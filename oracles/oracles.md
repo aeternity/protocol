@@ -129,7 +129,8 @@ Oracle/answer trees are to make answer retrieval efficient.
 
 ### Oracle register transaction
 - Contains:
-  - A unique oracle address
+  - The oracle "owner"
+  - A unique oracle address (a public key - proof of priv key should be given?!)
   - Query format definition
   - Response format definition
   - Query fee
@@ -145,7 +146,8 @@ Questions/Later:
 - Should Oracles have a TTL?
 
 ```
-{ oracle_address  :: public_key()
+{ oracle_owner    :: {public_key(), nonce()}
+, oracle_address  :: public_key()
 , query_format    :: format_definition()
 , response_format :: format_definition()
 , query_fee       :: amount()
