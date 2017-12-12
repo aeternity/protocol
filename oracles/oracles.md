@@ -48,7 +48,8 @@ The query transaction contains:
 - A query in the format declared by Alice's oracle.
 - A transaction fee for the miner.
 - A transfer of coin to Alice's oracle.
-- A TTL for the query (?)
+- A TTL for the query (If Alice's oracle doesn't answer the query
+  within the given time, Bob is refunded the coins)
 
 Bob registers a subscription on a node for getting notified when there
 is a response on his query
@@ -71,7 +72,8 @@ The response transaction contains:
 - A TTL for the response.
 
 Alice pays a transaction fee for posting the transaction. The fee is
-collected by the miner.
+collected by the miner. And as part of the transaction Alice's oracle
+receives the fee for the query.
 
 When the response transaction has been accepted to the chain, Bob's
 event subscription notifies him that there is a response.
@@ -160,20 +162,22 @@ Questions/Later:
   - A unique ID (proposal: sender_address + nonce)
   - A reference to the oracle
   - The query in binary format
-  - The query fee
+  - The query fee - locked up until either:
+    - The oracle answers and receive the fee
+    - The TTL expire and the sender gets a refund
+  - Query TTL
   - The transaction fee
 
 Questions/Later:
 - Should the query format be checked by the miner?
-- Query should have a TTL?
 
 ```
 { query_id        :: {public_key(), nonce()} %% sender + nonce as ID?
 , oracle_address  :: public_key()
 , query           :: binary()
 , query_fee       :: amount()
-, fee             :: amount()
-(, ttl             :: time_in_msecs()) }
+, ttl             :: time_in_msecs()
+, fee             :: amount() }
 ```
 
 ### Oracle response
