@@ -22,46 +22,58 @@ running a node?!
 
 ### Nodes need to maintain oracles trees and oracles answer trees
 
-Oracle/answer trees are to make answer retrieval efficient
+Oracle/answer trees are to make answer retrieval efficient.
+
+### Oracles have a published API
+
+- The API defines the format that queries should have.
+- The API defined the format answers will have.
+
+### Oracle responses have a type declaration
+- Types should correspond to types in the smart contract language.
+- There should be incentives to use simple types in oracle answers (boolean, integer).
+  - For example, through access cost in smart contracts.
+
+### Should oracle responses have restrictions on use?
+- For example, should only the creator of the query be able to use the
+  answer in a smart contract?
+- Should the framework support encryption/decryption of answers?
 
 ### We start with one question oracles to avoid indexing answers per oracles
 
-TODO: Is there a lot to be gained by this simplification?
+**TODO**: Is there a lot to be gained by this simplification?
+**ANSWER**: Probably not.
 
-### An oracle query/response has a TTL?
+### An oracle query/response has a TTL
 
-This means that we can prune the state trees. (In the chain it lives for ever
-obviously)
+- The actual response will remain on the chain.
+- The response will be pruned from the state tree after a certain number of blocks.
+- The cost of posting the answer should reflect the TTL.
 
 ## Transaction types related to Oracles:
-  - Oracle register: publish API, optionally set fee
-  - Oracle query: use API, include fee for oracle posting answer, optionally
-  include (flat) fee set by oracle
-  - Oracle response: uses funds from oracle query fee
+
+### Oracle register transaction
+- Declare format for queries (API).
+  - Protobuf or something similar?
+- Declare format for responses.
+- Set fee for posting a query. The fee can be 0.
+  - Fees are flat to begin with.
+  - We could imagine fees to be proportional to something.
+
+### Oracle query transaction
+- Declare query.
+  - Should the query format be checked by the miner?
+- Send fee to oracle
+- QueryID (address + nonce?)
+
+### Oracle response
+- Should we have a notification?
+  - Callback to the query?
+  - Reference to the query?
+- Any callback is paid by the oracle.
+  - The oracle operator needs to use funds from the query fee.
+  - (Later: Returned fee - If the oracle for some reason could not
+    provide an answer it might want to return (part of) the fee?!)
 
 (Open question: should there be a generic _DATA TX_ and should the Oracle
 answer be a special instance of this transaction.)
-
-### Oracle register
-  - Oracle Address
-  - Oracle API - Protobuf or something similar?
-  - Query fee (I.e. what does it cost to ask a question)
-
-Posting an ORACLE_REGISTER_TX costs a (flat?) fee.
-
-### Oracle query
-  - Oracle address
-  - QueryID (address + nonce?)
-  - Query data (following the API?)
-  - Query fee
-
-Posting an ORACLE_QUERY_TX costs a fee.
-
-### Oracle response
-  - QueryID
-  - Query response (following the API?)
-  - (Later: Returned fee - If the oracle for some reason could not provide an
-  answer it might want to return (part of) the fee?!)
-
-Posting an ORACLE_RESPONSE_TX costs a fee (should be covered by the 'Query fee'
-in the ORACLE_QUERY_TX)
