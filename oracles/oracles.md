@@ -159,33 +159,45 @@ Questions/Later:
 
 ### Oracle query transaction
 - Contains:
-  - A unique ID (proposal: sender_address + nonce)
-  - A reference to the oracle
+  - A unique ID (UUID)
+  - The sender (address)
+  - The oracle (address)
   - The query in binary format
   - The query fee - locked up until either:
     - The oracle answers and receive the fee
     - The TTL expire and the sender gets a refund
   - Query TTL
+  - Response TTL
   - The transaction fee
 
-Questions/Later:
+Questions/Comments/Later:
 - Should the query format be checked by the miner?
+- The size of this TX is variable (the Query), so fee/gas will vary - also the
+sender will pay for storing the query, thus the TTL will also affect the
+transaction fee.
+- The query fee should cover the possibly variable size (response format) of
+the response.
+- The response TTL is how long the response will live in the state tree.
+- What is a sensible default?
+- Should the response TTL be refunded if there is no response?
 
 ```
-{ query_id        :: {public_key(), nonce()} %% sender + nonce as ID?
+{ query_id        :: uuid()
+, sender_address  :: public_key()
 , oracle_address  :: public_key()
 , query           :: binary()
 , query_fee       :: amount()
-, ttl             :: time_in_msecs()
+, query_ttl       :: time_in_msecs()
+, response_ttl    :: time_in_msecs()
 , fee             :: amount() }
 ```
 
 ### Oracle response
 - Contains
-  - A unique ID (proposal: oracle_address + nonce)
-  - A reference to the query
+  - The query ID
   - The response in binary format
   - The transaction fee
+  - Response TTL
 
 Questions/Later:
 - Should we have a notification?
@@ -195,13 +207,14 @@ Questions/Later:
   - Returned fee - If the oracle for some reason could not
     provide an answer it might want to return (part of) the fee?!
 - Response should have a TTL?
+- Note the oracle will pay for the payload (the response) so there is an
+  incentive to keep it precise (and small).
 
 ```
-{ response_id     :: {public_key(), nonce()} %% oracle + nonce as ID?
-, query_id        :: {public_key(), nonce()}
+{ query_id        :: uuid()
 , response        :: binary()
 , fee             :: amount()
-(, ttl             :: time_in_msecs() ) }
+, ttl             :: time_in_msecs() }
 ```
 
 (Open question: should there be a generic _DATA TX_ and should the Oracle
