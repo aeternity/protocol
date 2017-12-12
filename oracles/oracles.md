@@ -53,27 +53,75 @@ Oracle/answer trees are to make answer retrieval efficient.
 ## Transaction types related to Oracles:
 
 ### Oracle register transaction
-- Declare format for queries (API).
+- Contains:
+  - A unique oracle address
+  - Query format definition
+  - Response format definition
+  - Query fee
+  - Transaction fee
+
+Questions/Later:
+- Exact format for queries (API).
   - Protobuf or something similar?
-- Declare format for responses.
-- Set fee for posting a query. The fee can be 0.
+- Exaxt format for responses.
+- Fee for posting a query. The fee can be 0.
   - Fees are flat to begin with.
   - We could imagine fees to be proportional to something.
+- Should Oracles have a TTL?
+
+```
+{ oracle_address  :: public_key()
+, query_format    :: format_definition()
+, response_format :: format_definition()
+, query_fee       :: amount()
+, fee             :: amount()
+(, ttl             :: time_in_msecs()) }
+```
 
 ### Oracle query transaction
-- Declare query.
-  - Should the query format be checked by the miner?
-- Send fee to oracle
-- QueryID (address + nonce?)
+- Contains:
+  - A unique ID (proposal: sender_address + nonce)
+  - A reference to the oracle
+  - The query in binary format
+  - The query fee
+  - The transaction fee
+
+Questions/Later:
+- Should the query format be checked by the miner?
+- Query should have a TTL?
+
+```
+{ query_id        :: {public_key(), nonce()} %% sender + nonce as ID?
+, oracle_address  :: public_key()
+, query           :: binary()
+, query_fee       :: amount()
+, fee             :: amount()
+(, ttl             :: time_in_msecs()) }
+```
 
 ### Oracle response
+- Contains
+  - A unique ID (proposal: oracle_address + nonce)
+  - A reference to the query
+  - The response in binary format
+  - The transaction fee
+
+Questions/Later:
 - Should we have a notification?
   - Callback to the query?
-  - Reference to the query?
 - Any callback is paid by the oracle.
   - The oracle operator needs to use funds from the query fee.
-  - (Later: Returned fee - If the oracle for some reason could not
-    provide an answer it might want to return (part of) the fee?!)
+  - Returned fee - If the oracle for some reason could not
+    provide an answer it might want to return (part of) the fee?!
+- Response should have a TTL?
+
+```
+{ response_id     :: {public_key(), nonce()} %% oracle + nonce as ID?
+, query_id        :: {public_key(), nonce()}
+, response        :: binary()
+, fee             :: amount()
+(, ttl             :: time_in_msecs() ) }
+```
 
 (Open question: should there be a generic _DATA TX_ and should the Oracle
 answer be a special instance of this transaction.)
