@@ -159,8 +159,7 @@ Questions/Later:
 
 ### Oracle query transaction
 - Contains:
-  - A unique ID (UUID)
-  - The sender (address)
+  - The sender (address) + nonce
   - The oracle (address)
   - The query in binary format
   - The query fee - locked up until either:
@@ -171,6 +170,7 @@ Questions/Later:
   - The transaction fee
 
 Questions/Comments/Later:
+- The Transaction ID is the hash of {sender_address, nonce, oracle_address}
 - Should the query format be checked by the miner?
 - The size of this TX is variable (the Query), so fee/gas will vary - also the
 sender will pay for storing the query, thus the TTL will also affect the
@@ -182,8 +182,8 @@ the response.
 - Should the response TTL be refunded if there is no response?
 
 ```
-{ query_id        :: uuid()
-, sender_address  :: public_key()
+{ sender_address  :: public_key()
+, nonce           :: nonce()
 , oracle_address  :: public_key()
 , query           :: binary()
 , query_fee       :: amount()
@@ -200,6 +200,7 @@ the response.
   - Response TTL
 
 Questions/Later:
+- The response Transaction ID (if needed) is the hash of {query_id, response}.
 - Should we have a notification?
   - Callback to the query?
 - Any callback is paid by the oracle.
@@ -211,7 +212,7 @@ Questions/Later:
   incentive to keep it precise (and small).
 
 ```
-{ query_id        :: uuid()
+{ query_id        :: tx_id()
 , response        :: binary()
 , fee             :: amount()
 , ttl             :: time_in_msecs() }
