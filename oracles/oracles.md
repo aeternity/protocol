@@ -199,6 +199,29 @@ the response.
   - The transaction fee
   - Response TTL
 
+### Questions/Later:
+- The response Transaction ID (if needed) is the hash of {query_id, response}.
+- Should we have a notification?
+  - Callback to the query?
+- Any callback is paid by the oracle.
+  - The oracle operator needs to use funds from the query fee.
+  - Returned fee - If the oracle for some reason could not
+    provide an answer it might want to return (part of) the fee?!
+- Response should have a TTL?
+- Note the oracle will pay for the payload (the response) so there is an
+  incentive to keep it precise (and small).
+
+```
+{ query_id        :: tx_id()
+, response        :: binary()
+, fee             :: amount()
+, ttl             :: time_in_msecs() }
+```
+
+(Open question: should there be a generic _DATA TX_ and should the Oracle
+answer be a special instance of this transaction.)
+
+
 ## Oracle state tree
 
 The oracle interactions resides in an oracle state tree that is
@@ -226,25 +249,3 @@ has the benefits:
 
 **TODO**: Should the oracle state tree be a separate tree or
   be joined with the accounts state tree?
-
-## Questions/Later:
-- The response Transaction ID (if needed) is the hash of {query_id, response}.
-- Should we have a notification?
-  - Callback to the query?
-- Any callback is paid by the oracle.
-  - The oracle operator needs to use funds from the query fee.
-  - Returned fee - If the oracle for some reason could not
-    provide an answer it might want to return (part of) the fee?!
-- Response should have a TTL?
-- Note the oracle will pay for the payload (the response) so there is an
-  incentive to keep it precise (and small).
-
-```
-{ query_id        :: tx_id()
-, response        :: binary()
-, fee             :: amount()
-, ttl             :: time_in_msecs() }
-```
-
-(Open question: should there be a generic _DATA TX_ and should the Oracle
-answer be a special instance of this transaction.)
