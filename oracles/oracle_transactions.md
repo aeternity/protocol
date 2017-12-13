@@ -1,14 +1,22 @@
 [back](./oracles.md)
 ## Oracle transactions
 
+Oracle transactions are of three types:
+- Register
+- Query
+- Response
+
 ### Oracle register transaction
-- Contains:
-  - The address that should be registered as an oracle (oracle_owner)
-  - Query format definition
-  - Response format definition
-  - Query fee
-  - Transaction fee
-  - A TTL (in number of blocks, or exact block height)
+
+An oracle operator can register an existing account as an oracle.
+
+The transaction contains:
+- The address that should be registered as an oracle (oracle_owner)
+- Query format definition
+- Response format definition
+- Query fee (that should be paid for posting a query to the oracle).
+- A TTL (relative in number of blocks, or absolute block height)
+- Transaction fee (must be larger than a minimum proportional to the TTL)
 
 Questions/Later:
 - Exact format for queries (API).
@@ -28,6 +36,13 @@ Questions/Later:
 }
 ```
 
+#### TODO
+- In the future we could imagine an oracle register transaction that
+  creates a new account by double signing the request with the source
+  account and the new account.
+- Decide on the minimum fee calculation.
+
+
 ### Oracle query transaction
 - Contains:
   - The sender (address) + nonce
@@ -44,14 +59,27 @@ The transaction creates an oracle interaction object in the oracle
 state tree. The id of this object is constructed from the query
 transaction as the hash of {sender_address, nonce, oracle_address}
 
-Questions/Comments/Later:
+The query TTL decides how long the query is open for response from the
+oracle.
+
+The query TTL can be either absolute (in block height) or relative
+(also in block height) to the block the query was included in.
+
+The response TTL decides how long the response is available when given
+from the oracle. The response TTL is always relative. This is to not
+give incentive to the oracle to post the answer late, since the oracle
+is paying the fee for the response.
+
+### Questions/Later
 - Should the query format be checked by the miner?
-- The size of this TX is variable (the Query), so fee/gas will vary - also the
+- The size of this TX is variable (the Query), so fee will vary - also the
 sender will pay for storing the query, thus the TTL will also affect the
 transaction fee.
-- The query fee should cover the possibly variable size (response format) of
-the response.
-- What is a sensible default?
+- We could include a staged fee that pays more to the oracle if it
+responds earlier.
+- We could include an earliest time that the oracle can answer to
+protect against malicious oracles answering early and collect the fee.
+
 
 ```
 { sender_address  :: public_key()
@@ -66,13 +94,24 @@ the response.
 ```
 
 ### Oracle response
-- Contains
-  - The oracle interaction ID
-  - The response in binary format
-  - The transaction fee
-  - Response TTL
 
+The oracle operator responds to a query by posting an oracle response
+transaction, signing it with the oracle account's private key.
 
+The response transaction is invalid if the TTL from the query has
+expired.
+
+The oracle pays the fee of the response transaction. The mininimum fee
+is determined by the response TTL from the query and the size of the
+response.
+
+Note that there is an incentive to keep the response precise (and
+small) since the oracle pays for the response transaction.
+
+The transaction contains
+- The oracle interaction ID (derived from the query)
+- The response in binary format
+- The transaction fee
 
 ```
 { interaction_id  :: tx_id()
@@ -82,15 +121,10 @@ the response.
 ```
 
 ### Questions/Later:
-- Should we have a notification?
-  - Subscriptions should be on the oracle interaction id.
-  - Callback to the query?
-- Any callback is paid by the oracle.
-  - The oracle operator needs to use funds from the query fee.
-  - Returned fee - If the oracle for some reason could not
-    provide an answer it might want to return (part of) the fee?!
-- Note the oracle will pay for the payload (the response) so there is an
-  incentive to keep it precise (and small).
 
-(Open question: should there be a generic _DATA TX_ and should the Oracle
-answer be a special instance of this transaction.)
+- Should we have an automatic callback defined in the query?
+  - Any callback is paid by the oracle.
+- Should we be able to return parts of the fee if the oracle for some
+    reason could not provide an answer.
+- Should there be a generic _DATA TX_ and should the Oracle answer be a
+    special instance of this transaction.
