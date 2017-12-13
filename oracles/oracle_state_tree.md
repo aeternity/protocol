@@ -12,15 +12,32 @@ The oracle state tree contains two types of objects:
 - The oracle definition
 - The oracle interaction
 
-The life span of an object in the oracle state tree is:
-- The oracle definition is:
-  - created by an oracle register transaction.
-  - deleted when its TTL expires.
-- The oracle interaction is:
-  - created by an oracle query transaction.
-  - closed by an oracle response transaction.
-  - immutable once it is closed.
-  - deleted when its TTL expires.
+#### The oracle definition
+
+- Created by an oracle register transaction.
+- Deleted when its TTL expires.
+
+#### The oracle interaction
+
+- Created by an oracle query transaction.
+- Closed by an oracle response transaction.
+- Immutable once it is closed.
+- Deleted when it expires
+
+The expiry is determined at creation time by the TTL of the oracle
+query transaction. If an oracle response transaction is accepted on
+the chain, the expiry is updated according to the response TTL.
+
+```
+{ sender_address :: pubkey()
+, sender_nonce   :: integer()
+, oracle_address :: pubkey()
+, response       :: oracle_response()
+, expires        :: block_height()
+, response_ttl   :: relative_ttl()
+, fee            :: integer()
+}
+```
 
 ### Oracle state tree update
 
