@@ -5,6 +5,7 @@
 - An **oracle** is an entity on the blockchain and lives in the **oracle state tree** in a full node.
 - An oracle is operated by an **oracle operator**.
 - The oracle operator creates an oracle through posting a **oracle register transaction** on the chain.
+- The oracle register transaction register an account as an oracle. (One account - one oracle)
 - Any user can query an oracle by posting an  **oracle query transaction** on the chain.
 - The oracle query transaction creates an **oracle interaction object** in the oracle state tree.
 - The oracle operator scans the transactions on the blockchain for the
