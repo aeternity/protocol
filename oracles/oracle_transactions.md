@@ -26,7 +26,8 @@ Questions/Later:
 , response_format :: format_definition()
 , query_fee       :: amount()
 , fee             :: amount()
-(, ttl             :: time_in_msecs()) }
+(, ttl             :: time_in_msecs())
+}
 ```
 
 ### Oracle query transaction
@@ -38,20 +39,21 @@ Questions/Later:
     - The oracle answers and receive the fee
     - The TTL expire and the sender gets a refund
   - Query TTL
-  - Response TTL
+  - Response TTL?
   - The transaction fee
 
+The transaction creates an oracle interaction object in the oracle
+state tree. The id of this object is constructed from the query
+transaction as the hash of {sender_address, nonce, oracle_address}
+
 Questions/Comments/Later:
-- The Transaction ID is the hash of {sender_address, nonce, oracle_address}
 - Should the query format be checked by the miner?
 - The size of this TX is variable (the Query), so fee/gas will vary - also the
 sender will pay for storing the query, thus the TTL will also affect the
 transaction fee.
 - The query fee should cover the possibly variable size (response format) of
 the response.
-- The response TTL is how long the response will live in the state tree.
 - What is a sensible default?
-- Should the response TTL be refunded if there is no response?
 
 ```
 { sender_address  :: public_key()
@@ -61,19 +63,29 @@ the response.
 , query_fee       :: amount()
 , query_ttl       :: time_in_msecs()
 , response_ttl    :: time_in_msecs()
-, fee             :: amount() }
+, fee             :: amount()
+}
 ```
 
 ### Oracle response
 - Contains
-  - The query ID
+  - The oracle interaction ID
   - The response in binary format
   - The transaction fee
   - Response TTL
 
+
+
+```
+{ interaction_id  :: tx_id()
+, response        :: binary()
+, fee             :: amount()
+, ttl             :: time_in_msecs() }
+```
+
 ### Questions/Later:
-- The response Transaction ID (if needed) is the hash of {query_id, response}.
 - Should we have a notification?
+  - Subscriptions should be on the oracle interaction id.
   - Callback to the query?
 - Any callback is paid by the oracle.
   - The oracle operator needs to use funds from the query fee.
@@ -82,13 +94,6 @@ the response.
 - Response should have a TTL?
 - Note the oracle will pay for the payload (the response) so there is an
   incentive to keep it precise (and small).
-
-```
-{ query_id        :: tx_id()
-, response        :: binary()
-, fee             :: amount()
-, ttl             :: time_in_msecs() }
-```
 
 (Open question: should there be a generic _DATA TX_ and should the Oracle
 answer be a special instance of this transaction.)
