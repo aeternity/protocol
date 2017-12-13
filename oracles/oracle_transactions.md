@@ -3,12 +3,12 @@
 
 ### Oracle register transaction
 - Contains:
-  - The oracle "owner"
-  - A unique oracle address (a public key - proof of priv key should be given?!)
+  - The address that should be registered as an oracle (oracle_owner)
   - Query format definition
   - Response format definition
   - Query fee
   - Transaction fee
+  - A TTL (in number of blocks, or exact block height)
 
 Questions/Later:
 - Exact format for queries (API).
@@ -17,16 +17,14 @@ Questions/Later:
 - Fee for posting a query. The fee can be 0.
   - Fees are flat to begin with.
   - We could imagine fees to be proportional to something.
-- Should Oracles have a TTL?
 
 ```
-{ oracle_owner    :: {public_key(), nonce()}
-, oracle_address  :: public_key()
+{ oracle_owner    :: public_key()
 , query_format    :: format_definition()
 , response_format :: format_definition()
 , query_fee       :: amount()
 , fee             :: amount()
-(, ttl             :: time_in_msecs())
+, ttl             :: ttl()
 }
 ```
 
@@ -39,7 +37,7 @@ Questions/Later:
     - The oracle answers and receive the fee
     - The TTL expire and the sender gets a refund
   - Query TTL
-  - Response TTL?
+  - Response TTL
   - The transaction fee
 
 The transaction creates an oracle interaction object in the oracle
@@ -61,8 +59,8 @@ the response.
 , oracle_address  :: public_key()
 , query           :: binary()
 , query_fee       :: amount()
-, query_ttl       :: time_in_msecs()
-, response_ttl    :: time_in_msecs()
+, query_ttl       :: ttl()
+, response_ttl    :: relative_ttl()
 , fee             :: amount()
 }
 ```
@@ -80,7 +78,7 @@ the response.
 { interaction_id  :: tx_id()
 , response        :: binary()
 , fee             :: amount()
-, ttl             :: time_in_msecs() }
+}
 ```
 
 ### Questions/Later:
@@ -91,7 +89,6 @@ the response.
   - The oracle operator needs to use funds from the query fee.
   - Returned fee - If the oracle for some reason could not
     provide an answer it might want to return (part of) the fee?!
-- Response should have a TTL?
 - Note the oracle will pay for the payload (the response) so there is an
   incentive to keep it precise (and small).
 
