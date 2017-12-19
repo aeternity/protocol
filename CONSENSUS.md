@@ -65,13 +65,26 @@ being solved is that of finding cycles in a bipartite graph.
 
 ### Accounts
 
-
-
 ### P2P network
 
 The peer-to-peer network is not part of the consensus and will be described in a
 separate document.
 
+### Coins and tokens
+
+#### Aeons
+
+Aeon is the main coin used in the Æternity system. We use the following denominations:
+
+```
+1
+1_000
+1_000_000
+1_000_000_000
+1_000_000_000_000
+1_000_000_000_000_000
+1_000_000_000_000_000_000 | aeon
+```
 
 ## Specification
 
