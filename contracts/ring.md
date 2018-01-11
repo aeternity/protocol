@@ -43,10 +43,10 @@ Ring has the following types:
 | address | A 256 bit number given as a hex | ```ff00```
 | string  | An array of bytes               | ```“Foo”```
 | bool    | A boolean                       | ```true```
-| list    | A homogenous immutable singly linked list. | [1, 2, 3]
+| list    | A homogenous immutable singly linked list. | ```[1, 2, 3]```
 | tuple   | An ordered heterogenous array   | ```(42, “Foo”, true)```
-| record  | An immutable key value store with fixed key names and typed values | ``` type balance = { owner: Address, value: uint } ```
-| map     | A mutable key value store with dynamic keys maping to values of one type |
+| record  | An immutable key value store with fixed key names and typed values | ``` type balance = { owner: address, value: uint } ```
+| map     | A immutable key value store with dynamic keys maping to values of one type | ```type accounts = map(address)```
 | state   | A record of blockstate key, value pairs  |
 | transactions | An append only list of blockchain transactions |
 | events   | An append only list of blockchain events (or log entries) |
@@ -62,7 +62,7 @@ Ring might not have arrays… Ring might have Maps.
  Ring will not have objects. (only contracts) 
 
 ### Pattern matching
-Pattern matching is probably outside the first iteration of Ring, but we definitely want it in the final language. |
+Pattern matching is probably outside the first iteration of Ring, but we definitely want it in the final language.
 
 ### Builtins
 #### Events
