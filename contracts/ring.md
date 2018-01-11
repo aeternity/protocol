@@ -39,14 +39,15 @@ Ring has the following types:
 
 | Type    | Description                     | Example
 | ------- | ------------------------------- | -------:
-| uint    | A 256 bit number                | ```42```
+| uint    | A 256 bit integer               | ```42```
+| int     | A 256 bit 2-complement integer  | ```-1```
 | address | A 256 bit number given as a hex | ```ff00```
-| string  | An array of bytes               | ```“Foo”```
 | bool    | A boolean                       | ```true```
+| string  | An array of bytes               | ```“Foo”```
 | list    | A homogenous immutable singly linked list. | ```[1, 2, 3]```
 | tuple   | An ordered heterogenous array   | ```(42, “Foo”, true)```
 | record  | An immutable key value store with fixed key names and typed values | ``` type balance = { owner: address, value: uint } ```
-| map     | A immutable key value store with dynamic keys maping to values of one type | ```type accounts = map(address)```
+| map     | An immutable key value store with dynamic maping of keys of one type to values of one type | ```type accounts = map(string, address)```
 | state   | A record of blockstate key, value pairs  |
 | transactions | An append only list of blockchain transactions |
 | events   | An append only list of blockchain events (or log entries) |
@@ -137,3 +138,77 @@ If a contract is disabled and its reference count is zero a miner can choose to 
 The reference count of a contract is handled as the account balance and kept in the state tree of the miner and the merkle hash is included in the state hash in each block just as with balances.
 
 The transaction for creating a contract has an extra fee called deposit which has to be an even number. The disable transaction is free but the miner and the creator get half of the deposit fee each at contract disable thus encouraging creators to disable their contracts and miners to pick disable transactions.
+
+## ABI
+
+The Ring AEVM ABI is similar to that of the Solidity/EVM ABI but adapted to
+the Ring types.
+
+The first 32 bytes of the calldata is the Keccak (SHA-3) hash of the signature of
+the function. The signature is defined as in the Solidity ABI,
+i.e. the function name with the parenthesised list of parameter types.
+Parameter types are split by a single comma.
+
+The state is appended as an extra argument to the function according to the contracts state type.
+(*** subject to change ***)
+
+
+The arguments are encoded according to their types as follows:
+
+Arguments of types uint, address, and bool are encoded as a big endian 256-bit word (32 bytes).
+
+Arguments of other types are encoded as a pointer to the position of their place in the calldata
+with (the number of arguments *  32) subtracted.
+
+String arguments are encoded with a 32 byte length (number of bytes) and as few 256-bit words
+as needed padded on the right with 0.
+
+A list is a series of cons cells each cell two 256-bit words, where the first word is data
+encoded in the same way as arguments and the second argument is either an address or
+nil (encoded as a 256-bit word with all bits = 1).
+
+A tuple of size N is encoded in the same way as N arguments (functions arguments are in reality a tuple).
+
+Records are encoded as tuples.
+
+Maps are encoded as a list of tuples, (key, value). ***This is subject to change***
+
+The contract code start by getting the function "name" (hash):
+
+```
+PUSH1 0
+CALLDATALOAD
+```
+
+Then for each function in the contract it executes
+
+```
+DUP1
+PUSH32 'function hash'
+EQ
+JUMPI function address
+```
+
+Then each exported function starts with an exported entry point where it executes
+code to fetch the arguments to memory
+
+```
+JUMPDEST
+PUSH32 1 ; Skip the function name in the calldata
+CALLDATALOAD
+...
+PUSH32 Arity ; Skip other arguments
+CALLDATALOAD
+
+; Fetch data to memory
+PUSH1  0  ; Address 0 in mem
+PUSH   Arity + 1 ; # words to skip and
+DUP              ; Size = calldatasize - (arity+1)
+CALLDATASIZE  
+SWAP1
+SUB         
+CALLDATACOPY     ; copy from [arity+1..Size] to mem(0)
+
+JUMPDEST         ; for local calls
+                 ; code for function body
+```
