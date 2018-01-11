@@ -47,6 +47,7 @@ Open question: we likely want to make it possible to have immutable state (param
 Ring has the following types:
 
 | Type    | Description                     | Example
+| ------- | ------------------------------- | -------:
 | uint    | A 256 bit number                | 42
 | address | A 256 bit number given as a hex | ff00
 | string  | An array of bytes               | “Foo”
