@@ -15,6 +15,8 @@ or considered for implementation.
 
 ## [Aeternity Naming System](./AENS.md)
 
+## [Smart Contracts](./contracts/contracts.md)
+
 ## Epoch
 
 Epoch is the reference implementation of the Aeternity protocol. Since we don't
@@ -23,4 +25,6 @@ such as API descriptions, will be kept in this repository until we decide for a
 better solution.
 
 - [API](./epoch/api/README.md)
+
+
 
