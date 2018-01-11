@@ -39,18 +39,21 @@ Ring has the following types:
 
 | Type    | Description                     | Example
 | ------- | ------------------------------- | -------:
-| uint    | A 256 bit number                | 42
-| address | A 256 bit number given as a hex | ff00
-| string  | An array of bytes               | “Foo”
-| bool    | A boolean                       | true
-| tuple   | An ordered heterogenous array   | (42, “Foo”, true)
-| record  | An immutable key value store with fixed key names and typed values | ``` type balance = { owner: Address, value: UInt } ```
+| uint    | A 256 bit number                | ```42```
+| address | A 256 bit number given as a hex | ```ff00```
+| string  | An array of bytes               | ```“Foo”```
+| bool    | A boolean                       | ```true```
 | list    | A homogenous immutable singly linked list. | [1, 2, 3]
+| tuple   | An ordered heterogenous array   | ```(42, “Foo”, true)```
+| record  | An immutable key value store with fixed key names and typed values | ``` type balance = { owner: Address, value: uint } ```
+| map     | A mutable key value store with dynamic keys maping to values of one type |
 | state   | A record of blockstate key, value pairs  |
-| transaction | A blockchain transaction |
+| transactions | An append only list of blockchain transactions |
+| events   | An append only list of blockchain events (or log entries) |
 
 #### Arrays
-Ring might not have arrays… Ring might have Maps. From looking at Solidity examples, maps (mapping from key to value) is a common idiom - this suggests we should try to support them. Reason has a (slightly clunky) Map library/API - perhaps we can do something on top of this?
+Ring might not have arrays… Ring might have Maps.
+
 ####  Variants
  Depending on how we write the compiler, if they are cheap to include some like to use variant types, while others might not want them.
 ####  Refs
