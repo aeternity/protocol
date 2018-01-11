@@ -150,7 +150,7 @@ i.e. the function name with the parenthesised list of parameter types.
 Parameter types are split by a single comma.
 
 The state is appended as an extra argument to the function according to the contracts state type.
-(*** subject to change ***)
+( *** subject to change *** )
 
 
 The arguments are encoded according to their types as follows:
@@ -188,6 +188,31 @@ PUSH32 'function hash'
 EQ
 JUMPI function address
 ```
+
+The above could also be implemented as a search tree looking at one
+byte at the time of the function hash if that produces smaller
+code. The compiler could also choose to truncate the hash to the
+shortest unique prefix and shift the incomming hash down. E.g if there
+are only three functions in the contract and their hashes starts with
+0xA, 0xB nd 0xC respectively we could have this code:
+
+```
+PUSH1 248     ; bits to shift left (256 - (prefix length * 8))
+SHR           ; shift down to prefix length
+DUP           ; for next comparision
+PUSH1 0xA     ; get prefix of first fun
+EQ            ; compare
+JUMPI #fun0xA ; jump
+PUSH1 0xB
+EQ
+JUMPI #fun0xB
+JUMP #fun0xC
+```
+
+(Given that the contract invocation checks that the function call is to a vaild address/hash before calling AEVM.)
+
+The shortest unique suffix could also be used, and the hash could be ANDed with the sufix length instead.
+
 
 Then each exported function starts with an exported entry point where it executes
 code to fetch the arguments to memory
