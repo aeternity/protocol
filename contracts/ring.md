@@ -87,12 +87,12 @@ Ring has the following types:
 | uint    | A 256 bit integer               | ```42```
 | int     | A 256 bit 2-complement integer  | ```-1```
 | address | A 256 bit number given as a hex | ```ff00```
-| bool    | A boolean                       | ```true```
+| bool    | A Boolean                       | ```true```
 | string  | An array of bytes               | ```“Foo”```
-| list    | A homogenous immutable singly linked list. | ```[1, 2, 3]```
-| tuple   | An ordered heterogenous array   | ```(42, “Foo”, true)```
+| list    | A homogeneous immutable singly linked list. | ```[1, 2, 3]```
+| tuple   | An ordered heterogeneous array   | ```(42, “Foo”, true)```
 | record  | An immutable key value store with fixed key names and typed values | ``` type balance = { owner: address, value: uint } ```
-| map     | An immutable key value store with dynamic maping of keys of one type to values of one type | ```type accounts = map(string, address)```
+| map     | An immutable key value store with dynamic mapping of keys of one type to values of one type | ```type accounts = map(string, address)```
 | state   | A record of blockstate key, value pairs  |
 | transactions | An append only list of blockchain transactions |
 | events   | An append only list of blockchain events (or log entries) |
@@ -183,7 +183,7 @@ Ring does not support inline html syntax.
 
 # Killing a contract
 
-There is no selfdestruct instruction in the aevm as in the Etherium
+There is no selfdestruct instruction in the aevm as in the Ethereum
 Virtual Machine instead there is a disable transaction which the
 creator of a contract can issue. When a contract is disabled no new
 contract can call the old contract.
@@ -216,7 +216,7 @@ the Ring types.
 
 The first 32 bytes of the calldata is the Keccak (SHA-3) hash of the signature of
 the function. The signature is defined as in the Solidity ABI,
-i.e. the function name with the parenthesised list of parameter types.
+i.e. the function name with the parenthesized list of parameter types.
 Parameter types are split by a single comma.
 
 The state is appended as an extra argument to the function according to the contracts state type.
@@ -264,14 +264,14 @@ JUMPI function address
 The above could also be implemented as a search tree looking at one
 byte at the time of the function hash if that produces smaller
 code. The compiler could also choose to truncate the hash to the
-shortest unique prefix and shift the incomming hash down. E.g if there
+shortest unique prefix and shift the incoming hash down. E.g if there
 are only three functions in the contract and their hashes starts with
 0xA, 0xB nd 0xC respectively we could have this code:
 
 ```
 PUSH1 248     ; bits to shift left (256 - (prefix length * 8))
 SHR           ; shift down to prefix length
-DUP           ; for next comparision
+DUP           ; for next comparison
 PUSH1 0xA     ; get prefix of first fun
 EQ            ; compare
 JUMPI #fun0xA ; jump
@@ -281,9 +281,9 @@ JUMPI #fun0xB
 JUMP #fun0xC
 ```
 
-(Given that the contract invocation checks that the function call is to a vaild address/hash before calling AEVM.)
+(Given that the contract invocation checks that the function call is to a valid address/hash before calling AEVM.)
 
-The shortest unique suffix could also be used, and the hash could be ANDed with the sufix length instead.
+The shortest unique suffix could also be used, and the hash could be ANDed with the suffix length instead.
 
 
 Then each exported function starts with an exported entry point where it executes

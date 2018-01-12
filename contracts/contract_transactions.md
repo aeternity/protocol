@@ -64,5 +64,5 @@ The transaction contains:
 
 The transaction has to be signed with the private key of the caller.
 
-The call_data is encoded in accordans with the contract language ABI.
+The call_data is encoded in accordance with the contract language ABI.
 (See e.g. the Ring ABI.)
