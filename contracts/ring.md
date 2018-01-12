@@ -309,3 +309,32 @@ CALLDATACOPY     ; copy from [arity+1..Size] to mem(0)
 JUMPDEST         ; for local calls
                  ; code for function body
 ```
+
+### Local function calls
+
+A local function call pushes the return address then the arguments.
+The callee pops the arguments and local variables then swaps the
+return address and the return value on the stack and jumps to
+the return value leaving only the return value on the stack.
+
+Call id(x):
+
+```
+            PUSHx RetAddress
+            DUP2              ; Get argument
+            PUSHx CalleeAdr
+            JUMP
+
+:RetAddress JUMPDEST          ; SP(0) contains ret address.
+```
+
+Return:
+
+```
+            SWAP1            ; Swap retvalue with first arg (only one arg in this fun)
+            POP              ; Drop the argument
+            SWAP1            ; Swap retval and retaddress
+            JUMP             ; return to the caller
+
+```
+
