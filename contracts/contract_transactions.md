@@ -4,7 +4,7 @@
 Contract transactions are of three types:
 - Create
 - Call
-- Disable
+- Disable -- To be decided.
 
 A contract is also a normal account with a balance.
 

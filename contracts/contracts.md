@@ -8,11 +8,11 @@
 - The contract owner creates a contract through posting a **contract creation transaction** on the chain.
 - The contract creation transaction register an account as a contract. (One account - one contract)
 - Any user can call an exported function in a contract by posting a  **contract call transaction** on the chain.
-- Contract can be written in a high level language which is compiled to the VM bytecode.
+- Contract can be written in a high level language which is compiled to the VM byte code.
 
 ## [Contract life cycle examples](./contract_life_cycle.md)
 
-There is no kill instruction in the Aetherium virutal machine, instead there is a deactivation instruction.
+There is no kill instruction in the Aeternity virtual machine, instead there is a deactivation instruction.
 When a contract is disabled it can only be called from other contracts already created on the chain.
 One can not create a new contract on the chain that calls a disabled contract neither directly nor indirectly.
 
@@ -21,8 +21,8 @@ A typically contract life cycle looks like this:
 2. Anyone can call the function f in A (call A.f()) any number of times.
 3. Another contract B that refers to A.f is created.
 4. Contract A is deactivated by O.
-5. No one can call A directly any more, and no new contract can refer to contracs A and B, but calls though B still goes to A.f.
-6. Contract B is deactivated by its owner, and has no refering contracts, it is dealocated as is contract A. (removed form the contract state tree)
+5. No one can call A directly any more, and no new contract can refer to contracts A and B, but calls though B still goes to A.f.
+6. Contract B is deactivated by its owner, and has no referring contracts, it is deallocated as is contract A. (removed form the contract state tree)
 
 ## [The AEVM](./aevm.md)
 
@@ -34,7 +34,7 @@ security issues with the EVM.
 
 ## [Ring: The first contract language](./ring.md)
 
-Ring is a functional Ocaml like languge which syntax most resembles that of Reason.
+Ring is a functional Ocaml like language which syntax most resembles that of Reason.
 
 ## [Contract state trees](./contract_state_tree.md)
 
