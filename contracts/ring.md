@@ -3,12 +3,27 @@
 An AEternity BlockChain Language
 The Ring is a dialect of ReasonML ( https://reasonml.github.io/ ).
 
-Ring is customized for smart contracts, that has the potential of being published to a blockchain (the AEternity BlockChain). Thus some unnecessary features of Reason (and OCaml - since Reason is closely related to OCaml) has been removed, and some blockchain specific primitives, constructions and types have been added. This document tries to summarize the changes and additions.
+Ring is customized for smart contracts, that has the potential of
+being published to a blockchain (the AEternity BlockChain). Thus some
+unnecessary features of Reason (and OCaml - since Reason is closely
+related to OCaml) has been removed, and some blockchain specific
+primitives, constructions and types have been added. This document
+tries to summarize the changes and additions.
 
 ## Language Features
 ### Contracts
-Ring does not have modules. Instead ring has static contracts. Contracts are similar to classes in object oriented languages and support local state and inheritance. More specifically:
-- A contract implementation, or simply a contract, is the code for a smart contract and consists of a list of types and functions that may or may not have a definition. A contract where all types and functions are defined is called a concrete contract. Only concrete contracts can be instantiated. Previously we had a notion of contract type, which is now replaced by fully abstract contracts where no types or functions have definitions. Example:
+
+Ring does not have modules. Instead ring has static
+contracts. Contracts are similar to classes in object oriented
+languages and support local state and inheritance. More specifically:
+
+- A contract implementation, or simply a contract, is the code for a
+  smart contract and consists of a list of types and functions that
+  may or may not have a definition. A contract where all types and
+  functions are defined is called a concrete contract. Only concrete
+  contracts can be instantiated. Previously we had a notion of
+  contract type, which is now replaced by fully abstract contracts
+  where no types or functions have definitions. Example:
 
 ```ocaml
 // An abstract contract
@@ -16,23 +31,53 @@ contract VotingType = {
   public stateful let vote : string => unit;
 };
 ```
-- A contract instance is an entity living on the block chain (or in a state channel). Each instance is associated with a particular contract implementation (at least from the view of high-level language; the low-level details of how to store and check API information on the chain is still to be worked out).
-- A contract may define a type state encapsulating its local state. The state must be initialised when instantiating a contract. This is done by the init function which can take arbitrary arguments and is called on contract instance creation.
-- Contracts have a public API, comprising the functions and types annotated with the public keyword. These can be used from outside the contract. Functions and types with no annotation (or internal) are part of the internal API and can be used by contracts inheriting (see below) the given contract. Functions and types annotated with private can only be used locally.
-- Contracts can inherit one (or more?) other contract(s). In this case the public functions (and types) of the inherited contract are included in the public API and internal functions are included in the internal API of the current contract. The state of the contract contains the states of all inherited contracts as well as the local state. However, the state of an inherited contract cannot be accessed other than through internal functions defined by that contract.
-- Open question: should we allow overriding defined functions? I would suggest no, but there might be compelling use cases that I'm missing.
+
+- A contract instance is an entity living on the block chain (or in a state channel). Each
+instance is associated with a particular contract implementation (at
+least from the view of high-level language; the low-level details of
+how to store and check API information on the chain is still to be
+worked out).
+- A contract may define a type state encapsulating its local
+  state. The state must be initialised when instantiating a
+  contract. This is done by the init function which can take arbitrary
+  arguments and is called on contract instance creation.
+- Contracts have a public API, comprising the functions and types
+  annotated with the public keyword. These can be used from outside
+  the contract. Functions and types with no annotation (or internal)
+  are part of the internal API and can be used by contracts inheriting
+  (see below) the given contract. Functions and types annotated with
+  private can only be used locally.
+- Contracts can inherit one (or more?) other contract(s). In this case
+  the public functions (and types) of the inherited contract are
+  included in the public API and internal functions are included in
+  the internal API of the current contract. The state of the contract
+  contains the states of all inherited contracts as well as the local
+  state. However, the state of an inherited contract cannot be
+  accessed other than through internal functions defined by that
+  contract.
+- Open question: should we allow overriding defined functions? I would
+  suggest no, but there might be compelling use cases that I'm
+  missing.
 
 ### Mutable state
-Ring does not have arbitrary mutable state, but only a limited form of state associated with each contract instance.
+
+Ring does not have arbitrary mutable state, but only a limited form of
+state associated with each contract instance.
 
 - Each contract defines a state type encapsulating its mutable state.
-- The value of the state is accessible from inside the contract through an implicitly bound variable state.
-- State updates are performed by calling a function put : state => unit (possibly with a better name).
-- Aside from the put function (and similar functions for transactions and events), the contract language is purely functional.
+- The value of the state is accessible from inside the contract
+  through an implicitly bound variable state.
+- State updates are performed by calling a function put : state =>
+  unit (possibly with a better name).
+- Aside from the put function (and similar functions for transactions
+  and events), the contract language is purely functional.
 - Functions modifying the state need to be annotated with the stateful keyword.
 
-To make it convenient to update parts of a deeply nested state Ring provides special special syntax for map/record updates.
-Open question: we likely want to make it possible to have immutable state (parameters). Keep separate from mutable state or annotate certain fields as immutable?
+To make it convenient to update parts of a deeply nested state Ring
+provides special special syntax for map/record updates.  Open
+question: we likely want to make it possible to have immutable state
+(parameters). Keep separate from mutable state or annotate certain
+fields as immutable?
 
 ### Types
 Ring has the following types:
@@ -56,18 +101,24 @@ Ring has the following types:
 Ring might not have arrays… Ring might have Maps.
 
 ####  Variants
- Depending on how we write the compiler, if they are cheap to include some like to use variant types, while others might not want them.
+Depending on how we write the compiler, if they are cheap to include
+some like to use variant types, while others might not want them.
+
 ####  Refs
  Ring has no refs.
+
 ####  Object
  Ring will not have objects. (only contracts) 
 
 ### Pattern matching
-Pattern matching is probably outside the first iteration of Ring, but we definitely want it in the final language.
+Pattern matching is probably outside the first iteration of Ring, but
+we definitely want it in the final language.
 
 ### Builtins
 #### Events
-Ring has events which logs a structured message to the contract log in the resulting blockchain transaction.
+Ring has events which logs a structured message to the contract log in
+the resulting blockchain transaction.
+
 ```
 event(name: string, value: any)
 ```
@@ -79,7 +130,11 @@ transaction(tx_type: transaction, argument: record )
 ```
 
 #### State
-A Ring contract has a state. You must declare the state record type in the contract. You can then update the state through mutable record update.
+
+A Ring contract has a state. You must declare the state record type in
+the contract. You can then update the state through mutable record
+update.
+
 ```
 type state = { mutable field: string
              , mutable value: uint};
@@ -125,19 +180,34 @@ There is one exception: abort (reason:string)
 Ring does not support inline html syntax.
 
 ## The lifetime of a contract
-#Killing a contract
 
-There is no selfdestruct instruction in the aevm as in the Etherium Virtual Machine instead there is a disable transaction which the creator of a contract can issue. When a contract is disabled no new contract can call the old contract.
+# Killing a contract
 
-When a contract is posted to the chain all references to other contracts are checked and a reference counter in each contract is increased. You can only post a contract to the chain if all the contracts referred to are enabled.
+There is no selfdestruct instruction in the aevm as in the Etherium
+Virtual Machine instead there is a disable transaction which the
+creator of a contract can issue. When a contract is disabled no new
+contract can call the old contract.
 
-When a contract is disabled all other contracts it refer to get their reference count decreased.
+When a contract is posted to the chain all references to other
+contracts are checked and a reference counter in each contract is
+increased. You can only post a contract to the chain if all the
+contracts referred to are enabled.
 
-If a contract is disabled and its reference count is zero a miner can choose to garbage collect the contract.
+When a contract is disabled all other contracts it refer to get their
+reference count decreased.
 
-The reference count of a contract is handled as the account balance and kept in the state tree of the miner and the merkle hash is included in the state hash in each block just as with balances.
+If a contract is disabled and its reference count is zero a miner can
+choose to garbage collect the contract.
 
-The transaction for creating a contract has an extra fee called deposit which has to be an even number. The disable transaction is free but the miner and the creator get half of the deposit fee each at contract disable thus encouraging creators to disable their contracts and miners to pick disable transactions.
+The reference count of a contract is handled as the account balance
+and kept in the state tree of the miner and the merkle hash is
+included in the state hash in each block just as with balances.
+
+The transaction for creating a contract has an extra fee called
+deposit which has to be an even number. The disable transaction is
+free but the miner and the creator get half of the deposit fee each at
+contract disable thus encouraging creators to disable their contracts
+and miners to pick disable transactions.
 
 ## ABI
 
@@ -152,6 +222,7 @@ Parameter types are split by a single comma.
 The state is appended as an extra argument to the function according to the contracts state type.
 ( *** subject to change *** )
 
+Return values are encoded in the same way as arguments.
 
 The arguments are encoded according to their types as follows:
 
@@ -167,7 +238,8 @@ A list is a series of cons cells each cell two 256-bit words, where the first wo
 encoded in the same way as arguments and the second argument is either an address or
 nil (encoded as a 256-bit word with all bits = 1).
 
-A tuple of size N is encoded in the same way as N arguments (functions arguments are in reality a tuple).
+A tuple of size N is encoded in the same way as N arguments (functions
+arguments are in reality a tuple).
 
 Records are encoded as tuples.
 
