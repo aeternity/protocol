@@ -7,10 +7,15 @@ existence of calls can be proven.
 
 ### Contract state tree objects
 
-The contract state tree contains three types of objects:
-- The contract definition
-- The contract store
-- The contract log
+The contract state tree contains objects:
+- The contract definition (code binary)
+- The contract store (data binary)
+- The contract log (data binary)
+- Active flag (Boolean)
+- List of refering contracts
+- Calls & Return data
+- Deposit (amount)
+- vm_version
 
 As well as normal account fields.
 

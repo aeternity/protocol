@@ -36,6 +36,8 @@ The transaction contains:
 , code            :: hex_bytes()
 , vm_version      :: hex_byte()
 , fee             :: amount()
+, deposit         :: amount()
+, amount          :: amount()
 , gas             :: amount()
 , gas_price       :: amount()
 , call_data       :: hex_bytes()
@@ -58,6 +60,15 @@ of
 ```
  "C0DE" && hash( nonce && owner)
 ```
+
+The fee, the deposit, the amount and the used gas will be
+subtracted from the owner account.
+
+The amount will be added to the contract account.
+
+The fee will added to the miners account.
+
+The deposit will be "held by the contract" until it is deactivated.
 
 The miner will add the new created contract address, the contract state
 and the return data from the initial call to the state tree.
