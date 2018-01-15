@@ -98,7 +98,7 @@ This is the entry as it should be stored by a node.
  ------------ ----
 | expires_by | 32 |
  ------------ ----
-| ttl        | 8  |
+| client_ttl | 8  |
  ------------ ----
 | pointers   |    |
  ------------ ----
@@ -110,7 +110,7 @@ This is the entry as it should be stored by a node.
 into the `revoked` state. This value MUST NOT be further than
 50000 blocks into the future.
 
-***ttl***: a suggestion as to how long any clients should
+***client_ttl***: a suggestion as to how long any clients should
 cache this information. (***TODO***: should have a reasonable
 upper limit, e.g. 86400 seconds, and probably a different
 name to not be confused with the general TTL for transactions)
