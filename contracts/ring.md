@@ -3,10 +3,10 @@
 An AEternity BlockChain Language
 The Ring is a dialect of ReasonML ( https://reasonml.github.io/ ).
 
-Ring is customized for smart contracts, that has the potential of
-being published to a blockchain (the AEternity BlockChain). Thus some
+Ring is customized for smart contracts, which can be published
+to a blockchain (the AEternity BlockChain). Thus some
 unnecessary features of Reason (and OCaml - since Reason is closely
-related to OCaml) has been removed, and some blockchain specific
+related to OCaml) have been removed, and some blockchain specific
 primitives, constructions and types have been added. This document
 tries to summarize the changes and additions.
 
@@ -74,7 +74,7 @@ state associated with each contract instance.
 - Functions modifying the state need to be annotated with the stateful keyword.
 
 To make it convenient to update parts of a deeply nested state Ring
-provides special special syntax for map/record updates.  Open
+provides special syntax for map/record updates.  Open
 question: we likely want to make it possible to have immutable state
 (parameters). Keep separate from mutable state or annotate certain
 fields as immutable?
