@@ -21,9 +21,9 @@ languages and support local state and inheritance. More specifically:
   smart contract and consists of a list of types and functions that
   may or may not have a definition. A contract where all types and
   functions are defined is called a concrete contract. Only concrete
-  contracts can be instantiated. Previously we had a notion of
-  contract type, which is now replaced by fully abstract contracts
-  where no types or functions have definitions. Example:
+  contracts can be instantiated. (Used in a create contract transaction.)
+
+- A contract can be abstract where no types or functions have definitions. Example:
 
 ```ocaml
 // An abstract contract
