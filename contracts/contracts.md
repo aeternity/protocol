@@ -5,8 +5,10 @@
 - A smart **Contract** is a program on the blockchain that lives in the **contract state tree** in a full node.
 - A contract runs on a virtual machine.
 - A contract is owned by an **contract owner**.
-- The contract owner creates a contract through posting a **contract creation transaction** on the chain.
+- The contract owner creates a contract through posting a **create contract transaction** on the chain.
+- Alternatively an owener can attach a contract to an existing account through an **attach contract transaction**.
 - The contract creation transaction register an account as a contract. (One account - one contract)
+- No one will have the private key for accounts created with create contract.
 - Any user can call an exported function in a contract by posting a  **contract call transaction** on the chain.
 - Contract can be written in a high level language which is compiled to the VM byte code.
 
@@ -49,6 +51,8 @@ The API defines the format that calls should have.
 
 ### Contracts are typed
 
-There are 4 basic types (uint, address, string, bool), 4 composed types (tuple, list, record, map), and 3 block chain specific types (state, transactions and events).
+There are 4 basic types (uint, address, string, bool), 4 composed
+types (tuple, list, record, map), and 3 block chain specific types
+(state, transactions and events).
 
 
