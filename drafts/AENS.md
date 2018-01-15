@@ -112,7 +112,11 @@ into the `revoked` state. This value MUST NOT be further than
 
 ***ttl***: a suggestion as to how long any clients should
 cache this information. (***TODO***: should have a reasonable
-upper limit, e.g. 86400 seconds)
+upper limit, e.g. 86400 seconds, and probably a different
+name to not be confused with the general TTL for transactions)
+
+This entry is only relevant for clients and has no conensus
+impact.
 
 ***pointers***: a dictionary with all the values this entry
 points towards, e.g. `{kind: "ipfs", data: "QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC"}`.
@@ -244,8 +248,8 @@ This transaction starts the claiming process.
  ------------ ----
 ```
 
-A `pre-claim` transaction for a name that is in the `claimed`
-state should be considered invalid.
+A client interacting with the blockchain should generate a warning
+if a user tries to claim a name that is not available.
 
 The `pre-claim` has an implicit expiration attached to it. A
 `pre-claim` MUST be considered invalid after 300 blocks, i.e.
@@ -304,8 +308,8 @@ Note that the fee here is a distinct fee from the normal transaction fee.
 The `update` transaction MUST be signed by the owner
 of the name entry to be updated.
 
-The `expire_by` MUST NOT be more than 1 year into the
-future.
+The `expire_by` MUST NOT be more than 36000 blocks into
+the future.
 
 
 #### Transfer
@@ -439,5 +443,6 @@ be distributed to random accounts via a lottery.
 [1] Kalodner, Harry A., et al. "An Empirical Study of Namecoin and Lessons for Decentralized Namespace Design." WEIS. 2015.
 
 [2] Ali, Muneeb, et al. "Blockstack: A Global Naming and Storage System Secured by Blockchains." USENIX Annual Technical Conference. 2016.
+
 
 
