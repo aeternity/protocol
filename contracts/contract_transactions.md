@@ -52,6 +52,13 @@ The transaction has to be signed with the private key of the owner.
 The special variable "caller" will be set to the same value as "owner"
 for the initial call.
 
+The contract address is created by taking the Key-length left most hex chars
+of
+
+```
+ "C0DE" && hash( nonce && owner)
+```
+
 The miner will add the new created contract address, the contract state
 and the return data from the initial call to the state tree.
 
