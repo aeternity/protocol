@@ -10,6 +10,12 @@ Contract transactions are of four types:
 A contract is also a normal account with a balance,
 and the normal spend transaction can be applied to the account.
 
+When a contract is createad or called, the miner checks that the
+creator/caller has gas*gas_price (*10^-18) aeons in the account.
+
+The execution of the call will use a certain amount of gas up to
+the maximum given, that amount is decduced from the caller's
+account and added to the miner's account.
 
 ### Create Contract Transaction
 
@@ -31,6 +37,7 @@ The transaction contains:
 , vm_version      :: hex_byte()
 , fee             :: amount()
 , gas             :: amount()
+, gas_price       :: amount()
 , call_data       :: hex_bytes()
 }
 ```
@@ -41,6 +48,9 @@ and hex bytes is a string of a number of hex bytes preceded with 0x.
 Call data is encoded depending on the ABI of the language of the contract.
 
 The transaction has to be signed with the private key of the owner.
+
+The special variable "caller" will be set to the same value as "owner"
+for the initial call.
 
 The miner will add the new created contract address, the contract state
 and the return data from the initial call to the state tree.
@@ -60,9 +70,13 @@ all other fields are as in create contract.
 , vm_version      :: hex_byte()
 , fee             :: amount()
 , gas             :: amount()
+, gas_price       :: amount()
 , call_data       :: hex_bytes()
 }
 ```
+
+The special variable "caller" will be set to the same value as "owner"
+for the initial call.
 
 The miner will add the return data and the state from the initial call
 to the state tree.
@@ -85,6 +99,7 @@ The transaction contains:
 , contract        :: public_key()
 , vm_version      :: hex_byte()
 , gas             :: amount()
+, gas_price       :: amount()
 , call_data       :: hex_bytes()
 , fee             :: amount()
 
