@@ -22,11 +22,15 @@ account and added to the miner's account.
 Anyone can create a new contract by submitting a create contract transaction.
 
 The transaction contains:
-- The address of the contract owner (the one signing and paying for the transaction) 
+- The address of the contract owner (the one signing and paying for the transaction)
+- Nonce of the owner/creator account.
 - The byte code of the contract
 - The VM to use
 - A transaction fee
+- A deposit (an even number, 0 is accepted).
+- An amount (aeons to transfer to the account, 0 is accepted).
 - Gas for the initial call
+- Gas price for the call.
 - Call data for the initial call (usually including a function name and args, interpreted by the contract).
 
 
@@ -70,8 +74,13 @@ The fee will added to the miners account.
 
 The deposit will be "held by the contract" until it is deactivated.
 
+If the initial call fails (runs out of gas) the contract is not
+created.  The owner loses the fee and the gas (to the miner) but the
+amount and the deposit are return to the owner.
+
 The miner will add the new created contract address, the contract state
-and the return data from the initial call to the state tree.
+and the return data from the initial call to the state tree (if the
+init succeeds).
 
 
 ### Attach Contract Transaction
@@ -87,6 +96,8 @@ all other fields are as in create contract.
 , code            :: hex_bytes()
 , vm_version      :: hex_byte()
 , fee             :: amount()
+, deposit         :: amount()
+, amount          :: amount()
 , gas             :: amount()
 , gas_price       :: amount()
 , call_data       :: hex_bytes()
@@ -107,6 +118,8 @@ Anyone can call an existing contract (as long as it isn't disabled).
 The transaction contains:
 - The address of the caller (the one signing and paying for the transaction)
 - The address of the contract
+- An optional additional fee to the miner apart from gas.
+- Optional amount to transfer to the account before execution.
 - The amount of gas to use
 - The calldata
 - A transaction fee
@@ -116,11 +129,11 @@ The transaction contains:
 , nonce           :: pos_integer()
 , contract        :: public_key()
 , vm_version      :: hex_byte()
+, fee             :: amount()
+, amount          :: amount()
 , gas             :: amount()
 , gas_price       :: amount()
 , call_data       :: hex_bytes()
-, fee             :: amount()
-
 }
 ```
 
