@@ -97,18 +97,11 @@ Ring has the following types:
 | transactions | An append only list of blockchain transactions |
 | events   | An append only list of blockchain events (or log entries) |
 
-#### Arrays
-Ring might not have arrays… Ring might have Maps.
-
-####  Variants
-Depending on how we write the compiler, if they are cheap to include
-some like to use variant types, while others might not want them.
-
-####  Refs
- Ring has no refs.
-
-####  Object
- Ring will not have objects. (only contracts) 
+#### Reason types not in Ring
+- Arrays
+- Variants
+- Refs
+- Object
 
 ### Pattern matching
 Pattern matching is probably outside the first iteration of Ring, but
