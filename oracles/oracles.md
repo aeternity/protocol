@@ -16,7 +16,7 @@
 
 ## [Oracle life cycle examples](./oracle_life_cycle.md)
 
-## [Oracle WebSocket API](./oracle_ws_api.md)
+## [Oracles - intended usage](./oracle_ws_api.md)
 
 ## [Oracle state trees](./oracle_state_tree.md)
 
