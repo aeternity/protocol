@@ -121,7 +121,7 @@ Response:
   {"action":"query",
    "origin":"oracle",
    "payload":{"result":"ok",
-              "query_id":"oi$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
+              "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
   }
 ```
 
@@ -135,7 +135,7 @@ Response:
   | ---- | ---- | ----------- | -------- |
   | type | `OracleResponseTxObject` | | Yes |
   | vsn | number | | No |
-  | interaction_id | string |  | No |
+  | query_id | string |  | No |
   | response | string |  | No |
   | fee | long |  | No |
 
@@ -156,7 +156,7 @@ Request:
    "action":"response",
    "payload":{"type":"OracleResponseTxObject",
               "vsn":1,
-              "interaction_id":"oi$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr",
+              "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr",
               "fee":4,
               "response":"I am fine, thanks!"}
   }
@@ -165,7 +165,7 @@ Response:
   {"origin":"oracle",
    "action":"response",
    "payload":{"result":"ok",
-              "query_id":"oi$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
+              "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
   }
 ```
 
@@ -223,7 +223,7 @@ Event:
    "action":"new_oracle_query",
    "payload":{"sender":"ak$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf",
               "query":"How are you?",
-              "interaction_id":"oi$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
+              "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
   }
 ```
 
@@ -236,7 +236,7 @@ Event:
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | type | `response` | | Yes |
-  | interaction_id | string | | Yes |
+  | query_id | string | | Yes |
 
 ### Response
  * **origin:** `oracle`
@@ -255,7 +255,7 @@ Event:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | interaction_id | string | hash that identifies the query | Yes |
+  | query_id | string | hash that identifies the query | Yes |
   | query | string | | Yes |
 
 ### Example
@@ -264,7 +264,7 @@ Request:
   {"target":"oracle",
    "action":"subscribe",
    "payload":{"type":"response",
-              "interaction_id":"oi$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
+              "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
   }
 
 Response:
@@ -272,14 +272,14 @@ Response:
    "action":"subscribe",
    "payload":{"result":"ok",
               "subscribed_to":{"type":"response",
-                               "interaction_id":"oi$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
+                               "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
   }
 
 Event:
   {"origin":"node",
    "action":"new_oracle_response",
    "payload":{"response":"I am fine, thanks!",
-              "interaction_id":"oi$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
+              "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
   }
 ```
 
@@ -363,7 +363,7 @@ post a query...
 ```
 ...
 > {"target":"oracle", "action":"query", "payload":{"type":"OracleQueryTxObject", "vsn":1, "oracle_pubkey":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":7, "query":"How are you?"}}
-< {"action":"query","origin":"oracle","payload":{"result":"ok","query_id":"oi$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
+< {"action":"query","origin":"oracle","payload":{"result":"ok","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
 ```
 
 Again we use exactly the same format for the payload as the HTTP API. And also,
@@ -379,7 +379,7 @@ receive an event on the websocket:
 ```
 ...
 < {"action":"mined_block","origin":"miner","payload":{"height":4,"hash":"bh$K6oGLV2cHMMpmKjr7bKAByqCxVRwhNUUh5nACagXknARLUbJ3"}}
-< {"action":"new_oracle_query","origin":"node","payload":{"sender":"ak$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","query":"How are you?","interaction_id":"oi$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
+< {"action":"new_oracle_query","origin":"node","payload":{"sender":"ak$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","query":"How are you?","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
 ```
 
 We should note that in the response for the query request above we got the
@@ -400,8 +400,8 @@ well, so let us post a response to the query.
 
 ```
 ...
-> {"target":"oracle", "action":"response", "payload":{"type":"OracleResponseTxObject", "vsn":1, "interaction_id":"oi$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr", "fee":3, "response":"I am fine, thanks!"}}
-< {"action":"response","origin":"oracle","payload":{"result":"ok","query_id":"oi$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
+> {"target":"oracle", "action":"response", "payload":{"type":"OracleResponseTxObject", "vsn":1, "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr", "fee":3, "response":"I am fine, thanks!"}}
+< {"action":"response","origin":"oracle","payload":{"result":"ok","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
 ```
 
 Also here we use exactly the same format for the payload as the HTTP API. The
@@ -415,7 +415,7 @@ response:
 ```
 ...
 < {"action":"mined_block","origin":"miner","payload":{"height":6,"hash":"bh$i9P6dgcihe47Kwm6ZvTDb84HPGWr147KPviatJ5QXntHrBY1m"}}
-< {"action":"new_oracle_response","origin":"node","payload":{"interaction_id":"oi$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","response":"I am fine, thanks!"}}
+< {"action":"new_oracle_response","origin":"node","payload":{"query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","response":"I am fine, thanks!"}}
 ```
 
 This conclude the walk through of the oracle life cycle example, which also
