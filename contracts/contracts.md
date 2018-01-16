@@ -23,7 +23,7 @@ A typically contract life cycle looks like this:
 2. Anyone can call the function f in A (call A.f()) any number of times.
 3. Another contract B that refers to A.f is created.
 4. Contract A is deactivated by O.
-5. No one can call A directly any more, and no new contract can refer to contracts A and B, but calls though B still goes to A.f.
+5. No one can call A directly any more, and no new contract can refer to contracts A and B, but calls through B still go to A.f.
 6. Contract B is deactivated by its owner, and has no referring contracts, it is deallocated as is contract A. (removed form the contract state tree)
 
 ## [The AEVM](./aevm.md)
