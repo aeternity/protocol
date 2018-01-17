@@ -9,11 +9,11 @@ complete life cycle of an Oracle.
 ## Oracle WebSocket API
 
 The WebSocket API provides five different actions:
- * [Register an Oracle](register-an-oracle)
- * [Post a query for an Oracle](post-a-query-for-an-oracle)
- * [Answer an Oracle query](answer-an-oracle-query)
- * [Register for post query events](register-for-post-query-events) (for a particular Oracle)
- * [Register for query response events](register-for-query-response-events) (for a particular Oracle query)
+ * [Register an Oracle](#register-an-oracle)
+ * [Post a query for an Oracle](#post-a-query-for-an-oracle)
+ * [Answer an Oracle query](#answer-an-oracle-query)
+ * [Register for post query events](#register-for-post-query-events) (for a particular Oracle)
+ * [Register for query response events](#register-for-query-response-events) (for a particular Oracle query)
 
 ## General Request/Response types
 A request has the format:
@@ -32,7 +32,7 @@ A response (and an event) has the format:
 | action | string | what was the action | Yes |
 | payload | object | data from the action | Yes |
 
-## [Register an Oracle]
+## Register an Oracle
 ### Request
  * **target:** `oracle`
  * **action:** `register`
