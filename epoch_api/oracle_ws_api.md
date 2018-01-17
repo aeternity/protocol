@@ -1,12 +1,5 @@
 [back](./epoch_api.md)
-# Oracle API
-
-The most general way to interact with Oracles is to use the WebSocket API
-(there is also an HTTP API with more limited functionality). In [Oracles -
-intended usage](../oracles/oracle_ws_api.md) the API is put to use, showing the
-complete life cycle of an Oracle.
-
-## Oracle WebSocket API
+# Oracle WebSocket API
 
 The WebSocket API provides five different actions:
  * [Register an Oracle](#register-an-oracle)
@@ -310,4 +303,3 @@ Event:
 account) it is somewhat limited what you can do with oracles. I.e. in practice
 you need a node per account - obviously this is a limitation we should try to
 lift as soon as possible.
-

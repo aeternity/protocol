@@ -16,8 +16,6 @@
 
 ## [Oracle life cycle examples](./oracle_life_cycle.md)
 
-## [Oracles - intended usage](./oracle_ws_api.md)
-
 ## [Oracle state trees](./oracle_state_tree.md)
 
 ## [Oracle transactions](./oracle_transactions.md)
