@@ -30,6 +30,8 @@ At least one of the two nodes needs to be configured with the peer address of th
 
 ### Running multiple nodes on same host
 
+This is mainly purposed for development.
+
 If you are using the release binaries (i.e. not the Docker image) and you want to run two nodes on the same host:
 * Deploy the release binary in two different locations - one per node;
 * For each node, before starting the node edit the user configuration file to specify distinct TCP ports;
