@@ -12,4 +12,6 @@ This document:
 
 ## User API - intended usage
 
+* [Account management user API usage](./account_api_usage.md)
+* [Spending tokens using user API](./spend_api_usage.md)
 * [Oracle user API usage](./oracle_api_usage.md)
