@@ -7,7 +7,7 @@ The following assumes that the node exposes at address 127.0.0.1 the following p
 ## Send tokens to another account
 
 In order to send tokens, you need to have tokens i.e. a positive (non-zero) balance.
-You obtain tokens e.g. after having mined successfully.
+You obtain tokens e.g. after having mined successfully a block or received tokens through a transaction.
 
 You need to know the public key to send tokens to (are returned by the `/account/pub-key` HTTP API).
 
