@@ -30,12 +30,17 @@ At least one of the two nodes needs to be configured with the peer address of th
 
 ### Running multiple nodes on same host
 
-Unless you are using Docker, in order to run two nodes on the same host you need to change the node name of each node.
-For each node, after having deployed it - and before starting it - you need to change directory (`cd`) to the directory where you deployed the node, then for node 1 run:
+If you are using the release binaries (i.e. not the Docker image) and you want to run two nodes on the same host:
+* Deploy the release binary in two different locations - one per node;
+* For each node, before starting the node edit the user configuration file to specify distinct TCP ports;
+* For each node, before starting the node change the node name of each node.
+
+In order to change the node name of node #1, change directory (`cd`) to the directory where you deployed node #1 then run (change "0.5.0" in the command with the version of the release you deployed):
 ```bash
 sed -ibkp 's/-sname epoch/-sname epoch1/g' releases/0.5.0/vm.args
 ```
-... while for node 2:
+
+In order to change the node name of node #2, change directory (`cd`) to the directory where you deployed node #2 then run (change "0.5.0" in the command with the version of the release you deployed):
 ```bash
 sed -ibkp 's/-sname epoch/-sname epoch2/g' releases/0.5.0/vm.args
 ```
