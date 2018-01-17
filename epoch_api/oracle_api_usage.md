@@ -1,8 +1,13 @@
-[back](./oracles.md)
+[back](./epoch_api.md)
 # Oracles - intended usage
 
+The most general way to interact with Oracles is to use the WebSocket
+API (there is also an HTTP API with more limited functionality). In
+this document the API is put to use, showing the complete life cycle
+of an Oracle.
+
 To show the intended usage of oracles we walk through basically the [Oracle
-life cycle](./oracle_life_cycle.md) For simplicity, we only work with a single
+life cycle](/oracles/oracle_life_cycle.md) For simplicity, we only work with a single
 node (`localhost/127.0.0.1`) in this example. It should be straightforward
 to split the example into one node running the oracle and other nodes querying
 that oracle. In the default node configuration the websocket interface is at
