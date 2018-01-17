@@ -1,37 +1,39 @@
 [back](./oracles.md)
 ## Oracle state tree
 
-The oracles and their interactions reside in an oracle state tree that
-is included in the root hash. The existence of an oracle and the
-existence of query/response will have to be proven when two parites
-contract with eachother.
+The oracle state tree contain oracle objects. Each oracle also have a separate
+tree with queries for this particular tree. The existence of an oracle and the
+existence of query/response will have to be proven when two parties contract
+with each other. In the name of efficiency the queries are not stored directly
+in the oracle object, instead the oracle object contains the root_hash of a
+separate Merkle tree containing the queries for the oracle.
 
 ### Oracle state tree objects
 
-The oracle state tree contains two types of objects:
-- The oracle definition
-- The oracle interaction
+- The oracle state tree contains oracle objects
+- The query state trees (one per oracle object) contain query objects.
 
-#### The oracle definition
+#### The oracle object
 
 - Created by an oracle register transaction.
 - Deleted when its TTL expires.
 
-#### The oracle interaction
+#### The oracle query object
 
 - Created by an oracle query transaction.
 - Closed by an oracle response transaction.
 - Immutable once it is closed.
-- Deleted when it expires
+- Deleted when it expires (When the query expire for an open query, and when
+the response expire for a closed query)
 
-The expiry is determined at creation time by the TTL of the oracle
-query transaction. If an oracle response transaction is accepted on
-the chain, the expiry is updated according to the response TTL.
+The expiry is determined at creation time by the query TTL, and the response
+TTL in the oracle query transaction. If/When an oracle response transaction is
+accepted on the chain, the expiry is updated according to the response TTL.
 
 ```
-{ sender_address :: pubkey()
-, sender_nonce   :: integer()
+{ query_id       :: id()
 , oracle_address :: pubkey()
+, query          :: query()
 , response       :: oracle_response()
 , expires        :: block_height()
 , response_ttl   :: relative_ttl()
@@ -41,9 +43,9 @@ the chain, the expiry is updated according to the response TTL.
 
 ### Oracle state tree update
 
-The oracle state tree is pruned when an objects TTL is reached in the
-height of the chain. Since the GB Merkle trees are sensitive to the
-order of operations we define the operation order as:
+The oracle state tree is pruned when the TTL of an object is reached in the
+height of the chain. Since the GB Merkle trees are sensitive to the order of
+operations we define the operation order as:
 
 1. Delete the expired objects. Object are deleted in ascending order of their IDs.
 2. Insert new object in the transaction order of the block.
@@ -58,16 +60,13 @@ has the benefits:
 - The next object to delete is the first object in the cache.
   - The TTL is lower than the block height -> We are done.
   - The TTL is equal to the block height -> Delete the object.
-- The cache can be recontructed by doing an in-order traversal of the
+- The cache can be reconstructed by doing an in-order traversal of the
   oracle state tree.
 
-### Pruning of oracle interaction objects
+### Pruning of oracle query objects
 
-If the oracle interaction has not been given a response, the poster of
+If the oracle query has not been given a response, the poster of
 the query should be refunded the oracle query fee. If the oracle has
 responded, the oracle was already given the funds at response time.
 
-### TODO:
-- Should the oracle state tree be a separate tree or
-  be joined with the accounts state tree?
-- Define the contents of the oracle interaction object.
+**NOTE:** The refunding has not yet been implemented
