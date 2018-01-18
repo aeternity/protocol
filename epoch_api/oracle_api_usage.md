@@ -17,7 +17,7 @@ websocket connection.
 In order to work through the example we also need the (Base58Check-encoded)
 public key of the node. This is easily retrieved from the running node:
 ```
-~/epoch/node: curl http://127.0.0.1:3113/v1/account/pub-key
+~/epoch/node: curl http://127.0.0.1:3103/v2/account/pub-key
 {"pub_key":"ak$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}
 ```
 
@@ -29,7 +29,7 @@ need to wait for the first block to be mined by the node (or else our
 transactions will be rejected with _"Insufficient balance"_).
 
 ```
-~/epoch/node: wscat -c ws://127.0.0.1:3114/websocket
+~/epoch/node: wscat -c ws://127.0.0.1:3104/websocket
 connected (press CTRL+C to quit)
 < {"action":"mined_block","origin":"miner","payload":{"height":1,"hash":"bh$jXjgHkcuXnTY4PtMpctcwFT2jf4fZ1jGdeax1geWoW64hSXpY"}}
 ```
