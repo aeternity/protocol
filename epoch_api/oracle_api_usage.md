@@ -11,7 +11,7 @@ life cycle](/oracles/oracle_life_cycle.md) For simplicity, we only work with a s
 node (`localhost/127.0.0.1`) in this example. It should be straightforward
 to split the example into one node running the oracle and other nodes querying
 that oracle. In the default node configuration the websocket interface is at
-*port 3014* - i.e. connecting to `ws://127.0.0.1:3114/websocket` opens a
+*port 3014* - i.e. connecting to `ws://127.0.0.1:3014/websocket` opens a
 websocket connection.
 
 In order to work through the example we also need the (Base58Check-encoded)
