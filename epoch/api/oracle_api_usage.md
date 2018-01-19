@@ -1,4 +1,4 @@
-[back](./epoch_api.md)
+[back](./README.md)
 # Oracles - intended usage
 
 The most general way to interact with Oracles is to use the WebSocket

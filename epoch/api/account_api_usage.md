@@ -1,4 +1,4 @@
-[back](./epoch_api.md)
+[back](./README.md)
 # Account management - intended usage
 
 Each node handles one account.
