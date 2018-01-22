@@ -24,6 +24,8 @@ The epoch node API consists of the following endpoints:
   * It is **not** meant to be exposed on the Internet;
   * Its TCP port is configurable.
 
+The epoch node uses the plain HTTP protocol for its API endpoints during the testnet phase while it will use the HTTPS protocol in mainnet.
+
 ## WebSocket API definition
 
 * [Oracle WS API](./oracle_ws_api.md)
