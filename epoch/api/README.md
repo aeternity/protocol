@@ -28,7 +28,26 @@ The epoch node uses the plain HTTP protocol for its API endpoints during the tes
 
 ## WebSocket API definition
 
+### General Request/Response types
+A request has the format:
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| target | string | what component to target | Yes |
+| action | string | what is the action | Yes |
+| payload | object | data for action | Yes |
+
+A response (and an event) has the format:
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| origin | string | what component did the action | Yes |
+| action | string | what was the action | Yes |
+| payload | object | data from the action | Yes |
+
+### List of WS APIs
 * [Oracle WS API](./oracle_ws_api.md)
+* [Chain WS API](./chain_ws_api.md)
 
 ## User API - intended usage
 
