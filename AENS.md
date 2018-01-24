@@ -258,20 +258,20 @@ about two days at 10 minute block time.
 The hash commitment for the `pre-claim` is computed as follows:
 
 ```
-commitment := Hash(NameHash(name) + nonce)
+commitment := Hash(NameHash(name) + name_salt)
 ```
 
 
 #### Claim
 
 ```
- ------------ ----
-| name       | 63 |
- ------------ ----
-| fee        | 32 |
- ------------ ----
-| nonce      | 32 |
- ------------ ----
+ ---------------- ----
+| name           | 63 |
+ ---------------- ----
+| fee            | 32 |
+ ------------- -- ----
+| name_salt      | 32 |
+ ---------------- ----
 ```
 
 Flow for a user:
