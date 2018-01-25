@@ -28,6 +28,36 @@ The epoch node uses the plain HTTP protocol for its API endpoints during the tes
 
 ## WebSocket API definition
 
+### Connection
+The epoch node supports an endpoint with a configurable port where the
+websocket's clients connect. It is located on `/websocket`.
+
+The node could serve multiple websocket clients. Their number is configured in
+the epoch.yaml. When all websocket connections are consumed - any new incoming
+connections will be queued. The queue has a maximum size and when it is
+reached - any new incoming connections will be rejected with an error code 400.
+This is to prevent the node of being overloaded with websocket connections.
+
+### Subscription to events
+Websocket clients will receive updates to events they've subscribed to. A
+client can subscribe to certain events on connecting and to others - on the
+fly.
+
+An example for the former can be [mining a block](./chain_ws_api.md#block-mined) event. On connection a client can pass a list of services to pass with a query parameter `subscribe_to`. If it is not passed - the client is subscribed to all events:
+
+* [mining a block](./chain_ws_api.md#block-mined) - keyword: `block_created`
+
+All events to be subscribed to are to be comma separated. Keyword `all` has
+the same effect as not passing the parameter at all. Examples:
+```
+/websocket?subscribe_to=all
+/websocket?subscribe_to=block_created
+/websocket?subscribe_to=event1,event2
+```
+
+Example for specific events to be subscribed on the fly are the Oracle ones as
+described [here](./oracle_ws_api.md#register-for-post-query-events)
+
 ### General Request/Response types
 A request has the format:
 

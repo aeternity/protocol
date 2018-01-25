@@ -4,8 +4,8 @@
 The WebSocket API provides the following actions:
 * [Get a block by height](#get-block-by-height)
 * [Get a block by hash](#get-block-by-hash)
-* [Get a header by height](#get-a-header-by-height)
-* [Get a header by hash](#get-a-header-by-hash)
+* [Get a header by height](#get-header-by-height)
+* [Get a header by hash](#get-header-by-hash)
 * [Receive a message when mining a block](#block-mined)
 
 ## Get block by height
@@ -26,7 +26,7 @@ The WebSocket API provides the following actions:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | block | object - [block](#block) |  | Yes |
+  | block | object - [block](#block-structure) |  | Yes |
   | height | number | Height of the block to fetch | yes |
   | type | string | `block` | Yes |
 
@@ -81,7 +81,7 @@ Response:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | block | object - [block](#block) |  | Yes |
+  | block | object - [block](#block-structure) |  | Yes |
   | hash | string | Hash of the block to fetch | yes |
   | type | string | `block` | Yes |
 
@@ -136,7 +136,7 @@ Response:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | block | object - [header](#header) |  | Yes |
+  | block | object - [header](#header-structure) |  | Yes |
   | height | number | Height of the header to fetch | yes |
   | type | string | `header` | Yes |
 
@@ -190,7 +190,7 @@ Response:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | block | object - [header](#header) |  | Yes |
+  | block | object - [header](#header-structure) |  | Yes |
   | hash | string | Hash of the header to fetch | yes |
   | type | string | `header` | Yes |
 
@@ -228,10 +228,7 @@ Response:
 
 
 ## Block mined
-### Request
-None
-
-### Response
+### Event 
  * **origin:** `miner`
  * **action:** `mined_block`
  * **payload:**
@@ -243,6 +240,7 @@ None
 
 ### Example
 ```
+Event:
 {"origin":"miner",
  "action":"mined_block",
   "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
@@ -251,3 +249,34 @@ None
 }
 
 ```
+
+## Data types
+### Header structure
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | height | number | Height of the block | yes |
+  | nonce | number | Block nonce | yes |
+  | pow | [number] | Block proof of work | no |
+  | prev_hash | string | Hash of the previous block | no |
+  | state_hash | string | Hash of the root of the state tree | yes |
+  | target | number  | Threshold below which the hash of the Cuckoo Cycle PoW solution must be | yes |
+  | time | number | Block mining time | yes |
+  | txs_hash | string | Root hash of the Merkle tree of transactions included in this block | no |
+  | version | number | Version of the block structure | yes |
+
+### Block structure
+A block consists of a header part and a list of transactions. [The header](#header-structure) is descibed in the section above.
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | transactions | [[transaction](#transaction-structure)] | List of transactions included in the block | no |
+
+**Note:** Genesis block lacks `transactions` and thus - `txs_hash`. Since it
+is the first block - it doesn't have `prev_hash`, too.
+
+### Transaction structure
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | tx | string | MessagePack encoded transaction object | yes |
+
