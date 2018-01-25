@@ -8,23 +8,6 @@ The WebSocket API provides five different actions:
  * [Register for post query events](#register-for-post-query-events) (for a particular Oracle)
  * [Register for query response events](#register-for-query-response-events) (for a particular Oracle query)
 
-## General Request/Response types
-A request has the format:
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| target | string | what component to target | Yes |
-| action | string | what is the action | Yes |
-| payload | object | data for action | Yes |
-
-A response (and an event) has the format:
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| origin | string | what component did the action | Yes |
-| action | string | what was the action | Yes |
-| payload | object | data from the action | Yes |
-
 ## Register an Oracle
 ### Request
  * **target:** `oracle`
