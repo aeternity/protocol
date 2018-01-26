@@ -204,25 +204,26 @@ and miners to pick disable transactions.
 
 ## ABI
 
-The Ring AEVM ABI is similar to that of the Solidity/EVM ABI but adapted to
-the Ring types.
+The calldata contains a tuple with function name and argument. E.g. ("main", (1,2,3))
+The compiler will generate entry coad to
+load the calldata to memory and then create a pattern matching switch on the function name
+and call the function with the second element as the argument.
+e.g.
+```
+ CALLDATALOAD
+ MLOAD
+```
 
-The first 32 bytes of the calldata is the Keccak (SHA-3) hash of the signature of
-the function. The signature is defined as in the Solidity ABI,
-i.e. the function name with the parenthesized list of parameter types.
-Parameter types are split by a single comma.
+```
+ case Data of
+  ("main", arg) : main(arg)
 
-The state is appended as an extra argument to the function according to the contracts state type.
-( *** subject to change *** )
+```
+Data is laid out in memory as follows:
 
-Return values are encoded in the same way as arguments.
+Data of types uint, address, and bool are encoded as a big endian 256-bit word (32 bytes).
 
-The arguments are encoded according to their types as follows:
-
-Arguments of types uint, address, and bool are encoded as a big endian 256-bit word (32 bytes).
-
-Arguments of other types are encoded as a pointer to the position of their place in the calldata
-with (the number of arguments *  32) subtracted.
+Data of other types are encoded as a pointer to the position of their place in the calldata.
 
 String arguments are encoded with a 32 byte length (number of bytes) and as few 256-bit words
 as needed padded on the right with 0.
@@ -238,20 +239,17 @@ Records are encoded as tuples.
 
 Maps are encoded as a list of tuples, (key, value). ***This is subject to change***
 
-The contract code start by getting the function "name" (hash):
+Return values are encoded in the same way as arguments.
+
+The contract code start by getting the calldata):
 
 ```
-PUSH1 0
-CALLDATALOAD
-```
+PUSH1 0       ;; MLOAD Address 0
+DUP           ;; Used for CALLDATACOPY address 0
+CALLDATASIZE
+CALLDATACOPY
+MLOAD
 
-Then for each function in the contract it executes
-
-```
-DUP1
-PUSH32 'function hash'
-EQ
-JUMPI function address
 ```
 
 The above could also be implemented as a search tree looking at one
@@ -259,49 +257,15 @@ byte at the time of the function hash if that produces smaller
 code. The compiler could also choose to truncate the hash to the
 shortest unique prefix and shift the incoming hash down. E.g if there
 are only three functions in the contract and their hashes starts with
-0xA, 0xB nd 0xC respectively we could have this code:
-
-```
-PUSH1 248     ; bits to shift left (256 - (prefix length * 8))
-SHR           ; shift down to prefix length
-DUP           ; for next comparison
-PUSH1 0xA     ; get prefix of first fun
-EQ            ; compare
-JUMPI #fun0xA ; jump
-PUSH1 0xB
-EQ
-JUMPI #fun0xB
-JUMP #fun0xC
-```
+0xA, 0xB nd 0xC respectively.
 
 (Given that the contract invocation checks that the function call is to a valid address/hash before calling AEVM.)
 
 The shortest unique suffix could also be used, and the hash could be ANDed with the suffix length instead.
 
-
 Then each exported function starts with an exported entry point where it executes
-code to fetch the arguments to memory
+code to fetch the arguments to memory.
 
-```
-JUMPDEST
-PUSH32 1 ; Skip the function name in the calldata
-CALLDATALOAD
-...
-PUSH32 Arity ; Skip other arguments
-CALLDATALOAD
-
-; Fetch data to memory
-PUSH1  0  ; Address 0 in mem
-PUSH   Arity + 1 ; # words to skip and
-DUP              ; Size = calldatasize - (arity+1)
-CALLDATASIZE  
-SWAP1
-SUB         
-CALLDATACOPY     ; copy from [arity+1..Size] to mem(0)
-
-JUMPDEST         ; for local calls
-                 ; code for function body
-```
 
 ### Local function calls
 
