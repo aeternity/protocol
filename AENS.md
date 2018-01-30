@@ -299,7 +299,7 @@ Note that the fee here is a distinct fee from the normal transaction fee.
  ------------ ----
 | expire_by  | 8  |
  ------------ ----
-| ttl        | 8  |
+| client_ttl | 8  |
  ------------ ----
 | pointers   |    |
  ------------ ----
@@ -311,6 +311,8 @@ of the name entry to be updated.
 The `expire_by` MUST NOT be more than 36000 blocks into
 the future.
 
+`update` transaction may be used to extend the lease of the name.
+We do not require an additional fee for extending the lease.
 
 #### Transfer
 
