@@ -44,10 +44,9 @@ accepted on the chain, the expiry is updated according to the response TTL.
 ### Oracle state tree update
 
 The oracle state tree is pruned when the TTL of an object is reached in the
-height of the chain. Since the GB Merkle trees are sensitive to the order of
-operations we define the operation order as:
+height of the chain. We define the operation order as:
 
-1. Delete the expired objects. Object are deleted in ascending order of their IDs.
+1. Delete the expired objects. Object should be deleted in ascending order of their IDs.
 2. Insert new object in the transaction order of the block.
 
 Note that the sorted order of the IDs is the same as the in-order
