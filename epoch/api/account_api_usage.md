@@ -21,7 +21,7 @@ You shall read output like the following:
 
 In order to retrieve your balance, fetch your public key then use it to get the balance associated to that public key (replace the public key in the command):
 ```bash
-curl -G http://127.0.0.1:3113/v2/account/balance/ak$3N1WLMewMQPUyQBdEhXRSYee84RQNKJrECwbbseMkNsZhv1XLjpmiqjAkvSRpQ6kgWJMjq9dTmdQ3ekuhpscJk6LpjJYk4'
+curl -G 'http://127.0.0.1:3113/v2/account/balance/ak$3N1WLMewMQPUyQBdEhXRSYee84RQNKJrECwbbseMkNsZhv1XLjpmiqjAkvSRpQ6kgWJMjq9dTmdQ3ekuhpscJk6LpjJYk4'
 ```
 You shall read output like the following...
 ```
