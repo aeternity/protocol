@@ -10,6 +10,7 @@ The WebSocket API provides the following actions:
 * [Unsubscribe to block chain events](#unsubscribe)
 * [Receive an event when mining a block](#mined-block)
 * [Receive an event when a block is added to the chain](#new-block)
+* [Receive an event when a transaction is added to the chain](#tx_chain)
 
 ## Get block by height
 ### Request
@@ -115,8 +116,8 @@ Response:
                         "target":553713663,
                         "time":1516707646911,
                         "transactions":[{"tx":"tx$cT6DAStjYG6BgLm3cL3WesxPwJgJ1CjK3roWw7UtwsqVyTCEzLvtGZLk6o1Ay1skL97FMZFpp6YHoGhaVoYJrRpXbzBUdwK3hwVRNXSJD4ZU1Bip2ak3nvcZRsuEREBdZgnYd1YuzNyWG2BQR4MFaear3x7vYGwwpo44SAKboGkJ8wWAYvysNziYQrQuVqGYRQ1j4kzscQUJWjRkmhLSoiX1EJQV8yGUuKixaG55o8LE6tbEyZaFtKjvApK6Eo"}],
-                         "txs_hash": "bx$JYyCS2dnvFeMZtJcakmjF8W9gJTHL45SCYnsrKsfj9wTva3pB",
-                         "version":4}
+                        "txs_hash": "bx$JYyCS2dnvFeMZtJcakmjF8W9gJTHL45SCYnsrKsfj9wTva3pB",
+                        "version":4}
               }
   }
 ```
@@ -299,6 +300,7 @@ Event:
 }
 
 ```
+
 ## New block
 ### Request
  * **target:** `chain`
@@ -326,6 +328,38 @@ Event:
  "action":"new_block",
   "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
              "height":46
+            }
+}
+
+```
+
+## TX Chain
+Get an event when a particular transaction is added to the blockchain.
+### Request
+ * **target:** `chain`
+ * **action:** `subscribe`
+ * **payload:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | type | string | `tx_chain` | Yes |
+  | tx_hash | string | Transaction Hash | Yes |
+
+### Event
+ * **origin:** `chain`
+ * **action:** `tx_chain`
+ * **payload:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | tx_hash | string | Hash of the just added transaction | Yes |
+
+### Example
+```
+Event:
+{"origin":"chain",
+ "action":"tx_chain",
+  "payload":{"tx_hash":"th$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31"
             }
 }
 
