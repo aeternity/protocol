@@ -23,15 +23,20 @@ public key of the node. This is easily retrieved from the running node:
 
 On a freshly started node, connect a websocket. (Here we use
 [WSCat](https://github.com/websockets/wscat) for the websocket connection.)
-Upon connection the client automatically subscribes to the _mined_block_-event,
+Upon connection we want to subscribe to the _mined_block_-event,
 i.e. everytime the node mines a new block an event is pushed to the client. We
-need to wait for the first block to be mined by the node (or else our
-transactions will be rejected with _"Insufficient balance"_).
+also need to wait for the first block to be mined by the node (or else our
+transactions will be rejected with _"Insufficient balance"_). In an environment
+with more than one node it is better to subscribe to the _new_block_-event, but
+here we simply use _mined_block_.
 
 ```
 ~/epoch/node: wscat -c ws://127.0.0.1:3104/websocket
 connected (press CTRL+C to quit)
-< {"action":"mined_block","origin":"miner","payload":{"height":1,"hash":"bh$jXjgHkcuXnTY4PtMpctcwFT2jf4fZ1jGdeax1geWoW64hSXpY"}}
+> {"target":"chain", "action":"subscribe", "payload":{"type":"mined_block}}
+< {"origin":"chain", "action":"subscribe", "payload":{"result":"ok", "subscribed_to":{"type":"mined_block}}}
+...
+< {"action":"mined_block","origin":"chain","payload":{"height":1,"hash":"bh$jXjgHkcuXnTY4PtMpctcwFT2jf4fZ1jGdeax1geWoW64hSXpY"}}
 ```
 
 Once the account has a positive balance we can post an _"Oracle register transaction"_:
@@ -53,9 +58,9 @@ exists we can register for getting events whenever a query is posted to this
 Oracle:
 ```
 ...
-< {"action":"mined_block","origin":"miner","payload":{"height":2,"hash":"bh$2UuiuAHW8bmRkcoMqP2Mcj5ZrxvGzjhQRhictByxf4AhcyF4q"}}
-> {"target":"oracle","action":"subscribe", "payload":{"type":"query","oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
-< {"action":"subscribe","origin":"oracle","payload":{"result":"ok","subscribed_to":{"oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","type":"query"}}}
+< {"action":"mined_block","origin":"chain","payload":{"height":2,"hash":"bh$2UuiuAHW8bmRkcoMqP2Mcj5ZrxvGzjhQRhictByxf4AhcyF4q"}}
+> {"target":"chain","action":"subscribe", "payload":{"type":"query","oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
+< {"action":"subscribe","origin":"chain","payload":{"result":"ok","subscribed_to":{"oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","type":"query"}}}
 ```
 
 We subscribe for `"type":"query"`, i.e. we want to get notified when the oracle
@@ -79,8 +84,8 @@ transaction gets included in the blockchain), but once that happens we should
 receive an event on the websocket:
 ```
 ...
-< {"action":"mined_block","origin":"miner","payload":{"height":4,"hash":"bh$K6oGLV2cHMMpmKjr7bKAByqCxVRwhNUUh5nACagXknARLUbJ3"}}
-< {"action":"new_oracle_query","origin":"node","payload":{"sender":"ak$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","query":"How are you?","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
+< {"action":"mined_block","origin":"chain","payload":{"height":4,"hash":"bh$K6oGLV2cHMMpmKjr7bKAByqCxVRwhNUUh5nACagXknARLUbJ3"}}
+< {"action":"new_oracle_query","origin":"chain","payload":{"sender":"ak$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","query":"How are you?","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
 ```
 
 We should note that in the response for the query request above we got the
@@ -91,8 +96,8 @@ rather than Bob...)
 
 ```
 ...
-> {"target":"oracle","action":"subscribe", "payload":{"type":"query","oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
-< {"action":"subscribe","origin":"oracle","payload":{"result":"ok","subscribed_to":{"oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","type":"query"}}}
+> {"target":"chain","action":"subscribe", "payload":{"type":"query","oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
+< {"action":"subscribe","origin":"chain","payload":{"result":"ok","subscribed_to":{"oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","type":"query"}}}
 ```
 
 We subscribe for `"type":"response"`, i.e. we want to get notified when the
@@ -115,8 +120,8 @@ be added to the chain), we see that we receive an event reflecting the query
 response:
 ```
 ...
-< {"action":"mined_block","origin":"miner","payload":{"height":6,"hash":"bh$i9P6dgcihe47Kwm6ZvTDb84HPGWr147KPviatJ5QXntHrBY1m"}}
-< {"action":"new_oracle_response","origin":"node","payload":{"query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","response":"I am fine, thanks!"}}
+< {"action":"mined_block","origin":"chain","payload":{"height":6,"hash":"bh$i9P6dgcihe47Kwm6ZvTDb84HPGWr147KPviatJ5QXntHrBY1m"}}
+< {"action":"new_oracle_response","origin":"chain","payload":{"query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","response":"I am fine, thanks!"}}
 ```
 
 This conclude the walk through of the oracle life cycle example, which also

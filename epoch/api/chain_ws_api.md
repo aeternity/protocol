@@ -6,7 +6,10 @@ The WebSocket API provides the following actions:
 * [Get a block by hash](#get-block-by-hash)
 * [Get a header by height](#get-header-by-height)
 * [Get a header by hash](#get-header-by-hash)
-* [Receive a message when mining a block](#block-mined)
+* [Subscribe to block chain events](#subscribe)
+* [Unsubscribe to block chain events](#unsubscribe)
+* [Receive an event when mining a block](#mined-block)
+* [Receive an event when a block is added to the chain](#new-block)
 
 ## Get block by height
 ### Request
@@ -17,7 +20,7 @@ The WebSocket API provides the following actions:
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | type | string | `block` | Yes |
-  | height | number | Height of the block to fetch | yes |
+  | height | number | Height of the block to fetch | Yes |
 
 ### Response
  * **origin:** `chain`
@@ -27,7 +30,7 @@ The WebSocket API provides the following actions:
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | block | object - [block](#block-structure) |  | Yes |
-  | height | number | Height of the block to fetch | yes |
+  | height | number | Height of the block to fetch | Yes |
   | type | string | `block` | Yes |
 
 ### Example
@@ -57,8 +60,8 @@ Response:
                         "target":553713663,
                         "time":1516707646911,
                         "transactions":[{"tx":"tx$cT6DAStjYG6BgLm3cL3WesxPwJgJ1CjK3roWw7UtwsqVyTCEzLvtGZLk6o1Ay1skL97FMZFpp6YHoGhaVoYJrRpXbzBUdwK3hwVRNXSJD4ZU1Bip2ak3nvcZRsuEREBdZgnYd1YuzNyWG2BQR4MFaear3x7vYGwwpo44SAKboGkJ8wWAYvysNziYQrQuVqGYRQ1j4kzscQUJWjRkmhLSoiX1EJQV8yGUuKixaG55o8LE6tbEyZaFtKjvApK6Eo"}],
-                         "txs_hash": "bx$JYyCS2dnvFeMZtJcakmjF8W9gJTHL45SCYnsrKsfj9wTva3pB",
-                         "version":4}
+                        "txs_hash": "bx$JYyCS2dnvFeMZtJcakmjF8W9gJTHL45SCYnsrKsfj9wTva3pB",
+                        "version":4}
               }
   }
 ```
@@ -72,7 +75,7 @@ Response:
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | type | string | `block` | Yes |
-  | hash | string | Hash of the block to fetch | yes |
+  | hash | string | Hash of the block to fetch | Yes |
 
 ### Response
  * **origin:** `chain`
@@ -226,22 +229,69 @@ Response:
   }
 ```
 
+## Subscribe
+### Request
+ * **target:** `chain`
+ * **action:** `subscribe`
+ * **payload:**
 
-## Block mined
-### Event 
- * **origin:** `miner`
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | type | string | Subscribe to events of `type` | Yes |
+  | <type_arg> | string | Some events can be further specialised - see indiviual events | No |
+
+### Response
+ * **origin:** `chain`
+ * **action:** `subscribe`
+ * **payload:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | result | string | `ok` or error reason | Yes |
+  | subscribed_to | object - query subscribe payload | | Yes on success |
+
+### Example
+```
+Request:
+  {"target":"chain",
+   "action":"subscribe",
+   "payload":{"type":"oracle_query",
+              "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}
+  }
+
+Response:
+  {"origin":"chain",
+   "action":"subscribe",
+   "payload":{"result":"ok",
+              "subscribed_to":{"type":"oracle_query",
+                               "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
+  }
+```
+
+## Mined block
+### Request
+ * **target:** `chain`
+ * **action:** `subscribe`
+ * **payload:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | type | string | `mined_block` | Yes |
+
+### Event
+ * **origin:** `chain`
  * **action:** `mined_block`
  * **payload:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | hash | string | Hash of the mined block | yes |
-  | height | number | Height of the mined block | yes |
+  | hash | string | Hash of the mined block | Yes |
+  | height | number | Height of the mined block | Yes |
 
 ### Example
 ```
 Event:
-{"origin":"miner",
+{"origin":"chain",
  "action":"mined_block",
   "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
              "height":1
@@ -249,28 +299,98 @@ Event:
 }
 
 ```
+## New block
+### Request
+ * **target:** `chain`
+ * **action:** `subscribe`
+ * **payload:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | type | string | `new_block` | Yes |
+
+### Event
+ * **origin:** `chain`
+ * **action:** `new_block`
+ * **payload:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | hash | string | Hash of the mined block | Yes |
+  | height | number | Height of the mined block | Yes |
+
+### Example
+```
+Event:
+{"origin":"chain",
+ "action":"new_block",
+  "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
+             "height":46
+            }
+}
+
+```
+
+## Unsubscribe
+### Request
+ * **target:** `chain`
+ * **action:** `unsubscribe`
+ * **payload:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | type | string | Unsubscribe to events of `type` | Yes |
+  | <type_arg> | string | Some events can be further specialised - see indiviual events | No |
+
+### Response
+ * **origin:** `chain`
+ * **action:** `unsubscribe`
+ * **payload:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | result | string | `ok` or error reason | Yes |
+  | subscribed_to | object - query unsubscribe payload | | Yes on success |
+
+### Example
+```
+Request:
+  {"target":"chain",
+   "action":"unsubscribe",
+   "payload":{"type":"oracle_query",
+              "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}
+  }
+
+Response:
+  {"origin":"chain",
+   "action":"unsubscribe",
+   "payload":{"result":"ok",
+              "subscribed_to":{"type":"oracle_query",
+                               "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
+  }
+```
 
 ## Data types
 ### Header structure
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | height | number | Height of the block | yes |
-  | nonce | number | Block nonce | yes |
-  | pow | [number] | Block proof of work | no |
-  | prev_hash | string | Hash of the previous block | no |
-  | state_hash | string | Hash of the root of the state tree | yes |
-  | target | number  | Threshold below which the hash of the Cuckoo Cycle PoW solution must be | yes |
-  | time | number | Block mining time | yes |
-  | txs_hash | string | Root hash of the Merkle tree of transactions included in this block | no |
-  | version | number | Version of the block structure | yes |
+  | height | number | Height of the block | Yes |
+  | nonce | number | Block nonce | Yes |
+  | pow | [number] | Block proof of work | No |
+  | prev_hash | string | Hash of the previous block | No |
+  | state_hash | string | Hash of the root of the state tree | Yes |
+  | target | number  | Threshold below which the hash of the Cuckoo Cycle PoW solution must be | Yes |
+  | time | number | Block mining time | Yes |
+  | txs_hash | string | Root hash of the Merkle tree of transactions included in this block | No |
+  | version | number | Version of the block structure | Yes |
 
 ### Block structure
 A block consists of a header part and a list of transactions. [The header](#header-structure) is descibed in the section above.
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | transactions | [[transaction](#transaction-structure)] | List of transactions included in the block | no |
+  | transactions | [[transaction](#transaction-structure)] | List of transactions included in the block | No |
 
 **Note:** Genesis block lacks `transactions` and thus - `txs_hash`. Since it
 is the first block - it doesn't have `prev_hash`, too.
@@ -278,5 +398,5 @@ is the first block - it doesn't have `prev_hash`, too.
 ### Transaction structure
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | MessagePack encoded transaction object | yes |
+  | tx | string | MessagePack encoded transaction object | Yes |
 

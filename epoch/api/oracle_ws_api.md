@@ -153,17 +153,17 @@ Response:
 
 ### Register for post query events
 ### Request
- * **target:** `oracle`
+ * **target:** `chain`
  * **action:** `subscribe`
  * **payload:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | type | `query` | | Yes |
+  | type | `oracle_query` | | Yes |
   | oracle_id | string | | Yes |
 
 ### Response
- * **origin:** `oracle`
+ * **origin:** `chain`
  * **action:** `subscribe`
  * **payload:**
 
@@ -173,7 +173,7 @@ Response:
   | subscribed_to | object - query subscribe payload | | Yes on success |
 
 ### Event
- * **origin:** `node`
+ * **origin:** `chain`
  * **action:** `new_oracle_query`
  * **payload:**
 
@@ -186,14 +186,14 @@ Response:
 ### Example
 ```
 Request:
-  {"target":"oracle",
+  {"target":"chain",
    "action":"subscribe",
    "payload":{"type":"query",
               "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}
   }
 
 Response:
-  {"origin":"oracle",
+  {"origin":"chain",
    "action":"subscribe",
    "payload":{"result":"ok",
               "subscribed_to":{"type":"query",
@@ -201,7 +201,7 @@ Response:
   }
 
 Event:
-  {"origin":"node",
+  {"origin":"chain",
    "action":"new_oracle_query",
    "payload":{"sender":"ak$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf",
               "query":"How are you?",
@@ -211,17 +211,17 @@ Event:
 
 ### Register for query response events
 ### Request
- * **target:** `oracle`
+ * **target:** `chain`
  * **action:** `subscribe`
  * **payload:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | type | `response` | | Yes |
+  | type | `oracle_response` | | Yes |
   | query_id | string | | Yes |
 
 ### Response
- * **origin:** `oracle`
+ * **origin:** `chain`
  * **action:** `subscribe`
  * **payload:**
 
@@ -231,7 +231,7 @@ Event:
   | subscribed_to | object - response subscribe payload | | Yes on success |
 
 ### Event
- * **origin:** `node`
+ * **origin:** `chain`
  * **action:** `new_oracle_response`
  * **payload:**
 
@@ -243,14 +243,14 @@ Event:
 ### Example
 ```
 Request:
-  {"target":"oracle",
+  {"target":"chain",
    "action":"subscribe",
    "payload":{"type":"response",
               "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
   }
 
 Response:
-  {"origin":"oracle",
+  {"origin":"chain",
    "action":"subscribe",
    "payload":{"result":"ok",
               "subscribed_to":{"type":"response",
@@ -258,7 +258,7 @@ Response:
   }
 
 Event:
-  {"origin":"node",
+  {"origin":"chain",
    "action":"new_oracle_response",
    "payload":{"response":"I am fine, thanks!",
               "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
