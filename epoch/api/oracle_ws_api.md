@@ -33,6 +33,7 @@ The WebSocket API provides five different actions:
   | ---- | ---- | ----------- | -------- |
   | result | string | `ok` or error reason | Yes |
   | oracle_id | string | Hash for created oracle | Yes on success |
+  | tx_hash | string | Hash for the transaction | Yes on success |
 
 ### Example
 ```
@@ -52,6 +53,7 @@ Response:
   {"action":"register",
    "origin":"oracle",
    "payload":{"result":"ok",
+              "tx_hash":"th$26iUqaRt4s1ydAF8z7WDeM4FhCqwEu5TbWTCazYFsPY8Le8Upq",
               "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}
   }
 ```
@@ -82,6 +84,7 @@ Response:
   | ---- | ---- | ----------- | -------- |
   | result | string | `ok` or error reason | Yes |
   | query_id | string | Hash for created query | Yes on success |
+  | tx_hash | string | Hash for the transaction | Yes on success |
 
 ### Example
 ```
@@ -103,6 +106,7 @@ Response:
   {"action":"query",
    "origin":"oracle",
    "payload":{"result":"ok",
+              "tx_hash":"th$26iUqaRt4s1ydAF8z7WDeM4FhCqwEu5TbWTCazYFsPY8Le8Upq",
               "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
   }
 ```
@@ -130,6 +134,7 @@ Response:
   | ---- | ---- | ----------- | -------- |
   | result | string | `ok` or error reason | Yes |
   | query_id | string | Hash for the answered query | Yes on success |
+  | tx_hash | string | Hash for the transaction | Yes on success |
 
 ### Example
 ```
@@ -147,6 +152,7 @@ Response:
   {"origin":"oracle",
    "action":"response",
    "payload":{"result":"ok",
+              "tx_hash":"th$26iUqaRt4s1ydAF8z7WDeM4FhCqwEu5TbWTCazYFsPY8Le8Upq",
               "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
   }
 ```
