@@ -21,9 +21,9 @@ curl http://localhost:3113/v2/account/pub-key
 ### Verify availability
 
 Verify that the name that your going to claim is not taken.
-For the purpose of this example let's consider `fooo.baar.aet` name:
+For the purpose of this example let's consider `foobar.aet` name:
 ```
-curl http://localhost:3013/v2/name\?name\=fooo.baar.aet
+curl http://localhost:3013/v2/name\?name\=foobar.aet
 {"reason":"Name not found"}
 ```
 
@@ -33,36 +33,17 @@ In order to claim a name you need to submit a preclaim transaction first, contai
 
 You need to pick a random salt value, to make commitment hash unique.
 Commitment hash is calculated based on [the formula](/AENS.md#pre-claim).
-For the purpose of this example name `fooo.baar.aet` with salt 123 is considered:
+For the purpose of this example name `foobar.aet` with salt 123 is considered.
+In order to obtain commitment hash use the following API:
 ```
-Base58(Commitment(fooo.baar.aet, 123)) = "cm$2fxgad7CSY4dPsn6SVtgdigNq8gdzRJb9W3VB1W5oRKHqC3yH6"
+curl http://localhost:3013/v2/commitment-hash\?name\=foobar.aet\&salt\=123
+{"commitment":"cm$Liq9Q5LGzop7n7TS35FVTpjECPJSPywnvqijEGCA6jiZZv6R7"}
 ```
-
-### How to obtain the hash
-
-We intend to extend public API with hash API computing the commitment hash
-
-Until its available developers can use one of two:
-
-from bash console in the host running node
-
-```
-$ bin/epoch eval 'aec_base58c:encode(commitment, aens_hash:commitment_hash(<<"fooo.baar.aet">>, 123))'
-<<"cm$2fxgad7CSY4dPsn6SVtgdigNq8gdzRJb9W3VB1W5oRKHqC3yH6">>
-```
-
-
-from e.g. `make local-attach`
-
-```
-erl> aec_base58c:encode(commitment, aens_hash:commitment_hash(<<"fooo.baar.aet">>, 123)).
-```
-
 
 To preclaim a name, send name preclaim transaction with commitment hash in the payload:
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-preclaim-tx -d '{"commitment": "cm$2fxgad7CSY4dPsn6SVtgdigNq8gdzRJb9W3VB1W5oRKHqC3yH6", "fee": 1}'
-{"commitment":"cm$2fxgad7CSY4dPsn6SVtgdigNq8gdzRJb9W3VB1W5oRKHqC3yH6"}
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-preclaim-tx -d '{"commitment": "cm$Liq9Q5LGzop7n7TS35FVTpjECPJSPywnvqijEGCA6jiZZv6R7", "fee": 1}'
+{"commitment":"cm$Liq9Q5LGzop7n7TS35FVTpjECPJSPywnvqijEGCA6jiZZv6R7"}
 ```
 
 Mind that preclaim and claim transactions will not be accepted in the same block,
@@ -78,30 +59,30 @@ curl http://localhost:3013/v2/top
 When a name is preclaimed, you are in a position to claim it.
 You must use the name with the same salt as used in commitment hash computation:
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-claim-tx -d '{"name": "fooo.baar.aet", "name_salt": 123, "fee": 1}'
-{"name_hash":"nm$65YjZ3BnZgwrjb1xRW2UGD7umqmnXhEtqHwtU7fbf9zreAfEp"}
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-claim-tx -d '{"name": "foobar.aet", "name_salt": 123, "fee": 1}'
+{"name_hash":"nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4"}
 ```
 
 After claiming the name (and claim transaction being accepted) you may verify name presence:
 ```
-curl http://localhost:3013/v2/name\?name\=fooo.baar.aet
-{"name":"fooo.baar.aet","name_ttl":0,"pointers":"[]"}
+curl http://localhost:3013/v2/name\?name\=foobar.aet
+{"name":"foobar.aet","name_hash":"nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4","name_ttl":0,"pointers":"[]"}
 ```
 
 ### Update
 
-In order to make better use of claimed name you need to specify where should it point to.
+In order to make better use of claimed name you need to specify where it should point to.
 To do so, specify pointers, which translates to different blockchain entities.
 In the initial version two pointers are available:
 * `account_pubkey`
 * `oracle_pubkey`
 
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-update-tx -d '{"name_hash": "nm$65YjZ3BnZgwrjb1xRW2UGD7umqmnXhEtqHwtU7fbf9zreAfEp", "name_ttl": 600000, "ttl": 50, "pointers": "{\"account_pubkey\":\"ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw\"}", "fee": 1}'
-{"name_hash":"nm$65YjZ3BnZgwrjb1xRW2UGD7umqmnXhEtqHwtU7fbf9zreAfEp"}
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-update-tx -d '{"name_hash": "nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4", "name_ttl": 600000, "ttl": 50, "pointers": "{\"account_pubkey\":\"ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw\"}", "fee": 1}'
+{"name_hash":"nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4"}
 
-curl http://localhost:3013/v2/name\?name\=fooo.baar.aet
-{"name":"fooo.baar.aet","name_ttl":600000,"pointers":"{\"account_pubkey\":\"ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw\"}"}
+curl http://localhost:3013/v2/name\?name\=foobar.aet
+{"name":"foobar.aet","name_ttl":600000,"pointers":"{\"account_pubkey\":\"ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw\"}"}
 ```
 
 ### Spend to name
@@ -109,7 +90,7 @@ curl http://localhost:3013/v2/name\?name\=fooo.baar.aet
 Now you may use account and oracle pointers interchangeably with their addresses.
 In order to utilize account pubkey pointer, put a name instead of an account key, e.g. in spend transaction put it in `recipient_pubkey` field:
 ```
-curl -X POST -H "Content-Type: application/json" -d '{"recipient_pubkey":"fooo.baar.aet", "amount":2, "fee":1}' http://127.0.0.1:3113/v2/spend-tx
+curl -X POST -H "Content-Type: application/json" -d '{"recipient_pubkey":"foobar.aet", "amount":2, "fee":1}' http://127.0.0.1:3113/v2/spend-tx
 {}
 ```
 
@@ -117,14 +98,14 @@ curl -X POST -H "Content-Type: application/json" -d '{"recipient_pubkey":"fooo.b
 
 In order to transfer a name to another user send name transfer transaction:
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-transfer-tx -d '{"name_hash": "nm$65YjZ3BnZgwrjb1xRW2UGD7umqmnXhEtqHwtU7fbf9zreAfEp", "recipient_pubkey": "ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw", "fee": 1}'
-{"name_hash":"nm$65YjZ3BnZgwrjb1xRW2UGD7umqmnXhEtqHwtU7fbf9zreAfEp"}
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-transfer-tx -d '{"name_hash": "nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4", "recipient_pubkey": "ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw", "fee": 1}'
+{"name_hash":"nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4"}
 ```
 
 ### Revoke
 
 In order to revoke a name send name revoke transaction:
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-revoke-tx -d '{"name_hash": "nm$65YjZ3BnZgwrjb1xRW2UGD7umqmnXhEtqHwtU7fbf9zreAfEp", "fee": 1}'
-{"name_hash":"nm$65YjZ3BnZgwrjb1xRW2UGD7umqmnXhEtqHwtU7fbf9zreAfEp"}
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-revoke-tx -d '{"name_hash": "nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4", "fee": 1}'
+{"name_hash":"nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4"}
 ```
