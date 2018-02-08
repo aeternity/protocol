@@ -15,6 +15,11 @@ The High Level Machine can execute AEtherium block chain operations (transaction
 block chain variables in straight line code. A contract on HLM has a two local key->value stores,
 one containing numbers and one containg strings.
 
+The cost for executuing a HLM contract is directly propotional to the size of CODE+STORE.
+That is the gas used is bytesize(CODE+STORE) before contract execution.
+
+This allows for blindingly fast and cheap contracts with a known kost to be executed on the AEternity chain.
+
 HLM statements are of the form:
 ```
  IF BoolExpr THEN Statement ELSE Statement
@@ -128,7 +133,7 @@ ROL
 ```
 
 
-## The Fast Aeternity Virtual Machine AEVM
+## The Fast Aeternity Virtual Machine FAEVM
 
 The FAEVM is also version of the EVM: https://github.com/ethereum/yellowpaper and it follows the AEVM exactly.
 
