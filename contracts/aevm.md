@@ -6,19 +6,19 @@ contract. The AEternity blockchain supports four virtual machines.
 
 1. HLM - A high level machine for executing logical formulas and blockchain operations.
 2. WTFVM - A Warded Typed Functional Virtual Machine
-3. AEVM - A version of the Etherium VM
-3. FAEVM - A fast version of the Etherium VM
+3. AEVM - A version of the Ethereum VM
+3. FAEVM - A fast version of the Ethereum VM
 
 # HLM
 
-The High Level Machine can execute AEtherium block chain operations (transactions) and logical tests on
+The High Level Machine can execute Ethereum block chain operations (transactions) and logical tests on
 block chain variables in straight line code. A contract on HLM has a two local key->value stores,
-one containing numbers and one containg strings.
+one containing numbers and one containing strings.
 
-The cost for executuing a HLM contract is directly propotional to the size of CODE+STORE.
+The cost for executing a HLM contract is directly proportional to the size of CODE+STORE.
 That is the gas used is bytesize(CODE+STORE) before contract execution.
 
-This allows for blindingly fast and cheap contracts with a known kost to be executed on the AEternity chain.
+This allows for blindingly fast and cheap contracts with a known cost to be executed on the AEternity chain.
 
 HLM statements are of the form:
 ```
@@ -85,15 +85,15 @@ TODO:
 
 # WTFVM
 
-The Warded Typed Functional Virtual Machine is used to efficeintly and safely execute contracts written in the Sophia language.
+The Warded Typed Functional Virtual Machine is used to efficiently and safely execute contracts written in the Sophia language.
 
 The WTFVM machine is Warded. This means that all arithmetic operations are checked for overflow and underflow if applicable.
-The machine has a signed arbitrary large number type so for most opertations there should be no overflow.
+The machine has a signed arbitrary large number type so for most operations there should be no overflow.
 
-The WTFVM machine is typed. Every instruction and every instruction argument has a type. All aregument types are checked when
+The WTFVM machine is typed. Every instruction and every instruction argument has a type. All argument types are checked when
 a contract is called. All data is tagged with the types.
 
-The WTFVM machine is functional. The machine supports the execution of functional langugaes with tagged data,
+The WTFVM machine is functional. The machine supports the execution of functional languages with tagged data,
 automatic memory management and garbage collection.
 
 The WTFVM is a virtual machine the instructions are on a higher level than pure memory references.
@@ -101,17 +101,17 @@ The WTFVM is a virtual machine the instructions are on a higher level than pure 
 [TODO: Full description of the WTFVM]
 
 
-## The Aeternity Virtual Machine AEVM
+## The AEternity Virtual Machine AEVM
 
 The AEVM is a version of the EVM: https://github.com/ethereum/yellowpaper
 
-The AEVM is emulated inside the AEtherium node an no marshallling of arguments, code and data is necessary.
+The AEVM is emulated inside the Ethereum node an no marshaling of arguments, code and data is necessary.
 This makes for fast upstart and faster execution of most smaller contracts.
 
 There are a few differences between the EVM and the AEVM.
 
 The SELFDESTRUCT instruction is not immediate, instead the contract is set in a disabled state where neither
-new contractracts nor call transactions can call the contract directly. When all other contracts reffering to
+new contracts nor call transactions can call the contract directly. When all other contracts referring to
 a disabled contract are fully disabled the contract is disabled.
 
 [TODO: Describe these instructions.]
@@ -133,12 +133,12 @@ ROL
 ```
 
 
-## The Fast Aeternity Virtual Machine FAEVM
+## The Fast AEternity Virtual Machine FAEVM
 
 The FAEVM is also version of the EVM: https://github.com/ethereum/yellowpaper and it follows the AEVM exactly.
 
 The FAEVM compiles the contract code to native code on supported hardware. The code will then execute outside
-of the AEtherium node and all code, data and arguments need to be marshalled to call the native code. This makes
+of the Ethereum node and all code, data and arguments need to be marshaled to call the native code. This makes
 for slower calls but faster execution for larger contracts.
 
 
