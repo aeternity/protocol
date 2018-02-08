@@ -90,7 +90,7 @@ Aeon is the main coin used in the Æternity system. We use the following denomin
 
 ### Crypto
 
-SHA-256 (256 bits digest) and secp256k1
+Blake2b (256 bits digest) and secp256k1
 
 #### Keys
 
@@ -279,7 +279,7 @@ header = version || height || prev_hash || txs_hash || root_hash || target || ev
 ```
 
 ```
-h_header = SHA256(header)
+h_header = Blake2b(header)
 ```
 
 The default `key` for cuckoo is 80 bytes long. The `nonce` here is expressed
@@ -312,7 +312,7 @@ it would have to be 64 bits. Therefore a solution is currently `[u32; 42]`.
 See [Chapter 9 of the cuckoo cycle paper](https://github.com/tromp/cuckoo/blob/master/doc/cuckoo.pdf?raw=true):
 
 	For further control, a difficulty target 0 < T < 2^256 is introduced, and we impose the additional
-constraint that the sha256 digest of the cycle nonces in ascending order be less than T, thus reducing
+constraint that the Blake2b 256 bit digest of the cycle nonces in ascending order be less than T, thus reducing
 the success probability by a factor 2^256 .
 
 Thus we adopt the target notion from Bitcoin and also use the same way to

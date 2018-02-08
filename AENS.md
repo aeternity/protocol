@@ -201,7 +201,7 @@ name instead of the original claimant's one.
 
 We are going to adopt the `NameHash` as defined by the ENS in
 [EIP-137](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md#namehash-algorithm)
-using SHA256 instead.
+using Blake2b (256 bits digest) instead.
 
 ```
 def namehash(name):
@@ -209,7 +209,7 @@ def namehash(name):
     return '\0' * 32
   else:
     label, _, remainder = name.partition('.')
-    return sha256(namehash(remainder) + sha256(label))
+    return Blake2b(namehash(remainder) + Blake2b(label))
 ```
 
 Names are generally only referred to in hashed form.
