@@ -16,7 +16,7 @@ block chain variables in straight line code. A contract on HLM has a two local k
 one containing numbers and one containg strings.
 
 HLM statements are of the form:
-
+```
  IF BoolExpr THEN Statement ELSE Statement
  IF BoolExpr THEN Statement 
  TX(SpendTx, A, B, Amount)
@@ -65,7 +65,8 @@ COP:
    >=
    <=
    EQOP
-   
+```
+
 A HLM contract has a caller and an owner (creator).
 
 TODO:
@@ -114,6 +115,7 @@ There is a PUSH N instruction.
 
 AEVM also has some new instructions that will make it into the EVM at some point:
 
+```
 JUMPTO jump_target
 JUMPIF jump_target
 BEGINSUB n_args, n_results
@@ -123,6 +125,7 @@ SHL
 SHR
 SAR
 ROL
+```
 
 
 ## The Fast Aeternity Virtual Machine AEVM
