@@ -1,9 +1,9 @@
 [back](./contracts.md)
-## The Ring Language
+## The Sophia Language
 An AEternity BlockChain Language
-The Ring is a dialect of ReasonML ( https://reasonml.github.io/ ).
+The Sophia is a dialect of ReasonML ( https://reasonml.github.io/ ).
 
-Ring is customized for smart contracts, which can be published
+Sophia is customized for smart contracts, which can be published
 to a blockchain (the AEternity BlockChain). Thus some
 unnecessary features of Reason (and OCaml - since Reason is closely
 related to OCaml) have been removed, and some blockchain specific
@@ -13,7 +13,7 @@ tries to summarize the changes and additions.
 ## Language Features
 ### Contracts
 
-Ring does not have modules. Instead ring has static
+Sophia does not have modules. Instead sophia has static
 contracts. Contracts are similar to classes in object oriented
 languages and support local state and inheritance. More specifically:
 
@@ -61,7 +61,7 @@ worked out).
 
 ### Mutable state
 
-Ring does not have arbitrary mutable state, but only a limited form of
+Sophia does not have arbitrary mutable state, but only a limited form of
 state associated with each contract instance.
 
 - Each contract defines a state type encapsulating its mutable state.
@@ -73,14 +73,14 @@ state associated with each contract instance.
   and events), the contract language is purely functional.
 - Functions modifying the state need to be annotated with the stateful keyword.
 
-To make it convenient to update parts of a deeply nested state Ring
+To make it convenient to update parts of a deeply nested state Sophia
 provides special syntax for map/record updates.  Open
 question: we likely want to make it possible to have immutable state
 (parameters). Keep separate from mutable state or annotate certain
 fields as immutable?
 
 ### Types
-Ring has the following types:
+Sophia has the following types:
 
 | Type    | Description                     | Example
 | ------- | ------------------------------- | -------:
@@ -97,19 +97,19 @@ Ring has the following types:
 | transactions | An append only list of blockchain transactions |
 | events   | An append only list of blockchain events (or log entries) |
 
-#### Reason types not in Ring
+#### Reason types not in Sophia
 - Arrays
 - Variants
 - Refs
 - Object
 
 ### Pattern matching
-Pattern matching is probably outside the first iteration of Ring, but
+Pattern matching is probably outside the first iteration of Sophia, but
 we definitely want it in the final language.
 
 ### Builtins
 #### Events
-Ring has events which logs a structured message to the contract log in
+Sophia has events which logs a structured message to the contract log in
 the resulting blockchain transaction.
 
 ```
@@ -117,14 +117,14 @@ event(name: string, value: any)
 ```
 
 #### Transactions
-Ring can generate blockchain transactions.
+Sophia can generate blockchain transactions.
 ```
 transaction(tx_type: transaction, argument: record )
 ```
 
 #### State
 
-A Ring contract has a state. You must declare the state record type in
+A Sophia contract has a state. You must declare the state record type in
 the contract. You can then update the state through mutable record
 update.
 
@@ -170,7 +170,7 @@ block_timestamp() : () => uint; /* Block timestamp */
 There is one exception: abort (reason:string)
 
 ### JSX
-Ring does not support inline html syntax.
+Sophia does not support inline html syntax.
 
 ## The lifetime of a contract
 

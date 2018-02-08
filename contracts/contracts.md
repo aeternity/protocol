@@ -34,9 +34,9 @@ A field in the contract specifies which virtual machine to be used.
 In the future we plan to provide at least one more virtual machine which addresses some of the
 security issues with the EVM.
 
-## [Ring: The first contract language](./ring.md)
+## [Sophia: The first contract language](./sophia.md)
 
-Ring is a functional Ocaml like language which syntax most resembles that of Reason.
+Sophia is a functional Ocaml like language which syntax most resembles that of Reason.
 
 ## [Contract state trees](./contract_state_tree.md)
 
