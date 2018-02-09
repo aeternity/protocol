@@ -59,11 +59,11 @@ Oracle:
 ```
 ...
 < {"action":"mined_block","origin":"chain","payload":{"height":2,"hash":"bh$2UuiuAHW8bmRkcoMqP2Mcj5ZrxvGzjhQRhictByxf4AhcyF4q"}}
-> {"target":"chain","action":"subscribe", "payload":{"type":"query","oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
-< {"action":"subscribe","origin":"chain","payload":{"result":"ok","subscribed_to":{"oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","type":"query"}}}
+> {"target":"chain","action":"subscribe", "payload":{"type":"oracle_query","oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
+< {"action":"subscribe","origin":"chain","payload":{"result":"ok","subscribed_to":{"oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","type":"oracle_query"}}}
 ```
 
-We subscribe for `"type":"query"`, i.e. we want to get notified when the oracle
+We subscribe for `"type":"oracle_query"`, i.e. we want to get notified when the oracle
 with the given id receives a query. Of course we want to test this, so let us
 post a query...
 ```
@@ -96,11 +96,11 @@ rather than Bob...)
 
 ```
 ...
-> {"target":"chain","action":"subscribe", "payload":{"type":"query","oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
-< {"action":"subscribe","origin":"chain","payload":{"result":"ok","subscribed_to":{"oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","type":"query"}}}
+> {"target":"chain","action":"subscribe", "payload":{"type":"oracle_response","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
+< {"action":"subscribe","origin":"chain","payload":{"result":"ok","subscribed_to":{"query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","type":"oracle_response"}}}
 ```
 
-We subscribe for `"type":"response"`, i.e. we want to get notified when the
+We subscribe for `"type":"oracle_response"`, i.e. we want to get notified when the
 oracle answers the query with the given id. Of course we want to test this as
 well, so let us post a response to the query.
 

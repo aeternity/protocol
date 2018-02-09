@@ -194,7 +194,7 @@ Response:
 Request:
   {"target":"chain",
    "action":"subscribe",
-   "payload":{"type":"query",
+   "payload":{"type":"oracle_query",
               "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}
   }
 
@@ -202,7 +202,7 @@ Response:
   {"origin":"chain",
    "action":"subscribe",
    "payload":{"result":"ok",
-              "subscribed_to":{"type":"query",
+              "subscribed_to":{"type":"oracle_query",
                                "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
   }
 
@@ -251,7 +251,7 @@ Event:
 Request:
   {"target":"chain",
    "action":"subscribe",
-   "payload":{"type":"response",
+   "payload":{"type":"oracle_response",
               "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
   }
 
@@ -259,7 +259,7 @@ Response:
   {"origin":"chain",
    "action":"subscribe",
    "payload":{"result":"ok",
-              "subscribed_to":{"type":"response",
+              "subscribed_to":{"type":"oracle_response",
                                "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
   }
 
