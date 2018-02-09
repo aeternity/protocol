@@ -88,9 +88,28 @@ Aeon is the main coin used in the Æternity system. We use the following denomin
 
 ## Specification
 
+### Serialization
+
 ### Crypto
 
 Blake2b (256 bits digest) and secp256k1
+
+
+#### Tagged Hashing
+
+`Hash(obj) = Hash(tag + Serialize(obj))`
+
+`tag` is a per object specific byte sequence, which guarantuees
+that object with differing types will always result in different
+hashes.
+
+`Serialize` should be a stable serialization function, i.e.
+for a given object the `object->serialized_obj->object` round
+trip should always result in the same object.
+
+| Object | Tag |
+| ------ | --- |
+|        |     |
 
 #### Keys
 
@@ -119,12 +138,24 @@ ECDSA, DER encoding (~72 bytes in size)
 
 ## Accounts
 
+Accounts are identified by secret/public key pair. Whoever owns the secret key for
+a given public key can issue transactions for the account associated.
+
 ```
 address: public key
 balance:
 nonce:
 height:
 ```
+
+***address***: public key used to create the account.
+
+***balance***: amount of aeons associated with this account.
+
+***nonce***: counts the number of transactions made. Nonces MUST be processed in order
+and if a nonce is missing, e.g. a transaction with nonce 3 is published but the issuing
+account has a nonce of two recorded, then the transaction MUST NOT be included in a block.
+
 
 ### Blocks
 

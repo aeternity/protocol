@@ -15,7 +15,7 @@ or considered for implementation.
 
 ## [Aeternity Naming System](./AENS.md)
 
-## Epoch
+## [Epoch](./epoch/README.md)
 
 Epoch is the reference implementation of the Aeternity protocol. Since we don't
 want to fragment relevant information too much, documentation specific to Epoch,
