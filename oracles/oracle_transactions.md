@@ -21,7 +21,7 @@ The transaction contains:
 Questions/Later:
 - Exact format for queries (API).
   - Protobuf or something similar?
-- Exaxt format for responses.
+- Exact format for responses.
 - Fee for posting a query. The fee can be 0.
   - Fees are flat to begin with.
   - We could imagine fees to be proportional to something.
