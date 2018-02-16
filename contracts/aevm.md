@@ -5,7 +5,7 @@ A smart contract is associated with a virtual machine for the execution of that
 contract. The AEternity blockchain supports four virtual machines.
 
 1. HLM - A high level machine for executing logical formulas and blockchain operations.
-2. WTFVM - A Warded Typed Functional Virtual Machine
+2. FTWVM - A Functional Typed Warded Virtual Machine
 3. AEVM - A version of the Ethereum VM
 3. FAEVM - A fast version of the Ethereum VM
 
@@ -83,25 +83,25 @@ TODO:
  * Describe return values
  * Describe how the key value stores are encoded
 
-# WTFVM
+# FTWVM
 
-The Warded Typed Functional Virtual Machine is used to efficiently and safely execute contracts written in the Sophia language.
+The Functional Typed Warded Virtual Machine is used to efficiently and safely execute contracts written in the Sophia language.
 
-The WTFVM machine is Warded. This means that all arithmetic operations are checked for overflow and underflow if applicable.
+The FTWVM machine is Warded. This means that all arithmetic operations are checked for overflow and underflow if applicable.
 The machine has a signed arbitrary large number type so for most operations there should be no overflow.
 
-The WTFVM machine is typed. Every instruction and every instruction argument has a type. All argument types are checked when
+The FTWVM machine is typed. Every instruction and every instruction argument has a type. All argument types are checked when
 a contract is called. All data is tagged with the types.
 
-The WTFVM machine is functional. The machine supports the execution of functional languages with tagged data,
+The FTWVM machine is functional. The machine supports the execution of functional languages with tagged data,
 automatic memory management and garbage collection.
 
-The WTFVM is a virtual machine the instructions are on a higher level than pure memory references.
+The FTWVM is a virtual machine the instructions are on a higher level than pure memory references.
 
-[TODO: Full description of the WTFVM]
+[TODO: Full description of the FTWVM]
 
 
-## The AEternity Virtual Machine AEVM
+## The AEternity Ethereum Virtual Machine AEVM
 
 The AEVM is a version of the EVM: https://github.com/ethereum/yellowpaper
 

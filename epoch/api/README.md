@@ -72,3 +72,4 @@ A response (and an event) has the format:
 * [Spending tokens using user API](./spend_api_usage.md)
 * [Oracle user API usage](./oracle_api_usage.md)
 * [Naming system API usage](./naming_system_api_usage.md)
+* [Contract API usage](./contract_api_usage.md)
