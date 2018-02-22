@@ -46,6 +46,7 @@ Request:
 Response:
   {"origin":"chain",
    "action":"requested_data",
+   "tag":"untagged",
    "payload":{"height":1,
               "type":"block",
               "block":{"height":1,
@@ -101,6 +102,7 @@ Request:
 Response:
   {"origin":"chain",
    "action":"requested_data",
+   "tag":"untagged",
    "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
               "type":"block",
               "block":{"height":1,
@@ -156,6 +158,7 @@ Request:
 Response:
   {"origin":"chain",
    "action":"requested_data",
+   "tag":"untagged",
    "payload":{"height":1,
               "type":"header",
               "block":{"height":1,
@@ -210,6 +213,7 @@ Request:
 Response:
   {"origin":"chain",
    "action":"requested_data",
+   "tag":"untagged",
    "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
               "type":"header",
               "block":{"height":1,
@@ -263,6 +267,7 @@ Request:
 Response:
   {"origin":"chain",
    "action":"subscribe",
+   "tag":"untagged",
    "payload":{"result":"ok",
               "subscribed_to":{"type":"oracle_query",
                                "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
@@ -398,6 +403,7 @@ Request:
 Response:
   {"origin":"chain",
    "action":"unsubscribe",
+   "tag":"untagged",
    "payload":{"result":"ok",
               "subscribed_to":{"type":"oracle_query",
                                "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}

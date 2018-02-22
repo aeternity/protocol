@@ -34,7 +34,7 @@ here we simply use _mined_block_.
 ~/epoch/node: wscat -c ws://127.0.0.1:3104/websocket
 connected (press CTRL+C to quit)
 > {"target":"chain", "action":"subscribe", "payload":{"type":"mined_block}}
-< {"origin":"chain", "action":"subscribe", "payload":{"result":"ok", "subscribed_to":{"type":"mined_block}}}
+< {"origin":"chain", "action":"subscribe", "tag":"untagged", "payload":{"result":"ok", "subscribed_to":{"type":"mined_block}}}
 ...
 < {"action":"mined_block","origin":"chain","payload":{"height":1,"hash":"bh$jXjgHkcuXnTY4PtMpctcwFT2jf4fZ1jGdeax1geWoW64hSXpY"}}
 ```
@@ -43,7 +43,7 @@ Once the account has a positive balance we can post an _"Oracle register transac
 ```
 ...
 > {"target":"oracle", "action":"register", "payload":{"type":"OracleRegisterTxObject", "vsn":1, "account":"ak$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf", "query_format":"the query spec", "response_format":"the response spec", "query_fee":4, "ttl":{"type":"delta", "value":50}, "fee":5}}
-< {"action":"register","origin":"oracle","payload":{"result":"ok","oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","tx_hash":"th$26iUqaRt4s1ydAF8z7WDeM4FhCqwEu5TbWTCazYFsPY8Le8Upq"}}
+< {"action":"register","origin":"oracle","tag":"untagged","payload":{"result":"ok","oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","tx_hash":"th$26iUqaRt4s1ydAF8z7WDeM4FhCqwEu5TbWTCazYFsPY8Le8Upq"}}
 ```
 
 The register transaction uses the same format for the payload as the HTTP API
@@ -59,8 +59,8 @@ Oracle:
 ```
 ...
 < {"action":"mined_block","origin":"chain","payload":{"height":2,"hash":"bh$2UuiuAHW8bmRkcoMqP2Mcj5ZrxvGzjhQRhictByxf4AhcyF4q"}}
-> {"target":"chain","action":"subscribe", "payload":{"type":"oracle_query","oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
-< {"action":"subscribe","origin":"chain","payload":{"result":"ok","subscribed_to":{"oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","type":"oracle_query"}}}
+> {"target":"chain","action":"subscribe","payload":{"type":"oracle_query","oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
+< {"action":"subscribe","origin":"chain","tag":"tagged","payload":{"result":"ok","subscribed_to":{"oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","type":"oracle_query"}}}
 ```
 
 We subscribe for `"type":"oracle_query"`, i.e. we want to get notified when the oracle
@@ -69,7 +69,7 @@ post a query...
 ```
 ...
 > {"target":"oracle", "action":"query", "payload":{"type":"OracleQueryTxObject", "vsn":1, "oracle_pubkey":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":7, "query":"How are you?"}}
-< {"action":"query","origin":"oracle","payload":{"result":"ok","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","tx_hash":"th$fCRXecXPDoYhKF5NaVdYL3ZbMMsJrUCKb18LJYCYuzRTT79mV"}}
+< {"action":"query","origin":"oracle","tag":"tagged","payload":{"result":"ok","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","tx_hash":"th$fCRXecXPDoYhKF5NaVdYL3ZbMMsJrUCKb18LJYCYuzRTT79mV"}}
 ```
 
 Again we use exactly the same format for the payload as the HTTP API. And also,
@@ -97,7 +97,7 @@ rather than Bob...)
 ```
 ...
 > {"target":"chain","action":"subscribe", "payload":{"type":"oracle_response","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
-< {"action":"subscribe","origin":"chain","payload":{"result":"ok","subscribed_to":{"query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","type":"oracle_response"}}}
+< {"action":"subscribe","origin":"chain","tag":"tagged","payload":{"result":"ok","subscribed_to":{"query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","type":"oracle_response"}}}
 ```
 
 We subscribe for `"type":"oracle_response"`, i.e. we want to get notified when the
@@ -107,7 +107,7 @@ well, so let us post a response to the query.
 ```
 ...
 > {"target":"oracle", "action":"response", "payload":{"type":"OracleResponseTxObject", "vsn":1, "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr", "fee":3, "response":"I am fine, thanks!"}}
-< {"action":"response","origin":"oracle","payload":{"result":"ok","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","tx_hash":"th$2mUjNg9VLztPC1DLSckdA6P4vPffC6xtAQNoHtYbtoHAd4yXuw"}}
+< {"action":"response","origin":"oracle","tag":"tagged","payload":{"result":"ok","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","tx_hash":"th$2mUjNg9VLztPC1DLSckdA6P4vPffC6xtAQNoHtYbtoHAd4yXuw"}}
 ```
 
 Also here we use exactly the same format for the payload as the HTTP API. The
