@@ -7,12 +7,12 @@
 - The oracle operator creates an oracle through posting a **oracle register transaction** on the chain.
 - The oracle register transaction register an account as an oracle. (One account - one oracle)
 - Any user can query an oracle by posting an  **oracle query transaction** on the chain.
-- The oracle query transaction creates an **oracle interaction object** in the oracle state tree.
+- The oracle query transaction creates an **oracle query object** in the oracle state tree.
 - The oracle operator scans the transactions on the blockchain for the
   oracle query transaction through whatever means. Probably on the operator's own node.
 - The oracle operator responds to the oracle query by posting an **oracle response transaction** on the chain.
-- The oracle response transaction modifies the oracle interaction object by adding the response.
-- After the response have been added, the oracle interaction object is closed, and is now immutable.
+- The oracle response transaction modifies the oracle query object by adding the response.
+- After the response have been added, the oracle query object is closed, and is now immutable.
 
 ## [Oracle life cycle examples](./oracle_life_cycle.md)
 
