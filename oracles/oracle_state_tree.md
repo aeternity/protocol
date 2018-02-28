@@ -1,22 +1,33 @@
 [back](./oracles.md)
 ## Oracle state tree
 
-The oracle state tree contain oracle objects. Each oracle also have a separate
-tree with queries for this particular tree. The existence of an oracle and the
-existence of query/response will have to be proven when two parties contract
-with each other. In the name of efficiency the queries are not stored directly
-in the oracle object, instead the oracle object contains the root_hash of a
-separate Merkle tree containing the queries for the oracle.
+The oracle state tree contain oracle objects and oracle query objects. The
+existence of an oracle and the existence of query/response will have to be
+proven when two parties contract with each other. Oracles and queries are
+stored in the same tree; where a query has an id that is the concatenation of
+the oracle id and a query id. Thus the queries in effect form a subtree of the
+oracle and can be iterated over, etc.
 
 ### Oracle state tree objects
 
-- The oracle state tree contains oracle objects
-- The query state trees (one per oracle object) contain query objects.
+- The oracle state tree contains
+  - Oracle objects
+  - Query objects
 
 #### The oracle object
 
 - Created by an oracle register transaction.
 - Deleted when its TTL expires.
+- Updated with a new (longer) TTL on oracle extend transaction.
+
+```
+{ owner           :: pubkey()
+, query_format    :: type_spec()
+, response_format :: type_spec()
+, query_fee       :: amount()
+, expires         :: block_height()
+}
+```
 
 #### The oracle query object
 
@@ -29,6 +40,8 @@ the response expire for a closed query)
 The expiry is determined at creation time by the query TTL, and the response
 TTL in the oracle query transaction. If/When an oracle response transaction is
 accepted on the chain, the expiry is updated according to the response TTL.
+*Note:* If the maximal TTL of the query (query TTL + response TTL) is longer
+than the TTL of the Oracle, then the query is *rejected*.
 
 ```
 { query_id       :: id()
@@ -68,4 +81,3 @@ If the oracle query has not been given a response, the poster of
 the query should be refunded the oracle query fee. If the oracle has
 responded, the oracle was already given the funds at response time.
 
-**NOTE:** The refunding has not yet been implemented

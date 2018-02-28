@@ -1,8 +1,9 @@
 [back](./oracles.md)
 ## Oracle transactions
 
-Oracle transactions are of three types:
+Oracle transactions are of four types:
 - Register
+- Extend
 - Query
 - Response
 
@@ -11,7 +12,7 @@ Oracle transactions are of three types:
 An oracle operator can register an existing account as an oracle.
 
 The transaction contains:
-- The address that should be registered as an oracle (oracle_owner)
+- The address that should be registered as an oracle (oracle_owner) + nonce
 - Query format definition
 - Response format definition
 - Query fee (that should be paid for posting a query to the oracle).
@@ -28,6 +29,7 @@ Questions/Later:
 
 ```
 { oracle_owner    :: public_key()
+, nonce           :: nonce()
 , query_format    :: format_definition()
 , response_format :: format_definition()
 , query_fee       :: amount()
@@ -42,6 +44,33 @@ Questions/Later:
   account and the new account.
 - Decide on the minimum fee calculation.
 
+### Oracle extend transaction
+
+An oracle operator can extend the TTL of an existing oracle.
+
+The transaction contains:
+- The address/oracle that should be extended (and a nonce)
+- An extension to the TTL (relative to current expiry in number of blocks)
+- Transaction fee (must be larger than a minimum proportional to the TTL)
+
+Questions/Later:
+- Fee for posting a query. The fee can be 0.
+  - Fees are flat to begin with.
+  - We could imagine fees to be proportional to something.
+
+```
+{ oracle :: public_key()
+, nonce  :: nonce()
+, ttl    :: ttl()
+, fee    :: amount()
+}
+```
+
+#### TODO
+- In the future we could imagine an oracle register transaction that
+  creates a new account by double signing the request with the source
+  account and the new account.
+- Decide on the minimum fee calculation.
 
 ### Oracle query transaction
 - Contains:
@@ -110,11 +139,14 @@ small) since the oracle pays for the response transaction.
 
 The transaction contains
 - The oracle interaction ID (derived from the query)
+- The oracle (address) + nonce
 - The response in binary format
 - The transaction fee
 
 ```
 { interaction_id  :: tx_id()
+, oracle_address  :: public_key()
+, nonce           :: nonce()
 , response        :: binary()
 , fee             :: amount()
 }

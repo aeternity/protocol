@@ -3,6 +3,7 @@
 
 The WebSocket API provides five different actions:
  * [Register an Oracle](#register-an-oracle)
+ * [Extend the TTL for an Oracle](#extend-the-ttl-for-an-oracle)
  * [Post a query for an Oracle](#post-a-query-for-an-oracle)
  * [Answer an Oracle query](#answer-an-oracle-query)
  * [Register for post query events](#register-for-post-query-events) (for a particular Oracle)
@@ -51,6 +52,51 @@ Request:
 
 Response:
   {"action":"register",
+   "origin":"oracle",
+   "tag":"untagged",
+   "payload":{"result":"ok",
+              "tx_hash":"th$26iUqaRt4s1ydAF8z7WDeM4FhCqwEu5TbWTCazYFsPY8Le8Upq",
+              "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}
+  }
+```
+
+## Extend the TTL for an Oracle
+### Request
+ * **target:** `oracle`
+ * **action:** `extend`
+ * **payload:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | type | `OracleExtendTxObject` | | Yes |
+  | vsn | number | | No |
+  | ttl | object - [RelativeTTL](#relativettl) |  | Yes |
+  | fee | number |  | Yes |
+
+### Response
+ * **origin:** `oracle`
+ * **action:** `extend`
+ * **payload:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | result | string | `ok` or error reason | Yes |
+  | oracle_id | string | Hash for the extended oracle | Yes on success |
+  | tx_hash | string | Hash for the transaction | Yes on success |
+
+### Example
+```
+Request:
+  {"target":"oracle",
+   "action":"extend",
+   "payload":{"type":"OracleExtendTxObject",
+              "vsn":1,
+              "ttl":{"type":"delta", "value":50},
+              "fee":2}
+  }
+
+Response:
+  {"action":"extend",
    "origin":"oracle",
    "tag":"untagged",
    "payload":{"result":"ok",
@@ -291,9 +337,3 @@ Event:
 | type | `delta` |  | Yes |
 | value | number |  | Yes |
 
-
-**Current limitation:** Since there is currently no interface for offline signing
-(all signing is done by a node - and that node is associated with exactly one
-account) it is somewhat limited what you can do with oracles. I.e. in practice
-you need a node per account - obviously this is a limitation we should try to
-lift as soon as possible.
