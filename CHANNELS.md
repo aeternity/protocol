@@ -561,10 +561,12 @@ without having committed to anything.
 
 ### Establishing channel on-chain
 
-All of the on-chain operations could typically be submitted by either peer but
-we assume that the initiating peer pays for the setup of the channel.
+All of the on-chain operations could be submitted by any peer but we assume that
+the initiating peer pays for the setup of the channel. Therefore the `initiator`
+MUST pay the standard transaction fees.
 
 (***TODO***: should fees be directly be deducted from channel balance?)
+(***TODO***: should a third party be able to open a channel for others?)
 
 #### `channel_create`
 
@@ -572,10 +574,17 @@ we assume that the initiating peer pays for the setup of the channel.
 - `participant`: public key
 - `initiator_amount`:
 - `participant_amount`:
+- `lock_period`
+- `fee`
+- `nonce`
 
 ### Updating channel on-chain
 
 An update to an open channel requires the signatures of all participants.
+
+Both `channel_deposit` and `channel_withdraw` MUST be signed by all involved
+parties, since changing channel balances might change the dynamics of code
+running in a channel.
 
 #### `channel_deposit`
 
@@ -584,13 +593,18 @@ long lived due to the increased ease of balancing out channels. The amount of
 coins sent along with this transaction will get locked up just like the initial
 deposit.
 
-This operation is optional.
+While it could be desirable to allow anyone to deposit into a channel, we are
+going to restrict deposits to the peers of a channel. That means, the `from`
+field MUST be the address of one of the participants of the targeted channel and
+the standard transaction fees MUST be paid by the `from` account.
 
+This operation is optional.
 
 - `channel_id`:
 - `from`: sender of the deposit
 - `amount`: amount of coins deposited
 - `to`: the peer which should receive the deposit
+- `nonce`: the transaction number of the submitting account
 
 
 #### `channel_withdraw`
@@ -598,10 +612,15 @@ This operation is optional.
 Channels should generally not be used to hold significant amounts of coins but
 being able to withdraw locked coins might still be of some use.
 
+The `from` account MUST be a participant in the target channel. The `amount`
+MUST be less or equal than the sum of all participants balances, i.e. channels
+cannot create coins out of thin air.
+
 - `channel_id`:
 - `amount`:
 - `from`:
 - `to`:
+- `nonce`
 
 (***TODO**: do we need to update on chain state with more up to date coin
 distributions?)
@@ -677,6 +696,8 @@ channel operations.
 - `closed`
 
 ## Contract execution
+
+## Light node requirements
 
 ## Examples
 
