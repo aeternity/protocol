@@ -1,14 +1,13 @@
 [back](./contracts.md)
 ## The Sophia Language
 An AEternity BlockChain Language
-The Sophia is a dialect of ReasonML ( https://reasonml.github.io/ ).
+The Sophia is a language in the ML family. It is strongly typed and has
+restricted mutable state.
 
 Sophia is customized for smart contracts, which can be published
-to a blockchain (the AEternity BlockChain). Thus some
-unnecessary features of Reason (and OCaml - since Reason is closely
-related to OCaml) have been removed, and some blockchain specific
-primitives, constructions and types have been added. This document
-tries to summarize the changes and additions.
+to a blockchain (the AEternity BlockChain). Thus some features of conventional
+languages, such as floating point arithmetic, are not present in Sophia, and
+some blockchain specific primitives, constructions and types have been added.
 
 ## Language Features
 ### Contracts
@@ -25,11 +24,10 @@ languages and support local state and inheritance. More specifically:
 
 - A contract can be abstract where no types or functions have definitions. Example:
 
-```ocaml
+```javascript
 // An abstract contract
-contract VotingType = {
-  public stateful let vote : string => unit;
-};
+contract VotingType =
+  public stateful function vote : string => unit
 ```
 
 - A contract instance is an entity living on the block chain (or in a state channel). Each
@@ -66,12 +64,12 @@ state associated with each contract instance.
 
 - Each contract defines a state type encapsulating its mutable state.
 - The value of the state is accessible from inside the contract
-  through an implicitly bound variable state.
-- State updates are performed by calling a function put : state =>
-  unit (possibly with a better name).
-- Aside from the put function (and similar functions for transactions
-  and events), the contract language is purely functional.
-- Functions modifying the state need to be annotated with the stateful keyword.
+  through an implicitly bound variable `state`.
+- State updates are performed by calling a function `put : state => unit`
+  (possibly with a better name).
+- Aside from the `put` function (and similar functions for transactions
+  and events), the language is purely functional.
+- Functions modifying the state need to be annotated with the `stateful` keyword.
 
 To make it convenient to update parts of a deeply nested state Sophia
 provides special syntax for map/record updates.  Open
@@ -88,89 +86,100 @@ Sophia has the following types:
 | int     | A 256 bit 2-complement integer  | ```-1```
 | address | A 256 bit number given as a hex | ```ff00```
 | bool    | A Boolean                       | ```true```
-| string  | An array of bytes               | ```“Foo”```
+| string  | An array of bytes               | ```"Foo"```
 | list    | A homogeneous immutable singly linked list. | ```[1, 2, 3]```
-| tuple   | An ordered heterogeneous array   | ```(42, “Foo”, true)```
+| tuple   | An ordered heterogeneous array   | ```(42, "Foo", true)```
 | record  | An immutable key value store with fixed key names and typed values | ``` type balance = { owner: address, value: uint } ```
 | map     | An immutable key value store with dynamic mapping of keys of one type to values of one type | ```type accounts = map(string, address)```
 | state   | A record of blockstate key, value pairs  |
 | transactions | An append only list of blockchain transactions |
 | events   | An append only list of blockchain events (or log entries) |
 
-#### Reason types not in Sophia
+#### Types not in Sophia
 - Arrays
-- Variants
-- Refs
-- Object
+- References
+- Objects
 
-### Pattern matching
-Pattern matching is probably outside the first iteration of Sophia, but
-we definitely want it in the final language.
+### Algebraic data types
+
+Sophia supports algebraic data types (variant types) and pattern matching. Data
+types can be recursive and are declared by giving a list of constructors with
+their respective arguments. For instance, the following defines a type of
+binary trees parameterised over the element type:
+
+```ocaml
+type tree('a) = Tip | Bin(tree('a), 'a, tree('a))
+```
+
+Elements of data types can be pattern matched against, using the `switch` construct:
+
+```ocaml
+function root(t : tree('a)) : option('a) =
+  switch(t)
+    Tip => None
+    Bin(_, v, _) => Some(v)
+```
 
 ### Builtins
+
 #### Events
-Sophia has events which logs a structured message to the contract log in
-the resulting blockchain transaction.
+
+Sophia contracts log structured messages to an event log in the resulting
+blockchain transaction. To use events a contract must declare a type `event`,
+and events are then logged using the `event` function:
 
 ```
-event(name: string, value: any)
+event(e : event) : ()
 ```
 
 #### Transactions
 Sophia can generate blockchain transactions.
 ```
-transaction(tx_type: transaction, argument: record )
+transaction(tx : transaction) : ()
+```
+The transaction type defines the transactions that can be created:
+```
+type spend_tx = {recipient : address, amount : uint}
+type transaction = SpendTx(spend_tx)
+                 | ...
 ```
 
-#### State
-
-A Sophia contract has a state. You must declare the state record type in
-the contract. You can then update the state through mutable record
-update.
-
-```
-type state = { mutable field: string
-             , mutable value: uint};
-let state = {field: “”, value : 0};
-let store_value = (f: string, v: uint) => {
-    state.field = f;
-    state.value = v;
-}
-```
 #### Contract primitives
-```
-creator() : () => address
-```
-The address (pubkey) of the entity signing for the contract creation transaction
-```
-caller() : () => address
-```
-The address of the entity currently calling the contract.
-```
-value() : () => uint
-```
-The amount of coins transferred to the contract when calling.
-```
-balance() : () => uint
-```
-The amount of coins currently in the contract account
-```
-contract_address() : () => address;
-```
-The address of the contract.
 
-Block references
+The block-chain environment available to a contract is defined by three record types
+`call`, `self` and `chain`:
+
 ```
-block_height() : () => uint;    /* Current block number */
-block_timestamp() : () => uint; /* Block timestamp */
+type call  = {caller : address,
+              value  : uint,
+              ...}
+type self  = {creator : address,
+              address : address,
+              balance : uint,
+              ...}
+type chain = {height    : uint,
+              timestamp : uint,
+              ...}
 ```
+A contract has access to variables of the same names, so that
 
+- `call.caller` is the address of the entity (possibly another contract)
+  calling the contract.
+- `call.value` is the amount of coins transferred to the contract in the call
+- `self.creator` is the address of the entity that signed the contract creation
+  transaction
+- `self.address` is the address of the contract account
+- `self.balance` is the amount of coins currently in the contract account
+- `chain.height` is the height of the current block (i.e. the block in which the current call will be included)
+- `chain.timestamp` is the timestamp of the current block
 
-### Exception
-There is one exception: abort (reason:string)
+### Exceptions
 
-### JSX
-Sophia does not support inline html syntax.
+Contracts can fail with an (uncatchable) exception using the function
+
+```
+abort(reason : string) : 'a
+```
 
 ## The lifetime of a contract
 
