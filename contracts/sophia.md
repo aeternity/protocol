@@ -181,6 +181,279 @@ Contracts can fail with an (uncatchable) exception using the function
 abort(reason : string) : 'a
 ```
 
+## Syntax
+
+### Lexical syntax
+
+#### Comments
+
+Single line comments start with `//` and block comments are enclosed in `/*`
+and `*/` and can be nested.
+
+#### Keywords
+
+```
+and band bnot bor bsl bsr bxor contract elif else false function if import
+internal let mod private public rec stateful switch true type
+```
+
+#### Tokens
+
+- `Id = [a-z_][A-Za-z0-9_']*` identifiers start with a lower case letter.
+- `Con = [A-Z][A-Za-z0-9_']*` constructors start with an upper case letter.
+- `QId = (Con\.)+Id` qualified identifiers (e.g. `Map.member`)
+- `QCon = (Con\.)+Con` qualified constructor
+- `TVar = 'Id` type variable (e.g `'a`, `'b`)
+- `Int = [0-9]+|0x[0-9A-Fa-f]+` integer literal
+- `Hash = #[0-9A-Fa-f]+` hash literal
+- `String` string literal enclosed in `"` with escape character `\`
+- `Char` character literal enclosed in `'` with escape character `\`
+
+### Layout blocks
+
+Sophia uses Python-style layout rules to group declarations and statements. A
+layout block with more than one element must start on a separate line and be
+indented more than the currently enclosing layout block. Blocks with a single
+element can be written on the same line as the previous token.
+
+Each element of the block must share the same indentation and no part of an
+element may be indented less than the indentation of the block. For instance
+
+```ocaml
+contract Layout =
+  function foo() = 0  // no layout
+  function bar() =    // layout block starts on next line
+    let x = foo()     // indented more than 2 spaces
+    x
+     + 1              // the '+' is indented more than the 'x'
+```
+
+### Notation
+
+In describing the syntax below, we use the following conventions:
+- Upper-case identifiers denote non-terminals (like `Expr`) or terminals with
+  some associated value (like `Id`).
+- Keywords and symbols are enclosed in single quotes: `'let'` or `'='`.
+- Choices are separated by vertical bars: `|`.
+- Optional elements are enclosed in `[` square brackets `]`.
+- `(` Parentheses `)` are used for grouping.
+- Zero or more repetitions are denoted by a postfix `*`, and one or more
+  repetitions by a `+`.
+- `Block(X)` denotes a layout block of `X`s.
+- `Sep(X, S)` is short for `[X (S X)*]`, i.e. a possibly empty sequence of `X`s
+  separated by `S`s.
+- `Sep1(X, S)` is short for `X (S X)*`, i.e. same as `Sep`, but must not be empty.
+
+
+### Declarations
+
+A Sophia file consists of a sequence of *declarations* in a layout block.
+
+```c
+File ::= Block(Decl)
+Decl ::= 'contract' Con '=' Block(Decl)
+       | 'type' Id ['(' TVar* ')'] ['=' TypeDef]
+       | Modifier* 'function' Id ':' Type
+       | Modifier* 'function' Id Args [':' Type] '=' Block(Stmt)
+
+Modifier ::= 'stateful' | 'public' | 'private' | 'internal'
+
+Args ::= '(' Sep(Arg, ',') ')'
+Arg  ::= Id [':' Type]
+```
+
+Contract declarations must appear at the top-level.
+
+For example,
+```ocaml
+contract Test =
+  type t = int
+  public function add (x : t, y : t) = x + y
+```
+
+There are three forms of type declarations: type aliases, record type definitions and data type definitions:
+
+```c
+TypeDef    ::= TypeAlias | RecordType | DataType
+TypeAlias  ::= Type
+RecordType ::= '{' Sep(FieldType, ',') '}'
+DataType   ::= Sep1(ConDecl, '|')
+
+FieldType  ::= Id ':' Type
+ConDecl    ::= Con ['(' Sep1(Type, ',') ')']
+```
+
+For example,
+```ocaml
+type point('a) = {x : 'a, y : 'a}
+type shape('a) = Circle(point('a), 'a) | Rect(point('a), point('a))
+type int_shape = shape(int)
+```
+
+### Types
+
+```c
+Type ::= Domain '=>' Type             // Function type
+       | Type '(' Sep(Type, ',') ')'  // Type application
+       | '(' Type ')'                 // Parens
+       | Id | QId | TVar
+
+Domain ::= Type                       // Single argument
+         | '(' Sep(Type, ',') ')'     // Multiple arguments
+```
+
+The function type arrow associates to the right.
+
+Example,
+```ocaml
+'a => list('a) => (int, list('a))
+```
+
+### Statements
+
+Function bodies are blocks of *statements*, where a statement is one of the following
+
+```c
+Stmt ::= 'switch' '(' Expr ')' Block(Case)
+       | 'if' '(' Expr ')' Block(Stmt)
+       | 'elif' '(' Expr ')' Block(Stmt)
+       | 'else' Block(Stmt)
+       | 'let' LetDef
+       | 'let' 'rec' Sep1(LetDef, 'and')  // (Mutually) recursive binding
+       | Expr
+
+LetDef ::= Id [Args] [':' Type] '=' Block(Stmt)
+
+Case    ::= Pattern '=>' Block(Stmt)
+Pattern ::= Expr
+```
+
+`if` statements can be followed by zero or more `elif` statements and an optional final `else` statement. For example,
+
+```ocaml
+let x : int = 4
+switch(f(x))
+  None => 0
+  Some(y) =>
+    if(y > 10)
+      "too big"
+    elif(y < 3)
+      "too small"
+    else
+      "just right"
+```
+
+### Expressions
+
+```c
+Expr ::= '(' Args ')' '=>' Block(Stmt)      // Anonymous function    (x) => x + 1
+       | 'if' '(' Expr ')' Expr 'else' Expr // If expression         if(x < y) y else x
+       | Expr ':' Type                      // Type annotation       5 : uint
+       | Expr BinOp Expr                    // Binary operator       x + y
+       | UnOp Expr                          // Unary operator        ! b
+       | Expr '(' Sep(Expr, ',') ')'        // Application           f(x, y)
+       | Expr '.' Id                        // Projection            state.x
+       | Expr '[' Expr ']'                  // Map lookup            map[key]
+       | Expr '{' Sep(FieldUpdate, ',') '}' // Record or map update  r{ fld[key].x = y }
+       | '[' Sep(Expr, ',') ']'             // List                  [1, 2, 3]
+       | '{' Sep(FieldUpdate, ',') '}'      // Record or map value   {x = 0, y = 1}, {[key] = val}
+       | '(' Expr ')'                       // Parens                (1 + 2) * 3
+       | Id | Con | QId | QCon              // Identifiers           x, None, Map.member, AELib.Token
+       | Int | Hash | String | Char         // Literals              123, 0xff, #00abc123, "foo", '%'
+
+FieldUpdate ::= Path '=' Expr
+Path ::= Id                 // Record field
+       | '[' Expr ']'       // Map key
+       | Path '.' Id        // Nested record field
+       | Path '[' Expr ']'  // Nested map key
+
+BinOp ::= '||' | '&&' | '<' | '>' | '=<' | '>=' | '==' | '!='
+        | '::' | '++' | '+' | '-' | '*' | '/' | 'mod'
+        | 'bor' | 'bxor' | 'band' | 'bsr' | bsl'
+UnOp  ::= '-' | '!' | 'bnot'
+```
+
+### Operator precendences
+
+In order of highest to lowest precedence.
+
+| Operators | Associativity
+| --- | ---
+| `!` `bnot` | right
+| `*` `/` `mod` `band` | left
+| `-` (unary) | right
+| `+` `-` `bor` `bxor` `bsl` `bsr` | left
+| `::` `++` | right
+| `<` `>` `=<` `>=` `==` `!=` | non
+| `&&` | right
+| `\|\|` | right
+
+## Examples
+
+```ocaml
+/*
+ *  A simple crowd funding example.
+ *  Not production code (do not use)!
+ */
+contract FundMe =
+
+  type state = { contributions : map(address, uint),
+                 total         : uint,
+                 beneficiary   : address,
+                 deadline      : uint,
+                 goal          : uint }
+
+  private function require(b : bool, err : string) =
+    if(!b) abort(err)
+
+  public function init(beneficiary, deadline, goal) : state =
+    { contributions = Map.empty,
+      beneficiary   = beneficiary,
+      deadline      = deadline,
+      total         = 0,
+      goal          = goal }
+
+  // -- API --
+
+  // Contribute to the project
+  public stateful function contribute() =
+    require(chain.height < state.deadline, "Deadline has passed")
+    let amount =
+      switch(Map.lookup(call.caller, state.contributions))
+        None    => call.amount
+        Some(n) => n + call.amount
+    put(state{ contributions[call.caller] = amount,
+               total = state.total + call.amount })
+
+  // Withdraw funds after the deadline.
+  public stateful function withdraw() =
+    require(chain.height >= deadline, "Cannot withdraw before deadline")
+    if(call.caller == state.beneficiary)
+      withdraw_beneficiary()
+    elif(is_contributor(call.caller))
+      withdraw_contributor()
+    else
+      abort("Not a contributor or beneficiary")
+
+  // -- Private functions --
+
+  private function is_contributor(addr) =
+    Map.member(addr, state.contributions)
+
+  private stateful function withdraw_beneficiary() =
+    require(state.total >= state.goal, "Project was not funded")
+    transaction(SpendTx({recipient = state.beneficiary,
+                         amount    = state.total }))
+    put(state{ beneficiary = #0 })
+
+  private stateful function withdraw_contributor() =
+    require(state.total < state.goal, "Project was funded")
+    let to = call.caller
+    transaction(SpendTx({recipient = to,
+                         amount    = state.contributions[to]}))
+    put(state{ contributions[to] = 0 })
+```
+
 ## The lifetime of a contract
 
 # Killing a contract
