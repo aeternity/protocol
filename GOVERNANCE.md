@@ -253,7 +253,6 @@ distinguish them or no way for clients to specify which of them specificly
 they want to use.
 
 
-
 ## Specification
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
@@ -267,11 +266,77 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 #### Add proposal
 
-### Voting
+### GeneralizedVoting
 
-#### Delegate
+Following voting proposal defines basic voting method without specifying how obtained VotesSummery should be used.
 
-#### Recall
+#### Definitions:
+- Voting = a process of supplying VotesSummery on DecisionMatter after Timeframe based on VoteTxs (balances of Entities that created those). Voting is created with QuestionTx.
+- Timeframe = start block, end block pair. All blocks from the block after start block to the end block are considered _in_
+- Entity = an Account, Contract or any other possible "being" with balance allowed to vote
+- Answer = unique payload in VoteTx.
+- VoteTx = a transaction with Answer referencing Voting. VoteTxs are only valid _in_ Timeframe. New VoteTx by Entity overwrites previous one. Addictional fee may be required if Answer is unique (wasn't previously supplied by anyone).
+- VotesSummery = map of Answers with assigned weights. Weights are assigned to Answer by summing balances at TimeFrame.end\_block of Entities that choose this Answer in valid VoteTx referencing this Voting. Any Entity that didn't vote is assumed to have chosen a `nil` Answer. (we record the total balance of Entities that didn't participate in Voting in special Answer)
+- QuestionTx = a transaction created by an Entity specifying Timeframe and DecisionMatter. It\'s only valid if block of inclussion is not _in_ or after Timeframe.
+- DecisionMatter = specification of purpose of voting and extensions used. Can be an not blockchain altering question (a human readable string), or a call to specific Governance process that will alter (or not) blockchain depending on VotesSummery. DecisionMatter can apply additional changes or restrictions to the Voting process.
+- VotingID = hash of QuestionTx
+
+#### Process details:
+1. (before Timeframe) QuestionTx is created and included in a block. This adds `{VotingID => VotingObject}` to chainstate.
+2. (in Timeframe) For every valid VoteTx `{EntityID => Answer}` is added to VotingObject in chainstate.
+3. (at Timeframe.end\_block) VotesSummery is calculated and added to VotingObject. Map `EntityID => Answer` is removed from VotingObject.
+
+#### Optional Voting changes:
+a. step 3. of GeneralizedVoting.Process can be saved in chainstate at some block after end\_block. This gives nodes more time to calculate the results. This offset should be proportional to Tiemframe length.
+
+### Voting extenstions
+
+#### ActiveEntities
+
+Only entities that created a Tx in last X blocks are included in `nil` Answer. I would recommend X to represent about 3-12 months.
+
+#### VotingPowerDelegation
+
+Entities can delegate their Voting power to others. This can be achieved by creating special Tx for changing VotingDelegation of Entities. This extension can include:
+- limited delegation
+- delegated voting power is weeker by multiplying it by some factor.
+- Entity can vote in voting making the delegation invalid or Delegation may prohibit voting. (to vote entity would have to first cancel the delegation and potentially delegate votes again after Voting ends)
+- delegation can be transferable or not
+
+This may be implemented in following ways:
+- by requiring inclusion of all the Entities whose Delegations are used in VoteTx - that would make VoteTx fee and size higher.
+- by storing in every Entity current Voting power and changing it whenever an Entity with VotingDelegation Votes - this will add overhead to every transaction created by Entity with VotingDelegation and limit possibility of transferring VotingDelegation.
+
+### OffChainAggreement
+
+When the only important value for some protocol is "Has >50% of Entities power voted on one answer?" such a voting can be done completely off-chain. Fee requirements can be removed completely or exchanged for less expensive anti spam methods (like hashcash). Votes in such systems should include expiration time. Depending on the use-case hash of such an agreement can be saved on chain for a kind of proof of oldness or complete voting can be submitted to blockchain. If a complete voting is submitted to blockchain, the fee can be split between all voters or the submitter may pay. (Some Entities may not want to pay a fee and some submitter may be have an incentive for the voting to pass big enought he is willing to pay fees for others votes)
+
+### Protocol Amendment
+
+Protocol Amendment can be split into parts:
+- changes to parameters of protocol - such changes do not break the consensus mechanics so they can be done without high quorum requirements and many security measures.
+- protocol extension - only possible if:
+    - we are able to represent our constitution in a way such that code changes can be automatically verified for compliance with constitution. This might be very hard, because a part of constitution will have to be "AEternity node code can't interfere with other parts of users system."
+    - or we are able to modularize code to an extend that allows creating protocol extensions that can't break consensus (are sandboxed from code enforcing constitution). This might be possible in a very limited extend if parts of node code will be expressed in sandboxable language.
+- protocol replacement - changes that can break consensus should require >50% quorum and security measures that prevents exploiting this functionality with attacks on offline forks.
+
+#### ProtocolParameterChange
+
+- To change some parameter of protocol first a Voting on that parameter should be opened. Such voting has to use set of extensions defined in protocol and Timeframe has to have length between minimum and maximum defined in protocol.
+- Depending on time passed since last change to parameter different quorum will be required.
+- Low quorum may impose as to an attack where someone puts a vote on the last block possible to vote on and changes parameter in a way that's unwanted by most Entities. To counter that: changes to parameter are applied only after X blocks of the last change. So change can be reverted before it takes effect by having another voting on the parameter. New Voting quorum has to be at least equal to power of voting it's trying to override.
+- For turning on and off futures and changing some other "choices" defined in protocol a normal Voting can be used with limited valid Answer set. Answer with most votes is applied if quorum was met.
+- For decisions on a variable that "represents a point on a line" (when answers can be sorted and small change to answer is insignificant) a normal Voting can be used. After voting ends if the quorum was met we take the weighted median (middle value after sorting all values) of all Answers and apply it.
+
+#### ProtocolExtenstion
+
+*TODO*
+
+#### ProtocolReplacement
+
+As it is allowed to change (so also "break") consensus, it should require >50% of total tokens (not only active tokens) voting on one Answer. OffChainAggreement can be used for this. I can think of the following approach:
+- Trusting always the longest chain and saving all votes from all ProtocolReplacements on chain. The problem is that an attacker can ignore the block that included ProtocolReplacement data and create over time a longer chain then the longest containing the ProtocolReplacement. This can be countered by remembering in nodes all executed ProtocolReplacements and never reverting them, but this leaves new nodes vournable to such attacks and if such an attack is executed, a software update hardcoding the ProtocolReplacement would have to be used. This attack can be made harder by delaying the ProtocolReplacement execution after inclusion on chain.
+- Trusting always the ProtocolReplacement with lowest block height even if it's on a fork + requiring all new ProtocolReplacemens to be on chains with previous executed ProcolReplacement. As a significant portion of AE is going to be created in genesis block this makes it extreamly unlikely for attacker to be able to have enough tokens is some fork to trigger a ProtocolReplacement. Over time when we introduce ProtocolReplacements we will limit possible attack surface as then an attacker would have to get >50% of tokens on a block with lower block height then the ProtocolReplacment or on a block in chain with the ProtocolReplacement.
 
 ### Replay Protection
 
