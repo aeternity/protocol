@@ -2,8 +2,16 @@
 
 The serialization formats in this document describes the binary format
 used to encode the different objects in the binary format that is used
-for hashing. Other formats may be used for communication between
-nodes.
+for:
+
+* Hashing (e.g., block hash)
+* Insertion in the Merkle Patricia Tree (e.g., state trees, transaction trees).
+* Signing transactions (i.e., the serialized form is signed).
+
+Other formats may be used for communication between nodes or for the
+user API.
+
+
 
 ## Static size object serialization
 
@@ -14,15 +22,15 @@ constructed directly as a byte array.
 
 | Fieldname | Size (bytes) |
 | --- | --- |
+| version      | 8    |
 | height       | 8    |
 | prev_hash    | 32   |
 | txs_hash     | 32   |
 | root_hash    | 32   |
 | target       | 8    |
+| pow_evidence | 168  |
 | nonce        | 8    |
 | time         | 8    |
-| version      | 8    |
-| pow_evidence | 168  |
 
 
 #### Block
@@ -64,7 +72,9 @@ array as well. We encode all integers as unsigned, big endian byte
 arrays. To avoid ambiguity in the encoding of integers, we adapt the
 same scheme as RLP and demand that ingegers are encoded with the
 minimal number of bytes (i.e., disallow leading zeroes in the encoded
-byte array).
+byte array). Negative integers is not used in the serialization format
+since they are not needed. If the need arises, the scheme should be
+extended.
 
 ### Binary serialization
 
