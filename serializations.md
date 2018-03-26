@@ -48,7 +48,8 @@ In this section we use `[]` to mean lists, `<name>` to denote fields,
 their types . We use `int()` to denote the integer type and `binary()`
 to denote the byte array type. Lists are denoted with `[]` in the type
 domain (e.g., `[int()]` is a list of integers). We use `++` as the
-list concatenation operator.
+list concatenation operator. We also use the `bool()` type as the
+special case of the integers `0` and `1` used as the boolean type.
 
 ### RLP Encoding
 
@@ -92,8 +93,9 @@ subsequent sections divided by object.
 | Type | Tag |
 |---|---|
 | Account | 10 |
-| Spend transaction | 11 |
-| Coinbase transaction | 12 |
+| Signed transaction | 11 |
+| Spend transaction | 12 |
+| Coinbase transaction | 13 |
 | Oracle | 20 |
 | Oracle query | 21 |
 | Oracle register transaction | 22 |
@@ -114,11 +116,19 @@ subsequent sections divided by object.
 
 #### Accounts
 ```
-[ <pubkey> :: binary()
-, <nonce>  :: int()
-, <height> :: int()
+[ <pubkey>  :: binary()
+, <nonce>   :: int()
+, <height>  :: int()
+, <balance> :: int()
 ]
 ```
+### Signed transaction
+```
+[ <signatures>  :: [binary()]
+, <transaction> :: binary()
+]
+```
+
 
 ### Spend transaction
 ```
@@ -127,6 +137,7 @@ subsequent sections divided by object.
 , <amount>    :: int()
 , <fee>       :: int()
 , <nonce>     :: int()
+]
 ```
 
 ### Coinbase transaction
@@ -153,6 +164,7 @@ subsequent sections divided by object.
 , <sender_nonce>   :: int()
 , <oracle_address> :: binary()
 , <query>          :: binary()
+, <has_response>   :: bool()
 , <response>       :: binary()
 , <expires>        :: int()
 , <response_ttl>   :: int()
@@ -167,8 +179,8 @@ subsequent sections divided by object.
 , <query_spec>    :: binary()
 , <response_spec> :: binary()
 , <query_fee>     :: int()
-, <ttl_type>      :: int() TODO: Looks different today
-, <ttl_value>     :: int() TODO: Looks different today
+, <ttl_type>      :: int()
+, <ttl_value>     :: int()
 , <fee>           :: int()
 ]
 ```
@@ -180,10 +192,10 @@ subsequent sections divided by object.
 , <oracle>             :: binary()
 , <query>              :: binary()
 , <query_fee>          :: int()
-, <query_ttl_type>     :: int() TODO: Looks different today
-, <query_ttl_value>    :: int() TODO: Looks different today
-, <response_ttl_type>  :: int() TODO: Looks different today
-, <response_ttl_value> :: int() TODO: Looks different today
+, <query_ttl_type>     :: int()
+, <query_ttl_value>    :: int()
+, <response_ttl_type>  :: int()
+, <response_ttl_value> :: int()
 , <fee>                :: int()
 ```
 
@@ -201,8 +213,8 @@ subsequent sections divided by object.
 ```
 [ <oracle>    :: binary()
 , <nonce>     :: int()
-, <ttl_type>  :: int() TODO: Looks different today
-, <ttl_value> :: int() TODO: Looks different today
+, <ttl_type>  :: int()
+, <ttl_value> :: int()
 , <fee>       :: int()
 ]
 ```
@@ -210,14 +222,14 @@ subsequent sections divided by object.
 #### Contract
 ```
 [ <pubkey>     :: binary()
-. <balance>    :: int()
+, <balance>    :: int()
 , <height>     :: int()
 , <owner>      :: binary()
 , <vm_version> :: int()
 , <code>       :: binary()
 , <state>      :: binary(),
 , <log>        :: binary(),
-, <active>     :: int(),
+, <active>     :: bool(),
 , <referers>   :: [binary()],
 , <deposit>    :: int()
 ]
@@ -231,6 +243,7 @@ subsequent sections divided by object.
 , <contract_address> :: binary()
 , <gas_used>         :: int()
 , <return_value>     :: binary()
+]
 ```
 
 #### Contract create transaction
@@ -267,9 +280,9 @@ subsequent sections divided by object.
 [ <hash>     :: binary()
 , <owner>    :: binary()
 , <expires>  :: int()
-, <status>   :: int()      TODO: Currently atom()
+, <status>   :: binary()
 , <ttl>      :: int()
-, <pointers> :: [binary()] TODO: Investigate
+, <pointers> :: binary() TODO: This is currently ambigous
 ```
 
 #### Name service commitment
@@ -285,8 +298,8 @@ subsequent sections divided by object.
 ```
 [ <account>   :: binary()
 , <nonce>     :: int()
-, <name>      :: binary()  TODO: Investigate
-, <name_salt> :: int()     TODO: Investigate
+, <name>      :: binary()
+, <name_salt> :: int()
 , <fee>       :: int()
 ]
 ```
@@ -306,7 +319,7 @@ subsequent sections divided by object.
 , <nonce>    :: int()
 , <hash>     :: binary()
 , <name_ttl> :: int()
-, <pointers> :: binary() TODO: Investigate
+, <pointers> :: binary() TODO: This is currently ambigous
 , <ttl>      :: int()
 , <fee>      :: int()
 ]
