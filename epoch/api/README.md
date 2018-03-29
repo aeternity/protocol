@@ -3,7 +3,7 @@
 This document:
 * Provides an overview of the API exposed by the epoch node;
 * Defines the WebSocket API of the epoch node;
-* Describes the intented usage of the user API of the epoch node.
+* Describes the intended usage of the user API of the epoch node.
 
 ## Overview
 
