@@ -3,26 +3,29 @@
 This document:
 * Provides an overview of the API exposed by the epoch node;
 * Defines the WebSocket API of the epoch node;
-* Describes the intented usage of the user API of the epoch node.
+* Describes the intended usage of the user API of the epoch node.
 
 ## Overview
 
-The epoch node API consists of the following endpoints:
-* External HTTP API;
-  * It consists of the peer-to-peer network API and of part of the user API;
-  * It is defined via Swagger schema;
+The epoch node exposes the following APIs:
+* Peer-to-peer network API. It consists of one TCP endpoint:
+  * It is encrypted and authenticated using the Noise protocol;
+  * It is not yet defined in a document. Advanced users may inspect the `aec_peer_connection` module;
   * It is meant to be exposed on the Internet;
   * Its TCP port is configurable.
-* Internal HTTP API;
-  * It consists of part of the user API;
-  * It is defined via Swagger schema;
-  * It is **not** meant to be exposed on the Internet;
-  * Its TCP port is configurable.
-* Internal WebSocket API.
-  * It consists of part of the user API;
-  * It is defined in the rest of this document;
-  * It is **not** meant to be exposed on the Internet;
-  * Its TCP port is configurable.
+* User API. It consists of three TCP endpoints:
+  * External HTTP endpoint;
+    * It is defined via Swagger schema;
+    * It is meant to be exposed on the Internet;
+    * Its TCP port is configurable.
+  * Internal HTTP endpoint;
+    * It is defined via Swagger schema;
+    * It is **not** meant to be exposed on the Internet;
+    * Its TCP port is configurable.
+  * Internal WebSocket endpoint.
+    * It is defined in the rest of this document;
+    * It is **not** meant to be exposed on the Internet;
+    * Its TCP port is configurable.
 
 The epoch node uses the plain HTTP protocol for its API endpoints during the testnet phase while it will use the HTTPS protocol in mainnet.
 

@@ -2,7 +2,7 @@
 # Spending tokens - intended usage
 
 The following assumes that the node exposes at address 127.0.0.1 the following ports:
-* HTTP internal API: 3113
+* User API internal HTTP endpoint: 3113
 
 ## Send tokens to another account
 
