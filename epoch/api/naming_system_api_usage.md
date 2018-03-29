@@ -7,8 +7,8 @@ The way to interact with Naming System is to use HTTP API.
 To read about possible states and life cycle of a name please see [the doc](/AENS.md).
 
 The following assumes that the node exposes at address 127.0.0.1 the following ports:
-* HTTP external API: 3013
-* HTTP internal API: 3113
+* User API external HTTP endpoint: 3013
+* User API internal HTTP endpoint: 3113
 
 ## Name management flow
 
