@@ -5,10 +5,6 @@
 You interact with a Aeternity node through HTTP.
 To learn more about contracts and contract life cycles see [the doc](/contracts/contracts.md).
 
-The following assumes that the node exposes at address 127.0.0.1 the following ports:
-* HTTP external API: 3013
-* HTTP internal API: 3113
-
 There are two basic types of API calls, off-chain operations and on-chain transactions.
 
 In order to affect the state of the chain you have to submit a signed transaction
