@@ -4,7 +4,7 @@ State channels allow entities to communicate with each other with the goal of
 collectively computing some function `f`.
 This `f` can be as simple as "send 0.1 coins every minute" or it could represent
 a decentralised exchange. These functions are, in our case, represented by smart
-contracts and just like any legal contract, we need an arbiter in case on party
+contracts and just like any legal contract, we need an arbiter in case one party
 tries to act maliciously. This arbiter is the blockchain.
 
 - trustless
@@ -13,8 +13,33 @@ tries to act maliciously. This arbiter is the blockchain.
 
 (***TODO***: needs some more work/clarification)
 
+## Table of Contents
+
+- [Goals](#goals)
+	- [Privacy](#privacy)
+	- [Security](#security)
+	- [Speed](#speed)
+	- [Cost](#cost)
+- [Terms](#terms)
+- [High level overview](#high-level-overview)
+- [Channel types](#channel-types)
+- [Topology](#topology)
+- [Incentives](#incentives)
+- [Channel types](#channel-types)
+- [Artefacts](#artefacts)
+- [Protocol](#protocol)
+- [Communication](#communication)
+	- [Overview](#overview)
+	- [Messages](#messages)
+	- [Establishing channel off-chain](#establishing-channel-off-chain)
+	- [Establishing channel on-chain](#establishing-channel-on-chain)
+- [Contract execution in channels](#contract-execution)
+- [Light node requirements](#light-node-requirements)
+- [Examples](#examples)
+- [Open Questions](#open)
 
 ## Goals
+
 
 - generic solution that supports many (all?) smart contracts
 	- even better if one state channel is generic, s.t. it can be instantiated and
@@ -27,7 +52,7 @@ tries to act maliciously. This arbiter is the blockchain.
 - on chain operations should be kept to a minimum
 - participants state should also be kept to a minimum, i.e. O(log n) or better
   constant multiplier
-- trustless to a degree with blockchain as the arbiter
+- trust-less to a degree with blockchain as the arbiter
 - any party involved can close a channel, but it should be discouraged
 
 Generally, an ideal state channel design should be a strict improvement over
@@ -62,12 +87,10 @@ transactions.
 - ***Liveness***: both peers can independently initiate closing of a channel and
   that operation is then processed by the blockchain with the usual assumptions
   of liveness.
-- ***Trustless***: since operations need to be signed by both peers and they
+- ***Trust-less***: since operations need to be signed by both peers and they
   sign operations based on their view of the state, both parties will only
   sign operations they agree on and don't need to trust the other peer.
 
-(***TODO***: Should this include basic assumption of the underlying arbiter/
-blockchain?)
 
 Thus security is on par.
 
@@ -81,8 +104,8 @@ process them, which should be a major improvement over on-chain interactions.
 
 ### Cost
 
-Using state channels requires at least two on-chain transactions, one to open it
-and then one to close it. Once a channel is established, no further on-chain
+Using state channels requires at least two on-chain transactions, for opening
+and closing them. Once a channel is established, no further on-chain
 transactions are needed unless a peer wants to withdraw or deposit funds. Even
 in the case of an one off transaction, it still might be worth opening a channel
 if one already has other open channels and thus might stand to gain fees by
@@ -96,7 +119,8 @@ it makes sense, in hope to be able to make it easier for others to adapt,
 although we try to enforce a `who - what - how` rule for naming, e.g.
 `channel_close_solo` as opposed to `solo_close_channel` or `channel_solo_close`.
 
-- ***node***: client connected to the blockchain, that can be addressed
+- ***node***: client connected to the blockchain, that can be addressed via an
+  IP address and port
 - ***peer***: participant in a channel
 - ***channel***: an off-chain method for two peers to exchange state updates,
   each node can have multiple channels and a pair of nodes can also have
@@ -104,16 +128,12 @@ although we try to enforce a `who - what - how` rule for naming, e.g.
   connection
 
 
-## High level overview
+## Notation
 
-Participating in a state channel requires two nodes to be able to communicate
-with each other. Throughout this document we are going to assume that this
-happens via TCP/IP.
-The process of discovering the `IP_ADDR:PORT` pair of a remote node is not
-covered in this document and assumed to happen out of band, unless both of them are already part of the state channel network, where nodes can announce their identities `(IP_ADDR, PORT, ID)`.
+All objects on the blockchain have a type and are uniquely addressable. We will
+denote this by `Type(Id)`, e.g. `Account(A)` is the account at address `A`. If
+we then want to get the balance of that account we use `Account(A).balance`
 
-To open a channel, two nodes first establish a connection. If they already have
-other open channels, opening a new one
 
 
 ## Channel types
@@ -126,15 +146,15 @@ In most cases a client/server architecture will most likely be mode of choice,
 where a client is using a service offered by the server, which is highly
 available and probably also some well known entity.
 To give one example, consider the case of a data feed. In this scenario the
-requester sends a micropayment for each request made to the provider. The most a
-requester could lose in this case is one micropayment. (***TODO***: ZKCP)
+initiator sends a micropayment for each request made to the provider. The most
+an initiator could lose in this case is one micropayment. (***TODO***: ZKCP)
 
-Here only the requester has an incentive to cheat and publish an outdated state,
+Here only the initiator has an incentive to cheat and publish an outdated state,
 which would assign them more money than they actually have.
-A cheater is easy to detect for a supplier. Whenever the requester closes the
+A cheater is easy to detect for a supplier. Whenever the initiator closes the
 channel unilaterally with an outdated state, the supplier can, during the lock
-period, publish a more recent state signed by the requester at which point the
-requester loses all funds in the channel to the supplier.
+period, publish a more recent state signed by the initiator at which point the
+initiator loses all funds in the channel to the supplier.
 
 
 ## Topology
@@ -146,13 +166,60 @@ the majority of users would not be able to offer reliable services, longer paths
 through the network would lock up significantly more funds and most likely also
 incur a higher forwarding fee.
 
-The hub and spoke model would have a number of big hubs, which would be involved
-in most routes through the network. These hubs would be tightly connected and
-offer highly available and short paths for most users at the price of a loss of
-privacy.
+In the hub and spoke model would have a number of big hubs, which would be
+involved in most routes through the network. These hubs would be tightly
+connected and offer highly available and short paths for most users at the price 
+of a loss of privacy.
 
-## Incentives in channels
+## Incentives
 
+Operating a channel takes at least two on-chain operations and therefore has a base amount of fees is required and this fact could be abused by a malicious
+peer.
+If the on-chain balance of an honest peer is less than
+
+To discourage malicious behaviour, a successful slashing of a channel closing,
+forfeits the malicious party's funds to the slasher.
+
+## Artefacts
+
+What should the outcome of a state channel be? The simplest answer would be a
+change in on-chain balances of participants but it could also be desirable to
+use state channels as a poor man's MPC and have a contract with a non-empty
+state as the result on chain.
+
+## Fees
+
+If we consider state channels to be long lived objects, then problems can arise
+around the handling of fees, that need to be paid for on chain transactions.
+
+Given that all parties need to sign of everything, a malicious party could
+potentially black mail a peer under some circumstances.
+If fees come from the channel balance, then one might end up in situations,
+where the channel balance is lower than the fee required for miners to pick up
+the transaction. The upshot here is, that the black mailed peer would lose less
+coins than the cost of an on chain transaction, which should not be a lot.
+If the fee instead comes from the account sending the transaction, then that
+account might end up without enough coins and thus possibly end up with
+insufficient funds to close the channel. This could potentially be worse since
+the channel might hold significant funds.
+
+Under these circumstances it seems deducting fees directly from the channel balance as part of its closing seems like the most sensible approach.
+
+To avoid this situation, a peer should consider halting any interactions if on-chain fees reach a point, where the fees required to close a channel in a timely
+manner approach the balance of the channel.
+
+
+## High level overview
+
+Participating in a state channel requires two nodes to be able to communicate
+with each other. Throughout this document we are going to assume that this
+happens via TCP/IP.
+The process of discovering the `IP_ADDR:PORT` pair of a remote node is not
+covered in this document and assumed to happen out of band, unless both of them are already part of the state channel network, where nodes can announce their identities `(IP_ADDR, PORT, ID)`.
+
+To open a channel, two nodes first establish a connection. If they already have
+an open channel, then creating a new one can be done via the same connection,
+using a new `temporary_channel_id` and multiplexing the messages.
 
 
 ## Protocol
@@ -164,17 +231,20 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 ## Communication
 
-Communication between participants of a channel is peer to peer and should
+Communication between participants of a channel is peer to peer and SHOULD
 happen via a reliable and ordered protocol, e.g. TCP. Peers should expect to be
-running their own node.
+running their own node, in order to be able to catch transactions relevant to
+the channels they are involved in, although outsourcing that job to a third party, while still being trustless, might be possible in the future.
 
 Messages will be both on- and off-chain.
 
-Communication should be encrypted and use a binary data format (***TODO***: this
-will probably be the same data format used by nodes for normal operation).
+Off-chain communication MUST be encrypted. To satisfy this, we use the same
+transport protocol used for sync, which offers encryption and authentication.
+Please refer to the [sync document](./SYNC.md) for details.
 
-Each pair of nodes should have at most one open connection over which channels
-can be multiplexed, given that each channel has a unique id.
+Each pair of nodes SHOULD have at most one open connection. Channels can be
+multiplexed easily, given that each channel has a unique id, so re-using
+connection does not pose any problems.
 
 
 ### Overview
@@ -255,6 +325,7 @@ channel_settle |   |     open     | -----+
                                  +------+
 ```
 
+
 ### Messages
 
 #### Off-chain
@@ -267,15 +338,16 @@ channel_settle |   |     open     | -----+
 	- [`funding_locked`](#funding_locked)
 	- [`channel_reestablish`](#channel_reestablish)
 - Updates
+	- [`update_init_contract`](#update_init_contract)
+	- [`update_exec_func`](#update_exec_fun)
+	- [`update_exec_result`](#update_exec_result)
 	- [`update_deposit`](#update_deposit)
 	- [`update_withdrawal`](#update_withdrawal)
 - Closing
 	- [`shutdown`](#shutdown)
 
-(***TODO***: add HTLCs)
 
-
-##### On-chain
+#### On-chain
 
 - [Establishment](#establishing-channel-on-chain)
 	- [`channel_create`](#channel_create)
@@ -315,7 +387,7 @@ transaction.
 #### `channel_open`
 
 Opening a channel is initiated with this message and communicates the initiators
-intent to the possible future peer.
+intent to the potential future peer.
 
 The `channel_open` message should provide the accepting peer all the information
 it needs to assemble the [`channel_create`](`channel_create`) transaction in
@@ -343,11 +415,12 @@ order to sign it.
  ---------------------- ----
 ```
 
-- `chain_hash`: transaction hash of the chain you want to use
-- `temporary_channel_id`: (***TODO***: how to derive this)
+- `chain_hash`: transaction hash of the chain you want to use, e.g. hash of the
+  genesis
+- `temporary_channel_id`: randomly chosen id unique between the involved peers
 - `lock_period`: time in blocks until a channel closing is to be accepted if not
   mutual or in general for peers to wait for new messages.
-- `push_amount`: initial deposit in favour of the participant by the initiator
+- `push_amount`: initial deposit in favour of the responder by the initiator
 - `initiator_amount`: amount the initiator is willing to commit
 - `responder_amount`: amount the initiator wants the responder to commit
 - `channel_reserve`: the minimum amount both peers need to maintain, s.t. both
@@ -358,14 +431,13 @@ order to sign it.
 (***TODO***: what's the appropriate size for the amounts. Do we want to
 discourage channels from holding big amounts?)
 
-(***TODO***: participant? receiver? responder? Naming is hard.)
-
-At some point state channels might exist across different chains, at which point
-specifying a `chain_hash` will become mandatory.
+In the future state channels might exist across different chains, at which point
+specifying a `chain_hash` will become meaningful.
 
 The `lock_period` can be freely chosen. Setting it too high might lock up funds
 for too long in the case of non-cooperation and setting it too low could leave
-a peer without enough time to react to a malicious peer.
+a peer without enough time to react to a malicious peer trying to unilaterally
+close a channel.
 
 Having the ability to include a `push_amount`, which credits funds to the other
 peer, simplifies the common case of wanting to open a channel and pay someone
@@ -376,27 +448,27 @@ opening a channel.
 
 ##### Requirements
 
-Initiator:
+*Initiator*:
 
 - `chain_hash` MUST identify the chain to be used
-- `temporary_channel_id` MUST be unique for the connecting peer
+- `temporary_channel_id` MUST be unique between the involved peers
 - `lock_period` SHOULD be sufficient time to safely publish transactions to the
   blockchain to stop a cheater
 - `push_amount` MUST be less or equal to `initiator_amount`
 - `initiator_pubkey` MUST be a valid ed25519 pubkey
 
-Responder MUST abort if:
+*Responder* MUST abort if:
 
-- `chain_hash` is unrecognized
+- `chain_hash` is unrecognised
 - `initiator_pubkey` not a valid ed25519 pubkey
 - `temporary_channel_id` is not unique between the peers
 
-Responder SHOULD abort if:
+*Responder* SHOULD abort if:
 
 - `initiator_pubkey` does not have sufficient balance to cover
   `initiator_amount`
 
-Responder MAY abort if:
+*Responder* MAY abort if:
 
 - `lock_period` is too small
 - `push_amount` is too small
@@ -407,12 +479,16 @@ Responder MAY abort if:
 
 #### `channel_accept`
 
+This message is sent by the `responding` peer. It is used to convey the
+conditions under which they are willing to accept the terms proposed by the
+initiating peer.
+
 ```
   name                  size (bytes)
  ---------------------- ----
-| temporary_channel_id | 32 |
- ---------------------- ----
 | chain_hash           | 32 |
+ ---------------------- ----
+| temporary_channel_id | 32 |
  ---------------------- ----
 | minimum_depth        | 4  |
  ---------------------- ----
@@ -426,11 +502,57 @@ Responder MAY abort if:
  ---------------------- ----
 ```
 
+- `chain_hash`: transaction hash of the chain you want to use
+- `temporary_channel_id`: randomly chosen id unique between the involved peers,
 - `minimum_depth`: number of blocks until an opening transaction should be
   considered final. The `minimum_depth` is set by the responding peer, since
   they will typically be the one providing a service.
+- `initiator_amount`: amount the initiator is willing to commit
+- `responder_amount`: amount the initiator wants the responder to commit
+- `channel_reserve`: the minimum amount both peers need to maintain. This makes
+  sure that both have to lose something in case they act maliciously
+- `responder_pubkey`: the account that the initiator wants to use to open the
+  channel
+  
+(***TODO***: This could be interactive, i.e. if the responding peer sends
+different amounts, then that might communicate that it wants these instead.)
 
 ##### Requirements
+
+*Responder*:
+
+- `chain_hash` MUST identify the chain to be used
+- `temporary_channel_id` MUST be unique between the involved peers
+- `lock_period` SHOULD be sufficient time to safely publish transactions to the
+  blockchain to stop a cheater
+- `responder_pubkey` MUST be a valid ed25519 pubkey
+
+#### `funding_created`
+
+Both peers need to sign
+
+#### `funding_signed`
+
+#### `funding_locked`
+
+Opening a channel requires an on-chain transaction. This transaction needs to be
+included in a block and, since we only have probabilistic finality, be
+sufficiently confirmed, s.t. the probability of a chain re-organisation is
+negligible.
+
+This message is exchanged by both peers to signal to each other that the above
+condition has been met from their point of view and only after both of them
+agree on this, can the channel be considered to be opened.
+
+##### Requirements
+
+A node SHOULD NOT send the `funding_locked` message unless the `channel_create`
+transaction has `minimum_depth` confirmations.
+
+### Initialise contract
+
+#### `update_init_contract`
+
 
 ### State update
 
@@ -445,11 +567,18 @@ Parameters:
 - `lock_period`: timeout in blocks
 
 
+#### `update_exec_func`
+
+
+
+#### `update_exec_result`
+
 ### Deposit
 
 Depositing funds into a channel should increase the longevity of channels, since
 it makes balancing them easier but seeing as this incurs an on-chain transaction
 we'd still like to avoid it, if possible.
+
 
 #### `update_deposit`
 
@@ -458,11 +587,12 @@ we'd still like to avoid it, if possible.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 2  |
+| amount               | 8  |
  ---------------------- ----
 | data                 |    |
  ---------------------- ----
 ```
+
 
 ### Withdrawal
 
@@ -473,9 +603,13 @@ we'd still like to avoid it, if possible.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 2  |
+| from                 | 32 |
  ---------------------- ----
-| data                 |    |
+| to                   | 32 |
+ ---------------------- ----
+| amount               | 2  |
+ ---------------------- ----
+| fee                  |    |
  ---------------------- ----
 ```
 
@@ -547,7 +681,8 @@ A                      B
 
 The `shutdown` message initiates the closing of a channel and can be sent by
 either party. After a peer sends the `shutdown` message, it MUST NOT propose any
-more `channel_update` messages.
+more update messages.
+
 
 ##### Requirements
 
@@ -556,7 +691,6 @@ A shutdown cannot be initiated before the on-chain channel opening is not signed
 The initiator MUST NOT send a `shutdown` before a `funding_created` and the responder MUST NOT send a `shutdown` before a `funding_signed` has been sent.
 Prior to the respective points peers can still safely abort the procedure
 without having committed to anything.
-
 
 
 ### Establishing channel on-chain
@@ -568,15 +702,56 @@ MUST pay the standard transaction fees.
 (***TODO***: should fees be directly be deducted from channel balance?)
 (***TODO***: should a third party be able to open a channel for others?)
 
+
 #### `channel_create`
 
-- `initiator`: public key
-- `participant`: public key
-- `initiator_amount`:
-- `participant_amount`:
+The `channel_create` transaction is used to register a channel on chain and its
+inclusion on chain causes the specified amounts to be locked up.
+
+e.g.
+
+```
+Account(initiator).balance := Account(initiator).balance - initiator_amount
+Account(responder).balance := Account(responder).balance - responder_amount
+
+Channel(cid).amount := initiator_amount + responder_amount
+```
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| initiator            | 32 |
+ ---------------------- ----
+| responder            | 32 |
+ ---------------------- ----
+| initiator_amount     | 32 |
+ ---------------------- ----
+| responder_amount     | 32 |
+ ---------------------- ----
+| lock_period          | 2  |
+ ---------------------- ----
+| fee                  |    |
+ ---------------------- ----
+| nonce                |    |
+ ---------------------- ----
+```
+
+- `initiator`: public key/address of the initiating peer
+- `responder`: public key/address of the responding peer
+- `initiator_amount`: unsigned
+- `responder_amount`:
 - `lock_period`
 - `fee`
 - `nonce`
+
+The `fee` and `nonce` refer to the `initiator` account, i.e. the `fee` MUST be taken from their balance and the `nonce` of their account MUST be incremented.
+
+
+##### Requirements
+
+`Account(initiator).balance >= initiator_amount + fee`
 
 ### Updating channel on-chain
 
@@ -585,6 +760,7 @@ An update to an open channel requires the signatures of all participants.
 Both `channel_deposit` and `channel_withdraw` MUST be signed by all involved
 parties, since changing channel balances might change the dynamics of code
 running in a channel.
+
 
 #### `channel_deposit`
 
@@ -595,10 +771,10 @@ deposit.
 
 While it could be desirable to allow anyone to deposit into a channel, we are
 going to restrict deposits to the peers of a channel. That means, the `from`
-field MUST be the address of one of the participants of the targeted channel and
-the standard transaction fees MUST be paid by the `from` account.
+field MUST be an address of one of the participants of the targeted channel and
+the standard transaction fee MUST be paid by the `from` account.
 
-This operation is optional.
+This operation is not mandatory for normal channel operations.
 
 - `channel_id`:
 - `from`: sender of the deposit
@@ -622,8 +798,10 @@ cannot create coins out of thin air.
 - `to`:
 - `nonce`
 
-(***TODO**: do we need to update on chain state with more up to date coin
-distributions?)
+To give an example, suppose `A` initially deposited `10` coins and `B` deposited `5` coins. Now `B` issues a `channel_withdraw` transaction, which MUST be signed
+by both `A` and `B`, with `amount: 6`. Given that both peers agreed to this
+value, the updated channel state would now have a balance of `9` and record.
+
 
 ### Closing channel on-chain
 
@@ -631,22 +809,42 @@ distributions?)
 
 - `channel_id`:
 - `amount`: signed
+- `fee`
+- `nonce`
 
 `amount` is the change in balance for both peers, e.g. if the initiator sent 2
 coins, then the amount should be `2`, and the final balances for both peers are
 then:
 
-`initiator_final = initiator_start - amount`
-`receiver_final = receiver_start + amount`
+`initiator_final = initiator_start + amount - fee/2`
+`responder_final = responder_start - amount - fee/2`
 
-If the initiator sent `-2` coins, i.e. received them, their final balance would
-be increased by that amount.
+
+##### Requirements
+
+This transaction MUST have valid signatures of all involved parties.
 
 #### `channel_close_solo`
 
+In order to close a channel unilaterally, a user has to send a
+`channel_close_solo` transaction. This is only necessary if one peer stops
+responding but can also be used by an malicious peer trying to close a channel
+with a state that hasn't been agreed on by all participants.
+
+With the inclusion of this transaction on chain, the timer, during which
+disputes in the form of `channel_slash` will be considered, is started.
+
 - `channel_id`:
+- `from`
+- `nonce`
+- `fee`
 
 #### `channel_slash`
+
+If a malicious party sent a `channel_close_solo` with an outdated state, the
+honest party has the opportunity to issue a `channel_slash` transaction. This
+transaction needs to include a state signed by all peers with a higher sequence
+number and if successful, causes the malicious party to forfeit its channel balance.
 
 - `channel_id`:
 
@@ -678,12 +876,12 @@ channel.
 - `responder_pubkey`
 - `initiator_amount`
 - `responder_amount`
-
+- `lock_period`
 
 
 ### Local state
 
-Peers need to store local state in order to be able to keep track of the state
+Peers need to store local state in order to be able to keep track of state
 channel operations.
 
 - `chain_hash`
@@ -695,20 +893,24 @@ channel operations.
 - `sequence_number`
 - `closed`
 
-## Contract execution
+## Contracts
+
+### Contract execution
+
+Execution of a contract inside a state channel requires peers to be able to
+initialise a virtual machine to run their smart contracts in.
+
+When operating in co-signing mode, contracts might need to be written in a way
+to avoid the free option problem.
+
+
+### Initialisation
+
+
 
 ## Light node requirements
 
 ## Examples
-
-## Open
-
-- privacy at odds with long livedness if outsiders can tell with whom an entity
-  is opening a state channel with, although remedied a bit if they are generic
-
-- What happens if both parties lose their state
-
-_ ***TODO***: consider Sprite constant lock time payments
 
 
 ## References
