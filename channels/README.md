@@ -173,6 +173,8 @@ the disappearance of one of these hubs would have a big impact.
 
 ## Incentives
 
+Operating a channel should be considered collaborative game with incentive for cooperation
+
 Operating a channel takes at least two on-chain operations and therefore has a base amount of fees is required and this fact could be abused by a malicious
 peer.
 
@@ -187,6 +189,10 @@ close the channel again.
 
 With that in mind, it is advised for users to be cautious with whom they open
 channels if they want to avoid the above issues.
+
+On the other hand, attributing every failure in a channel to malice would also
+be detrimental and cause both a loss of trust in the system and cause users to
+spend more on fees than they should.
 
 
 ## Artefacts
@@ -337,6 +343,7 @@ channel_settle |   |     open     | -----+
 
 
 ## Light node requirements
+
 
 ## Future Work
 

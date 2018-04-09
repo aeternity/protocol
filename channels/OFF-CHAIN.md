@@ -2,6 +2,7 @@
 
 ## Messages
 
+- [Overview](#overview)
 - [Control messages](#control-messages)
 	- [`error`](#error)
 	- [`ping`/`pong`](#ping_pong)
@@ -13,7 +14,7 @@
 	- [`funding_locked`](#funding_locked)
 	- [`channel_reestablish`](#channel_reestablish)
 - Updates
-	- [`update_init_contract`](#update_init_contract)
+	- [`update_contract_init`](#update_contract_init)
 	- [`update_exec_func`](#update_exec_fun)
 	- [`update_exec_result`](#update_exec_result)
 	- [`update_deposit_created`](#update_deposit)
@@ -27,6 +28,14 @@
 	- [`closing_created`](#closing_created)
 	- [`closing_signed`](#closing_signed)
 
+
+## Overview
+
+- two phase commit basically
+- important to make sure off-chain state is not lost
+- before signing on-chain make sure that off-chain gets updated too
+- include a recent block hash and ttl in off-chain messages to give peer
+  deadline that is enforceable
 
 ## Control messages
 
@@ -82,12 +91,11 @@ transaction.
 
 ### `channel_open`
 
-Opening a channel is initiated with this message and communicates the initiators
-intent to the potential future peer.
+This message initiates the opening of a channel and communicates the initiators'
+intent to a potential future peer.
 
 The `channel_open` message should provide the accepting peer all the information
-it needs to assemble the [`channel_create`](`channel_create`) transaction in
-order to sign it.
+it needs to assess whether it should accept the channel or not.
 
 
 ```
@@ -247,6 +255,8 @@ initiator to send their signature to the responder.
   name                  size (bytes)
  ---------------------- ----
 | temporary_channel_id | 32 |
+ ---------------------- ----
+| transaction_data     | 32 |
  ---------------------- ----
 | signature            | 64 |
  ---------------------- ----
@@ -474,3 +484,8 @@ to avoid the free option problem.
 ### Initialisation
 
 
+### On-chain enforcement
+
+- submit code, state, inputs
+- code should output new distribution of balances?
+- peers could choose to continue from there

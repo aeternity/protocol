@@ -50,9 +50,11 @@ Channel(cid).amount := initiator_amount + responder_amount
  ---------------------- ----
 | lock_period          | 2  |
  ---------------------- ----
-| fee                  |    |
+| ttl                  | 2  |
  ---------------------- ----
-| nonce                |    |
+| fee                  | 32 |
+ ---------------------- ----
+| nonce                | 32 |
  ---------------------- ----
 ```
 
@@ -61,10 +63,17 @@ Channel(cid).amount := initiator_amount + responder_amount
 - `initiator_amount`: unsigned
 - `responder_amount`:
 - `lock_period`
+- `ttl`
 - `fee`
 - `nonce`
 
+Peers will want to set the `ttl` to a value greater than zero, to avoid
+uncertainty. If the fees included are low and transaction pressure is high,
+then the transaction might end up being stuck in the mempool for an extended
+period.
+
 The `fee` and `nonce` refer to the `initiator` account, i.e. the `fee` MUST be taken from their balance and the `nonce` of their account MUST be incremented.
+
 
 
 #### Requirements
@@ -83,8 +92,8 @@ running in a channel.
 ### `channel_deposit`
 
 Depositing funds into a channel after creation should allow channels to be more
-long lived due to the increased ease of balancing out channels. The amount of
-coins sent along with this transaction will get locked up just like the initial
+long lived due to the increased ease of balancing them out. The amount of coins
+sent along with this transaction will get locked up just like the initial
 deposit.
 
 While it could be desirable to allow anyone to deposit into a channel, we are
@@ -92,54 +101,130 @@ going to restrict deposits to the peers of a channel. That means, the `from`
 field MUST be an address of one of the participants of the targeted channel and
 the standard transaction fee MUST be paid by the `from` account.
 
-This operation is not mandatory for normal channel operations.
+This operation is not mandatory for normal channel operation.
 
-- `channel_id`:
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| from                 | 32 |
+ ---------------------- ----
+| amount               | 32 |
+ ---------------------- ----
+| ttl                  | 2  |
+ ---------------------- ----
+| fee                  | 32 |
+ ---------------------- ----
+| nonce                | 32 |
+ ---------------------- ----
+```
+
+
+- `channel_id`: channel id as recorded on chain
 - `from`: sender of the deposit
 - `amount`: amount of coins deposited
-- `nonce`: the transaction number of the submitting account
+- `ttl`:
+- `fee`:
+- `nonce`: account nonce of the submitter
 
 
 ### `channel_withdraw`
 
 Channels should generally not be used to hold significant amounts of coins but
-being able to withdraw locked coins might still be of some use.
+being able to withdraw locked coins might still be of use.
 
 The `from` account MUST be a participant in the target channel. The `amount`
 MUST be less or equal than the sum of all participants balances, i.e. channels
 cannot create coins out of thin air.
 
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| from                 | 32 |
+ ---------------------- ----
+| amount               | 32 |
+ ---------------------- ----
+| ttl                  | 2  |
+ ---------------------- ----
+| fee                  | 32 |
+ ---------------------- ----
+| nonce                | 32 |
+ ---------------------- ----
+```
+
+
 - `channel_id`:
-- `amount`:
 - `from`:
+- `amount`:
+- `ttl`:
 - `fee`:
 - `nonce`
 
-To give an example, suppose `A` initially deposited `10` coins and `B` deposited `5` coins. Now `B` issues a `channel_withdraw` transaction, which MUST be signed
-by both `A` and `B`, with `amount: 6`. Given that both peers agreed to this
-value, the updated channel state would now have a balance of `9` and record.
 
+(***TODO***: should a channel be considered closed if all the coins are taken from it?)
 
 ## Closing channel on-chain
 
 ### `channel_close_mutual`
 
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| initiator_amount     | 32 |
+ ---------------------- ----
+| responder_amount     | 32 |
+ ---------------------- ----
+| ttl                  | 2  |
+ ---------------------- ----
+| fee                  | 32 |
+ ---------------------- ----
+| nonce                | 32 |
+ ---------------------- ----
+```
+
+
 - `channel_id`:
-- `amount`: signed
-- `fee`
-- `nonce`
+- `from`: sender of this transaction
+- `initiator_amount`: final balance for the initiator
+- `responder_amount`: final balance for the responder
+- `ttl`:
+- `fee`:
+- `nonce`: taken from the `initiator` account
 
-`amount` is the change in balance for both peers, e.g. if the initiator sent 2
-coins, then the amount should be `2`, and the final balances for both peers are
-then:
+`initiator_amount` and `responder_amount` are the agreed upon distribution of
+coins. To get the final outcome of the channel, the fees have to get accounted
+for:
 
-`initiator_final = initiator_start + amount - fee/2`
-`responder_final = responder_start - amount - fee/2`
+```
+if initiator_amount + responder_amount < fee
+  return error
+else if initiator_amount >= fee/2 && responder_amount >= fee/2
+  initiator_final := initiator_amount - fee/2
+  responder_final := responder_amount - fee/2
+else if initiator_amount > responder_amount
+  initiator_final := initiator_amount - fee + responder_amount
+  responder_final := 0.0
+else
+  responder_final := responder_amount - fee + initiator_amount
+  initiator_final := 0.0
+```
+
 
 
 #### Requirements
 
 This transaction MUST have valid signatures of all involved parties.
+
+After this transaction has been included in a block, the channel MUST be
+considered closed and allow no further modifications.
 
 ### `channel_close_solo`
 
@@ -151,10 +236,31 @@ with a state that hasn't been agreed on by all participants.
 With the inclusion of this transaction on chain, the timer, during which
 disputes in the form of `channel_slash` will be considered, is started.
 
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| from                 | 32 |
+ ---------------------- ----
+| amount               | 32 |
+ ---------------------- ----
+| ttl                  | 2  |
+ ---------------------- ----
+| fee                  | 32 |
+ ---------------------- ----
+| nonce                | 32 |
+ ---------------------- ----
+```
+
+
 - `channel_id`:
 - `from`
+- `ttl`
 - `nonce`
 - `fee`
+
 
 ### `channel_slash`
 
@@ -163,7 +269,33 @@ honest party has the opportunity to issue a `channel_slash` transaction. This
 transaction needs to include a state signed by all peers with a higher sequence
 number and if successful, causes the malicious party to forfeit its channel balance.
 
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| from                 | 32 |
+ ---------------------- ----
+| amount               | 32 |
+ ---------------------- ----
+| ttl                  | 2  |
+ ---------------------- ----
+| fee                  | 32 |
+ ---------------------- ----
+| nonce                | 32 |
+ ---------------------- ----
+```
+
+
 - `channel_id`:
+- `ttl`
+- `nonce`
+- `fee`
+
+#### Requirements
+
+MUST be signed using private key corresponding to the public key `from`.
 
 ### `channel_settle`
 
@@ -178,7 +310,40 @@ The `channel_settle` MUST only be included in a block if:
 - there are no outstanding `channel_slash` transactions, which means that
   either none were published or the most recent one expired
 
+
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| from                 | 32 |
+ ---------------------- ----
+| initiator_amount     | 32 |
+ ---------------------- ----
+| responder_amount     | 32 |
+ ---------------------- ----
+| ttl                  | 2  |
+ ---------------------- ----
+| fee                  | 32 |
+ ---------------------- ----
+| nonce                | 32 |
+ ---------------------- ----
+```
+
+
 - `channel_id`:
+- `from`
+- `ttl`
+- `nonce`
+- `fee`
+
+#### Requirements
+
+After this transaction has been included in a block, the channel MUST be
+considered closed and allow no further modifications.
+
+MUST be signed using private key corresponding to the public key `from`.
 
 ## Channel state tree
 
