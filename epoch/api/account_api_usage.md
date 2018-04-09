@@ -4,6 +4,7 @@
 Each node handles one account.
 
 The following assumes that the node exposes at address 127.0.0.1 the following ports:
+* User API external HTTP endpoint: 3013
 * User API internal HTTP endpoint: 3113
 
 ## Retrieve your public key
@@ -21,7 +22,7 @@ You shall read output like the following:
 
 In order to retrieve your balance, fetch your public key then use it to get the balance associated to that public key (replace the public key in the command):
 ```bash
-curl -G 'http://127.0.0.1:3113/v2/account/balance/ak$3N1WLMewMQPUyQBdEhXRSYee84RQNKJrECwbbseMkNsZhv1XLjpmiqjAkvSRpQ6kgWJMjq9dTmdQ3ekuhpscJk6LpjJYk4'
+curl -G 'http://127.0.0.1:3013/v2/account/balance/ak$3N1WLMewMQPUyQBdEhXRSYee84RQNKJrECwbbseMkNsZhv1XLjpmiqjAkvSRpQ6kgWJMjq9dTmdQ3ekuhpscJk6LpjJYk4'
 ```
 You shall read output like the following...
 ```
