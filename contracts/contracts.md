@@ -70,13 +70,15 @@ A typically contract life cycle looks like this:
 5. No one can call A directly any more, and no new contract can refer to contracts A and B, but calls through B still go to A.f.
 6. Contract B is deactivated by its owner, and has no referring contracts, it is deallocated as is contract A. (removed form the contract state tree)
 
-## [The AEVM](./aevm.md)
+## [Aeternity VMs](./contract_vms.md)
 
 Æternity plan to support multiple virtual machines.
 In order to make transition from Ethereum easy the first VM (AEVM) will be very similar to the EVM.
 A field in the contract specifies which virtual machine to be used.
 In the future we plan to provide at least one more virtual machine which addresses some of the
 security issues with the EVM.
+
+For more information see [Aeternity VMs](./contract_vms.md)
 
 ## [Sophia: The first contract language](./sophia.md)
 
