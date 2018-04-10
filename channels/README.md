@@ -30,8 +30,8 @@ tries to act maliciously. This arbiter is the blockchain.
 - [Communication](#communication)
 	- [Overview](#overview)
 - Messages
-	- [Off-chain](./OFF-CHAIN)
-	- [On-chain](./ON-CHAIN)
+	- [Off-chain](./OFF-CHAIN.md)
+	- [On-chain](./ON-CHAIN.md)
 - [Contract execution in channels](#contract-execution)
 - [Light node requirements](#light-node-requirements)
 - [Examples](#examples)
@@ -141,19 +141,21 @@ The most generic kind of channel would be one that lets peers instantiate any
 arbitrary smart contract within the channel and does not restrict the number of
 peers that can participate in such a channel.
 
-A client-server setup will most likely be mode of choice for the majority of
-channels, where a client is using a service offered by the server, which is
-highly available and probably also some well known entity.
-To give one example, consider the case of a data feed. In this scenario the
-initiator sends a micropayment for each request made to the provider. The most
-an initiator could lose in this case is one micropayment. (***TODO***: ZKCP)
+Our construction will try to meet the former property, allowing any number of
+arbitrary smart contracts to be executed in the channel, but restrict the latter 
+to two peers per channel.
 
-Here only the initiator has an incentive to cheat and publish an outdated state,
-which would assign them more money than they actually have.
-A cheater is easy to detect for a supplier. Whenever the initiator closes the
-channel unilaterally with an outdated state, the supplier can, during the lock
-period, publish a more recent state signed by the initiator at which point the
-initiator loses all funds in the channel to the supplier.
+With that in mind, the two peers in a channel will most likely not have the
+same roles but instead end up in a client-server arrangement for the majority of
+channels, where a client is using a service offered by the server, which is
+highly available and probably also some well known entity, mirroring the status
+quo of the current web.
+A popular example would be an exchange, where users connect to an exchange via
+state channels. This would process would be trustless, since exchanges can not
+lose funds, that haven't been signed over to them
+
+
+- offer (verified) library for standard functionality, e.g. simple payments
 
 
 ## Topology
@@ -178,8 +180,9 @@ Operating a channel should be considered collaborative game with incentive for c
 Operating a channel takes at least two on-chain operations and therefore has a base amount of fees is required and this fact could be abused by a malicious
 peer.
 
-To discourage malicious behaviour, a successful slashing of a channel closing,
-forfeits the malicious party's funds to the slasher.
+(***TODO***: To discourage malicious behaviour, a successful slashing of a
+channel closing, forfeits the malicious party's funds to the slasher but how can
+we make that work without opening attack vectors?)
 
 If a malicious peer doesn't want to risk loosing all its channel balance, it
 still has other options to disrupt or annoy others. Since closing a channel
@@ -200,7 +203,9 @@ spend more on fees than they should.
 What should the outcome of a state channel be? The simplest answer would be a
 change in on-chain balances of participants but it could also be desirable to
 use state channels as a poor man's MPC and have a contract with a non-empty
-state as the result on chain.
+state as the result on chain. (***TODO:*** would there be any way to verify that
+a state was actually produced by the given smart contract without having all the
+inputs?)
 
 
 ## Fees

@@ -31,11 +31,20 @@
 
 ## Overview
 
-- two phase commit basically
-- important to make sure off-chain state is not lost
-- before signing on-chain make sure that off-chain gets updated too
-- include a recent block hash and ttl in off-chain messages to give peer
-  deadline that is enforceable
+The protocol peers use to run smart contracts is a two phase commit protocol,
+where one peer proposes a change, gets it signed off by the others and then
+commits the update locally. These locks are necessary to avoid peers getting
+confused if updates are being proposed simultaneously.
+On a higher level, to keep off chain and on chain state in sync, peers should
+refuse to sign updates for either without also getting a signature for the
+other, e.g. don't sign an on chain `channel_deposit` transaction without also
+updating the state in channel as well.
+
+With the consistency of state updates being secured between peers, it is
+essential, that peers make absolutely sure to not lose their local state, since
+it could potentially lead to them not being able to slash outdated states
+published on chain.
+
 
 ## Control messages
 
@@ -460,13 +469,12 @@ channel operations.
 - `sequence_number`
 - `updated_at`
 - `closed`
+- [{}]
 
 ## Contracts
 
 Execution of a contract inside a state channel requires peers to be able to
 initialise a virtual machine to run their smart contracts in.
-
-### Contract execution
 
 Contracts are executed in rounds, which are denoted by sequence numbers.
 
@@ -480,12 +488,16 @@ went wrong.
 When operating in co-signing mode, contracts might need to be written in a way
 to avoid the free option problem.
 
-
-### Initialisation
-
-
 ### On-chain enforcement
 
 - submit code, state, inputs
 - code should output new distribution of balances?
 - peers could choose to continue from there
+
+With on chain enforcement of contracts it becomes possible to unilaterally force
+progress by publishing contract, state and input on chain. A miner would then
+execute the contract given the state and inputs to produce a new state. This new
+state could then either be used for both peers to continue operation from there
+or leave it at that.
+
+### Initialisation

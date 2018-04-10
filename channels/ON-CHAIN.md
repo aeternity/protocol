@@ -158,12 +158,12 @@ cannot create coins out of thin air.
 ```
 
 
-- `channel_id`:
+- `channel_id`: channel id as recorded on chain
 - `from`:
 - `amount`:
 - `ttl`:
 - `fee`:
-- `nonce`
+- `nonce`: the `from` account nonce
 
 
 (***TODO***: should a channel be considered closed if all the coins are taken from it?)
@@ -191,8 +191,7 @@ cannot create coins out of thin air.
 ```
 
 
-- `channel_id`:
-- `from`: sender of this transaction
+- `channel_id`: channel id as recorded on chain
 - `initiator_amount`: final balance for the initiator
 - `responder_amount`: final balance for the responder
 - `ttl`:
@@ -201,14 +200,18 @@ cannot create coins out of thin air.
 
 `initiator_amount` and `responder_amount` are the agreed upon distribution of
 coins. To get the final outcome of the channel, the fees have to get accounted
-for:
+for. It is advised that peers choose an even amount, otherwise one peer will end
+up paying more, although this should not be an issue in practice.
 
 ```
 if initiator_amount + responder_amount < fee
   return error
-else if initiator_amount >= fee/2 && responder_amount >= fee/2
-  initiator_final := initiator_amount - fee/2
-  responder_final := responder_amount - fee/2
+else if initiator_amount >= ceil(fee/2) && responder_amount >= floor(fee/2)
+  initiator_final := initiator_amount - ceil(fee/2)
+  responder_final := responder_amount - floor(fee/2)
+else if responder_amount >= ceil(fee/2) && initiator_amount >= floor(fee/2)
+  responder_final := responder_amount - ceil(fee/2)
+  initiator_final := initiator_amount - floor(fee/2)
 else if initiator_amount > responder_amount
   initiator_final := initiator_amount - fee + responder_amount
   responder_final := 0.0
@@ -225,6 +228,7 @@ This transaction MUST have valid signatures of all involved parties.
 
 After this transaction has been included in a block, the channel MUST be
 considered closed and allow no further modifications.
+
 
 ### `channel_close_solo`
 
@@ -267,7 +271,7 @@ disputes in the form of `channel_slash` will be considered, is started.
 If a malicious party sent a `channel_close_solo` with an outdated state, the
 honest party has the opportunity to issue a `channel_slash` transaction. This
 transaction needs to include a state signed by all peers with a higher sequence
-number and if successful, causes the malicious party to forfeit its channel balance.
+number.
 
 
 ```
@@ -293,15 +297,17 @@ number and if successful, causes the malicious party to forfeit its channel bala
 - `nonce`
 - `fee`
 
+
 #### Requirements
 
 MUST be signed using private key corresponding to the public key `from`.
 
 ### `channel_settle`
 
-The settlement transaction is the last one in the lifecycle of a channel, after
-all possible disputes are resolved. This transaction then redistributes the
-locked funds.
+The settlement transaction is the last one in the lifecycle of a channel, but
+only required if the parties involved did not manage to cooperate when trying
+to close the channel. It has to be issued after all possible disputes are
+resolved and then redistributes the locked funds.
 
 The `channel_settle` MUST only be included in a block if:
 
