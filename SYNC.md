@@ -9,7 +9,8 @@ communicate with others and exchange information about state transitions in
 order to synchronise their local state machines.
 
 This document describes how a set of peers can exchange information about state
-transitions in a settings where peers might not trust each other or could possibly even be acting maliciously.
+transitions in a settings where peers might not trust each other or could
+possibly even be acting maliciously.
 
 With that in mind, we're going to have to come up with a protocol that minimises
 attack surface while not (significantly) hampering the speed with which
@@ -53,10 +54,20 @@ communication will be encrypted and authenticated to ensure both confidentiality
 and integrity, which prevents adversaries from interfering with the protocol
 and de-anonymisation of nodes to a degree.
 
-For encryption and authentication we are going to use the [Noise protocol](https://noiseprotocol.org/), with the exact protocol name being `Noise_XK_25519_ChaChaPoly_Blake2b`, i.e. `XK` for handshakes, DH over `Curve25519`, `ChaChaPoly` for symmetric encryption and the `Blake2b` hash function.
-`XK` as a handshake pattern means that the initiator of the handshake sends
-their static key to the responder and the initiator knows the static key of the
-responder.
+For encryption and authentication we are going to use the [Noise
+protocol](https://noiseprotocol.org/), with the exact protocol name being
+`Noise_XK_25519_ChaChaPoly_Blake2b`, i.e. `XK` for handshakes, DH over
+`Curve25519`, `ChaChaPoly` for symmetric encryption and the `Blake2b` hash
+function. `XK` as a handshake pattern means that the initiator of the handshake
+sends their static key to the responder and the initiator knows the static key
+of the responder.
+
+Each node is having a `Curve25519` key pair for P2P communication. The peer
+discovery is bootstrapped by having a set of Aeternity peer addresses in the
+node configuration and the node tries to connect to these peers after starting
+up the node. Peer addresses looks like:
+`aenode://pp$ttZZwTS2nzxg7pnEeFMWeRCfdvdxeRu6SgVyeALZX3LbdeiWS@31.13.249.0:3015`.
+
 
 (***TODO***: Spell out the full protocol including key schedule etc.)
 
@@ -80,7 +91,7 @@ responder.
                                      |
                                      v
                               +--------------+
-                              | 
+                              |
 ```
 
 
@@ -107,7 +118,7 @@ The first message a connecting node needs to sent after establishing the secure
 session is send its proof of work puzzle solution.
 
 - this could either be interactive
-	1. initiator connects to note
+	1. initiator connects to node
 	2. responder sends challenge
 	3. initiator disconnects
 	4. initiator computes solution
@@ -116,7 +127,7 @@ session is send its proof of work puzzle solution.
 	- this might require a consensus value otherwise nodes wouldn't know what to
     expect
 
-Problems could arise if an overly difficult pow puzzle is required by most nodes 
+Problems could arise if an overly difficult pow puzzle is required by most nodes
 because it might prevent the majority of people from running nodes and hurt the
 health of the network.
 
@@ -211,12 +222,12 @@ denial of service attacks, e.g. SYN floods or any sort of amplification attacks.
 
 ### Transport
 
-Transport messages are encrypted and authenticated using the Noise protocol. For 
+Transport messages are encrypted and authenticated using the Noise protocol. For
 an in-depth discussion of the Noise protocol and its security guarantees, please
 refer to the [documentation](https://noiseprotocol.org/noise.html), specifically
-sections [7](https://noiseprotocol.org/noise.html#handshake-patterns) and 
+sections [7](https://noiseprotocol.org/noise.html#handshake-patterns) and
 [14](https://noiseprotocol.org/noise.html#security-considerations).
-Using encryption and authentication covers man-in-the-middle attacks, eavesdropping, 
+Using encryption and authentication covers man-in-the-middle attacks, eavesdropping,
 
 
 A Denial of Service (DoS) attack can be mounted at different layers, e.g. at the protocol or the node level.
