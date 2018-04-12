@@ -1,4 +1,4 @@
-[back](../SYNC.md)*
+[back](../SYNC.md)
 
 # P2P messages
 
@@ -13,7 +13,7 @@ length field. The payload is a byte array, and messages are either fixed binary
 data or encoded using [RLP](https://github.com/ethereum/wiki/wiki/RLP).
 
 There are currently 13 different P2P messages implemented in
-[epoch](https://github.com/aeternity/epoch/blob/master/apps/aecore/src/aec_peer_messages.erl)*
+[epoch](https://github.com/aeternity/epoch/blob/master/apps/aecore/src/aec_peer_messages.erl)
   - [MSG_FRAGMENT](#msg_fragment)
   - [MSG_P2P_RESPONSE](#msg_p2p_response)
   - [MSG_PING](#msg_ping)
