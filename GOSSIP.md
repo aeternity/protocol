@@ -1,6 +1,6 @@
 # Gossip
 
-As explained in the [Sync](SYNC.md) document, any block chain implementation needs
+As explained in the [Sync](SYNC.md) document, any blockchain implementation needs
 communication with peers in order to be truly useful. Apart from the lower level
 details described in that document, there is the additional dimension of how
 peers are selected for communication, how connections to those peers are
@@ -24,7 +24,7 @@ monitored. The ping interval is configurable, and defaults to once every 120
 seconds. If a ping fails, this is logged and the peer is scheduled for another
 ping in the normal interval.
 
-Once added to the list of know connected peers, a peer is never removed.
+Once added to the list of known connected peers, a peer is never removed.
 
 ## Gossiping of New Peers
 
@@ -34,13 +34,13 @@ The node that generates the message populates the neighbor list with 30 peers
 that are randomly selected from the list of known and connected peers.
 
 When a ping request is received from another peer, that peer is first checked
-for acceptance. This includes checking
+for acceptance. This includes verifying
 
-1. if it is not the local node itself
-2. that the peer is not in the block list
-3. and that it doesn't already have an existing connection
+1. It is not the local node itself
+2. The peer is not in the block list
+3. It doesn't already have an existing connection
 
-One the peer itself is accepted, all of the neighbors are added to the known
+Once the peer itself is accepted, all the neighbors are added to the known
 peers of the current node. They will then be pinged just as any other known
 peer.
 
