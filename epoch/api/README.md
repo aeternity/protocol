@@ -3,6 +3,7 @@
 This document:
 * Provides an overview of the API exposed by the epoch node;
 * Defines the WebSocket API of the epoch node;
+* Defines the Channels WebSocket API of the epoch node;
 * Describes the intended usage of the user API of the epoch node.
 
 ## Overview
@@ -73,6 +74,33 @@ An event has the same type as a response, except for not having a tag:
 | action | string | what was the action | Yes |
 | payload | object | data from the action | Yes |
 
+## Channels WebSocket API definition
+
+### Description
+Channels require persisted connections to an Aeternity node. New state is
+co-signed by both parties and then it becomes the latest valid state of the
+channel. This happens off chain. For persistence of the connection websockets
+are used.
+
+### Connection
+The epoch node supports an endpoint with a configurable port where the
+websocket's clients connect. It is located on `/channel`.
+
+The node could serve multiple channel websocket clients. Their number is configured in
+the epoch.yaml. When all websocket connections are consumed - any new incoming
+connections will be queued. The queue has a maximum size and when it is
+reached - any new incoming connections will be rejected with an error code 400.
+This is to prevent the node of being overloaded with websocket connections.
+
+### General message types
+All messages have the format:
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| action | string | what is the action | Yes |
+| tag | string | additional info for the action | No |
+| payload | object | data for action | Yes |
+
 ### List of WS APIs
 * [Oracle WS API](./oracle_ws_api.md)
 * [Chain WS API](./chain_ws_api.md)
@@ -84,3 +112,4 @@ An event has the same type as a response, except for not having a tag:
 * [Oracle user API usage](./oracle_api_usage.md)
 * [Naming system API usage](./naming_system_api_usage.md)
 * [Contract API usage](./contract_api_usage.md)
+* [Channels API usage](./channels_api_usage.md)
