@@ -118,6 +118,7 @@ it. Then it is posted to the chain.
 The initiator receives a message containing the unsigned transaction
 ```
 {'action': 'sign',
+ 'tag': 'initiator_signed',
  'payload': {'tx': 'tx$3KVbfQyL3812oUXuaKFrU35yh918LtZS9vSX3xkkyCCQUCReBH3znrhhcKEfv7Et2Unz3Wasec9Ty97xs4VCB3k2GBjhp1bHtYuNcD1JVKCbvfY68JyiVcCzdQJh1SfDtjMLxwaJtQGhUbaF2VySaBwFBTKTzHVCL58owtfXzt972GZEGmEtrdyY7Z1NNg25yhrPyAyGvKZY6WV'}
  }
 ```
@@ -144,6 +145,7 @@ The responder receives the following message
 After being informed for the initiator's signing the responder receives a message containing the unsigned transaction to be signed as well
 ```
 {'action': 'sign',
+ 'tag': 'responder_signed',
  'payload': {'tx': 'tx$3KVbfQyL3812oUXuaKFrU35yh918LtZS9vSX3xkkyCCQUCReBH3znrhhcKEfv7Et2Unz3Wasec9Ty97xs4VCB3k2GBjhp1bHtYuNcD1JVKCbvfY68JyiVcCzdQJh1SfDtjMLxwaJtQGhUbaF2VySaBwFBTKTzHVCL58owtfXzt972GZEGmEtrdyY7Z1NNg25yhrPyAyGvKZY6WV'}
  }
 ```
@@ -204,6 +206,7 @@ message and the responder agrees upon it with a `update_ack` message.
 The initiator receives a message containing the unsigned transaction
 ```
 {'action': 'sign',
+ 'tag': 'update',
  'payload': {'tx': 'tx$3419Kt6y56whdtUfBkefVW6FFJcZd5QFzqroJm42SqSvjehUtyi65yXmMWqXM9pNG6CkPvK9gfFxsqCQFeWhVefNrqLUx1sXJ7xsGjeNPzrWiUwvQjGMfRqGZtT8B9ptrih1CKDa3a3oS9uy1isJ5VbJc1tmtd2orc8CJf6uLiFAF174GKCqyQUp5k1H79DweovYAopZKKxpv8AjKK7h517G24Z3DXuCGoS85wxcFvD5Z3qiFatsZ7BY'}
  }
 ```
@@ -229,6 +232,7 @@ update the state of the state channel.
 After that the responder receives an update acknowledge message
 ```
 {'action': 'sign',
+ 'tag': 'update_ack',
  'payload': {'tx': 'tx$3419Kt6y56whdtUfBkefVW6FFJcZd5QFzqroJm42SqSvjehUtyi65yXmMWqXM9pNG6CkPvK9gfFxsqCQFeWhVefNrqLUx1sXJ7xsGjeNPzrWiUwvQjGMfRqGZtT8B9ptrih1CKDa3a3oS9uy1isJ5VbJc1tmtd2orc8CJf6uLiFAF174GKCqyQUp5k1H79DweovYAopZKKxpv8AjKK7h517G24Z3DXuCGoS85wxcFvD5Z3qiFatsZ7BY'}
  }
 ```
