@@ -239,6 +239,7 @@ subsequent sections divided by object.
 ```
 [ <caller_address>   :: binary()
 , <caller_nonce>     :: int()
+, <nonce>            :: int()
 , <height>           :: int()
 , <contract_address> :: binary()
 , <gas_used>         :: int()
