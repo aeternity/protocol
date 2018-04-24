@@ -6,7 +6,7 @@ You interact with a Aeternity node both through HTTP requests and Websocket
 connections.
 To learn more about channels and their life cycle see [the doc](/channels/README.md).
 
-In each channel there are two websocket client parties. Once the channel is opened - they are
+In each channel there are two websocket client parties. For each channel one participates one opens a new websocket connection. Once the channel is opened - participants are
 equal in every regard. They have different roles while opening and we have
 names for them - `initiator` and `responder`. For short we will call them _the
 parties_.
@@ -14,7 +14,7 @@ parties_.
 There are two basic types of interactions: persisted connection events and HTTP API calls.
 
 ### Websocket life cycle
-These are used for the scenrio when all parties behave correctly and as
+These are used for the scenario when all parties behave correctly and as
 expected. The flow is the following:
 
 1. [Channel open](#channel-open)
@@ -189,6 +189,65 @@ height needed is reached:
 ```
 {'action': 'info',
  'payload': {'event': 'funding_locked'}
+ }
+```
+
+### Initial state
+After both parties had confirmed that the funding is signed - they can proceed
+with sending the messages for off-chain updates. The first one is special - it
+it the initial state that both parties agreed upon starting the channel. Since
+it is prenegotiated, the channels software produces the update transaction for
+the parties and they just have to co-sign it. The initiator sends an `update`
+message and the responder agrees upon it with a `update_ack` message.
+
+#### Initiator signs the initial state
+The initiator receives a message containing the unsigned transaction
+```
+{'action': 'sign',
+ 'payload': {'tx': 'tx$3419Kt6y56whdtUfBkefVW6FFJcZd5QFzqroJm42SqSvjehUtyi65yXmMWqXM9pNG6CkPvK9gfFxsqCQFeWhVefNrqLUx1sXJ7xsGjeNPzrWiUwvQjGMfRqGZtT8B9ptrih1CKDa3a3oS9uy1isJ5VbJc1tmtd2orc8CJf6uLiFAF174GKCqyQUp5k1H79DweovYAopZKKxpv8AjKK7h517G24Z3DXuCGoS85wxcFvD5Z3qiFatsZ7BY'}
+ }
+```
+
+Initiator is to decode the transaction, inspect its contents, sign it, encode
+it and then post it back via a websocket message:
+
+```
+{'action': 'update',
+ 'payload': {'tx': 'tx$2veehmVabgjjKYWnuJ4fyYTucmfuwjgeLoxG3PGnYJexgWZ3GTqkVmEbqVQbUHpnMedBcrPWNMYnoG7qpeZzgggsfg1hj26epuqUL2foog2UfLAiqiT8mU7rdxM6cUJRMzEBYKcQaFJn5MfFbX8vfWSvynMAFSnRkSeLAHno9rsbu1iANBhvVjnbvcikNrTW6XX3qKq1xcQZjCBk1kt7rc3TK6FMcWhV9SEQBKFx29pRDmGXj1FX2evkJWErXB1GKfGdaFQuJNFjR7dz7DYSE6LMCedsq1mP4VAJMXpMJfrfT46wwjd9NxdMzePRt88GGjDtx5UjjjGWDrgRxZWW1qweiDcgDv3qXWKVvcwD'}
+ }
+```
+
+#### Responder signing the initial state
+The responder receives a message indicating the intention of the initiator to
+update the state of the state channel.
+
+```
+{'action': 'info',
+ 'payload': {'event': 'update'}
+ }
+```
+After that the responder receives an update acknowledge message
+```
+{'action': 'sign',
+ 'payload': {'tx': 'tx$3419Kt6y56whdtUfBkefVW6FFJcZd5QFzqroJm42SqSvjehUtyi65yXmMWqXM9pNG6CkPvK9gfFxsqCQFeWhVefNrqLUx1sXJ7xsGjeNPzrWiUwvQjGMfRqGZtT8B9ptrih1CKDa3a3oS9uy1isJ5VbJc1tmtd2orc8CJf6uLiFAF174GKCqyQUp5k1H79DweovYAopZKKxpv8AjKK7h517G24Z3DXuCGoS85wxcFvD5Z3qiFatsZ7BY'}
+ }
+```
+
+Please note that this is the same transaction as the initiator had already
+signed. Responder is to decode the it, inspect its contents, sign it, encode
+it and then post it back via a websocket message:
+
+```
+{'action': 'update_ack',
+ 'payload': {'tx': 'tx$2veehmVabgjjKYWnuHyWmmqMd7Kh18Ztri56nRBku7kvigr8iFFmKxjmCBNwj7tvzZiDzPt6MZGs1cBQtJEnd8kTVZxkrv7SFeBR9ynWG1JabaH9MCL83HjNbDn8QZMenwb1MM4H2sUYtfy7vxUfjYwTqqQ8oDsF29FJe2vbAHqHLHmnaHB9NTCNdMZUuJAKXB5UH9fr2PGJsKt2SrgZcz4HAaoSZTa1pgAWcM5ESegGBopGDWBGZRA8Wpafyb6NG8rthmVPqPLTud2Z5cia4RZHg4RaDmFQU9dBXaz2EN1CjmpG7U1jVWc6FwXzxKSEDo5DaGbs9JRbPs7xLTC8YrLNSfneSdMhVvXTky83'}
+ }
+```
+
+#### Open confirmation
+After both parties have co-signed the state update both of them receive a info for the channel open:
+```
+{'action': 'info',
+ 'payload': {'event': 'open'}
  }
 ```
 
