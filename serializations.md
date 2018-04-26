@@ -137,6 +137,7 @@ subsequent sections divided by object.
 , <amount>    :: int()
 , <fee>       :: int()
 , <nonce>     :: int()
+, <payload>   :: binary()
 ]
 ```
 
