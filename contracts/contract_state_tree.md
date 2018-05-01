@@ -34,15 +34,3 @@ The calls state tree contains all calls done in the block
 and their return values.
 
 See [Call Serialization](../serializations.md#call) for the serialization specification.
-
-- Calls & Return data
-```
-      	CONTRACT_INTERACTION_TYPE,
-      	CONTRACT_INTERACTION_VSN,
-      	caller_address,
-      	caller_nonce,
-      	height,
-      	contract_address,
-      	gas_used,
-      	return_value
-```
