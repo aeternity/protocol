@@ -17,25 +17,7 @@ The contract state tree contains objects:
 - Deposit (amount)
 - vm_version
 
-It is serialized as:
-```
-      CONTRACT_TYPE,
-      CONTRACT_VSN,
-      pubkey,
-      balance,
-      height,
-      nonce,
-      owner,
-      vm_version,
-      code,
-      state,
-      log,
-      active,
-      referers,
-      deposit,
-```
-
-As well as normal account fields.
+See [Contract Serialization](../serializations.md#contract) for the serialization specification.
 
 #### The contract definition
 
@@ -50,6 +32,8 @@ As well as normal account fields.
 
 The calls state tree contains all calls done in the block
 and their return values.
+
+See [Call Serialization](../serializations.md#call) for the serialization specification.
 
 - Calls & Return data
 ```

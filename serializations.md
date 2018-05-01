@@ -245,6 +245,7 @@ subsequent sections divided by object.
 , <contract_address> :: binary()
 , <gas_used>         :: int()
 , <return_value>     :: binary()
+, <return_type>      :: int()
 ]
 ```
 
