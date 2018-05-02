@@ -25,7 +25,7 @@ The transaction contains:
 - The address of the contract owner (the one signing and paying for the transaction)
 - Nonce of the owner/creator account.
 - The byte code of the contract
-- The VM to use
+- The VM/ABI to use
 - A transaction fee
 - A deposit (an even number, 0 is accepted).
 - An amount (aeons to transfer to the account, 0 is accepted).
@@ -73,6 +73,10 @@ The amount will be added to the contract account.
 The fee will added to the miners account.
 
 The deposit will be "held by the contract" until it is deactivated.
+
+The vm_version defines both the virtual machine used for the byte code of the contract
+and the binary interface/calling convention used by the contract. The version codes are
+listed in the VM description 
 
 If the initial call fails (runs out of gas) the contract is not
 created.  The owner loses the fee and the gas (to the miner) but the

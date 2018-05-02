@@ -1,11 +1,11 @@
 [back](./contracts.md)
 ## The Sophia Language
-An AEternity BlockChain Language
+An Æternity BlockChain Language
 The Sophia is a language in the ML family. It is strongly typed and has
 restricted mutable state.
 
 Sophia is customized for smart contracts, which can be published
-to a blockchain (the AEternity BlockChain). Thus some features of conventional
+to a blockchain (the Æternity BlockChain). Thus some features of conventional
 languages, such as floating point arithmetic, are not present in Sophia, and
 some blockchain specific primitives, constructions and types have been added.
 
@@ -484,7 +484,7 @@ free but the miner and the creator get half of the deposit fee each at
 contract disable thus encouraging creators to disable their contracts
 and miners to pick disable transactions.
 
-## ABI
+## The Sophia_01 ABI
 
 The calldata contains a tuple with function name and argument. E.g. ("main", (1,2,3))
 The compiler will generate entry coad to
