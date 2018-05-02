@@ -33,4 +33,4 @@ See [Contract Serialization](../serializations.md#contract) for the serializatio
 The calls state tree contains all calls done in the block
 and their return values.
 
-See [Call Serialization](../serializations.md#call) for the serialization specification.
+See [Call Serialization](../serializations.md#contract-call) for the serialization specification.

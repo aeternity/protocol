@@ -225,6 +225,7 @@ subsequent sections divided by object.
 [ <pubkey>     :: binary()
 , <balance>    :: int()
 , <height>     :: int()
+, <nonce>      :: int()
 , <owner>      :: binary()
 , <vm_version> :: int()
 , <code>       :: binary()
