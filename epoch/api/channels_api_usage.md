@@ -18,7 +18,7 @@ These are used for the scenario when all parties behave correctly and as
 expected. The flow is the following:
 
 1. [Channel open](#channel-open)
-2. Update channel state
+2. [Channel offchain update](#channel-offcain-update)
 3. Channel mutual close
 
 Only steps 1 and 3 require chain interactions, step 2 is off-chain.
@@ -256,3 +256,122 @@ After both parties have co-signed the state update both of them receive a info f
 ```
 
 From this point on - the state channel is considered to be opened.
+
+## Channel offchain update
+After the channel had been opened and before it had been closed there is a
+channel state that is updated when needed. The updates are off chain and
+broadcasted only between parties in the channel. The state represents the last
+division of the total channel balance. A state is considered to be valid only if both parties had agreed upon it. The latest channel state is the last valid state.
+At any time the latest state can be used for unilaterally closing the channel.
+
+### Channel state
+Both parties persist their own version of the state. It cointains:
+
+  | Name | Type | Description |
+  | ---- | ---- | ----------- |
+  | channel id | string | ID of the channel|
+  | initiator | string | initiator's public key |
+  | responder | string | responder's public key |
+  | initiator amount | integer | new initiator's amount |
+  | responder amount| integer | new responder's amount |
+  | updates | [update] | update being applied |
+  | state | string | placeholder |
+  | previous round | integer | reference for the previous round the changes are based at |
+  | round | integer | current round |
+
+Each subsequent state has a `round` increased with 1 and a reference to the
+previous round. Values of the amounts are the new ones - result of applying the
+update on the referenced round's values and the update.
+
+State field is a placeholder for future use.
+
+Since both participants can trigger new updates to the state - they are peers.
+Since one of them starts the update and the other acknowledges is below we are
+going to use `starter` and `acknowledger`. Both the initiator and the
+responder can take any of the roles.
+
+### Update
+Update is a change to be applied on top of the latest state. It has the
+following structure:
+
+  | Name | Type | Description |
+  | ---- | ---- | ----------- |
+  | from | string | sender's public key |
+  | to | string | receiver's public key |
+  | amount | integer | the amount givem |
+
+Sender and receiver are the channel parties. Both the initiator and responder
+can take those roles. Any public key outside of the channel is considered invalid.
+
+#### Start update
+##### Trigger an update
+The starter send a message containing the desired change
+```
+{'action': 'update',
+ 'tag': 'new',
+ 'payload': {
+    'from': 'ak$3YGRJv1QMgNbeDzvqX7qJrZWJDaHGmrHYHifxSbhSEgn6anuNYCNPrzsB911xTbZ35bvJYWLyYjrQaQKfvja9gkpvYMfEZ',
+    'to': 'ak$3gVuduh7vR9G7Hq3TpFaA7q9oQkMZZF2VsUxDYZabNeKC1uaqtjpKSth7wPn9dxnUzsHoT2fa6GPUzepbDXMHyC2F3HupT',
+    'amount': 2
+    }
+ }
+```
+The `starter` might take the role of `from` or `to` so the `starter` can
+trigger sending or request for tokens.
+
+##### Starter signs updated state
+Starter receives a message containing the updated channel state as a
+off chain transaction
+```
+{'action': 'sign',
+ 'tag': 'update',
+ 'payload' {
+    'tx': 'tx$21uV5so71tzLyBzTGBd5qd318n8Z33ninWoJzuBBKa3y3cLv8jL1gBsUpwoT1Wzs57fpxgxk7asMpuxcKpYxRnH1Qk679DjPUjLx3Lu6eNnPnfDwb4NpMq5tmm1Sq1j4MLfi6mFLadQ4CyuiENcytACQgkiU2CP8jWHKDCxAprKxP7EnXRKGbyaXkQRjvxmd5BK5XpnPHMoLb4zrrQfex5Wi8SkJjxWrhRyTr7u8jqyyebVPYmz3iRnnoEHfiECzBLdAYBz12U4VgUNrYug8C3ns5GcB1ytaUmggpDGY4K97dyYR8aMorFfqY6rPjwpRoL1BjbJgUBw54VVgMEijfeVCNcyw8wrVJnZeUAQKSesJcPhWShY717GVeQfGGHLzJhTY7iYBUUQCLfoVms86jJ3vMo1d9DpnahpCXfrZeR2PExg8Cn9DXc'}
+}
+```
+Starter is to decode the transaction, inspect its contents, sign it, encode
+it and then post it back via a websocket message:
+```
+{'action': 'update',
+ 'payload': {
+    'tx': 'tx$xCHADUvUikbjGRcBmioKtXFQKpGs7yZHvhkcjByxQDG5xnCpU6YVQs4qyBZL6h18xjTSy1wtUFe8ipKMHLp6VmU2KwLgd4mbUtqELz6w9wV6PGTex6ZS2y7TtqZsDuesGFTZqYET8syCor8kzGjemUkzvwHMJdKsQ5guDWj1C2EcuNR3MnK9heJLbKuf19peGDvijjS8zdCD1pxE4QcsVi9pAGUBCgFyKx8FkDzhv6LxjysuxdmuZqeTGq49s71QdVB74Y1DAQUq5JsH1kyhadFxVepS6FYmcBC4xK8h1sefipPAAVFY7YwNtj2W6U9CTCqSVAQSrpfGAo6322gSneD8aRKoGpQpy1NfxVePKqM5igmd1B6QDGcEYDigBzzNwrXpuYqjrdG5eB6C6ehwAxNskmiudbEuKrjwNL5JzExxrR21L5oQCDc3RMyPdeWJxs8eJfHCrWyzyAwsykV4hVGxddbsbrDWd3re42N5HARXpQG6Gq6aMGnSHJAKbXCWxys4Si6Wjpey7HyEgT1hYoxqtmwEGhW96Ksig'
+    }
+}
+```
+#### Acknowledger update
+Acknowledger receives an info message indicating an upcoming change:
+```
+{'action': 'info',
+ 'payload': {'event': 'update'}
+ }
+```
+Then the acknowledger receives a new message containing the updated channel state as a
+off chain transaction
+```
+{'action': 'sign',
+ 'tag': 'update_ack',
+ 'payload' {
+    'tx': 'tx$21uV5so71tzLyBzTGBd5qd318n8Z33ninWoJzuBBKa3y3cLv8jL1gBsUpwoT1Wzs57fpxgxk7asMpuxcKpYxRnH1Qk679DjPUjLx3Lu6eNnPnfDwb4NpMq5tmm1Sq1j4MLfi6mFLadQ4CyuiENcytACQgkiU2CP8jWHKDCxAprKxP7EnXRKGbyaXkQRjvxmd5BK5XpnPHMoLb4zrrQfex5Wi8SkJjxWrhRyTr7u8jqyyebVPYmz3iRnnoEHfiECzBLdAYBz12U4VgUNrYug8C3ns5GcB1ytaUmggpDGY4K97dyYR8aMorFfqY6rPjwpRoL1BjbJgUBw54VVgMEijfeVCNcyw8wrVJnZeUAQKSesJcPhWShY717GVeQfGGHLzJhTY7iYBUUQCLfoVms86jJ3vMo1d9DpnahpCXfrZeR2PExg8Cn9DXc'
+    }
+}
+```
+Note that this is the same transaction as the one the started had already signed. Acknowledger is to decode the transaction, inspect its contents, sign it, encode
+it and then post it back via a websocket message:
+```
+{'action': 'update_ack',
+ 'payload': {
+    'tx': 'tx$xCHADUvUikbjGRcBmj4YQkTJGCoGV6JQVdJW2FU1ZAYGhdayeCZerGqPWbRz4Eduq1KtjUbBJgdxSF3UKyChKMXne3dEDnChRdiUop4HYkHJ8GF3xQpbSspvST5qPTJqvcCstQCDXmJMLiYiWQ2hoPXL3a1qiiVmSwx2ztVuVqsEf1NsQCbMiNeJj8Uvrcp2FKN8TG2VoMTBTiMcCdLGXhX31EaLYTTDVyFTXGgFRUTdAsHgBjcQzm9hgQS75QjhKY7VtyUBCisUEQp8Dcr76rpdT1Qy9n8JYKboPkFZpY9DVx9We2hstbP3fjgZVLgDRAvLoC5YppVE7GZgUbRp6PMmbPUyc3qFYaxA82g7TzndipqnrKuuGzDjoPaM2w5evx1TvXAF5u1beac2kW7kJyKjLfLhjKQ8bnwBwcZ3WpdRfCVe55LtPwYEoZQJtdzojjVcuLmgJjbb2GDHioi8KXTasHre5oZKwkyYByMqzDafVTMT3kJqvdQG6HKAm8XGP6LGRsZFcpkn5jGtGbq7PRpTbAn1RbHWvRAEH'
+  }
+}
+```
+#### Finish update
+After both the parties had signed the new updated state of the channel - it is
+considered the latest one. Corresponding info messages are sent to both
+parties to indicate it.
+```
+{'action': 'info',
+ 'payload': {'event': 'update_finalized'}
+ }
+```
+After that a new state updated can be triggered.
+
