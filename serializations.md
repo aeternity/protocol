@@ -31,7 +31,7 @@ constructed directly as a byte array.
 | pow_evidence | 168  |
 | nonce        | 8    |
 | time         | 8    |
-
+| miner        | 32   |
 
 #### Block
 
@@ -95,7 +95,6 @@ subsequent sections divided by object.
 | Account | 10 |
 | Signed transaction | 11 |
 | Spend transaction | 12 |
-| Coinbase transaction | 13 |
 | Oracle | 20 |
 | Oracle query | 21 |
 | Oracle register transaction | 22 |
@@ -147,14 +146,6 @@ Signatures are sorted.
 , <fee>       :: int()
 , <nonce>     :: int()
 , <payload>   :: binary()
-]
-```
-
-### Coinbase transaction
-```
-[ <acct>   :: binary()
-, <height> :: int()
-, <reward> :: int()
 ]
 ```
 
