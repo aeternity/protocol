@@ -19,7 +19,7 @@ expected. The flow is the following:
 
 1. [Channel open](#channel-open)
 2. [Channel offchain update](#channel-offcain-update)
-3. Channel mutual close
+3. [Channel mutual close](#channel-mutual-close)
 
 Only steps 1 and 3 require chain interactions, step 2 is off-chain.
 
@@ -374,4 +374,89 @@ parties to indicate it.
  }
 ```
 After that a new state updated can be triggered.
+
+## Channel mutual close
+At any moment after the channel is opened - a closing procedure can be
+triggered. This can be done by either of the parties. The process is similar to
+the [offchain updates](#channel-offchain-update). Most notable change is the
+special transaction co-signed by both parties. It is called
+`channel_close_mutual_tx`. After gathering singatures it will endup on the
+chain and it has the following structure:
+
+  | Name | Type | Description |
+  | ---- | ---- | ----------- |
+  | channel id | string | ID of the channel|
+  | from | string | initiator's public key |
+  | initiator_amount | integer | final amount of tokens to be awarded by the initiator |
+  | responder_amount | integer | final amount of tokens to be awarded by the responder |
+  | ttl | integer | maximum block height to include the transaction |
+  | fee | integer | fee to be paid to the miner |
+  | nonce | integer | initiator's nonce |
+
+Since any of the participants can initiate a closing, we will use `starter`
+for the peer that triggers the process and `acknowledger` for the other one.
+
+### Initiate mutual close
+The starter sends the following message and triggers the closing procedure:
+```
+{'action': 'shutdown'}
+```
+
+### Starter signing
+Then the starter receives a `channel_close_mutual_tx` to sign:
+```
+{'action': 'sign',
+ 'tag': 'shutdown_sign',
+ 'payload': {
+    'tx': 'tx$2C9etiP9wZr2iQVj6BUYk5sxHVNgcVhK4ngwv7fjsnnj2S1przQggcqyfhfJGgMPkpzoDfBZM7SyxVQykUCHvJw2N7E5gWSMuiuGjL4fYYUAXkEeyJygCAqKiszgqz8RuBDAfyCX44SsC5Ev1KU84jkui5EVxb'
+    }
+}
+```
+Starter is to decode the transaction, inspect its contents, sign it, encode
+it and then post it back via a websocket message:
+```
+{'action': 'shutdown_sign',
+ 'payload': {
+    'tx': 'tx$4L9GSozvWQwFDrkxaT2DZYrXU1sFULxRkpFbKjzAR4XinUwRgFvzm7ct7ZCvq38ZfCUZR73yXHRnd2DURPCmwdj7NarynugJ5JkY5TVN6ZzxVMEs6nsA8Dfu7dA9AoFj3AwaDLdaBuUEXuXTvsLEZy57GCG2v8HLucFkpHRTK63VdG8UNMK429ofMqHo8QyPjdwHYjH43baCSiN21g2hfpL9qWBmGwmcipSKuV5tHKg2aMpURCHM1z1FnRqdosiVM42PJTxSAHv'
+    }
+}
+```
+### Acknowledger signing
+Then the acknowledger receives a `channel_close_mutual_tx` to sign:
+```
+{'action': 'sign',
+ 'tag': 'shutdown_sign_ack',
+ 'payload': {
+    'tx': 'tx$2C9etiP9wZr2iQVj6BUYk5sxHVNgcVhK4ngwv7fjsnnj2S1przQggcqyfhfJGgMPkpzoDfBZM7SyxVQykUCHvJw2N7E5gWSMuiuGjL4fYYUAXkEeyJygCAqKiszgqz8RuBDAfyCX44SsC5Ev1KU84jkui5EVxb'
+    }
+}
+```
+Note that this is the same transaction. Acknowledger is to decode the transaction, inspect its contents, sign it, encode
+it and then post it back via a websocket message:
+```
+{'action': 'shutdown_sign_ack',
+ 'payload': {
+    'tx': 'tx$FhWGD2ecn65dJoYfnYZxL9iNhbqXuTvq7HddtWNuQADQi71B1etAC7NmNG6n3Lq2wr6myPSG2HbGEAvJHJrmgbYuxC4biQGaz2Q7q3NtHJFxBKQxyRK33r4Cj98q3xNZqZ9YXQpE4f5XYjzLZbw6YRRsvdV28rzZHMFbX9rzeXJpxBD1NjtfHsQtVKMNyHABj96rt9DuV3XMmQomUw92TnuKNWUJS5omJ9N2Lq2bcm3TvWg7JvyxyU6DS9FPHwDw4aHcgRSsc5Bp'
+    }
+}
+```
+
+### Channel closing
+After both parties have co-signed the `channel_close_mutual_tx` the
+transaction is posted on the chain and the microservice handling the offchain
+requests dies. Parties receive the following info:
+```
+{'action': 'info',
+ 'payload': {'event': 'died'}
+ }
+```
+Then the websocket connection is closed.
+
+### Tracking the progress of the onchain transaction
+After calculated the hash of the `channel_close_mutual_tx` parties can track
+its progress as they would do with any on chain transaction
+```
+curl 'http://127.0.0.1:3013/v2/tx/th$gCajQAyuCHwXFTSTyZWfmvJqNrikJnKfWmBsrPaAUswtNf7VP?tx_encoding=json'
+```
+if the `block_hash` is `none` - then the transaction is still in the mempool.
 
