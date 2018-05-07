@@ -6,11 +6,11 @@ P2P messages are transported using the [Noise
 protocol](https://noiseprotocol.org/). Since each message in the Noise protocol
 is limited to (65536 - 2) bytes we sometimes have to fragment larger messages
 (in particular blocks and transaction pool-chunks). On top of this we use a
-simple message format, where 2 bytes (16 bits) are used for a big-endian
-encoded message type integer followed by the payload for the particular
-message. Since Noise (and the fragmentation) handle message size we need no
-length field. The payload is a byte array, and messages are either fixed binary
-data or encoded using [RLP](https://github.com/ethereum/wiki/wiki/RLP).
+simple message format, where 2 bytes (16 bits) are used for a big-endian encoded 
+message type integer followed by the payload for the particular message. Since
+Noise (and the fragmentation) handle message size we need no length field. The
+payload is a byte array, and messages are either fixed binary data or encoded
+using [RLP](https://github.com/ethereum/wiki/wiki/RLP).
 
 There are currently 13 different P2P messages implemented in
 [epoch](https://github.com/aeternity/epoch/blob/master/apps/aecore/src/aec_peer_messages.erl)
@@ -63,8 +63,7 @@ Message is RLP encoded, fields:
   - `Type :: int` - the type of the response
   - `Reason :: byte_array` - Human readable (UTF8) reason (only set
     if Result is `false`)*
-  - `Object :: byte_array` - an object of type `Type` if Result is
-    `true`.
+  - `Object :: byte_array` - an object of type `Type` if Result is `true`.
 
 ## MSG_PING
 *(Tag = 1)*

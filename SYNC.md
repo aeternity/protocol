@@ -14,7 +14,7 @@ possibly even be acting maliciously.
 
 With that in mind, we're going to have to come up with a protocol that minimises
 attack surface while not (significantly) hampering the speed with which
-information is spread.
+information is disseminated in the network.
 
 There are a couple of dimensions along which we can tune our protocol:
 
@@ -29,6 +29,131 @@ Ideally, our protocol has knobs which let users configure it to fit their needs,
 e.g. a node running on a mobile phone might want to reduce bandwidth at the cost
 of increased latency or on the other side of the spectrum a strong node might
 elect to reduce latency by using more network bandwidth and increased CPU usage.
+
+
+## Transport protocol
+
+This initial version is going to have nodes using TCP connections. All
+communication will be encrypted and authenticated to ensure both confidentiality
+and integrity, which prevents adversaries from interfering with the protocol
+and de-anonymisation of nodes to a degree.
+
+For encryption and authentication we are going to use the [Noise
+protocol](https://noiseprotocol.org/), with the exact protocol name being
+`Noise_XK_25519_ChaChaPoly_Blake2b`, i.e. `XK` for handshakes, DH over
+`Curve25519`, `ChaChaPoly` for symmetric encryption and the `Blake2b` hash
+function. `XK` as a handshake pattern means that the initiator of the handshake
+sends their static key to the responder and the initiator knows the static key
+of the responder.
+
+Each node has a static `Curve25519` key pair for P2P communication. The peer
+discovery is bootstrapped by having a set of Aeternity peer addresses in the
+node configuration and the node tries to connect to these peers after starting
+up the node. Peer addresses looks like:
+`aenode://pp$ttZZwTS2nzxg7pnEeFMWeRCfdvdxeRu6SgVyeALZX3LbdeiWS@31.13.249.0:3015`.
+
+
+(***TODO***: Spell out the full protocol including key schedule etc.)
+
+
+
+## Peer to peer network
+
+(***TODO***: this should probably be the overarching topic for this document and sync being a sub topic)
+
+Given that all nodes participating in the network are going to hold all
+available data, there is no need to have a structured overlay network.
+
+
+### Bootstrapping
+
+Before any node can start the process of downloading the blockchain, it needs to
+discover suitable neighbours, which are part of the peer to peer network.
+We consider two different ways to get this process bootstrapped:
+
+1. have a central service, that hands out an initial set of neighbours, e.g.
+   via a DNS lookup
+2. ship the node software with a set of initial neighbours
+
+Both options have advantages and disadvantages. Number one means that the set
+of initial neighbours can be easily rotated without having to update any
+configuration files but it depends on fairly centralised infrastructure.
+Option two does not rely on DNS but requires updates to the node software
+packages in order if the initial neighbour set needs to change.
+
+We will choose one of the following strategies to acquire our initial
+entrypoints for the network, in order of preference:
+
+1. consult local database of peers the node has talked to before and try to
+   connect to them
+2. connect to a list of known peers with DNS entries
+3. rely on hard-coded nodes that come with the node package
+
+
+
+
+### Neighbour selection
+
+After a node has been bootstrapped, it should try to keep a fairly stable
+neighbourhood and thus try to persist peers across restarts.
+
+To describe the selection process, we need to come up with strategies for
+neighbour replacement and a preference function used to pick a possible new
+peer out of a set.
+
+Choosing a selection strategy has a big impact on the overall health of the
+network, since it influences the node degree, which in turn controls resilience
+and message overhead.
+
+There's rich literature analysing different strategies based on values intrinsic
+to the peer to peer overlay network, e.g. peer age or behaviour metrics, or on
+values of the underlying network, e.g. RTT or geographical location.
+
+
+Replacement strategies based on age can be put into two different categories:
+
+- *active*:
+- *passive*:
+
+A number of different selection strategies have been discussed in the literature
+but in order to choose the right one we need to first come up with requirements.
+
+
+### Routing
+
+In the Bitcoin and Ethereum networks, routing is of no concern, given that it is
+generally impossible to say, who will produce the next block and as such a user
+will just post a transaction to the network in the hopes of reaching all miners,
+who can then pick it up.
+
+Given our usage of the Bitcoin-NG[7] protocol, a routing layer might be of
+interest for users, who have tight timing requirements, or just for the improved
+user experience by a potential decrease in latency when a transaction can be
+routed directly to the current round leader versus flooding the network.
+
+The addition of routing will be addressed in future versions of this document.
+
+### Churn
+
+There are many studies observing and studying churn patterns in peer to peer
+networks such as Gnutella or BitTorrent. While these are certainly valuable to
+consider in this context, we can assume that the usage patterns differ quite a
+lot, given that they are mostly used for sharing relatively small, self-
+contained files.
+
+Donet et al [8] did an early study of the bitcoin peer to peer network in 2013,
+finding "872648 different IP addresses corresponding to machines running Bitcoin
+nodes." but of which only a staggering 0.66% (5759) were still reachable after
+their observation period of 37 days. [bitnodes](https://bitnodes.earn.com/)
+has been trying to keep track of the peer to peer network size, starting in May
+2016 with around 6500 nodes.
+
+
+## Connection
+
+incoming/outgoing
+
+whitelist/blacklist
 
 
 ## Incentives
@@ -47,60 +172,11 @@ interest of the network.
 (***TODO***: Come up with something similar to/based on TorCoin, or at least
 mention it and give outlook for how it might be integrated.)
 
-## Transport protocol
-
-This initial version is going to have nodes using TCP connections. All
-communication will be encrypted and authenticated to ensure both confidentiality
-and integrity, which prevents adversaries from interfering with the protocol
-and de-anonymisation of nodes to a degree.
-
-For encryption and authentication we are going to use the [Noise
-protocol](https://noiseprotocol.org/), with the exact protocol name being
-`Noise_XK_25519_ChaChaPoly_Blake2b`, i.e. `XK` for handshakes, DH over
-`Curve25519`, `ChaChaPoly` for symmetric encryption and the `Blake2b` hash
-function. `XK` as a handshake pattern means that the initiator of the handshake
-sends their static key to the responder and the initiator knows the static key
-of the responder.
-
-Each node is having a `Curve25519` key pair for P2P communication. The peer
-discovery is bootstrapped by having a set of Aeternity peer addresses in the
-node configuration and the node tries to connect to these peers after starting
-up the node. Peer addresses looks like:
-`aenode://pp$ttZZwTS2nzxg7pnEeFMWeRCfdvdxeRu6SgVyeALZX3LbdeiWS@31.13.249.0:3015`.
 
 
-(***TODO***: Spell out the full protocol including key schedule etc.)
+## Block/Transaction Propagation
 
-
-
-## Connections
-
-```                  [open]
-+--------------+ -----------> +--------------+
-| Disconnected |              |   Requested  |
-+--------------+ <----------- +--------------+
-       ^          [reject]/          |
-       |            [timeout]        | [accept]
-       |                             |
-       |                             v
-       |                      +--------------+
-       +--------------------- |   Accepted   |
-           [disconnect]/      +--------------+
-             [timeout]               |
-                                     |
-                                     |
-                                     v
-                              +--------------+
-                              |
-```
-
-
-different connection pools
-
-incoming vs. outgoing connections
-
-## Block/Tx protocol
-
+- with bitcoin-ng always sending full blocks would be a giant waste
 
 - announce new tx/block to peers
 - peer asks for data if they don't have it
@@ -108,11 +184,34 @@ incoming vs. outgoing connections
 
 - send header first
 
-- if peer sends garbage they get penalty and after x they get disconnected
-
+- consider overhead for sending out single tx vs. batching
 
 
 ### Proof of work puzzle
+
+Node operators have the option to require connecting peers to solve a proof of
+work puzzle as a means of rate limiting. They should make use of this option if
+they believe to be the target of an eclipse attack or a denial of service.
+
+The solution to such a puzzle could either be generated offline or online both
+of which have their merits.
+
+Being able to generate the solution offline would give resource constrained
+nodes the possibility to easily participate but would also allow an attacker to
+generate many solutions before an attack.
+An example for such an offline scheme might be to find a solution to
+`Blake2b(CuckooCycle(Pubkey || Nonce)) > DifficultyTarget`.
+The peer would, upon connecting, present the nonce and the receiver of the
+connection could then verify that the static key used for the noise
+handshake concatenated with the nonce is indeed a valid solution.
+(***TODO***: this might require a consensus value otherwise nodes wouldn't know
+what to expect)
+
+Juels and Brainard [6] were the first to introduce an interactive scheme
+requiring the solution of a computational puzzle to combat denial of service attacks.
+
+
+
 
 The first message a connecting node needs to sent after establishing the secure
 session is send its proof of work puzzle solution.
@@ -123,25 +222,11 @@ session is send its proof of work puzzle solution.
 	3. initiator disconnects
 	4. initiator computes solution
 	5. initiator connects again and provides solution
-- or done offline
-	- this might require a consensus value otherwise nodes wouldn't know what to
-    expect
+
 
 Problems could arise if an overly difficult pow puzzle is required by most nodes
 because it might prevent the majority of people from running nodes and hurt the
 health of the network.
-
-```
-A                      B
-|---    pow_puzzle   -->|
-|                       |
-|                       |
-|                       |
-|                       |
-|                       |
-|                       |
-|                       |
-```
 
 
 ### Reputation
@@ -151,7 +236,7 @@ only be used to punish peers sending garbage or misbehaving. Reputation is local
 to a node and not shared with anyone.
 Once an offending node reaches some threshold, e.g. 0, the offended node MAY
 terminate the connection and SHOULD reject any further connection attempts by
-the offender for a while, e.g. 24 hours.
+the offender for a while, e.g. 24 hours, if they choose to punish them.
 
 Garbage in this content would be:
 
@@ -160,8 +245,7 @@ Garbage in this content would be:
 - ...
 
 If the offender is motivated and willing to bring up more nodes, then the node
-under attack MAY reduce the number of slots for connections that don't require
-the solution to a proof of work puzzle.
+under attack MAY opt for connecting nodes be required to solve a proof-of-work puzzle reduce before they are accepted.
 
 
 ## Configurables
@@ -246,10 +330,9 @@ Privacy:
 - anyone in the same network can basically see everything you do without encryption
 
 
-Distributed Denial of Service (DDoS) attacks are out of scope given that these
-are usually executed at layer lower that we are concerned with, although it
-could be argued that using mix networks hide the IP addresses of parties
-communicating and thus might mitigate one DDoS angle.
+Network level Distributed Denial of Service (DDoS) attacks, that try to take
+nodes offline by saturating their connection to the internet, are out of scope,
+although it could be argued that using mix networks hide the IP addresses of parties communicating and thus might mitigate one DDoS angle.
 
 
 
@@ -279,3 +362,11 @@ to another node. This solution
 [3]: Ghosh, Mainak, et al. A TorPath to TorCoin: proof-of-bandwidth altcoins for compensating relays. NAVAL RESEARCH LAB WASHINGTON DC, 2014.
 
 [4]: Rescorla, E., and B. Korver. "RFC 3552: Guidelines for writing RFC text on security considerations." Internet Society Req. for Comm (2003).
+
+[5]:
+
+[6]: Juels, Ari, and John G. Brainard. "Client puzzles: A Cryptographic countermeasure against connection depletion attacks." NDSS. Vol. 99. 1999.
+
+[7]: Eyal, Ittay, et al. "Bitcoin-NG: A Scalable Blockchain Protocol." NSDI. 2016.
+
+[8]: Donet, Joan Antoni Donet, Cristina Pérez-Sola, and Jordi Herrera-Joancomartí. "The bitcoin P2P network." International Conference on Financial Cryptography and Data Security. Springer, Berlin, Heidelberg, 2014.
