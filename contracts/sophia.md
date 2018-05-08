@@ -546,6 +546,15 @@ The shortest unique suffix could also be used, and the hash could be ANDed with 
 Then each exported function starts with an exported entry point where it executes
 code to fetch the arguments to memory.
 
+### Contract state
+
+Before a contract call is executed the current state of the contract is loaded
+into memory encoded as described above. A pointer to the encoded state is stored at
+address 0. The Sophia compiler generates code to unpack the encoded state and
+update the state pointer with a pointer to decoded value. Before returning the
+contract should encode the updated state and point the state pointer to the
+encoded data. If the call did not update the state the contract can set the
+state pointer to 0.
 
 ### Local function calls
 
