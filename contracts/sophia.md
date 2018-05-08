@@ -485,20 +485,43 @@ and miners to pick disable transactions.
 ## The Sophia_01 ABI
 
 The calldata contains a tuple with function name and argument. E.g. ("main", (1,2,3))
-The compiler will generate entry coad to
+The compiler will generate entry code to
 load the calldata to memory and then create a pattern matching switch on the function name
-and call the function with the second element as the argument.
-e.g.
-```
- CALLDATALOAD
- MLOAD
-```
+and call the function with the second element as the argument:
+
 
 ```
- case Data of
-  ("main", arg) : main(arg)
+CALLDATASIZE
+PUSH1 0
+PUSH1 32
+CALLDATACOPY  ;; Copy all calldata into address 32 (addr 0 is the state pointer)
+```
+
+followed by
 
 ```
+ switch(CallData)
+  ("fun1", arg) => fun1(arg)
+  ("fun2", arg) => fun2(arg)
+  ...
+```
+
+The above could also be implemented as a search tree looking at one
+byte at the time of the function hash if that produces smaller
+code. The compiler could also choose to truncate the hash to the
+shortest unique prefix and shift the incoming hash down. E.g if there
+are only three functions in the contract and their hashes starts with
+0xA, 0xB nd 0xC respectively.
+
+(Given that the contract invocation checks that the function call is to a valid address/hash before calling AEVM.)
+
+The shortest unique suffix could also be used, and the hash could be ANDed with the suffix length instead.
+
+Then each exported function starts with an exported entry point where it executes
+code to fetch the arguments to memory.
+
+### Data memory layout
+
 Data is laid out in memory as follows:
 
 Data of types uint, address, and bool are encoded as a big endian 256-bit word (32 bytes).
@@ -520,31 +543,6 @@ Records are encoded as tuples.
 Maps are encoded as a list of tuples, (key, value). ***This is subject to change***
 
 Return values are encoded in the same way as arguments.
-
-The contract code start by getting the calldata):
-
-```
-PUSH1 0       ;; MLOAD Address 0
-DUP           ;; Used for CALLDATACOPY address 0
-CALLDATASIZE
-CALLDATACOPY
-MLOAD
-
-```
-
-The above could also be implemented as a search tree looking at one
-byte at the time of the function hash if that produces smaller
-code. The compiler could also choose to truncate the hash to the
-shortest unique prefix and shift the incoming hash down. E.g if there
-are only three functions in the contract and their hashes starts with
-0xA, 0xB nd 0xC respectively.
-
-(Given that the contract invocation checks that the function call is to a valid address/hash before calling AEVM.)
-
-The shortest unique suffix could also be used, and the hash could be ANDed with the suffix length instead.
-
-Then each exported function starts with an exported entry point where it executes
-code to fetch the arguments to memory.
 
 ### Contract state
 
