@@ -62,11 +62,14 @@ worked out).
 Sophia does not have arbitrary mutable state, but only a limited form of
 state associated with each contract instance.
 
-- Each contract defines a state type encapsulating its mutable state.
+- Each contract defines a type `state` encapsulating its mutable state.
+- The initial state of a contract is computed by the contract's `init`
+  function. The `init` function is *pure* and returns the initial state as its
+  return value. At contract creation time, the `init` function is executed and
+  its result is stored as the contract state.
 - The value of the state is accessible from inside the contract
   through an implicitly bound variable `state`.
-- State updates are performed by calling a function `put : state => unit`
-  (possibly with a better name).
+- State updates are performed by calling a function `put : state => unit`.
 - Aside from the `put` function (and similar functions for transactions
   and events), the language is purely functional.
 - Functions modifying the state need to be annotated with the `stateful` keyword.
@@ -146,32 +149,27 @@ type transaction = SpendTx(spend_tx)
 
 #### Contract primitives
 
-The block-chain environment available to a contract is defined by three record types
-`call`, `self` and `chain`:
+The block-chain environment available to a contract is defined in three name spaces
+`Contract`, `Call`, and `Chain`:
 
-```
-type call  = {caller : address,
-              value  : uint,
-              ...}
-type self  = {creator : address,
-              address : address,
-              balance : uint,
-              ...}
-type chain = {height    : uint,
-              timestamp : uint,
-              ...}
-```
-A contract has access to variables of the same names, so that
-
-- `call.caller` is the address of the entity (possibly another contract)
+- `Contract.creator` is the address of the entity that signed the contract creation
+  transaction.
+- `Contract.address` is the address of the contract account.
+- `Contract.balance` is the amount of coins currently in the contract account.
+  Equivalent to `Chain.get_balance(Contract.address)`.
+- `Call.origin` is the address of the account that signed the call transaction that led to this call.
+- `Call.caller` is the address of the entity (possibly another contract)
   calling the contract.
-- `call.value` is the amount of coins transferred to the contract in the call
-- `self.creator` is the address of the entity that signed the contract creation
-  transaction
-- `self.address` is the address of the contract account
-- `self.balance` is the amount of coins currently in the contract account
-- `chain.height` is the height of the current block (i.e. the block in which the current call will be included)
-- `chain.timestamp` is the timestamp of the current block
+- `Call.value` is the amount of coins transferred to the contract in the call.
+- `Call.gas_price` is the gas price of the current call.
+- `Call.gas_left` is the amount of gas left for the current call.
+- `Chain.get_balance(a : address)` returns the balance of account `a`.
+- `Chain.block_hash(h)` returns the hash of the block at height `h`.
+- `Chain.block_height` is the height of the current block (i.e. the block in which the current call will be included).
+- `Chain.coinbase` is the address of the account getting the coinbase transaction of the current block.
+- `Chain.timestamp` is the timestamp of the current block.
+- `Chain.difficulty` is the difficulty of the current block.
+- `Chain.gas_limit` is the gas limit of the current block.
 
 ### Exceptions
 
@@ -487,20 +485,43 @@ and miners to pick disable transactions.
 ## The Sophia_01 ABI
 
 The calldata contains a tuple with function name and argument. E.g. ("main", (1,2,3))
-The compiler will generate entry coad to
+The compiler will generate entry code to
 load the calldata to memory and then create a pattern matching switch on the function name
-and call the function with the second element as the argument.
-e.g.
-```
- CALLDATALOAD
- MLOAD
-```
+and call the function with the second element as the argument:
+
 
 ```
- case Data of
-  ("main", arg) : main(arg)
+CALLDATASIZE
+PUSH1 0
+PUSH1 32
+CALLDATACOPY  ;; Copy all calldata into address 32 (addr 0 is the state pointer)
+```
+
+followed by
 
 ```
+ switch(CallData)
+  ("fun1", arg) => fun1(arg)
+  ("fun2", arg) => fun2(arg)
+  ...
+```
+
+The above could also be implemented as a search tree looking at one
+byte at the time of the function hash if that produces smaller
+code. The compiler could also choose to truncate the hash to the
+shortest unique prefix and shift the incoming hash down. E.g if there
+are only three functions in the contract and their hashes starts with
+0xA, 0xB nd 0xC respectively.
+
+(Given that the contract invocation checks that the function call is to a valid address/hash before calling AEVM.)
+
+The shortest unique suffix could also be used, and the hash could be ANDed with the suffix length instead.
+
+Then each exported function starts with an exported entry point where it executes
+code to fetch the arguments to memory.
+
+### Data memory layout
+
 Data is laid out in memory as follows:
 
 Data of types uint, address, and bool are encoded as a big endian 256-bit word (32 bytes).
@@ -523,31 +544,15 @@ Maps are encoded as a list of tuples, (key, value). ***This is subject to change
 
 Return values are encoded in the same way as arguments.
 
-The contract code start by getting the calldata):
+### Contract state
 
-```
-PUSH1 0       ;; MLOAD Address 0
-DUP           ;; Used for CALLDATACOPY address 0
-CALLDATASIZE
-CALLDATACOPY
-MLOAD
-
-```
-
-The above could also be implemented as a search tree looking at one
-byte at the time of the function hash if that produces smaller
-code. The compiler could also choose to truncate the hash to the
-shortest unique prefix and shift the incoming hash down. E.g if there
-are only three functions in the contract and their hashes starts with
-0xA, 0xB nd 0xC respectively.
-
-(Given that the contract invocation checks that the function call is to a valid address/hash before calling AEVM.)
-
-The shortest unique suffix could also be used, and the hash could be ANDed with the suffix length instead.
-
-Then each exported function starts with an exported entry point where it executes
-code to fetch the arguments to memory.
-
+Before a contract call is executed the current state of the contract is loaded
+into memory encoded as described above. A pointer to the encoded state is stored at
+address 0. The Sophia compiler generates code to unpack the encoded state and
+update the state pointer with a pointer to decoded value. Before returning the
+contract should encode the updated state and point the state pointer to the
+encoded data. If the call did not update the state the contract can set the
+state pointer to 0.
 
 ### Local function calls
 
