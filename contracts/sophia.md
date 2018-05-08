@@ -484,7 +484,7 @@ and miners to pick disable transactions.
 
 ## The Sophia_01 ABI
 
-The calldata contains a tuple with function name and argument. E.g. ("main", (1,2,3))
+The calldata contains a tuple with function name and argument, e.g. `("main", (1,2,3))`.
 The compiler will generate entry code to
 load the calldata to memory and then create a pattern matching switch on the function name
 and call the function with the second element as the argument:
@@ -522,27 +522,44 @@ code to fetch the arguments to memory.
 
 ### Data memory layout
 
-Data is laid out in memory as follows:
+Data communicated between a contract and the outside world is encoded as binary
+block in the VM memory. This includes calldata, contract state, and return
+values. The contract is responsible for converting between such binaries and
+Sophia values.
 
-Data of types uint, address, and bool are encoded as a big endian 256-bit word (32 bytes).
+Data is encoded in memory as follows:
 
-Data of other types are encoded as a pointer to the position of their place in the calldata.
+- Unboxed types (`int`, `address`, and `bool`) are encoded as a single big
+  endian 256-bit word (32 bytes).
 
-String arguments are encoded with a 32 byte length (number of bytes) and as few 256-bit words
-as needed padded on the right with 0.
+- Boxed types are encoded as a pointer into a following binary. This binary is encoded as follows:
+  - Unboxed types are encoded as a single word.
+  - Strings are encoded with a 32 byte length (number of bytes), followed by as few 256-bit words
+    as needed padded on the right with 0.
+  - Tuples are encoded with one word per component (stored left-to-right) where
+    each word is either an unboxed value or a pointer.
+  - Lists are encoded by an unboxed -1 word for the empty list and an encoded
+    pair of the head and the tail for a cons cell.
+  - Records are encoded as a tuple of field values.
+  - Maps are encoded as a list of key-value pairs. ***This is subject to change***
+  - The order of values is unspecified. For instance, in the encoding of a pair
+    of boxed values, the three cells (first component, second component, and
+    pair cell) can appear in any order in the encoded binary.
 
-A list is a series of cons cells each cell two 256-bit words, where the first word is data
-encoded in the same way as arguments and the second argument is either an address or
-nil (encoded as a 256-bit word with all bits = 1).
+- Pointers are relative, with the address of the first word of the data being
+  the *base address*. For calldata, the base address is 32 and for return
+  values and contract state the base address is 0.
 
-A tuple of size N is encoded in the same way as N arguments (functions
-arguments are in reality a tuple).
+#### Example
 
-Records are encoded as tuples.
-
-Maps are encoded as a list of tuples, (key, value). ***This is subject to change***
-
-Return values are encoded in the same way as arguments.
+A valid encoding of the value `("main", (1, 2, 3))` with base address 32 (`0x20`) would be
+```
+Word       0       1       2       3       4       5       6       7
+Addr    0x20    0x40    0x60    0x80    0xA0    0xC0    0xE0   0x100
+Value   0x40    0x80    0xC0       4    "main"     1       2       3
+```
+(where `"main"` is the 32 byte word obtained by right padding the string
+`"main"` with zeroes.)
 
 ### Contract state
 
