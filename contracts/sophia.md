@@ -62,11 +62,14 @@ worked out).
 Sophia does not have arbitrary mutable state, but only a limited form of
 state associated with each contract instance.
 
-- Each contract defines a state type encapsulating its mutable state.
+- Each contract defines a type `state` encapsulating its mutable state.
+- The initial state of a contract is computed by the contract's `init`
+  function. The `init` function is *pure* and returns the initial state as its
+  return value. At contract creation time, the `init` function is executed and
+  its result is stored as the contract state.
 - The value of the state is accessible from inside the contract
   through an implicitly bound variable `state`.
-- State updates are performed by calling a function `put : state => unit`
-  (possibly with a better name).
+- State updates are performed by calling a function `put : state => unit`.
 - Aside from the `put` function (and similar functions for transactions
   and events), the language is purely functional.
 - Functions modifying the state need to be annotated with the `stateful` keyword.
