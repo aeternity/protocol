@@ -245,7 +245,7 @@ Each value is just stored as a binary as is. If the value is the empty binary th
 from the tree.
 
 Contracts with vm_version == 1, i.e. Sophia contracts on the AEVM stores the memory layout of the
-tate as one binary value at address 0.
+state as one binary value at address 0.
 
 Contracts with vm_version == 2, i.e. Solidity contracts on the AEVM
 stores the VM storage map containg 256 bit binaries for both keys and
