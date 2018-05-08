@@ -149,32 +149,27 @@ type transaction = SpendTx(spend_tx)
 
 #### Contract primitives
 
-The block-chain environment available to a contract is defined by three record types
-`call`, `self` and `chain`:
+The block-chain environment available to a contract is defined in three name spaces
+`Contract`, `Call`, and `Chain`:
 
-```
-type call  = {caller : address,
-              value  : uint,
-              ...}
-type self  = {creator : address,
-              address : address,
-              balance : uint,
-              ...}
-type chain = {height    : uint,
-              timestamp : uint,
-              ...}
-```
-A contract has access to variables of the same names, so that
-
-- `call.caller` is the address of the entity (possibly another contract)
+- `Contract.creator` is the address of the entity that signed the contract creation
+  transaction.
+- `Contract.address` is the address of the contract account.
+- `Contract.balance` is the amount of coins currently in the contract account.
+  Equivalent to `Chain.get_balance(Contract.address)`.
+- `Call.origin` is the address of the account that signed the call transaction that led to this call.
+- `Call.caller` is the address of the entity (possibly another contract)
   calling the contract.
-- `call.value` is the amount of coins transferred to the contract in the call
-- `self.creator` is the address of the entity that signed the contract creation
-  transaction
-- `self.address` is the address of the contract account
-- `self.balance` is the amount of coins currently in the contract account
-- `chain.height` is the height of the current block (i.e. the block in which the current call will be included)
-- `chain.timestamp` is the timestamp of the current block
+- `Call.value` is the amount of coins transferred to the contract in the call.
+- `Call.gas_price` is the gas price of the current call.
+- `Call.gas_left` is the amount of gas left for the current call.
+- `Chain.get_balance(a : address)` returns the balance of account `a`.
+- `Chain.block_hash(h)` returns the hash of the block at height `h`.
+- `Chain.block_height` is the height of the current block (i.e. the block in which the current call will be included).
+- `Chain.coinbase` is the address of the account getting the coinbase transaction of the current block.
+- `Chain.timestamp` is the timestamp of the current block.
+- `Chain.difficulty` is the difficulty of the current block.
+- `Chain.gas_limit` is the gas limit of the current block.
 
 ### Exceptions
 
