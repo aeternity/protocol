@@ -113,7 +113,6 @@ subsequent sections divided by object.
 | Contract call | 41 |
 | Contract create transaction | 42 |
 | Contract call transaction | 43 |
-| Contract call transaction | 43 |
 | Channel create transaction | 50 |
 | Channel deposit transaction | 51 |
 | Channel withdraw transaction | 52 |
