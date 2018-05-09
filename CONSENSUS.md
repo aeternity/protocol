@@ -90,28 +90,16 @@ Aeon is the main coin used in the Æternity system. We use the following denomin
 
 ### Crypto
 
-Blake2b (256 bits digest) and secp256k1
+Blake2b (256 bits digest) and ed25519
 
 #### Keys
 
-KeyGen
-
-```
-n = 256
-sk <- rand(1^n)
-pk <- g^sk
-```
-
-Erlang returns `pk` as an uncompressed secp256k1 curve point.
-
-Binary representation:
-
-```
-sk_bin <- sk
-pk_bin <- 00000100 || pk_x || pk_y
-```
-
-The public key is `0x04` concatenated with the x and then the y coordinate of the point. Thus making it 65 bytes long.
+Key generation is done according to
+[RFC8032](https://tools.ietf.org/html/rfc8032#page-13), note that we have
+64-byte secret keys that consists of the seed concatenated with the public key
+in order to [save CPU cycles when
+signing](https://download.libsodium.org/doc/public-key_cryptography/public-key_signatures.html)
+The public key is 32 byte.
 
 #### Signatures
 
@@ -217,7 +205,7 @@ MUST have valid signature from private key belonging to `sender`.
 ```
  Fieldname       Size (bytes)
  -------------- -----
-| account      | 65  |
+| account      | 32  |
  -------------- -----
 ```
 
@@ -228,9 +216,9 @@ There MUST be one coinbase transaction per block.
 ```
  Fieldname       Size (bytes)
  -------------- -----
-| sender       | 65  |
+| sender       | 32  |
  -------------- -----
-| recipient    | 65  |
+| recipient    | 32  |
  -------------- -----
 | amount       | 8   |
  -------------- -----

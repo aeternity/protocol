@@ -18,13 +18,10 @@ ping_tref
 ### Key storage
 
 Both the public key and private key are encrypted with AES in ECB mode when stored on disk.
-The secret key gets left padded with 0's to a length of 32bytes, since erlang's crypto library does not return it padded.
-The public key currently gets padded to 128 bytes (***TODO: why not just pad it to 80 bytes which is the next 128bit multiple***)
-
 
 ```
-enc_sk = AES_ECB_ENC(lpad(sk_bin), SHA256(password))
-enc_pk = AES_ECB_ENC(rpad(pk_bin), SHA256(password))
+enc_sk = AES_ECB_ENC(sk_bin, SHA256(password))
+enc_pk = AES_ECB_ENC(pk_bin, SHA256(password))
 sk = AES_ECB_DEC(enc_sk, SHA256(password))
 sk = AES_ECB_DEC(enc_sk, SHA256(password))
 ```

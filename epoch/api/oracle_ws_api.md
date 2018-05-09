@@ -56,7 +56,7 @@ Response:
    "tag":"untagged",
    "payload":{"result":"ok",
               "tx_hash":"th$26iUqaRt4s1ydAF8z7WDeM4FhCqwEu5TbWTCazYFsPY8Le8Upq",
-              "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}
+              "oracle_id":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}
   }
 ```
 
@@ -101,7 +101,7 @@ Response:
    "tag":"untagged",
    "payload":{"result":"ok",
               "tx_hash":"th$26iUqaRt4s1ydAF8z7WDeM4FhCqwEu5TbWTCazYFsPY8Le8Upq",
-              "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}
+              "oracle_id":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}
   }
 ```
 
@@ -140,7 +140,7 @@ Request:
    "action":"query",
    "payload":{"type":"OracleQueryTxObject",
               "vsn":1,
-              "oracle_pubkey":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf",
+              "oracle_pubkey":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF",
               "query_fee":4,
               "query_ttl":{"type":"delta", "value":10},
               "response_ttl":{"type":"delta", "value":10},
@@ -244,7 +244,7 @@ Request:
   {"target":"chain",
    "action":"subscribe",
    "payload":{"type":"oracle_query",
-              "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}
+              "oracle_id":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}
   }
 
 Response:
@@ -253,13 +253,13 @@ Response:
    "tag":"untagged",
    "payload":{"result":"ok",
               "subscribed_to":{"type":"oracle_query",
-                               "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
+                               "oracle_id":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}}
   }
 
 Event:
   {"origin":"chain",
    "action":"new_oracle_query",
-   "payload":{"sender":"ak$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf",
+   "payload":{"sender":"ak$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF",
               "query":"How are you?",
               "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}
   }

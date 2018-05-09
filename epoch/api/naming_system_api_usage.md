@@ -15,7 +15,7 @@ The following assumes that the node exposes at address 127.0.0.1 the following p
 Check the public key of the node first (used as account key in later API calls):
 ```
 curl http://localhost:3113/v2/account/pub-key
-{"pub_key":"ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw"}
+{"pub_key":"ak$scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSf"}
 ```
 
 ### Verify availability
@@ -82,7 +82,7 @@ curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-u
 {"name_hash":"nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4"}
 
 curl http://localhost:3013/v2/name\?name\=foobar.aet
-{"name":"foobar.aet","name_ttl":600000,"pointers":"{\"account_pubkey\":\"ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw\"}"}
+{"name":"foobar.aet","name_ttl":600000,"pointers":"{\"account_pubkey\":\"ak$scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSf\"}"}
 ```
 
 ### Spend to name
