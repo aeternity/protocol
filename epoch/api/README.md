@@ -27,6 +27,10 @@ The epoch node exposes the following APIs:
     * It is defined in the rest of this document;
     * It is **not** meant to be exposed on the Internet;
     * Its TCP port is configurable.
+  * External Channels WebSocket endpoint.
+    * It is defined in the rest of this document;
+    * It is meant to be exposed on the Internet;
+    * Its TCP port is configurable.
 
 ## WebSocket API definition
 
@@ -77,17 +81,24 @@ An event has the same type as a response, except for not having a tag:
 ## Channels WebSocket API definition
 
 ### Description
-Channels require persisted connections to an Aeternity node. New state is
-co-signed by both parties and then it becomes the latest valid state of the
-channel. This happens off chain. For persistence of the connection websockets
+Channels provide means for off chain transactions with functionality of on
+chain dispute resolution.
+Channels require persisted connections to Aeternity nodes. Each participant in
+a channels uses one's own trusted node. For persistence of this connection websockets
 are used.
+Channels have on chain state that persists who the participants are and the
+total amout of tokens put in the channel.
+Each channel also has an off chain state representing the latest distribution of the balance of the
+channel. It can be updates - each new state is co-signed by both parties and only then it becomes the latest valid state of the
+channel. At any point of time channel can be closed either unilaterally or
+with a mutual agreement.
 
 ### Connection
 The epoch node supports an endpoint with a configurable port where the
 websocket's clients connect. It is located on `/channel`.
 
 The node could serve multiple channel websocket clients. Their number is configured in
-the epoch.yaml. When all websocket connections are consumed - any new incoming
+the `epoch.yaml`. When all websocket connections are consumed - any new incoming
 connections will be queued. The queue has a maximum size and when it is
 reached - any new incoming connections will be rejected with an error code 400.
 This is to prevent the node of being overloaded with websocket connections.
