@@ -68,7 +68,7 @@ improvements are as follows:
 
 ### Privacy
 
-On-chain interactions offer little to no privacy, since we currently make
+On-chain interactions offer little to no privacy, since we currently make no
 efforts to hide interacting parties or the nature of their interactions.
 
 State channels, at the least, reveal that two parties establish a channel and
@@ -357,14 +357,12 @@ channel_settle |   |     open     | -----+
 
 [1]: Lightning Network RFC: https://github.com/lightningnetwork/lightning-rfc
 
-[2]:
+[2]: Miller, Andrew, et al. "Sprites and State Channels: Payment Networks that Go Faster than Lightning."
 
-[3]: Miller, Andrew, et al. "Sprites and State Channels: Payment Networks that Go Faster than Lightning."
+[3]: Malavolta, Giulio, et al. "Concurrency and privacy with payment-channel networks." Proceedings of the 2017 ACM SIGSAC Conference on Computer and Communications Security. ACM, 2017.
 
-[4]: Malavolta, Giulio, et al. "Concurrency and privacy with payment-channel networks." Proceedings of the 2017 ACM SIGSAC Conference on Computer and Communications Security. ACM, 2017.
+[4]: Dziembowski, Stefan, et al. PERUN: Virtual Payment Channels over Cryptographic Currencies⋆. IACR Cryptology ePrint Archive, 2017: 635, 2017.
 
-[5]: Dziembowski, Stefan, et al. PERUN: Virtual Payment Channels over Cryptographic Currencies⋆. IACR Cryptology ePrint Archive, 2017: 635, 2017.
+[5]: Roos, Stefanie, et al. "Settling Payments Fast and Private: Efficient Decentralized Routing for Path-Based Transactions." arXiv preprint arXiv:1709.05748 (2017).
 
-[6]: Roos, Stefanie, et al. "Settling Payments Fast and Private: Efficient Decentralized Routing for Path-Based Transactions." arXiv preprint arXiv:1709.05748 (2017).
-
-[7]: Tremback, Jehan, and Zack Hess. "Universal payment channels." (2015).
+[6]: Tremback, Jehan, and Zack Hess. "Universal payment channels." (2015).
