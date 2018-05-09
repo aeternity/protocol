@@ -261,7 +261,7 @@ Request:
   {"target":"chain",
    "action":"subscribe",
    "payload":{"type":"oracle_query",
-              "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}
+              "oracle_id":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}
   }
 
 Response:
@@ -270,7 +270,7 @@ Response:
    "tag":"untagged",
    "payload":{"result":"ok",
               "subscribed_to":{"type":"oracle_query",
-                               "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
+                               "oracle_id":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}}
   }
 ```
 
@@ -397,7 +397,7 @@ Request:
   {"target":"chain",
    "action":"unsubscribe",
    "payload":{"type":"oracle_query",
-              "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}
+              "oracle_id":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}
   }
 
 Response:
@@ -406,7 +406,7 @@ Response:
    "tag":"untagged",
    "payload":{"result":"ok",
               "subscribed_to":{"type":"oracle_query",
-                               "oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
+                               "oracle_id":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}}
   }
 ```
 

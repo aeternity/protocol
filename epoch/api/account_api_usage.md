@@ -15,14 +15,14 @@ curl http://127.0.0.1:3113/v2/account/pub-key
 ```
 You shall read output like the following:
 ```
-{"pub_key":"ak$3N1WLMewMQPUyQBdEhXRSYee84RQNKJrECwbbseMkNsZhv1XLjpmiqjAkvSRpQ6kgWJMjq9dTmdQ3ekuhpscJk6LpjJYk4"}
+{"pub_key":"ak$N1WLMewMQPUyQBdEhXRSYee84RQNKJrECwbbseMkNsZhv1X"}
 ```
 
 ## Retrieve your balance
 
 In order to retrieve your balance, fetch your public key then use it to get the balance associated to that public key (replace the public key in the command):
 ```bash
-curl -G 'http://127.0.0.1:3013/v2/account/balance/ak$3N1WLMewMQPUyQBdEhXRSYee84RQNKJrECwbbseMkNsZhv1XLjpmiqjAkvSRpQ6kgWJMjq9dTmdQ3ekuhpscJk6LpjJYk4'
+curl -G 'http://127.0.0.1:3013/v2/account/balance/ak$N1WLMewMQPUyQBdEhXRSYee84RQNKJrECwbbseMkNsZhv1X'
 ```
 You shall read output like the following...
 ```

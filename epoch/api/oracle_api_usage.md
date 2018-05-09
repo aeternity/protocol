@@ -18,7 +18,7 @@ In order to work through the example we also need the (Base58Check-encoded)
 public key of the node. This is easily retrieved from the running node:
 ```
 ~/epoch/node: curl http://127.0.0.1:3103/v2/account/pub-key
-{"pub_key":"ak$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}
+{"pub_key":"ak$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}
 ```
 
 On a freshly started node, connect a websocket. (Here we use
@@ -42,8 +42,8 @@ connected (press CTRL+C to quit)
 Once the account has a positive balance we can post an _"Oracle register transaction"_:
 ```
 ...
-> {"target":"oracle", "action":"register", "payload":{"type":"OracleRegisterTxObject", "vsn":1, "account":"ak$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf", "query_format":"the query spec", "response_format":"the response spec", "query_fee":4, "ttl":{"type":"delta", "value":50}, "fee":5}}
-< {"action":"register","origin":"oracle","tag":"untagged","payload":{"result":"ok","oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","tx_hash":"th$26iUqaRt4s1ydAF8z7WDeM4FhCqwEu5TbWTCazYFsPY8Le8Upq"}}
+> {"target":"oracle", "action":"register", "payload":{"type":"OracleRegisterTxObject", "vsn":1, "account":"ak$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF", "query_format":"the query spec", "response_format":"the response spec", "query_fee":4, "ttl":{"type":"delta", "value":50}, "fee":5}}
+< {"action":"register","origin":"oracle","tag":"untagged","payload":{"result":"ok","oracle_id":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF","tx_hash":"th$26iUqaRt4s1ydAF8z7WDeM4FhCqwEu5TbWTCazYFsPY8Le8Upq"}}
 ```
 
 The register transaction uses the same format for the payload as the HTTP API
@@ -59,8 +59,8 @@ Oracle:
 ```
 ...
 < {"action":"mined_block","origin":"chain","payload":{"height":2,"hash":"bh$2UuiuAHW8bmRkcoMqP2Mcj5ZrxvGzjhQRhictByxf4AhcyF4q"}}
-> {"target":"chain","action":"subscribe","payload":{"type":"oracle_query","oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf"}}
-< {"action":"subscribe","origin":"chain","tag":"tagged","payload":{"result":"ok","subscribed_to":{"oracle_id":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","type":"oracle_query"}}}
+> {"target":"chain","action":"subscribe","payload":{"type":"oracle_query","oracle_id":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}}
+< {"action":"subscribe","origin":"chain","tag":"tagged","payload":{"result":"ok","subscribed_to":{"oracle_id":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF","type":"oracle_query"}}}
 ```
 
 We subscribe for `"type":"oracle_query"`, i.e. we want to get notified when the oracle
@@ -68,7 +68,7 @@ with the given id receives a query. Of course we want to test this, so let us
 post a query...
 ```
 ...
-> {"target":"oracle", "action":"query", "payload":{"type":"OracleQueryTxObject", "vsn":1, "oracle_pubkey":"ok$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":7, "query":"How are you?"}}
+> {"target":"oracle", "action":"query", "payload":{"type":"OracleQueryTxObject", "vsn":1, "oracle_pubkey":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":7, "query":"How are you?"}}
 < {"action":"query","origin":"oracle","tag":"tagged","payload":{"result":"ok","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","tx_hash":"th$fCRXecXPDoYhKF5NaVdYL3ZbMMsJrUCKb18LJYCYuzRTT79mV"}}
 ```
 
@@ -85,7 +85,7 @@ receive an event on the websocket:
 ```
 ...
 < {"action":"mined_block","origin":"chain","payload":{"height":4,"hash":"bh$K6oGLV2cHMMpmKjr7bKAByqCxVRwhNUUh5nACagXknARLUbJ3"}}
-< {"action":"new_oracle_query","origin":"chain","payload":{"sender":"ak$3jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdFtaJuxQvrR8VbbXExDPkCHFAei5q969JA6EayQpb8z5C3Mf","query":"How are you?","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
+< {"action":"new_oracle_query","origin":"chain","payload":{"sender":"ak$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF","query":"How are you?","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
 ```
 
 We should note that in the response for the query request above we got the
