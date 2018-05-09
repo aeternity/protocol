@@ -18,7 +18,7 @@ These are used for the scenario when all parties behave correctly and as
 expected. The flow is the following:
 
 1. [Channel open](#channel-open)
-2. [Channel offchain update](#channel-offcain-update)
+2. [Channel offchain update](#channel-offchain-update)
 3. [Channel mutual close](#channel-mutual-close)
 
 Only steps 1 and 3 require chain interactions, step 2 is off-chain.
