@@ -227,12 +227,26 @@ Feedback on the constant selection?
 
 ##### Bucket Selection
 
-The selection of a subset from a list of buckets could be done in various
-ways. The current idea is to hash the secret combined with the discriminator and
-extract groups of bits from the resulting hash as indexes in the list.
+The bucket selection is done by hashing the secret with the discriminator and
+use the result as an integer; this integer modulo is used to restrict the
+subset.
 
-I am not sure of cryptographic validity of this solution; this probably needs
-a bit more research.
+For the unverified bucket selection (without optional duplication):
+
+```Erlang
+  <<N1:160>> = crypto:hash(sha, <<Secret/binary, SourceIP/binary>>),
+  <<N2:160>> = crypto:hash(sha, <<Secret/binary, PeerIP/binary, (N1 rem 64)>>),
+  <<N3:160>> = crypto:hash(sha, <<Secret/binary, PeerPort/binary, (N2 rem 16)>>),
+  BucketIdx = N3 rem 1024.
+```
+
+For the verified bucket slection:
+
+```Erlang
+  <<N1:160>> = crypto:hash(sha, <<Secret/binary, PeerIP/binary>>).
+  <<N2:160>> = crypto:hash(sha, <<Secret/binary, PeerPort/binary, (N1 rem 16)>>).
+  BucketIdx = N2 rem 256.
+```
 
 ##### (optional) Peer Duplication in Unverified Pool
 
