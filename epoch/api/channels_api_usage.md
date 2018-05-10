@@ -42,7 +42,7 @@ in the chain and the others are meta data used for the connection itself.
   | initiator | string | initiator's public key | Yes | Yes |
   | responder | string | responder's public key | Yes | Yes |
   | lock_period | integer | amount of blocks for disputing a solo close | Yes | Yes |
-  | push_amount | integer | initial deposit in favour of the responder by the initiator | Yes | Yes |
+  | push_amount | integer | initial deposit in favour of the responder by the initiator | Yes | No |
   | initiator_amount | integer | amount of tokens the initiator has commited to the channel | Yes | Yes |
   | responder_amount | integer | amount of tokens the responder has commited to the channel | Yes | Yes |
   | channel_reserve | integer | the minimum amount both peers need to maintain | Yes | Yes |
