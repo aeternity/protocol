@@ -14,7 +14,7 @@
 	- [`funding_locked`](#funding_locked)
 	- [`channel_reestablish`](#channel_reestablish)
 - Updates
-	- [`update_contract_init`](#update_contract_init)
+	- [`update_contract_init`](#update_init_contract)
 	- [`update_exec_func`](#update_exec_fun)
 	- [`update_exec_result`](#update_exec_result)
 	- [`update_deposit_created`](#update_deposit)
@@ -33,23 +33,57 @@
 
 The protocol peers use to run smart contracts is a two phase commit protocol,
 where one peer proposes a change, gets it signed off by the others and then
-commits the update locally. These locks are necessary to avoid peers getting
+commits the update locally. These checks are necessary to avoid peers getting
 confused if updates are being proposed simultaneously.
-On a higher level, to keep off chain and on chain state in sync, peers should
+On a higher level, to keep off-chain and on-chain state in sync, peers should
 refuse to sign updates for either without also getting a signature for the
 other, e.g. don't sign an on chain `channel_deposit` transaction without also
 updating the state in channel as well.
 
 With the consistency of state updates being secured between peers, it is
-essential, that peers make absolutely sure to not lose their local state, since
+essential that peers make absolutely sure to not lose their local state, since
 it could potentially lead to them not being able to slash outdated states
-published on chain.
+published on-chain.
 
 
 ## Control messages
 
+### Framing
+
+Each message is identified by a 1-byte message code. The size of the following message is defined by the type – see the description of each individual message type.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| msg_type             | 1  |
+ ---------------------- ----
+| message              | .. |
+ ---------------------- ----
+```
+
+The following message codes are defined:
+```
+  type              code
+-------------------------
+| channel_open     | 1  |
+| channel_accept   | 2  |
+| channel_reestabl | 3  |
+| funding_created  | 4  |
+| funding_signed   | 5  |
+| funding_locked   | 6  |
+| update           | 7  |
+| update_ack       | 8  |
+| update_error     | 9  |
+| inband_message   | 96 |
+| error            | 97 |
+| shutdown         | 98 |
+| shutdown_ack     | 99 |
+-------------------------
+```
 
 ### `error`
+
+Message code: 97
 
 Explicitly communicating errors should make debugging easier. In order to avoid
 complex error handling, which tends to be prone to mistakes, once a channel
@@ -100,11 +134,13 @@ transaction.
 
 ### `channel_open`
 
+Message code: 1
+
 This message initiates the opening of a channel and communicates the initiators'
 intent to a potential future peer.
 
 The `channel_open` message should provide the accepting peer all the information
-it needs to assess whether it should accept the channel or not.
+it needs to assess whether or not it should accept the channel.
 
 
 ```
@@ -204,6 +240,8 @@ violating this invariant.
 
 ### `channel_accept`
 
+Message code: 2
+
 This message is sent by the `responding` peer. It is used to convey the
 conditions under which they are willing to accept the terms proposed by the
 initiating peer.
@@ -256,6 +294,8 @@ different amounts, then that might communicate that it wants these instead.)
 
 ### `funding_created`
 
+Message code: 4
+
 In order to open a channel on chain, peers need to cooperate and co-sign the
 `channel_create` transaction. The `funding_created` message is used by the
 initiator to send their signature to the responder.
@@ -281,6 +321,8 @@ initiator to send their signature to the responder.
 
 ### `funding_signed`
 
+Message code: 5
+
 If the responder was able to validate the initiator's signature sent in the
 `funding_created` message, then it should proceed to respond with its
 `funding_signed` message, unless the initiator specified a `push_amount > 0` in
@@ -300,9 +342,11 @@ initiator to send the initial state signed by them.
 
 ### `funding_locked`
 
+Message code: 6
+
 Opening a channel requires an on-chain transaction. This transaction needs to be
 included in a block and, since we only have probabilistic finality, be
-sufficiently confirmed, s.t. the probability of a chain re-organisation is
+sufficiently confirmed, so that the probability of a chain re-organisation is
 negligible.
 
 This message is exchanged by both peers to signal to each other that the above
@@ -439,7 +483,7 @@ more update messages.
 
 #### Requirements
 
-A shutdown cannot be initiated before the on-chain channel opening is not signed.
+A shutdown cannot be initiated before the on-chain channel opening is signed.
 
 The initiator MUST NOT send a `shutdown` before a `funding_created` and the responder MUST NOT send a `shutdown` before a `funding_signed` has been sent.
 Prior to the respective points peers can still safely abort the procedure
@@ -451,8 +495,6 @@ If the peers agree to a shutdown then they both need to sign the `channel_close_
 transaction
 
 ### `closing_signed`
-
-### `closing_created`
 
 
 ## Local state
