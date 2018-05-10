@@ -14,7 +14,7 @@ The epoch node exposes the following APIs:
   * It is not yet defined in a document. Advanced users may inspect the `aec_peer_connection` module;
   * It is meant to be exposed on the Internet;
   * Its TCP port is configurable.
-* User API. It consists of the following TCP endpoints::
+* User API. It consists of the following TCP endpoints:
   * External HTTP endpoint;
     * It is defined via Swagger schema;
     * It is meant to be exposed on the Internet;
