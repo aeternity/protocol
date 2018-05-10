@@ -3,6 +3,7 @@
 This document:
 * Provides an overview of the API exposed by the epoch node;
 * Defines the WebSocket API of the epoch node;
+* Defines the Channels WebSocket API of the epoch node;
 * Describes the intended usage of the user API of the epoch node.
 
 ## Overview
@@ -13,7 +14,7 @@ The epoch node exposes the following APIs:
   * It is not yet defined in a document. Advanced users may inspect the `aec_peer_connection` module;
   * It is meant to be exposed on the Internet;
   * Its TCP port is configurable.
-* User API. It consists of three TCP endpoints:
+* User API. It consists of the following TCP endpoints:
   * External HTTP endpoint;
     * It is defined via Swagger schema;
     * It is meant to be exposed on the Internet;
@@ -25,6 +26,10 @@ The epoch node exposes the following APIs:
   * Internal WebSocket endpoint.
     * It is defined in the rest of this document;
     * It is **not** meant to be exposed on the Internet;
+    * Its TCP port is configurable.
+  * External Channels WebSocket endpoint.
+    * It is defined in the rest of this document;
+    * It is meant to be exposed on the Internet;
     * Its TCP port is configurable.
 
 ## WebSocket API definition
@@ -77,6 +82,40 @@ An event has the same type as a response, except for not having a tag:
 * [Oracle WS API](./oracle_ws_api.md)
 * [Chain WS API](./chain_ws_api.md)
 
+## Channels WebSocket API definition
+
+### Description
+Channels provide means for off chain transactions with functionality of on
+chain dispute resolution.
+Channels require persisted connections to Aeternity nodes. Each participant in
+a channels uses one's own trusted node. For persistence of this connection websockets
+are used.
+Channels have on chain state that persists who the participants are and the
+total amout of tokens put in the channel.
+Each channel also has an off chain state representing the latest distribution of the balance of the
+channel. It can be updates - each new state is co-signed by both parties and only then it becomes the latest valid state of the
+channel. At any point of time channel can be closed either unilaterally or
+with a mutual agreement.
+
+### Connection
+The epoch node supports an endpoint with a configurable port where the
+websocket's clients connect. It is located on `/channel`.
+
+The node could serve multiple channel websocket clients. Their number is configured in
+the `epoch.yaml`. When all websocket connections are consumed - any new incoming
+connections will be queued. The queue has a maximum size and when it is
+reached - any new incoming connections will be rejected with an error code 400.
+This is to prevent the node of being overloaded with websocket connections.
+
+### General message types
+All messages have the format:
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| action | string | what is the action | Yes |
+| tag | string | additional info for the action | No |
+| payload | object | data for action | Yes |
+
 ## User API - intended usage
 
 * [Account management user API usage](./account_api_usage.md)
@@ -84,3 +123,4 @@ An event has the same type as a response, except for not having a tag:
 * [Oracle user API usage](./oracle_api_usage.md)
 * [Naming system API usage](./naming_system_api_usage.md)
 * [Contract API usage](./contract_api_usage.md)
+* [Channels API usage](./channels_api_usage.md)
