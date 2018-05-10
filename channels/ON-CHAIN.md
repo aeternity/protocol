@@ -232,7 +232,7 @@ considered closed and allow no further modifications.
 
 ### `channel_close_solo`
 
-In order to close a channel unilaterally, a user has to send a
+In order to close a channel unilaterally, a participant has to send a
 `channel_close_solo` transaction. This is only necessary if one peer stops
 responding but can also be used by an malicious peer trying to close a channel
 with a state that hasn't been agreed on by all participants.

@@ -115,7 +115,7 @@ relaying messages.
 ## Terms
 
 We try to follow the naming conventions used by the lightning network, wherever
-it makes sense, in hope to be able to make it easier for others to adapt,
+it makes sense, in hope to be able to make it easier for others to adopt,
 although we try to enforce a `who - what - how` rule for naming, e.g.
 `channel_close_solo` as opposed to `solo_close_channel` or `channel_solo_close`.
 
@@ -142,7 +142,7 @@ arbitrary smart contract within the channel and does not restrict the number of
 peers that can participate in such a channel.
 
 Our construction will try to meet the former property, allowing any number of
-arbitrary smart contracts to be executed in the channel, but restrict the latter 
+arbitrary smart contracts to be executed in the channel, but restrict the latter
 to two peers per channel.
 
 With that in mind, the two peers in a channel will most likely not have the
@@ -162,7 +162,7 @@ lose funds, that haven't been signed over to them
 
 It is still very much unclear, what the topology of a widely used channel
 network would look like but it seems that a hub and spoke model would be the
-most probable. This model seems more likely than a decentralised one because the 
+most probable. This model seems more likely than a decentralised one because the
 majority of users would not be able to offer reliable services, longer paths
 through the network would lock up significantly more funds and ostensibly also
 incur a higher forwarding fee.
@@ -184,7 +184,7 @@ peer.
 channel closing, forfeits the malicious party's funds to the slasher but how can
 we make that work without opening attack vectors?)
 
-If a malicious peer doesn't want to risk loosing all its channel balance, it
+If a malicious peer doesn't want to risk losing all its channel balance, it
 still has other options to disrupt or annoy others. Since closing a channel
 incurs a fee, they could open a channel with someone and subsequently refuse to
 cooperate, locking up coins and making the other party pay the fees required to
@@ -261,7 +261,6 @@ Messages will be both on- and off-chain.
 
 Off-chain communication MUST be encrypted. To satisfy this, we use the same
 transport protocol used for sync, which offers encryption and authentication.
-Please refer to the [sync document](./SYNC.md) for details.
 
 Each pair of nodes SHOULD have at most one open connection. Channels can be
 multiplexed easily, given that each channel has a unique id, so re-using

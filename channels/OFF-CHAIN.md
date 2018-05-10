@@ -5,7 +5,7 @@
 - [Overview](#overview)
 - [Control messages](#control-messages)
 	- [`error`](#error)
-	- [`ping`/`pong`](#ping_pong)
+	- [`ping`/`pong`](#pingpong)
 - [Establishment](#establishing-channel-off-chain)
 	- [`channel_open`](#channel_open)
 	- [`channel_accept`](#channel_accept)
@@ -136,8 +136,8 @@ it needs to assess whether it should accept the channel or not.
 - `push_amount`: initial deposit in favour of the responder by the initiator
 - `initiator_amount`: amount the initiator is willing to commit
 - `responder_amount`: amount the initiator wants the responder to commit
-- `channel_reserve`: the minimum amount both peers need to maintain, s.t. both
-  have to lose something in case they act maliciously
+- `channel_reserve`: the minimum amount both peers need to maintain, amount of
+  tokens a party is to lose in case of acting maliciously
 - `initiator_pubkey`: the account that the initiator wants to use to open the
   channel
 
@@ -159,7 +159,7 @@ close a channel.
 Having the ability to include a `push_amount`, which credits funds to the other
 peer, simplifies the common case of wanting to open a channel and pay someone
 immediately. An exchange might want to send you funds via this mechanism, since
-it only requires only one on-chain transaction and has the side effect of also
+it requires only one on-chain transaction and has the side effect of also
 opening a channel.
 If `push_amount > 0` then the initiator should send along a signed update,
 assigning that amount to the responder, before sending the `funding_created`
