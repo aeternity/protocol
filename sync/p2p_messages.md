@@ -6,7 +6,7 @@ P2P messages are transported using the [Noise
 protocol](https://noiseprotocol.org/). Since each message in the Noise protocol
 is limited to (65536 - 2) bytes we sometimes have to fragment larger messages
 (in particular blocks and transaction pool-chunks). On top of this we use a
-simple message format, where 2 bytes (16 bits) are used for a big-endian encoded 
+simple message format, where 2 bytes (16 bits) are used for a big-endian encoded
 message type integer followed by the payload for the particular message. Since
 Noise (and the fragmentation) handle message size we need no length field. The
 payload is a byte array, and messages are either fixed binary data or encoded
@@ -90,6 +90,7 @@ Message is RLP encoded, fields:
 
 Message is RLP encoded, fields:
   - `Height :: int`
+  - `TopHash :: byte_array` - to ensure we get a header at height from the right fork
 
 ## MSG_HEADER
 *(Tag = 4)*
@@ -104,7 +105,8 @@ The Header is serialized using the
 *(Tag = 5)*
 
 Message is RLP encoded, fields:
-  - `Hash :: byte_array` - header hash to start at
+  - `FromHash :: byte_array` - header hash to start at
+  - `TargetHash :: byte_array` - target header hash (to ensure we get headers from the right fork)
   - `N :: int` - number of header hashes to get
 
 ## MSG_HEADER_HASHES
