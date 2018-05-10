@@ -113,6 +113,15 @@ subsequent sections divided by object.
 | Contract call | 41 |
 | Contract create transaction | 42 |
 | Contract call transaction | 43 |
+| Channel create transaction | 50 |
+| Channel deposit transaction | 51 |
+| Channel withdraw transaction | 52 |
+| Channel close mutual transaction | 53 |
+| Channel close solo transaction | 54 |
+| Channel slash transaction | 55 |
+| Channel settle transaction | 56 |
+| Channel off chain transaction | 57 |
+| Channel | 58 |
 
 #### Accounts
 ```
@@ -361,4 +370,117 @@ purging them from the tree.
 , <hash>      :: binary()
 , <recipient> :: binary()
 , <fee>       :: int()
+]
+```
+
+### Channels
+
+#### Channel create transaction
+```
+[ <initiator>        , binary()
+, <initiator_amount> , int()
+, <responder>        , binary()
+, <responder_amount> , int()
+, <channel_reserve>  , int()
+, <lock_period>      , int()
+, <ttl>              , int()
+, <fee>              , int()
+, <nonce>            , int()
+]
+```
+
+#### Channel deposit transaction
+```
+[ <channel_id> , binary()
+, <from>       , binary()
+, <amount>     , int()
+, <ttl>        , int()
+, <fee>        , int()
+, <nonce>      , int()
+]
+```
+
+#### Channel withdraw transaction
+```
+[ <channel_id> , binary()
+, <to>         , binary()
+, <amount>     , int()
+, <ttl>        , int()
+, <fee>        , int()
+, <nonce>      , int()
+]
+```
+
+#### Channel close mutual transaction
+```
+[ <channel_id>      , binary()
+, <from>            , binary()
+, <initiator_amount>, int()
+, <responder_amount>, int()
+, <ttl>             , int()
+, <fee>             , int()
+, <nonce>           , int()
+]
+```
+
+#### Channel close solo transaction
+```
+[ <channel_id>      , binary()
+, <from>            , binary()
+, <payload>         , binary()
+, <ttl>             , int()
+, <fee>             , int()
+, <nonce>           , int()
+]
+```
+
+#### Channel slash transaction
+```
+[ <channel_id>      , binary()
+, <from>            , binary()
+, <payload>         , binary()
+, <ttl>             , int()
+, <fee>             , int()
+, <nonce>           , int()
+]
+```
+
+#### Channel settle transaction
+```
+[ <channel_id>      , binary()
+, <from>            , binary()
+, <initiator_amount>, int()
+, <responder_amount>, int()
+, <ttl>             , int()
+, <fee>             , int()
+, <nonce>           , int()
+]
+```
+
+#### Channel offchain transaction
+```
+[ <channel_id>       , binary()
+, <previous_round>   , int()
+, <round>            , int()
+, <initiator>        , binary()
+, <responder>        , binary()
+, <initiator_amount> , int()
+, <responder_amount> , int()
+, <updates>          , [{binary(), binary() ,int()}]
+, <state>            , binary()
+]
+```
+
+#### Channel
+```
+[ <id>              , binary()
+, <initiator>       , binary()
+, <responder>       , binary()
+, <total_amount>    , int()
+, <initiator_amount>, int()
+, <channel_reserve> , int()
+, <round>           , int()
+, <lock_period>     , int()
+, <closes_at>       , int()
+]
 ```
