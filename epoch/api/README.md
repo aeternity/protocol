@@ -78,6 +78,10 @@ An event has the same type as a response, except for not having a tag:
 | action | string | what was the action | Yes |
 | payload | object | data from the action | Yes |
 
+### List of WS APIs
+* [Oracle WS API](./oracle_ws_api.md)
+* [Chain WS API](./chain_ws_api.md)
+
 ## Channels WebSocket API definition
 
 ### Description
@@ -111,10 +115,6 @@ All messages have the format:
 | action | string | what is the action | Yes |
 | tag | string | additional info for the action | No |
 | payload | object | data for action | Yes |
-
-### List of WS APIs
-* [Oracle WS API](./oracle_ws_api.md)
-* [Chain WS API](./chain_ws_api.md)
 
 ## User API - intended usage
 
