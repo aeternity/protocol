@@ -31,7 +31,8 @@ There are two types of HTTP requests:
 
 ## Channel open
 In order to use a channel, it must be opened. Both parties negotiate parameters for the channel - for example the amounts to participate. Some of those are relevant to the chain and end up in a`channel_create_tx` that is posted on the chain. Once a certain amount of blocks have been mined on top of the one that included it, the channel is considered to be opened.
-parametersel parameters
+
+### Channel parameters
 Each channel has a set of parameters that is required for opening a
 connection. Most of those are part of the `channel_create_tx` which is included
 in the chain, and the others are metadata used for the connection itself.
