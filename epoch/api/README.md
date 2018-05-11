@@ -36,17 +36,17 @@ The epoch node exposes the following APIs:
 
 ### Connection
 The epoch node supports an endpoint with a configurable port where the
-websocket's clients connect. It is located on `/websocket`.
+WebSocket's clients connect. It is located on `/websocket`.
 
-The node could serve multiple websocket clients. Their number is configured in
-the epoch.yaml. When all websocket connections are consumed - any new incoming
+The node could serve multiple WebSocket clients. Their number is configured in
+the epoch.yaml. When all WebSocket connections are consumed - any new incoming
 connections will be queued. The queue has a maximum size and when it is
 reached - any new incoming connections will be rejected with an error code 400.
-This is to prevent the node of being overloaded with websocket connections.
+This is to prevent the node of being overloaded with WebSocket connections.
 
 ### Subscription to events
 
-Websocket clients will receive updates to events they've subscribed to. A
+WebSocket clients will receive updates to events they've subscribed to. A
 client can subscribe (and unsubscribe) to events on the fly. Subscribe is
 described in [Chain WS API - Subscribe](./chain_ws_api.md#subscribe) and an
 example usage for oracles can be seen in [Oracle user API usage](./oracle_api_usage.md).
@@ -85,27 +85,26 @@ An event has the same type as a response, except for not having a tag:
 ## Channels WebSocket API definition
 
 ### Description
-Channels provide means for off chain transactions with functionality of on
-chain dispute resolution.
+Channels provide means for off-chain transactions with functionality of on-chain dispute resolution.
 Channels require persisted connections to Aeternity nodes. Each participant in
-a channels uses one's own trusted node. For persistence of this connection websockets
+a channel uses one's own trusted node. For persistence of this connection, WebSockets
 are used.
-Channels have on chain state that persists who the participants are and the
-total amout of tokens put in the channel.
-Each channel also has an off chain state representing the latest distribution of the balance of the
-channel. It can be updates - each new state is co-signed by both parties and only then it becomes the latest valid state of the
-channel. At any point of time channel can be closed either unilaterally or
-with a mutual agreement.
+Channels have on-chain state that persists who the participants are and the
+total amout of tokens put into the channel.
+Each channel also has an off-chain state representing the latest distribution of the balance of the
+channel. It can be updated - each new state is co-signed by both parties and only then it becomes the latest valid state of the
+channel. At any point in time channel can be closed either unilaterally or
+through mutual agreement.
 
 ### Connection
 The epoch node supports an endpoint with a configurable port where the
-websocket's clients connect. It is located on `/channel`.
+WebSocket's clients connect. It is located on `/channel`.
 
-The node could serve multiple channel websocket clients. Their number is configured in
-the `epoch.yaml`. When all websocket connections are consumed - any new incoming
+The node could serve multiple channel WebSocket clients. Their number is configured in
+the `epoch.yaml`. When all WebSocket connections are consumed - any new incoming
 connections will be queued. The queue has a maximum size and when it is
-reached - any new incoming connections will be rejected with an error code 400.
-This is to prevent the node of being overloaded with websocket connections.
+reached, any new incoming connections will be rejected with an error code 400.
+This is to prevent the node of being overloaded with WebSocket connections.
 
 ### General message types
 All messages have the format:
