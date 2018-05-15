@@ -21,6 +21,15 @@ expected. The flow is the following:
 2. [Channel off-chain update](#channel-off-chain-update)
 3. [Channel mutual close](#channel-mutual-close)
 
+There are a some WebSocket events that can occur while the connection is open
+but are not necessarily part of the channel's life cycle.
+
+* [Update error](#update-error)
+
+* [Update conflict](#update-conflict)
+
+* [Generic messages](#generic-messages)
+
 Only steps 1 and 3 require chain interactions, step 2 is off-chain.
 
 ### HTTP requests
@@ -460,4 +469,83 @@ its progress as they would do with any on-chain transaction
 curl 'http://127.0.0.1:3013/v2/tx/th$gCajQAyuCHwXFTSTyZWfmvJqNrikJnKfWmBsrPaAUswtNf7VP?tx_encoding=json'
 ```
 if the `block_hash` is `none` - then the transaction is still in the mempool.
+
+### Other WebSocket events
+#### Update error
+Updates are not always successful, for example one participant tries to spend
+more tokens that one currently has in the channel's balance. This diverges
+from the update flow [described above](#channel-off-chain-update).
+
+Example message for when the `from` does not have enough tokens to spend
+```
+{'action': 'error',
+ 'payload': {'reason': 'insufficient_balance',
+             'request': {'action': 'update',
+                         'payload': {'amount': 10000,
+                                     'from': 'ak$2KTP6oDmZcPKRoE8DZxHFQA7GCyYoc8TTRek5uCEwXDFovkFqz',
+                                     'to': 'ak$2KmumVDr1KQwhzPbbC14t3at6wHD1i6TFAS3PoquPRnEGaiiWs'
+                                     },
+                          'tag': 'new'
+                          }
+              }
+}
+```
+
+The structure is having a `reason` and `request` holding the request being
+sent. Possible error reasons are:
+
+* `insufficient_balance` - when `from` does not have enough tokens in the
+  channel. Keep in mind that there is a minimal amount of `channel_reserve`
+  tokens to be kept by both parties.
+
+* `negative_amount` - the `udpate` event contained a negative amount
+
+* `invalid_pubkeys` - at least one of the addresses in the `update` event is
+  not present in the channel.
+
+#### Update conflict
+
+Since updates can be triggered by either party, it is possible both
+participants to start an `update` almost simultaneously. If a new `update` is
+started by a participant while the other participant has started an `update` of
+ones' own - a conflict occurs. Then both `update`-s are invalidated and the
+state is reverted to the last mutually signed one. Both participant receive a
+message containing a reference to the correct state.
+```
+{'action': 'conflict',
+ 'payload': {'channel_id': 'ch$WmpDbaiCs5roqRCL5KEKbpsDNJSbcbiUvt2cs1qyj4sM9HA3b',
+             'round': 42
+             }
+}
+```
+
+#### Generic messages
+
+There is the functionality to send participants messages containing
+information. In the scope of this - we are going to be calling those a `sender`
+and a `receiver`. These roles can be taken by any of the participants, anytime.
+
+The `sender` pushes a message with the following structure:
+
+```
+{'action': 'message',
+ 'payload': {'info': 'hejsan',
+             'to': 'ak$R2jDydYPpjsWckNte6bUFg6pJiyKRaYaLRBKnQFwZAuEiDxrb'
+             }
+}
+```
+
+Then the `receiver` gets an event containing the info being sent and some
+details:
+
+```
+{'action': 'message',
+ 'payload': {'message': {'channel_id': 'ch$6SgSc7a14dGbwMNCsjjQZCYVreVLKkFwBzJEZ58ZSZnV9FiQ1',
+                         'from': 'ak$2W2vDXjrDWCtVcJ3aKNHHr8BxJ37xaNg6o88AfxosTTyejiEM',
+                         'to': 'ak$R2jDydYPpjsWckNte6bUFg6pJiyKRaYaLRBKnQFwZAuEiDxrb',
+                         'info': 'hejsan'
+                         }
+            }
+}
+```
 
