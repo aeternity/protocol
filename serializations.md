@@ -231,11 +231,7 @@ subsequent sections divided by object.
 
 #### Contract
 ```
-[ <pubkey>     :: binary()
-, <balance>    :: int()
-, <height>     :: int()
-, <nonce>      :: int()
-, <owner>      :: binary()
+[ <owner>      :: binary()
 , <vm_version> :: int()
 , <code>       :: binary()
 , <log>        :: binary(),
@@ -245,6 +241,7 @@ subsequent sections divided by object.
 ]
 ```
 
+The balance of the accout is stored in the account state tree.
 The contract storage (or state) which is a key value map from (key::binary() to value::binary())
 is stored in its own subtree. The key for a contract storage value is:
 ```
