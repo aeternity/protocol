@@ -245,6 +245,8 @@ subsequent sections divided by object.
 ]
 ```
 
+The referers are sorted on addresses.
+
 The contract storage (or state) which is a key value map from (key::binary() to value::binary())
 is stored in its own subtree. The key for a contract storage value is:
 ```
