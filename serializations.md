@@ -138,6 +138,7 @@ subsequent sections divided by object.
 ]
 ```
 
+Signatures are sorted.
 
 ### Spend transaction
 ```
