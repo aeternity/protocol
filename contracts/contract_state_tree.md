@@ -43,11 +43,11 @@ The contract's account state tree is updated:
 
 The contract's state tree is updated:
 - Upon success of a contract call the contract log and the contract's storage sub tree is updated.
-- When another contract is created and that new contract referrers to the contract in the code, the refcount is increased.
+- When another contract is created and that new contract refers to the contract in the code, the refcount is increased.
 - When another contract that refers to the contract is deleted the refcount is decreased.
 - When the contract executes the deactivate instruction the active field is set to false.
 
-The fields owner, vm_version, code, and deposit are static throughout a contracts life time.
+The fields owner, vm_version, code, and deposit are static throughout a contract's life time.
 
 ### Pruning of contracts
 
@@ -57,6 +57,6 @@ TO BE WRITTEN.
 
 The calls state tree contains all calls done in the block and their
 return values. The calls state tree is pruned in each block so that
-the lates block only contains the calls in that block.
+the latest block only contains the calls in that block.
 
 See [Call Serialization](../serializations.md#contract-call) for the serialization specification.
