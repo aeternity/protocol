@@ -242,7 +242,7 @@ Signatures are sorted.
 ]
 ```
 
-The balance of the accout is stored in the account state tree.
+The balance of the account is stored in the account state tree.
 The contract storage (or state) which is a key value map from (key::binary() to value::binary())
 is stored in its own subtree. The key for a contract storage value is:
 ```
