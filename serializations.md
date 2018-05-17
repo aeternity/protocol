@@ -127,7 +127,6 @@ subsequent sections divided by object.
 ```
 [ <pubkey>  :: binary()
 , <nonce>   :: int()
-, <height>  :: int()
 , <balance> :: int()
 ]
 ```
