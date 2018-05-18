@@ -174,14 +174,14 @@ The initiator receives the following message
 ```
 
 #### Signed channel_create_tx
-Both participans receive the co-signed `channel_create_tx`:
+Both participants receive the co-signed `channel_create_tx`:
 ```
 {'action': 'on_chain_tx',
  'payload': {'tx': 'tx$9mmqY8QRoYS8QR5nyRkWwTyhwecE8NzHotRK1yMjvfvyPfsaBNwWFDrmzG3M5rHKARm39AqeJpgN4Aj7V57yP4KusptAvMA2r3y593vr51ubXN8zo8t8qg7Arb32wWhmYDvRXVGKhfYoqu91BpkammeY69xCjGuQrXKDk3t9aPCcrvM3PbERAMvkmvD9dsb2H5iujGin8qZTy42xsUYS6QcTiaomxo8CmieGSvZkAai1KCZ84MZzsAjsR1FP54Su7rfBPXZTd5u2AmyF7LwZoHQsJEspLnzXxun2MtKTkhR3du8PY'
             }
 }
 ```
-Using its hash participants can track its progress on the chain - entering the mempool, block inclusion and a number of confirmations.
+Using its hash, participants can track its progress on the chain: entering the mempool, block inclusion and a number of confirmations.
 
 #### Transaction in mempool
 At this point both parties had received the co-signed the `channel_create_tx` transaction. The transaction is posted by the state
@@ -460,17 +460,17 @@ it and then post it back via a WebSocket message:
 ```
 
 #### Signed channel_close_mutual_tx
-Both participans receive the co-signed `channel_close_mutual_tx`:
+Both participants receive the co-signed `channel_close_mutual_tx`:
 ```
 {'action': 'on_chain_tx',
  'payload': {'tx': 'tx$T7f9gwgv5SsoFi3uoKcjZcfG9wXqS52nRHiCZccmc2pYAxc17sfDDNu6EAVgxQQxD2pvbQGBBKpatdkczSQWPxqMdXpgPgKEqEGxzmqJmeNMFR81KotMjPAiJciuinTQ1Gr2jLnfck3mGhnpXT9DrniEYdqnd53nP2XGMPsodRC8dUUMFzANh3YzBn3xsrNA1eHVBu4SZVMGhUHR3baVGKNpdHhsz8RiYTc6bjHBDhRiRPtgfvF4swJGDUsgWpAciLnssdq8AZ9cVy5JyReg3mf8UJaSLfvVUATyN9LN3Jf3pW'
             }
 }
 ```
-Using its hash participants can track its progress on the chain - entering the mempool, block inclusion and a number of confirmations.
+Using its hash, participants can track its progress on the chain: entering the mempool, block inclusion and a number of confirmations.
 
 ### Channel closing
-After both parties have received the co-signed the `channel_close_mutual_tx` transaction, it is posted on the chain and the microservice handling the off-chain
+After both parties have received the co-signed `channel_close_mutual_tx` transaction, it is posted on the chain and the microservice handling the off-chain
 requests dies. Parties receive the following info:
 ```
 {'action': 'info',
