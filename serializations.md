@@ -411,7 +411,6 @@ purging them from the tree.
 #### Channel close mutual transaction
 ```
 [ <channel_id>      , binary()
-, <from>            , binary()
 , <initiator_amount>, int()
 , <responder_amount>, int()
 , <ttl>             , int()
