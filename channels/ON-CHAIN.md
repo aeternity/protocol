@@ -35,28 +35,7 @@ Account(responder).balance := Account(responder).balance - responder_amount
 Channel(cid).amount := initiator_amount + responder_amount
 ```
 
-```
-  name                  size (bytes)
- ---------------------- ----
-| channel_id           | 32 |
- ---------------------- ----
-| initiator            | 32 |
- ---------------------- ----
-| responder            | 32 |
- ---------------------- ----
-| initiator_amount     | 32 |
- ---------------------- ----
-| responder_amount     | 32 |
- ---------------------- ----
-| lock_period          | 2  |
- ---------------------- ----
-| ttl                  | 2  |
- ---------------------- ----
-| fee                  | 32 |
- ---------------------- ----
-| nonce                | 32 |
- ---------------------- ----
-```
+Serialization defined [here](../serializations.md#channel-create-transaction)
 
 - `initiator`: public key/address of the initiating peer
 - `responder`: public key/address of the responding peer
@@ -103,23 +82,7 @@ the standard transaction fee MUST be paid by the `from` account.
 
 This operation is not mandatory for normal channel operation.
 
-
-```
-  name                  size (bytes)
- ---------------------- ----
-| channel_id           | 32 |
- ---------------------- ----
-| from                 | 32 |
- ---------------------- ----
-| amount               | 32 |
- ---------------------- ----
-| ttl                  | 2  |
- ---------------------- ----
-| fee                  | 32 |
- ---------------------- ----
-| nonce                | 32 |
- ---------------------- ----
-```
+Serialization defined [here](../serializations.md#channel-deposit-transaction)
 
 
 - `channel_id`: channel id as recorded on chain
@@ -140,22 +103,7 @@ MUST be less or equal than the sum of all participants balances, i.e. channels
 cannot create coins out of thin air.
 
 
-```
-  name                  size (bytes)
- ---------------------- ----
-| channel_id           | 32 |
- ---------------------- ----
-| from                 | 32 |
- ---------------------- ----
-| amount               | 32 |
- ---------------------- ----
-| ttl                  | 2  |
- ---------------------- ----
-| fee                  | 32 |
- ---------------------- ----
-| nonce                | 32 |
- ---------------------- ----
-```
+Serialization defined [here](../serializations.md#channel-withdraw-transaction)
 
 
 - `channel_id`: channel id as recorded on chain
@@ -173,22 +121,7 @@ cannot create coins out of thin air.
 ### `channel_close_mutual`
 
 
-```
-  name                  size (bytes)
- ---------------------- ----
-| channel_id           | 32 |
- ---------------------- ----
-| initiator_amount     | 32 |
- ---------------------- ----
-| responder_amount     | 32 |
- ---------------------- ----
-| ttl                  | 2  |
- ---------------------- ----
-| fee                  | 32 |
- ---------------------- ----
-| nonce                | 32 |
- ---------------------- ----
-```
+Serialization defined [here](../serializations.md#channel-close-mutual-transaction)
 
 
 - `channel_id`: channel id as recorded on chain
@@ -241,22 +174,7 @@ With the inclusion of this transaction on chain, the timer, during which
 disputes in the form of `channel_slash` will be considered, is started.
 
 
-```
-  name                  size (bytes)
- ---------------------- ----
-| channel_id           | 32 |
- ---------------------- ----
-| from                 | 32 |
- ---------------------- ----
-| amount               | 32 |
- ---------------------- ----
-| ttl                  | 2  |
- ---------------------- ----
-| fee                  | 32 |
- ---------------------- ----
-| nonce                | 32 |
- ---------------------- ----
-```
+Serialization defined [here](../serializations.md#channel-close-solo-transaction)
 
 
 - `channel_id`:
@@ -274,22 +192,7 @@ transaction needs to include a state signed by all peers with a higher sequence
 number.
 
 
-```
-  name                  size (bytes)
- ---------------------- ----
-| channel_id           | 32 |
- ---------------------- ----
-| from                 | 32 |
- ---------------------- ----
-| amount               | 32 |
- ---------------------- ----
-| ttl                  | 2  |
- ---------------------- ----
-| fee                  | 32 |
- ---------------------- ----
-| nonce                | 32 |
- ---------------------- ----
-```
+Serialization defined [here](../serializations.md#channel-slash-transaction)
 
 
 - `channel_id`:
@@ -318,24 +221,7 @@ The `channel_settle` MUST only be included in a block if:
 
 
 
-```
-  name                  size (bytes)
- ---------------------- ----
-| channel_id           | 32 |
- ---------------------- ----
-| from                 | 32 |
- ---------------------- ----
-| initiator_amount     | 32 |
- ---------------------- ----
-| responder_amount     | 32 |
- ---------------------- ----
-| ttl                  | 2  |
- ---------------------- ----
-| fee                  | 32 |
- ---------------------- ----
-| nonce                | 32 |
- ---------------------- ----
-```
+Serialization defined [here](../serializations.md#channel-settle-transaction)
 
 
 - `channel_id`:
