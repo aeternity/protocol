@@ -1,9 +1,11 @@
 # Genesis
 
 The genesis block of the Aeternity blockchain will contain the initial
-distribution of coins.
+distribution of coins and this document describes the different possible
+processes available to us for the conversion of `AE` tokens to native coins.
 
-## ERC20 token
+
+## Aeternity token
 
 After collecting funds in early 2017, Aeternity issued an ERC20 token `AE` on
 the Ethereum blockchain. Such a token is, at the most fundamental level, just a
@@ -25,8 +27,19 @@ Given that the ERC20 token is transferable until late 2019, we are going to
 in order to be able to come up with an initial distribution, since we do not
 want to wait until the tokens are no longer transferable.
 
-(***TODO***: find out how many smart contracts are managing AE tokens currently
-and how many of the initial distribution never moved)
+Whenever the point comes at which the ERC20 tokens are no longer transferable,
+there will most likely still be token owners, which have failed to burn their
+tokens, in order to claim them on the Aeternity chain.
+Since tokens will not be transferable anymore, a simple signature will suffice
+to claim coins on the Aeternity chain.
+
+It is important that no smart contracts are left with tokens, since they cannot
+sign messages and thus wouldn't be able to claim coins using this method.
+The last resort then would be to setup another smart contract on the Ethereum
+chain with all the left-overs and have users send a small amount of Ether to
+that contract, or execute a contract call if the smart contract has the ability
+to do so, in order to show that they do control the tokens in question.
+
 
 ## Snapshot
 
@@ -36,20 +49,18 @@ This is arguably the simplest solution but it comes with a couple of downsides.
 
 First of all, it forces us to use the same address scheme as Ethereum, i.e. an
 address is `KECCAK256(ECDSAPUBKEY(priv_key))[96:255]` or the rightmost 160 bits
-of the the public keys' Keccak-256 hash. But the current plan is to use EdDSA/
-Ed25519 for signatures and use Blake2b instead of Keccak-256.
-(***TODO***: Alternative would be to support multiple signature schemes? How
-much would that increase verification effort/complexity? Or )
+of the the public keys' Keccak-256 hash, which goes against our current usage of
+EdDSA/Ed25519 for signatures and Blake2b instead of Keccak-256.
 
 Secondly, since tokens can be, and actually are, managed by smart contracts, we
 would have to replicate all these contracts, including state and dependencies,
 because private keys for smart contracts are unknown and thus preventing anyone
 from accessing the funds at a given address unless the contract is replicated.
 
-And much worse, it promotes private key re-use, which is akin to re-using
-passwords, just worse, especially given the context and the fact that now the
-security of users private keys rely on even more parties. This something users
-should be weary of since it jeopardises their funds on all chains involved.
+It also promotes private key re-use, which is akin to re-using passwords, just
+worse, especially given the context and the fact that now the security of users
+private keys rely on even more parties. This something users should be weary of
+since it jeopardises their funds on all chains involved.
 
 
 ## Token burning
@@ -59,19 +70,15 @@ supply the address that they want to use on the Aeternity chain.
 
 The disadvantage of this approach is that it requires active involvement of the
 users. That is, while the process can be automated easily, it still requires
-users to initiate the process and issue a transaction on the Ethereum chain.
-
-Since not all users would finish this process in time, as witnessed numerous
-times for other projects, where people stop paying attention to projects for
-months at a time, a pair of smart contracts could be set up on the Ethereum and
-Aeternity chain, which could be used to hand out unclaimed coins.
-(***TODO:*** Give detailed explanation for this)
+users to initiate the process and issue a transaction on the Ethereum chain and
+therefore also requires them to have Ether.
 
 The Aeternity token on the Ethereum chain is a [HumanStandardToken](https://github.com/ConsenSys/Token-Factory/blob/master/contracts/HumanStandardToken.sol)
 that comes with an `approveAndCall` method, which allows us to burn the tokens
 and register the public key for the Aeternity chain in just one call.
 
-Solidity contract on Ethereum chain:
+The solidity code for a contract used for burning coins on the Ethereum chain
+might look like this:
 
 ```
 pragma solidity ^0.4.21;
@@ -126,30 +133,66 @@ contract TokenBurner {
 }
 ```
 
-On the Aeternity chain, we need a contract, that either holds or funds, or can
-mint new coins, (***TODO***: This is where native tokens/assets come into play?)
-and a proof that the tokens were burned on the Ethereum chain. A proof of burn
-could be a proof that the above contract's state contains a claim entry.
+On the Aeternity chain, we need a contract, or a protocol level mechanism, that
+holds all funds that need to be dispersed and can verify that tokens were
+actually burned, e.g. by supplying the path in the state tree to the entry plus
+a valid Ethereum block header, and then after `Mon Sep 02 19:56:09 2019 UTC`
+allow signatures to be used.
+
+Since not all users would finish this process in time—as witnessed numerous
+times for other projects, where people stop paying attention to projects for
+months at a time—a pair of smart contracts could be set up on the Ethereum and
+Aeternity chain, which could be used to hand out unclaimed coins.
+
+
+## Third party/centralised solutions
+
+The above approach requires users to spend Ether, in order to burn their tokens.
+Given the assumption that the majority of users are currently using their tokens
+solely for speculation, we cannot assume them to actually know what exactly a
+token is or even how to use them outside of exchanges.
+The upshot of the last assumption is, that the exchanges have all the expertise
+needed. That is, exchanges can handle the conversion from ERC20 token to native
+coin without users actually having to anything.
+We might even encourage users, who would otherwise not be able to convert their
+tokens, to deposit them on an exchange.
+
+Currently, the AE token is traded on [17 centralised exchanges](https://coinmarketcap.com/currencies/aeternity/#markets) and some more decentralised exchanges. The
+decentralised exchanges operate via smart contracts on the Ethereum chain and
+will therefore not be able to list the native coin.
+
+With the majority of users having their tokens on exchanges, offloading the
+token to coin conversion to these third parties would be the solution with the
+best user experience, since there would be no need for the users to do anything.
+With this approach scammers trying to get users to send them their tokens
+would also have a hard time.
+
+Another approach—that would require users to put trust into a service setup by
+us—is to have a simple webservice, where users can post the public key they
+intend to use on the Aeternity chain and then receive an unique burn address on
+the Ethereum network. For each `AE` token sent to one of the burner addresses,
+we would then release the appropriate amount of native coins. This would be very
+easy to set up but has the major downside that it would most likely attract a
+lot of scammers.
 
 
 ## Incentives
 
-It is important to note, that users will need to withdraw their tokens from
-(centralised) exchanges in either case if they do not want to have to rely on
-these exchanges to start supporting the Aeternity blockchain and distribute
-their coins accordingly.
+We assume that the overwhelming majority of current users see their tokens
+exclusively as investment vehicles. If exchanges fail to support the native
+Aeternity coin or, for whatever reason, the native coin is traded at much lower
+value than the ERC20 token, then the incentive for the exchange of ERC20 tokens
+for native coins is weak.
 
-Assuming that the overwhelming majority of current users see their tokens
-exclusively as investment vehicles could introduce another problem. If exchanges
-fail to support the native Aeternity blockchain coin or, for whatever reason,
-the native coin is traded at much lower value than the ERC20 token, then the
-incentive for the exchange of ERC20 tokens for native coins is weak.
-
-To give people more of an incentive, we might consider an interactive auction.
-The burn and snapshot approaches can be seen as auctions, where one unit of the
-ERC20 token buys exactly one share of the native coin. So if we want people to
-abandon the old ERC20 token as quickly as possible, we might use a Reverse Dutch
+To have more of an incentive, we might consider an interactive auction. The burn
+and snapshot approaches can be seen as auctions, where one unit of the ERC20
+token buys exactly one share of the native coin. So if we want people to abandon
+the old ERC20 token as quickly as possible, we might use a Reverse/Dutch
 Auction, where the price per share never drops below one. That is, the
 multiplier starts off at e.g. 1.1 and decreases with time.
-(***TODO***: Dilution etc.)
+In the ideal case, where all users act immediately, this would not result in any
+dilution, since the total initial supply would just be multiplied by 1.1.
+But given that many people fail to keep up with projects, those that do fail
+to exchange their tokens in the first period, will end up with less coins
+relative to earlier participants.
 
