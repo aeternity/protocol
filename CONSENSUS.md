@@ -40,8 +40,8 @@ miners and new coins can only be created via these new blocks.
 
 #### Genesis block
 
-The genesis block is special in the sense that it does not have a parent, no coinbase
-transaction and contains the initial state of the Æternity blockchain. The initial state
+The genesis block is special in the sense that it does not have a parent
+and contains the initial state of the Æternity blockchain. The initial state
 is generated from the distribution of the AETernity ERC20 token on the Ethereum blockchain
 at a given cut-off point.
 
@@ -50,10 +50,6 @@ at a given cut-off point.
 Æternity follows the "fat protocol" approach, which means that the protocol itself
 has many features built in, as opposed to e.g. Ethereum, which maps any functionality beyond
 basic transactions—which change the state of an account—to smart contracts.
-
-#### Coinbase transactions
-
-(***TODO***: is there any benefit/reason to have a coinbase transaction with an account model?)
 
 ### Proof of Work
 
@@ -199,17 +195,6 @@ GENESIS_VERSION: 2
 
 MUST have valid signature from private key belonging to `sender`.
 
-
-#### Coinbase
-
-```
- Fieldname       Size (bytes)
- -------------- -----
-| account      | 32  |
- -------------- -----
-```
-
-There MUST be one coinbase transaction per block.
 
 #### Spend
 
