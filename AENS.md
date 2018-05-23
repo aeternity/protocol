@@ -52,9 +52,9 @@ the general public can start claiming names.
 
 ## Mechanisms
 
-It is unclear what a good mechanism for a naming system would look
-like. If we imagine two actors both being interested in the same name,
-what would a »fair« solution be to resolve this?
+It is unclear what a good distribution mechanism for a naming system would look
+like. If we imagine two actors both being interested in the same name, what
+would a »fair« solution be to resolve this?
 
 Fees are the main mechanism to discourage spam and squatting. This
 initial version will burn the governance fee, in order to enable us
@@ -106,22 +106,22 @@ This is the entry as it should be stored by a node.
 
 ***owner***: the account, which controls this entry.
 
-***expires_by***: the blockheight after which the entry goes
-into the `revoked` state. This value MUST NOT be further than
-50000 blocks into the future.
+***expires_by***: the blockheight after which the entry goes into the `revoked`
+state. This value MUST NOT be further than `floor(60 * 24 * 365/key_block_interval)`
+blocks into the future. `key_block_interval` is expressed in minutes.
 
 ***client_ttl***: a suggestion as to how long any clients should
 cache this information. (***TODO***: should have a reasonable
 upper limit, e.g. 86400 seconds, and probably a different
 name to not be confused with the general TTL for transactions)
 
-This entry is only relevant for clients and has no conensus
+This entry is only relevant for clients and has no consensus
 impact.
 
 ***pointers***: a dictionary with all the values this entry
 points towards, e.g. `{kind: "ipfs", data: "QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC"}`.
 This can have multiple entries, e.g. an ipfs hash which contains a
-profile picture and an payment address asssociated with the name.
+profile picture and an payment address associated with the name.
 
 
 ### Name
@@ -189,9 +189,9 @@ to commit to a name and after the commitment has been accepted into the
 chain, reveal the name to finish the process.
 
 A commitment should be binding, i.e. the claimant cannot change
-the value they commited to withouth changing the actual commitment
+the value they committed to without changing the actual commitment
 and hiding, so that a malicious miner learns nothing about the value
-the claimant has commited until they chose to reveal that value. This
+the claimant has committed until they chose to reveal that value. This
 prevents malicious miners from front running, i.e. upon seeing a
 claim transaction, including their own claim request for the same
 name instead of the original claimant's one.
@@ -252,8 +252,8 @@ A client interacting with the blockchain should generate a warning
 if a user tries to claim a name that is not available.
 
 The `pre-claim` has an implicit expiration attached to it. A
-`pre-claim` MUST be considered invalid after 300 blocks, i.e.
-about two days at 10 minute block time.
+`pre-claim` MUST be considered invalid after `floor(60 * 24 * 2/key_block_interval)` blocks, i.e.
+about two days.
 
 The hash commitment for the `pre-claim` is computed as follows:
 
@@ -268,24 +268,30 @@ commitment := Hash(NameHash(name) + name_salt)
  ---------------- ----
 | name           | 63 |
  ---------------- ----
+| rent           | 32 |
+ ------------- -- ----
 | name_salt      | 32 |
  ---------------- ----
 ```
 
 Flow for a user:
 
-1. (optional) wait `n` blocks, s.t. that the block including the `pre-claim` cannot be reversed whp
+1. (optional) wait `n` blocks, s.t. that the block including the `pre-claim` cannot be reversed with high probability
 2. send `claim` transaction to reveal name and pay the associated fee
 
-If the time delta of `pre-claim` and `claim` is bigger than 300 blocks,
+If the time delta of `pre-claim` and `claim` is bigger than `floor(60 * 24 * 2/key_block_interval)` blocks,
 then the `claim` MUST be rejected.
 
-The `claim` transaction MUST be signed by the same private key as a
-`pre-claim` transaction containing a commitment to the name and nonce.
+The `claim` transaction MUST be signed by the same private key as a `pre-claim`
+transaction containing a commitment to the name and nonce.
 
 A `claim` transaction MUST NOT be in included in the same block as its
 `pre-claim`.
 
+`rent` is the reoccurring fee that has to be paid for names. Our first rent
+model is a naïve one, that just uses a flat fee. Our initial target is 4 aeons
+per year. This comes out to `4/floor(60 * 24 * 365/key_block_interval)` aeons
+per block.
 
 #### Update
 
@@ -297,18 +303,25 @@ A `claim` transaction MUST NOT be in included in the same block as its
  ------------ ----
 | client_ttl | 8  |
  ------------ ----
+| rent       | 32 |
+ ------------ ----
 | pointers   |    |
  ------------ ----
 ```
 
-The `update` transaction MUST be signed by the owner
-of the name entry to be updated.
+The `update` transaction MUST be signed by the owner of the name entry to be
+updated.
 
-The `expire_by` MUST NOT be more than 36000 blocks into
-the future.
+The `expire_by` MUST NOT be more than `floor(60 * 24 * (365/2)/key_block_interval)`,
+i.e. half a year, blocks into the future.
 
 `update` transaction may be used to extend the lease of the name.
-We do not require an additional fee for extending the lease.
+
+`rent` is the reoccurring fee that has to be paid for names. Our target is to
+charge 4 aeons per year. This comes out to `4/floor(60 * 24 * 365/key_block_interval)`
+aeons per block. For an update, the rent charged is then
+`(new_expire_by - old_expire_by) * 4/floor(60 * 24 * 365/key_block_interval)`
+
 
 #### Transfer
 
@@ -320,8 +333,8 @@ We do not require an additional fee for extending the lease.
  ------------ ----
 ```
 
-The `transfer` transaction MUST be signed by the owner
-of the name entry to be transfered.
+The `transfer` transaction MUST be signed by the owner of the name entry to be
+transferred.
 
 
 ### Revoke
@@ -335,17 +348,17 @@ of the name entry to be transfered.
 The revoke transaction MUST be signed by the owner
 of a name entry.
 
-After the `revoke` transaction has been included in the chain,
-the name enters the `revoked` state. After a fixed timeout of
-2016 blocks, the name will be available for claiming again.
+After the `revoke` transaction has been included in the chain, the name enters
+the `revoked` state. After a fixed timeout of `floor(60 * 24 * 14/key_block_interval)`
+blocks, the name will be available for claiming again.
 
 
 ## Storage
 
-We are going to store the AENS entries in an ESMT and use the
-hash of a name, as defined above, as a pointer to the entry data.
-If there's no entry for a given hash then that pointer will point
-to an empty hash or to the hash of that entry data otherwise.
+AENS entries are stored in a Patricia Merkle Tree and use the hash of a name, as
+defined above, as a pointer to the entry data. If there's no entry for a given
+hash then that pointer will point to an empty hash or to the hash of that entry
+data otherwise.
 
 
 ## Launch
@@ -375,7 +388,7 @@ give the name to.
 These sub-labels allow for further customisation and also for users to
 associate with particular namespaces, e.g. a cryptographic cat breeding
 game might associate a name entry with every of its cats such as
-`unicorn.kitty.aet` and then transfering that name to the person, who
+`unicorn.kitty.aet` and then transferring that name to the person, who
 adopts the cat. The authorization policies for these will need some
 flexibility seeing as the owner of a namespace might want to prevent
 or allow users creating sub-sub-labels, e.g. the owner of `unicorn.kitty.aet`
@@ -441,6 +454,3 @@ be distributed to random accounts via a lottery.
 [1] Kalodner, Harry A., et al. "An Empirical Study of Namecoin and Lessons for Decentralized Namespace Design." WEIS. 2015.
 
 [2] Ali, Muneeb, et al. "Blockstack: A Global Naming and Storage System Secured by Blockchains." USENIX Annual Technical Conference. 2016.
-
-
-
