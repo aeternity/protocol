@@ -58,6 +58,8 @@ The `fee` and `nonce` refer to the `initiator` account, i.e. the `fee` MUST be t
 #### Requirements
 
 `Account(initiator).balance >= initiator_amount + fee`
+`initiator_amount >= channel_reserve`
+`responder_amount >= channel_reserve`
 
 ## Updating channel on-chain
 
