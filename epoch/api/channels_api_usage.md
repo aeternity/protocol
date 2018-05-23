@@ -185,7 +185,7 @@ Using its hash, participants can track its progress on the chain: entering the m
 
 #### Transaction in mempool
 At this point both parties had received the co-signed the `channel_create_tx` transaction. The transaction is posted by the state
-channel's software to the node and goes to the mempool. Having calculated its hash, one can validate it using the HTTP API:
+channel's software to the node and goes to the mempool. Having calculated its hash, one can validate it using the external HTTP API:
 ```
 $ curl 'http://localhost:3013/v2/tx/th$hNyHzj4dSzyBqReAMR36GGz1mhuXxQFuES3AnPkXkuY2w6dZb?tx_encoding=json'
 ```

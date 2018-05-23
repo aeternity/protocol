@@ -8,16 +8,18 @@ of an Oracle.
 
 To show the intended usage of oracles we walk through basically the [Oracle
 life cycle](/oracles/oracle_life_cycle.md) For simplicity, we only work with a single
-node (`localhost/127.0.0.1`) in this example. It should be straightforward
+node in this example. It should be straightforward
 to split the example into one node running the oracle and other nodes querying
-that oracle. In the default node configuration the websocket interface is at
-*port 3104* - i.e. connecting to `ws://127.0.0.1:3104/websocket` opens a
-websocket connection.
+that oracle.
+
+The following assumes that the node exposes at address `localhost/127.0.0.1` the following ports:
+* User API internal WebSocket endpoint: 3114 - i.e. connecting to `ws://127.0.0.1:3114/websocket` opens a websocket connection.
+* User API internal HTTP endpoint: 3113.
 
 In order to work through the example we also need the (Base58Check-encoded)
 public key of the node. This is easily retrieved from the running node:
 ```
-~/epoch/node: curl http://127.0.0.1:3103/v2/account/pub-key
+~/epoch/node: curl http://127.0.0.1:3113/v2/account/pub-key
 {"pub_key":"ak$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}
 ```
 
@@ -31,7 +33,7 @@ with more than one node it is better to subscribe to the _new_block_-event, but
 here we simply use _mined_block_.
 
 ```
-~/epoch/node: wscat -c ws://127.0.0.1:3104/websocket
+~/epoch/node: wscat -c ws://127.0.0.1:3114/websocket
 connected (press CTRL+C to quit)
 > {"target":"chain", "action":"subscribe", "payload":{"type":"mined_block}}
 < {"origin":"chain", "action":"subscribe", "tag":"untagged", "payload":{"result":"ok", "subscribed_to":{"type":"mined_block}}}
