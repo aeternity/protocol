@@ -75,7 +75,7 @@ Questions/Later:
 ### Oracle query transaction
 - Contains:
   - The sender (address) + nonce
-  - The oracle (address)
+  - The oracle (address) or hash of name
   - The query in binary format
   - The query fee - locked up until either:
     - The oracle answers and receive the fee
@@ -83,6 +83,8 @@ Questions/Later:
   - Query TTL
   - Response TTL
   - The transaction fee
+
+In case a name hash is provided as oracle address, the corresponding oracle address will be resolved from oracle_pubkey pointer in name tree while mining.
 
 The transaction creates an oracle interaction object in the oracle
 state tree. The id of this object is constructed from the query
@@ -113,7 +115,7 @@ protect against malicious oracles answering early and collect the fee.
 ```
 { sender_address  :: public_key()
 , nonce           :: nonce()
-, oracle_address  :: public_key()
+, oracle_address  :: public_key_or_name_hash()
 , query           :: binary()
 , query_fee       :: amount()
 , query_ttl       :: ttl()

@@ -13,7 +13,12 @@ You need to know the public key to send tokens to (are returned by the `/account
 
 In order to instruct your node to sign and broadcast a transaction sending tokens to the public key of the other account (recipient - replace the public key in the command):
 ```bash
-curl -X POST -H "Content-Type: application/json" -d '{"recipient_pubkey":"ak$PzQvEjt1ytvFMwN9STYvkXYnm72yEqkPcvLL9mzbzZ6fdczSb6L", "amount":2, "fee":1, "payload": "any public message"}' http://127.0.0.1:3113/v2/spend-tx
+curl -X POST -H "Content-Type: application/json" -d '{"recipient":"ak$PzQvEjt1ytvFMwN9STYvkXYnm72yEqkPcvLL9mzbzZ6fdczSb6L", "amount":2, "fee":1, "payload": "any public message"}' http://127.0.0.1:3113/v2/spend-tx
+```
+
+In case of sending to a name, for which a account_pubkey pointer is registered in the naming system, include the name hash as recipient.
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{"recipient":"nm$PzQvEjt1ytvFMwN9STYvkXYnm72yEqkPcvLL9mzbzZ6fdczSb6L", "amount":2, "fee":1, "payload": "any public message"}' http://127.0.0.1:3113/v2/spend-tx
 ```
 
 Once the transaction is included in a block, the recipient shall receive the specified amount and the miner that specified fee.

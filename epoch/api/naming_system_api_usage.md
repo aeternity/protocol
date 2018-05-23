@@ -98,7 +98,12 @@ curl -X POST -H "Content-Type: application/json" -d '{"recipient_pubkey":"foobar
 
 In order to transfer a name to another user send name transfer transaction:
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-transfer-tx -d '{"name_hash": "nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4", "recipient_pubkey": "ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw", "fee": 1}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-transfer-tx -d '{"name_hash": "nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4", "recipient": "ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw", "fee": 1}'
+{"name_hash":"nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4"}
+```
+in case of transfering to a registered account_pubkey in the naming system:
+```
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-transfer-tx -d '{"name_hash": "nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4", "recipient": "nm$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw", "fee": 1}'
 {"name_hash":"nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4"}
 ```
 

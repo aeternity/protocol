@@ -327,6 +327,8 @@ We do not require an additional fee for extending the lease.
 The `transfer` transaction MUST be signed by the owner
 of the name entry to be transfered.
 
+The `target` can be either a account pubkey or name hash, for which an account public key can be resolved from the naming system.
+
 
 ### Revoke
 
@@ -445,6 +447,3 @@ be distributed to random accounts via a lottery.
 [1] Kalodner, Harry A., et al. "An Empirical Study of Namecoin and Lessons for Decentralized Namespace Design." WEIS. 2015.
 
 [2] Ali, Muneeb, et al. "Blockstack: A Global Naming and Storage System Secured by Blockchains." USENIX Annual Technical Conference. 2016.
-
-
-
