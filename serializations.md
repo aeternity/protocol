@@ -15,31 +15,51 @@ user API.
 
 ## Static size object serialization
 
-#### Block header
+There are two types of blocks:
 
-For block headers all fields sizes are statically known and can be
+* key block - does not contain a list of transactions, therefore, it is
+not divided into a header and a list of transactions;
+* micro block - contains a header, a list of transactions and a signature.
+
+### Key block
+
+All field sizes are statically known and can be constructed directly as
+a byte array.
+
+| Fieldname | Size (bytes) |
+| --- | --- |
+| version    | 8    |
+| height     | 8    |
+| prev_hash  | 32   |
+| state_hash | 32   |
+| miner      | 32   |
+| target     | 8    |
+| pow        | 168  |
+| nonce      | 8    |
+| time       | 8    |
+
+### Micro block header
+
+All field sizes of a micro block header are statically known and can be
 constructed directly as a byte array.
 
 | Fieldname | Size (bytes) |
 | --- | --- |
-| version      | 8    |
-| height       | 8    |
-| prev_hash    | 32   |
-| txs_hash     | 32   |
-| root_hash    | 32   |
-| target       | 8    |
-| pow_evidence | 168  |
-| nonce        | 8    |
-| time         | 8    |
-| miner        | 32   |
+| version    | 8    |
+| height     | 8    |
+| prev_hash  | 32   |
+| state_hash | 32   |
+| txs_hash   | 32   |
+| key_hash   | 32   |
+| time       | 8    |
 
-#### Block
+### Micro block
 
-The only difference between a block and its header is the list of
-transactions. The transactions are captured in the header by the
-transaction root hash (txs_hash). The block does not currently have a
-separate binary serialization form since the block hash is computed
-from the block header.
+The only difference between a micro block and its header is a list of
+transactions and a signature. The transactions are captured in the
+header by the transaction root hash (`txs_hash`). The block does not
+currently have a separate binary serialization form since the block
+hash is computed from the block header.
 
 ## Dynamic size object serialization
 
