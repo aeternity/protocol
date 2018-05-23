@@ -166,7 +166,7 @@ The block-chain environment available to a contract is defined in three name spa
 - `Chain.get_balance(a : address)` returns the balance of account `a`.
 - `Chain.block_hash(h)` returns the hash of the block at height `h`.
 - `Chain.block_height` is the height of the current block (i.e. the block in which the current call will be included).
-- `Chain.coinbase` is the address of the account getting the coinbase transaction of the current block.
+- `Chain.coinbase` is the address of the account that mined the current block.
 - `Chain.timestamp` is the timestamp of the current block.
 - `Chain.difficulty` is the difficulty of the current block.
 - `Chain.gas_limit` is the gas limit of the current block.
