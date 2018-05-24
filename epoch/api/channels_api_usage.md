@@ -75,7 +75,12 @@ in the chain, and the others are metadata used for the connection itself.
   | ttl | 1000 |
 
   The `initiator` will be connecting to the `responder` on localhost:1234
-  We will be using the tool [wscat](https://github.com/websockets/wscat)
+  We will be using following tools
+
+  * [wscat](https://github.com/websockets/wscat)
+  * [unpack](https://github.com/aeternity/aepp-sdk-js/blob/develop/examples/sign.js)
+  * [sign](https://github.com/aeternity/aepp-sdk-js/blob/develop/examples/sign.js)
+
   We assume the channel's WebSocket listener is set on port 3014 (default one)
 
 ### Initiator WebSocket open
@@ -131,8 +136,29 @@ The initiator receives a message containing the unsigned transaction
  'payload': {'tx': 'tx$3KVbfQyL3812oUXuaKFrU35yh918LtZS9vSX3xkkyCCQUCReBH3znrhhcKEfv7Et2Unz3Wasec9Ty97xs4VCB3k2GBjhp1bHtYuNcD1JVKCbvfY68JyiVcCzdQJh1SfDtjMLxwaJtQGhUbaF2VySaBwFBTKTzHVCL58owtfXzt972GZEGmEtrdyY7Z1NNg25yhrPyAyGvKZY6WV'}
  }
 ```
-Initiator is to decode the transaction, inspect its contents, sign it, encode
-it and then post it back via a WebSocket message:
+Initiator is to decode the transaction, inspect its contents,
+```
+$ unpack tx\$3KVbfQyL3812oUXuaKFrU35yh918LtZS9vSX3xkkyCCQUCReBH3znrhhcKEfv7Et2Unz3Wasec9Ty97xs4VCB3k2GBjhp1bHtYuNcD1JVKCbvfY68JyiVcCzdQJh1SfDtjMLxwaJtQGhUbaF2VySaBwFBTKTzHVCL58owtfXzt972GZEGmEtrdyY7Z1NNg25yhrPyAyGvKZY6WV
+{
+  "tag": 50,
+  "version": 1,
+  "initiator": "ak$3cFW2rQBfR77cHDgjKLNu3wsUxH9i6TRjfxe63i4rxtLEKC5HLurQo8Exdd4x6DSdNZr2CbGNJhTY4N9AR9nRL1AkgFec1",
+  "initiatorAmount": 7,
+  "responder": "ak$3SW3AqLeCtCV15qGuosr3jz13VMeZ4PhztWR1ufWUQDQe1BhJ6xJLA2gjcPNHFHrJPzb8nmypsgAH3QXb4F4R97eLRVBmt",
+  "responderAmount": 3,
+  "channelReserve": 2,
+  "lockPeriod": 10,
+  "ttl": 1000,
+  "fee": 1,
+  "nonce": 1
+}
+```
+sign it, encode it
+```
+$ sign tx\$Vb6U4dbYYjKr1eq2iU9ftCb3sVLoq3NzBdSpLqgrARkYJ1VgcubZhXRXDuYqoMFrtpJsxpfA5yq4woAUwc4SVYFHZNoUpLqpxbgtDBxDfFz3h3FBzLasqQcNAqqzjiufeuhmnFVWB1oLBTqdKGYTVsamt4zwL3bct7dVVrYfx2X51kXoom5WwPwmQxKjMSFtKgoYaDgNUx6RNLwnCjdJ1J1Jvcm5mi7JuaRsTzvr4HAmzWm6U9oXwSHih7VQ5VGJ5pA85nbCi6MPgmwZZFCU2xY5mKx4uo6jCXgnqQAQEpqpipuhLsoVnNRU3aY6B --file initiator_key
+tx$Vb6U4dbYYjKr1eq2iU9ftCb3sVLoq3NzBdSpLqgrARkYJ1VgcubZhXRXDuYqoMFrtpJsxpfA5yq4woAUwc4SVYFHZNoUpLqpxbgtDBxDfFz3h3FBzLasqQcNAqqzjiufeuhmnFVWB1oLBTqdKGYTVsamt4zwL3bct7dVVrYfx2X51kXoom5WwPwmQxKjMSFtKgoYaDgNUx6RNLwnCjdJ1J1Jvcm5mi7JuaRsTzvr4HAmzWm6U9oXwSHih7VQ5VGJ5pA85nbCi6MPgmwZZFCU2xY5mKx4uo6jCXgnqQAQEpqpipuhLsoVnNRU3aY6B
+```
+and then post it back via a WebSocket message:
 ```
 {'action': 'initiator_signed',
  'payload': {'tx': 'tx$Vb6U4dbYYjKr1eq2iU9ftCb3sVLoq3NzBdSpLqgrARkYJ1VgcubZhXRXDuYqoMFrtpJsxpfA5yq4woAUwc4SVYFHZNoUpLqpxbgtDBxDfFz3h3FBzLasqQcNAqqzjiufeuhmnFVWB1oLBTqdKGYTVsamt4zwL3bct7dVVrYfx2X51kXoom5WwPwmQxKjMSFtKgoYaDgNUx6RNLwnCjdJ1J1Jvcm5mi7JuaRsTzvr4HAmzWm6U9oXwSHih7VQ5VGJ5pA85nbCi6MPgmwZZFCU2xY5mKx4uo6jCXgnqQAQEpqpipuhLsoVnNRU3aY6B'}
@@ -158,8 +184,29 @@ After being informed for the initiator's signing the responder receives a messag
  'payload': {'tx': 'tx$3KVbfQyL3812oUXuaKFrU35yh918LtZS9vSX3xkkyCCQUCReBH3znrhhcKEfv7Et2Unz3Wasec9Ty97xs4VCB3k2GBjhp1bHtYuNcD1JVKCbvfY68JyiVcCzdQJh1SfDtjMLxwaJtQGhUbaF2VySaBwFBTKTzHVCL58owtfXzt972GZEGmEtrdyY7Z1NNg25yhrPyAyGvKZY6WV'}
  }
 ```
-Note that this is the same transaction. Responder is to decode the transaction, inspect its contents, sign it, encode
-it and then post it back via a WebSocket message:
+Note that this is the same transaction. Responder is to decode the transaction, inspect its contents,
+```
+$ unpack tx\$3KVbfQyL3812oUXuaKFrU35yh918LtZS9vSX3xkkyCCQUCReBH3znrhhcKEfv7Et2Unz3Wasec9Ty97xs4VCB3k2GBjhp1bHtYuNcD1JVKCbvfY68JyiVcCzdQJh1SfDtjMLxwaJtQGhUbaF2VySaBwFBTKTzHVCL58owtfXzt972GZEGmEtrdyY7Z1NNg25yhrPyAyGvKZY6WV
+{
+  "tag": 50,
+  "version": 1,
+  "initiator": "ak$3cFW2rQBfR77cHDgjKLNu3wsUxH9i6TRjfxe63i4rxtLEKC5HLurQo8Exdd4x6DSdNZr2CbGNJhTY4N9AR9nRL1AkgFec1",
+  "initiatorAmount": 7,
+  "responder": "ak$3SW3AqLeCtCV15qGuosr3jz13VMeZ4PhztWR1ufWUQDQe1BhJ6xJLA2gjcPNHFHrJPzb8nmypsgAH3QXb4F4R97eLRVBmt",
+  "responderAmount": 3,
+  "channelReserve": 2,
+  "lockPeriod": 10,
+  "ttl": 1000,
+  "fee": 1,
+  "nonce": 1
+}
+```
+sign it, encode it
+```
+$ sign tx\$3KVbfQyL3812oUXuaKFrU35yh918LtZS9vSX3xkkyCCQUCReBH3znrhhcKEfv7Et2Unz3Wasec9Ty97xs4VCB3k2GBjhp1bHtYuNcD1JVKCbvfY68JyiVcCzdQJh1SfDtjMLxwaJtQGhUbaF2VySaBwFBTKTzHVCL58owtfXzt972GZEGmEtrdyY7Z1NNg25yhrPyAyGvKZY6WV --file responder_key
+tx$7Uf44dj9jVkgNb4hbCsUamkEL3869mVK5ks4f6Ywi8FBCR4WBrJd6FnVPkpRoV3yU9Y7nqYeGZQ3VfSqvtU5eWJmAUW4dBDyZ68TsgC5kkJn23TMatabo5AowBLBARS2Kji6hEbyta1i1EaKfsj95jcmr4ncKy3VQnur3gDvZpN6sLFSthow7Lh5QDCSVuXzQNhZyTMPayunH7BuWgjEi8FmDJTp2hyR4NeReAaYxFHCD2qZ5kQLzGFHgU9zaydb8X3gB3Bi4fjUoToNmUWTLC9aXF69USSY4SLQZY2C4oV6PbmQTeKdFoahXmmG
+```
+and then post it back via a WebSocket message:
 ```
 {'action': 'responder_signed',
  'payload': {'tx': 'tx$7Uf44dj9jVkgNb4hbCsUamkEL3869mVK5ks4f6Ywi8FBCR4WBrJd6FnVPkpRoV3yU9Y7nqYeGZQ3VfSqvtU5eWJmAUW4dBDyZ68TsgC5kkJn23TMatabo5AowBLBARS2Kji6hEbyta1i1EaKfsj95jcmr4ncKy3VQnur3gDvZpN6sLFSthow7Lh5QDCSVuXzQNhZyTMPayunH7BuWgjEi8FmDJTp2hyR4NeReAaYxFHCD2qZ5kQLzGFHgU9zaydb8X3gB3Bi4fjUoToNmUWTLC9aXF69USSY4SLQZY2C4oV6PbmQTeKdFoahXmmG'}
@@ -228,8 +275,29 @@ The initiator receives a message containing the unsigned transaction
  }
 ```
 
-The initiator is to decode the transaction, inspect its contents, sign it, encode
-it and then post it back via a WebSocket message:
+The initiator is to decode the transaction, inspect its contents,
+```
+$ unpack tx\$3419Kt6y56whdtUfBkefVW6FFJcZd5QFzqroJm42SqSvjehUtyi65yXmMWqXM9pNG6CkPvK9gfFxsqCQFeWhVefNrqLUx1sXJ7xsGjeNPzrWiUwvQjGMfRqGZtT8B9ptrih1CKDa3a3oS9uy1isJ5VbJc1tmtd2orc8CJf6uLiFAF174GKCqyQUp5k1H79DweovYAopZKKxpv8AjKK7h517G24Z3DXuCGoS85wxcFvD5Z3qiFatsZ7BY
+{
+  "tag": 57,
+  "version": 1,
+  "channelId": "B9DYJaD881LseMc9Rqs8jBQpjydos56jrGE75KA351mBjxxh5",
+  "previousRound": 0,
+  "round": 1,
+  "initiator": "ak$3sNNdNdZarHn7LuS4sJgsdQQ1RbFdigZGyvntwjLv2RDu2CyyK7HFkXTAT2rc5dAfKUPFn9XBELRvTocETeGXBRPZWWZMz",
+  "responder": "ak$3VniWz6WzDC1Fvwh2hjHm811Pr3xYQHbLo7S2cmMPM51PtvpQ6CsmMM9CX2REBetFTgE3EnujmvCzSZVEqKe1odeatH43W",
+  "initiatorAmount": 7,
+  "responderAmount": 3,
+  "updates": [],
+  "state": "3QJmnh"
+}
+```
+sign it, encode it
+```
+$ sign tx\$3419Kt6y56whdtUfBkefVW6FFJcZd5QFzqroJm42SqSvjehUtyi65yXmMWqXM9pNG6CkPvK9gfFxsqCQFeWhVefNrqLUx1sXJ7xsGjeNPzrWiUwvQjGMfRqGZtT8B9ptrih1CKDa3a3oS9uy1isJ5VbJc1tmtd2orc8CJf6uLiFAF174GKCqyQUp5k1H79DweovYAopZKKxpv8AjKK7h517G24Z3DXuCGoS85wxcFvD5Z3qiFatsZ7BY --file initiator_key
+tx$2veehmVabgjjKYWnuJ4fyYTucmfuwjgeLoxG3PGnYJexgWZ3GTqkVmEbqVQbUHpnMedBcrPWNMYnoG7qpeZzgggsfg1hj26epuqUL2foog2UfLAiqiT8mU7rdxM6cUJRMzEBYKcQaFJn5MfFbX8vfWSvynMAFSnRkSeLAHno9rsbu1iANBhvVjnbvcikNrTW6XX3qKq1xcQZjCBk1kt7rc3TK6FMcWhV9SEQBKFx29pRDmGXj1FX2evkJWErXB1GKfGdaFQuJNFjR7dz7DYSE6LMCedsq1mP4VAJMXpMJfrfT46wwjd9NxdMzePRt88GGjDtx5UjjjGWDrgRxZWW1qweiDcgDv3qXWKVvcwD
+```
+and then post it back via a WebSocket message:
 
 ```
 {'action': 'update',
@@ -253,11 +321,30 @@ After that the responder receives an update acknowledge message
  'payload': {'tx': 'tx$3419Kt6y56whdtUfBkefVW6FFJcZd5QFzqroJm42SqSvjehUtyi65yXmMWqXM9pNG6CkPvK9gfFxsqCQFeWhVefNrqLUx1sXJ7xsGjeNPzrWiUwvQjGMfRqGZtT8B9ptrih1CKDa3a3oS9uy1isJ5VbJc1tmtd2orc8CJf6uLiFAF174GKCqyQUp5k1H79DweovYAopZKKxpv8AjKK7h517G24Z3DXuCGoS85wxcFvD5Z3qiFatsZ7BY'}
  }
 ```
-
 Please note that this is the same transaction as the one that the initiator
-signed. Responder is to decode it, inspect its contents, sign it, encode
-it and then post it back via a WebSocket message:
-
+signed. Responder is to decode it, inspect its contents,
+```
+$ unpack tx\$3419Kt6y56whdtUfBkefVW6FFJcZd5QFzqroJm42SqSvjehUtyi65yXmMWqXM9pNG6CkPvK9gfFxsqCQFeWhVefNrqLUx1sXJ7xsGjeNPzrWiUwvQjGMfRqGZtT8B9ptrih1CKDa3a3oS9uy1isJ5VbJc1tmtd2orc8CJf6uLiFAF174GKCqyQUp5k1H79DweovYAopZKKxpv8AjKK7h517G24Z3DXuCGoS85wxcFvD5Z3qiFatsZ7BY
+{
+  "tag": 57,
+  "version": 1,
+  "channelId": "B9DYJaD881LseMc9Rqs8jBQpjydos56jrGE75KA351mBjxxh5",
+  "previousRound": 0,
+  "round": 1,
+  "initiator": "ak$3sNNdNdZarHn7LuS4sJgsdQQ1RbFdigZGyvntwjLv2RDu2CyyK7HFkXTAT2rc5dAfKUPFn9XBELRvTocETeGXBRPZWWZMz",
+  "responder": "ak$3VniWz6WzDC1Fvwh2hjHm811Pr3xYQHbLo7S2cmMPM51PtvpQ6CsmMM9CX2REBetFTgE3EnujmvCzSZVEqKe1odeatH43W",
+  "initiatorAmount": 7,
+  "responderAmount": 3,
+  "updates": [],
+  "state": "3QJmnh"
+}
+```
+sign it, encode it
+```
+$ sign tx\$3419Kt6y56whdtUfBkefVW6FFJcZd5QFzqroJm42SqSvjehUtyi65yXmMWqXM9pNG6CkPvK9gfFxsqCQFeWhVefNrqLUx1sXJ7xsGjeNPzrWiUwvQjGMfRqGZtT8B9ptrih1CKDa3a3oS9uy1isJ5VbJc1tmtd2orc8CJf6uLiFAF174GKCqyQUp5k1H79DweovYAopZKKxpv8AjKK7h517G24Z3DXuCGoS85wxcFvD5Z3qiFatsZ7BY --file responder_key
+tx$2veehmVabgjjKYWnuHyWmmqMd7Kh18Ztri56nRBku7kvigr8iFFmKxjmCBNwj7tvzZiDzPt6MZGs1cBQtJEnd8kTVZxkrv7SFeBR9ynWG1JabaH9MCL83HjNbDn8QZMenwb1MM4H2sUYtfy7vxUfjYwTqqQ8oDsF29FJe2vbAHqHLHmnaHB9NTCNdMZUuJAKXB5UH9fr2PGJsKt2SrgZcz4HAaoSZTa1pgAWcM5ESegGBopGDWBGZRA8Wpafyb6NG8rthmVPqPLTud2Z5cia4RZHg4RaDmFQU9dBXaz2EN1CjmpG7U1jVWc6FwXzxKSEDo5DaGbs9JRbPs7xLTC8YrLNSfneSdMhVvXTky83
+```
+and then post it back via a WebSocket message:
 ```
 {'action': 'update_ack',
  'payload': {'tx': 'tx$2veehmVabgjjKYWnuHyWmmqMd7Kh18Ztri56nRBku7kvigr8iFFmKxjmCBNwj7tvzZiDzPt6MZGs1cBQtJEnd8kTVZxkrv7SFeBR9ynWG1JabaH9MCL83HjNbDn8QZMenwb1MM4H2sUYtfy7vxUfjYwTqqQ8oDsF29FJe2vbAHqHLHmnaHB9NTCNdMZUuJAKXB5UH9fr2PGJsKt2SrgZcz4HAaoSZTa1pgAWcM5ESegGBopGDWBGZRA8Wpafyb6NG8rthmVPqPLTud2Z5cia4RZHg4RaDmFQU9dBXaz2EN1CjmpG7U1jVWc6FwXzxKSEDo5DaGbs9JRbPs7xLTC8YrLNSfneSdMhVvXTky83'}
@@ -347,7 +434,34 @@ off-chain transaction
     'tx': 'tx$21uV5so71tzLyBzTGBd5qd318n8Z33ninWoJzuBBKa3y3cLv8jL1gBsUpwoT1Wzs57fpxgxk7asMpuxcKpYxRnH1Qk679DjPUjLx3Lu6eNnPnfDwb4NpMq5tmm1Sq1j4MLfi6mFLadQ4CyuiENcytACQgkiU2CP8jWHKDCxAprKxP7EnXRKGbyaXkQRjvxmd5BK5XpnPHMoLb4zrrQfex5Wi8SkJjxWrhRyTr7u8jqyyebVPYmz3iRnnoEHfiECzBLdAYBz12U4VgUNrYug8C3ns5GcB1ytaUmggpDGY4K97dyYR8aMorFfqY6rPjwpRoL1BjbJgUBw54VVgMEijfeVCNcyw8wrVJnZeUAQKSesJcPhWShY717GVeQfGGHLzJhTY7iYBUUQCLfoVms86jJ3vMo1d9DpnahpCXfrZeR2PExg8Cn9DXc'}
 }
 ```
-The starter is to decode the transaction, inspect its contents, sign it, encode
+The starter is to decode the transaction, inspect its contents,
+```
+$ unpack tx\$21uV5so71tzLyBzTGBd5qd318n8Z33ninWoJzuBBKa3y3cLv8jL1gBsUpwoT1Wzs57fpxgxk7asMpuxcKpYxRnH1Qk679DjPUjLx3Lu6eNnPnfDwb4NpMq5tmm1Sq1j4MLfi6mFLadQ4CyuiENcytACQgkiU2CP8jWHKDCxAprKxP7EnXRKGbyaXkQRjvxmd5BK5XpnPHMoLb4zrrQfex5Wi8SkJjxWrhRyTr7u8jqyyebVPYmz3iRnnoEHfiECzBLdAYBz12U4VgUNrYug8C3ns5GcB1ytaUmggpDGY4K97dyYR8aMorFfqY6rPjwpRoL1BjbJgUBw54VVgMEijfeVCNcyw8wrVJnZeUAQKSesJcPhWShY717GVeQfGGHLzJhTY7iYBUUQCLfoVms86jJ3vMo1d9DpnahpCXfrZeR2PExg8Cn9DXc
+{
+  "tag": 57,
+  "version": 1,
+  "channelId": "YXnuxqsGsB4zqJ8TMKXMsLPU47mxfa2GABVJTgHFcZjLUXVjj",
+  "previousRound": 1,
+  "round": 2,
+  "initiator": "ak$3NhyLDtcKQUdT9mM8H9iSUitVHEHF4YUKMRjbYcLhnLpT6XBpy53H6cbjZ51QE4Yy6uUgVndeRG2MHavtDYDUaT5hcohaW",
+  "responder": "ak$3eevQ3JknpV4gSpZyVWBSnbePfZhFLXuWFjFw8AfudCh92vfw3mn8at7G1eyWkmVFSnXQSqaiyTwKr2dxGyrTUvGqPEeNt",
+  "initiatorAmount": 5,
+  "responderAmount": 5,
+  "updates": [
+    [
+      "ak$3NhyLDtcKQUdT9mM8H9iSUitVHEHF4YUKMRjbYcLhnLpT6XBpy53H6cbjZ51QE4Yy6uUgVndeRG2MHavtDYDUaT5hcohaW",
+      "ak$3eevQ3JknpV4gSpZyVWBSnbePfZhFLXuWFjFw8AfudCh92vfw3mn8at7G1eyWkmVFSnXQSqaiyTwKr2dxGyrTUvGqPEeNt",
+      2
+    ]
+  ],
+  "state": "3QJmnh"
+}
+```
+sign it, encode
+```
+$ sign tx\$21uV5so71tzLyBzTGBd5qd318n8Z33ninWoJzuBBKa3y3cLv8jL1gBsUpwoT1Wzs57fpxgxk7asMpuxcKpYxRnH1Qk679DjPUjLx3Lu6eNnPnfDwb4NpMq5tmm1Sq1j4MLfi6mFLadQ4CyuiENcytACQgkiU2CP8jWHKDCxAprKxP7EnXRKGbyaXkQRjvxmd5BK5XpnPHMoLb4zrrQfex5Wi8SkJjxWrhRyTr7u8jqyyebVPYmz3iRnnoEHfiECzBLdAYBz12U4VgUNrYug8C3ns5GcB1ytaUmggpDGY4K97dyYR8aMorFfqY6rPjwpRoL1BjbJgUBw54VVgMEijfeVCNcyw8wrVJnZeUAQKSesJcPhWShY717GVeQfGGHLzJhTY7iYBUUQCLfoVms86jJ3vMo1d9DpnahpCXfrZeR2PExg8Cn9DXc
+tx$xCHADUvUikbjGRcBmioKtXFQKpGs7yZHvhkcjByxQDG5xnCpU6YVQs4qyBZL6h18xjTSy1wtUFe8ipKMHLp6VmU2KwLgd4mbUtqELz6w9wV6PGTex6ZS2y7TtqZsDuesGFTZqYET8syCor8kzGjemUkzvwHMJdKsQ5guDWj1C2EcuNR3MnK9heJLbKuf19peGDvijjS8zdCD1pxE4QcsVi9pAGUBCgFyKx8FkDzhv6LxjysuxdmuZqeTGq49s71QdVB74Y1DAQUq5JsH1kyhadFxVepS6FYmcBC4xK8h1sefipPAAVFY7YwNtj2W6U9CTCqSVAQSrpfGAo6322gSneD8aRKoGpQpy1NfxVePKqM5igmd1B6QDGcEYDigBzzNwrXpuYqjrdG5eB6C6ehwAxNskmiudbEuKrjwNL5JzExxrR21L5oQCDc3RMyPdeWJxs8eJfHCrWyzyAwsykV4hVGxddbsbrDWd3re42N5HARXpQG6Gq6aMGnSHJAKbXCWxys4Si6Wjpey7HyEgT1hYoxqtmwEGhW96Ksig --file starter_key
+```
 it and then post it back via a WebSocket message:
 ```
 {'action': 'update',
@@ -373,8 +487,35 @@ off-chain transaction
     }
 }
 ```
-Note that this is the same transaction as the one that the starter had already signed. The acknowledger is to decode the transaction, inspect its contents, sign it, encode
-it and then post it back via a WebSocket message:
+Note that this is the same transaction as the one that the starter had already signed. The acknowledger is to decode the transaction, inspect its contents,
+```
+$ unpack tx\$21uV5so71tzLyBzTGBd5qd318n8Z33ninWoJzuBBKa3y3cLv8jL1gBsUpwoT1Wzs57fpxgxk7asMpuxcKpYxRnH1Qk679DjPUjLx3Lu6eNnPnfDwb4NpMq5tmm1Sq1j4MLfi6mFLadQ4CyuiENcytACQgkiU2CP8jWHKDCxAprKxP7EnXRKGbyaXkQRjvxmd5BK5XpnPHMoLb4zrrQfex5Wi8SkJjxWrhRyTr7u8jqyyebVPYmz3iRnnoEHfiECzBLdAYBz12U4VgUNrYug8C3ns5GcB1ytaUmggpDGY4K97dyYR8aMorFfqY6rPjwpRoL1BjbJgUBw54VVgMEijfeVCNcyw8wrVJnZeUAQKSesJcPhWShY717GVeQfGGHLzJhTY7iYBUUQCLfoVms86jJ3vMo1d9DpnahpCXfrZeR2PExg8Cn9DXc
+{
+  "tag": 57,
+  "version": 1,
+  "channelId": "YXnuxqsGsB4zqJ8TMKXMsLPU47mxfa2GABVJTgHFcZjLUXVjj",
+  "previousRound": 1,
+  "round": 2,
+  "initiator": "ak$3NhyLDtcKQUdT9mM8H9iSUitVHEHF4YUKMRjbYcLhnLpT6XBpy53H6cbjZ51QE4Yy6uUgVndeRG2MHavtDYDUaT5hcohaW",
+  "responder": "ak$3eevQ3JknpV4gSpZyVWBSnbePfZhFLXuWFjFw8AfudCh92vfw3mn8at7G1eyWkmVFSnXQSqaiyTwKr2dxGyrTUvGqPEeNt",
+  "initiatorAmount": 5,
+  "responderAmount": 5,
+  "updates": [
+    [
+      "ak$3NhyLDtcKQUdT9mM8H9iSUitVHEHF4YUKMRjbYcLhnLpT6XBpy53H6cbjZ51QE4Yy6uUgVndeRG2MHavtDYDUaT5hcohaW",
+      "ak$3eevQ3JknpV4gSpZyVWBSnbePfZhFLXuWFjFw8AfudCh92vfw3mn8at7G1eyWkmVFSnXQSqaiyTwKr2dxGyrTUvGqPEeNt",
+      2
+    ]
+  ],
+  "state": "3QJmnh"
+}
+```
+sign it, encode it
+```
+$ sign tx\$21uV5so71tzLyBzTGBd5qd318n8Z33ninWoJzuBBKa3y3cLv8jL1gBsUpwoT1Wzs57fpxgxk7asMpuxcKpYxRnH1Qk679DjPUjLx3Lu6eNnPnfDwb4NpMq5tmm1Sq1j4MLfi6mFLadQ4CyuiENcytACQgkiU2CP8jWHKDCxAprKxP7EnXRKGbyaXkQRjvxmd5BK5XpnPHMoLb4zrrQfex5Wi8SkJjxWrhRyTr7u8jqyyebVPYmz3iRnnoEHfiECzBLdAYBz12U4VgUNrYug8C3ns5GcB1ytaUmggpDGY4K97dyYR8aMorFfqY6rPjwpRoL1BjbJgUBw54VVgMEijfeVCNcyw8wrVJnZeUAQKSesJcPhWShY717GVeQfGGHLzJhTY7iYBUUQCLfoVms86jJ3vMo1d9DpnahpCXfrZeR2PExg8Cn9DXc --file acknowledger_key
+tx$xCHADUvUikbjGRcBmj4YQkTJGCoGV6JQVdJW2FU1ZAYGhdayeCZerGqPWbRz4Eduq1KtjUbBJgdxSF3UKyChKMXne3dEDnChRdiUop4HYkHJ8GF3xQpbSspvST5qPTJqvcCstQCDXmJMLiYiWQ2hoPXL3a1qiiVmSwx2ztVuVqsEf1NsQCbMiNeJj8Uvrcp2FKN8TG2VoMTBTiMcCdLGXhX31EaLYTTDVyFTXGgFRUTdAsHgBjcQzm9hgQS75QjhKY7VtyUBCisUEQp8Dcr76rpdT1Qy9n8JYKboPkFZpY9DVx9We2hstbP3fjgZVLgDRAvLoC5YppVE7GZgUbRp6PMmbPUyc3qFYaxA82g7TzndipqnrKuuGzDjoPaM2w5evx1TvXAF5u1beac2kW7kJyKjLfLhjKQ8bnwBwcZ3WpdRfCVe55LtPwYEoZQJtdzojjVcuLmgJjbb2GDHioi8KXTasHre5oZKwkyYByMqzDafVTMT3kJqvdQG6HKAm8XGP6LGRsZFcpkn5jGtGbq7PRpTbAn1RbHWvRAEH
+```
+and then post it back via a WebSocket message:
 ```
 {'action': 'update_ack',
  'payload': {
@@ -430,8 +571,26 @@ Then the starter receives a `channel_close_mutual_tx` to sign:
     }
 }
 ```
-Starter is to decode the transaction, inspect its contents, sign it, encode
-it and then post it back via a WebSocket message:
+Starter is to decode the transaction, inspect its contents,
+```
+$ unpack tx\$2C9etiP9wZr2iQVj6BUYk5sxHVNgcVhK4ngwv7fjsnnj2S1przQggcqyfhfJGgMPkpzoDfBZM7SyxVQykUCHvJw2N7E5gWSMuiuGjL4fYYUAXkEeyJygCAqKiszgqz8RuBDAfyCX44SsC5Ev1KU84jkui5EVxb
+{
+  "tag": 53,
+  "version": 1,
+  "channelId": "2LvsrNZqzei11qdv8PQuDvPD7tro8sgBSjRo5GJPnbmGsmTb6B",
+  "initiatorAmount": 6.377576942165202e+154,
+  "responderAmount": 6,
+  "ttl": 3,
+  "fee": 1000,
+  "nonce": 1
+}
+```
+sign it, encode it
+```
+$ sign tx\$2C9etiP9wZr2iQVj6BUYk5sxHVNgcVhK4ngwv7fjsnnj2S1przQggcqyfhfJGgMPkpzoDfBZM7SyxVQykUCHvJw2N7E5gWSMuiuGjL4fYYUAXkEeyJygCAqKiszgqz8RuBDAfyCX44SsC5Ev1KU84jkui5EVxb --file starter_key
+tx$4L9GSozvWQwFDrkxaT2DZYrXU1sFULxRkpFbKjzAR4XinUwRgFvzm7ct7ZCvq38ZfCUZR73yXHRnd2DURPCmwdj7NarynugJ5JkY5TVN6ZzxVMEs6nsA8Dfu7dA9AoFj3AwaDLdaBuUEXuXTvsLEZy57GCG2v8HLucFkpHRTK63VdG8UNMK429ofMqHo8QyPjdwHYjH43baCSiN21g2hfpL9qWBmGwmcipSKuV5tHKg2aMpURCHM1z1FnRqdosiVM42PJTxSAHv
+```
+and then post it back via a WebSocket message:
 ```
 {'action': 'shutdown_sign',
  'payload': {
@@ -449,8 +608,25 @@ Then the acknowledger receives a `channel_close_mutual_tx` to sign:
     }
 }
 ```
-Note that this is the same transaction. The acknowledger is to decode the transaction, inspect its contents, sign it, encode
-it and then post it back via a WebSocket message:
+Note that this is the same transaction. The acknowledger is to decode the transaction, inspect its contents,
+```
+$ unpack tx\$2C9etiP9wZr2iQVj6BUYk5sxHVNgcVhK4ngwv7fjsnnj2S1przQggcqyfhfJGgMPkpzoDfBZM7SyxVQykUCHvJw2N7E5gWSMuiuGjL4fYYUAXkEeyJygCAqKiszgqz8RuBDAfyCX44SsC5Ev1KU84jkui5EVxb
+{
+  "tag": 53,
+  "version": 1,
+  "channelId": "2LvsrNZqzei11qdv8PQuDvPD7tro8sgBSjRo5GJPnbmGsmTb6B",
+  "initiatorAmount": 6.377576942165202e+154,
+  "responderAmount": 6,
+  "ttl": 3,
+  "fee": 1000,
+  "nonce": 1
+}
+```
+sign it, encode it
+```
+$ sign tx\$2C9etiP9wZr2iQVj6BUYk5sxHVNgcVhK4ngwv7fjsnnj2S1przQggcqyfhfJGgMPkpzoDfBZM7SyxVQykUCHvJw2N7E5gWSMuiuGjL4fYYUAXkEeyJygCAqKiszgqz8RuBDAfyCX44SsC5Ev1KU84jkui5EVxb --file acknowledger_key
+```
+and then post it back via a WebSocket message:
 ```
 {'action': 'shutdown_sign_ack',
  'payload': {
@@ -565,4 +741,3 @@ details:
             }
 }
 ```
-
