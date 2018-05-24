@@ -30,6 +30,7 @@ e.g.
 
 ```
 Account(initiator).balance := Account(initiator).balance - initiator_amount
+
 Account(responder).balance := Account(responder).balance - responder_amount
 
 Channel(cid).amount := initiator_amount + responder_amount
