@@ -46,7 +46,8 @@ Serialization defined [here](../serializations.md#channel-create-transaction)
 - `fee`
 - `nonce`
 
-Peers will want to set the `ttl` to a value greater than zero, to avoid
+The `ttl` is in absolute chain height. The involved parties will want
+to set the `ttl` to a value quite a bit larger than the present chain height, to avoid
 uncertainty. If the fees included are low and transaction pressure is high,
 then the transaction might end up being stuck in the mempool for an extended
 period.
@@ -58,6 +59,7 @@ The `fee` and `nonce` refer to the `initiator` account, i.e. the `fee` MUST be t
 #### Requirements
 
 `Account(initiator).balance >= initiator_amount + fee`
+`Account(responder).balance >= responder_amount`
 `initiator_amount >= channel_reserve`
 `responder_amount >= channel_reserve`
 
