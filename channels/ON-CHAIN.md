@@ -69,11 +69,17 @@ The `fee` and `nonce` refer to the `initiator` account, i.e. the `fee` MUST be t
 
 ## Updating channel on-chain
 
-An update to an open channel requires the signatures of all participants.
+An update to an open channel requires the signatures of all
+participants and a channel identification (`channel_id`).
 
 Both `channel_deposit` and `channel_withdraw` MUST be signed by all involved
 parties, since changing channel balances might change the dynamics of code
 running in a channel.
+
+The `channel_id` is
+[computed](https://github.com/aeternity/epoch/blob/master/apps/aechannel/src/aesc_channels.erl)
+from the public key of the initiator, the nonce of the create transaction and the public key of the
+responder. 
 
 
 ### `channel_deposit`
