@@ -465,6 +465,32 @@ A                       B
 |                       |
 ```
 
+In case of both parties want to close the channel in agreement and
+there is enough money left in the channel to pay for the fee, then the
+the advised distribution of returning the funds left in the channel is
+as follows:
+
+```
+if initiator_amount + responder_amount < fee
+  return error
+else if initiator_amount >= ceil(fee/2) && responder_amount >= floor(fee/2)
+  initiator_final := initiator_amount - ceil(fee/2)
+  responder_final := responder_amount - floor(fee/2)
+else if responder_amount >= ceil(fee/2) && initiator_amount >= floor(fee/2)
+  responder_final := responder_amount - ceil(fee/2)
+  initiator_final := initiator_amount - floor(fee/2)
+else if initiator_amount > responder_amount
+  initiator_final := initiator_amount - fee + responder_amount
+  responder_final := 0.0
+else
+  responder_final := responder_amount - fee + initiator_amount
+  initiator_final := 0.0
+  ```
+
+This means that one of the parties will propose these final amounts in the
+closing transaction and the other, also following this advise, will
+happily sign it.
+
 
 ### `shutdown`
 
