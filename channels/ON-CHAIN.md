@@ -149,28 +149,11 @@ Serialization defined [here](../serializations.md#channel-close-mutual-transacti
 - `nonce`: taken from the `initiator` account
 
 `initiator_amount` and `responder_amount` are the agreed upon distribution of
-coins. To get the final outcome of the channel, the fees have to get accounted
-for. It is advised that peers choose an even amount, otherwise one peer will end
-up paying more, although this should not be an issue in practice.
-
-```
-if initiator_amount + responder_amount < fee
-  return error
-else if initiator_amount >= ceil(fee/2) && responder_amount >= floor(fee/2)
-  initiator_final := initiator_amount - ceil(fee/2)
-  responder_final := responder_amount - floor(fee/2)
-else if responder_amount >= ceil(fee/2) && initiator_amount >= floor(fee/2)
-  responder_final := responder_amount - ceil(fee/2)
-  initiator_final := initiator_amount - floor(fee/2)
-else if initiator_amount > responder_amount
-  initiator_final := initiator_amount - fee + responder_amount
-  responder_final := 0.0
-else
-  responder_final := responder_amount - fee + initiator_amount
-  initiator_final := 0.0
-```
-
-
+tokens. The initiator's account is returned the `initiator_amount` and
+the responder's account is returned `responder_amount`. The channel
+must have enough total to pay for the fee as well as the agreed
+amounts. The total of a channel is computed by adding the amounts of
+the initiator and responder (before the close).
 
 #### Requirements
 
@@ -179,6 +162,8 @@ This transaction MUST have valid signatures of all involved parties.
 After this transaction has been included in a block, the channel MUST be
 considered closed and allow no further modifications.
 
+`channel total == 
+  transcation initiator_amount + responder_amount + fee`
 
 ### `channel_close_solo`
 
