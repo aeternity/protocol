@@ -421,6 +421,8 @@ purging them from the tree.
 ]
 ```
 
+The payload is a serialized signed channel offchain transaction.
+
 #### Channel slash transaction
 ```
 [ <channel_id>      , binary()
@@ -431,6 +433,8 @@ purging them from the tree.
 , <nonce>           , int()
 ]
 ```
+
+The payload is a serialized signed channel offchain transaction.
 
 #### Channel settle transaction
 ```
@@ -445,6 +449,11 @@ purging them from the tree.
 ```
 
 #### Channel offchain transaction
+
+The channel offchain transaction is not included directly in the transaction tree but indirectly as payload of:
+* The channel close solo transaction;
+* The channel slash transaction.
+
 ```
 [ <channel_id>       , binary()
 , <previous_round>   , int()
@@ -453,7 +462,7 @@ purging them from the tree.
 , <responder>        , binary()
 , <initiator_amount> , int()
 , <responder_amount> , int()
-, <updates>          , [{binary(), binary() ,int()}]
+, <updates>          , [{int(), binary(), binary(), int()}]
 , <state>            , binary()
 ]
 ```
