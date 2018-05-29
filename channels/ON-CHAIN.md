@@ -159,7 +159,7 @@ This transaction MUST have valid signatures of all involved parties.
 After this transaction has been included in a block, the channel MUST be
 considered closed and allow no further modifications.
 
-`channel initiator_amount + responder_amount == 
+`channel total == 
   transcation initiator_amount + responder_amount + fee`
 
 ### `channel_close_solo`
