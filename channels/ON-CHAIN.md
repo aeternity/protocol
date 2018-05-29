@@ -76,11 +76,14 @@ Both `channel_deposit` and `channel_withdraw` MUST be signed by all involved
 parties, since changing channel balances might change the dynamics of code
 running in a channel.
 
-The `channel_id` is
-[computed](https://github.com/aeternity/epoch/blob/master/apps/aechannel/src/aesc_channels.erl)
-from the public key of the initiator, the nonce of the create transaction and the public key of the
-responder. 
+The `channel_id` is computed from the public key of the initiator, the
+nonce of the create transaction and the public key of the responder
+using Blake2b (256 bits digest).
 
+```
+channel_id = Blake2b(initiator || channel_create_tx_nonce || responder)
+                        32                  32                  32
+```
 
 ### `channel_deposit`
 
