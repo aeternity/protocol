@@ -121,6 +121,7 @@ subsequent sections divided by object.
 | Channel settle transaction | 56 |
 | Channel off chain transaction | 57 |
 | Channel | 58 |
+| POI | 60 |
 
 #### Accounts
 ```
@@ -480,3 +481,23 @@ The channel offchain transaction is not included directly in the transaction tre
 , <closes_at>       , int()
 ]
 ```
+
+#### Proof of inclusion on state trees (POI)
+```
+[ {<accounts>  , [{binary(), [{binary(), [binary()]}]}]}
+, {<calls>     , [{binary(), [{binary(), [binary()]}]}]}
+, {<channels>  , [{binary(), [{binary(), [binary()]}]}]}
+, {<contracts> , [{binary(), [{binary(), [binary()]}]}]}
+, {<ns>        , [{binary(), [{binary(), [binary()]}]}]}
+, {<oracles>   , [{binary(), [{binary(), [binary()]}]}]}
+]
+```
+
+Each field is the representation of a subtree to the top level tree. The serialization should be interpreted as
+```
+{<tree>, [<proof_of_inclusion>]}
+where
+<proof_of_inclusion> := [{<root_hash>, [{<mpt_hash>, <mpt_value>}]}]
+```
+where `[{<mpt_hash>, <mpt_value>}]` is the sorted list of Merkel Patricia Tree nodes in the proof. If the subtree is empty,
+the serialization is just `[]`, and otherwise it is a list of one element `[<proof_of_inclusion>]`.
