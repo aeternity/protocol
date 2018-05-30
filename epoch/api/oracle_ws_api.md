@@ -22,8 +22,9 @@ The WebSocket API provides five different actions:
   | query_format | string |  | Yes |
   | response_format | string |  | Yes |
   | query_fee | number |  | Yes |
-  | ttl | object - [TTL](#ttl) |  | Yes |
+  | oracle_ttl | object - [TTL](#ttl) |  | Yes |
   | fee | number |  | Yes |
+  | ttl | number |  | Yes |
 
 ### Response
  * **origin:** `oracle`
@@ -46,8 +47,9 @@ Request:
               "query_format":"the query spec",
               "response_format":"the response spec",
               "query_fee":4,
-              "ttl":{"type":"delta", "value":50},
-              "fee":5}
+              "oracle_ttl":{"type":"delta", "value":50},
+              "fee":5
+              "ttl":1234}
   }
 
 Response:
@@ -70,8 +72,9 @@ Response:
   | ---- | ---- | ----------- | -------- |
   | type | `OracleExtendTxObject` | | Yes |
   | vsn | number | | No |
-  | ttl | object - [RelativeTTL](#relativettl) |  | Yes |
+  | oracle_ttl | object - [RelativeTTL](#relativettl) |  | Yes |
   | fee | number |  | Yes |
+  | ttl | number |  | Yes |
 
 ### Response
  * **origin:** `oracle`
@@ -91,8 +94,9 @@ Request:
    "action":"extend",
    "payload":{"type":"OracleExtendTxObject",
               "vsn":1,
-              "ttl":{"type":"delta", "value":50},
-              "fee":2}
+              "oracle_ttl":{"type":"delta", "value":50},
+              "fee":2,
+              "ttl":1234}
   }
 
 Response:
@@ -121,6 +125,7 @@ Response:
   | query_ttl | object - [TTL](#ttl) |  | Yes |
   | response_ttl | object - [RelativeTTL](#relativettl) |  | Yes |
   | fee | number |  | Yes |
+  | ttl | number |  | Yes |
 
 ### Response
  * **origin:** `oracle`
@@ -145,6 +150,7 @@ Request:
               "query_ttl":{"type":"delta", "value":10},
               "response_ttl":{"type":"delta", "value":10},
               "fee":7,
+              "ttl":1234,
               "query":"How are you?"
               }
   }
@@ -171,7 +177,8 @@ Response:
   | vsn | number | | No |
   | query_id | string |  | No |
   | response | string |  | No |
-  | fee | long |  | No |
+  | fee | number |  | No |
+  | ttl | number |  | Yes |
 
 ### Response
  * **origin:** `oracle`
@@ -193,6 +200,7 @@ Request:
               "vsn":1,
               "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr",
               "fee":4,
+              "ttl":1234,
               "response":"I am fine, thanks!"}
   }
 

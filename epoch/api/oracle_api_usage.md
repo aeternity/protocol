@@ -44,7 +44,7 @@ connected (press CTRL+C to quit)
 Once the account has a positive balance we can post an _"Oracle register transaction"_:
 ```
 ...
-> {"target":"oracle", "action":"register", "payload":{"type":"OracleRegisterTxObject", "vsn":1, "account":"ak$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF", "query_format":"the query spec", "response_format":"the response spec", "query_fee":4, "ttl":{"type":"delta", "value":50}, "fee":5}}
+> {"target":"oracle", "action":"register", "payload":{"type":"OracleRegisterTxObject", "vsn":1, "account":"ak$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF", "query_format":"the query spec", "response_format":"the response spec", "query_fee":4, "oracle_ttl":{"type":"delta", "value":50}, "fee":5, "ttl":1234}}
 < {"action":"register","origin":"oracle","tag":"untagged","payload":{"result":"ok","oracle_id":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF","tx_hash":"th$26iUqaRt4s1ydAF8z7WDeM4FhCqwEu5TbWTCazYFsPY8Le8Upq"}}
 ```
 
@@ -70,7 +70,7 @@ with the given id receives a query. Of course we want to test this, so let us
 post a query...
 ```
 ...
-> {"target":"oracle", "action":"query", "payload":{"type":"OracleQueryTxObject", "vsn":1, "oracle_pubkey":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":7, "query":"How are you?"}}
+> {"target":"oracle", "action":"query", "payload":{"type":"OracleQueryTxObject", "vsn":1, "oracle_pubkey":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":7, "ttl":1234, "query":"How are you?"}}
 < {"action":"query","origin":"oracle","tag":"tagged","payload":{"result":"ok","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","tx_hash":"th$fCRXecXPDoYhKF5NaVdYL3ZbMMsJrUCKb18LJYCYuzRTT79mV"}}
 ```
 
@@ -108,7 +108,7 @@ well, so let us post a response to the query.
 
 ```
 ...
-> {"target":"oracle", "action":"response", "payload":{"type":"OracleResponseTxObject", "vsn":1, "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr", "fee":3, "response":"I am fine, thanks!"}}
+> {"target":"oracle", "action":"response", "payload":{"type":"OracleResponseTxObject", "vsn":1, "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr", "fee":3, "ttl":1234, "response":"I am fine, thanks!"}}
 < {"action":"response","origin":"oracle","tag":"tagged","payload":{"result":"ok","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","tx_hash":"th$2mUjNg9VLztPC1DLSckdA6P4vPffC6xtAQNoHtYbtoHAd4yXuw"}}
 ```
 
