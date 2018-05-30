@@ -366,59 +366,59 @@ purging them from the tree.
 
 #### Channel create transaction
 ```
-[ <initiator>        , binary()
-, <initiator_amount> , int()
-, <responder>        , binary()
-, <responder_amount> , int()
-, <channel_reserve>  , int()
-, <lock_period>      , int()
-, <ttl>              , int()
-, <fee>              , int()
-, <nonce>            , int()
+[ <initiator>        :: binary()
+, <initiator_amount> :: int()
+, <responder>        :: binary()
+, <responder_amount> :: int()
+, <channel_reserve>  :: int()
+, <lock_period>      :: int()
+, <ttl>              :: int()
+, <fee>              :: int()
+, <nonce>            :: int()
 ]
 ```
 
 #### Channel deposit transaction
 ```
-[ <channel_id> , binary()
-, <from>       , binary()
-, <amount>     , int()
-, <ttl>        , int()
-, <fee>        , int()
-, <nonce>      , int()
+[ <channel_id> :: binary()
+, <from>       :: binary()
+, <amount>     :: int()
+, <ttl>        :: int()
+, <fee>        :: int()
+, <nonce>      :: int()
 ]
 ```
 
 #### Channel withdraw transaction
 ```
-[ <channel_id> , binary()
-, <to>         , binary()
-, <amount>     , int()
-, <ttl>        , int()
-, <fee>        , int()
-, <nonce>      , int()
+[ <channel_id> :: binary()
+, <to>         :: binary()
+, <amount>     :: int()
+, <ttl>        :: int()
+, <fee>        :: int()
+, <nonce>      :: int()
 ]
 ```
 
 #### Channel close mutual transaction
 ```
-[ <channel_id>      , binary()
-, <initiator_amount>, int()
-, <responder_amount>, int()
-, <ttl>             , int()
-, <fee>             , int()
-, <nonce>           , int()
+[ <channel_id>       :: binary()
+, <initiator_amount> :: int()
+, <responder_amount> :: int()
+, <ttl>              :: int()
+, <fee>              :: int()
+, <nonce>            :: int()
 ]
 ```
 
 #### Channel close solo transaction
 ```
-[ <channel_id>      , binary()
-, <from>            , binary()
-, <payload>         , binary()
-, <ttl>             , int()
-, <fee>             , int()
-, <nonce>           , int()
+[ <channel_id>      :: binary()
+, <from>            :: binary()
+, <payload>         :: binary()
+, <ttl>             :: int()
+, <fee>             :: int()
+, <nonce>           :: int()
 ]
 ```
 
@@ -426,12 +426,12 @@ The payload is a serialized signed channel offchain transaction.
 
 #### Channel slash transaction
 ```
-[ <channel_id>      , binary()
-, <from>            , binary()
-, <payload>         , binary()
-, <ttl>             , int()
-, <fee>             , int()
-, <nonce>           , int()
+[ <channel_id>      :: binary()
+, <from>            :: binary()
+, <payload>         :: binary()
+, <ttl>             :: int()
+, <fee>             :: int()
+, <nonce>           :: int()
 ]
 ```
 
@@ -439,13 +439,13 @@ The payload is a serialized signed channel offchain transaction.
 
 #### Channel settle transaction
 ```
-[ <channel_id>      , binary()
-, <from>            , binary()
-, <initiator_amount>, int()
-, <responder_amount>, int()
-, <ttl>             , int()
-, <fee>             , int()
-, <nonce>           , int()
+[ <channel_id>       :: binary()
+, <from>             :: binary()
+, <initiator_amount> :: int()
+, <responder_amount> :: int()
+, <ttl>              :: int()
+, <fee>              :: int()
+, <nonce>            :: int()
 ]
 ```
 
@@ -456,29 +456,29 @@ The channel offchain transaction is not included directly in the transaction tre
 * The channel slash transaction.
 
 ```
-[ <channel_id>       , binary()
-, <previous_round>   , int()
-, <round>            , int()
-, <initiator>        , binary()
-, <responder>        , binary()
-, <initiator_amount> , int()
-, <responder_amount> , int()
-, <updates>          , [{int(), binary(), binary(), int()}]
-, <state>            , binary()
+[ <channel_id>       :: binary()
+, <previous_round>   :: int()
+, <round>            :: int()
+, <initiator>        :: binary()
+, <responder>        :: binary()
+, <initiator_amount> :: int()
+, <responder_amount> :: int()
+, <updates>          :: [{int(), binary(), binary(), int()}]
+, <state>            :: binary()
 ]
 ```
 
 #### Channel
 ```
-[ <id>              , binary()
-, <initiator>       , binary()
-, <responder>       , binary()
-, <total_amount>    , int()
-, <initiator_amount>, int()
-, <channel_reserve> , int()
-, <round>           , int()
-, <lock_period>     , int()
-, <closes_at>       , int()
+[ <id>               :: binary()
+, <initiator>        :: binary()
+, <responder>        :: binary()
+, <total_amount>     :: int()
+, <initiator_amount> :: int()
+, <channel_reserve>  :: int()
+, <round>            :: int()
+, <lock_period>      :: int()
+, <closes_at>        :: int()
 ]
 ```
 
