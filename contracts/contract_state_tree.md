@@ -62,3 +62,7 @@ the latest block only contains the calls in that block.
 The key is `<contract_address><caller_address><caller_nonce><contract_address>`.
 
 See [Call Serialization](../serializations.md#contract-call) for the serialization specification.
+
+Each call includes the caller address and caller nonce that, together,
+correlate the call with the transaction in the block that did the
+call.
