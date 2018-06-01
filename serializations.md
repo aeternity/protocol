@@ -492,5 +492,9 @@ The channel offchain transaction is not included directly in the transaction tre
 , {<oracles>   :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), [<mpt_value> :: binary()]}]}]}
 ]
 ```
-NOTE: `[{<mpt_hash>, <mpt_value>}]` is the sorted list of Merkle Patricia Tree nodes in the proof. If the subtree is empty,
-the serialization is just `[]`, and otherwise it is a list of one element `[<proof_of_inclusion>]`.
+
+NOTE: `[{<mpt_hash>, <mpt_value>}]` is the sorted list of Merkle Patricia Tree nodes in the proof.
+If the subtree (e.g. `<accounts>`) is empty,
+then the serialization is just `[]` (e.g. `<accounts>` is `[]`);
+otherwise it is a list of one element `[<proof_of_inclusion>]`
+(e.g. `<accounts>` is `[{<root_hash>, [{<mpt_hash>, <mpt_value>}, {<mpt_hash>, <mpt_value>}]}]`).
