@@ -498,3 +498,7 @@ If the subtree (e.g. `<accounts>`) is empty,
 then the serialization is just `[]` (e.g. `<accounts>` is `[]`);
 otherwise it is a list of one element `[<proof_of_inclusion>]`
 (e.g. `<accounts>` is `[{<root_hash>, [{<mpt_hash>, <mpt_value>}, {<mpt_hash>, <mpt_value>}]}]`).
+
+NOTE: As the POI contains the Merkle Patricia Tree nodes (e.g. not only their hashes):
+* Each state subtree does not necessarily contain elements of the same key length.
+* The key used for storing each object in each state subtree is not necessarily derived from the object itself.
