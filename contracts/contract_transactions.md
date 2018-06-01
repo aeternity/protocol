@@ -10,11 +10,11 @@ Contract transactions are of four types:
 A contract is also a normal account with a balance,
 and the normal spend transaction can be applied to the account.
 
-When a contract is createad or called, the miner checks that the
+When a contract is created or called, the miner checks that the
 creator/caller has gas*gas_price (*10^-18) aeons in the account.
 
 The execution of the call will use a certain amount of gas up to
-the maximum given, that amount is decduced from the caller's
+the maximum given, that amount is deducted from the caller's
 account and added to the miner's account.
 
 ### Create Contract Transaction
@@ -70,17 +70,17 @@ subtracted from the owner account.
 
 The amount will be added to the contract account.
 
-The fee will added to the miners account.
+The fee will added to the miner account.
 
 The deposit will be "held by the contract" until it is deactivated.
 
 The vm_version defines both the virtual machine used for the byte code of the contract
 and the binary interface/calling convention used by the contract. The version codes are
-listed in the VM description 
+listed in the VM description.
 
 If the initial call fails (runs out of gas) the contract is not
 created.  The owner loses the fee and the gas (to the miner) but the
-amount and the deposit are return to the owner.
+amount and the deposit are returned to the owner.
 
 The miner will add the new created contract address, the contract state
 and the return data from the initial call to the state tree (if the
@@ -89,8 +89,8 @@ init succeeds).
 
 ### Attach Contract Transaction
 
-Attach contract code to an existing accont.
-In this case owner == the acount addrres and no new account will be created,
+Attach contract code to an existing account.
+In this case owner == the account address and no new account will be created,
 all other fields are as in create contract.
 
 
@@ -144,7 +144,7 @@ The transaction contains:
 The transaction has to be signed with the private key of the caller.
 
 The call_data is encoded in accordance with the contract language ABI.
-(See e.g. the Ring ABI.)
+(See e.g. the Sophia ABI.)
 
 The miner will add the return data and the state of the call to the state
 tree.
