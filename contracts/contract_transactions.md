@@ -144,7 +144,7 @@ The transaction contains:
 The transaction has to be signed with the private key of the caller.
 
 The call_data is encoded in accordance with the contract language ABI.
-(See e.g. the Ring ABI.)
+(See e.g. the Sophia ABI.)
 
 The miner will add the return data and the state of the call to the state
 tree.
