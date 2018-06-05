@@ -19,9 +19,9 @@ key, an '@' character, the hostname or IP number, a ':' character and the Noise
 port number the node is using. If the address contains a hostname, it will be
 resolved to an IP. Example:
 
-'''
+```
 aenode://pp$HryRGHJ7Ct3trkktVyVBgfhHL1J4EYSD9cScuMZDV61eSHrCZ@mynode.example.com:3015
-'''
+```
 
 A node is uniquely identified by its public key, and it can only have one IP and
 port at the same time. This means one IP can have several instanced of Epoch
@@ -297,20 +297,20 @@ subset.
 
 For the unverified bucket selection:
 
-'''Erlang
+```Erlang
 <<N1:160>> = crypto:hash(sha, <<Secret/binary, PeerGroup/binary>>).
 <<N2:160>> = crypto:hash(sha, <<Secret/binary, PeerAddress/binary>>).
 <<N3:160>> = crypto:hash(sha, <<Secret/binary, SourceGroup/binary, (N1 rem 16):8, (N2 rem 4):8>>).
 BucketIdx = N3 rem 1024.
-'''
+```
 
 For the verified bucket selection:
 
-'''Erlang
+```Erlang
 <<N1:160>> = crypto:hash(sha, <<Secret/binary, PeerAddress/binary>>).
 <<N2:160>> = crypto:hash(sha, <<Secret/binary, PeerGroup/binary, (N1 rem 8):8>>).
 BucketIdx = N2 rem 256.
-'''
+```
 
 #### Persistence
 
