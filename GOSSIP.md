@@ -24,15 +24,15 @@ aenode://pp$HryRGHJ7Ct3trkktVyVBgfhHL1J4EYSD9cScuMZDV61eSHrCZ@mynode.example.com
 ```
 
 A node is uniquely identified by its public key, and it can only have one IP and
-port at the same time. This means one IP can have several instanced of Epoch
+port at the same time. This means one IP can have several instances of Epoch
 started at the same time listening on different ports if they have different
 public keys. This key corresponds to the private key that is used for the Noise
 protocol listener associated with the IP and port.
 
 Apart from being used in encryption via the Noise protocol, the public key is
 also used to determine which node should keep its initiated connection open in
-case two connections are opened (see [Gossiping of New Peers](#gossiping-of-new-
-peers)).
+case two connections are opened (see
+[Gossiping of New Peers](#gossiping-of-new-peers)).
 
 ### Gossiping of New Peers
 
@@ -114,7 +114,7 @@ should probably be disabled.
 
 ### Connections
 
-There is two pool of connections, inbound connection and outbound connections.
+There are two pools of connections, inbound connection and outbound connections.
 
 Both inbound and outbound connections are used for mempool, gossip and sync
 protocol; but only outbound connections are used for relaying new blocks to
