@@ -323,8 +323,8 @@ Event:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | hash | string | Hash of the mined block | Yes |
-  | height | number | Height of the mined block | Yes |
+  | hash | string | Hash of the new block | Yes |
+  | height | number | Height of the new block | Yes |
 
 ### Example
 ```
