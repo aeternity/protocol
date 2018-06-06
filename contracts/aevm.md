@@ -2,7 +2,7 @@
 
 The AEVM is a version of the EVM: https://github.com/ethereum/yellowpaper
 
-The AEVM can be emulated inside the Æternity node an no marshaling of
+The AEVM can be emulated inside the Æternity node and no marshaling of
 arguments, code and data is necessary.  This makes for fast upstart
 and faster execution of most smaller contracts.
 
