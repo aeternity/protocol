@@ -94,21 +94,13 @@ Sophia has the following types:
 | tuple      | An ordered heterogeneous array   | ```(42, "Foo", true)```
 | record     | An immutable key value store with fixed key names and typed values | ``` type balance = { owner: address, value: uint } ```
 | map        | An immutable key value store with dynamic mapping of keys of one type to values of one type | ```type accounts = map(string, address)```
-| option('a) | An optional value either None or Some('a) | Some(42) 
-| ---------- | ------------------------------- | -------|
+| option('a) | An optional value either None or Some('a) | ```Some(42)```
 | state        | A record of blockstate key, value pairs  |
 | transactions | An append only list of blockchain transactions |
 | events       | An append only list of blockchain events (or log entries) |
-| ------------ | ------------------------------- | -------|
-| oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  Oracle.register(acct, sign, fee, qfee, ttl)
-| oracle_query('a, 'b) | A specific oracle query |  Oracle.query(o, q, fee, qttl, rttl)
-| -------------------- | ------------------------------- | -------|
+| oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, sign, fee, qfee, ttl)```
+| oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, fee, qttl, rttl)```
 
-
-#### Types not in Sophia
-- Arrays
-- References
-- Objects
 
 ### Algebraic data types
 
@@ -131,6 +123,51 @@ function root(t : tree('a)) : option('a) =
 ```
 
 ### Builtins
+
+#### Oracle interface
+
+```
+Oracle.register(acct : address
+                sign : int,   // Signed account address
+                fee  : int,
+                qfee : int,
+                ttl  : int) : oracle('a, 'b)
+```
+
+```
+Oracle.query_fee(o : oracle(string, int)) : int
+```
+
+```
+Oracle.Query(o    : oracle('a, 'b),
+             q    : 'a,
+             fee  : int,
+             qttl : int,
+             rttl : int) : oracle_query('a, 'b)
+```
+
+```
+  function extendOracle(o    : oracle(string, int),
+                        sign : int,   // Signed oracle address
+                        fee  : int,
+                        ttl  : int) : () =
+    Oracle.extend(o, sign, fee, ttl)
+
+  function respond(o : oracle(string, int), q : oracle_query(string, int), sign : int, r : int) =
+    Oracle.respond(o, q, sign, r)
+
+  function getQuestion(o : oracle(string, int), q : oracle_query(string, int)) : string =
+    Oracle.get_question(o, q)
+
+  function hasAnswer(o : oracle(string, int), q : oracle_query(string, int)) =
+    switch(Oracle.get_answer(o, q))
+      None    => false
+      Some(_) => true
+
+  function getAnswer(o : oracle(string, int), q : oracle_query(string, int)) : option(int) =
+    Oracle.get_answer(o, q)
+```
+
 
 #### Events
 

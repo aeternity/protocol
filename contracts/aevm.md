@@ -24,9 +24,8 @@ The first argument in the call specifies witch primop to call.
 The following arguments are encoded as Sophia data.
 
 | OpNo | Name                |           Arguments | Return value  |
-| ---- | ------------------- | ------------------- | ------------- :
-|    1 | Spend               | Recipient : address | Nil           |
 | ---- | ------------------- | ------------------- | ------------- |
+|    1 | Spend               | Recipient : address | Nil           |
 |  100 | Oracle register     | Acct : address , Sign : signature, QFee : int, TTL : int, QType : typerep, RType : typerep | Oracle : address |
 |  101 | Oracle query        | Oracle : address, Query : `('a,'b)` , QTTL : int, RTTL : int | `query : oracle_query('a, 'b)` |
 |  102 | Oracle respond      | Oracle : address, Query : address , Sign : signature, R : `'a` | () |
@@ -34,7 +33,6 @@ The following arguments are encoded as Sophia data.
 |  104 | Oracle get answer   | Oracle : address, Query : address | `option('b)` |
 |  105 | Oracle get question | Oracle : address, Query : address | `'a` |
 |  106 | Oracle query fee    | Oracle : address    | int           |
-| ---- | ------------------- | ------------------- | ------------- |
 
 ## New instructions
 
