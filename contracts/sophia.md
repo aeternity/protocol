@@ -191,7 +191,7 @@ To respond to an oracle question, use the Oracle.respond function:
 Oracle.respond(o    : oracle('a, 'b),
                q    : oracle_query('a, 'b),
                sign : int,
-               r    : int)
+               r    : 'b)
 ```
 
 
@@ -212,7 +212,7 @@ Oracle.Query(o    : oracle('a, 'b),
 To ask the oracle what the query fee is use the Oracle.query_fee function:
 
 ```
-Oracle.query_fee(o : oracle(string, int)) : int
+Oracle.query_fee(o : oracle('a, 'b)) : int
 ```
 
 ##### Oracle hasAnswer
