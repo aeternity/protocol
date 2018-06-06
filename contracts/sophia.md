@@ -83,20 +83,27 @@ fields as immutable?
 ### Types
 Sophia has the following types:
 
-| Type    | Description                     | Example
-| ------- | ------------------------------- | -------:
-| uint    | A 256 bit integer               | ```42```
-| int     | A 256 bit 2-complement integer  | ```-1```
-| address | A 256 bit number given as a hex | ```ff00```
-| bool    | A Boolean                       | ```true```
-| string  | An array of bytes               | ```"Foo"```
-| list    | A homogeneous immutable singly linked list. | ```[1, 2, 3]```
-| tuple   | An ordered heterogeneous array   | ```(42, "Foo", true)```
-| record  | An immutable key value store with fixed key names and typed values | ``` type balance = { owner: address, value: uint } ```
-| map     | An immutable key value store with dynamic mapping of keys of one type to values of one type | ```type accounts = map(string, address)```
-| state   | A record of blockstate key, value pairs  |
+| Type       | Description                     | Example
+| ---------- | ------------------------------- | -------:
+| uint       | A 256 bit integer               | ```42```
+| int        | A 256 bit 2-complement integer  | ```-1```
+| address    | A 256 bit number given as a hex | ```ff00```
+| bool       | A Boolean                       | ```true```
+| string     | An array of bytes               | ```"Foo"```
+| list       | A homogeneous immutable singly linked list. | ```[1, 2, 3]```
+| tuple      | An ordered heterogeneous array   | ```(42, "Foo", true)```
+| record     | An immutable key value store with fixed key names and typed values | ``` type balance = { owner: address, value: uint } ```
+| map        | An immutable key value store with dynamic mapping of keys of one type to values of one type | ```type accounts = map(string, address)```
+| option('a) | An optional value either None or Some('a) | Some(42) 
+| ---------- | ------------------------------- | -------|
+| state        | A record of blockstate key, value pairs  |
 | transactions | An append only list of blockchain transactions |
-| events   | An append only list of blockchain events (or log entries) |
+| events       | An append only list of blockchain events (or log entries) |
+| ------------ | ------------------------------- | -------|
+| oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  Oracle.register(acct, sign, fee, qfee, ttl)
+| oracle_query('a, 'b) | A specific oracle query |  Oracle.query(o, q, fee, qttl, rttl)
+| -------------------- | ------------------------------- | -------|
+
 
 #### Types not in Sophia
 - Arrays
@@ -545,10 +552,18 @@ Data is encoded in memory as follows:
   - The order of values is unspecified. For instance, in the encoding of a pair
     of boxed values, the three cells (first component, second component, and
     pair cell) can appear in any order in the encoded binary.
-
+  - The option type is encoded as -1 for `None` and as the tuple {4, V} for `Some(V)`.
+  - Type representations are encoded as tuples as follows:
+    - word: {0}  (any unboxed type)
+    - String: {1}
+    - List(T): {2, encode(T)}
+    - Tuple(T): {3, encode(T)}
+    - Option(T): {4, encode(T)}
 - Pointers are relative, with the address of the first word of the data being
   the *base address*. For calldata, the base address is 32 and for return
   values and contract state the base address is 0.
+
+
 
 #### Example
 
