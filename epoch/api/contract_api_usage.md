@@ -18,7 +18,7 @@ For an up to date list of all HTTP API endpoints and their arguments see
 An epoch node provides some utility functions to help you create contract transactions.
 
 
-### Contract Compile 
+### Contract Compile
 [/contract/compile doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/CompileContract)
 
 

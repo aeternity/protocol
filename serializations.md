@@ -145,6 +145,7 @@ Signatures are sorted.
 , <recipient> :: binary()
 , <amount>    :: int()
 , <fee>       :: int()
+, <ttl>       :: int()
 , <nonce>     :: int()
 , <payload>   :: binary()
 ]
@@ -184,6 +185,7 @@ Signatures are sorted.
 , <ttl_type>      :: int()
 , <ttl_value>     :: int()
 , <fee>           :: int()
+, <ttl>           :: int()
 ]
 ```
 
@@ -199,6 +201,7 @@ Signatures are sorted.
 , <response_ttl_type>  :: int()
 , <response_ttl_value> :: int()
 , <fee>                :: int()
+, <ttl>                :: int()
 ```
 
 #### Oracle response transaction
@@ -208,6 +211,7 @@ Signatures are sorted.
 , <query_id> :: binary()
 , <response> :: binary()
 , <fee>      :: int()
+, <ttl>      :: int()
 ]
 ```
 
@@ -218,6 +222,7 @@ Signatures are sorted.
 , <ttl_type>  :: int()
 , <ttl_value> :: int()
 , <fee>       :: int()
+, <ttl>       :: int()
 ]
 ```
 
@@ -271,6 +276,7 @@ purging them from the tree.
 , <code>       :: binary()
 , <vm_version> :: int()
 , <fee>        :: int()
+, <ttl>        :: int()
 , <deposit>    :: int()
 , <amount>     :: int()
 , <gas>        :: int()
@@ -286,6 +292,7 @@ purging them from the tree.
 , <contract>   :: binary()
 , <vm_version> :: int()
 , <fee>        :: int()
+, <ttl>        :: int()
 , <amount>     :: int()
 , <gas>        :: int()
 , <gas_price>  :: int()
@@ -319,6 +326,7 @@ purging them from the tree.
 , <name>      :: binary()
 , <name_salt> :: int()
 , <fee>       :: int()
+, <ttl>       :: int()
 ]
 ```
 
@@ -328,18 +336,20 @@ purging them from the tree.
 , <nonce>      :: int()
 , <commitment> :: binary()
 , <fee>        :: int()
+, <ttl>        :: int()
 ]
 ```
 
 #### Name service update transaction
 ```
-[ <account>  :: binary()
-, <nonce>    :: int()
-, <hash>     :: binary()
-, <name_ttl> :: int()
-, <pointers> :: binary() TODO: This is currently ambigous
-, <ttl>      :: int()
-, <fee>      :: int()
+[ <account>    :: binary()
+, <nonce>      :: int()
+, <hash>       :: binary()
+, <name_ttl>   :: int()
+, <pointers>   :: binary() TODO: This is currently ambigous
+, <client_ttl> :: int()
+, <fee>        :: int()
+, <ttl>        :: int()
 ]
 ```
 
@@ -349,6 +359,7 @@ purging them from the tree.
 , <nonce>   :: int()
 , <hash>    :: binary()
 , <fee>     :: int()
+, <ttl>     :: int()
 ]
 ```
 
@@ -359,6 +370,7 @@ purging them from the tree.
 , <hash>      :: binary()
 , <recipient> :: binary()
 , <fee>       :: int()
+, <ttl>       :: int()
 ]
 ```
 
