@@ -98,6 +98,7 @@ Sophia has the following types:
 | state        | A record of blockstate key, value pairs  |
 | transactions | An append only list of blockchain transactions |
 | events       | An append only list of blockchain events (or log entries) |
+| raw_spend    | Spend an amount from contract to an address | ```raw_spend(address, 1000)```
 | oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, sign, fee, qfee, ttl)```
 | oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, fee, qttl, rttl)```
 
@@ -123,6 +124,12 @@ function root(t : tree('a)) : option('a) =
 ```
 
 ### Builtins
+
+#### Account interface
+
+```
+raw_spend(to : address, amount : integer)
+```
 
 #### Oracle interface
 
