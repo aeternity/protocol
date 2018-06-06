@@ -98,7 +98,6 @@ Sophia has the following types:
 | state        | A record of blockstate key, value pairs  |
 | transactions | An append only list of blockchain transactions |
 | events       | An append only list of blockchain events (or log entries) |
-| raw_spend    | Spend an amount from contract to an address | ```raw_spend(address, 1000)```
 | oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, sign, fee, qfee, ttl)```
 | oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, fee, qttl, rttl)```
 
@@ -127,11 +126,18 @@ function root(t : tree('a)) : option('a) =
 
 #### Account interface
 
+To spend tokens from the contract account to the account "to" you call the raw_spend function.
+
 ```
 raw_spend(to : address, amount : integer)
 ```
 
 #### Oracle interface
+You can attach an oracle to the current contract and you can interact with oracles
+through the Oracle interface.
+
+To register a new oracle answering questions of type `'a` eith answers of type `'b`
+call Oracle.register.
 
 ```
 Oracle.register(acct : address
@@ -140,6 +146,15 @@ Oracle.register(acct : address
                 qfee : int,
                 ttl  : int) : oracle('a, 'b)
 ```
+
+The `acct` is the address of the oracle to register (can be the same as the contract).
+The `sign` is a signature of the address to register proving you have the private key
+of the oracle, or the integer 0 when address is the same as the contract.
+The 'qfee' is the query fee to be paid by a user when asking a question of the oracle.
+The 'ttl' is the Time To Live in relative block height for the oracle.
+The type `'a` is the type of the question to ask.
+The type `'b` is the type of the oracle answers.
+
 
 ```
 Oracle.query_fee(o : oracle(string, int)) : int
