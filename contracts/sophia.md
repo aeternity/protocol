@@ -136,7 +136,18 @@ raw_spend(to : address, amount : integer)
 You can attach an oracle to the current contract and you can interact with oracles
 through the Oracle interface.
 
-To register a new oracle answering questions of type `'a` eith answers of type `'b`
+For a full description of how Oracle works see [Oracles](/oracles/oracles.md#oracles)
+
+An Oracle operator will use the functions `Oracle.register`, `Oracle.getQuestion`,
+`Oracle.respond` and `Oracle.extend`.
+
+An Oracle user will use the functions `Oracle.query_fee`, `Oracle.query`,
+`Oracle.getQuestion`, `Oracle.hasAnswer` and `Oracle.getAnswer`.
+
+
+##### Oracle Register
+
+To register a new oracle answering questions of type `'a` with answers of type `'b`
 call Oracle.register.
 
 ```
@@ -155,10 +166,38 @@ The 'ttl' is the Time To Live in relative block height for the oracle.
 The type `'a` is the type of the question to ask.
 The type `'b` is the type of the oracle answers.
 
+##### Oracle Extend
+To extend the TTL of an oracle, call `Oracle.extend`:
 
 ```
-Oracle.query_fee(o : oracle(string, int)) : int
+Oracle.extend(o    : oracle('a, 'b),
+              sign : int,   // Signed oracle address
+              fee  : int,
+              ttl  : int) : ()
 ```
+
+##### Oracle getQuestion
+To check what the question of a query is use the Oracle.getQuestion function:
+
+
+```
+Oracle.getQuestion(o : oracle('a, 'b), q : oracle_query('a, 'b)) : 'a
+```
+
+##### Oracle respond
+To respond to an oracle question, use the Oracle.respond function:
+
+```
+Oracle.respond(o    : oracle('a, 'b),
+               q    : oracle_query('a, 'b),
+               sign : int,
+               r    : int)
+```
+
+
+##### Oracle query
+To ask an oracle a question, use the Oracle.query function:
+
 
 ```
 Oracle.Query(o    : oracle('a, 'b),
@@ -168,27 +207,23 @@ Oracle.Query(o    : oracle('a, 'b),
              rttl : int) : oracle_query('a, 'b)
 ```
 
-```
-Oracle.extend(o    : oracle('a, 'b),
-              sign : int,   // Signed oracle address
-              fee  : int,
-              ttl  : int) : ()
-```
+
+##### Oracle Query Fee
+To ask the oracle what the query fee is use the Oracle.query_fee function:
 
 ```
-Oracle.respond(o    : oracle('a, 'b),
-               q    : oracle_query('a, 'b),
-               sign : int,
-               r    : int)
+Oracle.query_fee(o : oracle(string, int)) : int
 ```
 
-```
-Oracle.getQuestion(o : oracle('a, 'b), q : oracle_query('a, 'b)) : 'a
-```
+##### Oracle hasAnswer
+To check if a query has been answered use the Oracle.hasAnswer function:
+
 
 ```
 Oracle.hasAnswer(o : oracle('a, 'b), q : oracle_query('a. 'b): bool
 ```
+##### Oracle getAnswer
+To ask the oracle what the query answer is use the Oracle.getAnswer function:
 
 ```
 Oracle.getAnswer(o : oracle('a, 'b), q : oracle_query('a, 'b)) : option('b)
