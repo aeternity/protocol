@@ -23,7 +23,7 @@ Interaction with the first class objects of the Æternity chain (e.g.
 oracles, names, and state channels) is done through calls to a
 built in contract at address 0.
 
-The first argument in the call specifies witch primop to call.
+The first argument in the call specifies which primop to call.
 The following arguments are encoded as Sophia data.
 
 | OpNo | Name                |             Arguments | Return value    |
