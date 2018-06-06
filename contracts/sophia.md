@@ -147,25 +147,29 @@ Oracle.Query(o    : oracle('a, 'b),
 ```
 
 ```
-  function extendOracle(o    : oracle(string, int),
-                        sign : int,   // Signed oracle address
-                        fee  : int,
-                        ttl  : int) : () =
-    Oracle.extend(o, sign, fee, ttl)
+Oracle.extend(o    : oracle('a, 'b),
+              sign : int,   // Signed oracle address
+              fee  : int,
+              ttl  : int) : ()
+```
 
-  function respond(o : oracle(string, int), q : oracle_query(string, int), sign : int, r : int) =
-    Oracle.respond(o, q, sign, r)
+```
+Oracle.respond(o    : oracle('a, 'b),
+               q    : oracle_query('a, 'b),
+               sign : int,
+               r    : int)
+```
 
-  function getQuestion(o : oracle(string, int), q : oracle_query(string, int)) : string =
-    Oracle.get_question(o, q)
+```
+Oracle.getQuestion(o : oracle('a, 'b), q : oracle_query('a, 'b)) : 'a
+```
 
-  function hasAnswer(o : oracle(string, int), q : oracle_query(string, int)) =
-    switch(Oracle.get_answer(o, q))
-      None    => false
-      Some(_) => true
+```
+Oracle.hasAnswer(o : oracle('a, 'b), q : oracle_query('a. 'b): bool
+```
 
-  function getAnswer(o : oracle(string, int), q : oracle_query(string, int)) : option(int) =
-    Oracle.get_answer(o, q)
+```
+Oracle.getAnswer(o : oracle('a, 'b), q : oracle_query('a, 'b)) : option('b)
 ```
 
 
