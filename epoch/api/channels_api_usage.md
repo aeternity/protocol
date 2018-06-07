@@ -55,7 +55,7 @@ in the chain, and the others are metadata used for the connection itself.
   | initiator_amount | integer | amount of tokens the initiator has commited to the channel | Yes | Yes |
   | responder_amount | integer | amount of tokens the responder has commited to the channel | Yes | Yes |
   | channel_reserve | integer | the minimum amount both peers need to maintain | Yes | Yes |
-  | ttl | integer | minimum block height to include the `channel_create_tx` | Yes | Yes |
+  | ttl | integer | minimum block height to include the `channel_create_tx` | No | Yes |
   | host | string | host of the `responder`'s node| Yes | No |
   | port | integer | the port of the `responder`s node| Yes | No |
   | timeouts | object | the maximum lenght of time waiting for the other party to respond in the different states| No | No |
