@@ -51,7 +51,7 @@ The `ttl` is in absolute chain height. The involved parties will want
 to set the `ttl` to a value quite a bit larger than the present chain height, to avoid
 uncertainty. If the fees included are low and transaction pressure is high,
 then the transaction might end up being stuck in the mempool for an extended
-period.
+period. `ttl` is optional, no `ttl` means a transaction that is valid "forever".
 
 The `fee` and `nonce` refer to the `initiator` account, i.e. the `fee` MUST be taken from their balance and the `nonce` of their account MUST be incremented.
 
@@ -162,7 +162,7 @@ This transaction MUST have valid signatures of all involved parties.
 After this transaction has been included in a block, the channel MUST be
 considered closed and allow no further modifications.
 
-`channel total == 
+`channel total ==
   transcation initiator_amount + responder_amount + fee`
 
 ### `channel_close_solo`
