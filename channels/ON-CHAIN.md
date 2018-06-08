@@ -115,9 +115,9 @@ Serialization defined [here](../serializations.md#channel-deposit-transaction)
 Channels should generally not be used to hold significant amounts of tokens but
 being able to withdraw locked tokens might still be of use.
 
-The `from` account MUST be a participant in the target channel. The `amount`
+The `to` account MUST be a participant in the target channel. The `amount`
 MUST be less or equal than the sum of all participants balances, i.e. channels
-cannot create tokens out of thin air. The fee is paid by the `from` account and that
+cannot create tokens out of thin air. The fee is paid by the `to` account and that
 account should hold enough tokens to pay the fee, i.e., the fee is subtracted before
 the withdrawn tokens arrive.
 
@@ -125,11 +125,11 @@ Serialization defined [here](../serializations.md#channel-withdraw-transaction)
 
 
 - `channel_id`: channel id as recorded on chain
-- `from`: receiver of the withdraw
+- `to`: receiver of the withdraw
 - `amount`: amount of tokens withdrawn
 - `ttl`:
 - `fee`:
-- `nonce`: the `from` account nonce
+- `nonce`: the `to` account nonce
 
 
 (***TODO***: should a channel be considered closed if all the tokens are taken from it?)
