@@ -88,7 +88,7 @@ channel_id = Blake2b(initiator || channel_create_tx_nonce || responder)
 ### `channel_deposit`
 
 Depositing funds into a channel after creation should allow channels to be more
-long lived due to the increased ease of balancing them out. The amount of coins
+long lived due to the increased ease of balancing them out. The amount of tokens
 sent along with this transaction will get locked up just like the initial
 deposit.
 
@@ -104,7 +104,7 @@ Serialization defined [here](../serializations.md#channel-deposit-transaction)
 
 - `channel_id`: channel id as recorded on chain
 - `from`: sender of the deposit
-- `amount`: amount of coins deposited
+- `amount`: amount of tokens deposited
 - `ttl`:
 - `fee`:
 - `nonce`: account nonce of the submitter
@@ -112,26 +112,27 @@ Serialization defined [here](../serializations.md#channel-deposit-transaction)
 
 ### `channel_withdraw`
 
-Channels should generally not be used to hold significant amounts of coins but
-being able to withdraw locked coins might still be of use.
+Channels should generally not be used to hold significant amounts of tokens but
+being able to withdraw locked tokens might still be of use.
 
-The `from` account MUST be a participant in the target channel. The `amount`
+The `to` account MUST be a participant in the target channel. The `amount`
 MUST be less or equal than the sum of all participants balances, i.e. channels
-cannot create coins out of thin air.
-
+cannot create tokens out of thin air. The fee is paid by the `to` account and that
+account should hold enough tokens to pay the fee, i.e., the fee is subtracted before
+the withdrawn tokens arrive.
 
 Serialization defined [here](../serializations.md#channel-withdraw-transaction)
 
 
 - `channel_id`: channel id as recorded on chain
-- `from`:
-- `amount`:
+- `to`: receiver of the withdraw
+- `amount`: amount of tokens withdrawn
 - `ttl`:
 - `fee`:
-- `nonce`: the `from` account nonce
+- `nonce`: the `to` account nonce
 
 
-(***TODO***: should a channel be considered closed if all the coins are taken from it?)
+(***TODO***: should a channel be considered closed if all the tokens are taken from it?)
 
 ## Closing channel on-chain
 
