@@ -59,7 +59,7 @@ The calls state tree contains all calls done in the block and their
 return values. The calls state tree is pruned in each block so that
 the latest block only contains the calls in that block.
 
-The key is `<contract_address><caller_address><caller_nonce><contract_address>`.
+The key is `<contract_address>Blake2b(<caller_address><caller_nonce><contract_address>)`, that uses Blake2b (256 bits digest).
 
 See [Call Serialization](../serializations.md#contract-call) for the serialization specification.
 
