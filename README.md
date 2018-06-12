@@ -22,6 +22,8 @@ implemented or considered for implementation.
 
 ## [State Channels](./channels/README.md)
 
+## [Serialization formats](./serializations.md)
+
 ## Epoch
 
 Epoch is the reference implementation of the Aeternity protocol. Since we don't

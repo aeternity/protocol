@@ -51,6 +51,30 @@ domain (e.g., `[int()]` is a list of integers). We use `++` as the
 list concatenation operator. We also use the `bool()` type as the
 special case of the integers `0` and `1` used as the boolean type.
 
+### The id() type
+
+The special type `id()` is a `binary()` denoting a tagged binary
+(e.g., hash or public key) referring to an object in the chain (e.g.,
+account, oracle) . The first byte is a tag denoting which type of
+identifier, and the remaining 32 bytes is the identifier itself. This
+is used to distinguish between identifiers where there can be
+ambiguity.
+
+| Id tag | Identifier type |
+| ---    | ---             |
+| 1      | account         |
+| 2      | name            |
+| 3      | commitment      |
+| 4      | oracle          |
+| 5      | contract        |
+| 6      | channel         |
+
+In Erlang notation, the `id()` type pattern is:
+```
+<<Tag:1/unsigned-integer-unit:8, Hash:32/binary-unit:8>>
+```
+
+
 ### RLP Encoding
 
 We use the Recursive Length Prefix encodng
@@ -76,6 +100,7 @@ minimal number of bytes (i.e., disallow leading zeroes in the encoded
 byte array). Negative integers is not used in the serialization format
 since they are not needed. If the need arises, the scheme should be
 extended.
+
 
 ### Binary serialization
 
@@ -125,8 +150,7 @@ subsequent sections divided by object.
 
 #### Accounts
 ```
-[ <pubkey>  :: binary()
-, <nonce>   :: int()
+[ <nonce>   :: int()
 , <balance> :: int()
 ]
 ```
@@ -141,8 +165,8 @@ Signatures are sorted.
 
 ### Spend transaction
 ```
-[ <sender>    :: binary()
-, <recipient> :: binary()
+[ <sender>    :: id()
+, <recipient> :: id()
 , <amount>    :: int()
 , <fee>       :: int()
 , <ttl>       :: int()
@@ -153,7 +177,7 @@ Signatures are sorted.
 
 #### Oracles
 ```
-[ <owner>           :: binary()
+[ <owner>           :: id()
 , <query_format>    :: binary()
 , <response_format> :: binary()
 , <query_fee>       :: int()
@@ -163,9 +187,9 @@ Signatures are sorted.
 
 #### Oracle queries
 ```
-[ <sender_address> :: binary()
+[ <sender_address> :: id()
 , <sender_nonce>   :: int()
-, <oracle_address> :: binary()
+, <oracle_address> :: id()
 , <query>          :: binary()
 , <has_response>   :: bool()
 , <response>       :: binary()
@@ -177,7 +201,7 @@ Signatures are sorted.
 
 #### Oracle register transaction
 ```
-[ <account>       :: binary()
+[ <account>       :: id()
 , <nonce>         :: int()
 , <query_spec>    :: binary()
 , <response_spec> :: binary()
@@ -191,9 +215,9 @@ Signatures are sorted.
 
 #### Oracle query transaction
 ```
-[ <sender>             :: binary()
+[ <sender>             :: id()
 , <nonce>              :: int()
-, <oracle>             :: binary()
+, <oracle>             :: id()
 , <query>              :: binary()
 , <query_fee>          :: int()
 , <query_ttl_type>     :: int()
@@ -206,7 +230,7 @@ Signatures are sorted.
 
 #### Oracle response transaction
 ```
-[ <oracle>   :: binary()
+[ <oracle>   :: id()
 , <nonce>    :: int()
 , <query_id> :: binary()
 , <response> :: binary()
@@ -217,7 +241,7 @@ Signatures are sorted.
 
 #### Oracle extend transaction
 ```
-[ <oracle>    :: binary()
+[ <oracle>    :: id()
 , <nonce>     :: int()
 , <ttl_type>  :: int()
 , <ttl_value> :: int()
@@ -228,12 +252,12 @@ Signatures are sorted.
 
 #### Contract
 ```
-[ <owner>      :: binary()
+[ <owner>      :: id()
 , <vm_version> :: int()
 , <code>       :: binary()
 , <log>        :: binary(),
 , <active>     :: bool(),
-, <referers>   :: [binary()],
+, <referers>   :: [id()],
 , <deposit>    :: int()
 ]
 ```
@@ -259,10 +283,10 @@ purging them from the tree.
 
 #### Contract call
 ```
-[ <caller_address>   :: binary()
+[ <caller_address>   :: id()
 , <caller_nonce>     :: int()
 , <height>           :: int()
-, <contract_address> :: binary()
+, <contract_address> :: id()
 , <gas_used>         :: int()
 , <return_value>     :: binary()
 , <return_type>      :: int()
@@ -271,7 +295,7 @@ purging them from the tree.
 
 #### Contract create transaction
 ```
-[ <owner>      :: binary()
+[ <owner>      :: id()
 , <nonce>      :: int()
 , <code>       :: binary()
 , <vm_version> :: int()
@@ -287,9 +311,9 @@ purging them from the tree.
 
 #### Contract call transaction
 ```
-[ <caller>     :: binary()
+[ <caller>     :: id()
 , <nonce>      :: int()
-, <contract>   :: binary()
+, <contract>   :: id()
 , <vm_version> :: int()
 , <fee>        :: int()
 , <ttl>        :: int()
@@ -302,8 +326,7 @@ purging them from the tree.
 
 #### Name service name
 ```
-[ <hash>     :: binary()
-, <owner>    :: binary()
+[ <owner>    :: id()
 , <expires>  :: int()
 , <status>   :: binary()
 , <ttl>      :: int()
@@ -312,8 +335,7 @@ purging them from the tree.
 
 #### Name service commitment
 ```
-[ <hash>    :: binary()
-, <owner>   :: binary()
+[ <owner>   :: id()
 , <created> :: int()
 , <expires> :: int()
 ]
@@ -321,9 +343,9 @@ purging them from the tree.
 
 #### Name service claim transaction
 ```
-[ <account>   :: binary()
+[ <account>   :: id()
 , <nonce>     :: int()
-, <name>      :: binary()
+, <name>      :: binary() %% The actual name, not the hash
 , <name_salt> :: int()
 , <fee>       :: int()
 , <ttl>       :: int()
@@ -332,9 +354,9 @@ purging them from the tree.
 
 #### Name service preclaim transaction
 ```
-[ <account>    :: binary()
+[ <account>    :: id()
 , <nonce>      :: int()
-, <commitment> :: binary()
+, <commitment> :: id()
 , <fee>        :: int()
 , <ttl>        :: int()
 ]
@@ -342,9 +364,9 @@ purging them from the tree.
 
 #### Name service update transaction
 ```
-[ <account>    :: binary()
+[ <account>    :: id()
 , <nonce>      :: int()
-, <hash>       :: binary()
+, <hash>       :: id()
 , <name_ttl>   :: int()
 , <pointers>   :: binary() TODO: This is currently ambigous
 , <client_ttl> :: int()
@@ -355,9 +377,9 @@ purging them from the tree.
 
 #### Name service revoke transaction
 ```
-[ <account> :: binary()
+[ <account> :: id()
 , <nonce>   :: int()
-, <hash>    :: binary()
+, <hash>    :: id()
 , <fee>     :: int()
 , <ttl>     :: int()
 ]
@@ -365,10 +387,10 @@ purging them from the tree.
 
 #### Name service transfer transaction
 ```
-[ <account>   :: binary()
+[ <account>   :: id()
 , <nonce>     :: int()
-, <hash>      :: binary()
-, <recipient> :: binary()
+, <hash>      :: id()
+, <recipient> :: id()
 , <fee>       :: int()
 , <ttl>       :: int()
 ]
@@ -378,9 +400,9 @@ purging them from the tree.
 
 #### Channel create transaction
 ```
-[ <initiator>        :: binary()
+[ <initiator>        :: id()
 , <initiator_amount> :: int()
-, <responder>        :: binary()
+, <responder>        :: id()
 , <responder_amount> :: int()
 , <channel_reserve>  :: int()
 , <lock_period>      :: int()
@@ -392,8 +414,8 @@ purging them from the tree.
 
 #### Channel deposit transaction
 ```
-[ <channel_id> :: binary()
-, <from>       :: binary()
+[ <channel_id> :: id()
+, <from>       :: id()
 , <amount>     :: int()
 , <ttl>        :: int()
 , <fee>        :: int()
@@ -403,8 +425,8 @@ purging them from the tree.
 
 #### Channel withdraw transaction
 ```
-[ <channel_id> :: binary()
-, <to>         :: binary()
+[ <channel_id> :: id()
+, <to>         :: id()
 , <amount>     :: int()
 , <ttl>        :: int()
 , <fee>        :: int()
@@ -414,7 +436,7 @@ purging them from the tree.
 
 #### Channel close mutual transaction
 ```
-[ <channel_id>       :: binary()
+[ <channel_id>       :: id()
 , <initiator_amount> :: int()
 , <responder_amount> :: int()
 , <ttl>              :: int()
@@ -425,8 +447,8 @@ purging them from the tree.
 
 #### Channel close solo transaction
 ```
-[ <channel_id>      :: binary()
-, <from>            :: binary()
+[ <channel_id>      :: id()
+, <from>            :: id()
 , <payload>         :: binary()
 , <ttl>             :: int()
 , <fee>             :: int()
@@ -438,8 +460,8 @@ The payload is a serialized signed channel offchain transaction.
 
 #### Channel slash transaction
 ```
-[ <channel_id>      :: binary()
-, <from>            :: binary()
+[ <channel_id>      :: id()
+, <from>            :: id()
 , <payload>         :: binary()
 , <ttl>             :: int()
 , <fee>             :: int()
@@ -451,8 +473,8 @@ The payload is a serialized signed channel offchain transaction.
 
 #### Channel settle transaction
 ```
-[ <channel_id>       :: binary()
-, <from>             :: binary()
+[ <channel_id>       :: id()
+, <from>             :: id()
 , <initiator_amount> :: int()
 , <responder_amount> :: int()
 , <ttl>              :: int()
@@ -468,11 +490,11 @@ The channel offchain transaction is not included directly in the transaction tre
 * The channel slash transaction.
 
 ```
-[ <channel_id>       :: binary()
+[ <channel_id>       :: id()
 , <previous_round>   :: int()
 , <round>            :: int()
-, <initiator>        :: binary()
-, <responder>        :: binary()
+, <initiator>        :: id()
+, <responder>        :: id()
 , <initiator_amount> :: int()
 , <responder_amount> :: int()
 , <updates>          :: [{int(), binary(), binary(), int()}]
@@ -482,9 +504,8 @@ The channel offchain transaction is not included directly in the transaction tre
 
 #### Channel
 ```
-[ <id>               :: binary()
-, <initiator>        :: binary()
-, <responder>        :: binary()
+[ <initiator>        :: id()
+, <responder>        :: id()
 , <total_amount>     :: int()
 , <initiator_amount> :: int()
 , <channel_reserve>  :: int()
@@ -513,4 +534,5 @@ otherwise it is a list of one element `[<proof_of_inclusion>]`
 
 NOTE: As the POI contains the Merkle Patricia Tree nodes (e.g. not only their hashes):
 * Each state subtree does not necessarily contain elements of the same key length.
+* The object itself does not contain its own id as it can be derived from the location in the tree.
 * The key used for storing each object in each state subtree is not necessarily derived from the object itself.
