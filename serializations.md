@@ -287,6 +287,7 @@ purging them from the tree.
 , <caller_nonce>     :: int()
 , <height>           :: int()
 , <contract_address> :: id()
+, <gas_price>        :: int()
 , <gas_used>         :: int()
 , <return_value>     :: binary()
 , <return_type>      :: int()
