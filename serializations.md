@@ -409,6 +409,7 @@ purging them from the tree.
 , <lock_period>      :: int()
 , <ttl>              :: int()
 , <fee>              :: int()
+, <state_hash>       :: binary()
 , <nonce>            :: int()
 ]
 ```
@@ -420,6 +421,8 @@ purging them from the tree.
 , <amount>     :: int()
 , <ttl>        :: int()
 , <fee>        :: int()
+, <state_hash> :: binary()
+, <round>      :: int()
 , <nonce>      :: int()
 ]
 ```
@@ -431,6 +434,8 @@ purging them from the tree.
 , <amount>     :: int()
 , <ttl>        :: int()
 , <fee>        :: int()
+, <state_hash> :: binary()
+, <round>      :: int()
 , <nonce>      :: int()
 ]
 ```
@@ -451,6 +456,7 @@ purging them from the tree.
 [ <channel_id>      :: id()
 , <from>            :: id()
 , <payload>         :: binary()
+, <poi>             :: poi()
 , <ttl>             :: int()
 , <fee>             :: int()
 , <nonce>           :: int()
@@ -464,6 +470,7 @@ The payload is a serialized signed channel offchain transaction.
 [ <channel_id>      :: id()
 , <from>            :: id()
 , <payload>         :: binary()
+, <poi>             :: poi()
 , <ttl>             :: int()
 , <fee>             :: int()
 , <nonce>           :: int()
@@ -494,12 +501,8 @@ The channel offchain transaction is not included directly in the transaction tre
 [ <channel_id>       :: id()
 , <previous_round>   :: int()
 , <round>            :: int()
-, <initiator>        :: id()
-, <responder>        :: id()
-, <initiator_amount> :: int()
-, <responder_amount> :: int()
 , <updates>          :: [{int(), binary(), binary(), int()}]
-, <state>            :: binary()
+, <state_hash>       :: binary()
 ]
 ```
 
