@@ -12,7 +12,7 @@ Noise (and the fragmentation) handle message size we need no length field. The
 payload is a byte array, and messages are either fixed binary data or encoded
 using [RLP](https://github.com/ethereum/wiki/wiki/RLP).
 
-There are currently 15 different P2P messages implemented in
+The following P2P messages are implemented in
 [epoch](https://github.com/aeternity/epoch/blob/master/apps/aecore/src/aec_peer_messages.erl)
   - [MSG_FRAGMENT](#msg_fragment)
   - [MSG_P2P_RESPONSE](#msg_p2p_response)
@@ -132,7 +132,8 @@ Message is RLP encoded, fields:
 Message is RLP encoded, fields:
   - `Txs:: [byte_array]`
 
-A signed transaction is serialized using the `aetx_sign:serialize_to_binary/1`.
+A signed transaction is serialized as a tagged and versioned
+[signed transaction](../serializations.md#signed-transaction).
 
 ## MSG_BLOCK
 *(Tag = 11)*

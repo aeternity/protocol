@@ -183,7 +183,7 @@ all its connected peers to fetch blocks and transactions.
 
 (***TODO***: Write a detailed description of the epoch implementation.)
 
-Synchronizing the list of unconfirmed transactions is a smaller task and the
+Synchronizing the unconfirmed transactions is a smaller task and the
 node will pick one other peer and synchronize (only the missing) transactions
 from this peer. The synchronization uses MP-trees - a more detailed description is
 [here](./sync/tx_pool_sync.md).

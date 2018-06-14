@@ -1,18 +1,20 @@
 [back](../SYNC.md)
 
-# TX-pool synchronization
+# Mempool/TX-pool synchronization
 
 On startup the epoch node needs to update (or get from scratch if it is a
 completely new node) its list of unconfirmed transactions. New transactions it
 will get through gossip, but by construction older transactions that (for some
-reason) has not made it onto the chain is not gossiped.
+reason) have not made it onto the chain is not gossiped.
 
 Potentially there is a big overlap between the list of transactions held by the
 starting node (transactions are persisted) and the peer it is synchronizing
 with; thus to save network bandwidth it is preferrable to only send the missing
 transactions. The protocol is straightforward:
   1. the node picks one peer to synchronize with
-  2. they each create a MP tree holding their local transactions
+  2. they each create a MP tree holding their local transactions - In the MP
+     tree, each element has as key the hash of the signed transaction and as
+     (placeholder) value the empty list.
   3. the initiator asks for a partial unfolding of the peer's tree
   4. the initiator computes what parts of the tree it doesn't know about and
      either goes back to 3. and asks for further information, or
@@ -52,7 +54,7 @@ Message is RLP encoded, fields:
 
 ### KEY_NODE
 Message is RLP encoded, fields:
-  - `type :: int` = 2
+  - `type :: int` = 3
   - `key  :: byte_array`
 
 
