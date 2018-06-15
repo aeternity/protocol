@@ -12,7 +12,7 @@ Noise (and the fragmentation) handle message size we need no length field. The
 payload is a byte array, and messages are either fixed binary data or encoded
 using [RLP](https://github.com/ethereum/wiki/wiki/RLP).
 
-There are currently 13 different P2P messages implemented in
+The following P2P messages are implemented in
 [epoch](https://github.com/aeternity/epoch/blob/master/apps/aecore/src/aec_peer_messages.erl)
   - [MSG_FRAGMENT](#msg_fragment)
   - [MSG_P2P_RESPONSE](#msg_p2p_response)
@@ -23,10 +23,12 @@ There are currently 13 different P2P messages implemented in
   - [MSG_GET_N_SUCCESSORS](#msg_get_n_successors)
   - [MSG_HEADER_HASHES](#msg_header_hashes)
   - [MSG_GET_BLOCK](#msg_get_block)
-  - [MSG_TX](#msg_tx)
+  - [MSG_TXS](#msg_txs)
   - [MSG_BLOCK](#msg_block)
-  - [MSG_GET_MEMPOOL](#msg_get_mempool)
-  - [MSG_MEMPOOL](#msg_mempool)
+  - [MSG_TX_POOL_SYNC_INIT](#msg_tx_pool_sync_init)
+  - [MSG_TX_POOL_SYNC_UNFOLD](#msg_tx_pool_sync_unfold)
+  - [MSG_TX_POOL_SYNC_GET](#msg_tx_pool_sync_get)
+  - [MSG_TX_POOL_SYNC_FINISH](#msg_tx_pool_sync_finish)
 
 Each message type (except for `MSG_FRAGMENT`) is versioned such that the
 message can easily be changed while still maintaining backwards compatibility
@@ -124,6 +126,15 @@ hash, see `aec_peer_messages` for details.
 Message is RLP encoded, fields:
   - `Hash :: byte_array`
 
+## MSG_TXS
+*(Tag = 9)*
+
+Message is RLP encoded, fields:
+  - `Txs:: [byte_array]`
+
+A signed transaction is serialized as a tagged and versioned
+[signed transaction](../serializations.md#signed-transaction).
+
 ## MSG_BLOCK
 *(Tag = 11)*
 
@@ -133,24 +144,28 @@ Message is RLP encoded, fields:
 A block is serialized using the `aec_blocks:serialize_to_binary/1` function, it
 consists of a header and a list of signed transactions.
 
-## MSG_TX
-*(Tag = 9)*
+## MSG_TX_POOL_SYNC_INIT
+*(Tag = 20)*
+
+Message has no body.
+
+## MSG_TX_POOL_SYNC_UNFOLD
+*(Tag = 21)*
 
 Message is RLP encoded, fields:
-  - `Tx :: byte_array`
+  - `Unfolds :: [byte_array]`
 
-A signed transaction is serialized using the `aetx_sign:serialize_to_binary/1`.
+Unfolds are serialized in `aec_tx_pool_sync` - the serialization is described in
+[tx_pool_sync])(./tx_pool_sync.md).
 
-## MSG_GET_MEMPOOL
-*(Tag = 13)*
-
-Message is RLP encoded, fields:
-
-*Note:* No fields, just an empty RLP encoding.
-
-## MSG_MEMPOOL
-*(Tag = 14)*
+## MSG_TX_POOL_SYNC_GET
+*(Tag = 22)*
 
 Message is RLP encoded, fields:
-  - `Txs :: [byte_array]` - list of serialized signed transactions
+  - `TxHashes :: [byte_array]`
 
+## MSG_TX_POOL_SYNC_FINISH
+*(Tag = 23)*
+
+Message is RLP encoded, fields:
+  - `Done :: bool`

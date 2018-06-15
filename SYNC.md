@@ -64,6 +64,7 @@ up the node. Peer addresses looks like:
 Given that all nodes participating in the network are going to hold all
 available data, there is no need to have a structured overlay network.
 
+An overview of the P2P-message protocol is [here](./sync/p2p_messages.md).
 
 ### Bootstrapping
 
@@ -172,7 +173,20 @@ interest of the network.
 (***TODO***: Come up with something similar to/based on TorCoin, or at least
 mention it and give outlook for how it might be integrated.)
 
+## Block/Transaction Synchronization
 
+At startup (after discovering at least one other Peer) the node will
+synchronize the chain, and the current list of unconfirmed transactions.
+
+Synchronizing the chain is (potentially) a big task, and the node will utilize
+all its connected peers to fetch blocks and transactions.
+
+(***TODO***: Write a detailed description of the epoch implementation.)
+
+Synchronizing the unconfirmed transactions is a smaller task and the
+node will pick one other peer and synchronize (only the missing) transactions
+from this peer. The synchronization uses MP-trees - a more detailed description is
+[here](./sync/tx_pool_sync.md).
 
 ## Block/Transaction Propagation
 
