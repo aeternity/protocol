@@ -193,7 +193,7 @@ Serialization defined [here](../serializations.md#channel-close-solo-transaction
 
 - `channel_id`: channel id as recorded on-chain
 - `from`: participant of the channel that posts the closing transaction
-- `payload`: transaction proving that the proof of inclusion is part of the channel
+- `payload`: empty or a transaction proving that the proof of inclusion is part of the channel
 - `poi`: proof of inclusion
 - `ttl`
 - `nonce`: taken from the `from`'s account
@@ -207,10 +207,13 @@ Payload is a valid transaction that has:
 * `state_hash` equal to the proof of inclusion's root hash
 * `channel_id` being the same as the transaction `channel_id`
 * `round` being greater or equal to the last on-chain `round` for that channel id
-The payload can be either co-signed or unilaterally signed. If the transaction
+The payload can be either empty or a signed transaction. If the transaction
 type is channel_create/channel_deposit/channel_withdraw/channel_offchain it
 MUST be co-signed. Unilaterally signed is used only when forcing progress on a
 channel's state.
+If the payload is empty - the channel is closed according to
+the last on-chain transaction. In this case the proof of
+inclusion root must be equal to the one persisted for the channel on-chain.
 
 ### `channel_slash`
 
@@ -239,10 +242,13 @@ Payload is a valid transaction that has:
 * `state_hash` equal to the proof of inclusion's root hash
 * `channel_id` being the same as the transaction `channel_id`
 * `round` being greater or equal to the last on-chain `round` for that channel id
-The payload can be either co-signed or unilaterally signed. If the transaction
+The payload can be either empty or a signed transaction. If the transaction
 type is channel_create/channel_deposit/channel_withdraw/channel_offchain it
 MUST be co-signed. Unilaterally signed is used only when forcing progress on a
 channel's state.
+If the payload is empty - the channel is closed according to
+the last on-chain transaction. In this case the proof of
+inclusion root must be equal to the one persisted for the channel on-chain.
 
 
 #### Requirements

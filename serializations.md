@@ -463,7 +463,7 @@ purging them from the tree.
 ]
 ```
 
-The payload is a serialized signed channel offchain transaction.
+The payload is a serialized signed channel offchain transaction or is empty.
 
 #### Channel slash transaction
 ```
@@ -477,7 +477,7 @@ The payload is a serialized signed channel offchain transaction.
 ]
 ```
 
-The payload is a serialized signed channel offchain transaction.
+The payload is a serialized signed channel offchain transaction is empty.
 
 #### Channel settle transaction
 ```
@@ -499,7 +499,6 @@ The channel offchain transaction is not included directly in the transaction tre
 
 ```
 [ <channel_id>       :: id()
-, <previous_round>   :: int()
 , <round>            :: int()
 , <updates>          :: [{int(), binary(), binary(), int()}]
 , <state_hash>       :: binary()
@@ -513,6 +512,7 @@ The channel offchain transaction is not included directly in the transaction tre
 , <total_amount>     :: int()
 , <initiator_amount> :: int()
 , <channel_reserve>  :: int()
+, <state_hash>       :: binary()
 , <round>            :: int()
 , <lock_period>      :: int()
 , <closes_at>        :: int()
