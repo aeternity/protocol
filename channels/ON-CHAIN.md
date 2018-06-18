@@ -95,7 +95,7 @@ update consists of updates being applied on top of channel state tree and the
 is never decremented.
 
 Each on-chain updating transaction provides two fields that are essential for
-fututre conflict resolution: `round` and `state_hash`. The state hash is the
+future conflict resolution: `round` and `state_hash`. The state hash is the
 root hash of the channel state tree after the on-chain has been applied to the
 local state tree. The `round` is the _next_ state channel internal round. Thus
 the on-chain update transaction represents on-chain the next off-chain state
