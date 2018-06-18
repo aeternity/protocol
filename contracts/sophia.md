@@ -122,6 +122,82 @@ function root(t : tree('a)) : option('a) =
     Bin(_, v, _) => Some(v)
 ```
 
+### Maps and records
+
+A Sophia record type is given by a fixed set of fields with associated,
+possibly different, types. For instance
+```
+  type account = { name    : string,
+                   balance : int,
+                   history : list(transaction) }
+```
+
+Maps, on the other hand, can contain an arbitrary number of key-value bindings,
+but of a fixed type. The type of maps with keys of type `'k` and values of type
+`'v` is written `map('k, 'v)`. Key types are restricted to atomic types (`int`,
+`address`, `bool`, and `string`).
+
+#### Constructing maps and records
+
+A value of record type is constructed by giving a value for each of the fields.
+For the example above,
+```
+  function new_account(name) =
+    {name = name, balance = 0, history = []}
+```
+Maps are constructed similarly, with keys enclosed in square brackets
+```
+  function example_map() : map(string, int) =
+    {["key1"] = 1, ["key2"] = 2}
+```
+The empty map is written `{}`.
+
+#### Accessing values
+
+Record fields access is written `r.f` and map lookup `m[k]`. For instance,
+```
+  function get_balance(a : address, accounts : map(address, account)) =
+    accounts[a].balance
+```
+Looking up a non-existing key in a map results in the contract failing. See
+`Map.member` and `Map.lookup` below for safe lookups.
+
+#### Updating a value
+
+Record field updates are written `r{f = v}`. This creates a new record value
+which is the same as `r`, but with the value of the field `f` replaced by `v`.
+Similarly, `m{[k] = v}` constructs a map with the same values as `m` except
+that `k` maps to `v`. It makes no difference if `m` has a mapping for `k` or
+not.
+
+It is possible to give a name to the old value of a field or mapping in an
+update: instead of `acc{ balance = acc.balance + 100 }` it is possible to write
+`acc{ balance @ b = b + 100 }`, binding `b` to `acc.balance`. When giving a
+name to a map value (`m{ [k] @ x = v }`), the corresponding key must be present
+in the map or the contract will fail.
+
+Updates can be nested:
+```
+function clear_history(a : address, accounts : map(address, account)) : map(address, account) =
+  accounts{ [a].history = [] }
+```
+This is equivalent to `accounts{ [a] @ acc = acc{ history = [] } }` and thus
+requires `a` to be present in the accounts map.
+
+
+#### Builtin functions on maps
+
+The following builtin functions are defined on maps:
+
+```
+  Map.lookup(k : 'k, m : map('k, 'v)) : option('v)
+  Map.member(k : 'k, m : map('k, 'v)) : bool
+  Map.delete(k : 'k, m : map('k, 'v)) : map('k, 'v)
+  Map.size(m : map('k, 'v)) : int
+  Map.to_list(m : map('k, 'v)) : list(('k, 'v))
+  Map.from_list(m : list(('k, 'v))) : map('k, 'v)
+```
+
 ### Builtins
 
 #### Account interface
