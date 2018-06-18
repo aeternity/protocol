@@ -86,6 +86,23 @@ channel_id = Blake2b(initiator || channel_create_tx_nonce || responder)
                         32                  32                  32
 ```
 
+Each party keeps a state tree specific for the channel. It consists of all the
+channel data: accounts, contracts and etc. Closing transactions provide a
+proof of inclusion for this tree instead of posting the tree itself.
+Each off-chain update bumps an integer value called `round`. Each off-chain
+update consists of updates being applied on top of channel state tree and the
+`round` it happened. `round` must be incremented on every off-chain update and
+is never decremented.
+
+Each on-chain updating transaction provides two fields that are essential for
+fututre conflict resolution: `round` and `state_hash`. The state hash is the
+root hash of the channel state tree after the on-chain has been applied to the
+local state tree. The `round` is the _next_ state channel internal round. Thus
+the on-chain update transaction represents on-chain the next off-chain state
+of the channel. This way we can solo close a channel according to the last
+on-chain state. All we have to do is to provide a proof of inclusion having
+the same `state_hash`.
+
 ### `channel_deposit`
 
 Depositing funds into a channel after creation should allow channels to be more
@@ -115,6 +132,7 @@ Serialization defined [here](../serializations.md#channel-deposit-transaction)
 Note that the `round` should be incremented on each off-chain update. This is enforced by all
 on-chain transactions that have either `round` or a `payload` (with a `round` included) must have a
 `round` greater of equal to the last on-chain `round`.
+
 
 ### `channel_withdraw`
 
@@ -201,19 +219,24 @@ Serialization defined [here](../serializations.md#channel-close-solo-transaction
 
 Proof of inclusion represents a subset of the internal channel state. At the
 bare minimum it has to include all accounts and their balances but can also
-include contracts and contract calls.
+include contracts and contract calls. It must provide enough information to
+close the channel. Miners are to validate it and use its data to initiate the
+procedure of channel solo closing.
 
 Payload is a valid transaction that has:
-* `state_hash` equal to the proof of inclusion's root hash
+* `state_hash` equal to the proof of inclusion's root hash. This is a proof
+  that the PoI is a correct one
 * `channel_id` being the same as the transaction `channel_id`
 * `round` being greater or equal to the last on-chain `round` for that channel id
-The payload can be either empty or a signed transaction. If the transaction
-type is channel_create/channel_deposit/channel_withdraw/channel_offchain it
-MUST be co-signed. Unilaterally signed is used only when forcing progress on a
-channel's state.
+The payload can be either empty or a signed transaction.
 If the payload is empty - the channel is closed according to
 the last on-chain transaction. In this case the proof of
 inclusion root must be equal to the one persisted for the channel on-chain.
+If the playload is a transaction it could be:
+*  channel_create/channel_deposit/channel_withdraw/channel_offchain: then it
+MUST be co-signed
+* transaction for on-chain forcing progress on a channel's state: this is not
+  yet implemented but it will be unilaterally signed
 
 ### `channel_slash`
 
@@ -275,7 +298,7 @@ Serialization defined [here](../serializations.md#channel-settle-transaction)
 
 
 - `channel_id`: channel id as recorded on-chain
-- `from`: participant of the channel that posts the slashing transaction
+- `from`: participant of the channel that posts the settling transaction
 - `initiator_amount`: unsigned amount of tokens the initiator gets from the channel
 - `responder_amount`: unsigned amount of tokens the responder gets from the channel
 - `ttl`

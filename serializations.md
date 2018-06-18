@@ -463,7 +463,7 @@ purging them from the tree.
 ]
 ```
 
-The payload is a serialized signed channel offchain transaction or is empty.
+The payload is a serialized signed channel offchain transaction or it is empty.
 
 #### Channel slash transaction
 ```
@@ -477,7 +477,7 @@ The payload is a serialized signed channel offchain transaction or is empty.
 ]
 ```
 
-The payload is a serialized signed channel offchain transaction is empty.
+The payload is a serialized signed channel offchain transaction or it is empty.
 
 #### Channel settle transaction
 ```
