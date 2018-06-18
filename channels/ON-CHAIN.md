@@ -14,7 +14,7 @@
 Each party keeps a state tree specific for the channel. It consists of all the
 channel data: accounts, contracts and etc. and has the same structure as the
 on-chain state tree. Off-chain transactions update this channel auxiliary tree.
-It is a responsibility of the parties to keep this it locally. Solo closing
+It is a responsibility of the parties to keep this locally. Solo closing
 transactions provide a proof of inclusion for it instead of
 posting the whole tree.
 Each off-chain update consists of updates being applied on top of channel state
@@ -223,7 +223,7 @@ Serialization defined [here](../serializations.md#channel-close-solo-transaction
 Proof of inclusion represents a subset of the internal channel state. At the
 bare minimum it has to include all accounts and their balances but can also
 include contracts and contract calls. It must provide enough information to
-close the channel. Miners are to check balances in it if any and use this data to initiate the
+close the channel. Miners are to check balances in it and use this data to initiate the
 procedure of channel solo closing.
 
 Payload is a valid transaction that has:
