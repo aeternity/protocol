@@ -58,11 +58,12 @@ The transaction has to be signed with the private key of the owner.
 The special variable "caller" will be set to the same value as "owner"
 for the initial call.
 
-The contract address is created by taking the Key-length left most hex chars
-of
+The contract address is created by hashing, using Blake2b (256 bits digest), the concatenation of:
+* The address of the contract owner;
+* The nonce encoded as unsigned, big endian byte array, with the minimum number of bytes.
 
 ```
- "C0DE" && hash( nonce && owner)
+ hash(owner, nonce)
 ```
 
 The fee, the deposit, the amount and the used gas will be
