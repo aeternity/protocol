@@ -519,7 +519,7 @@ The channel offchain transaction is not included directly in the transaction tre
 ]
 ```
 
-#### Proof of inclusion on state trees (POI)
+#### Proof of inclusion on state trees (POI) :: poi()
 ```
 [ {<accounts>  :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), [<mpt_value> :: binary()]}]}]}
 , {<calls>     :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), [<mpt_value> :: binary()]}]}]}

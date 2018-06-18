@@ -11,6 +11,26 @@
 	- [`channel_slash`](#channel_slash)
 	- [`channel_settle`](#channel_settlement)
 
+Each party keeps a state tree specific for the channel. It consists of all the
+channel data: accounts, contracts and etc. and has the same structure as the
+on-chain state tree. Off-chain transactions update this channel auxiliary tree.
+It is a responsibility of the parties to keep this it locally. Solo closing
+transactions provide a proof of inclusion for it instead of
+posting the whole tree.
+Each off-chain update consists of updates being applied on top of channel state
+tree and an integer value `round` representing when it happened. Since `round`
+must always be bumped, provided two off-chain transactions we can reason which
+was performed earlier than the other.
+
+Each on-chain updating transaction provides two fields that are essential for
+future conflict resolution: `round` and `state_hash`. The state hash is the
+root hash of the channel state tree after the on-chain has been applied to the
+local state tree. The `round` is the _next_ state channel internal round. Thus
+the on-chain update transaction represents on-chain the next off-chain state
+of the channel. This way we can solo close a channel according to the last
+on-chain state. All we have to do is to provide a proof of inclusion having
+the same `state_hash`.
+
 ## Establishing channel on-chain
 
 All of the on-chain operations could be submitted by any peer but we assume that
@@ -45,7 +65,7 @@ Serialization defined [here](../serializations.md#channel-create-transaction)
 - `lock_period`: minimal block height interval between a channel_close_solo/last channel_slash transaction and the channel_settle transaction
 - `ttl`
 - `fee`
-- `state_hash`: the root hash of the channel state tree
+- `state_hash`: the root hash of the channel state tree; This is not validated, just kept in the channel's object
 - `nonce`
 
 The `ttl` is in absolute chain height. The involved parties will want
@@ -86,23 +106,6 @@ channel_id = Blake2b(initiator || channel_create_tx_nonce || responder)
                         32                  32                  32
 ```
 
-Each party keeps a state tree specific for the channel. It consists of all the
-channel data: accounts, contracts and etc. Closing transactions provide a
-proof of inclusion for this tree instead of posting the tree itself.
-Each off-chain update bumps an integer value called `round`. Each off-chain
-update consists of updates being applied on top of channel state tree and the
-`round` it happened. `round` must be incremented on every off-chain update and
-is never decremented.
-
-Each on-chain updating transaction provides two fields that are essential for
-future conflict resolution: `round` and `state_hash`. The state hash is the
-root hash of the channel state tree after the on-chain has been applied to the
-local state tree. The `round` is the _next_ state channel internal round. Thus
-the on-chain update transaction represents on-chain the next off-chain state
-of the channel. This way we can solo close a channel according to the last
-on-chain state. All we have to do is to provide a proof of inclusion having
-the same `state_hash`.
-
 ### `channel_deposit`
 
 Depositing funds into a channel after creation should allow channels to be more
@@ -125,7 +128,7 @@ Serialization defined [here](../serializations.md#channel-deposit-transaction)
 - `amount`: amount of tokens deposited
 - `ttl`:
 - `fee`:
-- `state_hash`: the root hash of the channel state tree after the deposit had been applied
+- `state_hash`: the root hash of the channel state tree after the deposit had been applied; This is not validated, just kept in the channel's object
 - `round`: the internal channel's round that applies the deposit
 - `nonce`: account nonce of the submitter
 
@@ -153,7 +156,7 @@ Serialization defined [here](../serializations.md#channel-withdraw-transaction)
 - `amount`: amount of tokens withdrawn
 - `ttl`:
 - `fee`:
-- `state_hash`: the root hash of the channel state tree after the withdraw had been applied
+- `state_hash`: the root hash of the channel state tree after the withdraw had been applied; This is not validated, just kept in the channel's object
 - `round`: the internal channel's round that applies the withdraw
 - `nonce`: the `to` account nonce
 
@@ -220,7 +223,7 @@ Serialization defined [here](../serializations.md#channel-close-solo-transaction
 Proof of inclusion represents a subset of the internal channel state. At the
 bare minimum it has to include all accounts and their balances but can also
 include contracts and contract calls. It must provide enough information to
-close the channel. Miners are to validate it and use its data to initiate the
+close the channel. Miners are to check balances in it if any and use this data to initiate the
 procedure of channel solo closing.
 
 Payload is a valid transaction that has:
@@ -325,10 +328,12 @@ channel.
 - `total_amount`
 - `initiator_amount`
 - `channel_reserve`
+- `state_hash`: last published state_hash 
 - `round`: last published round
 - `closes_at`: on-chain channel closing height
 - `lock_period`: agreed upon locking period by peers
 
-Keeping track of the `round`, `closes_at` and `lock_period` is
+Keeping track of the `state_hash`, `round`, `closes_at` and `lock_period` is
 necessary for nodes to be able to assess the validity of `channel_slash` and
 `channel_settle` transactions.
+Serialization defined [here](../serializations.md#channel)
