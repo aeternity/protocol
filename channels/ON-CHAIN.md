@@ -220,7 +220,7 @@ Serialization defined [here](../serializations.md#channel-close-solo-transaction
 - `nonce`: taken from the `from`'s account
 - `fee`
 
-Proof of inclusion represents a subset of the internal channel state. At the
+Proof of inclusion represents the internal channel. At the
 bare minimum it has to include all accounts and their balances but can also
 include contracts and contract calls. It must provide enough information to
 close the channel. Miners are to check balances in it and use this data to initiate the
@@ -236,8 +236,7 @@ If the payload is empty - the channel is closed according to
 the last on-chain transaction. In this case the proof of
 inclusion root must be equal to the one persisted for the channel on-chain.
 If the playload is a transaction it could be:
-*  channel_create/channel_deposit/channel_withdraw/channel_offchain: then it
-MUST be co-signed
+* channel_offchain: then it MUST be co-signed
 * transaction for on-chain forcing progress on a channel's state: this is not
   yet implemented but it will be unilaterally signed
 
@@ -260,7 +259,7 @@ Serialization defined [here](../serializations.md#channel-slash-transaction)
 - `nonce`: taken from the `from`'s account
 - `fee`
 
-Proof of inclusion represents a subset of the internal channel state. At the
+Proof of inclusion represents the internal channel state. At the
 bare minimum it has to include all accounts and their balances but can also
 include contracts and contract calls.
 
@@ -268,13 +267,15 @@ Payload is a valid transaction that has:
 * `state_hash` equal to the proof of inclusion's root hash
 * `channel_id` being the same as the transaction `channel_id`
 * `round` being greater or equal to the last on-chain `round` for that channel id
-The payload can be either empty or a signed transaction. If the transaction
-type is channel_create/channel_deposit/channel_withdraw/channel_offchain it
-MUST be co-signed. Unilaterally signed is used only when forcing progress on a
-channel's state.
+The payload can be either empty or a signed transaction.
 If the payload is empty - the channel is closed according to
 the last on-chain transaction. In this case the proof of
 inclusion root must be equal to the one persisted for the channel on-chain.
+If the playload is a transaction it could be:
+* channel_offchain: then it MUST be co-signed
+* transaction for on-chain forcing progress on a channel's state: this is not
+  yet implemented but it will be unilaterally signed
+
 
 
 #### Requirements
