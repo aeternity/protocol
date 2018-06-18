@@ -95,7 +95,7 @@ first fields describe the object type and the object version.
 Since all values are byte arrays in RLP, `int()` needs to be a byte
 array as well. We encode all integers as unsigned, big endian byte
 arrays. To avoid ambiguity in the encoding of integers, we adapt the
-same scheme as RLP and demand that ingegers are encoded with the
+same scheme as RLP and demand that integers are encoded with the
 minimal number of bytes (i.e., disallow leading zeroes in the encoded
 byte array). Negative integers is not used in the serialization format
 since they are not needed. If the need arises, the scheme should be
