@@ -201,7 +201,7 @@ If `push_amount > 0` then the initiator should send along a signed update,
 assigning that amount to the responder, before sending the `funding_created`
 message.
 
-A `channel_reserve` ensures that parties have something to lose in the case that 
+A `channel_reserve` ensures that parties have something to lose in the case that
 they start acting maliciously. Enforcement of this rule must be done by the
 clients, which in practice means they should not sign any updates that end up
 violating this invariant.
@@ -378,7 +378,7 @@ transaction has `minimum_depth` confirmations.
 
 State updates require consent of both parties.
 
-Each update MUST have a strictly increasing sequence number, which SHOULD start
+Each update MUST have a strictly increasing round, which SHOULD start
 at `0` on channel initialisation.
 
 Parameters:
@@ -408,7 +408,7 @@ we'd still like to avoid it, if possible.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| amount               | 8  |
+| data                 | 32 |
  ---------------------- ----
 ```
 
@@ -422,13 +422,7 @@ we'd still like to avoid it, if possible.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| from                 | 32 |
- ---------------------- ----
-| to                   | 32 |
- ---------------------- ----
-| amount               | 2  |
- ---------------------- ----
-| fee                  |    |
+| data                 | 32 |
  ---------------------- ----
 ```
 
@@ -534,7 +528,7 @@ channel operations.
 - `initiator_amount`
 - `responder_amount`
 - `channel_active`
-- `sequence_number`
+- `round`
 - `updated_at`
 - `closed`
 - [{}]
@@ -544,7 +538,7 @@ channel operations.
 Execution of a contract inside a state channel requires parties to be able to
 initialise a virtual machine to run their smart contracts in.
 
-Contracts are executed in rounds, which are denoted by sequence numbers.
+Contracts are executed in rounds, which are denoted by rounds.
 
 Every party executes each smart contract locally and checks if the signed states
 they receive match up with theirs. In the case that states and signatures are

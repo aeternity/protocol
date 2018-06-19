@@ -65,8 +65,8 @@ in the chain, and the others are metadata used for the connection itself.
 
   | Name | Value |
   | ---- | ----- |
-  | initiator | ak$3YGRJv1QMgNbeDzvqX7qJrZWJDaHGmrHYHifxSbhSEgn6anuNYCNPrzsB911xTbZ35bvJYWLyYjrQaQKfvja9gkpvYMfEZ |
-  | responder | ak$3gVuduh7vR9G7Hq3TpFaA7q9oQkMZZF2VsUxDYZabNeKC1uaqtjpKSth7wPn9dxnUzsHoT2fa6GPUzepbDXMHyC2F3HupT |
+  | initiator | ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn |
+  | responder | ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68 |
   | lock_period | 10 |
   | push_amount | 3 |
   | initiator_amount | 10 |
@@ -82,7 +82,7 @@ in the chain, and the others are metadata used for the connection itself.
 Using the set of prenegotiated parameters the initiator connects
 ```
 $ wscat --connect
-'localhost:3014/channel?initiator=ak$3YGRJv1QMgNbeDzvqX7qJrZWJDaHGmrHYHifxSbhSEgn6anuNYCNPrzsB911xTbZ35bvJYWLyYjrQaQKfvja9gkpvYMfEZ&responder=ak$3gVuduh7vR9G7Hq3TpFaA7q9oQkMZZF2VsUxDYZabNeKC1uaqtjpKSth7wPn9dxnUzsHoT2fa6GPUzepbDXMHyC2F3HupT&lock_period=10&push_amount=3&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&host=localhost&port=1234&role=initiator'
+'localhost:3014/channel?initiator=ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn&responder=ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68&lock_period=10&push_amount=3&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&host=localhost&port=1234&role=initiator'
 
 connected (press CTRL+C to quit)
 ```
@@ -93,7 +93,7 @@ Note the `role=initiator` as it is specific
 Using the set of prenegotiated parameters the responder connects
 ```
 $ wscat --connect
-'localhost:3014/channel?initiator=ak$3YGRJv1QMgNbeDzvqX7qJrZWJDaHGmrHYHifxSbhSEgn6anuNYCNPrzsB911xTbZ35bvJYWLyYjrQaQKfvja9gkpvYMfEZ&responder=ak$3gVuduh7vR9G7Hq3TpFaA7q9oQkMZZF2VsUxDYZabNeKC1uaqtjpKSth7wPn9dxnUzsHoT2fa6GPUzepbDXMHyC2F3HupT&lock_period=10&push_amount=3&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&port=1234&role=responder'
+'localhost:3014/channel?initiator=ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn&responder=ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68&lock_period=10&push_amount=3&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&port=1234&role=responder'
 
 connected (press CTRL+C to quit)
 ```
@@ -128,14 +128,14 @@ The initiator receives a message containing the unsigned transaction
 ```
 {'action': 'sign',
  'tag': 'initiator_signed',
- 'payload': {'tx': 'tx$3KVbfQyL3812oUXuaKFrU35yh918LtZS9vSX3xkkyCCQUCReBH3znrhhcKEfv7Et2Unz3Wasec9Ty97xs4VCB3k2GBjhp1bHtYuNcD1JVKCbvfY68JyiVcCzdQJh1SfDtjMLxwaJtQGhUbaF2VySaBwFBTKTzHVCL58owtfXzt972GZEGmEtrdyY7Z1NNg25yhrPyAyGvKZY6WV'}
+ 'payload': {'tx': 'tx$6GDUCeNUH5DYb7RB6Aa9WNHwPzjj8jWwp1rt9iyimoJvpKe7NeCAcWryYY965s6Y8F7FxHyYffSxE5VhLPdm1gWiJFCG3Qd2FuZzs9vi4zhmY5MvHQpWrtuPdMd71YCu8kL5VNGkCQVPBLHWddCeuFRyknZPR3b'}
  }
 ```
 Initiator is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
 ```
 {'action': 'initiator_signed',
- 'payload': {'tx': 'tx$Vb6U4dbYYjKr1eq2iU9ftCb3sVLoq3NzBdSpLqgrARkYJ1VgcubZhXRXDuYqoMFrtpJsxpfA5yq4woAUwc4SVYFHZNoUpLqpxbgtDBxDfFz3h3FBzLasqQcNAqqzjiufeuhmnFVWB1oLBTqdKGYTVsamt4zwL3bct7dVVrYfx2X51kXoom5WwPwmQxKjMSFtKgoYaDgNUx6RNLwnCjdJ1J1Jvcm5mi7JuaRsTzvr4HAmzWm6U9oXwSHih7VQ5VGJ5pA85nbCi6MPgmwZZFCU2xY5mKx4uo6jCXgnqQAQEpqpipuhLsoVnNRU3aY6B'}
+ 'payload': {'tx': 'tx$7gq4gp1GGiqdJ1qEZv5h4UiUdaPS4BtwyR1FitViBERzHjntzwCUWLgVM6khGeLuYMehyhbPuqYD6HwR5r1bQb9BTKt3WcaGgBQhUx8CFdjTA2QPhZnGrE5k8uuturu7uaeRLXeyUQJMyoSf5xZzD3DrzomkUJuYb1r3E6pHvNxjUbq2Qo4xoDYp6kjBo5nzNdAEnwk8iwn1opLjFRDX519nPAfEujqsTrkjCScu2FjaUwqkvSnVA8JT8v4FumsdP5ua'}
  }
 ```
 
@@ -155,14 +155,14 @@ After being informed for the initiator's signing the responder receives a messag
 ```
 {'action': 'sign',
  'tag': 'responder_signed',
- 'payload': {'tx': 'tx$3KVbfQyL3812oUXuaKFrU35yh918LtZS9vSX3xkkyCCQUCReBH3znrhhcKEfv7Et2Unz3Wasec9Ty97xs4VCB3k2GBjhp1bHtYuNcD1JVKCbvfY68JyiVcCzdQJh1SfDtjMLxwaJtQGhUbaF2VySaBwFBTKTzHVCL58owtfXzt972GZEGmEtrdyY7Z1NNg25yhrPyAyGvKZY6WV'}
+ 'payload': {'tx': 'tx$6GDUCeNUH5DYb7RB6Aa9WNHwPzjj8jWwp1rt9iyimoJvpKe7NeCAcWryYY965s6Y8F7FxHyYffSxE5VhLPdm1gWiJFCG3Qd2FuZzs9vi4zhmY5MvHQpWrtuPdMd71YCu8kL5VNGkCQVPBLHWddCeuFRyknZPR3b'}
  }
 ```
 Note that this is the same transaction. Responder is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
 ```
 {'action': 'responder_signed',
- 'payload': {'tx': 'tx$7Uf44dj9jVkgNb4hbCsUamkEL3869mVK5ks4f6Ywi8FBCR4WBrJd6FnVPkpRoV3yU9Y7nqYeGZQ3VfSqvtU5eWJmAUW4dBDyZ68TsgC5kkJn23TMatabo5AowBLBARS2Kji6hEbyta1i1EaKfsj95jcmr4ncKy3VQnur3gDvZpN6sLFSthow7Lh5QDCSVuXzQNhZyTMPayunH7BuWgjEi8FmDJTp2hyR4NeReAaYxFHCD2qZ5kQLzGFHgU9zaydb8X3gB3Bi4fjUoToNmUWTLC9aXF69USSY4SLQZY2C4oV6PbmQTeKdFoahXmmG'}
+ 'payload': {'tx': 'tx$6GDUCeNUH5DYb7RB6Aa9WNHwPzjj8jWwp1rt9iyimoJvpKe7NeCAcWryYY965s6Y8F7FxHyYffSxE5VhLPdm1gWiJFCG3Qd2FuZzs9vi4zhmY5MvHQpWrtuPdMd71YCu8kL5VNGkCQVPBLHWddCeuFRyknZPR3b'}
  }
 ```
 #### Initiator is informed
@@ -213,56 +213,8 @@ height needed is reached:
 
 ### Initial state
 After both parties have confirmed that the funding is signed - they can proceed
-with sending the messages for off-chain updates. The first one is special - it
-it is the initial state that both parties agreed upon when opening the channel. Since
-it is prenegotiated, the channel's software produces the update transaction for
-the parties and they just have to co-sign it. The initiator sends an `update`
-message and the responder agrees upon it with a `update_ack` message.
-
-#### Initiator signs the initial state
-The initiator receives a message containing the unsigned transaction
-```
-{'action': 'sign',
- 'tag': 'update',
- 'payload': {'tx': 'tx$3419Kt6y56whdtUfBkefVW6FFJcZd5QFzqroJm42SqSvjehUtyi65yXmMWqXM9pNG6CkPvK9gfFxsqCQFeWhVefNrqLUx1sXJ7xsGjeNPzrWiUwvQjGMfRqGZtT8B9ptrih1CKDa3a3oS9uy1isJ5VbJc1tmtd2orc8CJf6uLiFAF174GKCqyQUp5k1H79DweovYAopZKKxpv8AjKK7h517G24Z3DXuCGoS85wxcFvD5Z3qiFatsZ7BY'}
- }
-```
-
-The initiator is to decode the transaction, inspect its contents, sign it, encode
-it and then post it back via a WebSocket message:
-
-```
-{'action': 'update',
- 'payload': {'tx': 'tx$2veehmVabgjjKYWnuJ4fyYTucmfuwjgeLoxG3PGnYJexgWZ3GTqkVmEbqVQbUHpnMedBcrPWNMYnoG7qpeZzgggsfg1hj26epuqUL2foog2UfLAiqiT8mU7rdxM6cUJRMzEBYKcQaFJn5MfFbX8vfWSvynMAFSnRkSeLAHno9rsbu1iANBhvVjnbvcikNrTW6XX3qKq1xcQZjCBk1kt7rc3TK6FMcWhV9SEQBKFx29pRDmGXj1FX2evkJWErXB1GKfGdaFQuJNFjR7dz7DYSE6LMCedsq1mP4VAJMXpMJfrfT46wwjd9NxdMzePRt88GGjDtx5UjjjGWDrgRxZWW1qweiDcgDv3qXWKVvcwD'}
- }
-```
-
-#### Responder signing the initial state
-The responder receives a message indicating the intention of the initiator to
-update the state of the channel.
-
-```
-{'action': 'info',
- 'payload': {'event': 'update'}
- }
-```
-After that the responder receives an update acknowledge message
-```
-{'action': 'sign',
- 'tag': 'update_ack',
- 'payload': {'tx': 'tx$3419Kt6y56whdtUfBkefVW6FFJcZd5QFzqroJm42SqSvjehUtyi65yXmMWqXM9pNG6CkPvK9gfFxsqCQFeWhVefNrqLUx1sXJ7xsGjeNPzrWiUwvQjGMfRqGZtT8B9ptrih1CKDa3a3oS9uy1isJ5VbJc1tmtd2orc8CJf6uLiFAF174GKCqyQUp5k1H79DweovYAopZKKxpv8AjKK7h517G24Z3DXuCGoS85wxcFvD5Z3qiFatsZ7BY'}
- }
-```
-
-Please note that this is the same transaction as the one that the initiator
-signed. Responder is to decode it, inspect its contents, sign it, encode
-it and then post it back via a WebSocket message:
-
-```
-{'action': 'update_ack',
- 'payload': {'tx': 'tx$2veehmVabgjjKYWnuHyWmmqMd7Kh18Ztri56nRBku7kvigr8iFFmKxjmCBNwj7tvzZiDzPt6MZGs1cBQtJEnd8kTVZxkrv7SFeBR9ynWG1JabaH9MCL83HjNbDn8QZMenwb1MM4H2sUYtfy7vxUfjYwTqqQ8oDsF29FJe2vbAHqHLHmnaHB9NTCNdMZUuJAKXB5UH9fr2PGJsKt2SrgZcz4HAaoSZTa1pgAWcM5ESegGBopGDWBGZRA8Wpafyb6NG8rthmVPqPLTud2Z5cia4RZHg4RaDmFQU9dBXaz2EN1CjmpG7U1jVWc6FwXzxKSEDo5DaGbs9JRbPs7xLTC8YrLNSfneSdMhVvXTky83'}
- }
-```
+with sending the messages for off-chain updates. The inital state is the one
+described in the create transaction.
 
 #### Open confirmation
 After both parties have co-signed the state update both of them will receive a info for the channel open:
@@ -426,7 +378,7 @@ Then the starter receives a `channel_close_mutual_tx` to sign:
 {'action': 'sign',
  'tag': 'shutdown_sign',
  'payload': {
-    'tx': 'tx$2C9etiP9wZr2iQVj6BUYk5sxHVNgcVhK4ngwv7fjsnnj2S1przQggcqyfhfJGgMPkpzoDfBZM7SyxVQykUCHvJw2N7E5gWSMuiuGjL4fYYUAXkEeyJygCAqKiszgqz8RuBDAfyCX44SsC5Ev1KU84jkui5EVxb'
+    'tx': 'tx$SUBGDUaJgWhDYs73EPSiX42Xd3PSmHAhRmwd1th9ibGipCVVbsdS96roQZEH4MF'
     }
 }
 ```
@@ -435,7 +387,7 @@ it and then post it back via a WebSocket message:
 ```
 {'action': 'shutdown_sign',
  'payload': {
-    'tx': 'tx$4L9GSozvWQwFDrkxaT2DZYrXU1sFULxRkpFbKjzAR4XinUwRgFvzm7ct7ZCvq38ZfCUZR73yXHRnd2DURPCmwdj7NarynugJ5JkY5TVN6ZzxVMEs6nsA8Dfu7dA9AoFj3AwaDLdaBuUEXuXTvsLEZy57GCG2v8HLucFkpHRTK63VdG8UNMK429ofMqHo8QyPjdwHYjH43baCSiN21g2hfpL9qWBmGwmcipSKuV5tHKg2aMpURCHM1z1FnRqdosiVM42PJTxSAHv'
+    'tx': 'tx$8oWtHcfnWDSQV6Wdehp1MdXYhcbV29a7tWe3LWDqU5RwKvMhzPQLiSJKaYhtw4NLaBN1m3pmEtsVjoygkohXi9i8e3vpYgenphdKJmYLrFqjouxmyC5yKbsQUY8m9i4EzcMNuHmrLwrXrrPhKC1qY25Pxb6u74VEVuk'
     }
 }
 ```
@@ -445,7 +397,7 @@ Then the acknowledger receives a `channel_close_mutual_tx` to sign:
 {'action': 'sign',
  'tag': 'shutdown_sign_ack',
  'payload': {
-    'tx': 'tx$2C9etiP9wZr2iQVj6BUYk5sxHVNgcVhK4ngwv7fjsnnj2S1przQggcqyfhfJGgMPkpzoDfBZM7SyxVQykUCHvJw2N7E5gWSMuiuGjL4fYYUAXkEeyJygCAqKiszgqz8RuBDAfyCX44SsC5Ev1KU84jkui5EVxb'
+    'tx': 'tx$SUBGDUaJgWhDYs73EPSiX42Xd3PSmHAhRmwd1th9ibGipCVVbsdS96roQZEH4MF'
     }
 }
 ```
@@ -454,7 +406,7 @@ it and then post it back via a WebSocket message:
 ```
 {'action': 'shutdown_sign_ack',
  'payload': {
-    'tx': 'tx$FhWGD2ecn65dJoYfnYZxL9iNhbqXuTvq7HddtWNuQADQi71B1etAC7NmNG6n3Lq2wr6myPSG2HbGEAvJHJrmgbYuxC4biQGaz2Q7q3NtHJFxBKQxyRK33r4Cj98q3xNZqZ9YXQpE4f5XYjzLZbw6YRRsvdV28rzZHMFbX9rzeXJpxBD1NjtfHsQtVKMNyHABj96rt9DuV3XMmQomUw92TnuKNWUJS5omJ9N2Lq2bcm3TvWg7JvyxyU6DS9FPHwDw4aHcgRSsc5Bp'
+    'tx': 'tx$8oWtHcfnWDSYu4SfLLLHqYqM5JXiCZd6De7fLQZesMHrArZeWzP7893EVpBpUR56tKUeJXJ3YUTuqB8a4efiHaw6ai3GKwoeu3ZyzfGPUfb5EMG6viv2dM8mhtKqaG7fkEAWuswbmFN4bDjXANbAK2sMU36yfBc9p1h'
     }
 }
 ```
@@ -463,7 +415,7 @@ it and then post it back via a WebSocket message:
 Both participants receive the co-signed `channel_close_mutual_tx`:
 ```
 {'action': 'on_chain_tx',
- 'payload': {'tx': 'tx$T7f9gwgv5SsoFi3uoKcjZcfG9wXqS52nRHiCZccmc2pYAxc17sfDDNu6EAVgxQQxD2pvbQGBBKpatdkczSQWPxqMdXpgPgKEqEGxzmqJmeNMFR81KotMjPAiJciuinTQ1Gr2jLnfck3mGhnpXT9DrniEYdqnd53nP2XGMPsodRC8dUUMFzANh3YzBn3xsrNA1eHVBu4SZVMGhUHR3baVGKNpdHhsz8RiYTc6bjHBDhRiRPtgfvF4swJGDUsgWpAciLnssdq8AZ9cVy5JyReg3mf8UJaSLfvVUATyN9LN3Jf3pW'
+ 'payload': {'tx': 'tx$ERkuTBJfEHtrmDkFz7BaigSKsnqmsCc8MorKFUwAW5VmpSoatcN3Njy2Vda8asojeshjb7SoXsqevaDLzXj78GSPwTTfYJmJtwrewTwK3LSFBe5BEYMA8rxNAWSahW1ecp1wbkBgpdiUQn1Q1UFLcYVpWYGpTWFH5DXn69iz6kFWX8sa7c5PSTaLenjVZEkbV9pEgKHKbjfovvd15Jc821y3zhQvtfhcYKS89r7gnhi81LWsjnSghmjANgjiC'
             }
 }
 ```
@@ -483,7 +435,7 @@ Then the WebSocket connection is closed.
 After calculating the hash of the co-signed `channel_close_mutual_tx` parties can track
 its progress as they would do with any on-chain transaction
 ```
-curl 'http://127.0.0.1:3013/v2/tx/th$gCajQAyuCHwXFTSTyZWfmvJqNrikJnKfWmBsrPaAUswtNf7VP?tx_encoding=json'
+curl 'http://127.0.0.1:3013/v2/tx/th$2qkN973cNJiejXVJoXkXbttf1iKetWJCSY1W5VUBh3pnRS1kCC?tx_encoding=json'
 ```
 if the `block_hash` is `none` - then the transaction is still in the mempool.
 
@@ -499,8 +451,8 @@ Example message for when the `from` does not have enough tokens to spend
  'payload': {'reason': 'insufficient_balance',
              'request': {'action': 'update',
                          'payload': {'amount': 10000,
-                                     'from': 'ak$2KTP6oDmZcPKRoE8DZxHFQA7GCyYoc8TTRek5uCEwXDFovkFqz',
-                                     'to': 'ak$2KmumVDr1KQwhzPbbC14t3at6wHD1i6TFAS3PoquPRnEGaiiWs'
+                                     'from': 'ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn',
+                                     'to': 'ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68'
                                      },
                           'tag': 'new'
                           }
@@ -547,7 +499,7 @@ The `sender` pushes a message with the following structure:
 ```
 {'action': 'message',
  'payload': {'info': 'hejsan',
-             'to': 'ak$R2jDydYPpjsWckNte6bUFg6pJiyKRaYaLRBKnQFwZAuEiDxrb'
+             'to': 'ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68'
              }
 }
 ```
@@ -558,8 +510,8 @@ details:
 ```
 {'action': 'message',
  'payload': {'message': {'channel_id': 'ch$6SgSc7a14dGbwMNCsjjQZCYVreVLKkFwBzJEZ58ZSZnV9FiQ1',
-                         'from': 'ak$2W2vDXjrDWCtVcJ3aKNHHr8BxJ37xaNg6o88AfxosTTyejiEM',
-                         'to': 'ak$R2jDydYPpjsWckNte6bUFg6pJiyKRaYaLRBKnQFwZAuEiDxrb',
+                         'from': 'ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn',
+                         'to': 'ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68',
                          'info': 'hejsan'
                          }
             }
