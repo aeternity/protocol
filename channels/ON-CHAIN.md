@@ -231,6 +231,7 @@ Payload is a valid transaction that has:
   that the PoI is a correct one
 * `channel_id` being the same as the transaction `channel_id`
 * `round` being greater or equal to the last on-chain `round` for that channel id
+
 The payload can be either empty or a signed transaction.
 If the payload is empty - the channel is closed according to
 the last on-chain transaction. In this case the proof of
@@ -267,6 +268,7 @@ Payload is a valid transaction that has:
 * `state_hash` equal to the proof of inclusion's root hash
 * `channel_id` being the same as the transaction `channel_id`
 * `round` being greater or equal to the last on-chain `round` for that channel id
+
 The payload can be either empty or a signed transaction.
 If the payload is empty - the channel is closed according to
 the last on-chain transaction. In this case the proof of
