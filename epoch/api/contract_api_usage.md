@@ -21,8 +21,6 @@ An epoch node provides some utility functions to help you create contract transa
 ### Contract Compile
 [/contract/compile doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/CompileContract)
 
-
-
 ### Encode Call Data
 [/contract/encode-calldata doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/EncodeCalldata)
 
@@ -35,6 +33,8 @@ function -- the name of the function in the contract to call (if abi is "sophia"
 arg -- the argument to the call as Sophia constants (when abi is "sophia" or "sophia-address") or as an solidity encoded call-data (if abi is "evm").
 abi -- one of "sophia", "sophia-address" or "evm".
 
+### Decode Call Data
+[/contract/decode-data doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/DecodeData)
 
 ## On chain transactions
 
