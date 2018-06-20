@@ -252,7 +252,7 @@ Signatures are sorted.
 
 #### Contract
 
-For a contract with address `<contractpubkey>`, the fields of the contract object (to which tag and version need to be prepended) is:
+For a contract with address `<contractpubkey>`, the fields of the contract object (to which tag and version need to be prepended) are:
 
 ```
 [ <owner>      :: id()
