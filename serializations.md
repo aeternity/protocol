@@ -251,6 +251,9 @@ Signatures are sorted.
 ```
 
 #### Contract
+
+For a contract with address `<contractpubkey>`, the fields of the contract object (to which tag and version need to be prepended) are:
+
 ```
 [ <owner>      :: id()
 , <vm_version> :: int()
@@ -263,13 +266,14 @@ Signatures are sorted.
 ```
 
 The balance of the account is stored in the account state tree.
+
 The contract storage (or state) which is a key value map from (key::binary() to value::binary())
 is stored in its own subtree. The key for a contract storage value is:
 ```
 <contractpubkey><16><key> :: binary()
 ```
-Each value is just stored as a binary as is. If the value is the empty binary the key is pruned
-from the tree.
+Each value is just stored as a binary as is - without tag or version.
+If the value is the empty binary the key is pruned from the tree.
 
 Contracts with vm_version == 1, i.e. Sophia contracts on the AEVM stores the memory layout of the
 state as one binary value at address 0.
