@@ -55,8 +55,8 @@ in the chain, and the others are metadata used for the connection itself.
   | responder | string | responder's public key | Yes | Yes |
   | lock_period | integer | amount of blocks for disputing a solo close | Yes | Yes |
   | push_amount | integer | initial deposit in favour of the responder by the initiator | Yes | No |
-  | initiator_amount | integer | amount of tokens the initiator has commited to the channel | Yes | Yes |
-  | responder_amount | integer | amount of tokens the responder has commited to the channel | Yes | Yes |
+  | initiator_amount | integer | amount of tokens the initiator has committed to the channel | Yes | Yes |
+  | responder_amount | integer | amount of tokens the responder has committed to the channel | Yes | Yes |
   | channel_reserve | integer | the minimum amount both peers need to maintain | Yes | Yes |
   | ttl | integer | minimum block height to include the `channel_create_tx` | No | Yes |
   | host | string | host of the `responder`'s node| Yes | No |
@@ -523,7 +523,7 @@ details:
 
 #### Total balance update events
 
-After the channel has been opened it has a total balance of tokens commited to
+After the channel has been opened it has a total balance of tokens committed to
 it. This balance is persisted as part of the on-chain channel state. Upon
 closing a channel on-chain, the closing balances of the participants are
 checked against this balance. Under no circumstances the sum of the closing balances can
@@ -556,7 +556,7 @@ posted on-chain and is included in a block. It has the following structure:
   | ---- | ---- | ----------- |
   | channel id | string | ID of the channel|
   | from | string | depositor's public key |
-  | amount | integer | the amount commited to the channel |
+  | amount | integer | the amount committed to the channel |
   | ttl | integer | minimum block height to include the transaction |
   | fee | integer | fee to be paid to the miner |
   | state_hash | string | the root of the internal channel state hash after the deposit |
