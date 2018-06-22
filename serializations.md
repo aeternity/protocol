@@ -547,3 +547,4 @@ NOTE: As the POI contains the Merkle Patricia Tree nodes (e.g. not only their ha
 * Each state subtree does not necessarily contain elements of the same key length.
 * The object itself does not contain its own id as it can be derived from the location in the tree.
 * The key used for storing each object in each state subtree is not necessarily derived from the object itself.
+* The value(s) whose inclusion the POI proves is included in the POI itself.
