@@ -532,9 +532,10 @@ The channel offchain transaction is not included directly in the transaction tre
 
 NOTE: `[{<mpt_hash>, <mpt_value>}]` is the sorted list of Merkle Patricia Tree nodes in the proof.
 If the subtree (e.g. `<accounts>`) is empty,
-then the serialization is just `[]` (e.g. `<accounts>` is `[]`);
+then the serialization is just `[]` (e.g. `<accounts>` is `[{<root_hash>, []}]`);
 otherwise it is a list of one element `[<proof_of_inclusion>]`
-(e.g. `<accounts>` is `[{<root_hash>, [{<mpt_hash>, <mpt_value>}, {<mpt_hash>, <mpt_value>}]}]`).
+(e.g. `<accounts>` is `[{<root_hash>, [{<mpt_hash>, <mpt_value>}, {<mpt_hash>, <mpt_value>}]}]`;
+`<accounts>` is `[{<root_hash>, []}]`).
 
 NOTE: As the POI contains the Merkle Patricia Tree nodes (e.g. not only their hashes):
 * Each state subtree does not necessarily contain elements of the same key length.
