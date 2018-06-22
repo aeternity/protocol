@@ -85,6 +85,8 @@ RLP ensures that there is only one serialization of each corresponding
 object on the lowest level, but it can only encode two primitive
 objects, lists and byte arrays.
 
+RLP ensures that the serialization is a non-empty byte array.
+
 Objects in Æternity are encoded as lists of fields, where the two
 first fields describe the object type and the object version.
 
