@@ -85,6 +85,8 @@ RLP ensures that there is only one serialization of each corresponding
 object on the lowest level, but it can only encode two primitive
 objects, lists and byte arrays.
 
+RLP ensures that the serialization is a non-empty byte array.
+
 Objects in Æternity are encoded as lists of fields, where the two
 first fields describe the object type and the object version.
 
@@ -251,6 +253,9 @@ Signatures are sorted.
 ```
 
 #### Contract
+
+For a contract with address `<contractpubkey>`, the fields of the contract object (to which tag and version need to be prepended) are:
+
 ```
 [ <owner>      :: id()
 , <vm_version> :: int()
@@ -263,13 +268,16 @@ Signatures are sorted.
 ```
 
 The balance of the account is stored in the account state tree.
+
 The contract storage (or state) which is a key value map from (key::binary() to value::binary())
 is stored in its own subtree. The key for a contract storage value is:
 ```
 <contractpubkey><16><key> :: binary()
 ```
-Each value is just stored as a binary as is. If the value is the empty binary the key is pruned
-from the tree.
+The `<key>` is non-empty.
+
+Each value is just stored as a binary as is - without tag or version.
+If the value is the empty binary the key is pruned from the tree.
 
 Contracts with vm_version == 1, i.e. Sophia contracts on the AEVM stores the memory layout of the
 state as one binary value at address 0.
@@ -532,11 +540,13 @@ The channel offchain transaction is not included directly in the transaction tre
 
 NOTE: `[{<mpt_hash>, <mpt_value>}]` is the sorted list of Merkle Patricia Tree nodes in the proof.
 If the subtree (e.g. `<accounts>`) is empty,
-then the serialization is just `[]` (e.g. `<accounts>` is `[]`);
+then the serialization is just `[]` (e.g. `<accounts>` is `[{<root_hash>, []}]`);
 otherwise it is a list of one element `[<proof_of_inclusion>]`
-(e.g. `<accounts>` is `[{<root_hash>, [{<mpt_hash>, <mpt_value>}, {<mpt_hash>, <mpt_value>}]}]`).
+(e.g. `<accounts>` is `[{<root_hash>, [{<mpt_hash>, <mpt_value>}, {<mpt_hash>, <mpt_value>}]}]`;
+`<accounts>` is `[{<root_hash>, []}]`).
 
 NOTE: As the POI contains the Merkle Patricia Tree nodes (e.g. not only their hashes):
 * Each state subtree does not necessarily contain elements of the same key length.
 * The object itself does not contain its own id as it can be derived from the location in the tree.
 * The key used for storing each object in each state subtree is not necessarily derived from the object itself.
+* The value(s) whose inclusion the POI proves is included in the POI itself.
