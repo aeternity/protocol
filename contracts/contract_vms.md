@@ -16,15 +16,15 @@ of the application binary interface (ABI) of the contract.
 
 The current meaning of this field is:
 
-| Value | Machine  | ABI         | Description
-| ----- | -------- | ----------- | -----------
-|   00  |          |             | RESERVED
-|   01  | [AEVM_01](aevm.md)  | [Sophia_01](sophia.md#the-sophia_01-abi)   | For Sophia contracts on the AEVM
-|   02  | [AEVM_01](aevm.md)  | [Solidity_01](solidity.md#the-solidity_01-abi) | For Solidity contracts on the AEVM
-|   03  | [FTWVM_01](contract_vms.md#ftwvm) | Sophia_02   | For Sophia contracts on the FTWVM
-|   04  | [HLM_01](contract_vms.md#hlm)   | Varna_01    | For Varna contracts on the HLM
-|   05  | [FAEVM_01](aevm.md#the-fast-%C3%86ternity-virtual-machine-faevm) | [Solidity_01](solidity.md#the-solidity_01-abi)| For fast execution of Solidity contracts
-| 06-FF |          |             | UNUSED
+| Value (hex) | Machine  | ABI         | Description
+| ----------- | -------- | ----------- | -----------
+|   00        |          |             | RESERVED
+|   01        | [AEVM_01](aevm.md)  | [Sophia_01](sophia.md#the-sophia_01-abi)   | For Sophia contracts on the AEVM
+|   02        | [AEVM_01](aevm.md)  | [Solidity_01](solidity.md#the-solidity_01-abi) | For Solidity contracts on the AEVM
+|   03        | [FTWVM_01](contract_vms.md#ftwvm) | Sophia_02   | For Sophia contracts on the FTWVM
+|   04        | [HLM_01](contract_vms.md#hlm)   | Varna_01    | For Varna contracts on the HLM
+|   05        | [FAEVM_01](aevm.md#the-fast-%C3%86ternity-virtual-machine-faevm) | [Solidity_01](solidity.md#the-solidity_01-abi)| For fast execution of Solidity contracts
+| 06-FF       |          |             | UNUSED
 
 The machine names corresponds to the machines described below (HLM, FTWVM, AEVM).
 The number after the machine name designates the version of the machine.

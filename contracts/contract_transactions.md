@@ -33,23 +33,7 @@ The transaction contains:
 - Gas price for the call.
 - Call data for the initial call (usually including a function name and args, interpreted by the contract).
 
-
-```
-{ owner           :: public_key()
-, nonce           :: pos_integer()
-, code            :: hex_bytes()
-, vm_version      :: hex_byte()
-, fee             :: amount()
-, deposit         :: amount()
-, amount          :: amount()
-, gas             :: amount()
-, gas_price       :: amount()
-, call_data       :: hex_bytes()
-}
-```
-
-Where a hex byte is a string of two hex digits preceded with 0x,
-and hex bytes is a string of a number of hex bytes preceded with 0x.
+See [Contract Create Transaction Serialization](../serializations.md#contract-create-transaction) for the serialization specification.
 
 Call data is encoded depending on the ABI of the language of the contract.
 
@@ -129,18 +113,7 @@ The transaction contains:
 - The calldata
 - A transaction fee
 
-```
-{ caller          :: public_key()
-, nonce           :: pos_integer()
-, contract        :: public_key()
-, vm_version      :: hex_byte()
-, fee             :: amount()
-, amount          :: amount()
-, gas             :: amount()
-, gas_price       :: amount()
-, call_data       :: hex_bytes()
-}
-```
+See [Contract Call Transaction Serialization](../serializations.md#contract-call-transaction) for the serialization specification.
 
 The transaction has to be signed with the private key of the caller.
 
