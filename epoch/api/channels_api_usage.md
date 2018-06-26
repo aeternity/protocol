@@ -526,10 +526,10 @@ details:
 After the channel has been opened it has a total balance of tokens committed to
 it. This balance is persisted as part of the on-chain channel state. Upon
 closing a channel on-chain, the closing balances of the participants are
-checked against this balance. Under no circumstances the sum of the closing balances can
+checked against this balance. Under no circumstances can the sum of the closing balances
 be greater than the total balance on-chain.
 
-Participants are able to modify the total balancer: the following two functionalities are available:
+Participants are able to modify the total balance: the following two functionalities are available:
 
 * deposit - when a participant wants to commit more tokens from his on-chain
   balance to the channel total balance
@@ -539,9 +539,9 @@ Participants are able to modify the total balancer: the following two functional
 ### Deposit events
 
 After the channel had been opened any of the participants can initiate a
-deposit. Process closely resembles the [update](#update). Most notable
-difference is the transaction been co-signed: it is `channel_deposit_tx` and
-after the procedure is finished - it is being posted on-chain.
+deposit. The process closely resembles the [update](#update). The most notable
+difference is the transaction has been co-signed: it is `channel_deposit_tx` and
+after the procedure is finished, it is posted on-chain.
 
 Since both the initiator and responder can deposit tokens, in the scope of this description we
 will call the participant that commits tokens to the channel a depositor and
@@ -572,7 +572,7 @@ Any of the participants can initiate a deposit. Only requirements are:
 
 ##### Trigger a deposit
 
-The depositor sends a websocket message containing the desired change
+The depositor sends a WebSocket message containing the desired change
 ```
 {'action': 'deposit',
  'payload': {
@@ -629,7 +629,7 @@ it and then post it back via a WebSocket message:
 ```
 
 #### Finish deposit
-After both the parties had signed the deposit transaction, the transaction is posted on-chain and
+After both parties had signed the deposit transaction, the transaction is posted on-chain and
 both parties receive it:
 ```
 {'action': 'on_chain_tx',
@@ -641,8 +641,8 @@ They are both to compute the transaction hash. Using it,
 participants can track its progress on the chain: entering the mempool, block
 inclusion and a number of confirmations.
 
-After the `minimum_depth` block confirmations each participants is informed
-for the deposit progress on chain by one's own node:
+After the `minimum_depth` block confirmations each participant is informed
+for the deposit progress on-chain by one's own node:
 ```
 {'action': 'info',
  'payload': {'event': 'own_deposit_locked'}
@@ -657,20 +657,20 @@ height needed is reached:
 ```
 With this the deposit sequence is complete and the channel can continue with
 other updates. Note that the deposit transaction's `round` and `state_hash`
-are the one considered latest from the channel's perspective. For example the
+are the ones considered latest from the channel's perspective. For example the
 next correct off-chain update/deposit/withdrawal shall have a deposit
 transaction's `round` plus one.
 
 ### Withdraw events
 
 After the channel had been opened any of the participants can initiate a
-withdrawal. Process closely resembles the [update](#update). Most notable
-difference is the transaction been co-signed: it is `channel_withdraw_tx` and
+withdrawal. The process closely resembles the [update](#update). The most notable
+difference is that the transaction has been co-signed: it is `channel_withdraw_tx` and
 after the procedure is finished - it is being posted on-chain.
 
 Since both the initiator and responder can withdraw tokens, in the scope of this description we
 will call the participant that commits tokens to the channel a withdrawer and
-the other party - acknowledger. Note that any public key outside of the channel participants
+the other party - an acknowledger. Note that any public key outside of the channel participants
 is considered invalid for the withdrawer role.
 
 #### Withdraw transaction
@@ -690,14 +690,14 @@ posted on-chain and is included in a block. It has the following structure:
 
 #### Start withdraw
 
-Any of the participants can initiate a withdrawal. Only requirements are:
+Any of the participants can initiate a withdrawal. The only requirements are:
 * Channel is already opened
 * No off-chain update/deposit/withdrawal is currently being performed
 * Channel is not being closed or in a solo closing state
 
 ##### Trigger a withdrawal
 
-The withdrawer sends a websocket message containing the desired change
+The withdrawer sends a WebSocket message containing the desired change
 ```
 {'action': 'withdraw',
  'payload': {
@@ -743,7 +743,7 @@ transaction for confirmation:
     }
 }
 ```
-Note that this is the same transaction as the one that the withdrawer had already signed. The acknowledger is to decode the transaction, inspect its contents, sign it, encode
+Note that this is the same transaction as the one that the withdrawer has already signed. The acknowledger is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
 ```
 {'action': 'withdraw_ack',
@@ -766,8 +766,8 @@ They are both to compute the transaction hash. Using it,
 participants can track its progress on the chain: entering the mempool, block
 inclusion and a number of confirmations.
 
-After the `minimum_depth` block confirmations each participants is informed
-for the withdraw progress on chain by one's own node:
+After the `minimum_depth` block confirmations each participant is informed
+for the withdraw progress on-chain by one's own node:
 ```
 {'action': 'info',
  'payload': {'event': 'own_withdraw_locked'}
@@ -782,7 +782,7 @@ height needed is reached:
 ```
 With this the withdrawal sequence is complete and the channel can continue with
 other updates. Note that the withdraw transaction's `round` and `state_hash`
-are the one considered latest from the channel's perspective. For example the
+are the ones considered latest from the channel's perspective. For example the
 next correct off-chain update/deposit/withdrawal shall have a withdraw
 transaction's `round` plus one.
 
