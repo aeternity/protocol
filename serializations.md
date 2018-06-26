@@ -274,6 +274,8 @@ is stored in its own subtree. The key for a contract storage value is:
 ```
 <contractpubkey><16><key> :: binary()
 ```
+The `<key>` is non-empty.
+
 Each value is just stored as a binary as is - without tag or version.
 If the value is the empty binary the key is pruned from the tree.
 
