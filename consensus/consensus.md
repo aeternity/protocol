@@ -40,7 +40,7 @@ the time a block was received at, i.e. it will prefer the block it received firs
 
 This document depends on Bitcoin-NG protocol that describes rules for building blockchain.
 Bitcoin NG introduces two types of blocks:
-1. Key Blocks - Key Blocks carry an ID of a leader and Proof-of-Work evidence and associated metadata
+1. Key Blocks - Key Blocks carry a Public Key of a leader and Proof-of-Work evidence and associated metadata
 2. Micro Blocks - Micro Blocks carry transactions confirmed by a leader and associated metadata
 
 There may be `0-N` Micro Blocks between two Key Blocks. Micro Blocks are small and they are produced very often i.e. every three seconds.
