@@ -34,7 +34,7 @@ Leaders are elected by solving Proof-of-Work puzzle. They broadcast the evidence
       Leader 2 emitted one Micro Block so far
 
 
-Leaders, who follow the protocol, emit Micro Blocks until they receive Key Block broadcasted by another leader. Micro Blocks are not distinguished by height - they inherit the height of the leader that emitted them.
+Leaders, who follow the protocol, emit Micro Blocks until they receive Key Block broadcasted by another leader. Micro Blocks are not distinguished by height - they inherit the height of the leader that emitted them. All the blocks with the same height are called Generation. Recipients of Micro Blocks can validate them by cross-checking the signature in a Micro Block with the public key from the Key Block broadcasted by the same Leader.
 
 Latency
 ==
