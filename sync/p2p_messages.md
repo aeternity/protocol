@@ -22,9 +22,9 @@ The following P2P messages are implemented in
   - [MSG_HEADER](#msg_header)
   - [MSG_GET_N_SUCCESSORS](#msg_get_n_successors)
   - [MSG_HEADER_HASHES](#msg_header_hashes)
-  - [MSG_GET_BLOCK](#msg_get_block)
+  - [MSG_GET_GENERATION](#msg_get_generation)
   - [MSG_TXS](#msg_txs)
-  - [MSG_BLOCK](#msg_block)
+  - [MSG_GENERATION](#msg_generation)
   - [MSG_TX_POOL_SYNC_INIT](#msg_tx_pool_sync_init)
   - [MSG_TX_POOL_SYNC_UNFOLD](#msg_tx_pool_sync_unfold)
   - [MSG_TX_POOL_SYNC_GET](#msg_tx_pool_sync_get)
@@ -120,11 +120,12 @@ Message is RLP encoded, fields:
 Each header hash contains a 64-bit big endian height and the corresponding
 hash, see `aec_peer_messages` for details.
 
-## MSG_GET_BLOCK
-*(Tag = 7)*
+## MSG_GET_GENERATION
+*(Tag = 8)*
 
 Message is RLP encoded, fields:
   - `Hash :: byte_array`
+  - `Forward :: bool`
 
 ## MSG_TXS
 *(Tag = 9)*
@@ -135,14 +136,15 @@ Message is RLP encoded, fields:
 A signed transaction is serialized as a tagged and versioned
 [signed transaction](../serializations.md#signed-transaction).
 
-## MSG_BLOCK
-*(Tag = 11)*
+## MSG_GENERATION
+*(Tag = 12)*
 
 Message is RLP encoded, fields:
-  - `Block :: byte_array`
+  - `KeyBlock :: byte_array`
+  - `MicroBlocks :: [byte_array]`
+  - `Forward :: bool`
 
-A block is serialized using the `aec_blocks:serialize_to_binary/1` function, it
-consists of a header and a list of signed transactions.
+The key block and each of the microblocks are serialized using the `aec_blocks:serialize_to_binary/1` function.
 
 ## MSG_TX_POOL_SYNC_INIT
 *(Tag = 20)*
