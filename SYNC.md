@@ -42,9 +42,9 @@ For encryption and authentication we are going to use the [Noise
 protocol](https://noiseprotocol.org/), with the exact protocol name being
 `Noise_XK_25519_ChaChaPoly_Blake2b`, i.e. `XK` for handshakes, DH over
 `Curve25519`, `ChaChaPoly` for symmetric encryption and the `Blake2b` hash
-function. `XK` as a handshake pattern means that the initiator of the handshake
-sends their static key to the responder and the initiator knows the static key
-of the responder.
+function. [`XK` as a handshake pattern](https://noiseexplorer.com/patterns/XK/)
+means that the initiator of the handshake sends their static key to
+the responder and the initiator knows the static keyof the responder.
 
 Each node has a static `Curve25519` key pair for P2P communication. The peer
 discovery is bootstrapped by having a set of Aeternity peer addresses in the
