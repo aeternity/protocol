@@ -305,6 +305,30 @@ To ask the oracle what the query answer is use the Oracle.getAnswer function:
 Oracle.getAnswer(o : oracle('a, 'b), q : oracle_query('a, 'b)) : option('b)
 ```
 
+#### AENS interface
+
+The following primitives are available for interacting with the Aeternity
+Naming System (AENS):
+
+- Name resolution
+  ```
+  AENS.resolve(name : string, key : string) : option('a)
+  ```
+  Here `name` should be a registered name and `key` one of the attributes
+  associated with this name (for instance `"account_pubkey"`). The return type
+  (`'a`) must be resolved at compile time to an atomic type and the value is
+  type checked against this type at run time.
+- AENS transactions
+  ```
+  AENS.preclaim(owner : address, commitment_hash : hash, sig : signature) : ()
+  AENS.claim   (owner : address, name : string, salt : int, sig : signature) : ()
+  AENS.transfer(owner : address, new_owner : address, name_hash : hash, sig : signature) : ()
+  AENS.revoke  (owner : address, name_hash : hash, sig : signature) : ()
+  ```
+  If `owner` is different from `Contract.address`, `sig` should be a signature
+  of the other arguments by the private key of the `owner` account.
+  (*TODO: make precise*, *TODO: not implemented*)
+
 
 #### Events
 
