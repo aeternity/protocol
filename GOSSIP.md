@@ -130,22 +130,22 @@ nodes to join the cluster even if the trusted nodes inbound limit has been
 reached. In addition, this prevent a node, in particular a trusted node, to
 have so much inbound connections that it cannot reach its number of outbound
 connections; a guaranteed number of outbound connection is crucial for proper
-propagation of new blocks. For all nodes to reach there established number of
+propagation of new blocks. For all nodes to reach their established number of
 outbound connections, the soft maximum limit for inbound connections must be
 smaller than the maximum number of nodes minus the wanted number of outgoing
 connections.
 
 The node will first burst-connect to the trusted peers and then periodically
 connects to more peers until it reaches the maximum number of outbound
-connections; the delay between connection should be small enough so the nodes
-has enough outbound connections to work properly, but large enough so it has
-enough peers to choose from. This is done by having a variable delay between
-connections of `2^(OUTBOUND_CONNECTION_COUNT - 1)` seconds when
+connections; the delay between connections to new peers should be small enough
+so the nodes has enough outbound connections to work properly, but large enough
+so it has enough peers to choose from. This is done by having a variable delay
+between connections of `2^(OUTBOUND_CONNECTION_COUNT - 1)` seconds when
 `OUTBOUND_CONNECTION_COUNT` is greater than `0` with a maximum of `30` seconds;
 this allow the node to reach 5 outbound connection under `15` seconds and
 connect to the last peer when having received around `20` gossip messages.
 
-The node iteratively pick a random peer (not yet connected) from either
+The node iteratively picks a random peer (not yet connected) from either
 the verified pool or the unverified pool (`0.5` probability by default),
 that is from a different group ([See Peer Groups](#peer-groups)) than
 any actual outbound connection. In case there are no more peers available in the
@@ -160,9 +160,9 @@ contains enough reachable peers to reduce the chance of a Sybil attack were
 most of the good peers are unreachable augmenting the probability of only
 hostile node getting selected. (Not yet implemented).
 
-If a peer changes its address but not its key, the new address will **never**
+If a peer changes its IP address but not its key, the new address will **never**
 be updated through gossip. This is to prevent an hostil node from gossiping
-bad address for known good nodes and making them unreachable. The peer will be
+bad addresses for known good nodes and making them unreachable. The peer will be
 removed after the normal retry policy is exausted; then the new address will be
 added through the usual gossip exchanges.
 
@@ -277,7 +277,7 @@ unverified pool: `1/2^N`
 - Period of verified peer random peer check when the maximum number
 of verified connections has been reached: `60 seconds`
 - Period of new peer connection up to the maximum number of verified
-connections: `min(30, 2^OUTBOUND_CONNECTION_COUNT) seconds`.
+connections: `min(30, 2^(OUTBOUND_CONNECTION_COUNT - 1)) seconds`.
 - Gossip ping frequency: `120 seconds`
 - Maximum time to get a ping from an inbound connection: `30 seconds`
 - Maximum time without activity (besides gossip) for inbound connections less
