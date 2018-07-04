@@ -27,7 +27,7 @@ Roles:
   | amount | integer | Amount of tokens to transfer | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'update',
  'tag': 'new',
  'payload': {
@@ -48,7 +48,7 @@ Roles:
   | tx | string | unsigned `channel_offchain` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'sign',
  'tag': 'update',
  'payload' {
@@ -65,7 +65,7 @@ Roles:
   | tx | string | signed `channel_offchain` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'update',
  'payload': {
     'tx': 'tx$xCHADUvUikbjGRcBmioKtXFQKpGs7yZHvhkcjByxQDG5xnCpU6YVQs4qyBZL6h18xjTSy1wtUFe8ipKMHLp6VmU2KwLgd4mbUtqELz6w9wV6PGTex6ZS2y7TtqZsDuesGFTZqYET8syCor8kzGjemUkzvwHMJdKsQ5guDWj1C2EcuNR3MnK9heJLbKuf19peGDvijjS8zdCD1pxE4QcsVi9pAGUBCgFyKx8FkDzhv6LxjysuxdmuZqeTGq49s71QdVB74Y1DAQUq5JsH1kyhadFxVepS6FYmcBC4xK8h1sefipPAAVFY7YwNtj2W6U9CTCqSVAQSrpfGAo6322gSneD8aRKoGpQpy1NfxVePKqM5igmd1B6QDGcEYDigBzzNwrXpuYqjrdG5eB6C6ehwAxNskmiudbEuKrjwNL5JzExxrR21L5oQCDc3RMyPdeWJxs8eJfHCrWyzyAwsykV4hVGxddbsbrDWd3re42N5HARXpQG6Gq6aMGnSHJAKbXCWxys4Si6Wjpey7HyEgT1hYoxqtmwEGhW96Ksig'
@@ -83,7 +83,7 @@ Roles:
   | tx | string | unsigned `channel_offchain` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'sign',
  'tag': 'update_ack',
  'payload' {
@@ -100,7 +100,7 @@ Roles:
   | tx | string | signed `channel_offchain` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'update_ack',
  'payload': {
     'tx': 'tx$xCHADUvUikbjGRcBmj4YQkTJGCoGV6JQVdJW2FU1ZAYGhdayeCZerGqPWbRz4Eduq1KtjUbBJgdxSF3UKyChKMXne3dEDnChRdiUop4HYkHJ8GF3xQpbSspvST5qPTJqvcCstQCDXmJMLiYiWQ2hoPXL3a1qiiVmSwx2ztVuVqsEf1NsQCbMiNeJj8Uvrcp2FKN8TG2VoMTBTiMcCdLGXhX31EaLYTTDVyFTXGgFRUTdAsHgBjcQzm9hgQS75QjhKY7VtyUBCisUEQp8Dcr76rpdT1Qy9n8JYKboPkFZpY9DVx9We2hstbP3fjgZVLgDRAvLoC5YppVE7GZgUbRp6PMmbPUyc3qFYaxA82g7TzndipqnrKuuGzDjoPaM2w5evx1TvXAF5u1beac2kW7kJyKjLfLhjKQ8bnwBwcZ3WpdRfCVe55LtPwYEoZQJtdzojjVcuLmgJjbb2GDHioi8KXTasHre5oZKwkyYByMqzDafVTMT3kJqvdQG6HKAm8XGP6LGRsZFcpkn5jGtGbq7PRpTbAn1RbHWvRAEH'
@@ -118,7 +118,7 @@ Roles:
   | round | integer | last correct state round | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'conflict',
  'payload': {'channel_id': 'ch$WmpDbaiCs5roqRCL5KEKbpsDNJSbcbiUvt2cs1qyj4sM9HA3b',
              'round': 42
@@ -136,7 +136,7 @@ Roles:
   | request | json | the failed request | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'error',
  'payload': {'reason': 'insufficient_balance',
              'request': {'action': 'update',
@@ -164,7 +164,7 @@ Roles:
   | amount | integer | Amount of tokens to deposit in the channel | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'deposit',
  'payload': {
     'amount': 2
@@ -182,7 +182,7 @@ Roles:
   | tx | string | unsigned `channel_deposit` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'sign',
  'tag': 'deposit_tx',
  'payload' {
@@ -199,7 +199,7 @@ Roles:
   | tx | string | signed `channel_deposit` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'deposit_tx',
  'payload': {
     'tx': 'tx$i2WsEQsiC5XsnyKgLeXGW6b9ys87yoQzNB65csymQbK9AsuWApenk9ViHpzxb2oJwUCGiqzA1Cc1D6pJAjkLcQ6w3m8Bhvt41HSqtpSpEd1MciHMcFg1xsZG9CsPu1NUBey9EupgXFJtZ4caNMXcV4evV7ocBjzdBcJo5CUMQgapQZ8ajgUrPgfqQTb3Gq8FFCuHHaHytA7fTNik4KAAvyHiEDutXf1VJxXG2oYkpoNTQGuriV3g4Hxrms3r7LD8ko91'
@@ -217,7 +217,7 @@ Roles:
   | tx | string | unsigned `channel_deposit` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'sign',
  'tag': 'deposit_ack',
  'payload' {
@@ -234,7 +234,7 @@ Roles:
   | tx | string | signed `channel_deposit` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'deposit_ack',
  'payload': {
     'tx': 'tx$2WsEQsiC5Xso1aHppqY8EwniUa9demV2SAdrNckji4H5ZRDnakiMPAWRv4SSksecqXBCriNTTFg6c3dXK9TzmRV7DoqkKH68Vh7XbVGS7g9CQfaj46S8wgsFBdJtoBMnHV3xbbzSz36cMAAN3eosKaA74TMkgXWgrDCD619RnmskuyvArGbgy6fMFqSniG1s9a3WoTMLoFyw6ucpxgS523Dk3SQEbPAxznbL9KsBEjsCroe4HBVZZG5bX3LU8ZX9PUy'
@@ -256,7 +256,7 @@ Roles:
   | amount | integer | Amount of tokens to withdraw form the channel | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'withdraw',
  'payload': {
     'amount': 2
@@ -274,7 +274,7 @@ Roles:
   | tx | string | unsigned `channel_withdraw` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'sign',
  'tag': 'withdraw_tx',
  'payload' {
@@ -291,7 +291,7 @@ Roles:
   | tx | string | signed `channel_withdraw` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'withdraw_tx',
  'payload': {
     'tx': 'tx$2WsEQsiC5Xsn85g88TmLYonFu2r8HT53jQPJ7f6Ai9uvnZGwnExRyJ51nHS2mU4g2FUTf2PHUsgs22X5Nwg1E1Zy8ofuoJAttqhXpySyYJhCwdWXYKF6bapSXCLwQoKJ9bWLYYZqudsiPfwv43ekzgJHtaWozzFjrEq835B7Xbd8LSd4znVh2FRWfAPW1Zvsm6nKjN2NfEPndwbps7zgqvbQYeKngwFk952CLtDEpGfXXiS5pUp5ExYTwsxGE4E6LKV'
@@ -309,7 +309,7 @@ Roles:
   | tx | string | unsigned `channel_withdraw` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'sign',
  'tag': 'withdraw_ack',
  'payload' {
@@ -326,7 +326,7 @@ Roles:
   | tx | string | signed `channel_withdraw` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'withdraw_ack',
  'payload': {
     'tx': 'tx$2WsEQsiC5XsmkQF6BS1aUhB55XkktxRJi2ZWbpCbGVHgQNPQzUeaEJk57RrhWBagGqNUyUA9YY6PrZhTiXcYs6dK1BxASu8EummTYvfpTjfnA8hU21pw6Ms9fWbJbhBbLNai4hLGPEJZ12r1UHqxLTnq6nJ69vw6szeisRzVJ3XYNpvGgSR5dVyW7Yd2VvtW5CGEMCXCHVYquD8gt6RMBDDr1Q6LeLUTomBpgFGQknjKv56tLtZ2FHkWWa9mU22jXMS'
@@ -349,7 +349,7 @@ Roles:
   | info | string | Message body | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'message',
  'payload': {'info': 'hejsan',
              'to': 'ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68'
@@ -375,7 +375,7 @@ Roles:
   | info | string | Message body | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'message',
  'payload': {'message': {'channel_id': 'ch$6SgSc7a14dGbwMNCsjjQZCYVreVLKkFwBzJEZ58ZSZnV9FiQ1',
                          'from': 'ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn',
@@ -395,7 +395,7 @@ Roles:
  * **action:** `shutdown`
 
 #### Example
-```
+```javascript
 {'action': 'shutdown'}
 ```
 
@@ -409,7 +409,7 @@ Roles:
   | tx | string | unsigned `channel_close_mutual` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'sign',
  'tag': 'shutdown_sign',
  'payload': {
@@ -427,7 +427,7 @@ Roles:
   | tx | string | signed `channel_close_mutual` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'shutdown_sign',
  'payload': {
     'tx': 'tx$8oWtHcfnWDSQV6Wdehp1MdXYhcbV29a7tWe3LWDqU5RwKvMhzPQLiSJKaYhtw4NLaBN1m3pmEtsVjoygkohXi9i8e3vpYgenphdKJmYLrFqjouxmyC5yKbsQUY8m9i4EzcMNuHmrLwrXrrPhKC1qY25Pxb6u74VEVuk'
@@ -445,7 +445,7 @@ Roles:
   | tx | string | unsigned `channel_close_mutual` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'sign',
  'tag': 'shutdown_sign_ack',
  'payload': {
@@ -463,7 +463,7 @@ Roles:
   | tx | string | signed `channel_close_mutual` transaction | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'shutdown_sign_ack',
  'payload': {
     'tx': 'tx$8oWtHcfnWDSYu4SfLLLHqYqM5JXiCZd6De7fLQZesMHrArZeWzP7893EVpBpUR56tKUeJXJ3YUTuqB8a4efiHaw6ai3GKwoeu3ZyzfGPUfb5EMG6viv2dM8mhtKqaG7fkEAWuswbmFN4bDjXANbAK2sMU36yfBc9p1h'
@@ -480,7 +480,7 @@ Roles:
   | tx | string | co-signed transaction that is posted on-chain | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'shutdown_sign_ack',
  'payload': {
     'tx': 'tx$CWSA5wyxuP9AbAbcxQi8QbZsfUdhQdDouMSgsBTAQCNdN8PDKsLf6qnEhw6JacKRWKmBuwBaJYZTUSDUKih9vygmzkmbn2XC7MkGcz6zbwThk9jdyH8HQhzWq9uZ7ExYNjZyXGpPX6vQLsSRH8d4RxqvD94uG9YhcNqDWeSntM5CtBrjCwEXm9r3wEkZ6NKnoUShU5soJZTV8TAMFAArJMsS2V3EAjXSSVf3Xt5aJeVLgVbSYczcM22gvZt2LEPTCUJEYW2XsDvi6rAtps58d7B1P5uDuXG8s8hEWi11XsjaTyhGhnt9jfcBYVzQVdApG1JpMaQjeyRiEqwNoAVjTranxeM1Cn'
@@ -497,7 +497,7 @@ Roles:
   | event | string | event description | Yes |
 
 #### Example
-```
+```javascript
 {'action': 'info',
  'payload': {'event': 'own_deposit_locked'}
  }
