@@ -797,7 +797,7 @@ inclusion for the effects to take place. The solo closing sequence requires a
 couple of blocks and at least 2 transaction fees to be paid. This makes the
 solo closing sequence both slower and more expensive. It is intended to be
 used when the other party is trying to cheat or is not responding for a while.
-This is called a dispute and it is taken to the chain to resolve it. Despute
+This is called a dispute and it is taken to the chain to resolve it. Dispute
 resolution has the following steps:
 
 1. single `channel_solo_close` transaction
@@ -805,14 +805,14 @@ resolution has the following steps:
 3. single `channel_settle` transaction
 
 The second step is not required and a `channel_solo_close` could be followed
-either by zero, one or more `channel_slash` transactions every later one
+either by zero, one or more `channel_slash` transactions, each subsequent one 
 presenting a newer state and overwriting the previous one. Those are settled by
 a `channel_settle` transaction that finally closes the channel. Let's discuss
 those in detail.
 
 #### Payload and proof of inclusion
-Idea behind `channel_solo_close` and `channel_settle` is for parties to
-provide on-chain the latest channel internal state so the channel can be closed.
+The idea behind `channel_solo_close` and `channel_settle` is for parties to
+provide, on-chain, the latest channel internal state so that the channel can be closed.
 First comes the `channel_solo_close` that provides some off-chain state. Then a
 `channel_slash` can be posted but it is checked that it has a newer state than the
 `channel_solo_close` one. Then parties can post more `channel_slash` transactions
@@ -823,15 +823,15 @@ posted one. Thus the comparison on channel states is important. This is done
 by comparing rounds.
 
 Both `channel_solo_close` and `channel_slash` contain a `payload` field. This
-is either a binary containing an `channel_offchain` transaction or an empty
+is either a binary containing a `channel_offchain` transaction or an empty
 binary.
 
 If it is a `channel_offchain` transaction - it must be co-signed by both
 participants. It also contains a `channel_id`, `round` and `state_hash`.
-The `channel_id` with a combination with the correct singatures verifies that
+The `channel_id` in combination with the correct singatures verifies that
 this off-chain transaction indeed is part of the channel off-chain state. The
 `round` represents the height of the channel's state at the time the
-transaction was co-signed by the parties. The higher the round - the newer the
+transaction was co-signed by the parties. The higher the round, the newer the
 transaction is. This `round` must be greater than the last on-chain one for that channel.
 The `state_hash` is the internal channel state tree root hash
 at that `round` height.
@@ -852,7 +852,8 @@ channel's state tree had at this `round`.
 
 Both `channel_solo_close` and `channel_slash` contain a `poi` field. This is
 the proof of inclusion for participants' balances in the channel state: all
-the insignificant data in the channel's MPT is replaced by corresponding hashes.
+the insignificant data in the channel's MPT (Matricia Perkel Tree) is replaced
+by corresponding hashes.
 The root hash of the PoI must be equal to the `state_hash` provided by the `payload`.
 This guarantees that the PoI indeed is a proof of inclusion for tree at this height.
 
@@ -863,7 +864,7 @@ any subsequent withdrawal or deposits are considered invalid. Preconditions for
 the `channel_close_solo` to be valid are:
 
 * channel is opened on-chain
-* channel is not in a _closing_ state but not yet closed - no `channel_close_solo` had been
+* channel is not in a _closing_ state but not yet closed - no `channel_close_solo` has been
   included in a block yet
 
 Any participant in the channel can post a `channel_close_solo` transaction. In
@@ -889,7 +890,7 @@ a newer state via the `channel_slash` transaction. Preconditions for
 the `channel_slash` to be valid are:
 
 * channel is opened on-chain
-* channel is still in a _closing_ state - no `channel_settle` had been
+* channel is still in a _closing_ state - no `channel_settle` has been
   included in a block yet
 
 Any participant in the channel can post a `channel_slash` transaction. In
@@ -921,7 +922,7 @@ disputes are possible after that.
 
 In order to give parties time to slash a closing channel and update its state
 with a newer one, there is a timeframe only after which the `channel_settle`
-can be posted. This is measured in blockes mined on top of the last received
+can be posted. This is measured in blocks mined on top of the last received
 transaction for that channel (either `channel_close_solo` or `channel_slash`).
 The amount itself is prenegotiated before opening the channel and is part of
 the `channel_create` transaction - it is the value of `lock_period`. Under no
@@ -930,12 +931,12 @@ condition a `channel_settle` can be included in a block before passing the
 `channel_slash` transaction. Every next included `channel_slash` restarts the
 timer. It is worth noting that since those transactions must include a `payload`
 newer than the prevous on-chain one - this timer can not be postponed
-indefinetly. Preconditions for the `channel_settle` to be valid are:
+indefinitely. Preconditions for the `channel_settle` to be valid are:
 
 * channel is opened on-chain
-* channel is still in a _closing_ state - no other `channel_settle` had been
+* channel is still in a _closing_ state - no other `channel_settle` has been
   included in a block yet
-* at least `lock_period` blocks had been mined on top of the last
+* at least `lock_period` blocks has been mined on top of the last
   `channel_close_solo` or `channel_slash`
 
 Any participant in the channel can post a `channel_settle` transaction. In
