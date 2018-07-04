@@ -534,7 +534,7 @@ Participants are able to modify the total balance: the following two functionali
 * deposit - when a participant wants to commit more tokens from his on-chain
   balance to the channel total balance
 * withdrawal - when a participant wants to transfer tokens out of the channel
-  on-chain balace to one's personal account
+  on-chain balance to one's personal account
 
 ### Deposit events
 
@@ -569,6 +569,8 @@ Any of the participants can initiate a deposit. Only requirements are:
 * Channel is already opened
 * No off-chain update/deposit/withdrawal is currently being performed
 * Channel is not being closed or in a solo closing state
+* The deposit must be equal to or greater than zero, and cannot exceed the
+  available balance on the depositor's account
 
 ##### Trigger a deposit
 
@@ -694,6 +696,8 @@ Any of the participants can initiate a withdrawal. The only requirements are:
 * Channel is already opened
 * No off-chain update/deposit/withdrawal is currently being performed
 * Channel is not being closed or in a solo closing state
+* The withdrawal amount must be equal to or greater than zero, and cannot
+  exceed the available balance on the channel (minus the `channel_reserve`)
 
 ##### Trigger a withdrawal
 
