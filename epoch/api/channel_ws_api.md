@@ -45,7 +45,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsinged `channel_offchain` transaction | Yes |
+  | tx | string | unsigned `channel_offchain` transaction | Yes |
 
 #### Example
 ```
@@ -62,7 +62,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | singed `channel_offchain` transaction | Yes |
+  | tx | string | signed `channel_offchain` transaction | Yes |
 
 #### Example
 ```
@@ -80,7 +80,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsinged `channel_offchain` transaction | Yes |
+  | tx | string | unsigned `channel_offchain` transaction | Yes |
 
 #### Example
 ```
@@ -97,7 +97,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | singed `channel_offchain` transaction | Yes |
+  | tx | string | signed `channel_offchain` transaction | Yes |
 
 #### Example
 ```
@@ -179,7 +179,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsinged `channel_deposit` transaction | Yes |
+  | tx | string | unsigned `channel_deposit` transaction | Yes |
 
 #### Example
 ```
@@ -196,7 +196,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | singed `channel_deposit` transaction | Yes |
+  | tx | string | signed `channel_deposit` transaction | Yes |
 
 #### Example
 ```
@@ -214,7 +214,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsinged `channel_deposit` transaction | Yes |
+  | tx | string | unsigned `channel_deposit` transaction | Yes |
 
 #### Example
 ```
@@ -231,7 +231,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | singed `channel_deposit` transaction | Yes |
+  | tx | string | signed `channel_deposit` transaction | Yes |
 
 #### Example
 ```
@@ -271,7 +271,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsinged `channel_withdraw` transaction | Yes |
+  | tx | string | unsigned `channel_withdraw` transaction | Yes |
 
 #### Example
 ```
@@ -288,7 +288,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | singed `channel_withdraw` transaction | Yes |
+  | tx | string | signed `channel_withdraw` transaction | Yes |
 
 #### Example
 ```
@@ -306,7 +306,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsinged `channel_withdraw` transaction | Yes |
+  | tx | string | unsigned `channel_withdraw` transaction | Yes |
 
 #### Example
 ```
@@ -323,7 +323,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | singed `channel_withdraw` transaction | Yes |
+  | tx | string | signed `channel_withdraw` transaction | Yes |
 
 #### Example
 ```
@@ -406,7 +406,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsinged `channel_close_mutual` transaction | Yes |
+  | tx | string | unsigned `channel_close_mutual` transaction | Yes |
 
 #### Example
 ```
@@ -424,7 +424,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | singed `channel_close_mutual` transaction | Yes |
+  | tx | string | signed `channel_close_mutual` transaction | Yes |
 
 #### Example
 ```
@@ -442,7 +442,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsinged `channel_close_mutual` transaction | Yes |
+  | tx | string | unsigned `channel_close_mutual` transaction | Yes |
 
 #### Example
 ```
@@ -460,7 +460,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | singed `channel_close_mutual` transaction | Yes |
+  | tx | string | signed `channel_close_mutual` transaction | Yes |
 
 #### Example
 ```
@@ -477,7 +477,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | co-singed transaction that is posted on-chain | Yes |
+  | tx | string | co-signed transaction that is posted on-chain | Yes |
 
 #### Example
 ```
