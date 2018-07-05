@@ -57,6 +57,8 @@ worked out).
   suggest no, but there might be compelling use cases that I'm
   missing.
 
+*NOTE: Contract inheritance is not yet implemented.*
+
 ### Mutable state
 
 Sophia does not have arbitrary mutable state, but only a limited form of
@@ -121,6 +123,8 @@ function root(t : tree('a)) : option('a) =
     Tip => None
     Bin(_, v, _) => Some(v)
 ```
+
+*NOTE: Recursive data types are not yet implemented*
 
 ### Maps and records
 
@@ -340,6 +344,8 @@ and events are then logged using the `event` function:
 event(e : event) : ()
 ```
 
+*NOTE: Events are not yet implemented*
+
 #### Transactions
 Sophia can generate blockchain transactions.
 ```
@@ -350,6 +356,13 @@ The transaction type defines the transactions that can be created:
 record   spend_tx = {recipient : address, amount : uint}
 datatype transaction = SpendTx(spend_tx)
                      | ...
+```
+
+*NOTE: Transaction types are not yet implemented. For now spend transactions
+can be issued using the builtin function*
+
+```
+  raw_spend : (address, int) => ()
 ```
 
 #### Contract primitives
