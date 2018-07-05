@@ -1,6 +1,6 @@
 # æternity protocol
 
-This document defines the æternity protocol. 
+This document defines the æternity protocol. It replaces the outdated whitepaper.
 
 ## Disclaimer
 
