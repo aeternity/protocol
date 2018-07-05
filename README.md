@@ -1,6 +1,6 @@
-# Æternity protocol
+# æternity protocol
 
-This document defines the Æternity protocol.
+This document defines the æternity protocol. 
 
 ## Disclaimer
 
@@ -33,5 +33,6 @@ better solution.
 
 - [API](./epoch/api/README.md)
 
+## *Outdated* Whitepaper v0.1
 
-
+*The early whitepaper v0.1 is **outdated** and can be found [here](https://aeternity.com/aeternity-blockchain-whitepaper.pdf).*
