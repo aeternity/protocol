@@ -767,12 +767,21 @@ Data is encoded in memory as follows:
     of boxed values, the three cells (first component, second component, and
     pair cell) can appear in any order in the encoded binary.
   - The option type is encoded as -1 for `None` and as a singleton tuple `{v}` for `Some(v)`.
+  - Values of datatypes are encoded as tuples where the first component is a
+    constructor tag (starting with 0 for the first constructor), and the
+    following components are the constructor arguments. For instance, for
+    ```
+      datatype zeroOrTwo = Zero | Two(int, int)
+    ```
+    `Zero` is encoded as a singleton tuple `{0}` and `Two(a, b)` as the triple `{1, a, b}`.
   - Type representations are encoded as tuples as follows:
-    - word: {0}  (any unboxed type)
-    - String: {1}
-    - List(T): {2, encode(T)}
-    - Tuple(T): {3, encode(T)}
-    - Option(T): {4, encode(T)}
+    - `word`: `{0}`  (any unboxed type)
+    - `string`: `{1}`
+    - `list(t)`: `{2, encode(t)}`
+    - `tuple(ts)`: `{3, encode(ts)}`, where `ts : list(typerep)`
+    - `option(t)`: `{4, encode(t)}`
+    - `datatype(cs)`: `{5, encode(cs)}`, where `cs : list(list(typerep))`
+      are the type representations for the constructor arguments
 - Pointers are relative, with the address of the first word of the data being
   the *base address*. For calldata, the base address is 32 and for return
   values and contract state the base address is 0.
