@@ -766,7 +766,7 @@ Data is encoded in memory as follows:
   - The order of values is unspecified. For instance, in the encoding of a pair
     of boxed values, the three cells (first component, second component, and
     pair cell) can appear in any order in the encoded binary.
-  - The option type is encoded as -1 for `None` and as the tuple {4, V} for `Some(V)`.
+  - The option type is encoded as -1 for `None` and as a singleton tuple `{v}` for `Some(v)`.
   - Type representations are encoded as tuples as follows:
     - word: {0}  (any unboxed type)
     - String: {1}
