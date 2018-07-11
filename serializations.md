@@ -26,17 +26,18 @@ not divided into a header and a list of transactions;
 All field sizes are statically known and can be constructed directly as
 a byte array.
 
-| Fieldname | Size (bytes) |
-| --- | --- |
-| version    | 8    |
-| height     | 8    |
-| prev_hash  | 32   |
-| state_hash | 32   |
-| miner      | 32   |
-| target     | 8    |
-| pow        | 168  |
-| nonce      | 8    |
-| time       | 8    |
+| Fieldname  | Size (bytes) |
+| --- | ---  |
+| version     | 8    |
+| height      | 8    |
+| prev_hash   | 32   |
+| state_hash  | 32   |
+| miner       | 32   |
+| beneficiary | 32   |
+| target      | 8    |
+| pow         | 168  |
+| nonce       | 8    |
+| time        | 8    |
 
 ### Micro block header
 
