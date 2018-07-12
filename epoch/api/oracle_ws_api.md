@@ -1,7 +1,7 @@
 [back](./README.md)
 # Oracle WebSocket API
 
-The WebSocket API provides five different actions:
+The WebSocket API provides the following actions:
  * [Register an Oracle](#register-an-oracle)
  * [Extend the TTL for an Oracle](#extend-the-ttl-for-an-oracle)
  * [Post a query for an Oracle](#post-a-query-for-an-oracle)

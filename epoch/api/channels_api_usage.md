@@ -30,13 +30,16 @@ but are not necessarily part of the channel's life cycle.
 
 * [Generic messages](#generic-messages)
 
+* [Deposit](#deposit-events)
+
+* [Withdrawal](#withdraw-events)
+
 Only steps 1 and 3 require chain interactions, step 2 is off-chain.
 
 ### HTTP requests
 There are two types of HTTP requests:
-* Amount-modifying ones - [deposit](#deposit-transaction) and [withdrawal](#withdrawal-transaction)
-* Channel-closing ones - [solo close](#solo-close-transaction),
-  [slash](#slash-transaction) and [settle](#settle-transaction)
+* Total amount-modifying ones - [deposit](#deposit-transaction) and [withdrawal](#withdraw-transaction)
+* [Channel-closing ones](#solo-closing-sequence) - [solo close](#solo-close-on-chain-transaction), [slash](#slash-on-chain-transaction) and [settle](#settle-on-chain-transaction)
 
 ## Channel open
 In order to use a channel, it must be opened. Both parties negotiate parameters for the channel - for example the amounts to participate. Some of those are relevant to the chain and end up in a`channel_create_tx` that is posted on the chain. Once a certain amount of blocks have been mined on top of the one that included it, the channel is considered to be opened.
@@ -52,8 +55,8 @@ in the chain, and the others are metadata used for the connection itself.
   | responder | string | responder's public key | Yes | Yes |
   | lock_period | integer | amount of blocks for disputing a solo close | Yes | Yes |
   | push_amount | integer | initial deposit in favour of the responder by the initiator | Yes | No |
-  | initiator_amount | integer | amount of tokens the initiator has commited to the channel | Yes | Yes |
-  | responder_amount | integer | amount of tokens the responder has commited to the channel | Yes | Yes |
+  | initiator_amount | integer | amount of tokens the initiator has committed to the channel | Yes | Yes |
+  | responder_amount | integer | amount of tokens the responder has committed to the channel | Yes | Yes |
   | channel_reserve | integer | the minimum amount both peers need to maintain | Yes | Yes |
   | ttl | integer | minimum block height to include the `channel_create_tx` | No | Yes |
   | host | string | host of the `responder`'s node| Yes | No |
@@ -315,7 +318,7 @@ following structure:
   | ---- | ---- | ----------- |
   | from | string | sender's public key |
   | to | string | receiver's public key |
-  | amount | integer | the amount givem |
+  | amount | integer | the amount given |
 
 Sender and receiver are the channel parties. Both the initiator and responder
 can take those roles. Any public key outside of the channel is considered invalid.
@@ -645,3 +648,438 @@ details:
             }
 }
 ```
+
+#### Total balance update events
+
+After the channel has been opened it has a total balance of tokens committed to
+it. This balance is persisted as part of the on-chain channel state. Upon
+closing a channel on-chain, the closing balances of the participants are
+checked against this balance. Under no circumstances can the sum of the closing balances
+be greater than the total balance on-chain.
+
+Participants are able to modify the total balance: the following two functionalities are available:
+
+* deposit - when a participant wants to commit more tokens from his on-chain
+  balance to the channel total balance
+* withdrawal - when a participant wants to transfer tokens out of the channel
+  on-chain balance to one's personal account
+
+### Deposit events
+
+After the channel had been opened any of the participants can initiate a
+deposit. The process closely resembles the [update](#update). The most notable
+difference is the transaction has been co-signed: it is `channel_deposit_tx` and
+after the procedure is finished, it is posted on-chain.
+
+Since both the initiator and responder can deposit tokens, in the scope of this description we
+will call the participant that commits tokens to the channel a depositor and
+the other party - acknowledger. Note that any public key outside of the channel participants
+is considered invalid for the depositor role.
+
+#### Deposit transaction
+The `channel_deposit_tx` is a change to be applied on top of the latest channel state. It also is
+posted on-chain and is included in a block. It has the following structure:
+
+  | Name | Type | Description |
+  | ---- | ---- | ----------- |
+  | channel id | string | ID of the channel|
+  | from | string | depositor's public key |
+  | amount | integer | the amount committed to the channel |
+  | ttl | integer | minimum block height to include the transaction |
+  | fee | integer | fee to be paid to the miner |
+  | state_hash | string | the root of the internal channel state hash after the deposit |
+  | round | integer | the next channel round |
+  | nonce | integer | depositor's nonce |
+
+#### Start deposit
+
+Any of the participants can initiate a deposit. Only requirements are:
+* Channel is already opened
+* No off-chain update/deposit/withdrawal is currently being performed
+* Channel is not being closed or in a solo closing state
+* The deposit must be equal to or greater than zero, and cannot exceed the
+  available balance on the depositor's account
+
+##### Trigger a deposit
+
+The depositor sends a WebSocket message containing the desired change
+```
+{'action': 'deposit',
+ 'payload': {
+    'amount': 2
+    }
+ }
+```
+
+##### Depositor signs updated state
+The depositor receives a message containing the updated channel state as a
+`channel_deposit_tx` transaction
+```
+{'action': 'sign',
+ 'tag': 'deposit_tx',
+ 'payload' {
+    'tx': 'tx$2C9es4FjJF3MtD1M3Np7tUzgCk8AE3ARVJe94Sxmh63feCNt2CekXvjLhBPS2i8pQ8JKGQfgzMQnvfntEdYmMYo7D1UP59UUQ31Bss5G1gz8sPhzmrx1cXCawF9eB27gjYVhTnaLXwUEqdJfHqfATuwLqJtc1p'}
+}
+```
+The depositor is to decode the transaction, inspect its contents, sign it, encode
+it and then post it back via a WebSocket message:
+```
+{'action': 'deposit_tx',
+ 'payload': {
+    'tx': 'tx$i2WsEQsiC5XsnyKgLeXGW6b9ys87yoQzNB65csymQbK9AsuWApenk9ViHpzxb2oJwUCGiqzA1Cc1D6pJAjkLcQ6w3m8Bhvt41HSqtpSpEd1MciHMcFg1xsZG9CsPu1NUBey9EupgXFJtZ4caNMXcV4evV7ocBjzdBcJo5CUMQgapQZ8ajgUrPgfqQTb3Gq8FFCuHHaHytA7fTNik4KAAvyHiEDutXf1VJxXG2oYkpoNTQGuriV3g4Hxrms3r7LD8ko91'
+    }
+}
+```
+
+#### Acknowledger update
+The acknowledger receives an info message indicating an upcoming change:
+```
+{'action': 'info',
+ 'payload': {'event': 'deposit_created'}
+ }
+```
+Then the acknowledger receives a new message containing the deposit
+transaction for confirmation:
+```
+{'action': 'sign',
+ 'tag': 'deposit_ack',
+ 'payload' {
+    'tx': 'tx$2C9es4FjJF3MtD1M3Np7tUzgCk8AE3ARVJe94Sxmh63feCNt2CekXvjLhBPS2i8pQ8JKGQfgzMQnvfntEdYmMYo7D1UP59UUQ31Bss5G1gz8sPhzmrx1cXCawF9eB27gjYVhTnaLXwUEqdJfHqfATuwLqJtc1p'
+    }
+}
+```
+Note that this is the same transaction as the one that the depositor had already signed. The acknowledger is to decode the transaction, inspect its contents, sign it, encode
+it and then post it back via a WebSocket message:
+```
+{'action': 'deposit_ack',
+ 'payload': {
+    'tx': 'tx$2WsEQsiC5Xso1aHppqY8EwniUa9demV2SAdrNckji4H5ZRDnakiMPAWRv4SSksecqXBCriNTTFg6c3dXK9TzmRV7DoqkKH68Vh7XbVGS7g9CQfaj46S8wgsFBdJtoBMnHV3xbbzSz36cMAAN3eosKaA74TMkgXWgrDCD619RnmskuyvArGbgy6fMFqSniG1s9a3WoTMLoFyw6ucpxgS523Dk3SQEbPAxznbL9KsBEjsCroe4HBVZZG5bX3LU8ZX9PUy'
+  }
+}
+```
+
+#### Finish deposit
+After both parties had signed the deposit transaction, the transaction is posted on-chain and
+both parties receive it:
+```
+{'action': 'on_chain_tx',
+ 'payload': {'tx': 'tx$3cDMp6242sBycND2FPT2jcDWFceRgA7zL3ckU8VzLQdvf2Uqjx5CKkjMXbYrmYjMnLnDihVTrF2fCLqNG93BTAsCNWT6QiJwdmXrTXLQ2d2d7rAc5bYepTC2w3LyrZ37jhx3dN7ATusjXtSu6jw9N8exaPxnjKD3twye5B6bdqbZEHKXXtqStUmaTmUDofEWtGaUCxTWKCboMH7T2mxEjzxgpaH2fbHRxA3GmxaTaKWoTfbnvqragH9QVo6QxiCRAGNUEkbRbPw8m1qPUKjVFWWQSZ9VcCdXte3DitS3anXv7jtTKAA7uuj5pbdG4qi64dDLTd52sSQP6JZpzMxa6oyJTDo5s'
+            }
+}
+```
+They are both to compute the transaction hash. Using it,
+participants can track its progress on the chain: entering the mempool, block
+inclusion and a number of confirmations.
+
+After the `minimum_depth` block confirmations each participant is informed
+for the deposit progress on-chain by one's own node:
+```
+{'action': 'info',
+ 'payload': {'event': 'own_deposit_locked'}
+ }
+```
+An update from one's own node that the other party had confirmed that the block
+height needed is reached:
+```
+{'action': 'info',
+ 'payload': {'event': 'deposit_locked'}
+ }
+```
+With this the deposit sequence is complete and the channel can continue with
+other updates. Note that the deposit transaction's `round` and `state_hash`
+are the ones considered latest from the channel's perspective. For example the
+next correct off-chain update/deposit/withdrawal shall have a deposit
+transaction's `round` plus one.
+
+### Withdraw events
+
+After the channel had been opened any of the participants can initiate a
+withdrawal. The process closely resembles the [update](#update). The most notable
+difference is that the transaction has been co-signed: it is `channel_withdraw_tx` and
+after the procedure is finished - it is being posted on-chain.
+
+Since both the initiator and responder can withdraw tokens, in the scope of this description we
+will call the participant that commits tokens to the channel a withdrawer and
+the other party - an acknowledger. Note that any public key outside of the channel participants
+is considered invalid for the withdrawer role.
+
+#### Withdraw transaction
+The `channel_withdraw_tx` is a change to be applied on top of the latest channel state. It also is
+posted on-chain and is included in a block. It has the following structure:
+
+  | Name | Type | Description |
+  | ---- | ---- | ----------- |
+  | channel id | string | ID of the channel|
+  | to | string | withdrawer's public key |
+  | amount | integer | the amount taken out from the channel |
+  | ttl | integer | minimum block height to include the transaction |
+  | fee | integer | fee to be paid to the miner |
+  | state_hash | string | the root of the internal channel state hash after the withdraw |
+  | round | integer | the next channel round |
+  | nonce | integer | withdrawer's nonce |
+
+#### Start withdraw
+
+Any of the participants can initiate a withdrawal. The only requirements are:
+* Channel is already opened
+* No off-chain update/deposit/withdrawal is currently being performed
+* Channel is not being closed or in a solo closing state
+* The withdrawal amount must be equal to or greater than zero, and cannot
+  exceed the available balance on the channel (minus the `channel_reserve`)
+
+##### Trigger a withdrawal
+
+The withdrawer sends a WebSocket message containing the desired change
+```
+{'action': 'withdraw',
+ 'payload': {
+    'amount': 2
+    }
+ }
+```
+
+##### Withdrawer signs updated state
+The withdrawer receives a message containing the updated channel state as a
+`channel_withdraw_tx` transaction
+```
+{'action': 'sign',
+ 'tag': 'withdraw_tx',
+ 'payload' {
+    'tx': 'tx$2C9estKT2f86WwC7LCa18cDTTmMCrXM7N2AcrXKmgnTo9DNchXjNmewbgNX2YW4RYk8iHkVRnPpeYLRgh6xH96mHNxCMW4aUL2hgTe6iqdrKyM5eqMbCN9YgTdDvUzDyASJwoicxXb7UeDF5kFWvsEMxXBKGX2'}
+}
+```
+The withdrawer is to decode the transaction, inspect its contents, sign it, encode
+it and then post it back via a WebSocket message:
+```
+{'action': 'withdraw_tx',
+ 'payload': {
+    'tx': 'tx$2WsEQsiC5Xsn85g88TmLYonFu2r8HT53jQPJ7f6Ai9uvnZGwnExRyJ51nHS2mU4g2FUTf2PHUsgs22X5Nwg1E1Zy8ofuoJAttqhXpySyYJhCwdWXYKF6bapSXCLwQoKJ9bWLYYZqudsiPfwv43ekzgJHtaWozzFjrEq835B7Xbd8LSd4znVh2FRWfAPW1Zvsm6nKjN2NfEPndwbps7zgqvbQYeKngwFk952CLtDEpGfXXiS5pUp5ExYTwsxGE4E6LKV'
+    }
+}
+```
+
+#### Acknowledger update
+The acknowledger receives an info message indicating an upcoming change:
+```
+{'action': 'info',
+ 'payload': {'event': 'withdraw_created'}
+ }
+```
+Then the acknowledger receives a new message containing the withdraw
+transaction for confirmation:
+```
+{'action': 'sign',
+ 'tag': 'withdraw_ack',
+ 'payload' {
+    'tx': 'tx$2C9estKT2f86WwC7LCa18cDTTmMCrXM7N2AcrXKmgnTo9DNchXjNmewbgNX2YW4RYk8iHkVRnPpeYLRgh6xH96mHNxCMW4aUL2hgTe6iqdrKyM5eqMbCN9YgTdDvUzDyASJwoicxXb7UeDF5kFWvsEMxXBKGX2'}
+    }
+}
+```
+Note that this is the same transaction as the one that the withdrawer has already signed. The acknowledger is to decode the transaction, inspect its contents, sign it, encode
+it and then post it back via a WebSocket message:
+```
+{'action': 'withdraw_ack',
+ 'payload': {
+    'tx': 'tx$2WsEQsiC5XsmkQF6BS1aUhB55XkktxRJi2ZWbpCbGVHgQNPQzUeaEJk57RrhWBagGqNUyUA9YY6PrZhTiXcYs6dK1BxASu8EummTYvfpTjfnA8hU21pw6Ms9fWbJbhBbLNai4hLGPEJZ12r1UHqxLTnq6nJ69vw6szeisRzVJ3XYNpvGgSR5dVyW7Yd2VvtW5CGEMCXCHVYquD8gt6RMBDDr1Q6LeLUTomBpgFGQknjKv56tLtZ2FHkWWa9mU22jXMS'
+  }
+}
+```
+
+#### Finish withdrawal
+After both the parties had signed the withdraw transaction, the transaction is posted on-chain and
+both parties receive it:
+```
+{'action': 'on_chain_tx',
+ 'payload': {'tx': 'tx$3cDMp6242sByJUzkqj5qREcZdMg99K3hYXtj8LTJrYvFEcd2FUa4CNfUzhnUQDkzaeeexK1ejuYPMJDD5bwjuGibBYLE1AYPPncdzwe9dHhATA2ftRgouyUxztZoQKQ1jNCDUpgkWcYPiBBRfSUJhoGGLzTfMHrfU5UiiMkcCkv6CmSWEm8JsiGAciJFJzzsRQyCJTZ6a6JM7ztBikcs9sQsG6crEdfnMwjG3zEowFT4wpaYZAxH849Y7m3c3pQkkABtcAkXznZEmtS89H9GWaecxKWkaAipz6WvCKAu33haGb4SM3apigLUYZc6xa2KyTJ8CutCKYWP8Jacua6z8B4hg4qM4'
+            }
+}
+```
+They are both to compute the transaction hash. Using it,
+participants can track its progress on the chain: entering the mempool, block
+inclusion and a number of confirmations.
+
+After the `minimum_depth` block confirmations each participant is informed
+for the withdraw progress on-chain by one's own node:
+```
+{'action': 'info',
+ 'payload': {'event': 'own_withdraw_locked'}
+ }
+```
+An update from one's own node that the other party had confirmed that the block
+height needed is reached:
+```
+{'action': 'info',
+ 'payload': {'event': 'withdraw_locked'}
+ }
+```
+With this the withdrawal sequence is complete and the channel can continue with
+other updates. Note that the withdraw transaction's `round` and `state_hash`
+are the ones considered latest from the channel's perspective. For example the
+next correct off-chain update/deposit/withdrawal shall have a withdraw
+transaction's `round` plus one.
+
+### Solo closing sequence
+At any moment in time after the channel had been opened any participant can
+initiate a solo closing. The mutual closing takes just one block
+inclusion for the effects to take place. The solo closing sequence requires a
+couple of blocks and at least 2 transaction fees to be paid. This makes the
+solo closing sequence both slower and more expensive. It is intended to be
+used when the other party is trying to cheat or is not responding for a while.
+This is called a dispute and it is taken to the chain to resolve it. Dispute
+resolution has the following steps:
+
+1. single `channel_solo_close` transaction
+2. zero or a couple of `channel_slash` transactions
+3. single `channel_settle` transaction
+
+The second step is not required and a `channel_solo_close` could be followed
+either by zero, one or more `channel_slash` transactions, each subsequent one 
+presenting a newer state and overwriting the previous one. Those are settled by
+a `channel_settle` transaction that finally closes the channel. Let's discuss
+those in detail.
+
+#### Payload and proof of inclusion
+The idea behind `channel_solo_close` and `channel_settle` is for parties to
+provide, on-chain, the latest channel internal state so that the channel can be closed.
+First comes the `channel_solo_close` that provides some off-chain state. Then a
+`channel_slash` can be posted but it is checked that it has a newer state than the
+`channel_solo_close` one. Then parties can post more `channel_slash` transactions
+but those are always checked to be containing a newer channel state than the last
+received on-chain. If one party tries to cheat by posting some old state - the other
+party can present to the chain a newer channel state and this overwrites the previous
+posted one. Thus the comparison on channel states is important. This is done
+by comparing rounds.
+
+Both `channel_solo_close` and `channel_slash` contain a `payload` field. This
+is either a binary containing a `channel_offchain` transaction or an empty
+binary.
+
+If it is a `channel_offchain` transaction - it must be co-signed by both
+participants. It also contains a `channel_id`, `round` and `state_hash`.
+The `channel_id` in combination with the correct singatures verifies that
+this off-chain transaction indeed is part of the channel off-chain state. The
+`round` represents the height of the channel's state at the time the
+transaction was co-signed by the parties. The higher the round, the newer the
+transaction is. This `round` must be greater than the last on-chain one for that channel.
+The `state_hash` is the internal channel state tree root hash
+at that `round` height.
+
+If the transaction's `payload` is empty - then the latest on-chain state for
+this channel is used. Both `channel_deposit` and `channel_withdraw`
+transactions contain a `round` and a `state_hash` and the latest received one
+overwrites the previous one. If there had been none of those, then the
+`channel_create` transaction is used: it has a `state_hash` and an implicit
+`round = 1`.
+
+Either by having a value in the `payload` or not having one, the
+`channel_solo_close` and `channel_slash` provide a channnel's `round` and a `state_hash`.
+In order to determine the order of the channel's states received - we compare
+the `rounds` and keep the state with the greatest `round`, considered to be
+the _newest_ and _latest_ state. They also provide the `state_hash` the
+channel's state tree had at this `round`.
+
+Both `channel_solo_close` and `channel_slash` contain a `poi` field. This is
+the proof of inclusion for participants' balances in the channel state: all
+the insignificant data in the channel's MPT (Matricia Perkel Tree) is replaced
+by corresponding hashes.
+The root hash of the PoI must be equal to the `state_hash` provided by the `payload`.
+This guarantees that the PoI indeed is a proof of inclusion for tree at this height.
+
+#### Solo close on-chain transaction
+The `channel_close_solo` transaction is the one that triggers the solo closing
+sequence. After it is included on-chain channel enters a _closing_ state and
+any subsequent withdrawal or deposits are considered invalid. Preconditions for
+the `channel_close_solo` to be valid are:
+
+* channel is opened on-chain
+* channel is not in a _closing_ state but not yet closed - no `channel_close_solo` has been
+  included in a block yet
+
+Any participant in the channel can post a `channel_close_solo` transaction. In
+the scope of this description we will call the one that posts the transaction
+_solo closer_.
+The transaction has the following structure:
+
+  | Name | Type | Description |
+  | ---- | ---- | ----------- |
+  | channel id | string | ID of the channel to close |
+  | from | string | solo closer's public key |
+  | payload | binary | closing payload |
+  | poi | binary | closing proof of inclusion |
+  | ttl | integer | maximum block height to include the transaction |
+  | fee | integer | fee to be paid to the miner |
+  | nonce | integer | solo closer's nonce |
+
+`payload` and `poi` are validated as [described above](#payload-and-proof-of-inclusion)
+
+#### Slash on-chain transaction
+After the channel is already in a _closing_ state, both participants can provide
+a newer state via the `channel_slash` transaction. Preconditions for
+the `channel_slash` to be valid are:
+
+* channel is opened on-chain
+* channel is still in a _closing_ state - no `channel_settle` has been
+  included in a block yet
+
+Any participant in the channel can post a `channel_slash` transaction. In
+the scope of this description we will call the one that posts the transaction
+_slasher_.
+The transaction has the following structure:
+
+  | Name | Type | Description |
+  | ---- | ---- | ----------- |
+  | channel id | string | ID of the channel to slash |
+  | from | string | slasher's public key |
+  | payload | binary | slashing payload |
+  | poi | binary | slashing proof of inclusion |
+  | ttl | integer | maximum block height to include the transaction |
+  | fee | integer | fee to be paid to the miner |
+  | nonce | integer | slasher's nonce |
+
+`payload` and `poi` are validated as [described above](#payload-and-proof-of-inclusion)
+
+#### Settle on-chain transaction
+After the `channel_close_solo` and all the `channel_slash` transactions,
+it is time to finally close the channel. One of the participants posts a
+`channel_settle` transaction that enforces closing of the channel. This
+happens according to the latest channel state that was sent on-chain. The
+`channel_settle` just finalizes the channel closing with the last received
+state, redistributes tokens to participants and closes the channel. No further
+disputes are possible after that.
+
+
+In order to give parties time to slash a closing channel and update its state
+with a newer one, there is a timeframe only after which the `channel_settle`
+can be posted. This is measured in blocks mined on top of the last received
+transaction for that channel (either `channel_close_solo` or `channel_slash`).
+The amount itself is prenegotiated before opening the channel and is part of
+the `channel_create` transaction - it is the value of `lock_period`. Under no
+condition a `channel_settle` can be included in a block before passing the
+`lock_period` amount of blocks on top of the last `channel_close_solo` or
+`channel_slash` transaction. Every next included `channel_slash` restarts the
+timer. It is worth noting that since those transactions must include a `payload`
+newer than the prevous on-chain one - this timer can not be postponed
+indefinitely. Preconditions for the `channel_settle` to be valid are:
+
+* channel is opened on-chain
+* channel is still in a _closing_ state - no other `channel_settle` has been
+  included in a block yet
+* at least `lock_period` blocks has been mined on top of the last
+  `channel_close_solo` or `channel_slash`
+
+Any participant in the channel can post a `channel_settle` transaction. In
+the scope of this description we will call the one that posts the transaction
+_settler_.
+The transaction has the following structure:
+
+  | Name | Type | Description |
+  | ---- | ---- | ----------- |
+  | channel id | string | ID of the channel to settle |
+  | from | string | settler's public key |
+  | initiator_amount | integer | initiator final amount |
+  | responder_amount | integer | responder final amount |
+  | ttl | integer | maximum block height to include the transaction |
+  | fee | integer | fee to be paid to the miner |
+  | nonce | integer | settler's nonce |
+
+The amounts are the exact amounts stored in the channel object on-chain.

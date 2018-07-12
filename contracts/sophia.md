@@ -57,6 +57,8 @@ worked out).
   suggest no, but there might be compelling use cases that I'm
   missing.
 
+*NOTE: Contract inheritance is not yet implemented.*
+
 ### Mutable state
 
 Sophia does not have arbitrary mutable state, but only a limited form of
@@ -92,7 +94,7 @@ Sophia has the following types:
 | string     | An array of bytes               | ```"Foo"```
 | list       | A homogeneous immutable singly linked list. | ```[1, 2, 3]```
 | tuple      | An ordered heterogeneous array   | ```(42, "Foo", true)```
-| record     | An immutable key value store with fixed key names and typed values | ``` type balance = { owner: address, value: uint } ```
+| record     | An immutable key value store with fixed key names and typed values | ``` record balance = { owner: address, value: uint } ```
 | map        | An immutable key value store with dynamic mapping of keys of one type to values of one type | ```type accounts = map(string, address)```
 | option('a) | An optional value either None or Some('a) | ```Some(42)```
 | state        | A record of blockstate key, value pairs  |
@@ -109,27 +111,29 @@ types can be recursive and are declared by giving a list of constructors with
 their respective arguments. For instance, the following defines a type of
 binary trees parameterised over the element type:
 
-```ocaml
-type tree('a) = Tip | Bin(tree('a), 'a, tree('a))
+```
+datatype tree('a) = Tip | Bin(tree('a), 'a, tree('a))
 ```
 
 Elements of data types can be pattern matched against, using the `switch` construct:
 
-```ocaml
+```
 function root(t : tree('a)) : option('a) =
   switch(t)
     Tip => None
     Bin(_, v, _) => Some(v)
 ```
 
+*NOTE: Recursive data types are not yet implemented*
+
 ### Maps and records
 
 A Sophia record type is given by a fixed set of fields with associated,
 possibly different, types. For instance
 ```
-  type account = { name    : string,
-                   balance : int,
-                   history : list(transaction) }
+  record account = { name    : string,
+                     balance : int,
+                     history : list(transaction) }
 ```
 
 Maps, on the other hand, can contain an arbitrary number of key-value bindings,
@@ -340,6 +344,8 @@ and events are then logged using the `event` function:
 event(e : event) : ()
 ```
 
+*NOTE: Events are not yet implemented*
+
 #### Transactions
 Sophia can generate blockchain transactions.
 ```
@@ -347,9 +353,16 @@ transaction(tx : transaction) : ()
 ```
 The transaction type defines the transactions that can be created:
 ```
-type spend_tx = {recipient : address, amount : uint}
-type transaction = SpendTx(spend_tx)
-                 | ...
+record   spend_tx = {recipient : address, amount : uint}
+datatype transaction = SpendTx(spend_tx)
+                     | ...
+```
+
+*NOTE: Transaction types are not yet implemented. For now spend transactions
+can be issued using the builtin function*
+
+```
+  raw_spend : (address, int) => ()
 ```
 
 #### Contract primitives
@@ -397,7 +410,7 @@ and `*/` and can be nested.
 
 ```
 and band bnot bor bsl bsr bxor contract elif else false function if import
-internal let mod private public rec stateful switch true type
+internal let mod private public rec stateful switch true type record datatype
 ```
 
 #### Tokens
@@ -422,7 +435,7 @@ element can be written on the same line as the previous token.
 Each element of the block must share the same indentation and no part of an
 element may be indented less than the indentation of the block. For instance
 
-```ocaml
+```
 contract Layout =
   function foo() = 0  // no layout
   function bar() =    // layout block starts on next line
@@ -455,7 +468,9 @@ A Sophia file consists of a sequence of *declarations* in a layout block.
 ```c
 File ::= Block(Decl)
 Decl ::= 'contract' Con '=' Block(Decl)
-       | 'type' Id ['(' TVar* ')'] ['=' TypeDef]
+       | 'type'     Id ['(' TVar* ')'] ['=' TypeAlias]
+       | 'record'   Id ['(' TVar* ')'] '=' RecordType
+       | 'datatype' Id ['(' TVar* ')'] '=' DataType
        | Modifier* 'function' Id ':' Type
        | Modifier* 'function' Id Args [':' Type] '=' Block(Stmt)
 
@@ -468,16 +483,17 @@ Arg  ::= Id [':' Type]
 Contract declarations must appear at the top-level.
 
 For example,
-```ocaml
+```
 contract Test =
   type t = int
   public function add (x : t, y : t) = x + y
 ```
 
-There are three forms of type declarations: type aliases, record type definitions and data type definitions:
+There are three forms of type declarations: type aliases (declared with the
+`type` keyword), record type definitions (`record`) and data type definitions
+(`datatype`):
 
 ```c
-TypeDef    ::= TypeAlias | RecordType | DataType
 TypeAlias  ::= Type
 RecordType ::= '{' Sep(FieldType, ',') '}'
 DataType   ::= Sep1(ConDecl, '|')
@@ -487,10 +503,10 @@ ConDecl    ::= Con ['(' Sep1(Type, ',') ')']
 ```
 
 For example,
-```ocaml
-type point('a) = {x : 'a, y : 'a}
-type shape('a) = Circle(point('a), 'a) | Rect(point('a), point('a))
-type int_shape = shape(int)
+```
+record   point('a) = {x : 'a, y : 'a}
+datatype shape('a) = Circle(point('a), 'a) | Rect(point('a), point('a))
+type     int_shape = shape(int)
 ```
 
 ### Types
@@ -508,7 +524,7 @@ Domain ::= Type                       // Single argument
 The function type arrow associates to the right.
 
 Example,
-```ocaml
+```
 'a => list('a) => (int, list('a))
 ```
 
@@ -533,7 +549,7 @@ Pattern ::= Expr
 
 `if` statements can be followed by zero or more `elif` statements and an optional final `else` statement. For example,
 
-```ocaml
+```
 let x : int = 4
 switch(f(x))
   None => 0
@@ -593,18 +609,18 @@ In order of highest to lowest precedence.
 
 ## Examples
 
-```ocaml
+```
 /*
  *  A simple crowd funding example.
  *  Not production code (do not use)!
  */
 contract FundMe =
 
-  type state = { contributions : map(address, uint),
-                 total         : uint,
-                 beneficiary   : address,
-                 deadline      : uint,
-                 goal          : uint }
+  record state = { contributions : map(address, uint),
+                   total         : uint,
+                   beneficiary   : address,
+                   deadline      : uint,
+                   goal          : uint }
 
   private function require(b : bool, err : string) =
     if(!b) abort(err)
@@ -750,13 +766,22 @@ Data is encoded in memory as follows:
   - The order of values is unspecified. For instance, in the encoding of a pair
     of boxed values, the three cells (first component, second component, and
     pair cell) can appear in any order in the encoded binary.
-  - The option type is encoded as -1 for `None` and as the tuple {4, V} for `Some(V)`.
+  - The option type is encoded as -1 for `None` and as a singleton tuple `{v}` for `Some(v)`.
+  - Values of datatypes are encoded as tuples where the first component is a
+    constructor tag (starting with 0 for the first constructor), and the
+    following components are the constructor arguments. For instance, for
+    ```
+      datatype zeroOrTwo = Zero | Two(int, int)
+    ```
+    `Zero` is encoded as a singleton tuple `{0}` and `Two(a, b)` as the triple `{1, a, b}`.
   - Type representations are encoded as tuples as follows:
-    - word: {0}  (any unboxed type)
-    - String: {1}
-    - List(T): {2, encode(T)}
-    - Tuple(T): {3, encode(T)}
-    - Option(T): {4, encode(T)}
+    - `word`: `{0}`  (any unboxed type)
+    - `string`: `{1}`
+    - `list(t)`: `{2, encode(t)}`
+    - `tuple(ts)`: `{3, encode(ts)}`, where `ts : list(typerep)`
+    - `option(t)`: `{4, encode(t)}`
+    - `datatype(cs)`: `{5, encode(cs)}`, where `cs : list(list(typerep))`
+      are the type representations for the constructor arguments
 - Pointers are relative, with the address of the first word of the data being
   the *base address*. For calldata, the base address is 32 and for return
   values and contract state the base address is 0.
