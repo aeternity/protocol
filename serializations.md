@@ -15,31 +15,51 @@ user API.
 
 ## Static size object serialization
 
-#### Block header
+There are two types of blocks:
 
-For block headers all fields sizes are statically known and can be
+* key block - does not contain a list of transactions, therefore, it is
+not divided into a header and a list of transactions;
+* micro block - contains a header, a list of transactions and a signature.
+
+### Key block
+
+All field sizes are statically known and can be constructed directly as
+a byte array.
+
+| Fieldname | Size (bytes) |
+| --- | --- |
+| version    | 8    |
+| height     | 8    |
+| prev_hash  | 32   |
+| state_hash | 32   |
+| miner      | 32   |
+| target     | 8    |
+| pow        | 168  |
+| nonce      | 8    |
+| time       | 8    |
+
+### Micro block header
+
+All field sizes of a micro block header are statically known and can be
 constructed directly as a byte array.
 
 | Fieldname | Size (bytes) |
 | --- | --- |
-| version      | 8    |
-| height       | 8    |
-| prev_hash    | 32   |
-| txs_hash     | 32   |
-| root_hash    | 32   |
-| target       | 8    |
-| pow_evidence | 168  |
-| nonce        | 8    |
-| time         | 8    |
-| miner        | 32   |
+| version    | 8    |
+| height     | 8    |
+| prev_hash  | 32   |
+| state_hash | 32   |
+| txs_hash   | 32   |
+| key_hash   | 32   |
+| time       | 8    |
 
-#### Block
+### Micro block
 
-The only difference between a block and its header is the list of
-transactions. The transactions are captured in the header by the
-transaction root hash (txs_hash). The block does not currently have a
-separate binary serialization form since the block hash is computed
-from the block header.
+The only difference between a micro block and its header is a list of
+transactions and a signature. The transactions are captured in the
+header by the transaction root hash (`txs_hash`). The block does not
+currently have a separate binary serialization form since the block
+hash is computed from the block header.
 
 ## Dynamic size object serialization
 
@@ -51,6 +71,30 @@ domain (e.g., `[int()]` is a list of integers). We use `++` as the
 list concatenation operator. We also use the `bool()` type as the
 special case of the integers `0` and `1` used as the boolean type.
 
+### The id() type
+
+The special type `id()` is a `binary()` denoting a tagged binary
+(e.g., hash or public key) referring to an object in the chain (e.g.,
+account, oracle) . The first byte is a tag denoting which type of
+identifier, and the remaining 32 bytes is the identifier itself. This
+is used to distinguish between identifiers where there can be
+ambiguity.
+
+| Id tag | Identifier type |
+| ---    | ---             |
+| 1      | account         |
+| 2      | name            |
+| 3      | commitment      |
+| 4      | oracle          |
+| 5      | contract        |
+| 6      | channel         |
+
+In Erlang notation, the `id()` type pattern is:
+```
+<<Tag:1/unsigned-integer-unit:8, Hash:32/binary-unit:8>>
+```
+
+
 ### RLP Encoding
 
 We use the Recursive Length Prefix encodng
@@ -60,6 +104,8 @@ have dynamic sizes of the fields.
 RLP ensures that there is only one serialization of each corresponding
 object on the lowest level, but it can only encode two primitive
 objects, lists and byte arrays.
+
+RLP ensures that the serialization is a non-empty byte array.
 
 Objects in Æternity are encoded as lists of fields, where the two
 first fields describe the object type and the object version.
@@ -71,11 +117,12 @@ first fields describe the object type and the object version.
 Since all values are byte arrays in RLP, `int()` needs to be a byte
 array as well. We encode all integers as unsigned, big endian byte
 arrays. To avoid ambiguity in the encoding of integers, we adapt the
-same scheme as RLP and demand that ingegers are encoded with the
+same scheme as RLP and demand that integers are encoded with the
 minimal number of bytes (i.e., disallow leading zeroes in the encoded
 byte array). Negative integers is not used in the serialization format
 since they are not needed. If the need arises, the scheme should be
 extended.
+
 
 ### Binary serialization
 
@@ -121,11 +168,11 @@ subsequent sections divided by object.
 | Channel settle transaction | 56 |
 | Channel off chain transaction | 57 |
 | Channel | 58 |
+| POI | 60 |
 
 #### Accounts
 ```
-[ <pubkey>  :: binary()
-, <nonce>   :: int()
+[ <nonce>   :: int()
 , <balance> :: int()
 ]
 ```
@@ -140,10 +187,11 @@ Signatures are sorted.
 
 ### Spend transaction
 ```
-[ <sender>    :: binary()
-, <recipient> :: binary()
+[ <sender>    :: id()
+, <recipient> :: id()
 , <amount>    :: int()
 , <fee>       :: int()
+, <ttl>       :: int()
 , <nonce>     :: int()
 , <payload>   :: binary()
 ]
@@ -151,7 +199,7 @@ Signatures are sorted.
 
 #### Oracles
 ```
-[ <owner>           :: binary()
+[ <owner>           :: id()
 , <query_format>    :: binary()
 , <response_format> :: binary()
 , <query_fee>       :: int()
@@ -161,9 +209,9 @@ Signatures are sorted.
 
 #### Oracle queries
 ```
-[ <sender_address> :: binary()
+[ <sender_address> :: id()
 , <sender_nonce>   :: int()
-, <oracle_address> :: binary()
+, <oracle_address> :: id()
 , <query>          :: binary()
 , <has_response>   :: bool()
 , <response>       :: binary()
@@ -175,7 +223,7 @@ Signatures are sorted.
 
 #### Oracle register transaction
 ```
-[ <account>       :: binary()
+[ <account>       :: id()
 , <nonce>         :: int()
 , <query_spec>    :: binary()
 , <response_spec> :: binary()
@@ -183,14 +231,15 @@ Signatures are sorted.
 , <ttl_type>      :: int()
 , <ttl_value>     :: int()
 , <fee>           :: int()
+, <ttl>           :: int()
 ]
 ```
 
 #### Oracle query transaction
 ```
-[ <sender>             :: binary()
+[ <sender>             :: id()
 , <nonce>              :: int()
-, <oracle>             :: binary()
+, <oracle>             :: id()
 , <query>              :: binary()
 , <query_fee>          :: int()
 , <query_ttl_type>     :: int()
@@ -198,48 +247,57 @@ Signatures are sorted.
 , <response_ttl_type>  :: int()
 , <response_ttl_value> :: int()
 , <fee>                :: int()
+, <ttl>                :: int()
 ```
 
 #### Oracle response transaction
 ```
-[ <oracle>   :: binary()
+[ <oracle>   :: id()
 , <nonce>    :: int()
 , <query_id> :: binary()
 , <response> :: binary()
 , <fee>      :: int()
+, <ttl>      :: int()
 ]
 ```
 
 #### Oracle extend transaction
 ```
-[ <oracle>    :: binary()
+[ <oracle>    :: id()
 , <nonce>     :: int()
 , <ttl_type>  :: int()
 , <ttl_value> :: int()
 , <fee>       :: int()
+, <ttl>       :: int()
 ]
 ```
 
 #### Contract
+
+For a contract with address `<contractpubkey>`, the fields of the contract object (to which tag and version need to be prepended) are:
+
 ```
-[ <owner>      :: binary()
+[ <owner>      :: id()
 , <vm_version> :: int()
 , <code>       :: binary()
 , <log>        :: binary(),
 , <active>     :: bool(),
-, <referers>   :: [binary()],
+, <referers>   :: [id()],
 , <deposit>    :: int()
 ]
 ```
 
 The balance of the account is stored in the account state tree.
+
 The contract storage (or state) which is a key value map from (key::binary() to value::binary())
 is stored in its own subtree. The key for a contract storage value is:
 ```
 <contractpubkey><16><key> :: binary()
 ```
-Each value is just stored as a binary as is. If the value is the empty binary the key is pruned
-from the tree.
+The `<key>` is non-empty.
+
+Each value is just stored as a binary as is - without tag or version.
+If the value is the empty binary the key is pruned from the tree.
 
 Contracts with vm_version == 1, i.e. Sophia contracts on the AEVM stores the memory layout of the
 state as one binary value at address 0.
@@ -253,10 +311,11 @@ purging them from the tree.
 
 #### Contract call
 ```
-[ <caller_address>   :: binary()
+[ <caller_address>   :: id()
 , <caller_nonce>     :: int()
 , <height>           :: int()
-, <contract_address> :: binary()
+, <contract_address> :: id()
+, <gas_price>        :: int()
 , <gas_used>         :: int()
 , <return_value>     :: binary()
 , <return_type>      :: int()
@@ -265,11 +324,12 @@ purging them from the tree.
 
 #### Contract create transaction
 ```
-[ <owner>      :: binary()
+[ <owner>      :: id()
 , <nonce>      :: int()
 , <code>       :: binary()
 , <vm_version> :: int()
 , <fee>        :: int()
+, <ttl>        :: int()
 , <deposit>    :: int()
 , <amount>     :: int()
 , <gas>        :: int()
@@ -280,11 +340,12 @@ purging them from the tree.
 
 #### Contract call transaction
 ```
-[ <caller>     :: binary()
+[ <caller>     :: id()
 , <nonce>      :: int()
-, <contract>   :: binary()
+, <contract>   :: id()
 , <vm_version> :: int()
 , <fee>        :: int()
+, <ttl>        :: int()
 , <amount>     :: int()
 , <gas>        :: int()
 , <gas_price>  :: int()
@@ -294,8 +355,7 @@ purging them from the tree.
 
 #### Name service name
 ```
-[ <hash>     :: binary()
-, <owner>    :: binary()
+[ <owner>    :: id()
 , <expires>  :: int()
 , <status>   :: binary()
 , <ttl>      :: int()
@@ -304,8 +364,7 @@ purging them from the tree.
 
 #### Name service commitment
 ```
-[ <hash>    :: binary()
-, <owner>   :: binary()
+[ <owner>   :: id()
 , <created> :: int()
 , <expires> :: int()
 ]
@@ -313,51 +372,56 @@ purging them from the tree.
 
 #### Name service claim transaction
 ```
-[ <account>   :: binary()
+[ <account>   :: id()
 , <nonce>     :: int()
-, <name>      :: binary()
+, <name>      :: binary() %% The actual name, not the hash
 , <name_salt> :: int()
 , <fee>       :: int()
+, <ttl>       :: int()
 ]
 ```
 
 #### Name service preclaim transaction
 ```
-[ <account>    :: binary()
+[ <account>    :: id()
 , <nonce>      :: int()
-, <commitment> :: binary()
+, <commitment> :: id()
 , <fee>        :: int()
+, <ttl>        :: int()
 ]
 ```
 
 #### Name service update transaction
 ```
-[ <account>  :: binary()
-, <nonce>    :: int()
-, <hash>     :: binary()
-, <name_ttl> :: int()
-, <pointers> :: binary() TODO: This is currently ambigous
-, <ttl>      :: int()
-, <fee>      :: int()
+[ <account>    :: id()
+, <nonce>      :: int()
+, <hash>       :: id()
+, <name_ttl>   :: int()
+, <pointers>   :: binary() TODO: This is currently ambigous
+, <client_ttl> :: int()
+, <fee>        :: int()
+, <ttl>        :: int()
 ]
 ```
 
 #### Name service revoke transaction
 ```
-[ <account> :: binary()
+[ <account> :: id()
 , <nonce>   :: int()
-, <hash>    :: binary()
+, <hash>    :: id()
 , <fee>     :: int()
+, <ttl>     :: int()
 ]
 ```
 
 #### Name service transfer transaction
 ```
-[ <account>   :: binary()
+[ <account>   :: id()
 , <nonce>     :: int()
-, <hash>      :: binary()
-, <recipient> :: binary()
+, <hash>      :: id()
+, <recipient> :: id()
 , <fee>       :: int()
+, <ttl>       :: int()
 ]
 ```
 
@@ -365,109 +429,144 @@ purging them from the tree.
 
 #### Channel create transaction
 ```
-[ <initiator>        , binary()
-, <initiator_amount> , int()
-, <responder>        , binary()
-, <responder_amount> , int()
-, <channel_reserve>  , int()
-, <lock_period>      , int()
-, <ttl>              , int()
-, <fee>              , int()
-, <nonce>            , int()
+[ <initiator>        :: id()
+, <initiator_amount> :: int()
+, <responder>        :: id()
+, <responder_amount> :: int()
+, <channel_reserve>  :: int()
+, <lock_period>      :: int()
+, <ttl>              :: int()
+, <fee>              :: int()
+, <state_hash>       :: binary()
+, <nonce>            :: int()
 ]
 ```
 
 #### Channel deposit transaction
 ```
-[ <channel_id> , binary()
-, <from>       , binary()
-, <amount>     , int()
-, <ttl>        , int()
-, <fee>        , int()
-, <nonce>      , int()
+[ <channel_id> :: id()
+, <from>       :: id()
+, <amount>     :: int()
+, <ttl>        :: int()
+, <fee>        :: int()
+, <state_hash> :: binary()
+, <round>      :: int()
+, <nonce>      :: int()
 ]
 ```
 
 #### Channel withdraw transaction
 ```
-[ <channel_id> , binary()
-, <to>         , binary()
-, <amount>     , int()
-, <ttl>        , int()
-, <fee>        , int()
-, <nonce>      , int()
+[ <channel_id> :: id()
+, <to>         :: id()
+, <amount>     :: int()
+, <ttl>        :: int()
+, <fee>        :: int()
+, <state_hash> :: binary()
+, <round>      :: int()
+, <nonce>      :: int()
 ]
 ```
 
 #### Channel close mutual transaction
 ```
-[ <channel_id>      , binary()
-, <initiator_amount>, int()
-, <responder_amount>, int()
-, <ttl>             , int()
-, <fee>             , int()
-, <nonce>           , int()
+[ <channel_id>       :: id()
+, <initiator_amount> :: int()
+, <responder_amount> :: int()
+, <ttl>              :: int()
+, <fee>              :: int()
+, <nonce>            :: int()
 ]
 ```
 
 #### Channel close solo transaction
 ```
-[ <channel_id>      , binary()
-, <from>            , binary()
-, <payload>         , binary()
-, <ttl>             , int()
-, <fee>             , int()
-, <nonce>           , int()
+[ <channel_id>      :: id()
+, <from>            :: id()
+, <payload>         :: binary()
+, <poi>             :: poi()
+, <ttl>             :: int()
+, <fee>             :: int()
+, <nonce>           :: int()
 ]
 ```
+
+The payload is a serialized signed channel offchain transaction or it is empty.
 
 #### Channel slash transaction
 ```
-[ <channel_id>      , binary()
-, <from>            , binary()
-, <payload>         , binary()
-, <ttl>             , int()
-, <fee>             , int()
-, <nonce>           , int()
+[ <channel_id>      :: id()
+, <from>            :: id()
+, <payload>         :: binary()
+, <poi>             :: poi()
+, <ttl>             :: int()
+, <fee>             :: int()
+, <nonce>           :: int()
 ]
 ```
 
+The payload is a serialized signed channel offchain transaction or it is empty.
+
 #### Channel settle transaction
 ```
-[ <channel_id>      , binary()
-, <from>            , binary()
-, <initiator_amount>, int()
-, <responder_amount>, int()
-, <ttl>             , int()
-, <fee>             , int()
-, <nonce>           , int()
+[ <channel_id>       :: id()
+, <from>             :: id()
+, <initiator_amount> :: int()
+, <responder_amount> :: int()
+, <ttl>              :: int()
+, <fee>              :: int()
+, <nonce>            :: int()
 ]
 ```
 
 #### Channel offchain transaction
+
+The channel offchain transaction is not included directly in the transaction tree but indirectly as payload of:
+* The channel close solo transaction;
+* The channel slash transaction.
+
 ```
-[ <channel_id>       , binary()
-, <previous_round>   , int()
-, <round>            , int()
-, <initiator>        , binary()
-, <responder>        , binary()
-, <initiator_amount> , int()
-, <responder_amount> , int()
-, <updates>          , [{binary(), binary() ,int()}]
-, <state>            , binary()
+[ <channel_id>       :: id()
+, <round>            :: int()
+, <updates>          :: [{int(), binary(), binary(), int()}]
+, <state_hash>       :: binary()
 ]
 ```
 
 #### Channel
 ```
-[ <id>              , binary()
-, <initiator>       , binary()
-, <responder>       , binary()
-, <total_amount>    , int()
-, <initiator_amount>, int()
-, <channel_reserve> , int()
-, <round>           , int()
-, <lock_period>     , int()
-, <closes_at>       , int()
+[ <initiator>        :: id()
+, <responder>        :: id()
+, <total_amount>     :: int()
+, <initiator_amount> :: int()
+, <channel_reserve>  :: int()
+, <state_hash>       :: binary()
+, <round>            :: int()
+, <lock_period>      :: int()
+, <closes_at>        :: int()
 ]
 ```
+
+#### Proof of inclusion on state trees (POI) :: poi()
+```
+[ {<accounts>  :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), [<mpt_value> :: binary()]}]}]}
+, {<calls>     :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), [<mpt_value> :: binary()]}]}]}
+, {<channels>  :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), [<mpt_value> :: binary()]}]}]}
+, {<contracts> :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), [<mpt_value> :: binary()]}]}]}
+, {<ns>        :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), [<mpt_value> :: binary()]}]}]}
+, {<oracles>   :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), [<mpt_value> :: binary()]}]}]}
+]
+```
+
+NOTE: `[{<mpt_hash>, <mpt_value>}]` is the sorted list of Merkle Patricia Tree nodes in the proof.
+If the subtree (e.g. `<accounts>`) is empty,
+then the serialization is just `[]` (e.g. `<accounts>` is `[{<root_hash>, []}]`);
+otherwise it is a list of one element `[<proof_of_inclusion>]`
+(e.g. `<accounts>` is `[{<root_hash>, [{<mpt_hash>, <mpt_value>}, {<mpt_hash>, <mpt_value>}]}]`;
+`<accounts>` is `[{<root_hash>, []}]`).
+
+NOTE: As the POI contains the Merkle Patricia Tree nodes (e.g. not only their hashes):
+* Each state subtree does not necessarily contain elements of the same key length.
+* The object itself does not contain its own id as it can be derived from the location in the tree.
+* The key used for storing each object in each state subtree is not necessarily derived from the object itself.
+* The value(s) whose inclusion the POI proves is included in the POI itself.

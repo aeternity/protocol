@@ -42,7 +42,7 @@ curl http://localhost:3013/v2/commitment-hash\?name\=foobar.aet\&salt\=123
 
 To preclaim a name, send name preclaim transaction with commitment hash in the payload:
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-preclaim-tx -d '{"commitment": "cm$Liq9Q5LGzop7n7TS35FVTpjECPJSPywnvqijEGCA6jiZZv6R7", "fee": 1}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-preclaim-tx -d '{"commitment": "cm$Liq9Q5LGzop7n7TS35FVTpjECPJSPywnvqijEGCA6jiZZv6R7", "fee": 1, "ttl":1234}'
 {"commitment":"cm$Liq9Q5LGzop7n7TS35FVTpjECPJSPywnvqijEGCA6jiZZv6R7"}
 ```
 
@@ -59,16 +59,17 @@ curl http://localhost:3013/v2/top
 When a name is preclaimed, you are in a position to claim it.
 You must use the name with the same salt as used in commitment hash computation:
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-claim-tx -d '{"name": "foobar.aet", "name_salt": 123, "fee": 1}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-claim-tx -d '{"name": "foobar.aet", "name_salt": 123, "fee": 1, "ttl":1234}'
 {"name_hash":"nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4"}
 ```
 
 After claiming the name (and claim transaction being accepted) you may verify name presence:
 ```
 curl http://localhost:3013/v2/name\?name\=foobar.aet
-{"name":"foobar.aet","name_hash":"nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4","name_ttl":0,"pointers":"[]"}
+{"name":"foobar.aet","name_hash":"nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4","name_ttl":50018,"pointers":"[]"}
 ```
 
+Note that the name is claimed for the max period (50000 blocks) and relative to the current height of chain.
 ### Update
 
 In order to make better use of claimed name you need to specify where it should point to.
@@ -78,19 +79,19 @@ In the initial version two pointers are available:
 * `oracle_pubkey`
 
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-update-tx -d '{"name_hash": "nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4", "name_ttl": 600000, "ttl": 50, "pointers": "{\"account_pubkey\":\"ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw\"}", "fee": 1}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-update-tx -d '{"name_hash": "nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4", "name_ttl": 10000, "client_ttl": 50, "pointers": "{\"account_pubkey\":\"ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw\"}", "fee": 1, "ttl":1234}'
 {"name_hash":"nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4"}
 
 curl http://localhost:3013/v2/name\?name\=foobar.aet
-{"name":"foobar.aet","name_ttl":600000,"pointers":"{\"account_pubkey\":\"ak$scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSf\"}"}
+{"name":"foobar.aet","name_ttl":10023,"pointers":"{\"account_pubkey\":\"ak$scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSf\"}"}
 ```
-
+Note that `name_ttl` is relative to the current height of the chain. Here we shortened the claim.
 ### Spend to name
 
 Now you may use account and oracle pointers interchangeably with their addresses.
 In order to utilize account pubkey pointer, put a name instead of an account key, e.g. in spend transaction put it in `recipient_pubkey` field:
 ```
-curl -X POST -H "Content-Type: application/json" -d '{"recipient_pubkey":"foobar.aet", "amount":2, "fee":1}' http://127.0.0.1:3113/v2/spend-tx
+curl -X POST -H "Content-Type: application/json" -d '{"recipient_pubkey":"foobar.aet", "amount":2, "fee":1, "ttl":1234}' http://127.0.0.1:3113/v2/spend-tx
 {}
 ```
 
@@ -98,7 +99,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"recipient_pubkey":"foobar
 
 In order to transfer a name to another user send name transfer transaction:
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-transfer-tx -d '{"name_hash": "nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4", "recipient_pubkey": "ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw", "fee": 1}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-transfer-tx -d '{"name_hash": "nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4", "recipient_pubkey": "ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw", "fee": 1, "ttl":1234}'
 {"name_hash":"nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4"}
 ```
 
@@ -106,6 +107,6 @@ curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-t
 
 In order to revoke a name send name revoke transaction:
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-revoke-tx -d '{"name_hash": "nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4", "fee": 1}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-revoke-tx -d '{"name_hash": "nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4", "fee": 1, "ttl":1234}'
 {"name_hash":"nm$2eDtssSnW5F9E2SBzHtLSmnHQEQQ5jcmgNjCAuYCtBCuT5giN4"}
 ```

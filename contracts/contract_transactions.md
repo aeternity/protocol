@@ -10,11 +10,11 @@ Contract transactions are of four types:
 A contract is also a normal account with a balance,
 and the normal spend transaction can be applied to the account.
 
-When a contract is createad or called, the miner checks that the
+When a contract is created or called, the miner checks that the
 creator/caller has gas*gas_price (*10^-18) aeons in the account.
 
 The execution of the call will use a certain amount of gas up to
-the maximum given, that amount is decduced from the caller's
+the maximum given, that amount is deducted from the caller's
 account and added to the miner's account.
 
 ### Create Contract Transaction
@@ -33,23 +33,7 @@ The transaction contains:
 - Gas price for the call.
 - Call data for the initial call (usually including a function name and args, interpreted by the contract).
 
-
-```
-{ owner           :: public_key()
-, nonce           :: pos_integer()
-, code            :: hex_bytes()
-, vm_version      :: hex_byte()
-, fee             :: amount()
-, deposit         :: amount()
-, amount          :: amount()
-, gas             :: amount()
-, gas_price       :: amount()
-, call_data       :: hex_bytes()
-}
-```
-
-Where a hex byte is a string of two hex digits preceded with 0x,
-and hex bytes is a string of a number of hex bytes preceded with 0x.
+See [Contract Create Transaction Serialization](../serializations.md#contract-create-transaction) for the serialization specification.
 
 Call data is encoded depending on the ABI of the language of the contract.
 
@@ -58,11 +42,12 @@ The transaction has to be signed with the private key of the owner.
 The special variable "caller" will be set to the same value as "owner"
 for the initial call.
 
-The contract address is created by taking the Key-length left most hex chars
-of
+The contract address is created by hashing, using Blake2b (256 bits digest), the concatenation of:
+* The address of the contract owner;
+* The nonce encoded as unsigned, big endian byte array, with the minimum number of bytes.
 
 ```
- "C0DE" && hash( nonce && owner)
+ hash(owner, nonce)
 ```
 
 The fee, the deposit, the amount and the used gas will be
@@ -70,17 +55,17 @@ subtracted from the owner account.
 
 The amount will be added to the contract account.
 
-The fee will added to the miners account.
+The fee will added to the miner account.
 
 The deposit will be "held by the contract" until it is deactivated.
 
 The vm_version defines both the virtual machine used for the byte code of the contract
 and the binary interface/calling convention used by the contract. The version codes are
-listed in the VM description 
+listed in the VM description.
 
 If the initial call fails (runs out of gas) the contract is not
 created.  The owner loses the fee and the gas (to the miner) but the
-amount and the deposit are return to the owner.
+amount and the deposit are returned to the owner.
 
 The miner will add the new created contract address, the contract state
 and the return data from the initial call to the state tree (if the
@@ -89,8 +74,8 @@ init succeeds).
 
 ### Attach Contract Transaction
 
-Attach contract code to an existing accont.
-In this case owner == the acount addrres and no new account will be created,
+Attach contract code to an existing account.
+In this case owner == the account address and no new account will be created,
 all other fields are as in create contract.
 
 
@@ -128,23 +113,12 @@ The transaction contains:
 - The calldata
 - A transaction fee
 
-```
-{ caller          :: public_key()
-, nonce           :: pos_integer()
-, contract        :: public_key()
-, vm_version      :: hex_byte()
-, fee             :: amount()
-, amount          :: amount()
-, gas             :: amount()
-, gas_price       :: amount()
-, call_data       :: hex_bytes()
-}
-```
+See [Contract Call Transaction Serialization](../serializations.md#contract-call-transaction) for the serialization specification.
 
 The transaction has to be signed with the private key of the caller.
 
 The call_data is encoded in accordance with the contract language ABI.
-(See e.g. the Ring ABI.)
+(See e.g. the Sophia ABI.)
 
 The miner will add the return data and the state of the call to the state
 tree.

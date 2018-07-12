@@ -83,25 +83,24 @@ fields as immutable?
 ### Types
 Sophia has the following types:
 
-| Type    | Description                     | Example
-| ------- | ------------------------------- | -------:
-| uint    | A 256 bit integer               | ```42```
-| int     | A 256 bit 2-complement integer  | ```-1```
-| address | A 256 bit number given as a hex | ```ff00```
-| bool    | A Boolean                       | ```true```
-| string  | An array of bytes               | ```"Foo"```
-| list    | A homogeneous immutable singly linked list. | ```[1, 2, 3]```
-| tuple   | An ordered heterogeneous array   | ```(42, "Foo", true)```
-| record  | An immutable key value store with fixed key names and typed values | ``` type balance = { owner: address, value: uint } ```
-| map     | An immutable key value store with dynamic mapping of keys of one type to values of one type | ```type accounts = map(string, address)```
-| state   | A record of blockstate key, value pairs  |
+| Type       | Description                     | Example
+| ---------- | ------------------------------- | -------:
+| uint       | A 256 bit integer               | ```42```
+| int        | A 256 bit 2-complement integer  | ```-1```
+| address    | A 256 bit number given as a hex | ```ff00```
+| bool       | A Boolean                       | ```true```
+| string     | An array of bytes               | ```"Foo"```
+| list       | A homogeneous immutable singly linked list. | ```[1, 2, 3]```
+| tuple      | An ordered heterogeneous array   | ```(42, "Foo", true)```
+| record     | An immutable key value store with fixed key names and typed values | ``` type balance = { owner: address, value: uint } ```
+| map        | An immutable key value store with dynamic mapping of keys of one type to values of one type | ```type accounts = map(string, address)```
+| option('a) | An optional value either None or Some('a) | ```Some(42)```
+| state        | A record of blockstate key, value pairs  |
 | transactions | An append only list of blockchain transactions |
-| events   | An append only list of blockchain events (or log entries) |
+| events       | An append only list of blockchain events (or log entries) |
+| oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, sign, fee, qfee, ttl)```
+| oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, fee, qttl, rttl)```
 
-#### Types not in Sophia
-- Arrays
-- References
-- Objects
 
 ### Algebraic data types
 
@@ -123,7 +122,213 @@ function root(t : tree('a)) : option('a) =
     Bin(_, v, _) => Some(v)
 ```
 
+### Maps and records
+
+A Sophia record type is given by a fixed set of fields with associated,
+possibly different, types. For instance
+```
+  type account = { name    : string,
+                   balance : int,
+                   history : list(transaction) }
+```
+
+Maps, on the other hand, can contain an arbitrary number of key-value bindings,
+but of a fixed type. The type of maps with keys of type `'k` and values of type
+`'v` is written `map('k, 'v)`. Key types are restricted to atomic types (`int`,
+`address`, `bool`, and `string`).
+
+#### Constructing maps and records
+
+A value of record type is constructed by giving a value for each of the fields.
+For the example above,
+```
+  function new_account(name) =
+    {name = name, balance = 0, history = []}
+```
+Maps are constructed similarly, with keys enclosed in square brackets
+```
+  function example_map() : map(string, int) =
+    {["key1"] = 1, ["key2"] = 2}
+```
+The empty map is written `{}`.
+
+#### Accessing values
+
+Record fields access is written `r.f` and map lookup `m[k]`. For instance,
+```
+  function get_balance(a : address, accounts : map(address, account)) =
+    accounts[a].balance
+```
+Looking up a non-existing key in a map results in the contract failing. See
+`Map.member` and `Map.lookup` below for safe lookups.
+
+#### Updating a value
+
+Record field updates are written `r{f = v}`. This creates a new record value
+which is the same as `r`, but with the value of the field `f` replaced by `v`.
+Similarly, `m{[k] = v}` constructs a map with the same values as `m` except
+that `k` maps to `v`. It makes no difference if `m` has a mapping for `k` or
+not.
+
+It is possible to give a name to the old value of a field or mapping in an
+update: instead of `acc{ balance = acc.balance + 100 }` it is possible to write
+`acc{ balance @ b = b + 100 }`, binding `b` to `acc.balance`. When giving a
+name to a map value (`m{ [k] @ x = v }`), the corresponding key must be present
+in the map or the contract will fail.
+
+Updates can be nested:
+```
+function clear_history(a : address, accounts : map(address, account)) : map(address, account) =
+  accounts{ [a].history = [] }
+```
+This is equivalent to `accounts{ [a] @ acc = acc{ history = [] } }` and thus
+requires `a` to be present in the accounts map.
+
+
+#### Builtin functions on maps
+
+The following builtin functions are defined on maps:
+
+```
+  Map.lookup(k : 'k, m : map('k, 'v)) : option('v)
+  Map.member(k : 'k, m : map('k, 'v)) : bool
+  Map.delete(k : 'k, m : map('k, 'v)) : map('k, 'v)
+  Map.size(m : map('k, 'v)) : int
+  Map.to_list(m : map('k, 'v)) : list(('k, 'v))
+  Map.from_list(m : list(('k, 'v))) : map('k, 'v)
+```
+
 ### Builtins
+
+#### Account interface
+
+To spend tokens from the contract account to the account "to" you call the raw_spend function.
+
+```
+raw_spend(to : address, amount : integer)
+```
+
+#### Oracle interface
+You can attach an oracle to the current contract and you can interact with oracles
+through the Oracle interface.
+
+For a full description of how Oracle works see [Oracles](/oracles/oracles.md#oracles)
+
+An Oracle operator will use the functions `Oracle.register`, `Oracle.getQuestion`,
+`Oracle.respond` and `Oracle.extend`.
+
+An Oracle user will use the functions `Oracle.query_fee`, `Oracle.query`,
+`Oracle.getQuestion`, `Oracle.hasAnswer` and `Oracle.getAnswer`.
+
+
+##### Oracle Register
+
+To register a new oracle answering questions of type `'a` with answers of type `'b`
+call Oracle.register.
+
+```
+Oracle.register(acct : address
+                sign : int,   // Signed account address
+                fee  : int,
+                qfee : int,
+                ttl  : int) : oracle('a, 'b)
+```
+
+The `acct` is the address of the oracle to register (can be the same as the contract).
+The `sign` is a signature of the address to register proving you have the private key
+of the oracle, or the integer 0 when address is the same as the contract.
+The 'qfee' is the query fee to be paid by a user when asking a question of the oracle.
+The 'ttl' is the Time To Live in relative block height for the oracle.
+The type `'a` is the type of the question to ask.
+The type `'b` is the type of the oracle answers.
+
+##### Oracle Extend
+To extend the TTL of an oracle, call `Oracle.extend`:
+
+```
+Oracle.extend(o    : oracle('a, 'b),
+              sign : int,   // Signed oracle address
+              fee  : int,
+              ttl  : int) : ()
+```
+
+##### Oracle getQuestion
+To check what the question of a query is use the Oracle.getQuestion function:
+
+
+```
+Oracle.getQuestion(o : oracle('a, 'b), q : oracle_query('a, 'b)) : 'a
+```
+
+##### Oracle respond
+To respond to an oracle question, use the Oracle.respond function:
+
+```
+Oracle.respond(o    : oracle('a, 'b),
+               q    : oracle_query('a, 'b),
+               sign : int,
+               r    : 'b)
+```
+
+
+##### Oracle query
+To ask an oracle a question, use the Oracle.query function:
+
+
+```
+Oracle.Query(o    : oracle('a, 'b),
+             q    : 'a,
+             fee  : int,
+             qttl : int,
+             rttl : int) : oracle_query('a, 'b)
+```
+
+
+##### Oracle Query Fee
+To ask the oracle what the query fee is use the Oracle.query_fee function:
+
+```
+Oracle.query_fee(o : oracle('a, 'b)) : int
+```
+
+##### Oracle hasAnswer
+To check if a query has been answered use the Oracle.hasAnswer function:
+
+
+```
+Oracle.hasAnswer(o : oracle('a, 'b), q : oracle_query('a. 'b): bool
+```
+##### Oracle getAnswer
+To ask the oracle what the query answer is use the Oracle.getAnswer function:
+
+```
+Oracle.getAnswer(o : oracle('a, 'b), q : oracle_query('a, 'b)) : option('b)
+```
+
+#### AENS interface
+
+The following primitives are available for interacting with the Aeternity
+Naming System (AENS):
+
+- Name resolution
+  ```
+  AENS.resolve(name : string, key : string) : option('a)
+  ```
+  Here `name` should be a registered name and `key` one of the attributes
+  associated with this name (for instance `"account_pubkey"`). The return type
+  (`'a`) must be resolved at compile time to an atomic type and the value is
+  type checked against this type at run time.
+- AENS transactions
+  ```
+  AENS.preclaim(owner : address, commitment_hash : hash, sig : signature) : ()
+  AENS.claim   (owner : address, name : string, salt : int, sig : signature) : ()
+  AENS.transfer(owner : address, new_owner : address, name_hash : hash, sig : signature) : ()
+  AENS.revoke  (owner : address, name_hash : hash, sig : signature) : ()
+  ```
+  If `owner` is different from `Contract.address`, `sig` should be a signature
+  of the other arguments by the private key of the `owner` account.
+  (*TODO: make precise*, *TODO: not implemented*)
+
 
 #### Events
 
@@ -545,10 +750,18 @@ Data is encoded in memory as follows:
   - The order of values is unspecified. For instance, in the encoding of a pair
     of boxed values, the three cells (first component, second component, and
     pair cell) can appear in any order in the encoded binary.
-
+  - The option type is encoded as -1 for `None` and as the tuple {4, V} for `Some(V)`.
+  - Type representations are encoded as tuples as follows:
+    - word: {0}  (any unboxed type)
+    - String: {1}
+    - List(T): {2, encode(T)}
+    - Tuple(T): {3, encode(T)}
+    - Option(T): {4, encode(T)}
 - Pointers are relative, with the address of the first word of the data being
   the *base address*. For calldata, the base address is 32 and for return
   values and contract state the base address is 0.
+
+
 
 #### Example
 

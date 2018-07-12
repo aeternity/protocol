@@ -268,8 +268,6 @@ commitment := Hash(NameHash(name) + name_salt)
  ---------------- ----
 | name           | 63 |
  ---------------- ----
-| fee            | 32 |
- ------------- -- ----
 | name_salt      | 32 |
  ---------------- ----
 ```
@@ -287,8 +285,6 @@ The `claim` transaction MUST be signed by the same private key as a
 
 A `claim` transaction MUST NOT be in included in the same block as its
 `pre-claim`.
-
-Note that the fee here is a distinct fee from the normal transaction fee.
 
 
 #### Update
