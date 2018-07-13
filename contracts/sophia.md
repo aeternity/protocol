@@ -611,66 +611,74 @@ In order of highest to lowest precedence.
 
 ```
 /*
- *  A simple crowd funding example.
- *  Not production code (do not use)!
+ * A simple crowd-funding example
  */
 contract FundMe =
 
-  record state = { contributions : map(address, uint),
-                   total         : uint,
+  record spend_args = { recipient : address,
+                        amount    : int }
+
+  record state = { contributions : map(address, int),
+                   total         : int,
                    beneficiary   : address,
-                   deadline      : uint,
-                   goal          : uint }
+                   deadline      : int,
+                   goal          : int }
+
+  private function abort(err : string) =
+    switch(0) 1 => ()
 
   private function require(b : bool, err : string) =
     if(!b) abort(err)
 
+  private function spend(args : spend_args) =
+    raw_spend(args.recipient, args.amount)
+
   public function init(beneficiary, deadline, goal) : state =
-    { contributions = Map.empty,
+    { contributions = {},
       beneficiary   = beneficiary,
       deadline      = deadline,
       total         = 0,
       goal          = goal }
 
-  // -- API --
+  private function is_contributor(addr) =
+    Map.member(addr, state.contributions)
 
-  // Contribute to the project
   public stateful function contribute() =
-    require(chain.height < state.deadline, "Deadline has passed")
-    let amount =
-      switch(Map.lookup(call.caller, state.contributions))
-        None    => call.amount
-        Some(n) => n + call.amount
-    put(state{ contributions[call.caller] = amount,
-               total = state.total + call.amount })
+    if(Chain.block_height >= state.deadline)
+      spend({ recipient = Call.caller, amount = Call.value }) // Refund money
+      false
+    else
+      let amount =
+        switch(Map.lookup(Call.caller, state.contributions))
+          None    => Call.value
+          Some(n) => n + Call.value
+      put(state{ contributions[Call.caller] = amount,
+                 total @ tot = tot + Call.value })
+      true
 
-  // Withdraw funds after the deadline.
   public stateful function withdraw() =
-    require(chain.height >= deadline, "Cannot withdraw before deadline")
-    if(call.caller == state.beneficiary)
+    if(Chain.block_height < state.deadline)
+      abort("Cannot withdraw before deadline")
+    if(Call.caller == state.beneficiary)
       withdraw_beneficiary()
-    elif(is_contributor(call.caller))
+    elif(is_contributor(Call.caller))
       withdraw_contributor()
     else
       abort("Not a contributor or beneficiary")
 
-  // -- Private functions --
-
-  private function is_contributor(addr) =
-    Map.member(addr, state.contributions)
-
   private stateful function withdraw_beneficiary() =
     require(state.total >= state.goal, "Project was not funded")
-    transaction(SpendTx({recipient = state.beneficiary,
-                         amount    = state.total }))
+    spend({recipient = state.beneficiary,
+           amount    = Contract.balance })
     put(state{ beneficiary = #0 })
 
   private stateful function withdraw_contributor() =
-    require(state.total < state.goal, "Project was funded")
-    let to = call.caller
-    transaction(SpendTx({recipient = to,
-                         amount    = state.contributions[to]}))
-    put(state{ contributions[to] = 0 })
+    if(state.total >= state.goal)
+      abort("Project was funded")
+    let to = Call.caller
+    spend({recipient = to,
+           amount    = state.contributions[to]})
+    put(state{ contributions @ c = Map.delete(to, c) })
 ```
 
 ## The lifetime of a contract
