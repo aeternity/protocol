@@ -50,5 +50,5 @@ There are two contract transactions available.
 ## Reading chain data
 
 ### Contract Call Result
-[tx/{tx_hash}/contract-call doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/GetContractCallFromTx)
+[/tx/{tx_hash}/contract-call doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/GetContractCallFromTx)
 
