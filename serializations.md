@@ -438,6 +438,7 @@ purging them from the tree.
 , <lock_period>      :: int()
 , <ttl>              :: int()
 , <fee>              :: int()
+, <delegates>        :: [id()]
 , <state_hash>       :: binary()
 , <nonce>            :: int()
 ]

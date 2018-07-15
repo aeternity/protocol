@@ -65,6 +65,9 @@ Serialization defined [here](../serializations.md#channel-create-transaction)
 - `lock_period`: minimal block height interval between a channel_close_solo/last channel_slash transaction and the channel_settle transaction
 - `ttl`
 - `fee`
+- `delegates`: a list of delegate addresses. The delegates play a role in the
+  solo closing sequence: except for the participants of the channel, they are
+  the only ones that can provide a slash transaction.
 - `state_hash`: the root hash of the channel state tree; This is not validated, just kept in the channel's object
 - `nonce`
 
@@ -253,7 +256,7 @@ Serialization defined [here](../serializations.md#channel-slash-transaction)
 
 
 - `channel_id`: channel id as recorded on-chain
-- `from`: participant of the channel that posts the slashing transaction
+- `from`: participant or delegate of the channel that posts the slashing transaction
 - `payload`: transaction proving that the proof of inclusion is part of the channel
 - `poi`: proof of inclusion
 - `ttl`
