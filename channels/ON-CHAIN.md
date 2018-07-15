@@ -5,6 +5,7 @@
 - [Updates](#updating-channel-on-chain)
 	- [`channel_deposit`](#channel_deposit)
 	- [`channel_withdraw`](#channel_withdraw)
+	- [`channel_snapshot_solo`](#channel_snapshot_solo)
 - [Closing](#closing-channel-on-chain)
 	- [`channel_close_mutual`](#channel_close_mutual)
 	- [`channel_close_solo`](#channel_close_solo)
@@ -165,6 +166,34 @@ on-chain transactions that have either `round` or a `payload` (with a `round` in
 `round` greater of equal to the last on-chain `round`.
 
 (***TODO***: should a channel be considered closed if all the tokens are taken from it?)
+
+### `channel_snapshot_solo`
+
+At any point of time any of the participants can initiate the solo closing sequence. After the `channel_close_solo`
+is posted and included in the chain - a `lock_period` block height timer is
+started. This is the time frame the other party is expected to dispute the
+closing state provided in the `channel_close_solo` transaction. In order to make
+channels both secure and so they operate in a trustless manner even when one is
+offline, we provide the functionality of snapshots.
+Snapshot is a mean to provide on-chain a newer state (represented by a `round`
+and a `state_hash`). After it is included - the channel can not be closed
+using some older state than the one being provided.
+
+The `from` account MUST be a participant in the target channel. The `payload`
+MUST be a co-signed off-chain state. It MUST be part of the same channel
+(containing same channel id) and it MUST have a `round` greater than the
+one currently present on-chain.
+
+Serialization defined [here](../serializations.md#channel-snapshot-solo-transaction)
+
+
+- `channel_id`: channel id as recorded on-chain
+- `from`: the account that posts the transaction
+- `payload`: co-signed off-chain state of the same channel
+- `ttl`:
+- `fee`:
+- `nonce`: the `from` account nonce
+
 
 ## Closing channel on-chain
 
