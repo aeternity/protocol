@@ -472,12 +472,12 @@ purging them from the tree.
 
 #### Channel close mutual transaction
 ```
-[ <channel_id>       :: id()
-, <initiator_amount> :: int()
-, <responder_amount> :: int()
-, <ttl>              :: int()
-, <fee>              :: int()
-, <nonce>            :: int()
+[ <channel_id>             :: id()
+, <initiator_amount_final> :: int()
+, <responder_amount_final> :: int()
+, <ttl>                    :: int()
+, <fee>                    :: int()
+, <nonce>                  :: int()
 ]
 ```
 
@@ -511,13 +511,13 @@ The payload is a serialized signed channel offchain transaction or it is empty.
 
 #### Channel settle transaction
 ```
-[ <channel_id>       :: id()
-, <from>             :: id()
-, <initiator_amount> :: int()
-, <responder_amount> :: int()
-, <ttl>              :: int()
-, <fee>              :: int()
-, <nonce>            :: int()
+[ <channel_id>             :: id()
+, <from>                   :: id()
+, <initiator_amount_final> :: int()
+, <responder_amount_final> :: int()
+, <ttl>                    :: int()
+, <fee>                    :: int()
+, <nonce>                  :: int()
 ]
 ```
 

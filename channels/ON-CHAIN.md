@@ -204,18 +204,18 @@ Serialization defined [here](../serializations.md#channel-close-mutual-transacti
 
 
 - `channel_id`: channel id as recorded on-chain
-- `initiator_amount`: final balance for the initiator
-- `responder_amount`: final balance for the responder
+- `initiator_amount_final`: final balance for the initiator
+- `responder_amount_final`: final balance for the responder
 - `ttl`:
 - `fee`:
 - `nonce`: taken from the `initiator` account
 
-`initiator_amount` and `responder_amount` are the agreed upon distribution of
-tokens. The initiator's account is returned the `initiator_amount` and
-the responder's account is returned `responder_amount`. The channel
+`initiator_amount_final` and `responder_amount_final` are the agreed upon distribution of
+tokens. The initiator's account is returned the `initiator_amount_final` and
+the responder's account is returned `responder_amount_final`. The channel
 must have enough total to pay for the fee as well as the agreed
 amounts. The total of a channel is computed by adding the amounts of
-the initiator and responder (before the close).
+the initiator and responder (before the close) and the fee.
 
 #### Requirements
 
@@ -225,7 +225,7 @@ After this transaction has been included in a block, the channel MUST be
 considered closed and allow no further modifications.
 
 `channel total ==
-  transcation initiator_amount + responder_amount + fee`
+  transcation initiator_amount_final + responder_amount_final + fee`
 
 ### `channel_close_solo`
 
@@ -334,8 +334,8 @@ Serialization defined [here](../serializations.md#channel-settle-transaction)
 
 - `channel_id`: channel id as recorded on-chain
 - `from`: participant of the channel that posts the settling transaction
-- `initiator_amount`: unsigned amount of tokens the initiator gets from the channel
-- `responder_amount`: unsigned amount of tokens the responder gets from the channel
+- `initiator_amount_final`: unsigned amount of tokens the initiator gets from the channel
+- `responder_amount_final`: unsigned amount of tokens the responder gets from the channel
 - `ttl`
 - `fee`
 - `nonce`: taken from the `from`'s account
@@ -345,7 +345,10 @@ Serialization defined [here](../serializations.md#channel-settle-transaction)
 After this transaction has been included in a block, the channel MUST be
 considered closed and allow no further modifications.
 
-MUST be signed using private key corresponding to the public key `from`.
+The transaction MUST be signed using private key corresponding to the public key `from`.
+
+The amounts must correspond to the ones on-chain, provided by the last
+channel_close_solo or channel_slash.
 
 ## Channel state tree
 

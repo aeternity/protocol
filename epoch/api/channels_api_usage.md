@@ -360,8 +360,8 @@ chain and has the following structure:
   | ---- | ---- | ----------- |
   | channel id | string | ID of the channel|
   | from | string | initiator's public key |
-  | initiator_amount | integer | final amount of tokens to be awarded by the initiator |
-  | responder_amount | integer | final amount of tokens to be awarded by the responder |
+  | initiator_amount_final | integer | final amount of tokens to be awarded by the initiator |
+  | responder_amount_final | integer | final amount of tokens to be awarded by the responder |
   | ttl | integer | maximum block height to include the transaction |
   | fee | integer | fee to be paid to the miner |
   | nonce | integer | initiator's nonce |
@@ -948,8 +948,8 @@ The transaction has the following structure:
   | ---- | ---- | ----------- |
   | channel id | string | ID of the channel to settle |
   | from | string | settler's public key |
-  | initiator_amount | integer | initiator final amount |
-  | responder_amount | integer | responder final amount |
+  | initiator_amount_final | integer | initiator final amount |
+  | responder_amount_final | integer | responder final amount |
   | ttl | integer | maximum block height to include the transaction |
   | fee | integer | fee to be paid to the miner |
   | nonce | integer | settler's nonce |
