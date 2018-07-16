@@ -169,6 +169,7 @@ subsequent sections divided by object.
 | Channel settle transaction | 56 |
 | Channel off chain transaction | 57 |
 | Channel | 58 |
+| Channel snapshot transaction | 59 |
 | POI | 60 |
 
 #### Accounts
@@ -519,6 +520,19 @@ The payload is a serialized signed channel offchain transaction or it is empty.
 , <nonce>            :: int()
 ]
 ```
+
+#### Channel snapshot solo transaction
+```
+[ <channel_id>      :: id()
+, <from>            :: id()
+, <payload>         :: binary()
+, <ttl>             :: int()
+, <fee>             :: int()
+, <nonce>           :: int()
+]
+```
+
+The payload is a serialized signed channel offchain transaction and can not be empty.
 
 #### Channel offchain transaction
 

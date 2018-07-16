@@ -334,6 +334,7 @@ channel_settle |   |     open     | -----+
                |   +--------------+
                |    ^ |    |
                |    | | channel_withdraw/
+               |    | | channel_snapshot_solo/
                |    | | channel_deposit
                |    +-+    |
                |           | channel_close_solo
