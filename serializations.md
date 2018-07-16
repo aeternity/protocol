@@ -542,6 +542,7 @@ The channel offchain transaction is not included directly in the transaction tre
 , <total_amount>     :: int()
 , <initiator_amount> :: int()
 , <channel_reserve>  :: int()
+, <delegates>        :: [id()]
 , <state_hash>       :: binary()
 , <round>            :: int()
 , <lock_period>      :: int()
