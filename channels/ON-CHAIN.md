@@ -175,7 +175,7 @@ started. This is the time frame the other party is expected to dispute the
 closing state provided in the `channel_close_solo` transaction. In order to make
 channels both secure and so they operate in a trustless manner even when one is
 offline, we provide the functionality of snapshots.
-Snapshot is a mean to provide on-chain a newer state (represented by a `round`
+Snapshot is a way providing on-chain a newer state (represented by a `round`
 and a `state_hash`). After it is included - the channel can not be closed
 using some older state than the one being provided.
 
