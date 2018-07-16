@@ -439,6 +439,7 @@ purging them from the tree.
 , <lock_period>      :: int()
 , <ttl>              :: int()
 , <fee>              :: int()
+, <delegates>        :: [id()]
 , <state_hash>       :: binary()
 , <nonce>            :: int()
 ]
@@ -555,6 +556,7 @@ The channel offchain transaction is not included directly in the transaction tre
 , <total_amount>     :: int()
 , <initiator_amount> :: int()
 , <channel_reserve>  :: int()
+, <delegates>        :: [id()]
 , <state_hash>       :: binary()
 , <round>            :: int()
 , <lock_period>      :: int()
