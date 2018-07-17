@@ -190,7 +190,7 @@ There is no need to consider Key Blocks' headers as Key Blocks do not hold heavy
  -------------- ------
 | pow_evidence | 168  |
  -------------- ------
-| signature    | 32  |
+| signature    | 64   |
  -------------- ------
 ```
 
@@ -215,7 +215,7 @@ There is no need to consider Key Blocks' headers as Key Blocks do not hold heavy
  -------------- ------
 | pow_evidence | 168  |
  -------------- ------
-| signature    | 32  |
+| signature    | 64   |
  -------------- ------
 ```
 (***TODO: Why do different fields have different positions?***)
