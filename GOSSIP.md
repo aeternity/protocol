@@ -130,32 +130,41 @@ nodes to join the cluster even if the trusted nodes inbound limit has been
 reached. In addition, this prevent a node, in particular a trusted node, to
 have so much inbound connections that it cannot reach its number of outbound
 connections; a guaranteed number of outbound connection is crucial for proper
-propagation of new blocks.
+propagation of new blocks. For all nodes to reach their established number of
+outbound connections, the soft maximum limit for inbound connections must be
+smaller than the maximum number of nodes minus the wanted number of outgoing
+connections.
 
-When started, the node will iteratively pick a random peer from the verified
-pool (not yet connected), that is from a different group
-([See Peer Groups](#peer-groups)) than any actual outbound connection.
-In case there are no more peers available in the verified pool, a random one is
-picked from the unverified pool. If the connection succeeds, an
+The node will first burst-connect to the trusted peers and then periodically
+connects to more peers until it reaches the maximum number of outbound
+connections; the delay between connections to new peers should be small enough
+so the nodes has enough outbound connections to work properly, but large enough
+so it has enough peers to choose from. This is done by having a variable delay
+between connections of `2^(OUTBOUND_CONNECTION_COUNT - 1)` seconds when
+`OUTBOUND_CONNECTION_COUNT` is greater than `0` with a maximum of `30` seconds;
+this allow the node to reach 5 outbound connection under `15` seconds and
+connect to the last peer when having received around `20` gossip messages.
+
+The node iteratively picks a random peer (not yet connected) from either
+the verified pool or the unverified pool (`0.5` probability by default),
+that is from a different group ([See Peer Groups](#peer-groups)) than
+any actual outbound connection. In case there are no more peers available in the
+selected pool the other one will be tried. If the connection succeeds, an
 unverified peer is upgraded to the verified pool and removed from the unverified
 pool. If the connection fails, the peer retry counter and last retry time are
 updated.
-
-The node will first burst-connect to the trusted peers and then periodically
-connects to more until it reaches the maximum number of outbound connections;
-the delay between connection should be set so the node has enough peer in its
-pool to choose from, it shouldn't connect to all the peer given from the first
-gossip messages.
 
 The node will periodically check a random peer from the pool without sending
 a ping message, only establishing the Noise connection. This ensure the pool
 contains enough reachable peers to reduce the chance of a Sybil attack were
 most of the good peers are unreachable augmenting the probability of only
-hostile node to get selected.
+hostile node getting selected. (Not yet implemented).
 
-If a peer changes its address but not its key, it will be removed after
-the normal retry policy is exausted. Then the new address will be added through
-the usual gossip exchanges.
+If a peer changes its IP address but not its key, the new address will **never**
+be updated through gossip. This is to prevent an hostil node from gossiping
+bad addresses for known good nodes and making them unreachable. The peer will be
+removed after the normal retry policy is exausted; then the new address will be
+added through the usual gossip exchanges.
 
 The peer retry counter and last retry time (initialized to '0' and 'infinity'),
 are used to filter out peers when picking them from the pools providing
@@ -175,13 +184,13 @@ from isolating the node by blocking chain traffic. If there is actually no
 traffic, it will just accelerate the connection rotation.
 
 - All connections without any chain-related activity (not counting gossip) for
-more than 180 seconds will get disconnected.
+more than 180 seconds will get disconnected. (Not yet implemented)
 - All inbound connections that don't send a ping after 30 seconds will be
 disconnected.
 - All recent inbound connections (less than 90 seconds old) without any
-chain-related activity (not counting gossip) will be closed.
+chain-related activity (not counting gossip) will be closed. (Not yet implemented)
 - When the maximum number of outbound connections has been reached, a random
-peer is checked every minute (Noise handcheck).
+peer is checked every minute (only Noise handcheck).
 
 #### Unverified Peers
 
@@ -242,11 +251,10 @@ rest of the IP of the peer to be added.
 3. If the bucket is full, one peer has to be evicted. This is done by first
 cleaning the peers that weren't gossiped for a long time, and if the bucket is
 still full, by selecting a random one with a bias toward the ones that are not
-connected and the last connection was the longest time ago. Trusted peers are
-never evicted.
+connected and the last connection was the longest time ago. Trusted peers and
+connected peers are never evicted.
 4. The eventually evicted peer is added to the unverified pool; its retry
-counter and last retry time are reset. If the node is connected to the evicted
-peer, the connection is closed.
+counter and last retry time are reset.
 
 See [Bucket Selection](#bucket-selection) for more details on how the buckets
 are selected from the secret and other discriminators.
@@ -257,26 +265,27 @@ are selected from the secret and other discriminators.
 
 List of constants with their current default values:
 
-- Maximum number of outbound connections: 10
-- Soft maximum number of inbound connections: 100
-- Number of buckets in the verified pool: 2^8 (256)
-- Number of peer per verified buckets: 2^5 (32)
-- Number of buckets in the unverified pool: 2^10 (1024)
-- Number of peer per unverified buckets: 2^6 (64)
-- Maximum number of duplicated peers in the unverified pool: 8
-- Probability of adding a Nth duplicated reference of an existing peer to the unverified pool: '1/2^N'
+- Maximum number of outbound connections: `10`
+- Soft maximum number of inbound connections: `100`
+- Number of buckets in the verified pool: `2^8` (`256`)
+- Number of peer per verified buckets: `2^5` (`32`)
+- Number of buckets in the unverified pool: `2^10` (`1024`)
+- Number of peer per unverified buckets: `2^6` (`64`)
+- Maximum number of duplicated peers in the unverified pool: `8`
+- Probability of adding a Nth duplicated reference of an existing peer to the
+unverified pool: `1/2^N`
 - Period of verified peer random peer check when the maximum number
-of verified connections has been reached: 60 seconds
+of verified connections has been reached: `60 seconds`
 - Period of new peer connection up to the maximum number of verified
-connections: 20 seconds.
-- Gossip ping frequency: 120 seconds
-- Maximum time to get a ping from an inbound connection: 30 seconds
+connections: `min(30, 2^(OUTBOUND_CONNECTION_COUNT - 1)) seconds`.
+- Gossip ping frequency: `120 seconds`
+- Maximum time to get a ping from an inbound connection: `30 seconds`
 - Maximum time without activity (besides gossip) for inbound connections less
-than 90 seconds old: 30 seconds
-- Maximum time without activity (besides gossip) for all connections: 180 seconds
-- Number of unverified buckets selected based on the source address group: 64
-- Number of unverified sub-buckets selected based on the peer address group: 4
-- Number of verified buckets selected based on peer address group: 8
+than 90 seconds old: `30 seconds`
+- Maximum time without activity (besides gossip) for all connections: `180 seconds`
+- Number of unverified buckets selected based on the source address group: `64`
+- Number of unverified sub-buckets selected based on the peer address group: `4`
+- Number of verified buckets selected based on peer address group: `8`
 
 With these default values:
 
@@ -288,6 +297,7 @@ unverified pool.
 - The maximum number of neighboring peers sharing the same IP a single node
 can add through gossip is from 23 to 184 depending on peer duplication in the
 unverified pool.
+- The minimum time to reach 10 outbound connections is 2 minutes and 31 seconds.
 
 ##### Bucket Selection
 
@@ -313,6 +323,8 @@ BucketIdx = N2 rem 256.
 ```
 
 #### Persistence
+
+(Not yet implemented)
 
 Persistence of the known peers is important in preventing Sybil/eclipse attacks.
 

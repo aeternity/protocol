@@ -29,6 +29,7 @@ The following P2P messages are implemented in
   - [MSG_TX_POOL_SYNC_UNFOLD](#msg_tx_pool_sync_unfold)
   - [MSG_TX_POOL_SYNC_GET](#msg_tx_pool_sync_get)
   - [MSG_TX_POOL_SYNC_FINISH](#msg_tx_pool_sync_finish)
+  - [MSG_CLOSE](#msg_close)
 
 Each message type (except for `MSG_FRAGMENT`) is versioned such that the
 message can easily be changed while still maintaining backwards compatibility
@@ -77,6 +78,8 @@ Message is RLP encoded, fields:
   - `Difficulty :: byte_array` - string representation of float that
     is the total difficulty of the chain.
   - `TopHash :: byte_array`
+  - `sync_allowed :: bool` - if the sender of this ping message is accepting
+    synchronization messages.
   - `Peers :: [byte_array]` - list of shared peers
 
 Peers are serialized/deserialized in `aec_peer_messages`
@@ -171,3 +174,8 @@ Message is RLP encoded, fields:
 
 Message is RLP encoded, fields:
   - `Done :: bool`
+
+## MSG_CLOSE
+*(Tag = 127)*
+
+This message has no fields.
