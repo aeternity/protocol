@@ -188,8 +188,6 @@ There is no need to consider Key Blocks' headers as Key Blocks do not hold heavy
  -------------- ------
 | txs          | var  |
  -------------- ------
-| pow_evidence | 168  |
- -------------- ------
 | signature    | 64   |
  -------------- ------
 ```
@@ -212,8 +210,6 @@ There is no need to consider Key Blocks' headers as Key Blocks do not hold heavy
 | time         |  8   |
  -------------- ------
 | version      |  8   |
- -------------- ------
-| pow_evidence | 168  |
  -------------- ------
 | signature    | 64   |
  -------------- ------
