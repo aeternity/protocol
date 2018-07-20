@@ -180,8 +180,6 @@ There is no need to consider Key Blocks' headers as Key Blocks do not hold heavy
  -------------- ------
 | txs_hash     | 32   |
  -------------- ------
-| key_hash     | 32   |
- -------------- ------
 | time         |  8   |
  -------------- ------
 | version      |  8   |
@@ -204,8 +202,6 @@ There is no need to consider Key Blocks' headers as Key Blocks do not hold heavy
 | state_hash   | 32   |
  -------------- ------
 | txs_hash     | 32   |
- -------------- ------
-| key_hash     | 32   |
  -------------- ------
 | time         |  8   |
  -------------- ------

@@ -51,7 +51,6 @@ constructed directly as a byte array.
 | prev_hash  | 32   |
 | state_hash | 32   |
 | txs_hash   | 32   |
-| key_hash   | 32   |
 | time       | 8    |
 
 ### Micro block
