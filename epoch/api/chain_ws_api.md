@@ -81,7 +81,6 @@ Response:
    "payload":{"hash":"bh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi",
               "type":"block",
               "block":{"height":1,
-                       "key_hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
                        "prev_hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
                        "signature":[239,191,189,239,191,189,73,107,239,191,189,20,
                                     83,239,191,189,93,239,191,189,56,101,239,191,
@@ -173,7 +172,6 @@ Response:
    "payload":{"hash":"bh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi",
               "type":"block",
               "block":{"height":1,
-                       "key_hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
                        "prev_hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
                        "signature":[239,191,189,239,191,189,73,107,239,191,189,20,
                                     83,239,191,189,93,239,191,189,56,101,239,191,
@@ -440,7 +438,6 @@ is the first block - it doesn't have `prev_hash`, too.
   | prev_hash | string | Hash of the previous block | Yes |
   | state_hash | string | Hash of the root of the state tree | Yes |
   | txs_hash | string | Root hash of the Merkle tree of transactions included in this block | Yes |
-  | key_hash | string | Key block hash of the related key block | Yes |
   | time | number | Block mining time | Yes |
   | version | number | Version of the block structure | Yes |
 
