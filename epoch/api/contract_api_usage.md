@@ -52,6 +52,8 @@ In order to affect the state of the chain you have to submit the signed transact
 ### Contract Call
 [/tx/contract/call doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/PostContractCall)
 
+[/tx/contract/call/compute doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/PostContractCallCompute)
+
 ## Reading chain data
 
 ### Contract Call Result
