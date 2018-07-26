@@ -4,34 +4,34 @@
 
 - [Overview](#overview)
 - [Control messages](#control-messages)
-	- [`error`](#error)
-	- [`ping`/`pong`](#pingpong)
+        - [`error`](#error)
+        - [`ping`/`pong`](#pingpong)
 - [Establishing channel off-chain](#establishing-channel-off-chain)
-	- [`channel_open`](#channel_open)
-	- [`channel_accept`](#channel_accept)
-	- [`funding_created`](#funding_created)
-	- [`funding_signed`](#funding_signed)
-	- [`funding_locked`](#funding_locked)
-	- [`channel_reestablish`](#channel_reestablish)
+        - [`channel_open`](#channel_open)
+        - [`channel_accept`](#channel_accept)
+        - [`funding_created`](#funding_created)
+        - [`funding_signed`](#funding_signed)
+        - [`funding_locked`](#funding_locked)
+        - [`channel_reestablish`](#channel_reestablish)
         - [`channel_reestablish_ack`](#channel_reestablish_ack)
 - [Updates](#state-update)
         - [`update`](#update)
         - [`update_ack`](#update_ack)
         - [`update_error`](#update_error)
-	- [`deposit_created`](#deposit_created)
-	- [`deposit_signed`](#deposit_signed)
-	- [`deposit_locked`](#deposit_locked)
+        - [`deposit_created`](#deposit_created)
+        - [`deposit_signed`](#deposit_signed)
+        - [`deposit_locked`](#deposit_locked)
         - [`deposit_error`](#deposit_error)
-	- [`withdraw_created`](#withdraw_created)
-	- [`withdraw_signed`](#withdraw_signed)
-	- [`withdraw_locked`](#withdraw_locked)
+        - [`withdraw_created`](#withdraw_created)
+        - [`withdraw_signed`](#withdraw_signed)
+        - [`withdraw_locked`](#withdraw_locked)
         - [`withdraw_error`](#withdraw_error)
 - [Other interaction](#other-interaction)
         - [`inband_msg`](#inband_msg)
 - [Closing](#channel-closing)
         - [`leave`](#leave)
         - [`leave_ack`](#leave_ack)
-	- [`shutdown`](#shutdown)
+        - [`shutdown`](#shutdown)
         - [`shutdown_ack`](#shutdown_ack)
 
 
@@ -56,7 +56,9 @@ published on-chain.
 
 ### Framing
 
-Each message is identified by a 1-byte message code. The size of the following message is defined by the type – see the description of each individual message type.
+Each message is identified by a 1-byte message code. The size of the following
+message is defined by the type – see the description of each individual
+message type.
 
 ```
   name                  size (bytes)
