@@ -6,7 +6,7 @@
 - [Control messages](#control-messages)
 	- [`error`](#error)
 	- [`ping`/`pong`](#pingpong)
-- [Establishment](#establishing-channel-off-chain)
+- [Establishing channel off-chain](#establishing-channel-off-chain)
 	- [`channel_open`](#channel_open)
 	- [`channel_accept`](#channel_accept)
 	- [`funding_created`](#funding_created)
@@ -14,9 +14,9 @@
 	- [`funding_locked`](#funding_locked)
 	- [`channel_reestablish`](#channel_reestablish)
         - [`channel_reestablish_ack`](#channel_reestablish_ack)
-- Updates
+- [Updates](#state-update)
         - [`update`](#update)
-        - [`update_ack`](#update)
+        - [`update_ack`](#update_ack)
         - [`update_error`](#update_error)
 	- [`deposit_created`](#deposit_created)
 	- [`deposit_signed`](#deposit_signed)
@@ -26,9 +26,9 @@
 	- [`withdraw_signed`](#withdraw_signed)
 	- [`withdraw_locked`](#withdraw_locked)
         - [`withdraw_error`](#withdraw_error)
-- Other interaction
+- [Other interaction](#other-interaction)
         - [`inband_msg`](#inband_msg)
-- Closing
+- [Closing](#channel-closing)
         - [`leave`](#leave)
         - [`leave_ack`](#leave_ack)
 	- [`shutdown`](#shutdown)
@@ -475,6 +475,20 @@ All subsequent messages must use the included `channel_id` instead of the
 - A node MUST NOT send the `funding_locked` message unless the `channel_create`
 transaction has `minimum_depth` confirmations.
 
+## State update
+
+State updates require consent of both parties.
+
+Each update MUST have a strictly increasing round, which SHOULD start
+at `0` on channel initialisation.
+
+Parameters:
+
+- `channel_id`:
+- `balances`:
+- `state`
+
+
 ### `update`
 
 Message code: 8
@@ -728,6 +742,34 @@ must be the last mutually signed state. The receiver does not reply.
  ---------------------- ----
 ```
 
+## Other interaction
+
+### `inband_message`
+
+Message code: 96
+
+Inband messages are arbitrary messages sent between the channel participants.
+The payload must be limited to 65,535 bytes. The fsm must deliver an inband
+message immediately, and the receiver must process it (e.g. conveying it to
+the client) immediately, preserving the message ordering.
+
+One possible use of inband messages could be to synchronize off-chain state
+updates, but any application is allowed.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
+ ---------------------- ----
+```
+
+## Channel closing
+
+
 ### `leave`
 
 Message code: 94
@@ -757,48 +799,6 @@ the `leave_ack` before it terminates.
   name                  size (bytes)
  ---------------------- ----
 | channel_id           | 32 |
- ---------------------- ----
-```
-
-### `inband_msg`
-
-Message code: 96
-
-Inband messages are arbitrary messages sent between the channel participants.
-The payload must be limited to 65,535 bytes. The fsm must deliver an inband
-message immediately, and the receiver must process it (e.g. conveying it to
-the client) immediately, preserving the message ordering.
-
-One possible use of inband messages could be to synchronize off-chain state
-updates, but any application is allowed.
-
-```
-  name                  size (bytes)
- ---------------------- ----
-| channel_id           | 32 |
- ---------------------- ----
-| length               | 2  |
- ---------------------- ----
-| data                 | N  |
- ---------------------- ----
-```
-
-
-### `error`
-
-Message code: 97
-
-An `error` message signals a fatal condition on the channel, and the
-receiver must terminate the channel as a result.
-
-```
-  name                  size (bytes)
- ---------------------- ----
-| channel_id           | 32 |
- ---------------------- ----
-| length               | 2  |
- ---------------------- ----
-| data                 | N  |
  ---------------------- ----
 ```
 
@@ -851,60 +851,7 @@ transaction onto the chain, and then terminate.
 ### `update_init_contract`
 
 
-## State update
-
-State updates require consent of both parties.
-
-Each update MUST have a strictly increasing round, which SHOULD start
-at `0` on channel initialisation.
-
-Parameters:
-
-- `channel_id`:
-- `balances`:
-- `state`
-
-
-### `update_exec_func`
-
-
-
-### `update_exec_result`
-
-## Deposit
-
-Depositing funds into a channel should increase the longevity of channels, since
-it makes balancing them easier but seeing as this incurs an on-chain transaction
-we'd still like to avoid it, if possible.
-
-
-### `update_deposit`
-
-```
-  name                  size (bytes)
- ---------------------- ----
-| channel_id           | 32 |
- ---------------------- ----
-| data                 | 32 |
- ---------------------- ----
-```
-
-
-## Withdrawal
-
-### `update_withdrawal`
-
-```
-  name                  size (bytes)
- ---------------------- ----
-| channel_id           | 32 |
- ---------------------- ----
-| data                 | 32 |
- ---------------------- ----
-```
-
-
-## Channel closing
+## To be reviewed
 
 A channel can be closed under three circumstances:
 
