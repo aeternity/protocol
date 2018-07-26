@@ -13,20 +13,26 @@
 	- [`funding_signed`](#funding_signed)
 	- [`funding_locked`](#funding_locked)
 	- [`channel_reestablish`](#channel_reestablish)
+        - [`channel_reestablish_ack`](#channel_reestablish_ack)
 - Updates
-	- [`update_contract_init`](#update_init_contract)
-	- [`update_exec_func`](#update_exec_fun)
-	- [`update_exec_result`](#update_exec_result)
-	- [`update_deposit_created`](#update_deposit)
-	- [`update_deposit_signed`](#update_deposit)
-	- [`update_deposit_locked`](#update_deposit)
-	- [`update_withdrawal_created`](#update_withdrawal)
-	- [`update_withdrawal_signed`](#update_withdrawal)
-	- [`update_withdrawal_locked`](#update_withdrawal)
+        - [`update`](#update)
+        - [`update_ack`](#update)
+        - [`update_error`](#update_error)
+	- [`deposit_created`](#deposit_created)
+	- [`deposit_signed`](#deposit_signed)
+	- [`deposit_locked`](#deposit_locked)
+        - [`deposit_error`](#deposit_error)
+	- [`withdraw_created`](#withdraw_created)
+	- [`withdraw_signed`](#withdraw_signed)
+	- [`withdraw_locked`](#withdraw_locked)
+        - [`withdraw_error`](#withdraw_error)
+- Other interaction
+        - [`inband_msg`](#inband_msg)
 - Closing
+        - [`leave`](#leave)
+        - [`leave_ack`](#leave_ack)
 	- [`shutdown`](#shutdown)
-	- [`closing_created`](#closing_created)
-	- [`closing_signed`](#closing_signed)
+        - [`shutdown_ack`](#shutdown_ack)
 
 
 ## Overview
@@ -301,7 +307,7 @@ different amounts, then that might communicate that it wants these instead.)
   blockchain to stop a cheater
 - `responder_pubkey` MUST be a valid ed25519 pubkey
 
-### `channel_reestabl`
+### `channel_reestablish`
 
 Message code: 3
 
@@ -315,7 +321,7 @@ to client failure or by the participants mutually agreeing to leave.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
@@ -323,7 +329,7 @@ to client failure or by the participants mutually agreeing to leave.
 
 The payload (`data`) must be the latest mutually signed offchain state, and
 the clients must verify that they have the corresponding state trees to match
-the state (otherwise, it will not be possible to close the channel later on.)
+the state (otherwise, it will not be possible to use the channel later on.)
 
 In the `epoch` implementation, the state trees are cached inside the node.
 Note that if the node restarts, cached data is not likely to survive (it is
@@ -341,7 +347,7 @@ state is in fact the last mutually signed state.
 - MUST abort if it doesn't have a corresponding state tree (is able to verify
   proof-of-inclusion) for the provided state.
 
-### `channel_reest_ack`
+### `channel_reestablish_ack`
 
 Message code: 4
 
@@ -352,13 +358,13 @@ Message code: 4
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
 ```
 
-This is a response message to `channel_reestabl`, expected to contain
+This is a response message to `channel_reestablish`, expected to contain
 identical information.
 
 #### Requirements
@@ -366,7 +372,7 @@ identical information.
 *Initiator*:
 
 - MUST abort if contents do not match exactly, those of the preceding
-  `channel_reestabl`
+  `channel_reestablish`
 - MUST abort if the `chain_id` doesn't match the current chain.
 - MUST abort if the payload does not correspond to the last known mutually
   signed state.
@@ -388,7 +394,7 @@ by the Initiator.
  ---------------------- ----
 | temporary_channel_id | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
@@ -403,7 +409,7 @@ by the Initiator.
 - MUST abort if the `data` cannot be deserialized into a valid
   `channel_create_tx` object
 - MUST abort if the signature is invalid for the provided transaction data
-- SHOULD abort if the `round` of the state is 
+- SHOULD abort if the `round` of the state is not equal to `1`
 
 
 ### `funding_signed`
@@ -415,13 +421,12 @@ If the responder was able to validate the initiator's signature sent in the
 object. The co-signed object will become the initial off-chain state of the
 channel.
 
-
 ```
   name                  size (bytes)
  ---------------------- ----
 | temporary_channel_id | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
@@ -488,7 +493,7 @@ message.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
@@ -500,7 +505,7 @@ Message code: 9
 
 In response to an `update` message, the receiving side verifies that the
 operations listed in the `updates` list, applied to the most recent co-signed
-state, results in a state tree corresponding to `root_hash`. If so, the
+state, results in a state tree corresponding to `state_hash`. If so, the
 state object is co-signed, then returned as payload in an `update_ack`
 message.
 
@@ -509,7 +514,7 @@ message.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
@@ -532,7 +537,7 @@ be the last mutually signed state. The receiver does not reply.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| round                | 32 |
+| round                | 4  |
  ---------------------- ----
 ```
 
@@ -544,7 +549,7 @@ In order to deposit more funds into the channel, one party can initiate
 a `deposit_created` request. The payload is a singly signed
 `channel_deposit_tx` object, which includes the state hash and round of the
 next off-chain state, after applying a deposit operation with the expected
-amount. The initiating side can only deposit funds from its own on-chain
+amount. The initiating side can only deposit tokens from its own on-chain
 account (same public key) to its own off-chain account in the channel state.
 
 Note that it is possible to deposit a zero amount, essentially making the
@@ -558,7 +563,7 @@ in an `deposit_signed` message.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
@@ -582,7 +587,7 @@ received, a `deposit_locked` message is sent, with the hash of the
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
@@ -603,7 +608,7 @@ useable.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
@@ -626,7 +631,7 @@ be the last mutually signed state. The receiver does not reply.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| round                | 32 |
+| round                | 4  |
  ---------------------- ----
 ```
 
@@ -635,12 +640,12 @@ be the last mutually signed state. The receiver does not reply.
 
 Message code: 15
 
-In order to withdraw funds into the channel, one party can initiate
+In order to withdraw tokens from the channel, one party can initiate
 a `withdraw_created` request. The payload is a singly signed
-`channel_deposit_tx` object, which includes the state hash and round of the
-next off-chain state, after applying a deposit operation with the expected
-amount. The initiating side can only deposit funds from its own on-chain
-account (same public key) to its own off-chain account in the channel state.
+`channel_withdraw_tx` object, which includes the state hash and round of the
+next off-chain state, after applying a withdrawal operation with the expected
+amount. The initiating side can only withdraw tokens from its own off-chain
+account in the channel state (same public key) to its own on-chain account.
 Note that it is possible to withdraw a zero amount, essentially making the
 operation an on-chain snapshot.
 
@@ -652,7 +657,7 @@ in an `withdraw_signed` message.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
@@ -675,7 +680,7 @@ received, a `withdraw_locked` message is sent, with the hash of the
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
@@ -696,7 +701,7 @@ useable.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
@@ -719,7 +724,7 @@ must be the last mutually signed state. The receiver does not reply.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| round                | 32 |
+| round                | 4  |
  ---------------------- ----
 ```
 
@@ -772,7 +777,7 @@ updates, but any application is allowed.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
@@ -791,7 +796,7 @@ receiver must terminate the channel as a result.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
@@ -813,7 +818,7 @@ state, and then replies with a `shutdown_ack` message.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
@@ -834,7 +839,7 @@ transaction onto the chain, and then terminate.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 16 |
+| length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
