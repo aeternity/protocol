@@ -4,29 +4,35 @@
 
 - [Overview](#overview)
 - [Control messages](#control-messages)
-	- [`error`](#error)
-	- [`ping`/`pong`](#pingpong)
-- [Establishment](#establishing-channel-off-chain)
-	- [`channel_open`](#channel_open)
-	- [`channel_accept`](#channel_accept)
-	- [`funding_created`](#funding_created)
-	- [`funding_signed`](#funding_signed)
-	- [`funding_locked`](#funding_locked)
-	- [`channel_reestablish`](#channel_reestablish)
-- Updates
-	- [`update_contract_init`](#update_init_contract)
-	- [`update_exec_func`](#update_exec_fun)
-	- [`update_exec_result`](#update_exec_result)
-	- [`update_deposit_created`](#update_deposit)
-	- [`update_deposit_signed`](#update_deposit)
-	- [`update_deposit_locked`](#update_deposit)
-	- [`update_withdrawal_created`](#update_withdrawal)
-	- [`update_withdrawal_signed`](#update_withdrawal)
-	- [`update_withdrawal_locked`](#update_withdrawal)
-- Closing
-	- [`shutdown`](#shutdown)
-	- [`closing_created`](#closing_created)
-	- [`closing_signed`](#closing_signed)
+  + [`error`](#error)
+  + [`ping`/`pong`](#pingpong)
+- [Establishing channel off-chain](#establishing-channel-off-chain)
+  + [`channel_open`](#channel_open)
+  + [`channel_accept`](#channel_accept)
+  + [`funding_created`](#funding_created)
+  + [`funding_signed`](#funding_signed)
+  + [`funding_locked`](#funding_locked)
+  + [`channel_reestablish`](#channel_reestablish)
+  + [`channel_reestablish_ack`](#channel_reestablish_ack)
+- [Updates](#state-update)
+  + [`update`](#update)
+  + [`update_ack`](#update_ack)
+  + [`update_error`](#update_error)
+  + [`deposit_created`](#deposit_created)
+  + [`deposit_signed`](#deposit_signed)
+  + [`deposit_locked`](#deposit_locked)
+  + [`deposit_error`](#deposit_error)
+  + [`withdraw_created`](#withdraw_created)
+  + [`withdraw_signed`](#withdraw_signed)
+  + [`withdraw_locked`](#withdraw_locked)
+  + [`withdraw_error`](#withdraw_error)
+- [Other interaction](#other-interaction)
+  + [`inband_msg`](#inband_msg)
+- [Closing](#channel-closing)
+  + [`leave`](#leave)
+  + [`leave_ack`](#leave_ack)
+  + [`shutdown`](#shutdown)
+  + [`shutdown_ack`](#shutdown_ack)
 
 
 ## Overview
@@ -50,7 +56,9 @@ published on-chain.
 
 ### Framing
 
-Each message is identified by a 1-byte message code. The size of the following message is defined by the type – see the description of each individual message type.
+Each message is identified by a 1-byte message code. The size of the following
+message is defined by the type – see the description of each individual
+message type.
 
 ```
   name                  size (bytes)
@@ -68,12 +76,23 @@ The following message codes are defined:
 | channel_open     | 1  |
 | channel_accept   | 2  |
 | channel_reestabl | 3  |
-| funding_created  | 4  |
-| funding_signed   | 5  |
-| funding_locked   | 6  |
-| update           | 7  |
-| update_ack       | 8  |
-| update_error     | 9  |
+| channel_reest_ack| 4
+| funding_created  | 5  |
+| funding_signed   | 6  |
+| funding_locked   | 7  |
+| update           | 8  |
+| update_ack       | 9  |
+| update_error     | 10 |
+| deposit_created  | 11 |
+| deposit_signed   | 12 |
+| deposit_locked   | 13 |
+| deposit_error    | 14 |
+| withdraw_created | 15 |
+| withdraw_signed  | 16 |
+| withdraw_locked  | 17 |
+| withdraw_error   | 18 |
+| leave            | 94 |
+| leave_ack        | 95 |
 | inband_message   | 96 |
 | error            | 97 |
 | shutdown         | 98 |
@@ -280,7 +299,6 @@ initiating party.
 (***TODO***: This could be interactive, i.e. if the responding party sends
 different amounts, then that might communicate that it wants these instead.)
 
-
 #### Requirements
 
 *Responder*:
@@ -291,23 +309,96 @@ different amounts, then that might communicate that it wants these instead.)
   blockchain to stop a cheater
 - `responder_pubkey` MUST be a valid ed25519 pubkey
 
+### `channel_reestablish`
 
-### `funding_created`
+Message code: 3
+
+It is possible to resume a channel which has been terminated either due
+to client failure or by the participants mutually agreeing to leave.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| chain_hash           | 32 |
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
+ ---------------------- ----
+```
+
+The payload (`data`) must be the latest mutually signed offchain state, and
+the clients must verify that they have the corresponding state trees to match
+the state (otherwise, it will not be possible to use the channel later on.)
+
+In the `epoch` implementation, the state trees are cached inside the node.
+Note that if the node restarts, cached data is not likely to survive (it is
+not persisted on each update for performance reasons.) The `epoch` channel
+fsm automatically recovers the state trees and verifies that the provided
+state is in fact the last mutually signed state.
+
+#### Requirements
+
+*Responder*:
+
+- MUST abort if the `chain_id` doesn't match the current chain.
+- MUST abort if the payload does not correspond to the last known mutually
+  signed state.
+- MUST abort if it doesn't have a corresponding state tree (is able to verify
+  proof-of-inclusion) for the provided state.
+
+### `channel_reestablish_ack`
 
 Message code: 4
 
+```
+  name                  size (bytes)
+ ---------------------- ----
+| chain_hash           | 32 |
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
+ ---------------------- ----
+```
+
+This is a response message to `channel_reestablish`, expected to contain
+identical information.
+
+#### Requirements
+
+*Initiator*:
+
+- MUST abort if contents do not match exactly, those of the preceding
+  `channel_reestablish`
+- MUST abort if the `chain_id` doesn't match the current chain.
+- MUST abort if the payload does not correspond to the last known mutually
+  signed state.
+- MUST abort if it doesn't have a corresponding state tree (is able to verify
+  proof-of-inclusion) for the provided state.
+
+
+### `funding_created`
+
+Message code: 5
+
 In order to open a channel on chain, parties need to cooperate and co-sign the
 `channel_create` transaction. The `funding_created` message is used by the
-initiator to send their signature to the responder.
+initiator to send an initial state - a `channel_create_tx` object, signed
+by the Initiator.
 
 ```
   name                  size (bytes)
  ---------------------- ----
 | temporary_channel_id | 32 |
  ---------------------- ----
-| transaction_data     | 32 |
+| length               | 2  |
  ---------------------- ----
-| signature            | 64 |
+| data                 | N  |
  ---------------------- ----
 ```
 
@@ -316,33 +407,47 @@ initiator to send their signature to the responder.
 
 *Responder*:
 
+- MUST abort if the size of the payload does not match `length`
+- MUST abort if the `data` cannot be deserialized into a valid
+  `channel_create_tx` object
 - MUST abort if the signature is invalid for the provided transaction data
+- SHOULD abort if the `round` of the state is not equal to `1`
 
 
 ### `funding_signed`
 
-Message code: 5
+Message code: 6
 
 If the responder was able to validate the initiator's signature sent in the
-`funding_created` message, then it should proceed to respond with its
-`funding_signed` message, unless the initiator specified a `push_amount > 0` in
-the `channel_open` message. In the latter case, they should wait for the
-initiator to send the initial state signed by them.
-
+`funding_created` message, then it should add its own signature to the state
+object. The co-signed object will become the initial off-chain state of the
+channel.
 
 ```
   name                  size (bytes)
  ---------------------- ----
 | temporary_channel_id | 32 |
  ---------------------- ----
-| signature            | 64 |
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
  ---------------------- ----
 ```
+
+#### Requirements
+
+*Initiator*:
+
+- MUST abort if the size of the payload does not match `length`
+- MUST abort if the `data` cannot be deserialized into a valid
+  `channel_create_tx` object
+- MUST abort if the `data` object isn't the offered initial state
+- MUST abort if the `data` object isn't mutually signed by both parties.
 
 
 ### `funding_locked`
 
-Message code: 6
+Message code: 7
 
 Opening a channel requires an on-chain transaction. This transaction needs to be
 included in a block and, since we only have probabilistic finality, be
@@ -353,26 +458,24 @@ This message is exchanged by both parties to signal to each other that the above
 condition has been met from their point of view and only after both of them
 agree on this, can the channel be considered to be opened.
 
+All subsequent messages must use the included `channel_id` instead of the
+`temporary_channel_id`.
+
 
 ```
   name                  size (bytes)
  ---------------------- ----
 | temporary_channel_id | 32 |
  ---------------------- ----
-| transaction_id       | 32 |
+| channel_id           | 32 |
  ---------------------- ----
 ```
 
 
 #### Requirements
 
-A node MUST NOT send the `funding_locked` message unless the `channel_create`
+- A node MUST NOT send the `funding_locked` message unless the `channel_create`
 transaction has `minimum_depth` confirmations.
-
-## Initialise contract
-
-### `update_init_contract`
-
 
 ## State update
 
@@ -388,46 +491,369 @@ Parameters:
 - `state`
 
 
-### `update_exec_func`
+### `update`
 
+Message code: 8
 
-
-### `update_exec_result`
-
-## Deposit
-
-Depositing funds into a channel should increase the longevity of channels, since
-it makes balancing them easier but seeing as this incurs an on-chain transaction
-we'd still like to avoid it, if possible.
-
-
-### `update_deposit`
+Once `funding_locked` messages have been exchanged, the channel enters the
+`open` state. Changes to the off-chain state can be effected by sending an
+`update` message. The payload of this message must be a singly-signed
+off-chain state, where the `updates` element contains a list of operations
+to be performed on the previous state, and the `state_hash` is the aggregated
+root hash of the resulting state trees. The receiver must verify that the
+state is a valid outcome, then return it, co-signed, in an `update_ack`
+message.
 
 ```
   name                  size (bytes)
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| data                 | 32 |
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
  ---------------------- ----
 ```
 
+### `update_ack`
 
-## Withdrawal
+Message code: 9
 
-### `update_withdrawal`
+In response to an `update` message, the receiving side verifies that the
+operations listed in the `updates` list, applied to the most recent co-signed
+state, results in a state tree corresponding to `state_hash`. If so, the
+state object is co-signed, then returned as payload in an `update_ack`
+message.
 
 ```
   name                  size (bytes)
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| data                 | 32 |
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
  ---------------------- ----
 ```
 
+### `update_error`
+
+Message code: 10
+
+Since both sides may initiate an `update` request, it is possible that both
+may do so at roughly the same time. In particular, in the `epoch` system,
+if an `update` request arrives while the fsm is waiting for its client to
+sign a new state update, it reverts both its own update attempt and the
+other participant's update request by sending an `update_error` message.
+The `round` element signifies the round of the fallback state, which must
+be the last mutually signed state. The receiver does not reply.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| round                | 4  |
+ ---------------------- ----
+```
+
+### `deposit_created`
+
+Message code: 11
+
+In order to deposit more funds into the channel, one party can initiate
+a `deposit_created` request. The payload is a singly signed
+`channel_deposit_tx` object, which includes the state hash and round of the
+next off-chain state, after applying a deposit operation with the expected
+amount. The initiating side can only deposit tokens from its own on-chain
+account (same public key) to its own off-chain account in the channel state.
+
+Note that it is possible to deposit a zero amount, essentially making the
+operation an on-chain snapshot.
+
+The receiving side verifies the operation and co-signs the state, returning it
+in an `deposit_signed` message.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
+ ---------------------- ----
+```
+
+
+### `deposit_signed`
+
+Message code: 12
+
+This is an acknowledgement of a preceding `deposit_created` message (see
+above). Upon receipt of a co-signed state, the receiver verifies that it is
+indeed the state resulting from the proposed deposit operation. The
+`channel_deposit_tx` is then pushed to the chain, and the requisit number of
+confirmations (`minimum_depth`) are awaited. Once confirmation has been
+received, a `deposit_locked` message is sent, with the hash of the
+`channel_deposit_tx` transaction.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
+ ---------------------- ----
+```
+
+### `deposit_locked`
+
+Message code: 13
+
+This message is sent upon receipt of a `minimum_depth` confirmation for a
+`channel_deposit_tx` transaction. The payload is the hash of the
+`channel_deposit_tx` transaction object. Once the message has been sent,
+the channel returns to the `open` state and the new off-chain state is
+useable.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
+ ---------------------- ----
+```
+
+### `deposit_error`
+
+Message code: 14
+
+Since both sides may initiate a `deposit_created` request, it is possible
+that both may do so at roughly the same time. In particular, in the `epoch`
+system, if a `deposit_created` request arrives while the fsm is waiting for
+its client to sign a new state update, it reverts both its own update attempt
+and the other participant's update request by sending a `deposit_error` message.
+The `round` element signifies the round of the fallback state, which must
+be the last mutually signed state. The receiver does not reply.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| round                | 4  |
+ ---------------------- ----
+```
+
+
+### `withdraw_created`
+
+Message code: 15
+
+In order to withdraw tokens from the channel, one party can initiate
+a `withdraw_created` request. The payload is a singly signed
+`channel_withdraw_tx` object, which includes the state hash and round of the
+next off-chain state, after applying a withdrawal operation with the expected
+amount. The initiating side can only withdraw tokens from its own off-chain
+account in the channel state (same public key) to its own on-chain account.
+Note that it is possible to withdraw a zero amount, essentially making the
+operation an on-chain snapshot.
+
+The receiving side verifies the operation and co-signs the state, returning it
+in an `withdraw_signed` message.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
+ ---------------------- ----
+```
+
+### `withdraw_signed`
+
+Message code: 16
+
+This is an acknowledgement of a preceding `withdraw_created` message (see
+above). Upon receipt of a co-signed state, the receiver verifies that it is
+indeed the state resulting from the proposed withdrawal operation. The
+`channel_withdraw_tx` is then pushed to the chain, and the requisit number of
+confirmations (`minimum_depth`) are awaited. Once confirmation has been
+received, a `withdraw_locked` message is sent, with the hash of the
+`channel_withdraw_tx` transaction.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
+ ---------------------- ----
+```
+
+### `withdraw_locked`
+
+Message code: 17
+
+This message is sent upon receipt of a `minimum_depth` confirmation for a
+`channel_withdraw_tx` transaction. The payload is the hash of the
+`channel_withdraw_tx` transaction object. Once the message has been sent,
+the channel returns to the `open` state and the new off-chain state is
+useable.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
+ ---------------------- ----
+```
+
+### `withdraw_error`
+
+Message code: 18
+
+Since both sides may initiate a `withdraw_created` request, it is possible
+that both may do so at roughly the same time. In particular, in the `epoch`
+system, if a `withdraw_created` request arrives while the fsm is waiting for
+its client to sign a new state update, it reverts both its own update attempt
+and the other participant's withdraw request by sending a `withdraw_error`
+message. The `round` element signifies the round of the fallback state, which
+must be the last mutually signed state. The receiver does not reply.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| round                | 4  |
+ ---------------------- ----
+```
+
+## Other interaction
+
+### `inband_message`
+
+Message code: 96
+
+Inband messages are arbitrary messages sent between the channel participants.
+The payload must be limited to 65,535 bytes. The fsm must deliver an inband
+message immediately, and the receiver must process it (e.g. conveying it to
+the client) immediately, preserving the message ordering.
+
+One possible use of inband messages could be to synchronize off-chain state
+updates, but any application is allowed.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
+ ---------------------- ----
+```
 
 ## Channel closing
+
+
+### `leave`
+
+Message code: 94
+
+While it is possible to simply drop out of a channel and later reestablish it,
+the success of the reestablishing operation depends on the other party keeping
+the most recent copy of the state. The polite way to ensure this is to send
+a `leave` request. The receiving side is expected to respond with a `leave_ack`.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+```
+
+
+### `leave_ack`
+
+Message code: 95
+
+This message is sent in response to a `leave` request. The sender may terminate
+its side once the message has been delivered. The receiver should wait for
+the `leave_ack` before it terminates.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+```
+
+### `shutdown`
+
+Message code: 98
+
+In order to close the channel in an orderly fashion, a `shutdown` message
+is sent, passing a singly signed `channel_close_mutual_tx` transaction object
+as payload. The sender creates the `channel_close_mutual_tx` from the latest
+co-signed state, including the root hash of the corresponding state tree.
+The receiver must verify that the payload corresponds to its latest co-signed
+state, and then replies with a `shutdown_ack` message.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
+ ---------------------- ----
+```
+
+### `shutdown_ack`
+
+Message code: 99
+
+This message is sent in response to a verified `shutdown` message. The sender
+may close once the message has been delivered. The receiver must, after
+verifying the payload of the `shutdown_ack` message (which must be the same
+`channel_close_mutual_tx` object, co-signed), push the `channel_close_mutua_tx`
+transaction onto the chain, and then terminate.
+
+```
+  name                  size (bytes)
+ ---------------------- ----
+| channel_id           | 32 |
+ ---------------------- ----
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
+ ---------------------- ----
+```
+
+
+## Initialise contract
+
+### `update_init_contract`
+
+
+## To be reviewed
 
 A channel can be closed under three circumstances:
 
