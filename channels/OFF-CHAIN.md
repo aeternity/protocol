@@ -988,12 +988,13 @@ Contracts are part of the [update](#state-update) mechanism: it is different
 updates that are being used. Serialization of those can be found [here](../serializations.md#channel-off-chain-update).
 
 First one participant initiates an update round containing a [channel create
-contract update](../serializations.md#channel-off-chain-update-create-contract). It contains all the 
-information needed for a contract creation. The other participant acknowledges
+contract update](../serializations.md#channel-off-chain-update-create-contract). It contains all the
+information needed for a contract creation. The other participant co-signs
 the changes and the contract is considered to be created.
 
 After a contract is created it can be called. For this one of the participants
 initiates an update round containing a [channel call
-contract update](../serializations.md#channel-off-chain-update-call-contract). It contains all the 
-information needed for a contract call, including the contract address. The other participant acknowledges the changes and the contract call is considered to be executed. Its results can be extracted from the calls tree in the state tree.
+contract update](../serializations.md#channel-off-chain-update-call-contract). It contains all the
+information needed for a contract call, including the contract address. The other participant co-signs
+the changes and the contract call is considered to be executed. Its results can be extracted from the calls tree in the state tree.
 

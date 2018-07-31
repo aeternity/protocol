@@ -542,14 +542,15 @@ The payload is a serialized signed channel off-chain transaction and can not be 
 
 #### Channel off-chain update
 
-Channel update rounds are described by various updates. They all form the
-`update()` type. If not specified something different, any of the addreses
-involved could belong to a participant, contract or even some other address
-part of the off-chain state tree of this channel.
+Channel update rounds are described by various updates, that are defined in
+this subsection. Each mention of type update() in the rest of this document is
+meant to be understood as referring to any one of these updates. If not specified
+something different, any of the addresses involved could belong to a participant,
+contract or even some other address part of the off-chain state tree of this channel.
 
-##### Channel off-chain update transfer
+###### Channel off-chain update transfer
 
-This is a internal off-chain transfer from one address to another.
+This is an internal off-chain transfer from one address to another.
 
 ```
 [ <from>    			:: id()
@@ -559,9 +560,9 @@ This is a internal off-chain transfer from one address to another.
 
 ```
 
-##### Channel off-chain update deposit
+###### Channel off-chain update deposit
 
-This is a internal off-chain balance increment. It is used by the
+This is an internal off-chain balance increment. It is used by the
 `channel_deposit_tx` internal representation.
 
 ```
@@ -571,9 +572,9 @@ This is a internal off-chain balance increment. It is used by the
 
 ```
 
-##### Channel off-chain update withdrawal
+###### Channel off-chain update withdrawal
 
-This is a internal off-chain balance decrement. It is used by the
+This is an internal off-chain balance decrement. It is used by the
 `channel_withdraw_tx` internal representation.
 
 ```
@@ -583,7 +584,7 @@ This is a internal off-chain balance decrement. It is used by the
 
 ```
 
-##### Channel off-chain update create contract
+###### Channel off-chain update create contract
 
 This is an update for creating new contracts inside channel's off-chain state
 tree.
@@ -598,9 +599,9 @@ tree.
 
 ```
 
-##### Channel off-chain update call contract
+###### Channel off-chain update call contract
 
-This is an update for creating new contracts inside channel's off-chain state
+This is an update for calling a contract inside channel's off-chain state
 tree.
 
 ```

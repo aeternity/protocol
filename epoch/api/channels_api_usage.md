@@ -341,9 +341,9 @@ it and then post it back via a WebSocket message:
 }
 ```
 #### Finish update
-After both the parties had signed the new updated state of the channel - it is
+After both the parties have signed the new updated state of the channel - it is
 considered the latest one. Corresponding update messages are sent to both
-parties to indicate it. In the payload the message there is the latest
+parties to indicate it. The payload of the message contains the latest
 co-signed off-chain update so the participants can persist it locally.
 ```
 {'action': 'update',
@@ -430,9 +430,9 @@ it and then post it back via a WebSocket message:
 }
 ```
 #### Finish update
-After both the parties had signed the new updated state of the channel - it is
+After both the parties have signed the new updated state of the channel - it is
 considered the latest one. Corresponding update messages are sent to both
-parties to indicate it. In the payload the message there is the latest
+parties to indicate it. The payload of the message contains the latest
 co-signed off-chain update so the participants can persist it locally.
 ```
 {'action': 'update',
@@ -534,9 +534,9 @@ it and then post it back via a WebSocket message:
 }
 ```
 #### Finish update
-After both the parties had signed the new updated state of the channel - it is
+After both the parties have signed the new updated state of the channel - it is
 considered the latest one. Corresponding update messages are sent to both
-parties to indicate it. In the payload the message there is the latest
+parties to indicate it. The payload of the message contains the latest
 co-signed off-chain update so the participants can persist it locally.
 
 ```
@@ -580,6 +580,10 @@ Then the call is returned through an incoming message:
 ```
 
 It is worth mentioning that since this is an off-chain transaction the gas price specified is not consumed.
+That amount of gas represents the amount of computations. It could be used for
+aproximation for the gas needed for executing a contract on-chain if a similar amount of
+computations are required. Computation heavy contracts might be just too
+expensive to be force progressed on-chain, so please use with caution.
 
 
 ## Channel mutual close

@@ -355,10 +355,10 @@ contract calls. Although this tree is internal to the channel during a dispute
 resolution part of is posted on-chain in order to use the blockchain as an
 arbiter so despite being internal - the privacy could be further improved.
 
-Contract life cycle closesly represents the one on-chain: once a contract is
-created - it can be called by participants. Contract has state, balance and a
-list of calles. Participants can make calls and thus modify channel balance
-and state. Participants can inspect the return values of the past calls.
+Contract life cycle closely represents the one on-chain: once a contract is
+created - it can be called by participants. Each contract has its own state,
+balance and a list of calls. Participants can make calls and thus modify channel balance
+and state. Participants can inspect the return values of past calls.
 Participants can remove a contract from a channel's state tree and
 redistribute its balance amongst them.
 
