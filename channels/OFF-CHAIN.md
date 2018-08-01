@@ -33,6 +33,9 @@
   + [`leave_ack`](#leave_ack)
   + [`shutdown`](#shutdown)
   + [`shutdown_ack`](#shutdown_ack)
+- [Contracts](#contracts)
+  + [On-chain enforcement](#on-chain-enforcement)
+  + [Lifecycle](#contracts-lifecycle)
 
 
 ## Overview
