@@ -37,6 +37,14 @@ but are not necessarily part of the channel's life cycle.
 
 * [Withdrawal](#withdraw-events)
 
+* [Getting state](#getting-state)
+
+  * [Balances](#get-balances)
+
+  * [Proof of inclusion](#get-proof-of-inclusion)
+
+  * [Contract call](#get-contract-call)
+
 Only steps 1 and 3 require chain interactions, step 2 is off-chain.
 
 ### HTTP requests
@@ -1030,6 +1038,116 @@ are the ones considered latest from the channel's perspective. For example the
 next correct off-chain update/deposit/withdrawal shall have a withdraw
 transaction's `round` plus one.
 
+### Getting state
+At any moment in time any participant can ask one's own FSM for various views of
+the latest channel state. This is to help wallet apps but they shall not trust
+FSM and compute state locally.
+
+#### Get balances
+In order to get the balances as those are part from the channel's state tree, a
+participant sends a WebSocket message
+```
+{'action': 'get',
+ 'tag': 'balances'
+ 'payload': {
+    'accounts': ['ak$Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
+                 'ak$V6an1xhec1xVaAhLuak7QoEbi6t7w5hEtYWp9bMKaJ19i6A9E']
+  }
+}
+```
+
+The `accounts` section of the payload contains a list of addresses to fetch
+balances of. Those can be either account balances or a contract ones, encoded
+as an account addresses.
+
+A response of this call looks like
+```
+{'action': 'get',
+ 'tag': 'balances'
+ 'payload': [
+		{'account': 'ak$Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
+     'balance': 700},
+    {'account': 'ak$V6an1xhec1xVaAhLuak7QoEbi6t7w5hEtYWp9bMKaJ19i6A9E',
+     'balance': 400}
+	]
+}
+```
+
+If a certain account address had not being found in the state tree - it is simply
+skipped in the response.
+
+#### Get proof of inclusion
+In order to build and use different services, one might need to provide a third party
+a minimified view of the internal channel's state.
+
+In order to fetch a proof of inclusion from the latest modified state tree,
+a participant sends a WebSocket message
+```
+{'action': 'get',
+ 'tag': 'poi'
+ 'payload': {
+    'accounts': ['ak$Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
+						  	 'ak$V6an1xhec1xVaAhLuak7QoEbi6t7w5hEtYWp9bMKaJ19i6A9E'],
+    'contracts': ['ct$2dCUAWYZdrWfACz3a2faJeKVTVrfDYxCQHCqAt5zM15f3u2UfA']
+  }
+}
+```
+
+The `accounts` section of the payload contains a list of addresses to include in the
+proof of inclusion. Almost same goes with the contract addesses listed in `contracts` section:
+only difference being that contract's accounts will be automatically be added
+to proof of inclusion as well as their state.
+
+A response of this call looks like
+```
+{'action': 'get',
+ 'tag': 'balances'
+ 'payload': {
+    'poi': 'pi$g1JxqVQDQdvjvekeM8hEnVeMFUgfF7YYNjjtrvir7q5tAKq2hFVdtvQo7q4p5Aix1S5XNvKabjEwQVvYVezmnq9VWYoJcmctc5mAu6xVj7KgDk3aG5E7topuuLPXEyGP6hAzRPbr2KzQrQ7KZvTdH15bY1WW7D7XGBRmuiDgYiDj8MAVVjqRFnBS5C6GgevgCkUpKX2tyQL7Y3svSNwDiGxV1b3G6xMbhDeStzgtZ9SrsCaLArP1g9wCDJkChEDXneCmMcvEv2acGwsmXHPfT1uy8oSTVny8tbivnnET7XVdjPJZWuvFbwGAmywa4fRF7wkzn4FQjasLo24DRS5fGYg7Z3uwnFbt4U8sn6yg4FvUBUweW28qMjFRAqVJPH6JKU6o8kZjgRjXsC2L7fbhRkYboecoft11FkFuFXdPjsCj3XGXWtTTAXihPooyTpbjp9yszXZqVxLZ7ms7zc6qtPS8Arq8yTf7UmManvhpYKreDMUqPLtkbUTy32LmeRGBUdhhCzUSg49EHtRo5ti8SCrARQt11ScBJnytnok4o3WvmNVq7SRcWPQgH3ABa8g9csirhcZcrx4f2LQoJwQ2VRnkZUUuxDPNEGRwprVWeCU7KfB3CU86z1eHDQWLnodaxLLJnM1fvpdbrjknRcTSTUjPR7rHcsWVmtkNTVqajCZJKUZN2izAAq5qnQUZwkgFLokynCkMGnkV4woi8j4YKusqXUGZ9w5iFfFsSRjw7brqEBySpQa3QayBBmqKu5CF3pTvikRyGhigCDhmyB3QUQ9SQNr2e4r91hoJmfLXN9o1mkW5ndCuVkKoJjSqiscshpZnvUWVKhQZoHEacdZM5z6U42DfqEVDUR6ptokdNpkJtQtuKo1YD1SyhXgvoHh2d2QCpR29wgRkUKswEDru4sFMRaaxk4uL2MpJg3XaAFhxv6WeKeELCGuYRn9yFnhT9pntUkoFWSghcBkk73uN8sYGo9EkDFkV59Gyrra2hm8Dj7iSUUMqJSMApssN8dWzL9HhC5Hb12mFy8ZzAw1jdYmEYXSmjP859A8cKdP6StwwjuhLacfqv7BkFsQX6Rg4w3ykjRPF2Aj2cf4rTMsNnU4bKFmGYc5RPctTx5pj6PchPyX8GgXMf7EfedQNv7rtT8pCLZ199MRCnPy1X3HURAb8PE9Mj8aZz21N8FDU3nT2XraYKE4DBfnwPnqTV6YNcUVk7AYbJ42BZ2AhTwtZzDovZ3FhK6RvjvUtU4MBPcbYFnidFeqNHq3uM1UeWyaHZJwRoQiptojxCPaDLr7gfNb4jUYRihbbczgNgWwbBsahC75rJWUn7C3dSzJYBY5BbRtgAUivU7tQAhE1SCZ79RDsHwo9Md6iFdX1W1YRB3U9b4gi2NN3HfH4dnA7ediYgB1r9eNGh8mw8SYXSruHFLV59LkSRyR9rFeTCUSTt418fNZAftdbqWhd1UceLZhB3QsdKA8UmSKZcjx1q8ZF83m5zDDgJnkkpiqoHRpZ5pzogPWR8HiJpaDUySD1D8yGgMuGbfsxLhrBm9oDqB1QDqKEWgtsBgu5ZYNob7DqY9cwmsfKnssuNofMG3MqpsYe28ZwEAGfVi1wm87QkSNqyCHYUa3yQ7woeR4ZvQwWJPF3GcXKpBhjVuJusE'
+	}
+}
+```
+
+If a certain address of an account or a contract had not being found in the state tree -
+the response is an error.
+
+#### Get contract calls
+In order to inspect the result value of a contract call, a participant sends a
+WebSocket message
+```
+{'action': 'get',
+ 'tag': 'contract_call',
+ 'payload': {'caller': 'ak$Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
+						 'contract': 'ct$2qSaJ7pe3MTdPpzS69ZdtQsVTPSoj7yyYL2KJLxKQoAAHJQdjq',
+						 'round': 11
+	}
+}
+```
+The combination of a `caller`, `contract` and a `round` of execution determines the
+contract call. Providing an incorrect set of those results in an error response.
+
+A non-error response of this call looks like this
+
+```
+{'action': 'get',
+ 'tag': 'contract_call',
+ 'payload': {
+		'caller_address': 'ak$Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
+    'caller_nonce': 11,
+    'contract_address': 'ct$2qSaJ7pe3MTdPpzS69ZdtQsVTPSoj7yyYL2KJLxKQoAAHJQdjq',
+    'gas_price': 0,
+		'gas_used': 561,
+    'height': 11,
+    'return_type': 'ok',
+    'return_value': '0x0000000000000000000000000000000000000000000000000000000000000015'
+	}
+}
+```
+
+It is worth mentioning that the gas is not consumed, because this is an off-chain contract call.
+It would be consumed if it were a on-chain one. This could happen if a call with a similar
+computations amount is to be forced on-chain.
+
 ### Solo closing sequence
 At any moment in time after the channel had been opened any participant can
 initiate a solo closing. The mutual closing takes just one block
@@ -1045,7 +1163,7 @@ resolution has the following steps:
 3. single `channel_settle` transaction
 
 The second step is not required and a `channel_solo_close` could be followed
-either by zero, one or more `channel_slash` transactions, each subsequent one 
+either by zero, one or more `channel_slash` transactions, each subsequent one
 presenting a newer state and overwriting the previous one. Those are settled by
 a `channel_settle` transaction that finally closes the channel. Let's discuss
 those in detail.
