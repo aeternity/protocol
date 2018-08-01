@@ -43,7 +43,7 @@ but are not necessarily part of the channel's life cycle.
 
   * [Proof of inclusion](#get-proof-of-inclusion)
 
-  * [Contract call](#get-contract-call)
+  * [Contract call](#get-contract-calls)
 
 Only steps 1 and 3 require chain interactions, step 2 is off-chain.
 
@@ -1078,7 +1078,7 @@ skipped in the response.
 
 #### Get proof of inclusion
 In order to build and use different services, one might need to provide a third party
-a minimified view of the internal channel's state.
+a minimal view of the internal channel's state.
 
 In order to fetch a proof of inclusion from the latest modified state tree,
 a participant sends a WebSocket message
@@ -1094,8 +1094,8 @@ a participant sends a WebSocket message
 ```
 
 The `accounts` section of the payload contains a list of addresses to include in the
-proof of inclusion. Almost same goes with the contract addesses listed in `contracts` section:
-only difference being that contract's accounts will be automatically be added
+proof of inclusion. Almost the same goes with the contract addesses listed in `contracts` section:
+the only difference being that contract's accounts will be automatically be added
 to proof of inclusion as well as their state.
 
 A response of this call looks like
@@ -1108,7 +1108,7 @@ A response of this call looks like
 }
 ```
 
-If a certain address of an account or a contract had not being found in the state tree -
+If a certain address of an account or a contract is not found in the state tree -
 the response is an error.
 
 #### Get contract calls
@@ -1145,8 +1145,8 @@ A non-error response of this call looks like this
 ```
 
 It is worth mentioning that the gas is not consumed, because this is an off-chain contract call.
-It would be consumed if it were a on-chain one. This could happen if a call with a similar
-computations amount is to be forced on-chain.
+It would be consumed if it were a on-chain one. This could happen if a call with a
+similar computation amount is to be forced on-chain.
 
 ### Solo closing sequence
 At any moment in time after the channel had been opened any participant can
