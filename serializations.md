@@ -166,7 +166,12 @@ subsequent sections divided by object.
 | Channel close solo transaction | 54 |
 | Channel slash transaction | 55 |
 | Channel settle transaction | 56 |
-| Channel off chain transaction | 57 |
+| Channel off-chain transaction | 57 |
+| Channel off-chain update transfer | 570 |
+| Channel off-chain update deposit | 571 |
+| Channel off-chain update withdrawal | 572 |
+| Channel off-chain update create contract | 573 |
+| Channel off-chain update call contract | 574 |
 | Channel | 58 |
 | Channel snapshot transaction | 59 |
 | POI | 60 |
@@ -493,7 +498,7 @@ purging them from the tree.
 ]
 ```
 
-The payload is a serialized signed channel offchain transaction or it is empty.
+The payload is a serialized signed channel off-chain transaction or it is empty.
 
 #### Channel slash transaction
 ```
@@ -507,7 +512,7 @@ The payload is a serialized signed channel offchain transaction or it is empty.
 ]
 ```
 
-The payload is a serialized signed channel offchain transaction or it is empty.
+The payload is a serialized signed channel off-chain transaction or it is empty.
 
 #### Channel settle transaction
 ```
@@ -532,18 +537,94 @@ The payload is a serialized signed channel offchain transaction or it is empty.
 ]
 ```
 
-The payload is a serialized signed channel offchain transaction and can not be empty.
+The payload is a serialized signed channel off-chain transaction and can not be empty.
 
-#### Channel offchain transaction
 
-The channel offchain transaction is not included directly in the transaction tree but indirectly as payload of:
+#### Channel off-chain update
+
+Channel update rounds are described by various updates, that are defined in
+this subsection. Each mention of type update() in the rest of this document is
+meant to be understood as referring to any one of these updates. If not specified
+something different, any of the addresses involved could belong to a participant,
+contract or even some other address part of the off-chain state tree of this channel.
+
+###### Channel off-chain update transfer
+
+This is an internal off-chain transfer from one address to another.
+
+```
+[ <from>    			:: id()
+, <to>      			:: id()
+, <amount>  			:: int()
+]
+
+```
+
+###### Channel off-chain update deposit
+
+This is an internal off-chain balance increment. It is used by the
+`channel_deposit_tx` internal representation.
+
+```
+[ <from>    			:: id()
+, <amount>  			:: int()
+]
+
+```
+
+###### Channel off-chain update withdrawal
+
+This is an internal off-chain balance decrement. It is used by the
+`channel_withdraw_tx` internal representation.
+
+```
+[ <to>      			:: id()
+, <amount>  			:: int()
+]
+
+```
+
+###### Channel off-chain update create contract
+
+This is an update for creating new contracts inside channel's off-chain state
+tree.
+
+```
+[ <owner>    			:: id()
+, <vm_version>  	:: int()
+, <code>  	      :: binary()
+, <deposit>  	    :: int()
+, <call_data>     :: binary()
+]
+
+```
+
+###### Channel off-chain update call contract
+
+This is an update for calling a contract inside channel's off-chain state
+tree.
+
+```
+[ <caller>  			:: id()
+, <contract>      :: id(),
+, <vm_version>  	:: int()
+, <amount>  	    :: int()
+, <call_data>     :: binary()
+, <call_stack>    :: [int()]
+]
+
+```
+
+#### Channel off-chain transaction
+
+The channel off-chain transaction is not included directly in the transaction tree but indirectly as payload of:
 * The channel close solo transaction;
 * The channel slash transaction.
 
 ```
 [ <channel_id>       :: id()
 , <round>            :: int()
-, <updates>          :: [{int(), binary(), binary(), int()}]
+, <updates>          :: [update()]
 , <state_hash>       :: binary()
 ]
 ```

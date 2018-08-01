@@ -19,6 +19,9 @@ expected. The flow is the following:
 
 1. [Channel open](#channel-open)
 2. [Channel off-chain update](#channel-off-chain-update)
+  * [Transfer](#transfer)
+  * [Create a contract](#create-a-contract)
+  * [Call a contract](#call-a-contract)
 3. [Channel mutual close](#channel-mutual-close)
 
 There are a some WebSocket events that can occur while the connection is open
@@ -232,39 +235,41 @@ From this point on, the channel is considered to be opened.
 ## Channel off-chain update
 After the channel has been opened and before it has been closed there is a
 channel state that is updated when needed. The updates are off-chain and
-broadcasted only between parties in the channel. The state represents the last
-distribution of the total channel balance. A state is considered to be valid only if both parties have agreed upon it. The latest channel state is the last valid state.
-At any time the latest state can be used for unilaterally closing the channel.
+broadcasted only between parties in the channel. The state is a full state
+tree that holds all the latest accounts, contracts and contract calls.
+A state is considered to be valid only if both parties have agreed upon it.
+Agreement it proven with signing a message that contains the channel id, round
+and root of the state tree (state_hash). States are ordered by their round - the greater the round,
+the newer the state. The latest channel state is the last valid state, having
+the greatest round. At any time the latest state can be used for unilaterally closing the channel.
 
 ### Channel state
-Both parties persist their own version of the state. It cointains:
+There are a couple of different types that could define the channel state.
+Those are deposit, withdrawal and off-chain transactions. They all containt at
+least the following data:
 
   | Name | Type | Description |
   | ---- | ---- | ----------- |
   | channel id | string | ID of the channel|
-  | initiator | string | initiator's public key |
-  | responder | string | responder's public key |
-  | initiator amount | integer | new initiator's amount |
-  | responder amount| integer | new responder's amount |
-  | updates | [update] | update being applied |
-  | state | string | placeholder |
-  | previous round | integer | reference for the previous round the changes are based at |
+  | state_hash | string | root of the state tree |
   | round | integer | current round |
 
-Each subsequent state has a `round` increased with 1 and a reference to the
-previous round. The values of the amounts are the new ones: the result of applying the
-update on the referenced round's values.
+You can find further information for them as it follows:
 
-The `state` field is a placeholder for future use.
+* [deposit transaction](../../serializations.md#channel-deposit-transaction)
+* [withdrawal transaction](../../serializations.md#channel-withdraw-transaction)
+* [off-chain transaction](../../serializations.md#channel-off-chain-transaction)
+
+Each subsequent state has a `round` increased with 1
 
 Since both participants are peers, they can both trigger new updates to the
-state - they are peers.
+state.
 Since one of them starts the update and the other acknowledges is below we are
 going to use `starter` and `acknowledger`. Both the initiator and the
 responder can take either of the roles.
 
-### Update
-The update is a change to be applied on top of the latest state. It has the
+### Transfer
+The transfer update is moving tokens from one channel account to another. The update is a change to be applied on top of the latest state. It has the
 following structure:
 
   | Name | Type | Description |
@@ -276,8 +281,8 @@ following structure:
 Sender and receiver are the channel parties. Both the initiator and responder
 can take those roles. Any public key outside of the channel is considered invalid.
 
-#### Start update
-##### Trigger an update
+#### Start transfer update
+##### Trigger a transfer update
 The starter sends a message containing the desired change
 ```
 {'action': 'update',
@@ -338,15 +343,250 @@ it and then post it back via a WebSocket message:
 }
 ```
 #### Finish update
-After both the parties had signed the new updated state of the channel - it is
-considered the latest one. Corresponding info messages are sent to both
-parties to indicate it.
+After both the parties have signed the new updated state of the channel - it is
+considered the latest one. Corresponding update messages are sent to both
+parties to indicate it. The payload of the message contains the latest
+co-signed off-chain update so the participants can persist it locally.
 ```
-{'action': 'info',
- 'payload': {'event': 'update_finalized'}
+{'action': 'update',
+ 'payload': {
+		'state': 'tx$3XPhV5wAjiGDkUqu4PWDEXdXEztp6iG1VYDCKU7U46Rgpk79c3cB1ZTnsYSYYyadgA5mU4ww2hzJePnu355nTZnGJTxYeGUS8ct8Zwgf6DTYxW8uKuwDbqtyX4xzPxVbPyhweeNM5s7nqqEojhg4tiwW9hXnrvvj9YyJqK8r77K5ZVoSHN7kg6TowztWjGqhGfeMVnRzkgyNWJvNgUCaUbHi9U2dgL4cX78XbhAiqPdn7emCsF4JhPJumXyMr54oToU6fb4QpmYiWXku3TVymK9vgz49FS53PYebtSZzrhTkgMM9mF7VguJ2Jfx9s2VCdhFeEMj58E2jFL4VfFeUnvc6xUD4jHdfspojDqa6hjWTSQ4bwguC5ZPLDWsnTArFTWYpQi7S9H2coebFNdCLb'}
  }
 ```
 After that a new state updated can be triggered.
+
+### Create a contract
+The create contract update is creating a contract inside the channel's internal state tree. The update is a change to be applied on top of the latest state. It has the
+following structure:
+
+  | Name | Type | Description |
+  | ---- | ---- | ----------- |
+  | vm_version | integer | version of the AEVM |
+  | deposit | integer | initial amount the owner of the contract commits to it |
+  | code | string | hex encoded compiled AEVM byte code |
+  | call_data | string | hex encoded compiled AEVM call data for the code |
+
+That would create a contract with the poster being the `owner` of it. Poster
+commits initially a `deposit` amount of tokens to the new contract.
+
+#### Start create contract update
+##### Trigger a create contract update
+The owner sends a message containing the desired change
+```
+{'action': 'update',
+ 'tag': 'new_contract',
+ 'payload' :{
+    'code' : '0x36600060203762000062620000366020518080805180516004146200007d57505b5080518051600414620000db57505b5060011951005b805903906000518059600081529081818162000058915b805081590391505090565b8352505060005250f35b8059039060008052f35b5990565b50806200012c9080905090565b602001517f696e69740000000000000000000000000000000000000000000000000000000014620000ae5762000020565b5050829150620000bd6200006c565b596000815290818181620000d1916200004d565b835250505b905090565b602001517f6d61696e00000000000000000000000000000000000000000000000000000000146200010c576200002f565b602001515159506000516200007090805180826200017691600091505090565b59600081529081818162000141918091505090565b835250509050620000d6565b825180599081525060208401602084038393509350935050600082136200014d57809250505090565b915050806000525959905090509056',
+    'call_data': '0x0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000004696e69740000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e0',
+    'deposit': 10,
+    'vm_version': 1}
+}
+```
+##### Owner signs updated state
+The owner receives a message containing the updated channel state as an
+off-chain transaction
+
+```
+{'action': 'sign',
+ 'tag': 'update',
+ 'payload' {
+    'tx': 'tx$JgoYCDwwyZGhYZcpejLVGEP2us4MVhHom43vJBRf5mfthGBErZrcPgBDCExqbZoX98TpqyutbUxs1ZhyJMEmXJrAzTivT17BHP8km5Zmsf6wBNk9kw6hKvn2gsHtb5ktHRLKu7oCiwsG2ro6VePKZCKV1Fo51d4bVkPEZmKkNqrrzuN6mHn88rYT3esKH848edtP9CMpyDDiV8DvsMsYmw5ZEzpUwKxf9UrEYPkfNzxm9Fax9tQscio8tGgTJh6xS6xEs8hH2R38kM9xjNBnhgwSS1VAk2jNT2VZz4NpRjYe2n9HabNo2SyYd5kPK3voVEV896GG8htzFCpytBptUZUmWrt3b8zfWtAkwboZRjzEF3AXBn7jpBcBgu9zFhpT6iwTAL5ACQcKNEu7bzJV4MBpNjEn7DXKBnBHXqDyk2URQenfXNnyJg9Aw1Mx1V5h5nmUYqi363u775f978MXaqoTyjBWSUZq14ZJ8H9GcAMBGiZTp3Rxa7fAvMUcCGwt34WCVEe4TWu9HcyKrMUebtpM5P5aMdQS3jVUaz26zMaJiCjjngx14zjrfSV1Wnfh5ESr7s4dyRXTHnG5tZFCFSAguEKTrZiZP2yTP7r1cNfJ15PoGHXCLLCNNoTAYDghAon8MhwcGBJhoqQ5gaAdYBwjKU92mJqBwU11KruxVkj2D1JYGgUyt1SJHo7tzeSHXX6N7RxKeHez9ST9qWSUEog1QF64RhJstdnBYcR6njscN7wh8GY4o6w2h6dauh5wzrCUvYc4B3reh4To9LgmL6hbHsXBMXbeCXCjVhZv24D7GZXZB68RTzxBy5SuJysEDZYSUSErStSHoqZbwzXaLieXsiMrhppyWDSNJAduJr7UrMuH2nWz5vPae714uwQKKGkEvakh3ZAC1nqZ1KrD6Jo59fyP6mPGYEpvpkte7WRtdHypRsiCus7nisFVzUg3p7hB6LdQYMoBAJ'}
+}
+```
+
+The owner is to decode the transaction, inspect its contents, sign it, encode
+it and then post it back via a WebSocket message:
+
+```
+{'action': 'update',
+ 'payload': {
+    'tx': 'tx$8YK7n5J3XLNE1t6pvhTLvFPWcoZyers5MonYRCYm6ahvRPpuBeF2kQML9D9AYjMAsPVbqjLajCMyAYV1irNBd5MLzcBugVRRHBW1kAPNvYUpQX4b5NBovAzZh3ULQ22hYfAXSJ9tXmmqteDG3eaQjFGQj1p1cUs29wqeXmMwRouxofovtprfnyTgEUqmvRn5TyxSECQTVoNgGvU7ERxEETynaL2AAxqMU67BLC5r4KY2SMRTX4aaJmeyC7spxDTfFM11w2fbVCgDusgdDhQiUSKR2cRT16EYkHM1bTPSJXhzBkN7ASRXCkBP9XqX8p9bri1U7bcvCTJNwojLUQxhzbwdUMhfMXtR63m1QV7bmpYJaSiAx5Xt4P31Yb6ZYAkKNrG4GXSsufioUvVHqBGKPTvbng1H1vHt871Afc4jUhPfzBhQ1Tz1brxMAc8rsSYFzTyn6z6EZsBGvZqXVFVUzkSv4BjaVm2d1iN8PyJwsQkeAuNHgMzKyvNVC2t1i2kZxCqCuPZcAiKQGqvPco3WPYvDWcxAdgfKvu4hTPAvxvef4zskmdbgNGtfR6BJV6SC1qDCrxF14BUMKF2ayJRhNL67Cm2HZPQ7TBbcTF3gHHTmmQdYzvKeu9xNzUoZsR5P5WaEirYmGdsi3rcWkpnoTmiKkMSyxDDZVh5Km9r9Mks33YHVnKpkWfpVq81xac2GNYyyjaFFuZjEggpgmZwWHmvVkkaFBAFdcWLqYrE8xTVFsXKth3ppopnuZD3TuYDmFTGkB46FPKF3suireqA2hPyZTnfEWsYNH177UDKFprpR8Cz7kvwz6pBHo7A9qMmDjN7N4GwBXspxyjddJRAvtPgtJsTDRrFKFzmtF3Nfm789gp2FYxV6S6FjYHfR2cWLJhnCvCBbDECiEtfJh2Pn4enLmPumZQfsnV8BgXz1hMDtXcMf6NzhP3kJEh2NebZpVidi64A1xAvRu9zxJkoWFhVN7eUDQhYFmGE1Avt9PY2xPEiuCMzgcp6zNrv5mWgf4AsrQM9T3gWhD52yU7SFw3KV4QMjHRJLFaJuXgFMGSaohpwzUu669p'
+    }
+}
+```
+
+#### Acknowledger update
+The acknowledger receives an info message indicating an upcoming change:
+```
+{'action': 'info',
+ 'payload': {'event': 'update'}
+ }
+```
+Then the acknowledger receives a new message containing the updated channel state as an
+off-chain transaction
+```
+{'action': 'sign',
+ 'tag': 'update_ack',
+ 'payload' {
+    'tx': 'tx$JgoYCDwwyZGhYZcpejLVGEP2us4MVhHom43vJBRf5mfthGBErZrcPgBDCExqbZoX98TpqyutbUxs1ZhyJMEmXJrAzTivT17BHP8km5Zmsf6wBNk9kw6hKvn2gsHtb5ktHRLKu7oCiwsG2ro6VePKZCKV1Fo51d4bVkPEZmKkNqrrzuN6mHn88rYT3esKH848edtP9CMpyDDiV8DvsMsYmw5ZEzpUwKxf9UrEYPkfNzxm9Fax9tQscio8tGgTJh6xS6xEs8hH2R38kM9xjNBnhgwSS1VAk2jNT2VZz4NpRjYe2n9HabNo2SyYd5kPK3voVEV896GG8htzFCpytBptUZUmWrt3b8zfWtAkwboZRjzEF3AXBn7jpBcBgu9zFhpT6iwTAL5ACQcKNEu7bzJV4MBpNjEn7DXKBnBHXqDyk2URQenfXNnyJg9Aw1Mx1V5h5nmUYqi363u775f978MXaqoTyjBWSUZq14ZJ8H9GcAMBGiZTp3Rxa7fAvMUcCGwt34WCVEe4TWu9HcyKrMUebtpM5P5aMdQS3jVUaz26zMaJiCjjngx14zjrfSV1Wnfh5ESr7s4dyRXTHnG5tZFCFSAguEKTrZiZP2yTP7r1cNfJ15PoGHXCLLCNNoTAYDghAon8MhwcGBJhoqQ5gaAdYBwjKU92mJqBwU11KruxVkj2D1JYGgUyt1SJHo7tzeSHXX6N7RxKeHez9ST9qWSUEog1QF64RhJstdnBYcR6njscN7wh8GY4o6w2h6dauh5wzrCUvYc4B3reh4To9LgmL6hbHsXBMXbeCXCjVhZv24D7GZXZB68RTzxBy5SuJysEDZYSUSErStSHoqZbwzXaLieXsiMrhppyWDSNJAduJr7UrMuH2nWz5vPae714uwQKKGkEvakh3ZAC1nqZ1KrD6Jo59fyP6mPGYEpvpkte7WRtdHypRsiCus7nisFVzUg3p7hB6LdQYMoBAJ'}
+    }
+}
+```
+Note that this is the same transaction as the one that the owner had already signed. The acknowledger is to decode the transaction, inspect its contents, sign it, encode
+it and then post it back via a WebSocket message:
+```
+{'action': 'update_ack',
+ 'payload': {
+    'tx': 'tx$8YK7n5J3XLNE1EoLatcNhJSoTnv2zUqxS6N3iVgqiBc4bjnTyoarR2qYZa5oJX4td78HnuHddPqe47DbbtWmY5SiK2rAurz59V49Pie5z1i7bPZzGa1QXo5obJG4kX64hVhHD2Wcz54vdfKFjEtQv4muUHjXfxav9LNja6rvRbUiASepmVa2B3ykbBVjhivkszNqubEwQ6NKiTC7G5NJnvFq5YFzDxWjrJfDmHsuz8TGETdYYHk6oQPhnudfQ4pXyp4zvzC2RG9KKLTWG2YkgL4w6QGFoHM6zFFw1NAR7vfGucBnSdf6Mb7Vwt2qBcm3CkHrP3ShvksQsE6GTuaniBGF3bE1xc3psBDa6rXKUiTpAx9W4W7N2Pe9qWmZMcfsG4iwMMvaAvkshW6usmTHFL8xcsmq5hd8VRDNQajoT5XaLhwnt3erfUYcZcAkHwvPjsrGya6L8rxa5d5yibPjZPYdmZiuD6XNabSKnt66b2d4b8S1QjVFkjUvibMAMWGngfFPGgs2uoiCsZ4bHsrgHTSvrDvN9v1vn7hMRvyvcVboBgv5uqtau3jDe3fybZZNDfY1hbxABTZeqNZ5BSE2mdGxftqQew1XCFwKyJZCz3CTPm3Wf9ab3U28GuLm4Bf74N7MzHr91qzhNAzcv7fKGru2JHxho6Hfhj16Fr2ME1XxQYmMo8neo65dtYY1cV5qcg94qVaTkTFAtCvjbWat36pubFG82EgbPf7Ptcfv1wPR6VZeikYzmW2j1DQvebs2EQv6qqwCXByqM4NMcZenvLwCkkK6vnaX4Jzpqpdvu5iEatso2wqdgE7f9iZrv5u86vw6vsej7sVVRUjiVpLYeJfEqXP9Zirm2p2qPGaSD9zXvnGS5uz3dxUH4pnkRmwoB8cXbPYvfLagmNYQXXzbxhi1BfSYbtGq7dfXLrZuzdxwGpLbv5HwPQKKtKUaeUpYTQ2XPBtga16sTuSbDw7xmBY76ywBHjnPt6n9RqoUT1WWj3jkGPvtKKkiWThiG9jzQP9P8mBCS22w2QLm6EwPuJ6sVTkr7nMWAaVcgY1qKJbUmneFi4x8fr'
+  }
+}
+```
+#### Finish update
+After both the parties have signed the new updated state of the channel - it is
+considered the latest one. Corresponding update messages are sent to both
+parties to indicate it. The payload of the message contains the latest
+co-signed off-chain update so the participants can persist it locally.
+```
+{'action': 'update',
+ 'payload': {
+    'state': 'tx$DxpMPQqimD6NuzKT6SWXsnQY3c9hVxqughSXAkRZJQzCbUDM8HazSos6Xqkpw2ndfRu8NQwDLbU4SsLKb7xasMShPYRfW9oe55pEdXLZi9ZMa4nMKzSN45sxsupiJ815VnNNKTwqH8G8yU1snTKCUz4Sed2xUAjx5KADR5eEbNfDUMhseczXyYZ6tj9ahYVnjqdxqgBuLmrEXq8LMirPzNAfzKaz55NaLMxXkMCpRdxy9mBXLpwcvRM8DxzBbK7n28r3GKk99x9fwgP5Tv2psyyAEMgxhFznXVTvVnSZY1zT8eKc5LJEL6LKBxSkXJXdTqeZWmjeRZruEqcmygFD4Tvpr6LpSyXStoL9tV4B4nyYuJdpESNd35H6eL57MSKrpSpGSnnhgefJ4pqXmEut9XcKT1TsXR1BbTvDDYnBAgZhxvwq1NB9CQy2pibnz1G5XHJVu6QmSj5yQUxRYtsksbAkXL5xhiSZ6DWwynqVKiSThwvU9wHYDFJuWLYKrUCJuA1zu4fmfvhsuL2FSMW2wft1ELm53UpkrPRq68nGeegYMYuMCpoGUruvDCwVPwhP8DKq1cSrhRSxn6HzMCDa7zBQKrmKnksQbdeWWxSgVEosxtvdLtNZ6tDYPJe4q78a5PkyGVDdiAkYYo1CmRt46wYoMvYQPiG6vpt3fTK2oambanFSdXjtK4MBXZxpUKA4bhwTFjiFadCkkGAgkGkaHP6ztnYQP11YGP4huyfZH6WoYXwmWVXahipTAoQFpTPQTp9wLy3QS2o8iY7wT1SSweYNuzgwh31LFfcbs8pXNuJ5NFqUR5ygRQQcaVcq2D6dv35YSNi7pfzpgLk1WGdwbPfTpAssNCwETda6r1k6zwWmn3nqL8hsy381KyrQPRkHbeaYG2msZd61QEZFm1CHkbx5xMp17jiTMJ2gZwVx6SpSGCxLogpWBxxcTPfUKphW5bVUYn5aoxZsgBcg5MrExouV6fk82GYoAsZ4yR1F6J3onJkBejMvd6XXSPYAx2dS22VGJhjQpzy6woBgwiVCV3kCSfnoaru6NzkkjVfW7THTvWz2dLbMoToFnPLnaypEjfh1heF2Ypr8QmV3XLrzwHQ7G8ZPFLRDm2jL5Zp6rnZLErD9wbyiiRGda7mQqg1wR1FznsJ3XXatpJmn'}
+ }
+```
+After that a new state updated can be triggered.
+
+#### Contract address computation
+The created contract is part of the state tree. It has its own balance and its
+place in the contracts subtree of the channel's state tree. In order to
+inspect its balance or call the contract one needs its address.
+
+Computation of this address is done exactly as it is in on-chain contracts -
+it is a hashed version of the channel's owner pubkey and the nonce. Only
+difference is that nonce is not computated in channels and the update round is
+used instead.
+
+### Call a contract
+The call contract update is calling a preexisting contract inside the channel's internal state tree. The update is a change to be applied on top of the latest state. It has the
+following structure.
+
+  | Name | Type | Description |
+  | ---- | ---- | ----------- |
+  | contract | string | address of the contract to call |
+  | vm_version | integer | version of the AEVM |
+  | amount | integer | amount the caller of the contract commits to it |
+  | call_data | string | hex encoded compiled AEVM call data for the code |
+
+That would call a contract with the poster being the `caller` of it. Poster
+commits an `amount` amount of tokens to the contract.
+
+The call would also create a `call` object inside the channel state tree. It contains the result of the contract call.
+
+#### Start call a contract update
+##### Trigger a contract call update
+The caller sends a message containing the desired change
+```
+{'action': 'update',
+ 'tag': 'call_contract',
+ 'payload' :{
+			'contract': 'ct$9sRA9AVE4BYTAkh5RNfJYmwQe1NZ4MErasQLXZkFWG43TPBqa',
+			'vm_version': 1,
+			'amount': 0,
+			'call_data': '0x0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000046d61696e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002a'
+		},
+}
+
+```
+
+##### Caller signs updated state
+The caller receives a message containing the updated channel state as an
+off-chain transaction
+
+```
+{'action': 'sign',
+ 'tag': 'update',
+ 'payload' {
+    'tx': 'tx$Sweh544j3PL6BzGK8Sk6dqW9ywspMup8J8ETuajNnTGkx3vTbwCS8K8LWAPNSBrkDUWEQCxDR2Kyvuv2v19YtsiNxcetmwWwEjYicTaZ1nZ84PvVs5WoP4LgSgur5yaiDwvoY4xkk5dGjfiXGYWE7udn8HwbZdHUQPXWtJdeGhcApf31SPYWUkW3hWk8sKZeHKU6f9aLQgiSsP2MNoqzfiTL1xppK4NPrS6gje7iVGdz8zBbQ1TRXcTsN7pecY8fSPMwKhEtH88jRbmXouYxatBUvYLy4vRiQJBcsZaCXhHKezoXqggPsPDUjfaM1P1FMrC3GxWS3CHotuR588TuvaUwPBVjwwoMYL1MJcTYLvejnDktsisFtfhH811h7R7pazQuhqbmMSWhRkYMLfXXwTXs32q334CMEZpz1UpWWA1DRJMBUVWmE7FmPedZDaqobUbNe2CKPk8oMG9apvdrrxE6cQRGupVyjXNor'}
+}
+```
+
+The caller is to decode the transaction, inspect its contents, sign it, encode
+it and then post it back via a WebSocket message:
+
+```
+{'action': 'update',
+ 'payload': {
+    'tx': 'tx$C4TACwXiGbsZf6sCqqEkZU7ngzvoDdqPHQMfNVGZUMQhsT9Nj64j3DbGYE6nB8V7R56zmfY8zuGCjAWgZecsby4RCwDtm5nE57DcX3srHgrzt4NS1mFUq9Vuan57SXT8n4xA5BFjz8WvKEqFptsHqzRhv6veY5o9cmTi4ea1t21BaCdfZiVg6mkf4pvrAzsNtnQ149BxuCLqLJJdaJXVWzJthDXBHLcHmDRTvqYRpnH8gD2veHizbJqnvApeVGwMJ9m5rZc3Tw3EDcZnsiFzKXBiZ1FMMBqZtiNzCCRhhn7uANkJiSi8e8iHcBJLyFRPzSgU6KTVNVGcc2CZVh2RQcMoJXWecdHHeMiCnGaX2MiT2EyjEox9a7kZBkTAAnoeri5F2GhGvdK98a275PjaCrA16xizH2DnvRdw92HFA2PgjQmHE3SgxB7MMhTAkaR3LcqmR5KfwLqikneU9DNM5PQzvYTh1J7rupP9AHXUhhFpGQXYcakXQfmEt2D3D4E3zBGDWqJRfVG8xmxYftzefkx5X5CpeWnCyiCepnUSbNyHFxZS4vyzvhZnTHmWVZksyY68MJAMmERk9'
+    }
+}
+```
+
+#### Acknowledger update
+The acknowledger receives an info message indicating an upcoming change:
+```
+{'action': 'info',
+ 'payload': {'event': 'update'}
+ }
+```
+Then the acknowledger receives a new message containing the updated channel state as an
+off-chain transaction
+```
+{'action': 'sign',
+ 'tag': 'update_ack',
+ 'payload' {
+    'tx': 'tx$Sweh544j3PL6BzGK8Sk6dqW9ywspMup8J8ETuajNnTGkx3vTbwCS8K8LWAPNSBrkDUWEQCxDR2Kyvuv2v19YtsiNxcetmwWwEjYicTaZ1nZ84PvVs5WoP4LgSgur5yaiDwvoY4xkk5dGjfiXGYWE7udn8HwbZdHUQPXWtJdeGhcApf31SPYWUkW3hWk8sKZeHKU6f9aLQgiSsP2MNoqzfiTL1xppK4NPrS6gje7iVGdz8zBbQ1TRXcTsN7pecY8fSPMwKhEtH88jRbmXouYxatBUvYLy4vRiQJBcsZaCXhHKezoXqggPsPDUjfaM1P1FMrC3GxWS3CHotuR588TuvaUwPBVjwwoMYL1MJcTYLvejnDktsisFtfhH811h7R7pazQuhqbmMSWhRkYMLfXXwTXs32q334CMEZpz1UpWWA1DRJMBUVWmE7FmPedZDaqobUbNe2CKPk8oMG9apvdrrxE6cQRGupVyjXNor'
+    }
+}
+```
+Note that this is the same transaction as the one that the caller had already signed. The acknowledger is to decode the transaction, inspect its contents, sign it, encode
+it and then post it back via a WebSocket message:
+```
+{'action': 'update_ack',
+ 'payload': {
+    'tx': 'tx$C4TACwXiGbsZg1Z9ChAEuaVJge62Uax5riSw4Tpp763SKTwLLGjhqPDUqjb9swx5X2G6XnpQk72v1yhFSLZvPtUv4JgoimKLqhAVUSoHB3btwEUTdgb3kVbaS6WLiaF86cqBZiDwbiL3GpThgZK7VhYedXFZK6PdK2RjywURhC9s8PNwP19Zetj19VkL4MYn1Z5tkoEh387dMfh9Mfh9jPf7gaBJjvwxNLuMjqHQXwSKPEpR8jYBF4cuzwaZzWeUSPKMxp44wDWQqqG8MTMwR1i8JbZjbAFtuj49TJWMw6xrvXski8XieHLHXrx5y4873CgD1FhRQT374Yvb5mYBTMtsYc8ttUCPiwi7AQteey7h1iRJgGc5bcd2omdGG8BmQZETfLaqwqXWN7mXXxPGfJQUaknHdocTum9FNyncYiAt6Y7znFJ1rZT2UkHvKwbvtJvhftWBJPrbExfeFMypn9DoW4SoaQ7RjBcmz5PWdt79BjRXhZpM7qbjvGF9i1f2cXiQFeKcj9FxXdzttN28kdtDvpYWdBbWcSMaWAYy7EBnMRHrGo2XdcDeJeGQdGnSBKaMHdN5LVhKF'
+  }
+}
+```
+#### Finish update
+After both the parties have signed the new updated state of the channel - it is
+considered the latest one. Corresponding update messages are sent to both
+parties to indicate it. The payload of the message contains the latest
+co-signed off-chain update so the participants can persist it locally.
+
+```
+{'action': 'update',
+ 'payload': {
+    'state': 'tx$L1mTJpyV97nWgMAFmrqcwECSThovgaU9qv5DYeqn3YQgzjCShS96n6u2rACsXyXAJyRrqGNTv2ytC1LgmH8zSuD6SkDTEiT2eCGuCsM1xXyZGooq14nu8naSZ3rhJEwBoZLTn3Tt86W3eUc1rPs2HaFwtxwsFhFu4dXHJTjmaVjigG8Juhvq1oQytscRCPVt9sjijr8h1mCCj73yhnsvwwJuMLi9WgspqwJfHHRVc8RWPtvKg6hbUKxn4cEP2M1rpXhVEUhCAkgKVfm58m4xvnuCNhvJhi37cGeSMSJkdrs64111jnQY2nwpiiS5dRW8c3VcHt1Zm8Sg1fyQgdmgbr3Rwbez1L6hCndppgX1DA2UniQB1y7eqC8nYMe4DUmXxnjcFxCQyaiTCBGavjcZiQUThHzwoACJ1yf4fr1HXZ2BzsgeSsuE2AuvphAvtiPSDmRUiFwxt1KGg3YRBxsSqs2Ums7D6QDoju11VH3k8ERcb9Hj6uJmHFC2yGu48jKHPB8bUCm1qDBZqEiDBVTQo6E1AiSLtvJmLoRd1gyUZ4pvCPPmGPQJ4Qsb16xH6q4YnJVMVQb7TWSs5PorsdqV1XPKg8rZSwSZJGZ1gT7fkf75ocXt986k3PMNCa98cDQmwbqFuqYYC4iMixj6k2txsFYUCyxrucHidNC8MFC'}
+ }
+```
+
+#### Getting a call result
+All calls are stored in the channel state tree. In order to extract one out of
+there and inspect it, one shall send a WebSocket event
+```
+{'action': 'get',
+ 'tag': 'contract_call',
+ 'payload': {
+    'contract_address': 'ct$9sRA9AVE4BYTAkh5RNfJYmwQe1NZ4MErasQLXZkFWG43TPBqa',
+    'caller_address': 'ak$2YeNqB4jQ1DG7QvUKgCkKeZAiXb2rnzkEoLTS8XeKF8Smgit2e',
+    'round': 8
+		}
+}
+```
+The `contract_address` is the address of the contract that had been called, the `round` is the round of the update and
+`caller_address` is the address of the caller.
+
+Then the call is returned through an incoming message:
+```
+{'action': 'get',
+ 'tag': 'contract_call',
+ 'payload': {
+      'contract_address': 'ct$9sRA9AVE4BYTAkh5RNfJYmwQe1NZ4MErasQLXZkFWG43TPBqa',
+			'caller_address': 'ak$2YeNqB4jQ1DG7QvUKgCkKeZAiXb2rnzkEoLTS8XeKF8Smgit2e',
+      'caller_nonce': 8,
+      'gas_price': 0,
+			'gas_used': 524,
+      'height': 8,
+      'return_type': 'ok',
+      'return_value': '0x000000000000000000000000000000000000000000000000000000000000002A'
+		}
+}
+```
+
+It is worth mentioning that since this is an off-chain transaction the gas price specified is not consumed.
+That amount of gas represents the amount of computations. It could be used for
+aproximation for the gas needed for executing a contract on-chain if a similar amount of
+computations are required. Computation heavy contracts might be just too
+expensive to be force progressed on-chain, so please use with caution.
+
 
 ## Channel mutual close
 At any moment after the channel is opened, a closing procedure can be

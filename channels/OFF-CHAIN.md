@@ -33,6 +33,9 @@
   + [`leave_ack`](#leave_ack)
   + [`shutdown`](#shutdown)
   + [`shutdown_ack`](#shutdown_ack)
+- [Contracts](#contracts)
+  + [On-chain enforcement](#on-chain-enforcement)
+  + [Lifecycle](#contracts-lifecycle)
 
 
 ## Overview
@@ -847,12 +850,6 @@ transaction onto the chain, and then terminate.
  ---------------------- ----
 ```
 
-
-## Initialise contract
-
-### `update_init_contract`
-
-
 ## To be reviewed
 
 A channel can be closed under three circumstances:
@@ -988,4 +985,19 @@ execute the contract given the state and inputs to produce a new state. This new
 state could then either be used for both parties to continue operation from there
 or leave it at that.
 
-### Initialisation
+### Contracts lifecycle
+
+Contracts are part of the [update](#state-update) mechanism: it is different
+updates that are being used. Serialization of those can be found [here](../serializations.md#channel-off-chain-update).
+
+First one participant initiates an update round containing a [channel create
+contract update](../serializations.md#channel-off-chain-update-create-contract). It contains all the
+information needed for a contract creation. The other participant co-signs
+the changes and the contract is considered to be created.
+
+After a contract is created it can be called. For this one of the participants
+initiates an update round containing a [channel call
+contract update](../serializations.md#channel-off-chain-update-call-contract). It contains all the
+information needed for a contract call, including the contract address. The other participant co-signs
+the changes and the contract call is considered to be executed. Its results can be extracted from the calls tree in the state tree.
+
