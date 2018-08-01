@@ -235,33 +235,35 @@ From this point on, the channel is considered to be opened.
 ## Channel off-chain update
 After the channel has been opened and before it has been closed there is a
 channel state that is updated when needed. The updates are off-chain and
-broadcasted only between parties in the channel. The state represents the last
-distribution of the total channel balance. A state is considered to be valid only if both parties have agreed upon it. The latest channel state is the last valid state.
-At any time the latest state can be used for unilaterally closing the channel.
+broadcasted only between parties in the channel. The state is a full state
+tree that holds all the latest accounts, contracts and contract calls.
+A state is considered to be valid only if both parties have agreed upon it.
+Agreement it proven with signing a message that contains the channel id, round
+and root of the state tree (state_hash). States are ordered by their round - the greater the round,
+the newer the state. The latest channel state is the last valid state, having
+the greatest round. At any time the latest state can be used for unilaterally closing the channel.
 
 ### Channel state
-Both parties persist their own version of the state. It cointains:
+There are a couple of different types that could define the channel state.
+Those are deposit, withdrawal and off-chain transactions. They all containt at
+least the following data:
 
   | Name | Type | Description |
   | ---- | ---- | ----------- |
   | channel id | string | ID of the channel|
-  | initiator | string | initiator's public key |
-  | responder | string | responder's public key |
-  | initiator amount | integer | new initiator's amount |
-  | responder amount| integer | new responder's amount |
-  | updates | [update] | update being applied |
-  | state | string | placeholder |
-  | previous round | integer | reference for the previous round the changes are based at |
+  | state_hash | string | root of the state tree |
   | round | integer | current round |
 
-Each subsequent state has a `round` increased with 1 and a reference to the
-previous round. The values of the amounts are the new ones: the result of applying the
-update on the referenced round's values.
+You can find further information for them as it follows:
 
-The `state` field is a placeholder for future use.
+* [deposit transaction](../../serializations.md#channel-deposit-transaction)
+* [withdrawal transaction](../../serializations.md#channel-withdraw-transaction)
+* [off-chain transaction](../../serializations.md#channel-off-chain-transaction)
+
+Each subsequent state has a `round` increased with 1
 
 Since both participants are peers, they can both trigger new updates to the
-state - they are peers.
+state.
 Since one of them starts the update and the other acknowledges is below we are
 going to use `starter` and `acknowledger`. Both the initiator and the
 responder can take either of the roles.
