@@ -126,6 +126,25 @@ function root(t : tree('a)) : option('a) =
 
 *NOTE: Recursive data types are not yet implemented*
 
+### Lists
+
+A Sophia list is a dynamically sized, homogenous, immutable, singly
+linked list. A list is constructed with the syntax `[1, 2, 3]`. The
+elements of a list can be any of datatype so for example we can have
+the following lists:
+
+```
+[1, 33, 2, 666]
+[(1, "aaa"), (10, "jjj"), (666, "the beast")]
+[{ [1] = "aaa", [10] = "jjj"}, { [5] = "eee", [666] = "the beast"}]
+```
+
+New elements can be prepended to the front of a list with the `::`
+operator. So `42 :: [1, 2, 3]` returns the list `[42, 1, 2, 3]`. The
+concatenation operator `++` appends its second argument to its first
+and returns the resulting list. So concatenating two lists
+`[1, 22, 33] ++ [10, 18, 55]` returns the list `[1, 22, 33, 10, 18, 55]`.
+
 ### Maps and records
 
 A Sophia record type is given by a fixed set of fields with associated,
@@ -592,6 +611,16 @@ BinOp ::= '||' | '&&' | '<' | '>' | '=<' | '>=' | '==' | '!='
 UnOp  ::= '-' | '!' | 'bnot'
 ```
 
+### Operators types
+
+| Operators | Type
+| --- | ---
+| `-` `+` `*` `/` `mod` | arithmetic operators
+| `bnot` `band` `bor` `bxor` `bsl` `bsr` | bitwise operators
+| `!` `&&` `\|\|` | logical operators
+| `==` `!=` `<` `>` `=<` `>=` | comparison operators
+| `::` `++` | list operators
+
 ### Operator precendences
 
 In order of highest to lowest precedence.
@@ -603,7 +632,7 @@ In order of highest to lowest precedence.
 | `-` (unary) | right
 | `+` `-` `bor` `bxor` `bsl` `bsr` | left
 | `::` `++` | right
-| `<` `>` `=<` `>=` `==` `!=` | non
+| `<` `>` `=<` `>=` `==` `!=` | none
 | `&&` | right
 | `\|\|` | right
 
