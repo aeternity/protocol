@@ -1,10 +1,8 @@
 [back](./README.md)
 # Oracles - intended usage
 
-The most general way to interact with Oracles is to use the WebSocket
-API (there is also an HTTP API with more limited functionality). In
-this document the API is put to use, showing the complete life cycle
-of an Oracle.
+The most general way to interact with Oracles is to use the HTTP API. In this
+document the API is put to use, showing the complete life cycle of an Oracle.
 
 To show the intended usage of oracles we walk through basically the [Oracle
 life cycle](/oracles/oracle_life_cycle.md) For simplicity, we only work with a single
@@ -13,123 +11,114 @@ to split the example into one node running the oracle and other nodes querying
 that oracle.
 
 The following assumes that the node exposes at address `localhost/127.0.0.1` the following ports:
-* User API internal WebSocket endpoint: 3114 - i.e. connecting to `ws://127.0.0.1:3114/websocket` opens a websocket connection.
-* User API internal HTTP endpoint: 3113.
+* User API external HTTP endpoint: 3013
+* User API internal HTTP endpoint: 3113
+
+## Oracle management flow
 
 In order to work through the example we also need the (Base58Check-encoded)
 public key of the node. This is easily retrieved from the running node:
 ```
-~/epoch/node: curl http://127.0.0.1:3113/v2/account/pub-key
-{"pub_key":"ak$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}
+curl http://127.0.0.1:3113/v2/account/pub-key
+
+{"pub_key":"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov"}
 ```
 
-On a freshly started node, connect a websocket. (Here we use
-[WSCat](https://github.com/websockets/wscat) for the websocket connection.)
-Upon connection we want to subscribe to the _mined_block_-event,
-i.e. everytime the node mines a new block an event is pushed to the client. We
-also need to wait for the first block to be mined by the node (or else our
-transactions will be rejected with _"Insufficient balance"_). In an environment
-with more than one node it is better to subscribe to the _new_block_-event, but
-here we simply use _mined_block_.
+We need to wait for the first block to be mined by the node (or else our
+transactions will be rejected with _"Insufficient balance"_).
 
-```
-~/epoch/node: wscat -c ws://127.0.0.1:3114/websocket
-connected (press CTRL+C to quit)
-> {"target":"chain", "action":"subscribe", "payload":{"type":"mined_block}}
-< {"origin":"chain", "action":"subscribe", "tag":"untagged", "payload":{"result":"ok", "subscribed_to":{"type":"mined_block}}}
-...
-< {"action":"mined_block","origin":"chain","payload":{"height":1,"hash":"bh$jXjgHkcuXnTY4PtMpctcwFT2jf4fZ1jGdeax1geWoW64hSXpY"}}
-```
+### Register
 
 Once the account has a positive balance we can post an _"Oracle register transaction"_:
 ```
-...
-> {"target":"oracle", "action":"register", "payload":{"type":"OracleRegisterTxObject", "vsn":1, "account":"ak$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF", "query_format":"the query spec", "response_format":"the response spec", "query_fee":4, "oracle_ttl":{"type":"delta", "value":50}, "fee":5, "ttl":1234}}
-< {"action":"register","origin":"oracle","tag":"untagged","payload":{"result":"ok","oracle_id":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF","tx_hash":"th$26iUqaRt4s1ydAF8z7WDeM4FhCqwEu5TbWTCazYFsPY8Le8Upq"}}
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/oracle-register-tx -d '{"type":"OracleRegisterTxObject", "vsn":1, "account":"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_format":"the query spec", "response_format":"the response spec", "query_fee":4, "oracle_ttl":{"type":"delta", "value":50}, "fee":5, "ttl":1234}'
+
+{"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","tx_hash":"th$2sDoWh1qe7PJ3nRJeqY4kaX7rjgWAaUVpET3EEGJvuPk3oaKNR"}
 ```
 
-The register transaction uses the same format for the payload as the HTTP API
-(<link to Swagger API description>). **NOTE:** the *transaction fee* is
-depending on the _TTL_. An oracle register transaction costs 4, and then 1 per
-1000 blocks of life time. (I.e. a TTL of 50 blocks --> 5, and a TTL of 4500
-blocks --> 9)
+**NOTE:** the *transaction fee* is depending on the _TTL_. An oracle register
+transaction costs 4, and then 1 per 1000 blocks of life time. (I.e. a TTL of
+50 blocks --> 5, and a TTL of 4500 blocks --> 9)
 
 This means that we have created the transaction to create the oracle, once the
-next block is mined this transaction will be included. Now, when the oracle
-exists we can register for getting events whenever a query is posted to this
-Oracle:
+next block is mined this transaction will be included. We can verify that the
+oracle is created:
 ```
-...
-< {"action":"mined_block","origin":"chain","payload":{"height":2,"hash":"bh$2UuiuAHW8bmRkcoMqP2Mcj5ZrxvGzjhQRhictByxf4AhcyF4q"}}
-> {"target":"chain","action":"subscribe","payload":{"type":"oracle_query","oracle_id":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}}
-< {"action":"subscribe","origin":"chain","tag":"tagged","payload":{"result":"ok","subscribed_to":{"oracle_id":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF","type":"oracle_query"}}}
+http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov
+
+{"expires":51,"id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query_fee":4,"query_format":"the query spec","response_format":"the response spec"}
 ```
 
-We subscribe for `"type":"oracle_query"`, i.e. we want to get notified when the oracle
-with the given id receives a query. Of course we want to test this, so let us
-post a query...
+### Extend
+
+Now, when the oracle exists, we can extend the TTL by posting an _"Oracle extend
+transaction"_:
 ```
-...
-> {"target":"oracle", "action":"query", "payload":{"type":"OracleQueryTxObject", "vsn":1, "oracle_pubkey":"ok$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":7, "ttl":1234, "query":"How are you?"}}
-< {"action":"query","origin":"oracle","tag":"tagged","payload":{"result":"ok","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","tx_hash":"th$fCRXecXPDoYhKF5NaVdYL3ZbMMsJrUCKb18LJYCYuzRTT79mV"}}
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/oracle-extend-tx -d '{"type":"OracleExtendTxObject", "vsn":1, "oracle":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "fee":5, "oracle_ttl":{"type":"delta", "value":100}}'
+
+{"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","tx_hash":"th$ACd8e5kcPrqQKg3pyEGTq7tBtdgLZ4MHd7MuPisUxHGjFgWRj"}
 ```
 
-Again we use exactly the same format for the payload as the HTTP API. And also,
-similar to the oracle registration transaction, the _transaction fee_ depends
+Again, we can check that the TTL was extended:
+```
+curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov
+
+{"expires":151,"id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query_fee":4,"query_format":"the query spec","response_format":"the response spec"}
+```
+
+### Query
+
+We can post a query to the existing oracle using an _"Oracle query transaction"_:
+```
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/oracle-query-tx -d '{"type":"OracleQueryTxObject", "vsn":1, "oracle_pubkey":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":7, "ttl":15, "query":"How are you?"}'
+
+{"query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","tx_hash":"th$2rJbVzsNSB6NGYccpCDrTn1EyLkQCCyYwYhUphCkTbWLNmg795"}
+```
+
+Similarly to the oracle registration transaction, the _transaction fee_ depends
 on the _TTL_ **and** the oracle query fee. The base query transaction fee is 2,
 we set the oracle query fee to 4 when registering, and the TTL accounts for 1
 per 1000 blocks (just a preliminary value to test the concept). I.e. the cost
 for our test transaction is 7.
 
-Not much will happen until the node mines another block (and the query
-transaction gets included in the blockchain), but once that happens we should
-receive an event on the websocket:
+We can check the active oracle queries:
 ```
-...
-< {"action":"mined_block","origin":"chain","payload":{"height":4,"hash":"bh$K6oGLV2cHMMpmKjr7bKAByqCxVRwhNUUh5nACagXknARLUbJ3"}}
-< {"action":"new_oracle_query","origin":"chain","payload":{"sender":"ak$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF","query":"How are you?","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
+curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov/queries
+
+{"oracle_queries":[{"expires":13,"fee":4,"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query":"ov$9wnkKJ3Qf2trdpq9EQbWQC","query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","response":"or$3QJmnh","response_ttl":{"type":"delta","value":10},"sender":"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","sender_nonce":3}]}
 ```
+
+**NOTE** the query value is Base58Check-encoded.
+
+### Response
 
 We should note that in the response for the query request above we got the
-*query_id*, this can be used (by Bob in the oracle life cycle example) to
-subscribe to an event when the query gets answered. (We also got it in the
-*new_oracle_query* event, but that event would normally be received by Alice
-rather than Bob...)
+*query_id* which we use to respond to the query using an _"Oracle response
+transaction"_:
 
 ```
-...
-> {"target":"chain","action":"subscribe", "payload":{"type":"oracle_response","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr"}}
-< {"action":"subscribe","origin":"chain","tag":"tagged","payload":{"result":"ok","subscribed_to":{"query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","type":"oracle_response"}}}
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/oracle-response-tx -d '{"type":"OracleResponseTxObject", "vsn":1, "query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m", "fee":3, "ttl":1234, "response":"I am fine, thanks!"}'
+
+{"query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","tx_hash":"th$HjWH76qbDNCb3eGPmwtRSM5wJcyjcSSy2LMFwe4zoCL2VLcDc"}
 ```
 
-We subscribe for `"type":"oracle_response"`, i.e. we want to get notified when the
-oracle answers the query with the given id. Of course we want to test this as
-well, so let us post a response to the query.
-
-```
-...
-> {"target":"oracle", "action":"response", "payload":{"type":"OracleResponseTxObject", "vsn":1, "query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr", "fee":3, "ttl":1234, "response":"I am fine, thanks!"}}
-< {"action":"response","origin":"oracle","tag":"tagged","payload":{"result":"ok","query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","tx_hash":"th$2mUjNg9VLztPC1DLSckdA6P4vPffC6xtAQNoHtYbtoHAd4yXuw"}}
-```
-
-Also here we use exactly the same format for the payload as the HTTP API. The
-_transaction fee_ depends on the _TTL_ (as set in the query). The base response
-transaction fee is 2 and the TTL accounts for 1 per 1000 blocks I.e. the cost
-for our test transaction is 3.
+The _transaction fee_ depends on the _TTL_ (as set in the query). The base
+response transaction fee is 2 and the TTL accounts for 1 per 1000 blocks
+I.e. the cost for our test transaction is 3.
 
 If we then wait for another block to be mined (and the response transaction to
-be added to the chain), we see that we receive an event reflecting the query
-response:
+be added to the chain), we see that there is a response for the query:
 ```
-...
-< {"action":"mined_block","origin":"chain","payload":{"height":6,"hash":"bh$i9P6dgcihe47Kwm6ZvTDb84HPGWr147KPviatJ5QXntHrBY1m"}}
-< {"action":"new_oracle_response","origin":"chain","payload":{"query_id":"oq$4RZoMEkm8QuuhJiiq53dd5pE4VstCthYRjBHgUKdhAhe7rLEr","response":"I am fine, thanks!"}}
+curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov/queries
+
+{"oracle_queries":[{"expires":14,"fee":4,"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query":"ov$9wnkKJ3Qf2trdpq9EQbWQC","query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","response":"or$Lr9RvdW8vZR8wq14ic7yUyC2vzi4nT","response_ttl":{"type":"delta","value":10},"sender":"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","sender_nonce":3}]}
 ```
 
+**NOTE** the response value is Base58Check-encoded.
+
 This conclude the walk through of the oracle life cycle example, which also
-exercise the websocket API for Oracles fully.
+exercise the HTTP API for Oracles fully.
 
 ### Alternative usage
 
-Of course the oracle transactions can just as well be supplied through the HTTP
-API. Registering for update events has to be done through WebSockets.
+TODO: WS API in the middleware.
