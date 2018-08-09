@@ -48,8 +48,7 @@ This is to prevent the node of being overloaded with WebSocket connections.
 
 WebSocket clients will receive updates to events they've subscribed to. A
 client can subscribe (and unsubscribe) to events on the fly. Subscribe is
-described in [Chain WS API - Subscribe](./chain_ws_api.md#subscribe) and an
-example usage for oracles can be seen in [Oracle user API usage](./oracle_api_usage.md).
+described in [Chain WS API - Subscribe](./chain_ws_api.md#subscribe).
 
 ### General Request/Response/Event types
 A request has the format:
@@ -79,7 +78,6 @@ An event has the same type as a response, except for not having a tag:
 | payload | object | data from the action | Yes |
 
 ### List of WS APIs
-* [Oracle WS API](./oracle_ws_api.md)
 * [Chain WS API](./chain_ws_api.md)
 
 ## Channels WebSocket API definition
