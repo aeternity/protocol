@@ -101,8 +101,8 @@ Sophia has the following types:
 | transactions | An append only list of blockchain transactions |
 | events       | An append only list of blockchain events (or log entries) |
 | signature    | A signature. |
-| oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, sign, fee, qfee, ttl)```
-| oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, fee, qttl, rttl)```
+| oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, sign, qfee, ttl)```
+| oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, qfee, qttl, rttl)```
 
 
 ### Algebraic data types
@@ -219,95 +219,134 @@ through the Oracle interface.
 
 For a full description of how Oracle works see [Oracles](/oracles/oracles.md#oracles)
 
-An Oracle operator will use the functions `Oracle.register`, `Oracle.getQuestion`,
-`Oracle.respond` and `Oracle.extend`.
+An Oracle operator will use the functions:
+* `Oracle.register`
+* `Oracle.get_question`
+* `Oracle.respond`
+* `Oracle.extend`
 
-An Oracle user will use the functions `Oracle.query_fee`, `Oracle.query`,
-`Oracle.getQuestion`, `Oracle.hasAnswer` and `Oracle.getAnswer`.
+An Oracle user will use the functions:
+* `Oracle.query_fee`
+* `Oracle.query`
+* `Oracle.get_answer`
 
+##### Oracle register
 
-##### Oracle Register
-
-To register a new oracle answering questions of type `'a` with answers of type `'b`
-call Oracle.register.
-
+To register a new oracle answering questions of type `'a` with answers of type `'b`,
+call `Oracle.register`:
 ```
 Oracle.register(acct : address
-                sign : int,   // Signed account address
-                fee  : int,
+                sign : signature,   // Signed account address
                 qfee : int,
                 ttl  : int) : oracle('a, 'b)
 ```
 
-The `acct` is the address of the oracle to register (can be the same as the contract).
-The `sign` is a signature of the address to register proving you have the private key
-of the oracle, or the integer 0 when address is the same as the contract.
-The 'qfee' is the query fee to be paid by a user when asking a question of the oracle.
-The 'ttl' is the Time To Live in relative block height for the oracle.
-The type `'a` is the type of the question to ask.
-The type `'b` is the type of the oracle answers.
+* The `acct` is the address of the oracle to register (can be the same as the contract).
+* The `sign` is a signature of the address to register proving you have the private key
+  of the oracle, or the integer 0 when address is the same as the contract.
+* The `qfee` is the query fee to be paid by a user when asking a question of the oracle.
+* The `ttl` is the Time To Live in relative block height for the oracle.
+* The type `'a` is the type of the question to ask.
+* The type `'b` is the type of the oracle answers.
 
-##### Oracle Extend
+##### Oracle extend
+
 To extend the TTL of an oracle, call `Oracle.extend`:
-
 ```
 Oracle.extend(o    : oracle('a, 'b),
-              sign : int,   // Signed oracle address
-              fee  : int,
+              sign : signature,   // Signed oracle address
               ttl  : int) : ()
 ```
 
-##### Oracle getQuestion
-To check what the question of a query is use the Oracle.getQuestion function:
+##### Oracle get_question
 
-
+To check what the question of a query is, use the `Oracle.get_question` function:
 ```
-Oracle.getQuestion(o : oracle('a, 'b), q : oracle_query('a, 'b)) : 'a
+Oracle.get_question(o : oracle('a, 'b), q : oracle_query('a, 'b)) : 'a
 ```
 
 ##### Oracle respond
-To respond to an oracle question, use the Oracle.respond function:
 
+To respond to an oracle question, use the `Oracle.respond` function:
 ```
 Oracle.respond(o    : oracle('a, 'b),
                q    : oracle_query('a, 'b),
-               sign : int,
+               sign : signature,
                r    : 'b)
 ```
 
-
 ##### Oracle query
-To ask an oracle a question, use the Oracle.query function:
 
-
+To ask an oracle a question, use the `Oracle.query` function:
 ```
-Oracle.Query(o    : oracle('a, 'b),
+Oracle.query(o    : oracle('a, 'b),
              q    : 'a,
-             fee  : int,
+             qfee : int,
              qttl : int,
              rttl : int) : oracle_query('a, 'b)
 ```
 
+##### Oracle query_fee
 
-##### Oracle Query Fee
-To ask the oracle what the query fee is use the Oracle.query_fee function:
-
+To ask the oracle what the query fee is, use the `Oracle.query_fee` function:
 ```
 Oracle.query_fee(o : oracle('a, 'b)) : int
 ```
 
-##### Oracle hasAnswer
-To check if a query has been answered use the Oracle.hasAnswer function:
+##### Oracle get_answer
 
+To ask the oracle what the optional query answer is, use the `Oracle.get_answer` function:
+```
+Oracle.get_answer(o : oracle('a, 'b), q : oracle_query('a, 'b)) : option('b)
+```
 
-```
-Oracle.hasAnswer(o : oracle('a, 'b), q : oracle_query('a. 'b): bool
-```
-##### Oracle getAnswer
-To ask the oracle what the query answer is use the Oracle.getAnswer function:
+##### Example
 
+Example for an oracle answering questions of type `string` with answers of type `int`:
 ```
-Oracle.getAnswer(o : oracle('a, 'b), q : oracle_query('a, 'b)) : option('b)
+contract Oracles =
+
+  function registerOracle(acct : address,
+                          sign : signature,   // Signed account address
+                          qfee : int,
+                          ttl  : int) : oracle(string, int) =
+     Oracle.register(acct, sign, qfee, ttl)
+
+  function queryFee(o : oracle(string, int)) : int =
+    Oracle.query_fee(o)
+
+  // Do not use in production!
+  function unsafeCreateQuery(o    : oracle(string, int),
+                       q    : string,
+                       qfee  : int,
+                       qttl : int,
+                       rttl : int) : oracle_query(string, int) =
+    Oracle.query(o, q, qfee, qttl, rttl)
+
+  function extendOracle(o    : oracle(string, int),
+                        sign : signature,   // Signed oracle address
+                        ttl  : int) : () =
+    Oracle.extend(o, sign, ttl)
+
+  function respond(o    : oracle(string, int),
+                   q    : oracle_query(string, int),
+                   sign : signature,
+                   r    : int) =
+    Oracle.respond(o, q, sign, r)
+
+  function getQuestion(o : oracle(string, int),
+                       q : oracle_query(string, int)) : string =
+    Oracle.get_question(o, q)
+
+  function hasAnswer(o : oracle(string, int),
+                     q : oracle_query(string, int)) =
+    switch(Oracle.get_answer(o, q))
+      None    => false
+      Some(_) => true
+
+  function getAnswer(o : oracle(string, int),
+                     q : oracle_query(string, int)) : option(int) =
+    Oracle.get_answer(o, q)
 ```
 
 #### AENS interface
