@@ -100,6 +100,7 @@ Sophia has the following types:
 | state        | A record of blockstate key, value pairs  |
 | transactions | An append only list of blockchain transactions |
 | events       | An append only list of blockchain events (or log entries) |
+| signature    | A signature. |
 | oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, sign, fee, qfee, ttl)```
 | oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, fee, qttl, rttl)```
 
