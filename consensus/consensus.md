@@ -292,6 +292,13 @@ header = version || height || prev_hash || state_hash || miner || beneficiary ||
            64         64         256          256         256         256          64       42*32       64       64
 ```
 
+For the purpose of computing a proof of work puzzle solution, the evidence and
+nonce are set to `[0] * 42` and `0` respectively, since neither are available
+before the puzzle has been solved.
+
+When a node receives a new key block it must repeat the process, setting
+evidence and nonce to all 0, in order to be able to validate the proof of work.
+
 ```
 h_header = Blake2b(header)
 ```
