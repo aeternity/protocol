@@ -46,7 +46,7 @@ but are not necessarily part of the channel's life cycle.
 
   * [Contract call](#get-contract-calls)
 
-Only steps 1 and 3 require chain interactions, step 2 is off-chain.
+Only steps 1 and 4 require chain interactions, step 2 and 3 are off-chain.
 
 ### HTTP requests
 There are two types of HTTP requests:
