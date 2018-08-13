@@ -108,7 +108,7 @@ The transaction contains:
 - The address of the caller (the one signing and paying for the transaction)
 - The address of the contract
 - An optional additional fee to the miner apart from gas.
-- Optional amount to transfer to the account before execution.
+- Optional amount to transfer to the account before execution (even if the execution fails).
 - The amount of gas to use
 - The calldata
 - A transaction fee
