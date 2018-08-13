@@ -244,7 +244,7 @@ Oracle.register(acct : address
 * The `acct` is the address of the oracle to register (can be the same as the contract).
 * The `sign` is a signature of the address to register proving you have the private key
   of the oracle, or the integer 0 when address is the same as the contract.
-* The `qfee` is the query fee to be paid by a user when asking a question of the oracle.
+* The `qfee` is the minimum query fee to be paid by a user when asking a question of the oracle.
 * The `ttl` is the Time To Live in relative block height for the oracle.
 * The type `'a` is the type of the question to ask.
 * The type `'b` is the type of the oracle answers.
@@ -285,6 +285,8 @@ Oracle.query(o    : oracle('a, 'b),
              qttl : int,
              rttl : int) : oracle_query('a, 'b)
 ```
+
+* The `qfee` is the query fee debited to the contract account (`Contract.address`).
 
 ##### Oracle query_fee
 
