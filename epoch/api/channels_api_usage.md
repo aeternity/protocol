@@ -22,7 +22,7 @@ expected. The flow is the following:
   * [Transfer](#transfer)
   * [Create a contract](#create-a-contract)
   * [Call a contract](#call-a-contract)
-3. [Optionally leave/reestablish](#leave-reestablish)
+3. [Optionally leave/reestablish](#optionally-leave-reestablish)
 4. [Channel mutual close](#channel-mutual-close)
 
 There are a some WebSocket events that can occur while the connection is open
@@ -602,7 +602,7 @@ aproximation for the gas needed for executing a contract on-chain if a similar a
 computations are required. Computation heavy contracts might be just too
 expensive to be force progressed on-chain, so please use with caution.
 
-## Channel leave/reestablish
+## Optionally leave/reestablish
 It is possible to leave a channel and then later reestablish the channel
 off-chain state and continue operation. Leaving the channel can either be
 done by simply disconnecting, or by sending a `'leave'` request. When receving
