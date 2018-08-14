@@ -22,7 +22,8 @@ expected. The flow is the following:
   * [Transfer](#transfer)
   * [Create a contract](#create-a-contract)
   * [Call a contract](#call-a-contract)
-3. [Channel mutual close](#channel-mutual-close)
+3. [Optionally leave/reestablish](#leave-reestablish)
+4. [Channel mutual close](#channel-mutual-close)
 
 There are a some WebSocket events that can occur while the connection is open
 but are not necessarily part of the channel's life cycle.
@@ -45,7 +46,7 @@ but are not necessarily part of the channel's life cycle.
 
   * [Contract call](#get-contract-calls)
 
-Only steps 1 and 3 require chain interactions, step 2 is off-chain.
+Only steps 1 and 4 require chain interactions, step 2 and 3 are off-chain.
 
 ### HTTP requests
 There are two types of HTTP requests:
@@ -221,6 +222,7 @@ An update from one's own node that the other party had confirmed that the block
 height needed is reached:
 ```
 {'action': 'info',
+ 'channel_id': 'ch$RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
  'payload': {'event': 'funding_locked'}
  }
 ```
@@ -234,6 +236,7 @@ described in the create transaction.
 After both parties have co-signed the state update both of them will receive a info for the channel open:
 ```
 {'action': 'info',
+ 'channel_id': 'ch$RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
  'payload': {'event': 'open'}
  }
 ```
@@ -295,6 +298,7 @@ The starter sends a message containing the desired change
 ```
 {'action': 'update',
  'tag': 'new',
+ 'channel_id': 'ch$RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
  'payload': {
     'from': 'ak$3YGRJv1QMgNbeDzvqX7qJrZWJDaHGmrHYHifxSbhSEgn6anuNYCNPrzsB911xTbZ35bvJYWLyYjrQaQKfvja9gkpvYMfEZ',
     'to': 'ak$3gVuduh7vR9G7Hq3TpFaA7q9oQkMZZF2VsUxDYZabNeKC1uaqtjpKSth7wPn9dxnUzsHoT2fa6GPUzepbDXMHyC2F3HupT',
@@ -319,6 +323,7 @@ The starter is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
 ```
 {'action': 'update',
+ 'channel_id': 'ch$RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
  'payload': {
     'tx': 'tx$xCHADUvUikbjGRcBmioKtXFQKpGs7yZHvhkcjByxQDG5xnCpU6YVQs4qyBZL6h18xjTSy1wtUFe8ipKMHLp6VmU2KwLgd4mbUtqELz6w9wV6PGTex6ZS2y7TtqZsDuesGFTZqYET8syCor8kzGjemUkzvwHMJdKsQ5guDWj1C2EcuNR3MnK9heJLbKuf19peGDvijjS8zdCD1pxE4QcsVi9pAGUBCgFyKx8FkDzhv6LxjysuxdmuZqeTGq49s71QdVB74Y1DAQUq5JsH1kyhadFxVepS6FYmcBC4xK8h1sefipPAAVFY7YwNtj2W6U9CTCqSVAQSrpfGAo6322gSneD8aRKoGpQpy1NfxVePKqM5igmd1B6QDGcEYDigBzzNwrXpuYqjrdG5eB6C6ehwAxNskmiudbEuKrjwNL5JzExxrR21L5oQCDc3RMyPdeWJxs8eJfHCrWyzyAwsykV4hVGxddbsbrDWd3re42N5HARXpQG6Gq6aMGnSHJAKbXCWxys4Si6Wjpey7HyEgT1hYoxqtmwEGhW96Ksig'
     }
@@ -357,6 +362,7 @@ parties to indicate it. The payload of the message contains the latest
 co-signed off-chain update so the participants can persist it locally.
 ```
 {'action': 'update',
+ 'channel_id': 'ch$RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
  'payload': {
     'state': 'tx$3XPhV5wAjiGDkUqu4PWDEXdXEztp6iG1VYDCKU7U46Rgpk79c3cB1ZTnsYSYYyadgA5mU4ww2hzJePnu355nTZnGJTxYeGUS8ct8Zwgf6DTYxW8uKuwDbqtyX4xzPxVbPyhweeNM5s7nqqEojhg4tiwW9hXnrvvj9YyJqK8r77K5ZVoSHN7kg6TowztWjGqhGfeMVnRzkgyNWJvNgUCaUbHi9U2dgL4cX78XbhAiqPdn7emCsF4JhPJumXyMr54oToU6fb4QpmYiWXku3TVymK9vgz49FS53PYebtSZzrhTkgMM9mF7VguJ2Jfx9s2VCdhFeEMj58E2jFL4VfFeUnvc6xUD4jHdfspojDqa6hjWTSQ4bwguC5ZPLDWsnTArFTWYpQi7S9H2coebFNdCLb'}
  }
@@ -551,6 +557,7 @@ co-signed off-chain update so the participants can persist it locally.
 
 ```
 {'action': 'update',
+ 'channel_id: 'ch$RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
  'payload': {
     'state': 'tx$L1mTJpyV97nWgMAFmrqcwECSThovgaU9qv5DYeqn3YQgzjCShS96n6u2rACsXyXAJyRrqGNTv2ytC1LgmH8zSuD6SkDTEiT2eCGuCsM1xXyZGooq14nu8naSZ3rhJEwBoZLTn3Tt86W3eUc1rPs2HaFwtxwsFhFu4dXHJTjmaVjigG8Juhvq1oQytscRCPVt9sjijr8h1mCCj73yhnsvwwJuMLi9WgspqwJfHHRVc8RWPtvKg6hbUKxn4cEP2M1rpXhVEUhCAkgKVfm58m4xvnuCNhvJhi37cGeSMSJkdrs64111jnQY2nwpiiS5dRW8c3VcHt1Zm8Sg1fyQgdmgbr3Rwbez1L6hCndppgX1DA2UniQB1y7eqC8nYMe4DUmXxnjcFxCQyaiTCBGavjcZiQUThHzwoACJ1yf4fr1HXZ2BzsgeSsuE2AuvphAvtiPSDmRUiFwxt1KGg3YRBxsSqs2Ums7D6QDoju11VH3k8ERcb9Hj6uJmHFC2yGu48jKHPB8bUCm1qDBZqEiDBVTQo6E1AiSLtvJmLoRd1gyUZ4pvCPPmGPQJ4Qsb16xH6q4YnJVMVQb7TWSs5PorsdqV1XPKg8rZSwSZJGZ1gT7fkf75ocXt986k3PMNCa98cDQmwbqFuqYYC4iMixj6k2txsFYUCyxrucHidNC8MFC'}
  }
@@ -595,6 +602,70 @@ aproximation for the gas needed for executing a contract on-chain if a similar a
 computations are required. Computation heavy contracts might be just too
 expensive to be force progressed on-chain, so please use with caution.
 
+## <a name="leave-reestablish"></a>Optionally leave/reestablish
+It is possible to leave a channel and then later reestablish the channel
+off-chain state and continue operation. Leaving the channel can either be
+done by simply disconnecting, or by sending a `'leave'` request. When receving
+a leave request, the channel fsm passes it on to the peer fsm, reports the
+current mutually signed state and then terminates. The `'reestablish'` request
+is very similar to a [Channel open](#channel-open) request, but also requires
+the channel id and the latest mutually signed state.
+
+The full state, including state trees, is cached internally by the `epoch`
+node, and upon reestablish, it is verified that the encoded state provided
+by the client corresponds to the latest full state retrieved from the cache.
+
+### Leave request
+Example:
+```javascript
+{'action': 'leave'}
+```
+
+The fsm responds with the following type of report:
+```javascript
+{'action': 'leave',
+ 'channel_id': 'ch$FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR',
+ 'payload':
+    {'state': 'tx$6jPYBUFTkcmQ7A3JYkUsYMChMHNqe3TMEhDZaSat7P1sbP4XXQP9QmaFfaAftUDjws3GhdKaBGyJRMBhHKyk2irBZsymgUVuxfQXR63ojEjg7C583D6cNKLSZtybZr9Cw6mmCkSDRVu41WbF1jKEkAkXbXznANm3AyJ1BLqNVB7qiAyFSVeq5qVcvHL4Z1y2DAhcLLw6YGSqFyuyg8pKVQRhL2LuePa9mdtoYZyY5VhvgShLz2oY8R3taBL8RrnnTvcwECvQu51yPKyM2pryoHaQbED5Zn7hdegZy6KN9wfpLXedtNB9ssmMvz5jHcK12vmtfeUMzRrySqtmBDGfiqwFZrYZ5A7xz1uqi'
+    }
+}
+```
+
+### Reestablish
+Open the channel in the same way as in the
+[Initiator WebSocket open](#initiator-websocket-open) example,
+adding the parameters `existing_channel_id` and `offchain_tx` with values
+matching the ones provided in the `leave` report above:
+
+```
+$ wscat --connect
+'localhost:3014/channel?initiator=ak$...&role=initiator&existing_channel_id=ch$FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR&offchain_tx=tx$6jPYBUFTkcmQ7A3JYkUsYMChMHNqe3TMEhDZaSat7P1sbP4XXQP9QmaFfaAftUDjws3GhdKaBGyJRMBhHKyk2irBZsymgUVuxfQXR63ojEjg7C583D6cNKLSZtybZr9Cw6mmCkSDRVu41WbF1jKEkAkXbXznANm3AyJ1BLqNVB7qiAyFSVeq5qVcvHL4Z1y2DAhcLLw6YGSqFyuyg8pKVQRhL2LuePa9mdtoYZyY5VhvgShLz2oY8R3taBL8RrnnTvcwECvQu51yPKyM2pryoHaQbED5Zn7hdegZy6KN9wfpLXedtNB9ssmMvz5jHcK12vmtfeUMzRrySqtmBDGfiqwFZrYZ5A7xz1uqi
+```
+
+The channel fsm responds with the following event reports if all goes well:
+```javascript
+{'action': 'info',
+ 'payload': {'event': 'channel_reestablished'}
+}
+```
+
+then the standard report indicating that the channel is open:
+```javascript
+{'action': 'info',
+ 'channel_id': 'ch$FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR',
+ 'payload': {'event': 'open'}
+}
+```
+
+followed by an update report with the latest mutually-signed state:
+```javascript
+{'action': 'update',
+ 'channel_id': 'ch$FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR',
+ 'payload':
+   {'state': 'tx$6jPYBUFTkcmQ7A3JYkUsYMChMHNqe3TMEhDZaSat7P1sbP4XXQP9QmaFfaAftUDjws3GhdKaBGyJRMBhHKyk2irBZsymgUVuxfQXR63ojEjg7C583D6cNKLSZtybZr9Cw6mmCkSDRVu41WbF1jKEkAkXbXznANm3AyJ1BLqNVB7qiAyFSVeq5qVcvHL4Z1y2DAhcLLw6YGSqFyuyg8pKVQRhL2LuePa9mdtoYZyY5VhvgShLz2oY8R3taBL8RrnnTvcwECvQu51yPKyM2pryoHaQbED5Zn7hdegZy6KN9wfpLXedtNB9ssmMvz5jHcK12vmtfeUMzRrySqtmBDGfiqwFZrYZ5A7xz1uqi'
+   }
+}
+```
 
 ## Channel mutual close
 At any moment after the channel is opened, a closing procedure can be

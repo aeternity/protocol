@@ -7,6 +7,7 @@ The WebSocket API provides the following actions:
  * [On-chain withdrawal](#withdrawal)
  * [Generic message](#generic-message)
  * [Close mutual](#close-mutual)
+ * [Leave](#leave)
  * [On-chain transactions](#on-chain-transactions)
  * [Info messages](#info-messages)
 
@@ -484,6 +485,29 @@ Roles:
 {'action': 'shutdown_sign_ack',
  'payload': {
     'tx': 'tx$CWSA5wyxuP9AbAbcxQi8QbZsfUdhQdDouMSgsBTAQCNdN8PDKsLf6qnEhw6JacKRWKmBuwBaJYZTUSDUKih9vygmzkmbn2XC7MkGcz6zbwThk9jdyH8HQhzWq9uZ7ExYNjZyXGpPX6vQLsSRH8d4RxqvD94uG9YhcNqDWeSntM5CtBrjCwEXm9r3wEkZ6NKnoUShU5soJZTV8TAMFAArJMsS2V3EAjXSSVf3Xt5aJeVLgVbSYczcM22gvZt2LEPTCUJEYW2XsDvi6rAtps58d7B1P5uDuXG8s8hEWi11XsjaTyhGhnt9jfcBYVzQVdApG1JpMaQjeyRiEqwNoAVjTranxeM1Cn'
+    }
+}
+```
+
+## Leave
+Roles:
+ * Leaver
+ * Acknowledger
+
+### Leaver initiates leave
+ * **action:** `leave`
+
+#### Example
+```javascript
+{'action': 'leave'}
+```
+
+#### Leaver and Acknowledger inform their clients
+```javascript
+{'action': 'leave',
+ 'channel_id': 'ch$FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR',
+ 'payload': {
+    'state': 'tx$6jPYBUFTkcmQ7A3JYkUsYMChMHNqe3TMEhDZaSat7P1sbP4XXQP9QmaFfaAftUDjws3GhdKaBGyJRMBhHKyk2irBZsymgUVuxfQXR63ojEjg7C583D6cNKLSZtybZr9Cw6mmCkSDRVu41WbF1jKEkAkXbXznANm3AyJ1BLqNVB7qiAyFSVeq5qVcvHL4Z1y2DAhcLLw6YGSqFyuyg8pKVQRhL2LuePa9mdtoYZyY5VhvgShLz2oY8R3taBL8RrnnTvcwECvQu51yPKyM2pryoHaQbED5Zn7hdegZy6KN9wfpLXedtNB9ssmMvz5jHcK12vmtfeUMzRrySqtmBDGfiqwFZrYZ5A7xz1uqi'
     }
 }
 ```
