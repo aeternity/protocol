@@ -134,11 +134,14 @@ nonce:
 #### Key Blocks
 
 ```
-PROTOCOL_VERSION: 2
-GENESIS_VERSION: 2
+PROTOCOL_VERSION: 21
+GENESIS_VERSION: 21
 ```
 
-- the timestamp of a block MUST be smaller than `now() + 30m` TODO: re-calc for NG
+- the timestamp of a key block MUST be smaller than `now() + 10m`
+- the timestamp of a key block MUST be bigger than:
+  - the median timestamp of the last 11 blocks (if height >= 12)
+  - the timestamp of the genesis block (if height <= 11)
 - the version MUST match the `PROTOCOL_VERSION`
 - the `pow_evidence` MUST be valid
 - MUST have `0 <= nonce <= MAX_NONCE`
@@ -176,6 +179,21 @@ GENESIS_VERSION: 2
 There is no need to consider Key Blocks' headers as Key Blocks do not hold heavy list of transactions
 
 #### Micro Blocks
+
+```
+PROTOCOL_VERSION: 21
+GENESIS_VERSION: 21
+```
+
+- the timestamp of a micro block MUST be smaller than `now() + 10m`
+- if the previous block is a micro block:
+  - the timestamp MUST be bigger than or equal to the timestamp of the previous block + 3s
+- if the previous block is a key block:
+  - the timestamp MUST be bigger than the timestamp of the previous block
+- the version MUST match the `PROTOCOL_VERSION`
+- the signature must be a valid signature produced by the issuer of
+  the previous key block
+- ***TODO***: fill in missing rules
 
 ```
  Fieldname       Size (bytes)
