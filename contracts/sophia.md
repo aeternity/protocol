@@ -131,13 +131,14 @@ function root(t : tree('a)) : option('a) =
 
 A Sophia list is a dynamically sized, homogenous, immutable, singly
 linked list. A list is constructed with the syntax `[1, 2, 3]`. The
-elements of a list can be any of datatype so for example we can have
-the following lists:
+elements of a list can be any of datatype but they must have the same
+type. The type of lists with elements of type `'e` is written
+`list('e)`. For example we can have the following lists:
 
 ```
-[1, 33, 2, 666]
-[(1, "aaa"), (10, "jjj"), (666, "the beast")]
-[{ [1] = "aaa", [10] = "jjj"}, { [5] = "eee", [666] = "the beast"}]
+[1, 33, 2, 666]                                                   : list(int)
+[(1, "aaa"), (10, "jjj"), (666, "the beast")]                     : list((int, string))
+[{[1] = "aaa", [10] = "jjj"}, {[5] = "eee", [666] = "the beast"}] : list(map(int, string))
 ```
 
 New elements can be prepended to the front of a list with the `::`
