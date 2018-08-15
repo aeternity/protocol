@@ -46,6 +46,8 @@ but are not necessarily part of the channel's life cycle.
 
   * [Contract call](#get-contract-calls)
 
+* [Cleaning local contract calls](#pruning-contract-calls)
+
 Only steps 1 and 4 require chain interactions, step 2 and 3 are off-chain.
 
 ### HTTP requests
@@ -1183,8 +1185,11 @@ If a certain address of an account or a contract is not found in the state tree 
 the response is an error.
 
 #### Get contract calls
-In order to inspect the result value of a contract call, a participant sends a
-WebSocket message
+Each participant persists contract call results locally. It is not required of
+both participants to share the same list of contract calls as this does not
+impact consesus bethween them. Any participant can prune his local set of
+calls in order to free some memory. In order to inspect the result value of a
+contract call, a participant sends a WebSocket message
 ```
 {'action': 'get',
  'tag': 'contract_call',
@@ -1218,6 +1223,25 @@ A non-error response of this call looks like this
 It is worth mentioning that the gas is not consumed, because this is an off-chain contract call.
 It would be consumed if it were a on-chain one. This could happen if a call with a
 similar computation amount is to be forced on-chain.
+
+#### Pruning contract calls
+
+Contract calls are kept locally in order for the participant to be able to
+look them up. They consume memory and in order for the participant to free it -
+one can prune all messages. This cleans up all locally stored contract calls
+and those will no longer be available for fetching and inspection.
+
+In order to prune local calls, a participant sends the following WebSocket
+message:
+
+```
+{'action': 'clean_contract_calls'}
+```
+
+Once calls are pruned, the same participant receives the following message:
+```
+{'action': 'calls_pruned'}
+```
 
 ### Solo closing sequence
 At any moment in time after the channel had been opened any participant can
