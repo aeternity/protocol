@@ -1227,9 +1227,9 @@ similar computation amount is to be forced on-chain.
 #### Pruning contract calls
 
 Contract calls are kept locally in order for the participant to be able to
-look them up. They consume memory and in order for the participant to free it
-- one can prune all messages. This cleans up all locally stored contract calls
-  and those will no longer be available for fetching and insepction.
+look them up. They consume memory and in order for the participant to free it -
+one can prune all messages. This cleans up all locally stored contract calls
+and those will no longer be available for fetching and inspection.
 
 In order to prune local calls, a participant sends the following WebSocket
 message:
@@ -1240,7 +1240,7 @@ message:
 
 Once calls are pruned, the same participant receives the following message:
 ```
-{'action': 'calls_prunned'}
+{'action': 'calls_pruned'}
 ```
 
 ### Solo closing sequence
