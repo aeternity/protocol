@@ -144,7 +144,7 @@ This method call will only be executed by clients.
 - [ `params` : (`string`, `string`, `string`, `int`) ]: list of method
   parameters
 	1. MUST be name and version of mining software in the given format or empty
-		 string
+	   string
 	2. MUST be session id received during a previous session or `null` if a new
 	   session should be initiated by the server
 	3. MUST be the host the client is trying to connect to or `null`
@@ -312,7 +312,9 @@ This method call will only be executed by clients.
 As with `mining.notify` all parameters after the job ID should be understood as
 being conditional on the block version sent along in `mining.notify`.
 
-The miner nonce MUST be `8 - len(extra_nonce)` bytes long and be little endian.
+The miner nonce MUST be `8 - len(extra_nonce)` bytes long and be little endian,
+in order for the server to produce a correct 8 bytes nonce when concatenating
+the extra and miner nonce.
 
 A `solution` in our current instantiation of cuckoo cycle is a list of 42 32bit
 integers. The solution MUST be formatted according to the rules specified in the
