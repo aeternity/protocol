@@ -104,6 +104,17 @@ Sophia has the following types:
 | oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, sign, qfee, ttl)```
 | oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, qfee, qttl, rttl)```
 
+### Type aliases
+
+Type aliases can be introduced with the `type` keyword and can be
+parameterized. For instance
+
+```
+type number = int
+type string_map('a) = map(string, 'a)
+```
+
+A type alias and its definition can be used interchangeably.
 
 ### Algebraic data types
 
