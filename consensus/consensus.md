@@ -134,8 +134,8 @@ nonce:
 #### Key Blocks
 
 ```
-PROTOCOL_VERSION: 21
-GENESIS_VERSION: 21
+PROTOCOL_VERSION: 22
+GENESIS_VERSION: 22
 ```
 
 - the timestamp of a key block MUST be smaller than `now() + 10m`
@@ -181,8 +181,8 @@ There is no need to consider Key Blocks' headers as Key Blocks do not hold heavy
 #### Micro Blocks
 
 ```
-PROTOCOL_VERSION: 21
-GENESIS_VERSION: 21
+PROTOCOL_VERSION: 22
+GENESIS_VERSION: 22
 ```
 
 - the timestamp of a micro block MUST be smaller than `now() + 10m`
@@ -281,7 +281,7 @@ HIGHEST_TARGET_SCI: 0x2100ffff
 HIGHEST_TARGET_INT: 0xffff000000000000000000000000000000000000000000000000000000000000
 NONCE_BITS: 64
 MAX_NONCE: 0xffffffffffffffff
-EXPECTED_BLOCK_MINE_RATE: 60 * 5 # every 5 minutes
+EXPECTED_BLOCK_MINE_RATE: 60 * 3 # every 3 minutes
 RECALCULATE_DIFFICULTY_FREQUENCY: 10
 ```
 
@@ -400,7 +400,7 @@ DesiredRate              = 1 / DesiredTimeBetweenBlocks
 ```
 
 The basic idea of the algorithm is to estimate the current network capacity
-based on the `N` (= 10) previous blocks and use that to set the new
+based on the `N` (= 17) previous blocks and use that to set the new
 target:
 
 ```
@@ -413,11 +413,13 @@ We can estimate the network capacity used to mine a given block `i` as
 
 ```
 EstimatedCapacity[i] = Difficulty[i] / MiningTime[i]
-MiningTime[i]        = Time[i + 1] - Time[i]
+MiningTime[i]        = Time[i] - Time[i - 1]
 ```
 
 The estimated capacity across all `N` blocks is then the weighted (by time)
-average of the estimated capacities for each block.
+average of the estimated capacities for each block. Note, since `MiningTime[i]`
+require `Time[i - 1]` and we do not use the genesis block timestamp in target
+adjustment we cannot start using the target estimation until block `N + 2 (= 19)`.
 
 ```
 EstimatedCapacity = Sum(EstimatedCapacity[i] * MiningTime[i]) / TotalTime
@@ -425,12 +427,26 @@ EstimatedCapacity = Sum(EstimatedCapacity[i] * MiningTime[i]) / TotalTime
                   = Sum(HIGHEST_TARGET / Target[i]) / TotalTime
 ```
 
+To get a good trade-off between response time and stability we use a variant of
+[DigiShield](https://github.com/zawy12/difficulty-algorithms/issues/9).
+That means we compute a tempered TotalTime (total solve time in algorithm description):
+
+```
+TotalTime'        = Sum(SolveTime[i])
+SolveTime[i]      = max(-FTL, min(6 * DesiredTimeBetweenBlocks, Time[i] - Time[i-1]))
+TemperedTotalTime = 0.75 * N * DesiredTimeBetweenBlocks + 0.2523 * TotalTime
+```
+
+Where FTL = Future Time Limit - i.e. the time a block is allowed to be
+"from the future". We use 10 minutes (600 s).
+
 Now, the problem is that we can't do any floating point arithmetic (to
 ensure the calculation can be verified by other nodes), so we pick a
 reasonably big integer K (= HIGHEST_TARGET * 2^32) and compute
 
 ```
 EstimatedCapacity ≈ Sum(K * HIGHEST_TARGET div Target[i]) / TotalTime / K
+TemperedTotalTime ≈ (3 * N * DesiredTimeBetweenBlocks) div 4 + (2523 * TotalTime') div 10000
 ```
 
 Then
