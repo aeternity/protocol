@@ -29,16 +29,16 @@ Unused tokens stay on the contract account.
 The first argument in the call specifies which primop to call.
 The following arguments are encoded as Sophia data.
 
-| OpNo | Name                |          Value |             Arguments | Return value    |
-| ---- | ------------------- | -------------- | --------------------- | --------------- |
-|    1 | Spend               | `Amount : int` | `Recipient : address` | `Nil`           |
-|  100 | Oracle register     | (Unused.)      | `Acct : address, Sign : signature, QFee : int, TTL : int, QType : typerep, RType : typerep` | `Oracle : address` |
-|  101 | Oracle query        | `QFee : int`   | `Oracle : address, Query : ('a,'b), QTTL : int, RTTL : int` | `query : oracle_query('a, 'b)` |
-|  102 | Oracle respond      | (Unused.)      | `Oracle : address, Query : address, Sign : signature, R : 'a` | `()` |
-|  103 | Oracle extend       | (Unused.)      | `Oracle : address, Sign : signature, TTL : integer` | `()` |
-|  104 | Oracle get answer   | (Unused.)      | `Oracle : address, Query : address` | `option('b)` |
-|  105 | Oracle get question | (Unused.)      | `Oracle : address, Query : address` | `'a` |
-|  106 | Oracle query fee    | (Unused.)      | `Oracle : address`    | `int`           |
+| OpNo | Name                |          Value |             Arguments | Return value    | Gas cost |
+| ---- | ------------------- | -------------- | --------------------- | --------------- | -------- |
+|    1 | Spend               | `Amount : int` | `Recipient : address` | `Nil`           | TODO     |
+|  100 | Oracle register     | (Unused.)      | `Acct : address, Sign : signature, QFee : int, TTL : int, QType : typerep, RType : typerep` | `Oracle : address` | Static positive component + dynamic component proportional to oracle (relative) TTL argument `TTL` (TODO: Detail.) |
+|  101 | Oracle query        | `QFee : int`   | `Oracle : address, Query : ('a,'b), QTTL : int, RTTL : int` | `query : oracle_query('a, 'b)` | Static positive component + dynamic component proportional to query (relative) TTL argument `QTTL` (TODO: Detail.) |
+|  102 | Oracle respond      | (Unused.)      | `Oracle : address, Query : address, Sign : signature, R : 'a` | `()` | Static positive component + dynamic component proportional to response (relative) TTL in query (from `RTTL` argument of query primop) (TODO: Detail.) |
+|  103 | Oracle extend       | (Unused.)      | `Oracle : address, Sign : signature, TTL : integer` | `()` | Static positive component + dynamic component proportional to oracle (relative) TTL argument `TTL` (TODO: Detail.) |
+|  104 | Oracle get answer   | (Unused.)      | `Oracle : address, Query : address` | `option('b)` | Static positive component (TODO: Detail.) |
+|  105 | Oracle get question | (Unused.)      | `Oracle : address, Query : address` | `'a` | Static positive component (TODO: Detail.) |
+|  106 | Oracle query fee    | (Unused.)      | `Oracle : address`    | `int`           | Static positive component (TODO: Detail.) |
 
 ## New instructions
 
