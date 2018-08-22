@@ -19,7 +19,10 @@ The transaction contains:
 - A TTL (relative in number of blocks, or absolute block height)
 - Transaction fee (must be larger than a minimum proportional to the TTL)
 
-Questions/Later:
+See the [serialization specification](/serializations.md#oracle-register-transaction).
+
+#### Questions/Later
+
 - Exact format for queries (API).
   - Protobuf or something similar?
 - Exact format for responses.
@@ -27,18 +30,8 @@ Questions/Later:
   - Fees are flat to begin with.
   - We could imagine fees to be proportional to something.
 
-```
-{ oracle_owner    :: public_key()
-, nonce           :: nonce()
-, query_format    :: format_definition()
-, response_format :: format_definition()
-, query_fee       :: amount()
-, fee             :: amount()
-, ttl             :: ttl()
-}
-```
-
 #### TODO
+
 - In the future we could imagine an oracle register transaction that
   creates a new account by double signing the request with the source
   account and the new account.
@@ -53,26 +46,23 @@ The transaction contains:
 - An extension to the TTL (relative to current expiry in number of blocks)
 - Transaction fee (must be larger than a minimum proportional to the TTL)
 
-Questions/Later:
+See the [serialization specification](/serializations.md#oracle-extend-transaction).
+
+#### Questions/Later
+
 - Fee for posting a query. The fee can be 0.
   - Fees are flat to begin with.
   - We could imagine fees to be proportional to something.
 
-```
-{ oracle :: public_key()
-, nonce  :: nonce()
-, ttl    :: ttl()
-, fee    :: amount()
-}
-```
-
 #### TODO
+
 - In the future we could imagine an oracle register transaction that
   creates a new account by double signing the request with the source
   account and the new account.
 - Decide on the minimum fee calculation.
 
 ### Oracle query transaction
+
 - Contains:
   - The sender (address) + nonce
   - The oracle (address)
@@ -99,7 +89,10 @@ from the oracle. The response TTL is always relative. This is to not
 give incentive to the oracle to post the answer late, since the oracle
 is paying the fee for the response.
 
-### Questions/Later
+See the [serialization specification](/serializations.md#oracle-query-transaction).
+
+#### Questions/Later
+
 - Should the query format be checked by the miner?
 - The size of this TX is variable (the Query), so fee will vary - also the
 sender will pay for storing the query, thus the TTL will also affect the
@@ -108,19 +101,6 @@ transaction fee.
 responds earlier.
 - We could include an earliest time that the oracle can answer to
 protect against malicious oracles answering early and collect the fee.
-
-
-```
-{ sender_address  :: public_key()
-, nonce           :: nonce()
-, oracle_address  :: public_key()
-, query           :: binary()
-, query_fee       :: amount()
-, query_ttl       :: ttl()
-, response_ttl    :: relative_ttl()
-, fee             :: amount()
-}
-```
 
 ### Oracle response
 
@@ -132,27 +112,20 @@ expired.
 
 The oracle pays the fee of the response transaction. The mininimum fee
 is determined by the response TTL from the query and the size of the
-response.
+response (***TODO***: Consider size of response in minimum fee).
 
 Note that there is an incentive to keep the response precise (and
 small) since the oracle pays for the response transaction.
 
 The transaction contains
-- The oracle interaction ID (derived from the query)
 - The oracle (address) + nonce
+- The oracle interaction ID (derived from the query)
 - The response in binary format
 - The transaction fee
 
-```
-{ interaction_id  :: tx_id()
-, oracle_address  :: public_key()
-, nonce           :: nonce()
-, response        :: binary()
-, fee             :: amount()
-}
-```
+See the [serialization specification](/serializations.md#oracle-response-transaction).
 
-### Questions/Later:
+#### Questions/Later
 
 - Should we have an automatic callback defined in the query?
   - Any callback is paid by the oracle.
