@@ -33,6 +33,10 @@ better solution.
 
 - [API](./epoch/api/README.md)
 
+## Security
+
+* [Threat Model](https://github.com/aeternity/aetmodel/blob/master/ThreatModel.md)
+
 ## *Outdated* Whitepaper v0.1
 
 *The early whitepaper v0.1 is **outdated** and can be found [here](https://aeternity.com/aeternity-blockchain-whitepaper.pdf).*
