@@ -238,10 +238,10 @@ The following builtin functions are defined on maps:
 
 #### Account interface
 
-To spend tokens from the contract account to the account "to" you call the raw_spend function.
+To spend tokens from the contract account to the account "to" you call the `Chain.spend` function.
 
 ```
-raw_spend(to : address, amount : integer)
+Chain.spend(to : address, amount : integer)
 ```
 
 #### Oracle interface
@@ -418,25 +418,6 @@ event(e : event) : ()
 ```
 
 *NOTE: Events are not yet implemented*
-
-#### Transactions
-Sophia can generate blockchain transactions.
-```
-transaction(tx : transaction) : ()
-```
-The transaction type defines the transactions that can be created:
-```
-record   spend_tx = {recipient : address, amount : uint}
-datatype transaction = SpendTx(spend_tx)
-                     | ...
-```
-
-*NOTE: Transaction types are not yet implemented. For now spend transactions
-can be issued using the builtin function*
-
-```
-  raw_spend : (address, int) => ()
-```
 
 #### Contract primitives
 
