@@ -172,6 +172,7 @@ subsequent sections divided by object.
 | POI | 60 |
 | Key block | 100 |
 | Micro block | 101 |
+| Light micro block | 102 |
 
 #### Accounts
 ```
