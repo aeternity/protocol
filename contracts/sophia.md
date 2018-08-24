@@ -27,7 +27,7 @@ languages and support local state and inheritance. More specifically:
 ```javascript
 // An abstract contract
 contract VotingType =
-  public stateful function vote : string => unit
+  public stateful function vote : string => ()
 ```
 
 - A contract instance is an entity living on the block chain (or in a state channel). Each
@@ -58,6 +58,40 @@ worked out).
   missing.
 
 *NOTE: Contract inheritance is not yet implemented.*
+
+#### Calling other contracts
+
+To call a function in another contract you need the address to an instance of
+the contract. The type of the address is a (possibly abstract) contract. For
+instance, given the `VotingType` contract above we can define a contract
+
+```javascript
+contract VoteTwice =
+  public function voteTwice(v : VotingType, alt : string) =
+    v.vote(alt)
+    v.vote(alt)
+```
+
+Contract calls take two optional named arguments `gas : int` and `value : int`
+that lets you set a gas limit and provide tokens to a contract call. If omitted
+the defaults are no gas limit and no tokens. Suppose there is a fee for voting:
+
+```javascript
+  function voteTwice(v : VotingType, fee : int, alt : string) =
+    v.vote(value = fee, alt)
+    v.vote(value = fee, alt)
+```
+
+Named arguments can be given in any order.
+
+To recover the underlying address of a contract instance there is a field
+`address : address`. For instance, to send tokens to the voting contract
+without calling it you can write
+
+```javascript
+  function pay(v : VotingType, amount : int) =
+    Chain.spend(v.address, amount)
+```
 
 ### Mutable state
 
