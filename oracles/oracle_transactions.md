@@ -17,7 +17,7 @@ The transaction contains:
 - Response format definition
 - Query fee (that should be paid for posting a query to the oracle).
 - A TTL (relative in number of blocks, or absolute block height)
-- Transaction fee (must be larger than a minimum proportional to the TTL)
+- Transaction fee. It must be greater than or equal to the mimimum transaction fee plus a component proportional to the relative TTL (quotient of the Euclidean division between the number of blocks and 1000, plus 1 if non-zero remainder).
 
 See the [serialization specification](/serializations.md#oracle-register-transaction).
 
@@ -44,7 +44,7 @@ An oracle operator can extend the TTL of an existing oracle.
 The transaction contains:
 - The address/oracle that should be extended (and a nonce)
 - An extension to the TTL (relative to current expiry in number of blocks)
-- Transaction fee (must be larger than a minimum proportional to the TTL)
+- Transaction fee. It must be greater than or equal to the mimimum transaction fee plus a component proportional to the relative TTL extension (quotient of the Euclidean division between the number of blocks and 1000, plus 1 if non-zero remainder).
 
 See the [serialization specification](/serializations.md#oracle-extend-transaction).
 
@@ -72,7 +72,7 @@ See the [serialization specification](/serializations.md#oracle-extend-transacti
     - The TTL expire and the sender gets a refund
   - Query TTL
   - Response TTL
-  - The transaction fee
+  - The transaction fee. It must be greater than or equal to the mimimum transaction fee plus a component proportional to the relative query TTL (quotient of the Euclidean division between the number of blocks and 1000, plus 1 if non-zero remainder).
 
 The transaction creates an oracle interaction object in the oracle
 state tree. The id of this object is constructed from the query
@@ -121,7 +121,7 @@ The transaction contains
 - The oracle (address) + nonce
 - The oracle interaction ID (derived from the query)
 - The response in binary format
-- The transaction fee
+- The transaction fee. It must be greater than or equal to the mimimum transaction fee plus a component proportional to the relative response TTL that is in the query (quotient of the Euclidean division between the number of blocks and 1000, plus 1 if non-zero remainder).
 
 See the [serialization specification](/serializations.md#oracle-response-transaction).
 
