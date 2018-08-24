@@ -27,7 +27,7 @@ languages and support local state and inheritance. More specifically:
 ```javascript
 // An abstract contract
 contract VotingType =
-  public stateful function vote : string => unit
+  public stateful function vote : string => ()
 ```
 
 - A contract instance is an entity living on the block chain (or in a state channel). Each
@@ -58,6 +58,40 @@ worked out).
   missing.
 
 *NOTE: Contract inheritance is not yet implemented.*
+
+#### Calling other contracts
+
+To call a function in another contract you need the address to an instance of
+the contract. The type of the address is a (possibly abstract) contract. For
+instance, given the `VotingType` contract above we can define a contract
+
+```javascript
+contract VoteTwice =
+  public function voteTwice(v : VotingType, alt : string) =
+    v.vote(alt)
+    v.vote(alt)
+```
+
+Contract calls take two optional named arguments `gas : int` and `value : int`
+that lets you set a gas limit and provide tokens to a contract call. If omitted
+the defaults are no gas limit and no tokens. Suppose there is a fee for voting:
+
+```javascript
+  function voteTwice(v : VotingType, fee : int, alt : string) =
+    v.vote(value = fee, alt)
+    v.vote(value = fee, alt)
+```
+
+Named arguments can be given in any order.
+
+To recover the underlying address of a contract instance there is a field
+`address : address`. For instance, to send tokens to the voting contract
+without calling it you can write
+
+```javascript
+  function pay(v : VotingType, amount : int) =
+    Chain.spend(v.address, amount)
+```
 
 ### Mutable state
 
@@ -238,10 +272,10 @@ The following builtin functions are defined on maps:
 
 #### Account interface
 
-To spend tokens from the contract account to the account "to" you call the raw_spend function.
+To spend tokens from the contract account to the account "to" you call the `Chain.spend` function.
 
 ```
-raw_spend(to : address, amount : integer)
+Chain.spend(to : address, amount : integer)
 ```
 
 #### Oracle interface
@@ -419,25 +453,6 @@ event(e : event) : ()
 
 *NOTE: Events are not yet implemented*
 
-#### Transactions
-Sophia can generate blockchain transactions.
-```
-transaction(tx : transaction) : ()
-```
-The transaction type defines the transactions that can be created:
-```
-record   spend_tx = {recipient : address, amount : uint}
-datatype transaction = SpendTx(spend_tx)
-                     | ...
-```
-
-*NOTE: Transaction types are not yet implemented. For now spend transactions
-can be issued using the builtin function*
-
-```
-  raw_spend : (address, int) => ()
-```
-
 #### Contract primitives
 
 The block-chain environment available to a contract is defined in three name spaces
@@ -453,7 +468,7 @@ The block-chain environment available to a contract is defined in three name spa
   calling the contract.
 - `Call.value` is the amount of coins transferred to the contract in the call.
 - `Call.gas_price` is the gas price of the current call.
-- `Call.gas_left` is the amount of gas left for the current call.
+- `Call.gas_left()` is the amount of gas left for the current call.
 - `Chain.get_balance(a : address)` returns the balance of account `a`.
 - `Chain.block_hash(h)` returns the hash of the block at height `h`.
 - `Chain.block_height` is the height of the current block (i.e. the block in which the current call will be included).
