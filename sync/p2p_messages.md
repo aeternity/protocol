@@ -22,8 +22,12 @@ The following P2P messages are implemented in
   - [MSG_HEADER](#msg_header)
   - [MSG_GET_N_SUCCESSORS](#msg_get_n_successors)
   - [MSG_HEADER_HASHES](#msg_header_hashes)
+  - [MSG_GET_BLOCK_TXS](#msg_get_block_txs)
   - [MSG_GET_GENERATION](#msg_get_generation)
   - [MSG_TXS](#msg_txs)
+  - [MSG_BLOCK_TXS](#msg_block_txs)
+  - [MSG_KEY_BLOCK](#msg_key_block)
+  - [MSG_MICRO_BLOCK](#msg_micro_block)
   - [MSG_GENERATION](#msg_generation)
   - [MSG_TX_POOL_SYNC_INIT](#msg_tx_pool_sync_init)
   - [MSG_TX_POOL_SYNC_UNFOLD](#msg_tx_pool_sync_unfold)
@@ -123,6 +127,13 @@ Message is RLP encoded, fields:
 Each header hash contains a 64-bit big endian height and the corresponding
 hash, see `aec_peer_messages` for details.
 
+## MSG_GET_BLOCK_TXS
+*(Tag = 7)*
+
+Message is RLP encoded, fields:
+  - `Hash :: byte_array - The block we fetch TXs from`
+  - `TxHashes :: [byte_array] - List of TxHashes to fetch TXs for`
+
 ## MSG_GET_GENERATION
 *(Tag = 8)*
 
@@ -138,6 +149,36 @@ Message is RLP encoded, fields:
 
 A signed transaction is serialized as a tagged and versioned
 [signed transaction](../serializations.md#signed-transaction).
+
+## MSG_BLOCK_TXS
+*(Tag = 13)
+
+Message is RLP encoded, fields:
+  - `Hash :: byte_array - The block we fetch TXs from`
+  - `Txs :: [byte_array] - List of serialized signed TXs`
+
+A signed transaction is serialized as a tagged and versioned
+[signed transaction](../serializations.md#signed-transaction).
+
+## MSG_KEY_BLOCK
+*(Tag = 10)
+
+Message is RLP encoded, fields:
+  - `KeyBlock :: byte_array - Serialized key block`
+
+The key block is [serialized](../serializations.md#key-block).
+
+## MSG_MICRO_BLOCK
+*(Tag = 11)
+
+Message is RLP encoded, fields:
+  - `MicroBlock :: byte_array - Serialized micro block`
+  - `Light :: bool - flag if micro block is light or normal`
+
+A normal micro block is [serialized](../serializations.md#micro-block).
+A light micro block is serialized using
+`aec_peer_connection:serialize_light_micro_block/1` - in effect replacing the
+list of serialized signed transactions with a list of transaction hashes.
 
 ## MSG_GENERATION
 *(Tag = 12)*
