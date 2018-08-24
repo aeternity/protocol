@@ -23,19 +23,22 @@ Interaction with the first class objects of the Æternity chain (e.g.
 oracles, names, and state channels) is done through calls to a
 built-in contract at address 0.
 
+The value in the call indicates the tokens that the primop can use from the contract account.
+Unused tokens stay on the contract account.
+
 The first argument in the call specifies which primop to call.
 The following arguments are encoded as Sophia data.
 
-| OpNo | Name                |             Arguments | Return value    |
-| ---- | ------------------- | --------------------- | --------------- |
-|    1 | Spend               | `Recipient : address` | `Nil`           |
-|  100 | Oracle register     | `Acct : address , Sign : signature, QFee : int, TTL : int, QType : typerep, RType : typerep` | `Oracle : address` |
-|  101 | Oracle query        | `Oracle : address, Query : ('a,'b) , QTTL : int, RTTL : int` | `query : oracle_query('a, 'b)` |
-|  102 | Oracle respond      | `Oracle : address, Query : address , Sign : signature, R : 'a` | `()` |
-|  103 | Oracle extend       | `Oracle : address, Sign : signature, Fee : integer, TTL : integer` | `()` |
-|  104 | Oracle get answer   | `Oracle : address, Query : address`   | `option('b)` |
-|  105 | Oracle get question | `Oracle : address, Query : address`   | `'a` |
-|  106 | Oracle query fee    | `Oracle : address`    | `int`           |
+| OpNo | Name                |          Value |             Arguments | Return value    |
+| ---- | ------------------- | -------------- | --------------------- | --------------- |
+|    1 | Spend               | `Amount : int` | `Recipient : address` | `Nil`           |
+|  100 | Oracle register     | (Unused.)      | `Acct : address, Sign : signature, QFee : int, TTL : int, QType : typerep, RType : typerep` | `Oracle : address` |
+|  101 | Oracle query        | `QFee : int`   | `Oracle : address, Query : 'a, QTTL : int, RTTL : int` | `query : address` |
+|  102 | Oracle respond      | (Unused.)      | `Oracle : address, Query : address, Sign : signature, R : 'b` | `()` |
+|  103 | Oracle extend       | (Unused.)      | `Oracle : address, Sign : signature, TTL : int` | `()` |
+|  104 | Oracle get answer   | (Unused.)      | `Oracle : address, Query : address` | `option('b)` |
+|  105 | Oracle get question | (Unused.)      | `Oracle : address, Query : address` | `'a` |
+|  106 | Oracle query fee    | (Unused.)      | `Oracle : address`    | `int`           |
 
 ## New instructions
 
