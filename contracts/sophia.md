@@ -434,7 +434,7 @@ The block-chain environment available to a contract is defined in three name spa
   calling the contract.
 - `Call.value` is the amount of coins transferred to the contract in the call.
 - `Call.gas_price` is the gas price of the current call.
-- `Call.gas_left` is the amount of gas left for the current call.
+- `Call.gas_left()` is the amount of gas left for the current call.
 - `Chain.get_balance(a : address)` returns the balance of account `a`.
 - `Chain.block_hash(h)` returns the hash of the block at height `h`.
 - `Chain.block_height` is the height of the current block (i.e. the block in which the current call will be included).
