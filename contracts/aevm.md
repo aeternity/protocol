@@ -33,7 +33,7 @@ The following arguments are encoded as Sophia data.
 | ---- | ------------------- | -------------- | --------------------- | --------------- |
 |    1 | Spend               | `Amount : int` | `Recipient : address` | `Nil`           |
 |  100 | Oracle register     | (Unused.)      | `Acct : address, Sign : signature, QFee : int, TTL : int, QType : typerep, RType : typerep` | `Oracle : address` |
-|  101 | Oracle query        | `QFee : int`   | `Oracle : address, Query : ('a,'b), QTTL : int, RTTL : int` | `query : oracle_query('a, 'b)` |
+|  101 | Oracle query        | `QFee : int`   | `Oracle : address, Query : ('a,'b), QTTL : int, RTTL : int` | `query : address` |
 |  102 | Oracle respond      | (Unused.)      | `Oracle : address, Query : address, Sign : signature, R : 'a` | `()` |
 |  103 | Oracle extend       | (Unused.)      | `Oracle : address, Sign : signature, TTL : integer` | `()` |
 |  104 | Oracle get answer   | (Unused.)      | `Oracle : address, Query : address` | `option('b)` |
