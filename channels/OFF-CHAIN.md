@@ -977,6 +977,7 @@ to avoid the free option problem.
 
 - submit code, state, inputs
 - code should output new distribution of balances?
+- submit a hash of what is expected to be the root of the new state
 - parties could choose to continue from there
 
 With on chain enforcement of contracts it becomes possible to unilaterally force

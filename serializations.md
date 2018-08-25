@@ -162,6 +162,7 @@ subsequent sections divided by object.
 | Channel create transaction | 50 |
 | Channel deposit transaction | 51 |
 | Channel withdraw transaction | 52 |
+| Channel force progress transaction | 521 |
 | Channel close mutual transaction | 53 |
 | Channel close solo transaction | 54 |
 | Channel slash transaction | 55 |
@@ -540,6 +541,25 @@ The payload is a serialized signed channel off-chain transaction or it is empty.
 The payload is a serialized signed channel off-chain transaction and can not be empty.
 
 
+#### Channel solo force progress transaction
+```
+[ <channel_id>      :: id()
+, <from>            :: id()
+, <payload>         :: binary()
+, <solo_payload>    :: binary()
+, <addresses>       :: [id()]
+, <poi>             :: poi()
+, <ttl>             :: int()
+, <fee>             :: int()
+, <nonce>           :: int()
+]
+```
+
+The payload is a serialized co-signed channel off-chain transaction or it is empty.
+The solo payload is a serialized single signed next channel off-chain transaction and it can not be empty.
+The proof inclusion has the same root hash as the state hash of the co-signed
+payload.
+
 #### Channel off-chain update
 
 Channel update rounds are described by various updates, that are defined in
@@ -611,6 +631,8 @@ tree.
 , <amount>  	    :: int()
 , <call_data>     :: binary()
 , <call_stack>    :: [int()]
+, <gas_price>     :: int()
+, <gas_limit>	    :: int()
 ]
 
 ```
@@ -631,16 +653,18 @@ The channel off-chain transaction is not included directly in the transaction tr
 
 #### Channel
 ```
-[ <initiator>        :: id()
-, <responder>        :: id()
-, <total_amount>     :: int()
-, <initiator_amount> :: int()
-, <channel_reserve>  :: int()
-, <delegates>        :: [id()]
-, <state_hash>       :: binary()
-, <round>            :: int()
-, <lock_period>      :: int()
-, <closes_at>        :: int()
+[ <initiator>           :: id()
+, <responder>           :: id()
+, <channel_amount>      :: int()
+, <initiator_amount>    :: int()
+, <responder_amount>    :: int()
+, <channel_reserve>     :: int()
+, <delegates>           :: [id()]
+, <state_hash>          :: binary()
+, <round>               :: int()
+, <lock_period>         :: int()
+, <closes_at>           :: int()
+, <force_blocked_till>  :: int()
 ]
 ```
 
