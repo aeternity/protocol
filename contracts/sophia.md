@@ -135,6 +135,7 @@ Sophia has the following types:
 | transactions | An append only list of blockchain transactions |
 | events       | An append only list of blockchain events (or log entries) |
 | signature    | A signature. |
+| Chain.ttl    | Time-to-live (fixed height or relative to current block) | ```FixedTTL(1050)``` ```RelativeTTL(50)```
 | oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, sign, qfee, ttl)```
 | oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, qfee, qttl, rttl)```
 
@@ -303,14 +304,15 @@ call `Oracle.register`:
 Oracle.register(acct : address
                 sign : signature,   // Signed account address
                 qfee : int,
-                ttl  : int) : oracle('a, 'b)
+                ttl  : Chain.ttl) : oracle('a, 'b)
 ```
 
 * The `acct` is the address of the oracle to register (can be the same as the contract).
 * The `sign` is a signature of the address to register proving you have the private key
   of the oracle, or the integer 0 when address is the same as the contract.
 * The `qfee` is the minimum query fee to be paid by a user when asking a question of the oracle.
-* The `ttl` is the Time To Live in relative block height for the oracle.
+* The `ttl` is the Time To Live for the oracle, either relative to the current
+  height (`RelativeTTL(delta)`) or a fixed height (`FixedTTL(height)`).
 * The type `'a` is the type of the question to ask.
 * The type `'b` is the type of the oracle answers.
 
@@ -320,8 +322,12 @@ To extend the TTL of an oracle, call `Oracle.extend`:
 ```
 Oracle.extend(o    : oracle('a, 'b),
               sign : signature,   // Signed oracle address
-              ttl  : int) : ()
+              ttl  : Chain.ttl) : ()
 ```
+
+The `ttl` is either a fixed height or relative to the current oracle expiry
+height. For instance, passing `RelativeTTL(100)` adds 100 blocks to the expiry
+time of the oracle.
 
 ##### Oracle get_question
 
@@ -347,11 +353,15 @@ To ask an oracle a question, use the `Oracle.query` function:
 Oracle.query(o    : oracle('a, 'b),
              q    : 'a,
              qfee : int,
-             qttl : int,
-             rttl : int) : oracle_query('a, 'b)
+             qttl : Chain.ttl,
+             rttl : Chain.ttl) : oracle_query('a, 'b)
 ```
 
 * The `qfee` is the query fee debited to the contract account (`Contract.address`).
+* The `qttl` controls the last height at which the oracle can submit a response
+  and can be either fixed or relative.
+* The `rttl` must be relative and controls how long an answer is kept on the chain.
+* The call fails if the oracle could expire before an answer.
 
 ##### Oracle query_fee
 
@@ -376,7 +386,7 @@ contract Oracles =
   function registerOracle(acct : address,
                           sign : signature,   // Signed account address
                           qfee : int,
-                          ttl  : int) : oracle(string, int) =
+                          ttl  : Chain.ttl) : oracle(string, int) =
      Oracle.register(acct, sign, qfee, ttl)
 
   function queryFee(o : oracle(string, int)) : int =
@@ -386,13 +396,13 @@ contract Oracles =
   function unsafeCreateQuery(o    : oracle(string, int),
                        q    : string,
                        qfee  : int,
-                       qttl : int,
+                       qttl : Chain.ttl,
                        rttl : int) : oracle_query(string, int) =
-    Oracle.query(o, q, qfee, qttl, rttl)
+    Oracle.query(o, q, qfee, qttl, RelativeTTL(rttl))
 
   function extendOracle(o    : oracle(string, int),
                         sign : signature,   // Signed oracle address
-                        ttl  : int) : () =
+                        ttl  : Chain.ttl) : () =
     Oracle.extend(o, sign, ttl)
 
   function respond(o    : oracle(string, int),
