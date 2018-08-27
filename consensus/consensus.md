@@ -148,35 +148,9 @@ GENESIS_VERSION: 21
 - txs_hash MUST be correct root hash of the merkle tree of all transactions.
 - ***TODO***: fill in missing rules
 
+Header [serialization format](../serializations.md#key-block-header)
 
-```
- Fieldname       Size (bytes)
- -------------- ------
-| height       | 8    |
- -------------- ------
-| prev_hash    | 32   |
- -------------- ------
-| state_hash   | 32   |
- -------------- ------
-| miner        | 32   |
- -------------- ------
-| beneficiary  | 32   |
- -------------- ------
-| target       | 8    |
- -------------- ------
-| pow_evidence | 168  |
- -------------- ------
-| nonce        | 8    |
- -------------- ------
-| time         | 8    |
- -------------- ------
-| version      | 8    |
- -------------- ------
-```
-
-#### Key Block header
-
-There is no need to consider Key Blocks' headers as Key Blocks do not hold heavy list of transactions
+Block [serialization format](../serializations.md#key-block)
 
 #### Micro Blocks
 
@@ -195,48 +169,10 @@ GENESIS_VERSION: 21
   the previous key block
 - ***TODO***: fill in missing rules
 
-```
- Fieldname       Size (bytes)
- -------------- ------
-| height       |  8   |
- -------------- ------
-| prev_hash    | 32   |
- -------------- ------
-| state_hash   | 32   |
- -------------- ------
-| txs_hash     | 32   |
- -------------- ------
-| time         |  8   |
- -------------- ------
-| version      |  8   |
- -------------- ------
-| txs          | var  |
- -------------- ------
-| signature    | 64   |
- -------------- ------
-```
+Header [serialization format](../serializations.md#micro-block-header)
 
-#### Micro Blocks Headers
+Block [serialization format](../serializations.md#micro-block)
 
-```
- Fieldname       Size (bytes)
- -------------- ------
-| height       |  8   |
- -------------- ------
-| prev_hash    | 32   |
- -------------- ------
-| state_hash   | 32   |
- -------------- ------
-| txs_hash     | 32   |
- -------------- ------
-| time         |  8   |
- -------------- ------
-| version      |  8   |
- -------------- ------
-| signature    | 64   |
- -------------- ------
-```
-(***TODO: Why do different fields have different positions?***)
 
 ### Transactions
 

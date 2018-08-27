@@ -17,11 +17,10 @@ user API.
 
 There are two types of blocks:
 
-* key block - does not contain a list of transactions, therefore, it is
-not divided into a header and a list of transactions;
-* micro block - contains a header, a list of transactions and a signature.
+* micro block - contains a header and a list of transactions.
+* key block - contains only a header.
 
-### Key block
+### Key block header
 
 All field sizes are statically known and can be constructed directly as
 a byte array.
@@ -52,14 +51,10 @@ constructed directly as a byte array.
 | state_hash | 32   |
 | txs_hash   | 32   |
 | time       | 8    |
+| signature  | 64   |
 
-### Micro block
-
-The only difference between a micro block and its header is a list of
-transactions and a signature. The transactions are captured in the
-header by the transaction root hash (`txs_hash`). The block does not
-currently have a separate binary serialization form since the block
-hash is computed from the block header.
+Note that the position for the signature (64 bytes) must be filled
+with only zeroes when constructing or validating the signature.
 
 ## Dynamic size object serialization
 
@@ -175,6 +170,9 @@ subsequent sections divided by object.
 | Channel | 58 |
 | Channel snapshot transaction | 59 |
 | POI | 60 |
+| Key block | 100 |
+| Micro block | 101 |
+| Light micro block | 102 |
 
 #### Accounts
 ```
@@ -667,3 +665,26 @@ NOTE: As the POI contains the Merkle Patricia Tree nodes (e.g. not only their ha
 * The object itself does not contain its own id as it can be derived from the location in the tree.
 * The key used for storing each object in each state subtree is not necessarily derived from the object itself.
 * The value(s) whose inclusion the POI proves is included in the POI itself.
+
+### Blocks
+
+### Micro block
+
+```
+[ <header>       :: binary()
+, <transactions> :: [binary()]
+]
+```
+NOTE: The transactions are signed transactions.
+
+### Key block
+
+Key blocks contain no more information that their [headers](#key-block-header). However, in
+order to distinguish between key blocks and micro blocks in transport
+format, the header is wrapped and tagged in the same way as micro blocks.
+
+```
+[ <header>       :: binary()
+]
+```
+
