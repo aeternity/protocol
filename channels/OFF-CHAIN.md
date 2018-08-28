@@ -850,21 +850,24 @@ transaction onto the chain, and then terminate.
  ---------------------- ----
 ```
 
-## To be reviewed
+## Channel closing
 
 A channel can be closed under three circumstances:
 
 1. Both parties agree to the close and sign the closing transaction together,
-   which then gets broadcast to the blockchain.
-2. One party wants to close the channel or the channel gets closed due to an
-   error. In this case either side can publish the latest state signed by both
-   parties and claim their balance after the negotiated timeout.
+   which then gets broadcasted and included in the blockchain.
+2. One party wants to close the channel: the other party might had been missing
+   for some time or had been trying to cheat. In this case either side can publish 
+   the latest state signed by both parties and claim their balance after the
+   negotiated timeout.
 3. A malicious party tries to publish an outdated state, which it prefers over a
    later state. In this case the honest party can publish a state signed by both
-   with a higher nonce and thereby prove that the other one is trying to cheat.
+   with a higher round and thereby prove that the other one is trying to cheat.
+   A transaction with a higher round overwrites the one with a lower one.
 
 In the case that both parties decide to close the channel, funds are accessible
-immediately, otherwise they have to wait at least `lock_period` blocks.
+immediately after the transaction of their agreement is included in a block,
+otherwise they have to wait at least `lock_period` blocks for disputes.
 
 ```
 A                       B
@@ -883,8 +886,8 @@ A                       B
 ```
 
 In case of both parties want to close the channel in agreement and
-there is enough money left in the channel to pay for the fee, then the
-the advised distribution of returning the funds left in the channel is
+there are enough tokens left in the channel to pay for the fee, then the
+the advised distribution of returning the tokens left in the channel is
 as follows:
 
 ```
@@ -898,15 +901,19 @@ else if responder_amount >= ceil(fee/2) && initiator_amount >= floor(fee/2)
   initiator_final := initiator_amount - floor(fee/2)
 else if initiator_amount > responder_amount
   initiator_final := initiator_amount - fee + responder_amount
-  responder_final := 0.0
+  responder_final := 0
 else
   responder_final := responder_amount - fee + initiator_amount
-  initiator_final := 0.0
+  initiator_final := 0
   ```
 
-This means that one of the parties will propose these final amounts in the
+This is an example distribution of the fee. If this is to be accepted as a
+norm - it means that one of the parties will propose these final amounts in the
 closing transaction and the other, also following this advise, will
 happily sign it.
+What ends up on-chain is the fee and the closing amounts of
+the parties. The process by which they got to agreement is not part of the
+protocol itself.
 
 
 ### `shutdown`
