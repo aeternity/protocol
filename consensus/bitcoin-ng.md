@@ -52,6 +52,10 @@ There is major challenge in providing liveness and integrity of the chain in the
      └────────┘                        └────────┘
       Leader 2 Award: Governance(Coinbase) + 0.6*(FeeN1+FeeN2) + 0.4*FeeN3
 
+In Aeternity granting both fixed award and fees from the generation is delayed by 180 key blocks (generations). As mentioned above, Key Blocks should be broadcasted approximately every 3 minutes, so the approximated delay is:
+```
+180 * 3 minutes = 540 minutes = 9 hours
+```
 
 Forks
 ==
@@ -85,3 +89,4 @@ Bitcoin-NG inherits Bitcoin's ability to fork in case of multiple block producer
 References:
 
 1. Bitcoin-NG: A Scalable Blockchain Protocol, Ittay Eyal, Adem Efe Gencer, Emin Gün Sirer, and Robbert van Renesse,Cornell University, 2016
+
