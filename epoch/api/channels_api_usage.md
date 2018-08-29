@@ -204,7 +204,7 @@ Using its hash, participants can track its progress on the chain: entering the m
 At this point both parties had received the co-signed the `channel_create_tx` transaction. The transaction is posted by the state
 channel's software to the node and goes to the mempool. Having calculated its hash, one can validate it using the external HTTP API:
 ```
-$ curl 'http://localhost:3013/v2/tx/th$hNyHzj4dSzyBqReAMR36GGz1mhuXxQFuES3AnPkXkuY2w6dZb?tx_encoding=json'
+$ curl 'http://localhost:3013/v2/transactions/th$hNyHzj4dSzyBqReAMR36GGz1mhuXxQFuES3AnPkXkuY2w6dZb'
 ```
 if the `block_hash` is `none` - then the transaction is still in the mempool.
 
@@ -759,7 +759,7 @@ Then the WebSocket connection is closed.
 After calculating the hash of the co-signed `channel_close_mutual_tx` parties can track
 its progress as they would do with any on-chain transaction
 ```
-curl 'http://127.0.0.1:3013/v2/tx/th$2qkN973cNJiejXVJoXkXbttf1iKetWJCSY1W5VUBh3pnRS1kCC?tx_encoding=json'
+curl 'http://127.0.0.1:3013/v2/transactions/th$2qkN973cNJiejXVJoXkXbttf1iKetWJCSY1W5VUBh3pnRS1kCC'
 ```
 if the `block_hash` is `none` - then the transaction is still in the mempool.
 
