@@ -9,12 +9,14 @@ The following assumes that the node exposes at address 127.0.0.1 the following p
 In order to send tokens, you need to have tokens i.e. a positive (non-zero) balance.
 You obtain tokens e.g. after having mined successfully a block or received tokens through a transaction.
 
-You need to know the public key to send tokens to (are returned by the `/debug/accounts/node` HTTP API).
-
-In order to instruct your node to sign and broadcast a transaction sending tokens to the public key of the other account (recipient - replace the public key in the command):
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{"recipient_pubkey":"ak$PzQvEjt1ytvFMwN9STYvkXYnm72yEqkPcvLL9mzbzZ6fdczSb6L", "amount":2, "fee":1, "ttl": 1234, "payload": "any public message"}' http://127.0.0.1:3113/v2/spend-tx
+In order to transfer tokens from an account (`sender_id`) to another account (`recipient_id`):
+* prepare spend transaction as per [specification](../../serializations.md). In order to ease the initial integration, the epoch node provides [/debug/transactions/spend endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostSpend)):
+``` bash
+curl -X POST -H "Content-Type: application/json" -d '{"sender_id":"...", "recipient_id":"...", "amount":2, "fee":1, "ttl":1234, "payload":"any public message"}' http://127.0.0.1:3113/v2/debug/transactions/spend
+{"tx":"..."}
 ```
+* sign the prepared transaction (e.g. by using the SDK)
+* post the signed transaction to the [/transactions endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/PostTransaction)
 
 Once the transaction is included in a block, the recipient shall receive the specified amount and the miner that specified fee. The `ttl` has to
 reflect the current height of the chain, it specify at what height the transaction expire and can't be included on the chain.
