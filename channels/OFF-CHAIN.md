@@ -195,7 +195,7 @@ it needs to assess whether or not it should accept the channel.
 - `initiator_amount`: amount the initiator is willing to commit
 - `responder_amount`: amount the initiator wants the responder to commit
 - `channel_reserve`: the minimum amount both parties need to maintain, amount of
-  tokens a party is to lose in case of acting maliciously
+  coins a party is to lose in case of acting maliciously
 - `initiator_pubkey`: the account that the initiator wants to use to open the
   channel
 
@@ -568,7 +568,7 @@ In order to deposit more funds into the channel, one party can initiate
 a `deposit_created` request. The payload is a singly signed
 `channel_deposit_tx` object, which includes the state hash and round of the
 next off-chain state, after applying a deposit operation with the expected
-amount. The initiating side can only deposit tokens from its own on-chain
+amount. The initiating side can only deposit coins from its own on-chain
 account (same public key) to its own off-chain account in the channel state.
 
 Note that it is possible to deposit a zero amount, essentially making the
@@ -659,11 +659,11 @@ be the last mutually signed state. The receiver does not reply.
 
 Message code: 15
 
-In order to withdraw tokens from the channel, one party can initiate
+In order to withdraw coins from the channel, one party can initiate
 a `withdraw_created` request. The payload is a singly signed
 `channel_withdraw_tx` object, which includes the state hash and round of the
 next off-chain state, after applying a withdrawal operation with the expected
-amount. The initiating side can only withdraw tokens from its own off-chain
+amount. The initiating side can only withdraw coins from its own off-chain
 account in the channel state (same public key) to its own on-chain account.
 Note that it is possible to withdraw a zero amount, essentially making the
 operation an on-chain snapshot.
@@ -850,21 +850,24 @@ transaction onto the chain, and then terminate.
  ---------------------- ----
 ```
 
-## To be reviewed
+## Channel closing
 
 A channel can be closed under three circumstances:
 
 1. Both parties agree to the close and sign the closing transaction together,
-   which then gets broadcast to the blockchain.
-2. One party wants to close the channel or the channel gets closed due to an
-   error. In this case either side can publish the latest state signed by both
-   parties and claim their balance after the negotiated timeout.
+   which then gets broadcasted and included in the blockchain.
+2. One party wants to close the channel: the other party might had been missing
+   for some time or had been trying to cheat. In this case either side can publish 
+   the latest state signed by both parties and claim their balance after the
+   negotiated timeout.
 3. A malicious party tries to publish an outdated state, which it prefers over a
    later state. In this case the honest party can publish a state signed by both
-   with a higher nonce and thereby prove that the other one is trying to cheat.
+   with a higher round and thereby prove that the other one is trying to cheat.
+   A transaction with a higher round overwrites the one with a lower one.
 
 In the case that both parties decide to close the channel, funds are accessible
-immediately, otherwise they have to wait at least `lock_period` blocks.
+immediately after the transaction of their agreement is included in a block,
+otherwise they have to wait at least `lock_period` blocks for disputes.
 
 ```
 A                       B
@@ -883,8 +886,8 @@ A                       B
 ```
 
 In case of both parties want to close the channel in agreement and
-there is enough money left in the channel to pay for the fee, then the
-the advised distribution of returning the funds left in the channel is
+there are enough coins left in the channel to pay for the fee, then the
+the advised distribution of returning the coins left in the channel is
 as follows:
 
 ```
@@ -898,15 +901,19 @@ else if responder_amount >= ceil(fee/2) && initiator_amount >= floor(fee/2)
   initiator_final := initiator_amount - floor(fee/2)
 else if initiator_amount > responder_amount
   initiator_final := initiator_amount - fee + responder_amount
-  responder_final := 0.0
+  responder_final := 0
 else
   responder_final := responder_amount - fee + initiator_amount
-  initiator_final := 0.0
+  initiator_final := 0
   ```
 
-This means that one of the parties will propose these final amounts in the
+This is an example distribution of the fee. If this is to be accepted as a
+norm - it means that one of the parties will propose these final amounts in the
 closing transaction and the other, also following this advise, will
 happily sign it.
+What ends up on-chain is the fee and the closing amounts of
+the parties. The process by which they got to agreement is not part of the
+protocol itself.
 
 
 ### `shutdown`
