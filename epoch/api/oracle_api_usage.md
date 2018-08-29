@@ -29,16 +29,19 @@ transactions will be rejected with _"Insufficient balance"_).
 
 ### Register
 
-Once the account has a positive balance we can post an _"Oracle register transaction"_:
+Once the account has a positive balance we can register an oracle:
+* prepare oracle register transaction as per [specification](../../serializations.md).
+In order to ease the initial integration, the epoch node provides
+[/debug/oracles/register endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostOracleRegister):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/oracle-register-tx -d '{"type":"OracleRegisterTxObject", "vsn":1, "account":"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_format":"the query spec", "response_format":"the response spec", "query_fee":4, "oracle_ttl":{"type":"delta", "value":50}, "fee":5, "ttl":1234}'
-
-{"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","tx_hash":"th$2sDoWh1qe7PJ3nRJeqY4kaX7rjgWAaUVpET3EEGJvuPk3oaKNR"}
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/oracle -d '{"account_id:"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_format":"the query spec", "response_format":"the response spec", "query_fee":4, "oracle_ttl":{"type":"delta", "value":50}, "fee":5, "ttl":1234}'
+{"tx":"..."}
 ```
-
 **NOTE:** the *transaction fee* is depending on the _TTL_. An oracle register
 transaction costs 4, and then 1 per 1000 blocks of life time. (I.e. a TTL of
 50 blocks --> 5, and a TTL of 4500 blocks --> 9)
+* sign the prepared transaction (e.g. by using the SDK)
+* post the signed transaction using the [/transactions endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/PostTransaction)
 
 This means that we have created the transaction to create the oracle, once the
 next block is mined this transaction will be included. We can verify that the
@@ -51,13 +54,16 @@ http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz
 
 ### Extend
 
-Now, when the oracle exists, we can extend the TTL by posting an _"Oracle extend
-transaction"_:
+Now, when the oracle exists, we can extend the TTL:
+* prepare oracle extend transaction as per [specification](../../serializations.md).
+In order to ease the initial integration, the epoch node provides
+[/debug/oracles/extend endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostOracleExtend):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/oracle-extend-tx -d '{"type":"OracleExtendTxObject", "vsn":1, "oracle":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "fee":5, "oracle_ttl":{"type":"delta", "value":100}}'
-
-{"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","tx_hash":"th$ACd8e5kcPrqQKg3pyEGTq7tBtdgLZ4MHd7MuPisUxHGjFgWRj"}
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/extend -d '{"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "fee":5, "oracle_ttl":{"type":"delta", "value":100}}'
+{"tx":"..."}
 ```
+* sign the prepared transaction (e.g. by using the SDK)
+* post the signed transaction using the [/transactions endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/PostTransaction)
 
 Again, we can check that the TTL was extended:
 ```
@@ -68,53 +74,58 @@ curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBu
 
 ### Query
 
-We can post a query to the existing oracle using an _"Oracle query transaction"_:
+We can post a query to the existing oracle:
+* prepare oracle query transaction as per [specification](../../serializations.md).
+In order to ease the initial integration, the epoch node provides
+[/debug/oracles/query endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostOracleQuery):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/oracle-query-tx -d '{"type":"OracleQueryTxObject", "vsn":1, "oracle_pubkey":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":7, "ttl":15, "query":"How are you?"}'
-
-{"query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","tx_hash":"th$2rJbVzsNSB6NGYccpCDrTn1EyLkQCCyYwYhUphCkTbWLNmg795"}
-```
-
-Similarly to the oracle registration transaction, the _transaction fee_ depends
+**NOTE** Similarly to the oracle registration transaction, the _transaction fee_ depends
 on the _TTL_ **and** the oracle query fee. The base query transaction fee is 2,
 we set the oracle query fee to 4 when registering, and the TTL accounts for 1
 per 1000 blocks (just a preliminary value to test the concept). I.e. the cost
 for our test transaction is 7.
 
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/query -d '{"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":7, "ttl":15, "query":"How are you?"}'
+{"tx":"..."}
+```
+* sign the prepared transaction (e.g. by using the SDK)
+* post the signed transaction using the [/transactions endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/PostTransaction)
+
 We can check the active oracle queries:
 ```
 curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov/queries
 
-{"oracle_queries":[{"expires":13,"fee":4,"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query":"ov$9wnkKJ3Qf2trdpq9EQbWQC","query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","response":"or$3QJmnh","response_ttl":{"type":"delta","value":10},"sender":"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","sender_nonce":3}]}
+{"oracle_queries":[{"expires":13,"fee":4,"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query":"ov$9wnkKJ3Qf2trdpq9EQbWQC","query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","response":"or$3QJmnh","response_ttl":{"type":"delta","value":10},"sender_id":"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","sender_nonce":3}]}
 ```
 
-**NOTE** the query value is Base58Check-encoded.
+**NOTE** the query and response values are Base58Check-encoded.
 
-### Response
+### Respond
 
 We should note that in the response for the query request above we got the
-*query_id* which we use to respond to the query using an _"Oracle response
-transaction"_:
-
+*query_id* which we use to respond to the query:
+* prepare oracle respond transaction as per [specification](../../serializations.md).
+In order to ease the initial integration, the epoch node provides
+[/debug/oracles/respondendpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostOracleRespond):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/oracle-response-tx -d '{"type":"OracleResponseTxObject", "vsn":1, "query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m", "fee":3, "ttl":1234, "response":"I am fine, thanks!"}'
-
-{"query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","tx_hash":"th$HjWH76qbDNCb3eGPmwtRSM5wJcyjcSSy2LMFwe4zoCL2VLcDc"}
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/respond -d '{"query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m", "fee":3, "ttl":1234, "response":"I am fine, thanks!"}'
+{"tx":"..."}
 ```
-
-The _transaction fee_ depends on the _TTL_ (as set in the query). The base
+**NOTE** The _transaction fee_ depends on the _TTL_ (as set in the query). The base
 response transaction fee is 2 and the TTL accounts for 1 per 1000 blocks
 I.e. the cost for our test transaction is 3.
+* sign the prepared transaction (e.g. by using the SDK)
+* post the signed transaction using the [/transactions endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/PostTransaction)
 
 If we then wait for another block to be mined (and the response transaction to
 be added to the chain), we see that there is a response for the query:
 ```
 curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov/queries
 
-{"oracle_queries":[{"expires":14,"fee":4,"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query":"ov$9wnkKJ3Qf2trdpq9EQbWQC","query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","response":"or$Lr9RvdW8vZR8wq14ic7yUyC2vzi4nT","response_ttl":{"type":"delta","value":10},"sender":"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","sender_nonce":3}]}
+{"oracle_queries":[{"expires":14,"fee":4,"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query":"ov$9wnkKJ3Qf2trdpq9EQbWQC","query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","response":"or$Lr9RvdW8vZR8wq14ic7yUyC2vzi4nT","response_ttl":{"type":"delta","value":10},"sender_id":"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","sender_nonce":3}]}
 ```
 
-**NOTE** the response value is Base58Check-encoded.
+**NOTE** the query and response values are Base58Check-encoded.
 
 This conclude the walk through of the oracle life cycle example, which also
 exercise the HTTP API for Oracles fully.
