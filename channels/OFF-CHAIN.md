@@ -195,7 +195,7 @@ it needs to assess whether or not it should accept the channel.
 - `initiator_amount`: amount the initiator is willing to commit
 - `responder_amount`: amount the initiator wants the responder to commit
 - `channel_reserve`: the minimum amount both parties need to maintain, amount of
-  tokens a party is to lose in case of acting maliciously
+  coins a party is to lose in case of acting maliciously
 - `initiator_pubkey`: the account that the initiator wants to use to open the
   channel
 
@@ -568,7 +568,7 @@ In order to deposit more funds into the channel, one party can initiate
 a `deposit_created` request. The payload is a singly signed
 `channel_deposit_tx` object, which includes the state hash and round of the
 next off-chain state, after applying a deposit operation with the expected
-amount. The initiating side can only deposit tokens from its own on-chain
+amount. The initiating side can only deposit coins from its own on-chain
 account (same public key) to its own off-chain account in the channel state.
 
 Note that it is possible to deposit a zero amount, essentially making the
@@ -659,11 +659,11 @@ be the last mutually signed state. The receiver does not reply.
 
 Message code: 15
 
-In order to withdraw tokens from the channel, one party can initiate
+In order to withdraw coins from the channel, one party can initiate
 a `withdraw_created` request. The payload is a singly signed
 `channel_withdraw_tx` object, which includes the state hash and round of the
 next off-chain state, after applying a withdrawal operation with the expected
-amount. The initiating side can only withdraw tokens from its own off-chain
+amount. The initiating side can only withdraw coins from its own off-chain
 account in the channel state (same public key) to its own on-chain account.
 Note that it is possible to withdraw a zero amount, essentially making the
 operation an on-chain snapshot.
@@ -886,8 +886,8 @@ A                       B
 ```
 
 In case of both parties want to close the channel in agreement and
-there are enough tokens left in the channel to pay for the fee, then the
-the advised distribution of returning the tokens left in the channel is
+there are enough coins left in the channel to pay for the fee, then the
+the advised distribution of returning the coins left in the channel is
 as follows:
 
 ```
