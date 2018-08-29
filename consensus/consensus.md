@@ -176,7 +176,6 @@ Block [serialization format](../serializations.md#micro-block)
 
 ### Transactions
 
-
 #### Signed transaction
 
 ```
@@ -190,6 +189,11 @@ Block [serialization format](../serializations.md#micro-block)
 
 MUST have valid signature from private key belonging to `sender`.
 
+#### Common fields for transactions
+
+Each (on-chain) transaction has the following fields:
+* Fee. It MUST be at least `1` (*10^-18) aeons.
+* Time to live (TTL).
 
 #### Spend
 
@@ -207,8 +211,6 @@ MUST have valid signature from private key belonging to `sender`.
 | nonce        | 8   |
  -------------- -----
 ```
-
-Fee MUST be at least `1` aeon.
 
 ### Proof of Work
 
