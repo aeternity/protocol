@@ -556,8 +556,8 @@ The payload is a serialized signed channel off-chain transaction and can not be 
 ```
 
 The payload is a serialized co-signed channel off-chain transaction or it is empty.
-The solo payload is a serialized single signed next channel off-chain transaction and it can not be empty.
-The proof inclusion has the same root hash as the state hash of the co-signed
+The solo payload is a serialized single-signed next channel off-chain transaction and it can not be empty.
+The proof of inclusion has the same root hash as the state hash of the co-signed
 payload.
 
 #### Channel off-chain update
@@ -664,7 +664,7 @@ The channel off-chain transaction is not included directly in the transaction tr
 , <round>               :: int()
 , <lock_period>         :: int()
 , <closes_at>           :: int()
-, <force_blocked_till>  :: int()
+, <force_blocked_until> :: int()
 ]
 ```
 
