@@ -9,7 +9,7 @@ The following assumes that the node exposes at address 127.0.0.1 the following p
 In order to send tokens, you need to have tokens i.e. a positive (non-zero) balance.
 You obtain tokens e.g. after having mined successfully a block or received tokens through a transaction.
 
-You need to know the public key to send tokens to (are returned by the `/account/pub-key` HTTP API).
+You need to know the public key to send tokens to (are returned by the `/debug/accounts/node` HTTP API).
 
 In order to instruct your node to sign and broadcast a transaction sending tokens to the public key of the other account (recipient - replace the public key in the command):
 ```bash

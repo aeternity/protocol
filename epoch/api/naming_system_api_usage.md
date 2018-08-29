@@ -14,7 +14,7 @@ The following assumes that the node exposes at address 127.0.0.1 the following p
 
 Check the public key of the node first (used as account key in later API calls):
 ```
-curl http://localhost:3113/v2/account/pub-key
+curl http://127.0.0.1:3113/v2/debug/accounts/node
 {"pub_key":"ak$scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSf"}
 ```
 

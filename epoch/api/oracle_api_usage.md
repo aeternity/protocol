@@ -19,9 +19,9 @@ The following assumes that the node exposes at address `localhost/127.0.0.1` the
 In order to work through the example we also need the (Base58Check-encoded)
 public key of the node. This is easily retrieved from the running node:
 ```
-curl http://127.0.0.1:3113/v2/account/pub-key
+curl http://127.0.0.1:3113/v2/debug/accounts/node
 
-{"pub_key":"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov"}
+{"pub_key":"ak$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}
 ```
 
 We need to wait for the first block to be mined by the node (or else our
