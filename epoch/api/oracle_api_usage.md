@@ -47,7 +47,7 @@ This means that we have created the transaction to create the oracle, once the
 next block is mined this transaction will be included. We can verify that the
 oracle is created:
 ```
-http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov
+curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov
 
 {"expires":51,"id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query_fee":4,"query_format":"the query spec","response_format":"the response spec"}
 ```
@@ -79,15 +79,14 @@ We can post a query to the existing oracle:
 In order to ease the initial integration, the epoch node provides
 [/debug/oracles/query endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostOracleQuery):
 ```
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/query -d '{"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":7, "ttl":15, "query":"How are you?"}'
+{"tx":"..."}
+```
 **NOTE** Similarly to the oracle registration transaction, the _transaction fee_ depends
 on the _TTL_ **and** the oracle query fee. The base query transaction fee is 2,
 we set the oracle query fee to 4 when registering, and the TTL accounts for 1
 per 1000 blocks (just a preliminary value to test the concept). I.e. the cost
 for our test transaction is 7.
-
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/query -d '{"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":7, "ttl":15, "query":"How are you?"}'
-{"tx":"..."}
-```
 * sign the prepared transaction (e.g. by using the SDK)
 * post the signed transaction using the [/transactions endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/PostTransaction)
 
