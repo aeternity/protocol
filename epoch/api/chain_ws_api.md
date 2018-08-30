@@ -390,13 +390,10 @@ A block can be either a key block or a micro block. [The key block](#key-block-s
   | ---- | ---- | ----------- | -------- |
   | transactions | [[transaction](#transaction-structure)] | List of transactions included in the block | No |
 
-**Note:** Genesis block lacks transactions and thus - `txs_hash`. Since it
-is the first block - it doesn't have `prev_hash`, too.
-
 ### Transaction structure
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | MessagePack encoded transaction object | Yes |
+  | tx | string | Encoded transaction object | Yes |
 
 ### Key block structure
 
