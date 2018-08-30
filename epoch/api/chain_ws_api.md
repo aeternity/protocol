@@ -39,16 +39,17 @@ Request:
   {"target":"chain",
    "action":"get",
    "payload":{"type":"block",
-              "hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31"}
+              "hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31"}
   }
 
 Response:
   {"origin":"chain",
    "action":"requested_data",
    "tag":"untagged",
-   "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
+   "payload":{"hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
               "type":"block",
               "block":{"height":1,
+                       "beneficiary":"ak$2evAxTKozswMyw9kXkvjJt3MbomCR1nLrf91BduXKdJLrvaaZt",
                        "miner":"ak$2YifF1Ba6pt29epYdCpYJmBFCNYWDM7brLQsNgpXUVUuoq1WA3",
                        "nonce":13295145107284252443,
                        "pow":[587,4075,4861,5296,5604,7432,7436,7859,8011,
@@ -57,7 +58,7 @@ Response:
                               16253,18555,18921,21286,22160,22317,23419,
                               23493,25216,25251,27563,28052,28167,29140,
                               29784,31846,31870,32023],
-                       "prev_hash":"bh$2FM7g2yCRf4jT4LCf9C9GMPpcGrXDh2hGkwNi1GDS3z8DkDC1q",
+                       "prev_hash":"mh$2FM7g2yCRf4jT4LCf9C9GMPpcGrXDh2hGkwNi1GDS3z8DkDC1q",
                        "state_hash":"bs$27Eij1X7r1TWpchxQ8QCB53AWcBf2KmrXoUh5G5vy9D2H8XkW8",
                        "target":553713663,
                        "time":1516707646911,
@@ -71,28 +72,18 @@ Request:
   {"target":"chain",
    "action":"get",
    "payload":{"type":"block",
-              "hash":"bh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi"}
+              "hash":"mh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi"}
   }
 
 Response:
   {"origin":"chain",
    "action":"requested_data",
    "tag":"untagged",
-   "payload":{"hash":"bh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi",
+   "payload":{"hash":"mh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi",
               "type":"block",
               "block":{"height":1,
-                       "prev_hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
-                       "signature":[239,191,189,239,191,189,73,107,239,191,189,20,
-                                    83,239,191,189,93,239,191,189,56,101,239,191,
-                                    189,239,191,189,239,191,189,239,191,189,123,
-                                    86,239,191,189,239,191,189,239,191,189,239,
-                                    191,189,65,239,191,189,97,20,239,191,189,239,
-                                    191,189,239,191,189,239,191,189,58,120,83,239,
-                                    191,189,215,171,50,211,138,239,191,189,97,43,
-                                    239,191,189,127,18,239,191,189,239,191,189,67,
-                                    112,239,191,189,239,191,189,39,239,191,189,62,
-                                    239,191,189,239,191,189,239,191,189,239,191,
-                                    189,0],
+                       "prev_hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
+                       "signature":"sg$MU2jt3zu4DAyR3oLtTeXkZDiqZsEo5TheMemS7p89N16Bov248rUKMBSQHTMNq9uBxoBq2ojUPRcxiTYVr5MjLRzxY7sr",
                        "state_hash":"bs$U5dTs9FbUsEaX5Sz1HuFxiZbEAAW5wz3B9mDghCpTu14CJhCD",
                        "time":1516707646920,
                        "transactions":[{"tx":"tx$cT6DAStjYG6BgLm3cL3WesxPwJgJ1CjK3roWw7UtwsqVyTCEzLvtGZLk6o1Ay1skL97FMZFpp6YHoGhaVoYJrRpXbzBUdwK3hwVRNXSJD4ZU1Bip2ak3nvcZRsuEREBdZgnYd1YuzNyWG2BQR4MFaear3x7vYGwwpo44SAKboGkJ8wWAYvysNziYQrQuVqGYRQ1j4kzscQUJWjRkmhLSoiX1EJQV8yGUuKixaG55o8LE6tbEyZaFtKjvApK6Eo"}],
@@ -130,16 +121,17 @@ Request:
   {"target":"chain",
    "action":"get",
    "payload":{"type":"header",
-              "hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31"}
+              "hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31"}
   }
 
 Response:
   {"origin":"chain",
    "action":"requested_data",
    "tag":"untagged",
-   "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
+   "payload":{"hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
               "type":"block",
               "block":{"height":1,
+                       "beneficiary":"ak$2evAxTKozswMyw9kXkvjJt3MbomCR1nLrf91BduXKdJLrvaaZt",
                        "miner":"ak$2YifF1Ba6pt29epYdCpYJmBFCNYWDM7brLQsNgpXUVUuoq1WA3",
                        "nonce":13295145107284252443,
                        "pow":[587,4075,4861,5296,5604,7432,7436,7859,8011,
@@ -148,7 +140,7 @@ Response:
                               16253,18555,18921,21286,22160,22317,23419,
                               23493,25216,25251,27563,28052,28167,29140,
                               29784,31846,31870,32023],
-                       "prev_hash":"bh$2FM7g2yCRf4jT4LCf9C9GMPpcGrXDh2hGkwNi1GDS3z8DkDC1q",
+                       "prev_hash":"mh$2FM7g2yCRf4jT4LCf9C9GMPpcGrXDh2hGkwNi1GDS3z8DkDC1q",
                        "state_hash":"bs$27Eij1X7r1TWpchxQ8QCB53AWcBf2KmrXoUh5G5vy9D2H8XkW8",
                        "target":553713663,
                        "time":1516707646911,
@@ -162,28 +154,18 @@ Request:
   {"target":"chain",
    "action":"get",
    "payload":{"type":"block",
-              "hash":"bh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi"}
+              "hash":"mh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi"}
   }
 
 Response:
   {"origin":"chain",
    "action":"requested_data",
    "tag":"untagged",
-   "payload":{"hash":"bh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi",
+   "payload":{"hash":"mh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi",
               "type":"block",
               "block":{"height":1,
-                       "prev_hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
-                       "signature":[239,191,189,239,191,189,73,107,239,191,189,20,
-                                    83,239,191,189,93,239,191,189,56,101,239,191,
-                                    189,239,191,189,239,191,189,239,191,189,123,
-                                    86,239,191,189,239,191,189,239,191,189,239,
-                                    191,189,65,239,191,189,97,20,239,191,189,239,
-                                    191,189,239,191,189,239,191,189,58,120,83,239,
-                                    191,189,215,171,50,211,138,239,191,189,97,43,
-                                    239,191,189,127,18,239,191,189,239,191,189,67,
-                                    112,239,191,189,239,191,189,39,239,191,189,62,
-                                    239,191,189,239,191,189,239,191,189,239,191,
-                                    189,0],
+                       "prev_hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
+                       "signature":"sg$6m9aAosi14tswKi37hFNJ6P48WFfRGP5cSz4p7M7SXtnuAeUWChqDCbSN4eqJV5oanL91oT6MHcf8zi5Lc1GSWumojjVr",
                        "state_hash":"bs$U5dTs9FbUsEaX5Sz1HuFxiZbEAAW5wz3B9mDghCpTu14CJhCD",
                        "time":1516707646920,
                        "txs_hash": "bx$JYyCS2dnvFeMZtJcakmjF8W9gJTHL45SCYnsrKsfj9wTva3pB",
@@ -257,7 +239,7 @@ Response:
 Event:
 {"origin":"chain",
  "action":"mined_block",
-  "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
+  "payload":{"hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
              "height":1
             }
 }
@@ -289,7 +271,7 @@ Event:
 Event:
 {"origin":"chain",
  "action":"added_micro_block",
-  "payload":{"hash":"bh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi",
+  "payload":{"hash":"mh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi",
              "height":1
             }
 }
@@ -321,7 +303,7 @@ Event:
 Event:
 {"origin":"chain",
  "action":"new_block",
-  "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
+  "payload":{"hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
              "height":46
             }
 }
@@ -408,24 +390,22 @@ A block can be either a key block or a micro block. [The key block](#key-block-s
   | ---- | ---- | ----------- | -------- |
   | transactions | [[transaction](#transaction-structure)] | List of transactions included in the block | No |
 
-**Note:** Genesis block lacks transactions and thus - `txs_hash`. Since it
-is the first block - it doesn't have `prev_hash`, too.
-
 ### Transaction structure
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | MessagePack encoded transaction object | Yes |
+  | tx | string | Encoded transaction object | Yes |
 
 ### Key block structure
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | height | number | Height of the block | Yes |
-  | prev_hash | string | Hash of the previous block | No |
+  | prev_hash | string | Hash of the previous block | Yes |
   | state_hash | string | Hash of the root of the state tree | Yes |
+  | beneficiary | string | Public key of the beneficiary | Yes |
   | miner | string | Public key of the miner that mined this block | Yes |
   | target | number  | Threshold below which the hash of the Cuckoo Cycle PoW solution must be | Yes |
-  | pow | [number] | Block proof of work | No |
+  | pow | [number] | Block proof of work | Yes |
   | nonce | number | Block nonce | Yes |
   | time | number | Block mining time | Yes |
   | version | number | Version of the block structure | Yes |
@@ -438,6 +418,7 @@ is the first block - it doesn't have `prev_hash`, too.
   | prev_hash | string | Hash of the previous block | Yes |
   | state_hash | string | Hash of the root of the state tree | Yes |
   | txs_hash | string | Root hash of the Merkle tree of transactions included in this block | Yes |
+  | signature | string | Signature of the node that included the block | Yes |
   | time | number | Block mining time | Yes |
   | version | number | Version of the block structure | Yes |
 
