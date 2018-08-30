@@ -83,17 +83,7 @@ Response:
               "type":"block",
               "block":{"height":1,
                        "prev_hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
-                       "signature":[239,191,189,239,191,189,73,107,239,191,189,20,
-                                    83,239,191,189,93,239,191,189,56,101,239,191,
-                                    189,239,191,189,239,191,189,239,191,189,123,
-                                    86,239,191,189,239,191,189,239,191,189,239,
-                                    191,189,65,239,191,189,97,20,239,191,189,239,
-                                    191,189,239,191,189,239,191,189,58,120,83,239,
-                                    191,189,215,171,50,211,138,239,191,189,97,43,
-                                    239,191,189,127,18,239,191,189,239,191,189,67,
-                                    112,239,191,189,239,191,189,39,239,191,189,62,
-                                    239,191,189,239,191,189,239,191,189,239,191,
-                                    189,0],
+                       "signature":"sg$MU2jt3zu4DAyR3oLtTeXkZDiqZsEo5TheMemS7p89N16Bov248rUKMBSQHTMNq9uBxoBq2ojUPRcxiTYVr5MjLRzxY7sr",
                        "state_hash":"bs$U5dTs9FbUsEaX5Sz1HuFxiZbEAAW5wz3B9mDghCpTu14CJhCD",
                        "time":1516707646920,
                        "transactions":[{"tx":"tx$cT6DAStjYG6BgLm3cL3WesxPwJgJ1CjK3roWw7UtwsqVyTCEzLvtGZLk6o1Ay1skL97FMZFpp6YHoGhaVoYJrRpXbzBUdwK3hwVRNXSJD4ZU1Bip2ak3nvcZRsuEREBdZgnYd1YuzNyWG2BQR4MFaear3x7vYGwwpo44SAKboGkJ8wWAYvysNziYQrQuVqGYRQ1j4kzscQUJWjRkmhLSoiX1EJQV8yGUuKixaG55o8LE6tbEyZaFtKjvApK6Eo"}],
@@ -175,17 +165,7 @@ Response:
               "type":"block",
               "block":{"height":1,
                        "prev_hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
-                       "signature":[239,191,189,239,191,189,73,107,239,191,189,20,
-                                    83,239,191,189,93,239,191,189,56,101,239,191,
-                                    189,239,191,189,239,191,189,239,191,189,123,
-                                    86,239,191,189,239,191,189,239,191,189,239,
-                                    191,189,65,239,191,189,97,20,239,191,189,239,
-                                    191,189,239,191,189,239,191,189,58,120,83,239,
-                                    191,189,215,171,50,211,138,239,191,189,97,43,
-                                    239,191,189,127,18,239,191,189,239,191,189,67,
-                                    112,239,191,189,239,191,189,39,239,191,189,62,
-                                    239,191,189,239,191,189,239,191,189,239,191,
-                                    189,0],
+                       "signature":"sg$6m9aAosi14tswKi37hFNJ6P48WFfRGP5cSz4p7M7SXtnuAeUWChqDCbSN4eqJV5oanL91oT6MHcf8zi5Lc1GSWumojjVr",
                        "state_hash":"bs$U5dTs9FbUsEaX5Sz1HuFxiZbEAAW5wz3B9mDghCpTu14CJhCD",
                        "time":1516707646920,
                        "txs_hash": "bx$JYyCS2dnvFeMZtJcakmjF8W9gJTHL45SCYnsrKsfj9wTva3pB",
@@ -441,6 +421,7 @@ is the first block - it doesn't have `prev_hash`, too.
   | prev_hash | string | Hash of the previous block | Yes |
   | state_hash | string | Hash of the root of the state tree | Yes |
   | txs_hash | string | Root hash of the Merkle tree of transactions included in this block | Yes |
+  | signature | string | Signature of the node that included the block | Yes |
   | time | number | Block mining time | Yes |
   | version | number | Version of the block structure | Yes |
 
