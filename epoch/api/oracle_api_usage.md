@@ -47,7 +47,7 @@ This means that we have created the transaction to create the oracle, once the
 next block is mined this transaction will be included. We can verify that the
 oracle is created:
 ```
-http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov
+curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov
 
 {"expires":51,"id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query_fee":4,"query_format":"the query spec","response_format":"the response spec"}
 ```
