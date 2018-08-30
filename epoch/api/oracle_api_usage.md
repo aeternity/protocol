@@ -105,7 +105,7 @@ We should note that in the response for the query request above we got the
 *query_id* which we use to respond to the query:
 * prepare oracle respond transaction as per [specification](../../serializations.md).
 In order to ease the initial integration, the epoch node provides
-[/debug/oracles/respondendpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostOracleRespond):
+[/debug/oracles/respond endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostOracleRespond):
 ```
 curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/respond -d '{"query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m", "fee":3, "ttl":1234, "response":"I am fine, thanks!"}'
 {"tx":"..."}
