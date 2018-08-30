@@ -421,11 +421,11 @@ is the first block - it doesn't have `prev_hash`, too.
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | height | number | Height of the block | Yes |
-  | prev_hash | string | Hash of the previous block | No |
+  | prev_hash | string | Hash of the previous block | Yes |
   | state_hash | string | Hash of the root of the state tree | Yes |
   | miner | string | Public key of the miner that mined this block | Yes |
   | target | number  | Threshold below which the hash of the Cuckoo Cycle PoW solution must be | Yes |
-  | pow | [number] | Block proof of work | No |
+  | pow | [number] | Block proof of work | Yes |
   | nonce | number | Block nonce | Yes |
   | time | number | Block mining time | Yes |
   | version | number | Version of the block structure | Yes |
