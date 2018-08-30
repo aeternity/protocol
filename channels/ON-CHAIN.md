@@ -253,7 +253,7 @@ Serialization defined [here](../serializations.md#channel-close-solo-transaction
 - `nonce`: taken from the `from`'s account
 - `fee`
 
-Proof of inclusion represents the internal channel' s state. At the
+Proof of inclusion represents the internal channel's state. At the
 bare minimum it has to include all accounts and their balances. It must provide enough information to
 close the channel. Miners are to check balances in it and use this data to update the
 channel's on-chain representation. This is how the poster initiates the solo closing sequence.
@@ -272,7 +272,7 @@ Payload is a valid transaction that has:
   the last on-chain transaction had been produced by forced progress, chain had
   been produced by a force progress transaction - the `round` can also be equal
   to it. In this case the co-signed payload overwrites the on-chain produced
-  signle-signed force progress
+  single-signed force progress
 
 The payload can be either empty or a signed transaction.
 If the payload is empty, the channel is closed according to
@@ -314,7 +314,7 @@ Payload is a valid transaction that has:
 * `round` being greater than the last on-chain `round` for that channel id. If
   the last on-chain transaction had been produced by forced progress, the
   `round` can also be equal to it. In this case the co-signed payload overwrites
-  the on-chain produced signle-signed force progress
+  the on-chain produced single-signed force progress
 
 The payload can be either empty or a signed transaction.
 If the payload is empty - the channel is closed according to
