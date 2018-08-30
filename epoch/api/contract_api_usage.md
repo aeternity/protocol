@@ -25,10 +25,10 @@ An epoch node provides some utility functions to help you create contract transa
 [/debug/contracts/code/call doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/CallContract)
 
 The arguments to the /debug/contracts/code/call endpoint are:
-code -- either the byte code of the contract to call (if abi is either "sophia" or "evm") or an address of a contract on chain (if abi is "sophia-address").
-function -- the name of the function in the contract to call (if abi is "sophia" or "sophia-address").
-arg -- the argument to the call as Sophia constants (when abi is "sophia" or "sophia-address") or as an solidity encoded call-data (if abi is "evm").
-abi -- one of "sophia", "sophia-address" or "evm".
+* code -- either the byte code of the contract to call (if abi is either "sophia" or "evm") or an address of a contract on chain (if abi is "sophia-address").
+* function -- the name of the function in the contract to call (if abi is "sophia" or "sophia-address").
+* arg -- the argument to the call as Sophia constants (when abi is "sophia" or "sophia-address") or as an solidity encoded call-data (if abi is "evm").
+* abi -- one of "sophia", "sophia-address" or "evm".
 
 ### Decode Call Data
 [/debug/contracts/code/decode-data doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/DecodeData)
