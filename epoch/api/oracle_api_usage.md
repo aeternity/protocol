@@ -83,9 +83,10 @@ curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/
 {"tx":"..."}
 ```
 **NOTE** Similarly to the oracle registration transaction, the _transaction fee_ field depends
-on the _TTL_. The base query transaction fee is 1 (as all other transactions),
+on the query _TTL_. The base query transaction fee is 1 (as all other transactions),
 and the TTL accounts for 1 per 1000 blocks (just a preliminary value to test the concept). I.e. the minimum fee field for our test transaction is 2.
-As the oracle was registered with query fee 4 when registering, the code of the transaction is be 6.
+We specify query fee 4 - that is the minimum considering that the oracle was registered with query fee 4.
+Therefore the cost of the transaction is 6.
 * sign the prepared transaction (e.g. by using the SDK)
 * post the signed transaction using the [/transactions endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/PostTransaction)
 
