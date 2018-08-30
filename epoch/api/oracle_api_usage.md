@@ -34,12 +34,12 @@ Once the account has a positive balance we can register an oracle:
 In order to ease the initial integration, the epoch node provides
 [/debug/oracles/register endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostOracleRegister):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/oracle -d '{"account_id:"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_format":"the query spec", "response_format":"the response spec", "query_fee":4, "oracle_ttl":{"type":"delta", "value":50}, "fee":5, "ttl":1234}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/oracle -d '{"account_id:"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_format":"the query spec", "response_format":"the response spec", "query_fee":4, "oracle_ttl":{"type":"delta", "value":50}, "fee":2, "ttl":1234}'
 {"tx":"..."}
 ```
 **NOTE:** the *transaction fee* is depending on the _TTL_. An oracle register
-transaction costs 4, and then 1 per 1000 blocks of life time. (I.e. a TTL of
-50 blocks --> 5, and a TTL of 4500 blocks --> 9)
+transaction costs at least 1 (as all other transactions), plus 1 per 1000 blocks of life time. (I.e. a TTL of
+50 blocks --> 2, and a TTL of 4500 blocks --> 6)
 * sign the prepared transaction (e.g. by using the SDK)
 * post the signed transaction using the [/transactions endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/PostTransaction)
 
@@ -79,14 +79,13 @@ We can post a query to the existing oracle:
 In order to ease the initial integration, the epoch node provides
 [/debug/oracles/query endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostOracleQuery):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/query -d '{"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":7, "ttl":15, "query":"How are you?"}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/query -d '{"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":2, "ttl":15, "query":"How are you?"}'
 {"tx":"..."}
 ```
-**NOTE** Similarly to the oracle registration transaction, the _transaction fee_ depends
-on the _TTL_ **and** the oracle query fee. The base query transaction fee is 2,
-we set the oracle query fee to 4 when registering, and the TTL accounts for 1
-per 1000 blocks (just a preliminary value to test the concept). I.e. the cost
-for our test transaction is 7.
+**NOTE** Similarly to the oracle registration transaction, the _transaction fee_ field depends
+on the _TTL_. The base query transaction fee is 1 (as all other transactions),
+and the TTL accounts for 1 per 1000 blocks (just a preliminary value to test the concept). I.e. the minimum fee field for our test transaction is 2.
+As the oracle was registered with query fee 4 when registering, the code of the transaction is be 6.
 * sign the prepared transaction (e.g. by using the SDK)
 * post the signed transaction using the [/transactions endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/PostTransaction)
 
