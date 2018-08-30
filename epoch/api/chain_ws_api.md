@@ -39,14 +39,14 @@ Request:
   {"target":"chain",
    "action":"get",
    "payload":{"type":"block",
-              "hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31"}
+              "hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31"}
   }
 
 Response:
   {"origin":"chain",
    "action":"requested_data",
    "tag":"untagged",
-   "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
+   "payload":{"hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
               "type":"block",
               "block":{"height":1,
                        "beneficiary":"ak$2evAxTKozswMyw9kXkvjJt3MbomCR1nLrf91BduXKdJLrvaaZt",
@@ -58,7 +58,7 @@ Response:
                               16253,18555,18921,21286,22160,22317,23419,
                               23493,25216,25251,27563,28052,28167,29140,
                               29784,31846,31870,32023],
-                       "prev_hash":"bh$2FM7g2yCRf4jT4LCf9C9GMPpcGrXDh2hGkwNi1GDS3z8DkDC1q",
+                       "prev_hash":"mh$2FM7g2yCRf4jT4LCf9C9GMPpcGrXDh2hGkwNi1GDS3z8DkDC1q",
                        "state_hash":"bs$27Eij1X7r1TWpchxQ8QCB53AWcBf2KmrXoUh5G5vy9D2H8XkW8",
                        "target":553713663,
                        "time":1516707646911,
@@ -72,17 +72,17 @@ Request:
   {"target":"chain",
    "action":"get",
    "payload":{"type":"block",
-              "hash":"bh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi"}
+              "hash":"mh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi"}
   }
 
 Response:
   {"origin":"chain",
    "action":"requested_data",
    "tag":"untagged",
-   "payload":{"hash":"bh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi",
+   "payload":{"hash":"mh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi",
               "type":"block",
               "block":{"height":1,
-                       "prev_hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
+                       "prev_hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
                        "signature":[239,191,189,239,191,189,73,107,239,191,189,20,
                                     83,239,191,189,93,239,191,189,56,101,239,191,
                                     189,239,191,189,239,191,189,239,191,189,123,
@@ -131,14 +131,14 @@ Request:
   {"target":"chain",
    "action":"get",
    "payload":{"type":"header",
-              "hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31"}
+              "hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31"}
   }
 
 Response:
   {"origin":"chain",
    "action":"requested_data",
    "tag":"untagged",
-   "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
+   "payload":{"hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
               "type":"block",
               "block":{"height":1,
                        "beneficiary":"ak$2evAxTKozswMyw9kXkvjJt3MbomCR1nLrf91BduXKdJLrvaaZt",
@@ -150,7 +150,7 @@ Response:
                               16253,18555,18921,21286,22160,22317,23419,
                               23493,25216,25251,27563,28052,28167,29140,
                               29784,31846,31870,32023],
-                       "prev_hash":"bh$2FM7g2yCRf4jT4LCf9C9GMPpcGrXDh2hGkwNi1GDS3z8DkDC1q",
+                       "prev_hash":"mh$2FM7g2yCRf4jT4LCf9C9GMPpcGrXDh2hGkwNi1GDS3z8DkDC1q",
                        "state_hash":"bs$27Eij1X7r1TWpchxQ8QCB53AWcBf2KmrXoUh5G5vy9D2H8XkW8",
                        "target":553713663,
                        "time":1516707646911,
@@ -164,17 +164,17 @@ Request:
   {"target":"chain",
    "action":"get",
    "payload":{"type":"block",
-              "hash":"bh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi"}
+              "hash":"mh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi"}
   }
 
 Response:
   {"origin":"chain",
    "action":"requested_data",
    "tag":"untagged",
-   "payload":{"hash":"bh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi",
+   "payload":{"hash":"mh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi",
               "type":"block",
               "block":{"height":1,
-                       "prev_hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
+                       "prev_hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
                        "signature":[239,191,189,239,191,189,73,107,239,191,189,20,
                                     83,239,191,189,93,239,191,189,56,101,239,191,
                                     189,239,191,189,239,191,189,239,191,189,123,
@@ -259,7 +259,7 @@ Response:
 Event:
 {"origin":"chain",
  "action":"mined_block",
-  "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
+  "payload":{"hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
              "height":1
             }
 }
@@ -291,7 +291,7 @@ Event:
 Event:
 {"origin":"chain",
  "action":"added_micro_block",
-  "payload":{"hash":"bh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi",
+  "payload":{"hash":"mh$2cNz9iRZofBFKVZwipREk34o2YqS7HnBjzySzzBgRKR2xtqKpi",
              "height":1
             }
 }
@@ -323,7 +323,7 @@ Event:
 Event:
 {"origin":"chain",
  "action":"new_block",
-  "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
+  "payload":{"hash":"kh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
              "height":46
             }
 }
