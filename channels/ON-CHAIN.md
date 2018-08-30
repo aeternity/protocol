@@ -255,13 +255,13 @@ Serialization defined [here](../serializations.md#channel-close-solo-transaction
 
 Proof of inclusion represents the internal channel' s state. At the
 bare minimum it has to include all accounts and their balances. It must provide enough information to
-close the channel. Miners are to check balances in it and use this data to initiate the
-procedure of channel solo closing.
+close the channel. Miners are to check balances in it and use this data to update the
+channel's on-chain representation. This is how the poster initiates the solo closing sequence.
 If there are any contracts in the channel and those have balances of their own - they are
 not provided in the proof of inclusion but they are rather to be force-pushed in
 subsequent transactions. It is up to participants to decide if they want to
 post them at all. Thus the accumulative balances of the accounts in
-the solo-close transaction can be lower than channel balance persisted
+the solo-close transaction can be lower than the channel balance persisted
 on-chain.
 
 Payload is a valid transaction that has:
@@ -401,7 +401,7 @@ executed on-chain and thus producing the next channel's off-chain state.
 This can happen both while a channel is closing or while it is still active. If the
 channel is not closing - participants can continue using it from the
 on-chain produced state or initiate a closing. If the channel is already
-closing - the force-progress updates what are the currently expected closing
+closing, the force-progress updates what are the currently expected closing
 amounts for each participant (according to the contract's execution).
 
 The force progress is based on what is considered to be the latest off-chain
@@ -423,8 +423,8 @@ than the one co-signed off-chain.
 
 The `channel_force_progress_tx` can be included in a block if:
 
-- the last on-chain transaction is NOT a force progress one
-- the last on-chain transaction had been a force progress but the block height
+- the last on-chain transaction for the targeted channel is NOT a force progress one
+- the last on-chain transaction for the targeted channel had been a force progress but the block height
   timer had passed
 
 It consists of:
@@ -448,7 +448,7 @@ thus providing insufficient set of accounts and contracts provided will result
 in a different channel `state_hash`.
 
 The payload can be either empty or a signed transaction.
-If the payload is empty, the last on-chain persisted state is used. In this case the proof of inclusion root has of the proof of inclusion must be equal to the one persisted for the channel on-chain. The round being used is the one stored in the channel on-chain.
+If the payload is empty, the last on-chain persisted state is used. In this case the proof of inclusion root hash must be equal to the one persisted for the channel on-chain. The round being used is the one stored in the channel on-chain.
 If the payload is a transaction it MUST be a channel_offchain_tx. It MUST be co-signed.
 
 An off-chain transaction payload is a valid transaction if it has:
@@ -491,7 +491,7 @@ trees have a root hash. It might be:
   - if the channel had been in a closing state, closing balances of
     participants are updated according to the ones in the modified channel state trees
 
-- no equal to the `state_hash` provided in the `solo_payload`. The hash
+- not equal to the `state_hash` provided in the `solo_payload`. The hash
   provided was not confirmed to be the expected one. The on-chain channel
   object is NOT modified
 
@@ -501,7 +501,7 @@ If the `channel_force_progress_tx` is a valid one - the contract call in the
 `solo_payload`'s `updates` is executed. This consumes gas. The `update` itself
 defines both the gas limit and the gas price. After the contract call has been
 executed and the real gas consumption has been calculated, the balance of the
-actor posting the transaction is updated to pay the gas fee. Since this is not
+account posting the transaction is updated to pay the gas fee. Since this is not
 a co-signed transaction but rather a unilateral one, it is only the one that
 initiates the force progress that pays it.
 
