@@ -109,7 +109,7 @@ In order to transfer a name to another user:
 In order to ease the initial integration, the epoch node provides
 [/debug/names/transfer endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostNameTransfer):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/name-transfer-tx -d '{"account_id":"ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3Qd", name_id": "nm$sEWkhrhGMAve7dhfNgXbjUVqSGD1HoZLgBnNAjRjWe5wm8iCC", "recipient_id": "ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw", "fee": 1, "ttl":1234}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/names/transfer -d '{name_id": "nm$sEWkhrhGMAve7dhfNgXbjUVqSGD1HoZLgBnNAjRjWe5wm8iCC", "recipient_id": "ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw", "account_id":"ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3Qd",  "fee": 1, "ttl":1234}'
 {"tx":"..."}
 ```
 * sign the prepared transaction (e.g. by using the SDK)
