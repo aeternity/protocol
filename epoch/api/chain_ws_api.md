@@ -49,6 +49,7 @@ Response:
    "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
               "type":"block",
               "block":{"height":1,
+                       "beneficiary":"ak$2evAxTKozswMyw9kXkvjJt3MbomCR1nLrf91BduXKdJLrvaaZt",
                        "miner":"ak$2YifF1Ba6pt29epYdCpYJmBFCNYWDM7brLQsNgpXUVUuoq1WA3",
                        "nonce":13295145107284252443,
                        "pow":[587,4075,4861,5296,5604,7432,7436,7859,8011,
@@ -140,6 +141,7 @@ Response:
    "payload":{"hash":"bh$2Tehbaf4QrmxCJHAnnHPxV5AvMwUe1ThpH7bvPpdfd5nEk1u31",
               "type":"block",
               "block":{"height":1,
+                       "beneficiary":"ak$2evAxTKozswMyw9kXkvjJt3MbomCR1nLrf91BduXKdJLrvaaZt",
                        "miner":"ak$2YifF1Ba6pt29epYdCpYJmBFCNYWDM7brLQsNgpXUVUuoq1WA3",
                        "nonce":13295145107284252443,
                        "pow":[587,4075,4861,5296,5604,7432,7436,7859,8011,
@@ -423,6 +425,7 @@ is the first block - it doesn't have `prev_hash`, too.
   | height | number | Height of the block | Yes |
   | prev_hash | string | Hash of the previous block | Yes |
   | state_hash | string | Hash of the root of the state tree | Yes |
+  | beneficiary | string | Public key of the beneficiary | Yes |
   | miner | string | Public key of the miner that mined this block | Yes |
   | target | number  | Threshold below which the hash of the Cuckoo Cycle PoW solution must be | Yes |
   | pow | [number] | Block proof of work | Yes |
