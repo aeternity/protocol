@@ -134,7 +134,7 @@ Serialization defined [here](../serializations.md#channel-deposit-transaction)
 - `ttl`:
 - `fee`:
 - `state_hash`: the root hash of the channel state tree after the deposit had been applied; This is not validated, just kept in the channel's object
-- `round`: the internal channel's round that applies the deposit
+- `round`: the channel's internal round that applies the deposit
 - `nonce`: account nonce of the submitter
 
 Note that the `round` should be incremented on each off-chain update. This is enforced by all
@@ -162,7 +162,7 @@ Serialization defined [here](../serializations.md#channel-withdraw-transaction)
 - `ttl`:
 - `fee`:
 - `state_hash`: the root hash of the channel state tree after the withdraw had been applied; This is not validated, just kept in the channel's object
-- `round`: the internal channel's round that applies the withdraw
+- `round`: the channel's internal round that applies the withdraw
 - `nonce`: the `to` account nonce
 
 Note that the `round` should be incremented on each off-chain update. This is enforced by all
@@ -253,7 +253,7 @@ Serialization defined [here](../serializations.md#channel-close-solo-transaction
 - `nonce`: taken from the `from`'s account
 - `fee`
 
-Proof of inclusion represents the internal channel's state. At the
+Proof of inclusion represents the channel's internal state. At the
 bare minimum it has to include all accounts and their balances. It must provide enough information to
 close the channel. Miners are to check balances in it and use this data to update the
 channel's on-chain representation. This is how the poster initiates the solo closing sequence.
@@ -299,7 +299,7 @@ Serialization defined [here](../serializations.md#channel-slash-transaction)
 - `nonce`: taken from the `from`'s account
 - `fee`
 
-Proof of inclusion represents the internal channel's state. It has to include both participant
+Proof of inclusion represents the channel's internal state. It has to include both participant
 accounts and their balances.
 If there are any contracts in the channel and those have balances of their own, they are
 not provided in the proof of inclusion but they are rather to be force-pushed in
@@ -396,7 +396,7 @@ Serialization defined [here](../serializations.md#channel)
 Forcing progress is the mechanism to be used when a dispute
 arises between parties and one of them wants to use the blockchain as an
 arbiter. The poster provides enough state so that an off-chain contract can be
-executed on-chain and thus producing the next channel's off-chain state.
+executed on-chain and thus producing the channel's next off-chain state.
 
 This can happen both while a channel is closing or while it is still active. If the
 channel is not closing - participants can continue using it from the
