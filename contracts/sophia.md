@@ -4,7 +4,7 @@ An Æternity BlockChain Language
 The Sophia is a language in the ML family. It is strongly typed and has
 restricted mutable state.
 
-Sophia is customized for smart contracts, which can be published
+Sophia is tailor-made for smart contracts that can be published
 to a blockchain (the Æternity BlockChain). Thus some features of conventional
 languages, such as floating point arithmetic, are not present in Sophia, and
 some blockchain specific primitives, constructions and types have been added.
@@ -12,17 +12,17 @@ some blockchain specific primitives, constructions and types have been added.
 ## Language Features
 ### Contracts
 
-Sophia does not have modules. Instead sophia has static
-contracts. Contracts are similar to classes in object oriented
+Sophia does not have modules. Instead, sophia has static
+*contracts*. Contracts are similar to classes in object oriented
 languages and support local state and inheritance. More specifically:
 
-- A contract implementation, or simply a contract, is the code for a
-  smart contract and consists of a list of types and functions that
+- A contract *implementation* (or simply: a contract), is the code for a
+  smart contract and consists of a list of types and functions, which
   may or may not have a definition. A contract where all types and
-  functions are defined is called a concrete contract. Only concrete
-  contracts can be instantiated. (Used in a create contract transaction.)
+  functions are defined is called a *concrete* contract. Only concrete
+  contracts can be *instantiated*. (Used in a *create contract* transaction.)
 
-- A contract can be abstract where no types or functions have definitions. Example:
+- A contract can be abstract, meaning that some types or functions have no definition. Example:
 
 ```javascript
 // An abstract contract
@@ -32,37 +32,37 @@ contract VotingType =
 
 - A contract instance is an entity living on the block chain (or in a state channel). Each
 instance is associated with a particular contract implementation (at
-least from the view of high-level language; the low-level details of
+least from the view of the high-level language; the low-level details of
 how to store and check API information on the chain is still to be
 worked out).
-- A contract may define a type state encapsulating its local
-  state. The state must be initialised when instantiating a
-  contract. This is done by the init function which can take arbitrary
-  arguments and is called on contract instance creation.
-- Contracts have a public API, comprising the functions and types
-  annotated with the public keyword. These can be used from outside
-  the contract. Functions and types with no annotation (or internal)
+- A contract may define a type *state* to encapsulate its local
+  state. The state must be initialised when instantiating the
+  contract. This is done by the contract's *init* function which
+  can take arbitrary arguments and is called on contract instance creation.
+- Contracts have a public API, comprising of the functions and types
+  annotated with the *public* keyword. These can be used from outside
+  the contract. Functions and types with no annotation (or *internal*)
   are part of the internal API and can be used by contracts inheriting
   (see below) the given contract. Functions and types annotated with
-  private can only be used locally.
-- Contracts can inherit one (or more?) other contract(s). In this case
+  *private* can only be used locally.
+- Contracts can inherit one [or more?] other contract[s]. In this case
   the public functions (and types) of the inherited contract are
   included in the public API and internal functions are included in
   the internal API of the current contract. The state of the contract
-  contains the states of all inherited contracts as well as the local
-  state. However, the state of an inherited contract cannot be
-  accessed other than through internal functions defined by that
+  contains the states of all inherited contracts as well as its own.
+  However, the state of an inherited contract cannot be
+  accessed other than through *internal* functions defined by that
   contract.
-- Open question: should we allow overriding defined functions? I would
+- [Open question: should we allow overriding defined functions? I would
   suggest no, but there might be compelling use cases that I'm
-  missing.
+  missing.]
 
-*NOTE: Contract inheritance is not yet implemented.*
+*[NOTE: Contract inheritance is not yet implemented.]*
 
 #### Calling other contracts
 
-To call a function in another contract you need the address to an instance of
-the contract. The type of the address is a (possibly abstract) contract. For
+To call a function in another contract you need the *address* to an instance of
+that contract. The type of the address is a (possibly abstract) *contract*. For
 instance, given the `VotingType` contract above we can define a contract
 
 ```javascript
@@ -73,8 +73,9 @@ contract VoteTwice =
 ```
 
 Contract calls take two optional named arguments `gas : int` and `value : int`
-that lets you set a gas limit and provide tokens to a contract call. If omitted
-the defaults are no gas limit and no tokens. Suppose there is a fee for voting:
+that let you set a gas limit and provide tokens to a contract call. If omitted
+the defaults are: no gas limit and no tokens. Suppose there is a fee for voting
+implemented in VotingType:
 
 ```javascript
   function voteTwice(v : VotingType, fee : int, alt : string) =
@@ -84,9 +85,9 @@ the defaults are no gas limit and no tokens. Suppose there is a fee for voting:
 
 Named arguments can be given in any order.
 
-To recover the underlying address of a contract instance there is a field
+To recover the underlying address of a contract instance, it has a field
 `address : address`. For instance, to send tokens to the voting contract
-without calling it you can write
+without calling it (using the global namespace *Chain*), you can write:
 
 ```javascript
   function pay(v : VotingType, amount : int) =
@@ -95,48 +96,65 @@ without calling it you can write
 
 ### Mutable state
 
-Sophia does not have arbitrary mutable state, but only a limited form of
-state associated with each contract instance.
+Sophia does not have arbitrary mutable state, but only the limited form of
+state in the *state* that is associated with each contract instance.
 
 - Each contract defines a type `state` encapsulating its mutable state.
 - The initial state of a contract is computed by the contract's `init`
-  function. The `init` function is *pure* and returns the initial state as its
-  return value. At contract creation time, the `init` function is executed and
-  its result is stored as the contract state.
-- The value of the state is accessible from inside the contract
+  function. The `init` function is *pure* - meaning it will return the same
+  result for the same input every time and has no side effects - and it returns
+  the initial *state* as its return value: at contract creation time, the `init`
+  function is executed and its result is stored as the contract state.
+- The value of the contract's state is accessible from inside the contract
   through an implicitly bound variable `state`.
 - State updates are performed by calling a function `put : state => unit`.
 - Aside from the `put` function (and similar functions for transactions
-  and events), the language is purely functional.
+  and events), Sophia is purely functional.
 - Functions modifying the state need to be annotated with the `stateful` keyword.
 
-To make it convenient to update parts of a deeply nested state Sophia
-provides special syntax for map/record updates.  Open
+To make it convenient to update parts of deeply nested state, Sophia
+provides special syntax for map/record updates. [Open
 question: we likely want to make it possible to have immutable state
 (parameters). Keep separate from mutable state or annotate certain
-fields as immutable?
+fields as immutable?]
 
 ### Types
+
+Sophia uses a leading hyphen `'` to signify type variables that are used for 
+defining new, variant types (more on Syntax, below):
+
+| Description                     | Example
+| ------------------------------- | -------:
+| A Type variable                 | ```'a```
+
+It also has a wildcard pattern that matches any value, to be used for pattern
+matching when a particular value in a matched pattern is not of interest:
+
+| Description                     | Example
+| ------------------------------- | -------:
+| The Wildcard pattern            | ```_```
+
+
 Sophia has the following types:
 
 | Type       | Description                     | Example
 | ---------- | ------------------------------- | -------:
 | uint       | A 256 bit integer               | ```42```
 | int        | A 256 bit 2-complement integer  | ```-1```
-| address    | A 256 bit number given as a hex | ```ff00```
+| address    | A 256 bit number given as a hex | ```0xff00```
 | bool       | A Boolean                       | ```true```
 | string     | An array of bytes               | ```"Foo"```
-| list       | A homogeneous immutable singly linked list. | ```[1, 2, 3]```
-| tuple      | An ordered heterogeneous array   | ```(42, "Foo", true)```
+| list       | A homogeneous, immutable singly-linked list | ```[1, 2, 3]```
+| tuple      | An ordered, heterogeneous array   | ```(42, "Foo", true)```
 | record     | An immutable key value store with fixed key names and typed values | ``` record balance = { owner: address, value: uint } ```
-| map        | An immutable key value store with dynamic mapping of keys of one type to values of one type | ```type accounts = map(string, address)```
+| map        | An immutable key/value store with dynamic mapping of keys of one type to values of one type | ```type accounts = map(string, address)```
 | option('a) | An optional value either None or Some('a) | ```Some(42)```
-| state        | A record of blockstate key, value pairs  |
-| transactions | An append only list of blockchain transactions |
-| events       | An append only list of blockchain events (or log entries) |
-| signature    | A signature. |
-| oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, sign, qfee, ttl)```
-| oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, qfee, qttl, rttl)```
+| state        | A *record* of *blockstate* key/value pairs  |
+| transactions | An append-only list of blockchain transactions |
+| events       | An append-only list of blockchain events (or log entries) |
+| signature    | A signature |
+| oracle('a, 'b)       | An oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, sign, fee, ttl)```
+| oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, fee, qttl, rttl)```
 
 ### Type aliases
 
@@ -153,9 +171,10 @@ A type alias and its definition can be used interchangeably.
 ### Algebraic data types
 
 Sophia supports algebraic data types (variant types) and pattern matching. Data
-types can be recursive and are declared by giving a list of constructors with
-their respective arguments. For instance, the following defines a type of
-binary trees parameterised over the element type:
+types can be recursive and are declared by giving a pipe-separated list of
+*constructors* with their respective arguments. For instance, the following
+defines a type of binary trees parameterised over the element type 'a, using
+the constructors of pre-existing types Tip and Bin:
 
 ```
 datatype tree('a) = Tip | Bin(tree('a), 'a, tree('a))
@@ -170,13 +189,13 @@ function root(t : tree('a)) : option('a) =
     Bin(_, v, _) => Some(v)
 ```
 
-*NOTE: Recursive data types are not yet implemented*
+*[NOTE: Recursive data types are not yet implemented]*
 
 ### Lists
 
-A Sophia list is a dynamically sized, homogenous, immutable, singly
-linked list. A list is constructed with the syntax `[1, 2, 3]`. The
-elements of a list can be any of datatype but they must have the same
+A Sophia list is a dynamically sized, homogenous, immutable, singly-linked
+list. A list is constructed with the syntax `[1, 2, 3]`. The
+elements of a list can be of any datatype but they must have the same
 type. The type of lists with elements of type `'e` is written
 `list('e)`. For example we can have the following lists:
 
@@ -186,36 +205,42 @@ type. The type of lists with elements of type `'e` is written
 [{[1] = "aaa", [10] = "jjj"}, {[5] = "eee", [666] = "the beast"}] : list(map(int, string))
 ```
 
-New elements can be prepended to the front of a list with the `::`
+New *elements* can be *prepended* to the front of a list with the `::`
 operator. So `42 :: [1, 2, 3]` returns the list `[42, 1, 2, 3]`. The
-concatenation operator `++` appends its second argument to its first
+concatenation operator `++` takes two *lists*, appends the second to the first
 and returns the resulting list. So concatenating two lists
-`[1, 22, 33] ++ [10, 18, 55]` returns the list `[1, 22, 33, 10, 18, 55]`.
+`[1, 22, 33] ++ [10, 18, 55]` returns the list `[1, 22, 33, 10, 18, 55]`. Even
+where they are variables, the arguments to `++` remain unchanged. Both `::` and
+`++` are right-associative.
+
+The empty list is written `[]`.
 
 ### Maps and records
 
 A Sophia record type is given by a fixed set of fields with associated,
-possibly different, types. For instance
+possibly different, types. For instance:
 ```
   record account = { name    : string,
                      balance : int,
                      history : list(transaction) }
 ```
 
-Maps, on the other hand, can contain an arbitrary number of key-value bindings,
+Maps, on the other hand, can contain an arbitrary number of key/value bindings,
 but of a fixed type. The type of maps with keys of type `'k` and values of type
-`'v` is written `map('k, 'v)`. Key types are restricted to atomic types (`int`,
-`address`, `bool`, and `string`).
+`'v` is written `map('k, 'v)`. Key types are restricted to the atomic types
+(`int`, `address`, `bool`, and `string`). [what about uint?]
 
 #### Constructing maps and records
 
 A value of record type is constructed by giving a value for each of the fields.
-For the example above,
+For the example above:
 ```
   function new_account(name) =
     {name = name, balance = 0, history = []}
 ```
-Maps are constructed similarly, with keys enclosed in square brackets
+[order of arguments relevant?]
+
+Maps are constructed similarly, with keys enclosed in square brackets:
 ```
   function example_map() : map(string, int) =
     {["key1"] = 1, ["key2"] = 2}
@@ -232,13 +257,17 @@ Record fields access is written `r.f` and map lookup `m[k]`. For instance,
 Looking up a non-existing key in a map results in the contract failing. See
 `Map.member` and `Map.lookup` below for safe lookups.
 
+[the entire contract or only this call into this contract?]
+
 #### Updating a value
 
-Record field updates are written `r{f = v}`. This creates a new record value
-which is the same as `r`, but with the value of the field `f` replaced by `v`.
+Record field updates are written `r{f = v}`. This creates a new record value,
+which is the same as `r`, but with the value of the field `f` replaced by the
+value of `v`. Note that r, being immutable, does not change.
+
 Similarly, `m{[k] = v}` constructs a map with the same values as `m` except
-that `k` maps to `v`. It makes no difference if `m` has a mapping for `k` or
-not.
+that in this new map `k` maps to `v`. It makes no difference if `m` already had
+a mapping for `k` or not. Note that m, being immutable, does not change.
 
 It is possible to give a name to the old value of a field or mapping in an
 update: instead of `acc{ balance = acc.balance + 100 }` it is possible to write
@@ -255,9 +284,9 @@ This is equivalent to `accounts{ [a] @ acc = acc{ history = [] } }` and thus
 requires `a` to be present in the accounts map.
 
 
-#### Builtin functions on maps
+#### Built-in functions on maps
 
-The following builtin functions are defined on maps:
+The following built-in functions are defined on maps:
 
 ```
   Map.lookup(k : 'k, m : map('k, 'v)) : option('v)
@@ -268,12 +297,12 @@ The following builtin functions are defined on maps:
   Map.from_list(m : list(('k, 'v))) : map('k, 'v)
 ```
 
-### Builtins
+### Built-ins
 
 #### Account interface
 
-To spend tokens from the contract account to the account "to" you call the `Chain.spend` function.
-
+To spend tokens from the contract's implicit account to the account "to", you
+call the `Chain.spend` function. The amount is in eto Aeons:
 ```
 Chain.spend(to : address, amount : integer)
 ```
@@ -307,7 +336,7 @@ Oracle.register(acct : address
 ```
 
 * The `acct` is the address of the oracle to register (can be the same as the contract).
-* The `sign` is a signature of the address to register proving you have the private key
+* The `sign` is a signature of the address to register, proving you have the private key
   of the oracle, or the integer 0 when address is the same as the contract.
 * The `qfee` is the minimum query fee to be paid by a user when asking a question of the oracle.
 * The `ttl` is the Time To Live in relative block height for the oracle.
@@ -351,7 +380,8 @@ Oracle.query(o    : oracle('a, 'b),
              rttl : int) : oracle_query('a, 'b)
 ```
 
-* The `qfee` is the query fee debited to the contract account (`Contract.address`).
+* The `qfee` is the query fee debited to the account the oracle was registered 
+with (`Contract.address`).
 
 ##### Oracle query_fee
 
@@ -425,7 +455,7 @@ Naming System (AENS):
   ```
   AENS.resolve(name : string, key : string) : option('a)
   ```
-  Here `name` should be a registered name and `key` one of the attributes
+  Here, `name` should be a registered name and `key` one of the attributes
   associated with this name (for instance `"account_pubkey"`). The return type
   (`'a`) must be resolved at compile time to an atomic type and the value is
   type checked against this type at run time.
@@ -458,15 +488,16 @@ event(e : event) : ()
 The block-chain environment available to a contract is defined in three name spaces
 `Contract`, `Call`, and `Chain`:
 
-- `Contract.creator` is the address of the entity that signed the contract creation
+- `Contract.creator` is the address of the account that signed the contract creation
   transaction.
-- `Contract.address` is the address of the contract account.
-- `Contract.balance` is the amount of coins currently in the contract account.
+- `Contract.address` is the address of the contract's account.
+- `Contract.balance` is the amount of coins currently in the contract's account.
   Equivalent to `Chain.get_balance(Contract.address)`.
-- `Call.origin` is the address of the account that signed the call transaction that led to this call.
-- `Call.caller` is the address of the entity (possibly another contract)
+- `Call.origin` is the address of the account that signed the call transaction
+  that led to the currently handled call.
+- `Call.caller` is the address of the account (possibly another contract)
   calling the contract.
-- `Call.value` is the amount of coins transferred to the contract in the call.
+- `Call.value` is the amount of coins transferred to the contract in this call.
 - `Call.gas_price` is the gas price of the current call.
 - `Call.gas_left()` is the amount of gas left for the current call.
 - `Chain.get_balance(a : address)` returns the balance of account `a`.
@@ -479,11 +510,14 @@ The block-chain environment available to a contract is defined in three name spa
 
 ### Exceptions
 
-Contracts can fail with an (uncatchable) exception using the function
+Contract execution can fail with an (uncatchable) exception using the function:
 
 ```
 abort(reason : string) : 'a
 ```
+
+[This does not kill the contract but only abort the entire current call.
+Including, potentially, in contracts that called into the aborting contract.]
 
 ## Syntax
 
@@ -506,7 +540,7 @@ internal let mod private public rec stateful switch true type record datatype
 - `Id = [a-z_][A-Za-z0-9_']*` identifiers start with a lower case letter.
 - `Con = [A-Z][A-Za-z0-9_']*` constructors start with an upper case letter.
 - `QId = (Con\.)+Id` qualified identifiers (e.g. `Map.member`)
-- `QCon = (Con\.)+Con` qualified constructor
+- `QCon = (Con\.)+Con` qualified constructor (e.g. `Foo.Bar.Baz`)
 - `TVar = 'Id` type variable (e.g `'a`, `'b`)
 - `Int = [0-9]+|0x[0-9A-Fa-f]+` integer literal
 - `Hash = #[0-9A-Fa-f]+` hash literal
@@ -559,7 +593,7 @@ Decl ::= 'contract' Con '=' Block(Decl)
        | 'type'     Id ['(' TVar* ')'] ['=' TypeAlias]
        | 'record'   Id ['(' TVar* ')'] '=' RecordType
        | 'datatype' Id ['(' TVar* ')'] '=' DataType
-       | Modifier* 'function' Id ':' Type
+       | Modifier* 'function' Id [':' Type]
        | Modifier* 'function' Id Args [':' Type] '=' Block(Stmt)
 
 Modifier ::= 'stateful' | 'public' | 'private' | 'internal'
@@ -570,7 +604,7 @@ Arg  ::= Id [':' Type]
 
 Contract declarations must appear at the top-level.
 
-For example,
+For example:
 ```
 contract Test =
   type t = int
@@ -583,7 +617,7 @@ There are three forms of type declarations: type aliases (declared with the
 
 ```c
 TypeAlias  ::= Type
-RecordType ::= '{' Sep(FieldType, ',') '}'
+RecordType ::= '{' Sep1(FieldType, ',') '}'
 DataType   ::= Sep1(ConDecl, '|')
 
 FieldType  ::= Id ':' Type
@@ -601,12 +635,12 @@ type     int_shape = shape(int)
 
 ```c
 Type ::= Domain '=>' Type             // Function type
-       | Type '(' Sep(Type, ',') ')'  // Type application
+       | Type '(' Sep1(Type, ',') ')'  // Type application
        | '(' Type ')'                 // Parens
        | Id | QId | TVar
 
 Domain ::= Type                       // Single argument
-         | '(' Sep(Type, ',') ')'     // Multiple arguments
+         | '(' Sep1(Type, ',') ')'     // Multiple arguments
 ```
 
 The function type arrow associates to the right.
@@ -722,9 +756,6 @@ contract FundMe =
                    deadline      : int,
                    goal          : int }
 
-  private function abort(err : string) =
-    switch(0) 1 => ()
-
   private function require(b : bool, err : string) =
     if(!b) abort(err)
 
@@ -799,19 +830,19 @@ reference count decreased.
 If a contract is disabled and its reference count is zero a miner can
 choose to garbage collect the contract.
 
-The reference count of a contract is handled as the account balance
+The reference count of a contract is handled like the account balance
 and kept in the state tree of the miner and the merkle hash is
 included in the state hash in each block just as with balances.
 
 The transaction for creating a contract has an extra fee called
-deposit which has to be an even number. The disable transaction is
-free but the miner and the creator get half of the deposit fee each at
-contract disable thus encouraging creators to disable their contracts
-and miners to pick disable transactions.
+*deposit* which has to be an even number. The disable transaction is
+free but the miner and the creator get half of the deposit fee each when
+the contract is disabled, thus encouraging creators to disable their contracts
+and miners to include disable transactions.
 
 ## The Sophia_01 ABI
 
-The calldata contains a tuple with function name and argument, e.g. `("main", (1,2,3))`.
+The calldata contains a tuple with a function name and an argument, e.g. `("main", (1,2,3))`.
 The compiler will generate entry code to
 load the calldata to memory and then create a pattern matching switch on the function name
 and call the function with the second element as the argument:
@@ -860,7 +891,6 @@ Data is encoded in memory as follows:
   endian 256-bit word (32 bytes).
 
 - Boxed types are encoded as a pointer into a following binary. This binary is encoded as follows:
-  - Unboxed types are encoded as a single word.
   - Strings are encoded with a 32 byte length (number of bytes), followed by as few 256-bit words
     as needed padded on the right with 0.
   - Tuples are encoded with one word per component (stored left-to-right) where
@@ -910,14 +940,14 @@ Value   0x40    0x80    0xC0       4    "main"     1       2       3
 Before a contract call is executed the current state of the contract is loaded
 into memory encoded as described above. A pointer to the encoded state is stored at
 address 0. The Sophia compiler generates code to unpack the encoded state and
-update the state pointer with a pointer to decoded value. Before returning the
+update the state pointer with a pointer to the decoded value. Before returning the
 contract should encode the updated state and point the state pointer to the
 encoded data. If the call did not update the state the contract can set the
 state pointer to 0.
 
 ### Local function calls
 
-A local function call pushes the return address then the arguments.
+A local function call pushes the return address, then the arguments.
 The callee pops the arguments and local variables then swaps the
 return address and the return value on the stack and jumps to
 the return value leaving only the return value on the stack.
