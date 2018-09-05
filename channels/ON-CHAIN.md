@@ -421,11 +421,9 @@ than the one co-signed off-chain.
 
 ### `channel_force_progress_tx`
 
-The `channel_force_progress_tx` can be included in a block if:
-
-- the last on-chain transaction for the targeted channel is NOT a force progress one
-- the last on-chain transaction for the targeted channel had been a force progress but the block height
-  timer had passed
+The `channel_force_progress_tx` can be included in a block if either the last
+on-chain transaction for the targeted channel is not a force progress one or
+the block height timer had passed.
 
 It consists of:
 
@@ -443,12 +441,14 @@ It consists of:
 
 Proof of inclusion represents the internal channel state. It  
 has to include all accounts, all contracts and their balances.
-Based on this structure - the next `state_hash` is going to be computed
+Based on this structure, the next `state_hash` is going to be computed
 thus providing insufficient set of accounts and contracts provided will result
 in a different channel `state_hash`.
 
 The payload can be either empty or a signed transaction.
-If the payload is empty, the last on-chain persisted state is used. In this case the proof of inclusion root hash must be equal to the one persisted for the channel on-chain. The round being used is the one stored in the channel on-chain.
+If the payload is empty, the last on-chain persisted state is used. In this
+case the proof of inclusion root hash must be equal to the one persisted for
+the channel on-chain. The round being used is the one stored in the channel on-chain.
 If the payload is a transaction it MUST be a channel_offchain_tx. It MUST be co-signed.
 
 An off-chain transaction payload is a valid transaction if it has:
@@ -498,12 +498,18 @@ trees have a root hash. It might be:
 #### Call object
 
 If the `channel_force_progress_tx` is a valid one - the contract call in the
-`solo_payload`'s `updates` is executed. This consumes gas. The `update` itself
+`solo_payload`'s `updates` is executed upon the MPT that had been produced by
+the `poi`. The output is a new MPT that will represent the new off-chain
+channel state. Participants are to either continue using the channel or close
+it. If there is no later off-chain update, they should use this produced MPT
+in both cases.
+
+The contract execution consumes gas. The `update` itself
 defines both the gas limit and the gas price. After the contract call has been
 executed and the real gas consumption has been calculated, the balance of the
 account posting the transaction is updated to pay the gas fee. Since this is not
-a co-signed transaction but rather a unilateral one, it is only the one that
-initiates the force progress that pays it.
+a co-signed transaction but rather a unilateral one, the initiator of the
+progress enforcement pays the fees.
 
 The contract call produces on-chain a new call object in the on-chain state
 trees for contract calls. Usually calls have a key that is composed by
