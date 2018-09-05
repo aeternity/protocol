@@ -174,8 +174,6 @@ it needs to assess whether or not it should accept the channel.
  ---------------------- ----
 | lock_period          | 2  |
  ---------------------- ----
-| push_amount          | 8  |
- ---------------------- ----
 | initiator_amount     | 8  |
  ---------------------- ----
 | responder_amount     | 8  |
@@ -191,7 +189,6 @@ it needs to assess whether or not it should accept the channel.
 - `temporary_channel_id`: randomly chosen id unique between the involved parties
 - `lock_period`: time in blocks until a channel closing is to be accepted if not
   mutual or in general for parties to wait for new messages.
-- `push_amount`: initial deposit in favour of the responder by the initiator
 - `initiator_amount`: amount the initiator is willing to commit
 - `responder_amount`: amount the initiator wants the responder to commit
 - `channel_reserve`: the minimum amount both parties need to maintain, amount of
@@ -214,15 +211,6 @@ for too long in the case of non-cooperation and setting it too low could leave
 a party without enough time to react to a malicious party trying to unilaterally
 close a channel.
 
-Having the ability to include a `push_amount`, which credits funds to the other
-party, simplifies the common case of wanting to open a channel and pay someone
-immediately. An exchange might want to send you funds via this mechanism, since
-it requires only one on-chain transaction and has the side effect of also
-opening a channel.
-If `push_amount > 0` then the initiator should send along a signed update,
-assigning that amount to the responder, before sending the `funding_created`
-message.
-
 A `channel_reserve` ensures that parties have something to lose in the case that
 they start acting maliciously. Enforcement of this rule must be done by the
 clients, which in practice means they should not sign any updates that end up
@@ -237,7 +225,6 @@ violating this invariant.
 - `temporary_channel_id` MUST be unique between the involved parties
 - `lock_period` SHOULD be sufficient time to safely publish transactions to the
   blockchain to stop a cheater
-- `push_amount` MUST be less or equal to `initiator_amount`
 - `initiator_pubkey` MUST be a valid ed25519 pubkey
 
 *Responder* MUST abort if:
@@ -254,7 +241,6 @@ violating this invariant.
 *Responder* MAY abort if:
 
 - `lock_period` is too small
-- `push_amount` is too small
 - `channel_reserve` is too large or small
 - `responder_amount` is too large
 - `initiator_amount` is too small
