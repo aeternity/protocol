@@ -68,7 +68,6 @@ in the chain, and the others are metadata used for the connection itself.
   | initiator | string | initiator's public key | Yes | Yes |
   | responder | string | responder's public key | Yes | Yes |
   | lock_period | integer | amount of blocks for disputing a solo close | Yes | Yes |
-  | push_amount | integer | initial deposit in favour of the responder by the initiator | Yes | No |
   | initiator_amount | integer | amount of tokens the initiator has committed to the channel | Yes | Yes |
   | responder_amount | integer | amount of tokens the responder has committed to the channel | Yes | Yes |
   | channel_reserve | integer | the minimum amount both peers need to maintain | Yes | Yes |
@@ -85,7 +84,6 @@ in the chain, and the others are metadata used for the connection itself.
   | initiator | ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn |
   | responder | ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68 |
   | lock_period | 10 |
-  | push_amount | 3 |
   | initiator_amount | 10 |
   | responder_amount | 10 |
   | channel_reserve | 2 |
@@ -99,7 +97,7 @@ in the chain, and the others are metadata used for the connection itself.
 Using the set of prenegotiated parameters the initiator connects
 ```
 $ wscat --connect
-'localhost:3014/channel?initiator=ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn&responder=ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68&lock_period=10&push_amount=3&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&host=localhost&port=1234&role=initiator'
+'localhost:3014/channel?initiator=ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn&responder=ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68&lock_period=10&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&host=localhost&port=1234&role=initiator'
 
 connected (press CTRL+C to quit)
 ```
@@ -110,7 +108,7 @@ Note the `role=initiator` as it is specific
 Using the set of prenegotiated parameters the responder connects
 ```
 $ wscat --connect
-'localhost:3014/channel?initiator=ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn&responder=ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68&lock_period=10&push_amount=3&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&port=1234&role=responder'
+'localhost:3014/channel?initiator=ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn&responder=ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68&lock_period=10&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&port=1234&role=responder'
 
 connected (press CTRL+C to quit)
 ```
