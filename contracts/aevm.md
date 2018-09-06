@@ -23,6 +23,7 @@ Interaction with the first class objects of the Æternity chain (e.g.
 oracles, names, and state channels) is done through calls to a
 built-in contract at address 0.
 
+
 The value in the call indicates the tokens that the primop can use from the contract account.
 Unused tokens stay on the contract account.
 
@@ -42,8 +43,8 @@ The following arguments are encoded as Sophia data.
 
 ## Chain specific instructions
 
-The COINBASE instruction retern the beneficiary of the previous block.
-When executing a contract in a state chennel (either off-chain or in
+The COINBASE instruction return the beneficiary of the current generation
+stored in the previous key block.
+When executing a contract in a state channel (either off-chain or in
 a force progress) COINBASE will return 0.
-
 
