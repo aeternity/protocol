@@ -335,14 +335,16 @@ channel_settle |   |     open     | -----+
                |    ^ |    |
                |    | | channel_withdraw/
                |    | | channel_snapshot_solo/
-               |    | | channel_deposit
+               |    | | channel_deposit/
+               |    | | channel_force_progress
                |    +-+    |
                |           | channel_close_solo
                |           v
                |   +--------------+
                +-- |    closing   | ----+
-                   +--------------+     | channel_slash
-                                 ^      |
+                   +--------------+     | channel_slash/
+                                 ^      | channel_force_progress
+                                 |      |
                                  +------+
 ```
 
@@ -351,20 +353,30 @@ channel_settle |   |     open     | -----+
 
 Each participant of a state channels keeps a state tree representing the
 internal channel's state. This tree consists of accounts, contracts and
-contract calls. Although this tree is internal to the channel during a dispute
-resolution part of is posted on-chain in order to use the blockchain as an
-arbiter so despite being internal - the privacy could be further improved.
+contract calls. Although this tree is internal to the channel, during a dispute
+resolution part of it is posted on-chain in order to use the blockchain as an
+arbiter. Despite the contract being internal in most cases, it is not in all
+cases. The privacy could be further improved.
 
-Contract life cycle closely represents the one on-chain: once a contract is
-created - it can be called by participants. Each contract has its own state,
-balance and a list of calls. Participants can make calls and thus modify channel balance
-and state. Participants can inspect the return values of past calls.
-Participants can remove a contract from a channel's state tree and
+Off-chain contract life cycle closely represents the on-chain one. A contract
+is created via a co-signed off-chain transaction. Once this is done, the new
+contract can be called by both channel participants. Each contract has its own
+state and balance. They can be modified by contrat calls executions. 
+Contract calls are purged on every round. If the last round contained a call,
+it would be part of the calls tree. Otherwise the calls will be empty.
+Different client implementations cani keep old calls so participants can
+inspect their return values but this is not part of the protocol.
+Participants can remove an off-chain contract from a channel's state tree and
 redistribute its balance amongst them.
 
-If a dispute arises - a proof of inclusion of the contract inside channel's
-state tree is posted on-chain in order for the blockchain to enforce progress
-of the channel. That way we keep contracts in channels trustless.
+Contract calls execution relies on both participants agreeing on a state
+update. At one moment a participant can be missing or refusing to cooperate to
+a valid off-chain contract call. We call this a dispute and it can be resolved
+using forcing of progress on-chain. This requires the forcing party to provide
+enough information for the contract execution as well with a proof that the
+contract had been part of the channel's state. The result of a successful
+force progress is a new channel off-chain state. This way we keep contracts
+in channels trustless.
 
 ## Light node requirements
 

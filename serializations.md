@@ -546,7 +546,9 @@ The payload is a serialized signed channel off-chain transaction and can not be 
 [ <channel_id>      :: id()
 , <from>            :: id()
 , <payload>         :: binary()
-, <solo_payload>    :: binary()
+, <round>           :: int()
+, <update>          :: binary()
+, <state_hash>      :: binary() 
 , <addresses>       :: [id()]
 , <poi>             :: poi()
 , <ttl>             :: int()
@@ -556,7 +558,13 @@ The payload is a serialized signed channel off-chain transaction and can not be 
 ```
 
 The payload is a serialized co-signed channel off-chain transaction or it is empty.
-The solo payload is a serialized single-signed next channel off-chain transaction and it can not be empty.
+The round is the new channel's round that will be produced by the forcing of
+progress.
+The update is the contract call update to be applied on the old channel's
+state.
+The state hash is the expected root hash of the produced channel's state trees
+after the update had been applied to the channel state provided in the proof
+of inclusion.
 The proof of inclusion has the same root hash as the state hash of the co-signed
 payload.
 

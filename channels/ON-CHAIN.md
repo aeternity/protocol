@@ -423,15 +423,17 @@ than the one co-signed off-chain.
 
 The `channel_force_progress_tx` can be included in a block if either the last
 on-chain transaction for the targeted channel is not a force progress one or
-the block height timer had passed.
+the block height timer for force progressing had passed.
 
 It consists of:
 
 - `channel_id`: channel id as recorded on-chain
 - `from`: participant of the channel that posts the force progress transaction
 - `payload`: empty or a transaction proving that the proof of inclusion is part of the channel
-- `solo_payload`: a transaction representing the change to be applied on the
-  channel's state
+- `round`: channel's next round
+- `update`: channel off-chain update that contains the contract call with gas
+  limit and gas prices to be consumed for the on-chain execution
+- `state_hash`: channel's expected new root hash of off-chain state trees  
 - `addresses` - a list of ids for accounts and contracts provided in the proof
   of inclusion
 - `poi`: proof of inclusion for the old channel state
@@ -457,20 +459,17 @@ An off-chain transaction payload is a valid transaction if it has:
 * `channel_id` being the same as the transaction `channel_id`
 * `round` being greater to the last on-chain `round` for that channel id.
 
-The solo_payload can not be empty. It MUST be a signed transaction.
-It MUST be a channel_offchain_tx
-
-An off-chain transaction solo payload is a valid transaction if it has:
-* `channel_id` being the same as the transaction `channel_id`
-* `round` being the incremented by one `round` provided in the `payload`. 
-* `updates` has a single update that is a call to a contract. The caller of
-  this update MUST be the poster of the force progress transaction. `gas` and
-  `gas_price` are specified. The gas fees are going to be paid by the poster
-  of the transaction.
-* `state_hash` will be the root hash of the updated channel's state trees.
-  After applying the contract call to the provided `poi` and updating accounts
-  accodingly - a new channel's state tree is produced. It SHOULD have the same
-  root hash as the one provided in the `solo_payload`
+The round MUST be the incremented by one `round` provided in the `payload`. 
+The update MUST be a call to a contract. The caller of this update MUST be
+the poster of the force progress transaction. `gas` and `gas_price` are
+specified in the update as well. The gas fees are going to be paid by the poster
+of the transaction.
+The state_hash will be the root hash of the updated channel's state trees.
+After applying the contract call to the provided `poi` and updating accounts
+accodingly - a new channel's state tree is produced. It SHOULD have the same
+value of root hash as the state hash. If those do not match the force progress
+fails but since this can only be determined after the call had been executed, a
+call object is added on-chain and gas is consumed.
 
 Serialization defined [here](../serializations.md#channel-solo-force-progress-transaction)
 
@@ -479,30 +478,29 @@ Serialization defined [here](../serializations.md#channel-solo-force-progress-tr
 #### Updating channel object
 
 A channel state trees are recreated according to the `poi` being provided. The
-update provided in the `updates` of the `solo_payload` is a contract call one.
-It is applied on the channel's state trees and modifies them. The modified
-trees have a root hash. It might be:
+update is an off-chain contract call. It is applied on the channel's state trees and
+modifies them. The modified trees have a root hash. It might be:
 
-- equal to the `state_hash` provided in the `solo_payload`. This hash
+- equal to the `state_hash` provided in the force progress transaction. This hash
   indeed is the expected result of the contract call and the blockchain has
   confirmed it. The on-chain channel object is updated accordingly:
   - channel's state hash is updated to be the newly computed one
-  - channel's round is the one in the `solo_payload`
+  - channel's round is the one in the force progress transaction
   - if the channel had been in a closing state, closing balances of
     participants are updated according to the ones in the modified channel state trees
 
-- not equal to the `state_hash` provided in the `solo_payload`. The hash
+- not equal to the `state_hash` provided in the force progress transaction. The hash
   provided was not confirmed to be the expected one. The on-chain channel
-  object is NOT modified
+  object is NOT modified. Gas is still consumed and a call object is created
+  on-chain.
 
 #### Call object
 
 If the `channel_force_progress_tx` is a valid one - the contract call in the
-`solo_payload`'s `updates` is executed upon the MPT that had been produced by
-the `poi`. The output is a new MPT that will represent the new off-chain
-channel state. Participants are to either continue using the channel or close
-it. If there is no later off-chain update, they should use this produced MPT
-in both cases.
+`update` is executed upon the MPT that had been produced by the `poi`. The
+output is a new MPT that will represent the new off-chain channel state.
+Participants are to either continue using the channel or close it. If there
+is no later off-chain update, they are expected to use this produced MPT in both cases.
 
 The contract execution consumes gas. The `update` itself
 defines both the gas limit and the gas price. After the contract call has been
