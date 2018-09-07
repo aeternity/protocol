@@ -325,7 +325,7 @@ Oracle.extend(o    : oracle('a, 'b),
               ttl  : Chain.ttl) : ()
 ```
 
-The `ttl` is either a fixed height or relative to the current oracle expiry
+The `ttl` is must be a relative TTL, relative to the current oracle expiry
 height. For instance, passing `RelativeTTL(100)` adds 100 blocks to the expiry
 time of the oracle.
 
