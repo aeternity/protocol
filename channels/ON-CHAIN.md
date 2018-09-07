@@ -409,7 +409,10 @@ state. We have no way of proving that this is the case so there is a time frame
 provided for the other participant to dispute it. This time frame is
 measured in block height and it works exactly like the `lock_period` does for
 closing sequences - a new force progress can not be posted until a certain chain
-height is reached. It is worth mentioning that what is to be
+height is reached. The value of the block height timer is the same as the one
+of the `lock_period`.
+
+It is worth mentioning that what is to be
 disputed is the off-chain state that the force progress had been based on but not
 the forcing of progress itself. If an older state had been provided by the
 forcing party, the other party can post a newer co-signed off-chain state (via a
