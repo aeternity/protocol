@@ -148,7 +148,7 @@ GENESIS_VERSION: 22
 - txs_hash MUST be correct root hash of the merkle tree of all transactions.
 - ***TODO***: fill in missing rules
 
-Header [serialization format](../serializations.md#key-block-header)
+Header [serialization format](../serializations.md#key-blockheader)
 
 Block [serialization format](../serializations.md#key-block)
 

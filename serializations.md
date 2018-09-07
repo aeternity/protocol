@@ -11,25 +11,38 @@ for:
 Other formats may be used for communication between nodes or for the
 user API.
 
-
-
-## Static size object serialization
+## Blocks and headers
 
 There are two types of blocks:
 
 * micro block - contains a header and a list of transactions.
 * key block - contains only a header.
 
-### Key block header
+Blocks are serialized in a staged manner for uniformity. The key block
+does not contain any more information than the header, so the
+representation of the block and the header is the same. Micro blocks
+has a static size header and a dynamic size "body".
+
+The first bit of the headers are used as a tag to distinguish between
+a key block and a micro block.
+
+| Header type tag | Header type |
+| ---             | ---         |
+| 0               | micro       |
+| 1               | key         |
+
+### Key block/header
 
 All field sizes are statically known and can be constructed directly as
 a byte array.
 
 | Fieldname  | Size (bytes) |
 | --- | ---  |
-| version     | 8    |
+| key_tag     | 1 bit   |
+| version     | 63 bits |
 | height      | 8    |
 | prev_hash   | 32   |
+| prev_key_hash | 32   |
 | state_hash  | 32   |
 | miner       | 32   |
 | beneficiary | 32   |
@@ -38,6 +51,13 @@ a byte array.
 | nonce       | 8    |
 | time        | 8    |
 
+### Micro block
+
+| Fieldname    | Size |
+| ---          | ---  |
+| Micro Header | 216 bytes |
+| [Micro Body](#micro-body)| variable |
+
 ### Micro block header
 
 All field sizes of a micro block header are statically known and can be
@@ -45,9 +65,11 @@ constructed directly as a byte array.
 
 | Fieldname | Size (bytes) |
 | --- | --- |
-| version    | 8    |
+| micro_tag  | 1 bit   |
+| version    | 63 bits |
 | height     | 8    |
 | prev_hash  | 32   |
+| prev_key_hash | 32   |
 | state_hash | 32   |
 | txs_hash   | 32   |
 | time       | 8    |
@@ -170,8 +192,7 @@ subsequent sections divided by object.
 | Channel | 58 |
 | Channel snapshot transaction | 59 |
 | POI | 60 |
-| Key block | 100 |
-| Micro block | 101 |
+| Micro body | 101 |
 | Light micro block | 102 |
 
 #### Accounts
@@ -666,25 +687,10 @@ NOTE: As the POI contains the Merkle Patricia Tree nodes (e.g. not only their ha
 * The key used for storing each object in each state subtree is not necessarily derived from the object itself.
 * The value(s) whose inclusion the POI proves is included in the POI itself.
 
-### Blocks
 
-### Micro block
-
+#### Micro Body
 ```
-[ <header>       :: binary()
-, <transactions> :: [binary()]
+[ <transactions> :: [binary()]
 ]
 ```
 NOTE: The transactions are signed transactions.
-
-### Key block
-
-Key blocks contain no more information that their [headers](#key-block-header). However, in
-order to distinguish between key blocks and micro blocks in transport
-format, the header is wrapped and tagged in the same way as micro blocks.
-
-```
-[ <header>       :: binary()
-]
-```
-
