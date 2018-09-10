@@ -23,6 +23,7 @@ Interaction with the first class objects of the Æternity chain (e.g.
 oracles, names, and state channels) is done through calls to a
 built-in contract at address 0.
 
+
 The value in the call indicates the tokens that the primop can use from the contract account.
 Unused tokens stay on the contract account.
 
@@ -40,33 +41,10 @@ The following arguments are encoded as Sophia data.
 |  105 | Oracle get question | (Unused.)      | `Oracle : address, Query : address` | `'a` |
 |  106 | Oracle query fee    | (Unused.)      | `Oracle : address`    | `int`           |
 
-## New instructions
+## Chain specific instructions
 
-[TODO: Describe these instructions.]
-
-There is a PUSH N instruction.
-
-AEVM also has some new instructions that will make it into the EVM at some point:
-
-```
-JUMPTO jump_target
-JUMPIF jump_target
-BEGINSUB n_args, n_results
-JUMPSUB jump_target
-RETURNSUB
-SHL
-SHR
-SAR
-ROL
-```
-
-
-## The Fast Æternity Virtual Machine FAEVM
-
-The FAEVM is also version of the EVM: https://github.com/ethereum/yellowpaper and it follows the AEVM exactly.
-
-The FAEVM compiles the contract code to native code on supported hardware. The code will then execute outside
-of the Ethereum node and all code, data and arguments need to be marshaled to call the native code. This makes
-for slower calls but faster execution for larger contracts.
-
+The COINBASE instruction return the beneficiary of the current generation
+stored in the previous key block.
+When executing a contract in a state channel (either off-chain or in
+a force progress) COINBASE will return 0.
 
