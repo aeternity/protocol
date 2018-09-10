@@ -898,6 +898,7 @@ Data is encoded in memory as follows:
     - `option(t)`: `{4, encode(t)}`
     - `datatype(cs)`: `{5, encode(cs)}`, where `cs : list(list(typerep))`
       are the type representations for the constructor arguments
+  - The `ttl` type is encoded as the datatype `datatype ttl = RelativeTTL(int) | FixedTTL(int)`.
 - Pointers are relative, with the address of the first word of the data being
   the *base address*. For calldata, the base address is 32 and for return
   values and contract state the base address is 0.
