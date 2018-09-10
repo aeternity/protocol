@@ -15,7 +15,7 @@ The following assumes that the node exposes at address 127.0.0.1 the following p
 Check the public key of the node first (used as account key in later API calls):
 ```
 curl http://127.0.0.1:3113/v2/debug/accounts/node
-{"pub_key":"ak$scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSf"}
+{"pub_key":"ak_scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSf"}
 ```
 
 ### Verify availability
@@ -37,7 +37,7 @@ For the purpose of this example name `foobar.aet` with salt 123 is considered.
 In order to obtain commitment hash use the [/debug/names/commitment-id endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/GetCommitmentId):
 ```
 curl http://localhost:3013/v2/debug/names/commitment-id\?name\=foobar.aet\&salt\=123
-{"commitment_id":"cm$cwe2wGMbiNkXadsw1vzDDCKgi1TunyWgpz3s9fGPE25gJJnHK"}
+{"commitment_id":"cm_cwe2wGMbiNkXadsw1vzDDCKgi1TunyWgpz3s9fGPE25gJJnHK"}
 ```
 
 To preclaim a name:
@@ -45,7 +45,7 @@ To preclaim a name:
 In order to ease the initial integration, the epoch node provides
 [/debug/names/preclaim endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostNamePreclaim):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/names/preclaim -d '{"commitment_id":"cm$cwe2wGMbiNkXadsw1vzDDCKgi1TunyWgpz3s9fGPE25gJJnHK", "fee": 1, "ttl":1234}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/names/preclaim -d '{"commitment_id":"cm_cwe2wGMbiNkXadsw1vzDDCKgi1TunyWgpz3s9fGPE25gJJnHK", "fee": 1, "ttl":1234}'
 {"tx":"..."}
 ```
 * sign the prepared transaction (e.g. by using the SDK)
@@ -86,7 +86,7 @@ In order to update pointers:
 In order to ease the initial integration, the epoch node provides
 [/debug/names/update endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostNameUpdate):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/names/update -d '{"name_id": "...", "name_ttl": 10000, "client_ttl": 50, "pointers":[{"key":"account_pubkey", "id":"ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw"}], "fee": 1, "ttl":1234}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/names/update -d '{"name_id": "...", "name_ttl": 10000, "client_ttl": 50, "pointers":[{"key":"account_pubkey", "id":"ak_3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw"}], "fee": 1, "ttl":1234}'
 {"tx":"..."}
 ```
 * sign the prepared transaction (e.g. by using the SDK)
@@ -109,7 +109,7 @@ In order to transfer a name to another user:
 In order to ease the initial integration, the epoch node provides
 [/debug/names/transfer endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostNameTransfer):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/names/transfer -d '{name_id": "nm$sEWkhrhGMAve7dhfNgXbjUVqSGD1HoZLgBnNAjRjWe5wm8iCC", "recipient_id": "ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw", "account_id":"ak$3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3Qd",  "fee": 1, "ttl":1234}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/names/transfer -d '{name_id": "nm_sEWkhrhGMAve7dhfNgXbjUVqSGD1HoZLgBnNAjRjWe5wm8iCC", "recipient_id": "ak_3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw", "account_id":"ak_3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3Qd",  "fee": 1, "ttl":1234}'
 {"tx":"..."}
 ```
 * sign the prepared transaction (e.g. by using the SDK)
@@ -122,7 +122,7 @@ In order to revoke a name:
 In order to ease the initial integration, the epoch node provides
 [/debug/names/revoke endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostNameRevoke):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/names/revoke -d '{"name_id": "nm$sEWkhrhGMAve7dhfNgXbjUVqSGD1HoZLgBnNAjRjWe5wm8iCC", "fee": 1, "ttl":1234}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/names/revoke -d '{"name_id": "nm_sEWkhrhGMAve7dhfNgXbjUVqSGD1HoZLgBnNAjRjWe5wm8iCC", "fee": 1, "ttl":1234}'
 {"tx":"..."}
 ```
 * sign the prepared transaction (e.g. by using the SDK)

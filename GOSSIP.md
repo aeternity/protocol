@@ -20,7 +20,7 @@ port number the node is using. If the address contains a hostname, it will be
 resolved to an IP. Example:
 
 ```
-aenode://pp$HryRGHJ7Ct3trkktVyVBgfhHL1J4EYSD9cScuMZDV61eSHrCZ@mynode.example.com:3015
+aenode://pp_HryRGHJ7Ct3trkktVyVBgfhHL1J4EYSD9cScuMZDV61eSHrCZ@mynode.example.com:3015
 ```
 
 A node is uniquely identified by its public key, and it can only have one IP and

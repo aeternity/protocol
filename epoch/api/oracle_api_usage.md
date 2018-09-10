@@ -21,7 +21,7 @@ public key of the node. This is easily retrieved from the running node:
 ```
 curl http://127.0.0.1:3113/v2/debug/accounts/node
 
-{"pub_key":"ak$jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}
+{"pub_key":"ak_jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}
 ```
 
 We need to wait for the first block to be mined by the node (or else our
@@ -34,7 +34,7 @@ Once the account has a positive balance we can register an oracle:
 In order to ease the initial integration, the epoch node provides
 [/debug/oracles/register endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostOracleRegister):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/oracle -d '{"account_id:"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_format":"the query spec", "response_format":"the response spec", "query_fee":4, "oracle_ttl":{"type":"delta", "value":50}, "fee":2, "ttl":1234}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/oracle -d '{"account_id:"ak_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_format":"the query spec", "response_format":"the response spec", "query_fee":4, "oracle_ttl":{"type":"delta", "value":50}, "fee":2, "ttl":1234}'
 {"tx":"..."}
 ```
 **NOTE:** the *transaction fee* is depending on the _TTL_. An oracle register
@@ -49,7 +49,7 @@ oracle is created:
 ```
 curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov
 
-{"expires":51,"id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query_fee":4,"query_format":"the query spec","response_format":"the response spec"}
+{"expires":51,"id":"ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query_fee":4,"query_format":"the query spec","response_format":"the response spec"}
 ```
 
 ### Extend
@@ -59,7 +59,7 @@ Now, when the oracle exists, we can extend the TTL:
 In order to ease the initial integration, the epoch node provides
 [/debug/oracles/extend endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostOracleExtend):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/extend -d '{"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "fee":5, "oracle_ttl":{"type":"delta", "value":100}}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/extend -d '{"oracle_id":"ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "fee":5, "oracle_ttl":{"type":"delta", "value":100}}'
 {"tx":"..."}
 ```
 * sign the prepared transaction (e.g. by using the SDK)
@@ -69,7 +69,7 @@ Again, we can check that the TTL was extended:
 ```
 curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov
 
-{"expires":151,"id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query_fee":4,"query_format":"the query spec","response_format":"the response spec"}
+{"expires":151,"id":"ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query_fee":4,"query_format":"the query spec","response_format":"the response spec"}
 ```
 
 ### Query
@@ -79,7 +79,7 @@ We can post a query to the existing oracle:
 In order to ease the initial integration, the epoch node provides
 [/debug/oracles/query endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostOracleQuery):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/query -d '{"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":2, "ttl":15, "query":"How are you?"}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/query -d '{"oracle_id":"ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":2, "ttl":15, "query":"How are you?"}'
 {"tx":"..."}
 ```
 **NOTE** Similarly to the oracle registration transaction, the _transaction fee_ field depends
@@ -94,7 +94,7 @@ We can check the active oracle queries:
 ```
 curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov/queries
 
-{"oracle_queries":[{"expires":13,"fee":4,"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query":"ov$9wnkKJ3Qf2trdpq9EQbWQC","query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","response":"or$3QJmnh","response_ttl":{"type":"delta","value":10},"sender_id":"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","sender_nonce":3}]}
+{"oracle_queries":[{"expires":13,"fee":4,"oracle_id":"ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query":"ov_9wnkKJ3Qf2trdpq9EQbWQC","query_id":"oq_2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","response":"or_3QJmnh","response_ttl":{"type":"delta","value":10},"sender_id":"ak_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","sender_nonce":3}]}
 ```
 
 **NOTE** the query and response values are Base58Check-encoded.
@@ -107,7 +107,7 @@ We should note that in the response for the query request above we got the
 In order to ease the initial integration, the epoch node provides
 [/debug/oracles/respond endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostOracleRespond):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/respond -d '{"query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m", "fee":2, "ttl":1234, "response":"I am fine, thanks!"}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/respond -d '{"query_id":"oq_2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m", "fee":2, "ttl":1234, "response":"I am fine, thanks!"}'
 {"tx":"..."}
 ```
 **NOTE** The _transaction fee_ depends on the response _TTL_ (as set in the query). The base
@@ -121,7 +121,7 @@ be added to the chain), we see that there is a response for the query:
 ```
 curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov/queries
 
-{"oracle_queries":[{"expires":14,"fee":4,"oracle_id":"ok$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query":"ov$9wnkKJ3Qf2trdpq9EQbWQC","query_id":"oq$2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","response":"or$Lr9RvdW8vZR8wq14ic7yUyC2vzi4nT","response_ttl":{"type":"delta","value":10},"sender_id":"ak$EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","sender_nonce":3}]}
+{"oracle_queries":[{"expires":14,"fee":4,"oracle_id":"ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query":"ov_9wnkKJ3Qf2trdpq9EQbWQC","query_id":"oq_2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","response":"or_Lr9RvdW8vZR8wq14ic7yUyC2vzi4nT","response_ttl":{"type":"delta","value":10},"sender_id":"ak_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","sender_nonce":3}]}
 ```
 
 **NOTE** the query and response values are Base58Check-encoded.
