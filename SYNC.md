@@ -50,7 +50,7 @@ Each node has a static `Curve25519` key pair for P2P communication. The peer
 discovery is bootstrapped by having a set of Aeternity peer addresses in the
 node configuration and the node tries to connect to these peers after starting
 up the node. Peer addresses looks like:
-`aenode://pp$ttZZwTS2nzxg7pnEeFMWeRCfdvdxeRu6SgVyeALZX3LbdeiWS@31.13.249.0:3015`.
+`aenode://pp_ttZZwTS2nzxg7pnEeFMWeRCfdvdxeRu6SgVyeALZX3LbdeiWS@31.13.249.0:3015`.
 
 
 (***TODO***: Spell out the full protocol including key schedule etc.)

@@ -82,8 +82,8 @@ in the chain, and the others are metadata used for the connection itself.
 
   | Name | Value |
   | ---- | ----- |
-  | initiator_id | ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn |
-  | responder_id | ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68 |
+  | initiator_id | ak_4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn |
+  | responder_id | ak_35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68 |
   | lock_period | 10 |
   | push_amount | 3 |
   | initiator_amount | 10 |
@@ -99,7 +99,7 @@ in the chain, and the others are metadata used for the connection itself.
 Using the set of prenegotiated parameters the initiator connects
 ```
 $ wscat --connect
-'localhost:3014/channel?initiator_id=ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn&responder_id=ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68&lock_period=10&push_amount=3&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&host=localhost&port=1234&role=initiator'
+'localhost:3014/channel?initiator_id=ak_4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn&responder_id=ak_35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68&lock_period=10&push_amount=3&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&host=localhost&port=1234&role=initiator'
 
 connected (press CTRL+C to quit)
 ```
@@ -110,7 +110,7 @@ Note the `role=initiator` as it is specific
 Using the set of prenegotiated parameters the responder connects
 ```
 $ wscat --connect
-'localhost:3014/channel?initiator_id=ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn&responder_id=ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68&lock_period=10&push_amount=3&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&port=1234&role=responder'
+'localhost:3014/channel?initiator_id=ak_4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn&responder_id=ak_35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68&lock_period=10&push_amount=3&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&port=1234&role=responder'
 
 connected (press CTRL+C to quit)
 ```
@@ -145,14 +145,14 @@ The initiator receives a message containing the unsigned transaction
 ```
 {'action': 'sign',
  'tag': 'initiator_signed',
- 'payload': {'tx': 'tx$6GDUCeNUH5DYb7RB6Aa9WNHwPzjj8jWwp1rt9iyimoJvpKe7NeCAcWryYY965s6Y8F7FxHyYffSxE5VhLPdm1gWiJFCG3Qd2FuZzs9vi4zhmY5MvHQpWrtuPdMd71YCu8kL5VNGkCQVPBLHWddCeuFRyknZPR3b'}
+ 'payload': {'tx': 'tx_6GDUCeNUH5DYb7RB6Aa9WNHwPzjj8jWwp1rt9iyimoJvpKe7NeCAcWryYY965s6Y8F7FxHyYffSxE5VhLPdm1gWiJFCG3Qd2FuZzs9vi4zhmY5MvHQpWrtuPdMd71YCu8kL5VNGkCQVPBLHWddCeuFRyknZPR3b'}
  }
 ```
 Initiator is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
 ```
 {'action': 'initiator_signed',
- 'payload': {'tx': 'tx$7gq4gp1GGiqdJ1qEZv5h4UiUdaPS4BtwyR1FitViBERzHjntzwCUWLgVM6khGeLuYMehyhbPuqYD6HwR5r1bQb9BTKt3WcaGgBQhUx8CFdjTA2QPhZnGrE5k8uuturu7uaeRLXeyUQJMyoSf5xZzD3DrzomkUJuYb1r3E6pHvNxjUbq2Qo4xoDYp6kjBo5nzNdAEnwk8iwn1opLjFRDX519nPAfEujqsTrkjCScu2FjaUwqkvSnVA8JT8v4FumsdP5ua'}
+ 'payload': {'tx': 'tx_7gq4gp1GGiqdJ1qEZv5h4UiUdaPS4BtwyR1FitViBERzHjntzwCUWLgVM6khGeLuYMehyhbPuqYD6HwR5r1bQb9BTKt3WcaGgBQhUx8CFdjTA2QPhZnGrE5k8uuturu7uaeRLXeyUQJMyoSf5xZzD3DrzomkUJuYb1r3E6pHvNxjUbq2Qo4xoDYp6kjBo5nzNdAEnwk8iwn1opLjFRDX519nPAfEujqsTrkjCScu2FjaUwqkvSnVA8JT8v4FumsdP5ua'}
  }
 ```
 
@@ -172,14 +172,14 @@ After being informed for the initiator's signing the responder receives a messag
 ```
 {'action': 'sign',
  'tag': 'responder_signed',
- 'payload': {'tx': 'tx$6GDUCeNUH5DYb7RB6Aa9WNHwPzjj8jWwp1rt9iyimoJvpKe7NeCAcWryYY965s6Y8F7FxHyYffSxE5VhLPdm1gWiJFCG3Qd2FuZzs9vi4zhmY5MvHQpWrtuPdMd71YCu8kL5VNGkCQVPBLHWddCeuFRyknZPR3b'}
+ 'payload': {'tx': 'tx_6GDUCeNUH5DYb7RB6Aa9WNHwPzjj8jWwp1rt9iyimoJvpKe7NeCAcWryYY965s6Y8F7FxHyYffSxE5VhLPdm1gWiJFCG3Qd2FuZzs9vi4zhmY5MvHQpWrtuPdMd71YCu8kL5VNGkCQVPBLHWddCeuFRyknZPR3b'}
  }
 ```
 Note that this is the same transaction. Responder is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
 ```
 {'action': 'responder_signed',
- 'payload': {'tx': 'tx$6GDUCeNUH5DYb7RB6Aa9WNHwPzjj8jWwp1rt9iyimoJvpKe7NeCAcWryYY965s6Y8F7FxHyYffSxE5VhLPdm1gWiJFCG3Qd2FuZzs9vi4zhmY5MvHQpWrtuPdMd71YCu8kL5VNGkCQVPBLHWddCeuFRyknZPR3b'}
+ 'payload': {'tx': 'tx_6GDUCeNUH5DYb7RB6Aa9WNHwPzjj8jWwp1rt9iyimoJvpKe7NeCAcWryYY965s6Y8F7FxHyYffSxE5VhLPdm1gWiJFCG3Qd2FuZzs9vi4zhmY5MvHQpWrtuPdMd71YCu8kL5VNGkCQVPBLHWddCeuFRyknZPR3b'}
  }
 ```
 #### Initiator is informed
@@ -194,7 +194,7 @@ The initiator receives the following message
 Both participants receive the co-signed `channel_create_tx`:
 ```
 {'action': 'on_chain_tx',
- 'payload': {'tx': 'tx$9mmqY8QRoYS8QR5nyRkWwTyhwecE8NzHotRK1yMjvfvyPfsaBNwWFDrmzG3M5rHKARm39AqeJpgN4Aj7V57yP4KusptAvMA2r3y593vr51ubXN8zo8t8qg7Arb32wWhmYDvRXVGKhfYoqu91BpkammeY69xCjGuQrXKDk3t9aPCcrvM3PbERAMvkmvD9dsb2H5iujGin8qZTy42xsUYS6QcTiaomxo8CmieGSvZkAai1KCZ84MZzsAjsR1FP54Su7rfBPXZTd5u2AmyF7LwZoHQsJEspLnzXxun2MtKTkhR3du8PY'
+ 'payload': {'tx': 'tx_9mmqY8QRoYS8QR5nyRkWwTyhwecE8NzHotRK1yMjvfvyPfsaBNwWFDrmzG3M5rHKARm39AqeJpgN4Aj7V57yP4KusptAvMA2r3y593vr51ubXN8zo8t8qg7Arb32wWhmYDvRXVGKhfYoqu91BpkammeY69xCjGuQrXKDk3t9aPCcrvM3PbERAMvkmvD9dsb2H5iujGin8qZTy42xsUYS6QcTiaomxo8CmieGSvZkAai1KCZ84MZzsAjsR1FP54Su7rfBPXZTd5u2AmyF7LwZoHQsJEspLnzXxun2MtKTkhR3du8PY'
             }
 }
 ```
@@ -204,7 +204,7 @@ Using its hash, participants can track its progress on the chain: entering the m
 At this point both parties had received the co-signed the `channel_create_tx` transaction. The transaction is posted by the state
 channel's software to the node and goes to the mempool. Having calculated its hash, one can validate it using the external HTTP API:
 ```
-$ curl 'http://localhost:3013/v2/transactions/th$hNyHzj4dSzyBqReAMR36GGz1mhuXxQFuES3AnPkXkuY2w6dZb'
+$ curl 'http://localhost:3013/v2/transactions/th_hNyHzj4dSzyBqReAMR36GGz1mhuXxQFuES3AnPkXkuY2w6dZb'
 ```
 if the `block_hash` is `none` - then the transaction is still in the mempool.
 
@@ -224,7 +224,7 @@ An update from one's own node that the other party had confirmed that the block
 height needed is reached:
 ```
 {'action': 'info',
- 'channel_id': 'ch$RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
+ 'channel_id': 'ch_RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
  'payload': {'event': 'funding_locked'}
  }
 ```
@@ -238,7 +238,7 @@ described in the create transaction.
 After both parties have co-signed the state update both of them will receive a info for the channel open:
 ```
 {'action': 'info',
- 'channel_id': 'ch$RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
+ 'channel_id': 'ch_RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
  'payload': {'event': 'open'}
  }
 ```
@@ -300,10 +300,10 @@ The starter sends a message containing the desired change
 ```
 {'action': 'update',
  'tag': 'new',
- 'channel_id': 'ch$RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
+ 'channel_id': 'ch_RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
  'payload': {
-    'from': 'ak$3YGRJv1QMgNbeDzvqX7qJrZWJDaHGmrHYHifxSbhSEgn6anuNYCNPrzsB911xTbZ35bvJYWLyYjrQaQKfvja9gkpvYMfEZ',
-    'to': 'ak$3gVuduh7vR9G7Hq3TpFaA7q9oQkMZZF2VsUxDYZabNeKC1uaqtjpKSth7wPn9dxnUzsHoT2fa6GPUzepbDXMHyC2F3HupT',
+    'from': 'ak_3YGRJv1QMgNbeDzvqX7qJrZWJDaHGmrHYHifxSbhSEgn6anuNYCNPrzsB911xTbZ35bvJYWLyYjrQaQKfvja9gkpvYMfEZ',
+    'to': 'ak_3gVuduh7vR9G7Hq3TpFaA7q9oQkMZZF2VsUxDYZabNeKC1uaqtjpKSth7wPn9dxnUzsHoT2fa6GPUzepbDXMHyC2F3HupT',
     'amount': 2
     }
  }
@@ -318,16 +318,16 @@ off-chain transaction
 {'action': 'sign',
  'tag': 'update',
  'payload' {
-    'tx': 'tx$21uV5so71tzLyBzTGBd5qd318n8Z33ninWoJzuBBKa3y3cLv8jL1gBsUpwoT1Wzs57fpxgxk7asMpuxcKpYxRnH1Qk679DjPUjLx3Lu6eNnPnfDwb4NpMq5tmm1Sq1j4MLfi6mFLadQ4CyuiENcytACQgkiU2CP8jWHKDCxAprKxP7EnXRKGbyaXkQRjvxmd5BK5XpnPHMoLb4zrrQfex5Wi8SkJjxWrhRyTr7u8jqyyebVPYmz3iRnnoEHfiECzBLdAYBz12U4VgUNrYug8C3ns5GcB1ytaUmggpDGY4K97dyYR8aMorFfqY6rPjwpRoL1BjbJgUBw54VVgMEijfeVCNcyw8wrVJnZeUAQKSesJcPhWShY717GVeQfGGHLzJhTY7iYBUUQCLfoVms86jJ3vMo1d9DpnahpCXfrZeR2PExg8Cn9DXc'}
+    'tx': 'tx_21uV5so71tzLyBzTGBd5qd318n8Z33ninWoJzuBBKa3y3cLv8jL1gBsUpwoT1Wzs57fpxgxk7asMpuxcKpYxRnH1Qk679DjPUjLx3Lu6eNnPnfDwb4NpMq5tmm1Sq1j4MLfi6mFLadQ4CyuiENcytACQgkiU2CP8jWHKDCxAprKxP7EnXRKGbyaXkQRjvxmd5BK5XpnPHMoLb4zrrQfex5Wi8SkJjxWrhRyTr7u8jqyyebVPYmz3iRnnoEHfiECzBLdAYBz12U4VgUNrYug8C3ns5GcB1ytaUmggpDGY4K97dyYR8aMorFfqY6rPjwpRoL1BjbJgUBw54VVgMEijfeVCNcyw8wrVJnZeUAQKSesJcPhWShY717GVeQfGGHLzJhTY7iYBUUQCLfoVms86jJ3vMo1d9DpnahpCXfrZeR2PExg8Cn9DXc'}
 }
 ```
 The starter is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
 ```
 {'action': 'update',
- 'channel_id': 'ch$RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
+ 'channel_id': 'ch_RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
  'payload': {
-    'tx': 'tx$xCHADUvUikbjGRcBmioKtXFQKpGs7yZHvhkcjByxQDG5xnCpU6YVQs4qyBZL6h18xjTSy1wtUFe8ipKMHLp6VmU2KwLgd4mbUtqELz6w9wV6PGTex6ZS2y7TtqZsDuesGFTZqYET8syCor8kzGjemUkzvwHMJdKsQ5guDWj1C2EcuNR3MnK9heJLbKuf19peGDvijjS8zdCD1pxE4QcsVi9pAGUBCgFyKx8FkDzhv6LxjysuxdmuZqeTGq49s71QdVB74Y1DAQUq5JsH1kyhadFxVepS6FYmcBC4xK8h1sefipPAAVFY7YwNtj2W6U9CTCqSVAQSrpfGAo6322gSneD8aRKoGpQpy1NfxVePKqM5igmd1B6QDGcEYDigBzzNwrXpuYqjrdG5eB6C6ehwAxNskmiudbEuKrjwNL5JzExxrR21L5oQCDc3RMyPdeWJxs8eJfHCrWyzyAwsykV4hVGxddbsbrDWd3re42N5HARXpQG6Gq6aMGnSHJAKbXCWxys4Si6Wjpey7HyEgT1hYoxqtmwEGhW96Ksig'
+    'tx': 'tx_xCHADUvUikbjGRcBmioKtXFQKpGs7yZHvhkcjByxQDG5xnCpU6YVQs4qyBZL6h18xjTSy1wtUFe8ipKMHLp6VmU2KwLgd4mbUtqELz6w9wV6PGTex6ZS2y7TtqZsDuesGFTZqYET8syCor8kzGjemUkzvwHMJdKsQ5guDWj1C2EcuNR3MnK9heJLbKuf19peGDvijjS8zdCD1pxE4QcsVi9pAGUBCgFyKx8FkDzhv6LxjysuxdmuZqeTGq49s71QdVB74Y1DAQUq5JsH1kyhadFxVepS6FYmcBC4xK8h1sefipPAAVFY7YwNtj2W6U9CTCqSVAQSrpfGAo6322gSneD8aRKoGpQpy1NfxVePKqM5igmd1B6QDGcEYDigBzzNwrXpuYqjrdG5eB6C6ehwAxNskmiudbEuKrjwNL5JzExxrR21L5oQCDc3RMyPdeWJxs8eJfHCrWyzyAwsykV4hVGxddbsbrDWd3re42N5HARXpQG6Gq6aMGnSHJAKbXCWxys4Si6Wjpey7HyEgT1hYoxqtmwEGhW96Ksig'
     }
 }
 ```
@@ -344,7 +344,7 @@ off-chain transaction
 {'action': 'sign',
  'tag': 'update_ack',
  'payload' {
-    'tx': 'tx$21uV5so71tzLyBzTGBd5qd318n8Z33ninWoJzuBBKa3y3cLv8jL1gBsUpwoT1Wzs57fpxgxk7asMpuxcKpYxRnH1Qk679DjPUjLx3Lu6eNnPnfDwb4NpMq5tmm1Sq1j4MLfi6mFLadQ4CyuiENcytACQgkiU2CP8jWHKDCxAprKxP7EnXRKGbyaXkQRjvxmd5BK5XpnPHMoLb4zrrQfex5Wi8SkJjxWrhRyTr7u8jqyyebVPYmz3iRnnoEHfiECzBLdAYBz12U4VgUNrYug8C3ns5GcB1ytaUmggpDGY4K97dyYR8aMorFfqY6rPjwpRoL1BjbJgUBw54VVgMEijfeVCNcyw8wrVJnZeUAQKSesJcPhWShY717GVeQfGGHLzJhTY7iYBUUQCLfoVms86jJ3vMo1d9DpnahpCXfrZeR2PExg8Cn9DXc'
+    'tx': 'tx_21uV5so71tzLyBzTGBd5qd318n8Z33ninWoJzuBBKa3y3cLv8jL1gBsUpwoT1Wzs57fpxgxk7asMpuxcKpYxRnH1Qk679DjPUjLx3Lu6eNnPnfDwb4NpMq5tmm1Sq1j4MLfi6mFLadQ4CyuiENcytACQgkiU2CP8jWHKDCxAprKxP7EnXRKGbyaXkQRjvxmd5BK5XpnPHMoLb4zrrQfex5Wi8SkJjxWrhRyTr7u8jqyyebVPYmz3iRnnoEHfiECzBLdAYBz12U4VgUNrYug8C3ns5GcB1ytaUmggpDGY4K97dyYR8aMorFfqY6rPjwpRoL1BjbJgUBw54VVgMEijfeVCNcyw8wrVJnZeUAQKSesJcPhWShY717GVeQfGGHLzJhTY7iYBUUQCLfoVms86jJ3vMo1d9DpnahpCXfrZeR2PExg8Cn9DXc'
     }
 }
 ```
@@ -353,7 +353,7 @@ it and then post it back via a WebSocket message:
 ```
 {'action': 'update_ack',
  'payload': {
-    'tx': 'tx$xCHADUvUikbjGRcBmj4YQkTJGCoGV6JQVdJW2FU1ZAYGhdayeCZerGqPWbRz4Eduq1KtjUbBJgdxSF3UKyChKMXne3dEDnChRdiUop4HYkHJ8GF3xQpbSspvST5qPTJqvcCstQCDXmJMLiYiWQ2hoPXL3a1qiiVmSwx2ztVuVqsEf1NsQCbMiNeJj8Uvrcp2FKN8TG2VoMTBTiMcCdLGXhX31EaLYTTDVyFTXGgFRUTdAsHgBjcQzm9hgQS75QjhKY7VtyUBCisUEQp8Dcr76rpdT1Qy9n8JYKboPkFZpY9DVx9We2hstbP3fjgZVLgDRAvLoC5YppVE7GZgUbRp6PMmbPUyc3qFYaxA82g7TzndipqnrKuuGzDjoPaM2w5evx1TvXAF5u1beac2kW7kJyKjLfLhjKQ8bnwBwcZ3WpdRfCVe55LtPwYEoZQJtdzojjVcuLmgJjbb2GDHioi8KXTasHre5oZKwkyYByMqzDafVTMT3kJqvdQG6HKAm8XGP6LGRsZFcpkn5jGtGbq7PRpTbAn1RbHWvRAEH'
+    'tx': 'tx_xCHADUvUikbjGRcBmj4YQkTJGCoGV6JQVdJW2FU1ZAYGhdayeCZerGqPWbRz4Eduq1KtjUbBJgdxSF3UKyChKMXne3dEDnChRdiUop4HYkHJ8GF3xQpbSspvST5qPTJqvcCstQCDXmJMLiYiWQ2hoPXL3a1qiiVmSwx2ztVuVqsEf1NsQCbMiNeJj8Uvrcp2FKN8TG2VoMTBTiMcCdLGXhX31EaLYTTDVyFTXGgFRUTdAsHgBjcQzm9hgQS75QjhKY7VtyUBCisUEQp8Dcr76rpdT1Qy9n8JYKboPkFZpY9DVx9We2hstbP3fjgZVLgDRAvLoC5YppVE7GZgUbRp6PMmbPUyc3qFYaxA82g7TzndipqnrKuuGzDjoPaM2w5evx1TvXAF5u1beac2kW7kJyKjLfLhjKQ8bnwBwcZ3WpdRfCVe55LtPwYEoZQJtdzojjVcuLmgJjbb2GDHioi8KXTasHre5oZKwkyYByMqzDafVTMT3kJqvdQG6HKAm8XGP6LGRsZFcpkn5jGtGbq7PRpTbAn1RbHWvRAEH'
   }
 }
 ```
@@ -364,9 +364,9 @@ parties to indicate it. The payload of the message contains the latest
 co-signed off-chain update so the participants can persist it locally.
 ```
 {'action': 'update',
- 'channel_id': 'ch$RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
+ 'channel_id': 'ch_RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
  'payload': {
-    'state': 'tx$3XPhV5wAjiGDkUqu4PWDEXdXEztp6iG1VYDCKU7U46Rgpk79c3cB1ZTnsYSYYyadgA5mU4ww2hzJePnu355nTZnGJTxYeGUS8ct8Zwgf6DTYxW8uKuwDbqtyX4xzPxVbPyhweeNM5s7nqqEojhg4tiwW9hXnrvvj9YyJqK8r77K5ZVoSHN7kg6TowztWjGqhGfeMVnRzkgyNWJvNgUCaUbHi9U2dgL4cX78XbhAiqPdn7emCsF4JhPJumXyMr54oToU6fb4QpmYiWXku3TVymK9vgz49FS53PYebtSZzrhTkgMM9mF7VguJ2Jfx9s2VCdhFeEMj58E2jFL4VfFeUnvc6xUD4jHdfspojDqa6hjWTSQ4bwguC5ZPLDWsnTArFTWYpQi7S9H2coebFNdCLb'}
+    'state': 'tx_3XPhV5wAjiGDkUqu4PWDEXdXEztp6iG1VYDCKU7U46Rgpk79c3cB1ZTnsYSYYyadgA5mU4ww2hzJePnu355nTZnGJTxYeGUS8ct8Zwgf6DTYxW8uKuwDbqtyX4xzPxVbPyhweeNM5s7nqqEojhg4tiwW9hXnrvvj9YyJqK8r77K5ZVoSHN7kg6TowztWjGqhGfeMVnRzkgyNWJvNgUCaUbHi9U2dgL4cX78XbhAiqPdn7emCsF4JhPJumXyMr54oToU6fb4QpmYiWXku3TVymK9vgz49FS53PYebtSZzrhTkgMM9mF7VguJ2Jfx9s2VCdhFeEMj58E2jFL4VfFeUnvc6xUD4jHdfspojDqa6hjWTSQ4bwguC5ZPLDWsnTArFTWYpQi7S9H2coebFNdCLb'}
  }
 ```
 After that a new state updated can be triggered.
@@ -406,7 +406,7 @@ off-chain transaction
 {'action': 'sign',
  'tag': 'update',
  'payload' {
-    'tx': 'tx$JgoYCDwwyZGhYZcpejLVGEP2us4MVhHom43vJBRf5mfthGBErZrcPgBDCExqbZoX98TpqyutbUxs1ZhyJMEmXJrAzTivT17BHP8km5Zmsf6wBNk9kw6hKvn2gsHtb5ktHRLKu7oCiwsG2ro6VePKZCKV1Fo51d4bVkPEZmKkNqrrzuN6mHn88rYT3esKH848edtP9CMpyDDiV8DvsMsYmw5ZEzpUwKxf9UrEYPkfNzxm9Fax9tQscio8tGgTJh6xS6xEs8hH2R38kM9xjNBnhgwSS1VAk2jNT2VZz4NpRjYe2n9HabNo2SyYd5kPK3voVEV896GG8htzFCpytBptUZUmWrt3b8zfWtAkwboZRjzEF3AXBn7jpBcBgu9zFhpT6iwTAL5ACQcKNEu7bzJV4MBpNjEn7DXKBnBHXqDyk2URQenfXNnyJg9Aw1Mx1V5h5nmUYqi363u775f978MXaqoTyjBWSUZq14ZJ8H9GcAMBGiZTp3Rxa7fAvMUcCGwt34WCVEe4TWu9HcyKrMUebtpM5P5aMdQS3jVUaz26zMaJiCjjngx14zjrfSV1Wnfh5ESr7s4dyRXTHnG5tZFCFSAguEKTrZiZP2yTP7r1cNfJ15PoGHXCLLCNNoTAYDghAon8MhwcGBJhoqQ5gaAdYBwjKU92mJqBwU11KruxVkj2D1JYGgUyt1SJHo7tzeSHXX6N7RxKeHez9ST9qWSUEog1QF64RhJstdnBYcR6njscN7wh8GY4o6w2h6dauh5wzrCUvYc4B3reh4To9LgmL6hbHsXBMXbeCXCjVhZv24D7GZXZB68RTzxBy5SuJysEDZYSUSErStSHoqZbwzXaLieXsiMrhppyWDSNJAduJr7UrMuH2nWz5vPae714uwQKKGkEvakh3ZAC1nqZ1KrD6Jo59fyP6mPGYEpvpkte7WRtdHypRsiCus7nisFVzUg3p7hB6LdQYMoBAJ'}
+    'tx': 'tx_JgoYCDwwyZGhYZcpejLVGEP2us4MVhHom43vJBRf5mfthGBErZrcPgBDCExqbZoX98TpqyutbUxs1ZhyJMEmXJrAzTivT17BHP8km5Zmsf6wBNk9kw6hKvn2gsHtb5ktHRLKu7oCiwsG2ro6VePKZCKV1Fo51d4bVkPEZmKkNqrrzuN6mHn88rYT3esKH848edtP9CMpyDDiV8DvsMsYmw5ZEzpUwKxf9UrEYPkfNzxm9Fax9tQscio8tGgTJh6xS6xEs8hH2R38kM9xjNBnhgwSS1VAk2jNT2VZz4NpRjYe2n9HabNo2SyYd5kPK3voVEV896GG8htzFCpytBptUZUmWrt3b8zfWtAkwboZRjzEF3AXBn7jpBcBgu9zFhpT6iwTAL5ACQcKNEu7bzJV4MBpNjEn7DXKBnBHXqDyk2URQenfXNnyJg9Aw1Mx1V5h5nmUYqi363u775f978MXaqoTyjBWSUZq14ZJ8H9GcAMBGiZTp3Rxa7fAvMUcCGwt34WCVEe4TWu9HcyKrMUebtpM5P5aMdQS3jVUaz26zMaJiCjjngx14zjrfSV1Wnfh5ESr7s4dyRXTHnG5tZFCFSAguEKTrZiZP2yTP7r1cNfJ15PoGHXCLLCNNoTAYDghAon8MhwcGBJhoqQ5gaAdYBwjKU92mJqBwU11KruxVkj2D1JYGgUyt1SJHo7tzeSHXX6N7RxKeHez9ST9qWSUEog1QF64RhJstdnBYcR6njscN7wh8GY4o6w2h6dauh5wzrCUvYc4B3reh4To9LgmL6hbHsXBMXbeCXCjVhZv24D7GZXZB68RTzxBy5SuJysEDZYSUSErStSHoqZbwzXaLieXsiMrhppyWDSNJAduJr7UrMuH2nWz5vPae714uwQKKGkEvakh3ZAC1nqZ1KrD6Jo59fyP6mPGYEpvpkte7WRtdHypRsiCus7nisFVzUg3p7hB6LdQYMoBAJ'}
 }
 ```
 
@@ -416,7 +416,7 @@ it and then post it back via a WebSocket message:
 ```
 {'action': 'update',
  'payload': {
-    'tx': 'tx$8YK7n5J3XLNE1t6pvhTLvFPWcoZyers5MonYRCYm6ahvRPpuBeF2kQML9D9AYjMAsPVbqjLajCMyAYV1irNBd5MLzcBugVRRHBW1kAPNvYUpQX4b5NBovAzZh3ULQ22hYfAXSJ9tXmmqteDG3eaQjFGQj1p1cUs29wqeXmMwRouxofovtprfnyTgEUqmvRn5TyxSECQTVoNgGvU7ERxEETynaL2AAxqMU67BLC5r4KY2SMRTX4aaJmeyC7spxDTfFM11w2fbVCgDusgdDhQiUSKR2cRT16EYkHM1bTPSJXhzBkN7ASRXCkBP9XqX8p9bri1U7bcvCTJNwojLUQxhzbwdUMhfMXtR63m1QV7bmpYJaSiAx5Xt4P31Yb6ZYAkKNrG4GXSsufioUvVHqBGKPTvbng1H1vHt871Afc4jUhPfzBhQ1Tz1brxMAc8rsSYFzTyn6z6EZsBGvZqXVFVUzkSv4BjaVm2d1iN8PyJwsQkeAuNHgMzKyvNVC2t1i2kZxCqCuPZcAiKQGqvPco3WPYvDWcxAdgfKvu4hTPAvxvef4zskmdbgNGtfR6BJV6SC1qDCrxF14BUMKF2ayJRhNL67Cm2HZPQ7TBbcTF3gHHTmmQdYzvKeu9xNzUoZsR5P5WaEirYmGdsi3rcWkpnoTmiKkMSyxDDZVh5Km9r9Mks33YHVnKpkWfpVq81xac2GNYyyjaFFuZjEggpgmZwWHmvVkkaFBAFdcWLqYrE8xTVFsXKth3ppopnuZD3TuYDmFTGkB46FPKF3suireqA2hPyZTnfEWsYNH177UDKFprpR8Cz7kvwz6pBHo7A9qMmDjN7N4GwBXspxyjddJRAvtPgtJsTDRrFKFzmtF3Nfm789gp2FYxV6S6FjYHfR2cWLJhnCvCBbDECiEtfJh2Pn4enLmPumZQfsnV8BgXz1hMDtXcMf6NzhP3kJEh2NebZpVidi64A1xAvRu9zxJkoWFhVN7eUDQhYFmGE1Avt9PY2xPEiuCMzgcp6zNrv5mWgf4AsrQM9T3gWhD52yU7SFw3KV4QMjHRJLFaJuXgFMGSaohpwzUu669p'
+    'tx': 'tx_8YK7n5J3XLNE1t6pvhTLvFPWcoZyers5MonYRCYm6ahvRPpuBeF2kQML9D9AYjMAsPVbqjLajCMyAYV1irNBd5MLzcBugVRRHBW1kAPNvYUpQX4b5NBovAzZh3ULQ22hYfAXSJ9tXmmqteDG3eaQjFGQj1p1cUs29wqeXmMwRouxofovtprfnyTgEUqmvRn5TyxSECQTVoNgGvU7ERxEETynaL2AAxqMU67BLC5r4KY2SMRTX4aaJmeyC7spxDTfFM11w2fbVCgDusgdDhQiUSKR2cRT16EYkHM1bTPSJXhzBkN7ASRXCkBP9XqX8p9bri1U7bcvCTJNwojLUQxhzbwdUMhfMXtR63m1QV7bmpYJaSiAx5Xt4P31Yb6ZYAkKNrG4GXSsufioUvVHqBGKPTvbng1H1vHt871Afc4jUhPfzBhQ1Tz1brxMAc8rsSYFzTyn6z6EZsBGvZqXVFVUzkSv4BjaVm2d1iN8PyJwsQkeAuNHgMzKyvNVC2t1i2kZxCqCuPZcAiKQGqvPco3WPYvDWcxAdgfKvu4hTPAvxvef4zskmdbgNGtfR6BJV6SC1qDCrxF14BUMKF2ayJRhNL67Cm2HZPQ7TBbcTF3gHHTmmQdYzvKeu9xNzUoZsR5P5WaEirYmGdsi3rcWkpnoTmiKkMSyxDDZVh5Km9r9Mks33YHVnKpkWfpVq81xac2GNYyyjaFFuZjEggpgmZwWHmvVkkaFBAFdcWLqYrE8xTVFsXKth3ppopnuZD3TuYDmFTGkB46FPKF3suireqA2hPyZTnfEWsYNH177UDKFprpR8Cz7kvwz6pBHo7A9qMmDjN7N4GwBXspxyjddJRAvtPgtJsTDRrFKFzmtF3Nfm789gp2FYxV6S6FjYHfR2cWLJhnCvCBbDECiEtfJh2Pn4enLmPumZQfsnV8BgXz1hMDtXcMf6NzhP3kJEh2NebZpVidi64A1xAvRu9zxJkoWFhVN7eUDQhYFmGE1Avt9PY2xPEiuCMzgcp6zNrv5mWgf4AsrQM9T3gWhD52yU7SFw3KV4QMjHRJLFaJuXgFMGSaohpwzUu669p'
     }
 }
 ```
@@ -434,7 +434,7 @@ off-chain transaction
 {'action': 'sign',
  'tag': 'update_ack',
  'payload' {
-    'tx': 'tx$JgoYCDwwyZGhYZcpejLVGEP2us4MVhHom43vJBRf5mfthGBErZrcPgBDCExqbZoX98TpqyutbUxs1ZhyJMEmXJrAzTivT17BHP8km5Zmsf6wBNk9kw6hKvn2gsHtb5ktHRLKu7oCiwsG2ro6VePKZCKV1Fo51d4bVkPEZmKkNqrrzuN6mHn88rYT3esKH848edtP9CMpyDDiV8DvsMsYmw5ZEzpUwKxf9UrEYPkfNzxm9Fax9tQscio8tGgTJh6xS6xEs8hH2R38kM9xjNBnhgwSS1VAk2jNT2VZz4NpRjYe2n9HabNo2SyYd5kPK3voVEV896GG8htzFCpytBptUZUmWrt3b8zfWtAkwboZRjzEF3AXBn7jpBcBgu9zFhpT6iwTAL5ACQcKNEu7bzJV4MBpNjEn7DXKBnBHXqDyk2URQenfXNnyJg9Aw1Mx1V5h5nmUYqi363u775f978MXaqoTyjBWSUZq14ZJ8H9GcAMBGiZTp3Rxa7fAvMUcCGwt34WCVEe4TWu9HcyKrMUebtpM5P5aMdQS3jVUaz26zMaJiCjjngx14zjrfSV1Wnfh5ESr7s4dyRXTHnG5tZFCFSAguEKTrZiZP2yTP7r1cNfJ15PoGHXCLLCNNoTAYDghAon8MhwcGBJhoqQ5gaAdYBwjKU92mJqBwU11KruxVkj2D1JYGgUyt1SJHo7tzeSHXX6N7RxKeHez9ST9qWSUEog1QF64RhJstdnBYcR6njscN7wh8GY4o6w2h6dauh5wzrCUvYc4B3reh4To9LgmL6hbHsXBMXbeCXCjVhZv24D7GZXZB68RTzxBy5SuJysEDZYSUSErStSHoqZbwzXaLieXsiMrhppyWDSNJAduJr7UrMuH2nWz5vPae714uwQKKGkEvakh3ZAC1nqZ1KrD6Jo59fyP6mPGYEpvpkte7WRtdHypRsiCus7nisFVzUg3p7hB6LdQYMoBAJ'}
+    'tx': 'tx_JgoYCDwwyZGhYZcpejLVGEP2us4MVhHom43vJBRf5mfthGBErZrcPgBDCExqbZoX98TpqyutbUxs1ZhyJMEmXJrAzTivT17BHP8km5Zmsf6wBNk9kw6hKvn2gsHtb5ktHRLKu7oCiwsG2ro6VePKZCKV1Fo51d4bVkPEZmKkNqrrzuN6mHn88rYT3esKH848edtP9CMpyDDiV8DvsMsYmw5ZEzpUwKxf9UrEYPkfNzxm9Fax9tQscio8tGgTJh6xS6xEs8hH2R38kM9xjNBnhgwSS1VAk2jNT2VZz4NpRjYe2n9HabNo2SyYd5kPK3voVEV896GG8htzFCpytBptUZUmWrt3b8zfWtAkwboZRjzEF3AXBn7jpBcBgu9zFhpT6iwTAL5ACQcKNEu7bzJV4MBpNjEn7DXKBnBHXqDyk2URQenfXNnyJg9Aw1Mx1V5h5nmUYqi363u775f978MXaqoTyjBWSUZq14ZJ8H9GcAMBGiZTp3Rxa7fAvMUcCGwt34WCVEe4TWu9HcyKrMUebtpM5P5aMdQS3jVUaz26zMaJiCjjngx14zjrfSV1Wnfh5ESr7s4dyRXTHnG5tZFCFSAguEKTrZiZP2yTP7r1cNfJ15PoGHXCLLCNNoTAYDghAon8MhwcGBJhoqQ5gaAdYBwjKU92mJqBwU11KruxVkj2D1JYGgUyt1SJHo7tzeSHXX6N7RxKeHez9ST9qWSUEog1QF64RhJstdnBYcR6njscN7wh8GY4o6w2h6dauh5wzrCUvYc4B3reh4To9LgmL6hbHsXBMXbeCXCjVhZv24D7GZXZB68RTzxBy5SuJysEDZYSUSErStSHoqZbwzXaLieXsiMrhppyWDSNJAduJr7UrMuH2nWz5vPae714uwQKKGkEvakh3ZAC1nqZ1KrD6Jo59fyP6mPGYEpvpkte7WRtdHypRsiCus7nisFVzUg3p7hB6LdQYMoBAJ'}
     }
 }
 ```
@@ -443,7 +443,7 @@ it and then post it back via a WebSocket message:
 ```
 {'action': 'update_ack',
  'payload': {
-    'tx': 'tx$8YK7n5J3XLNE1EoLatcNhJSoTnv2zUqxS6N3iVgqiBc4bjnTyoarR2qYZa5oJX4td78HnuHddPqe47DbbtWmY5SiK2rAurz59V49Pie5z1i7bPZzGa1QXo5obJG4kX64hVhHD2Wcz54vdfKFjEtQv4muUHjXfxav9LNja6rvRbUiASepmVa2B3ykbBVjhivkszNqubEwQ6NKiTC7G5NJnvFq5YFzDxWjrJfDmHsuz8TGETdYYHk6oQPhnudfQ4pXyp4zvzC2RG9KKLTWG2YkgL4w6QGFoHM6zFFw1NAR7vfGucBnSdf6Mb7Vwt2qBcm3CkHrP3ShvksQsE6GTuaniBGF3bE1xc3psBDa6rXKUiTpAx9W4W7N2Pe9qWmZMcfsG4iwMMvaAvkshW6usmTHFL8xcsmq5hd8VRDNQajoT5XaLhwnt3erfUYcZcAkHwvPjsrGya6L8rxa5d5yibPjZPYdmZiuD6XNabSKnt66b2d4b8S1QjVFkjUvibMAMWGngfFPGgs2uoiCsZ4bHsrgHTSvrDvN9v1vn7hMRvyvcVboBgv5uqtau3jDe3fybZZNDfY1hbxABTZeqNZ5BSE2mdGxftqQew1XCFwKyJZCz3CTPm3Wf9ab3U28GuLm4Bf74N7MzHr91qzhNAzcv7fKGru2JHxho6Hfhj16Fr2ME1XxQYmMo8neo65dtYY1cV5qcg94qVaTkTFAtCvjbWat36pubFG82EgbPf7Ptcfv1wPR6VZeikYzmW2j1DQvebs2EQv6qqwCXByqM4NMcZenvLwCkkK6vnaX4Jzpqpdvu5iEatso2wqdgE7f9iZrv5u86vw6vsej7sVVRUjiVpLYeJfEqXP9Zirm2p2qPGaSD9zXvnGS5uz3dxUH4pnkRmwoB8cXbPYvfLagmNYQXXzbxhi1BfSYbtGq7dfXLrZuzdxwGpLbv5HwPQKKtKUaeUpYTQ2XPBtga16sTuSbDw7xmBY76ywBHjnPt6n9RqoUT1WWj3jkGPvtKKkiWThiG9jzQP9P8mBCS22w2QLm6EwPuJ6sVTkr7nMWAaVcgY1qKJbUmneFi4x8fr'
+    'tx': 'tx_8YK7n5J3XLNE1EoLatcNhJSoTnv2zUqxS6N3iVgqiBc4bjnTyoarR2qYZa5oJX4td78HnuHddPqe47DbbtWmY5SiK2rAurz59V49Pie5z1i7bPZzGa1QXo5obJG4kX64hVhHD2Wcz54vdfKFjEtQv4muUHjXfxav9LNja6rvRbUiASepmVa2B3ykbBVjhivkszNqubEwQ6NKiTC7G5NJnvFq5YFzDxWjrJfDmHsuz8TGETdYYHk6oQPhnudfQ4pXyp4zvzC2RG9KKLTWG2YkgL4w6QGFoHM6zFFw1NAR7vfGucBnSdf6Mb7Vwt2qBcm3CkHrP3ShvksQsE6GTuaniBGF3bE1xc3psBDa6rXKUiTpAx9W4W7N2Pe9qWmZMcfsG4iwMMvaAvkshW6usmTHFL8xcsmq5hd8VRDNQajoT5XaLhwnt3erfUYcZcAkHwvPjsrGya6L8rxa5d5yibPjZPYdmZiuD6XNabSKnt66b2d4b8S1QjVFkjUvibMAMWGngfFPGgs2uoiCsZ4bHsrgHTSvrDvN9v1vn7hMRvyvcVboBgv5uqtau3jDe3fybZZNDfY1hbxABTZeqNZ5BSE2mdGxftqQew1XCFwKyJZCz3CTPm3Wf9ab3U28GuLm4Bf74N7MzHr91qzhNAzcv7fKGru2JHxho6Hfhj16Fr2ME1XxQYmMo8neo65dtYY1cV5qcg94qVaTkTFAtCvjbWat36pubFG82EgbPf7Ptcfv1wPR6VZeikYzmW2j1DQvebs2EQv6qqwCXByqM4NMcZenvLwCkkK6vnaX4Jzpqpdvu5iEatso2wqdgE7f9iZrv5u86vw6vsej7sVVRUjiVpLYeJfEqXP9Zirm2p2qPGaSD9zXvnGS5uz3dxUH4pnkRmwoB8cXbPYvfLagmNYQXXzbxhi1BfSYbtGq7dfXLrZuzdxwGpLbv5HwPQKKtKUaeUpYTQ2XPBtga16sTuSbDw7xmBY76ywBHjnPt6n9RqoUT1WWj3jkGPvtKKkiWThiG9jzQP9P8mBCS22w2QLm6EwPuJ6sVTkr7nMWAaVcgY1qKJbUmneFi4x8fr'
   }
 }
 ```
@@ -455,7 +455,7 @@ co-signed off-chain update so the participants can persist it locally.
 ```
 {'action': 'update',
  'payload': {
-    'state': 'tx$DxpMPQqimD6NuzKT6SWXsnQY3c9hVxqughSXAkRZJQzCbUDM8HazSos6Xqkpw2ndfRu8NQwDLbU4SsLKb7xasMShPYRfW9oe55pEdXLZi9ZMa4nMKzSN45sxsupiJ815VnNNKTwqH8G8yU1snTKCUz4Sed2xUAjx5KADR5eEbNfDUMhseczXyYZ6tj9ahYVnjqdxqgBuLmrEXq8LMirPzNAfzKaz55NaLMxXkMCpRdxy9mBXLpwcvRM8DxzBbK7n28r3GKk99x9fwgP5Tv2psyyAEMgxhFznXVTvVnSZY1zT8eKc5LJEL6LKBxSkXJXdTqeZWmjeRZruEqcmygFD4Tvpr6LpSyXStoL9tV4B4nyYuJdpESNd35H6eL57MSKrpSpGSnnhgefJ4pqXmEut9XcKT1TsXR1BbTvDDYnBAgZhxvwq1NB9CQy2pibnz1G5XHJVu6QmSj5yQUxRYtsksbAkXL5xhiSZ6DWwynqVKiSThwvU9wHYDFJuWLYKrUCJuA1zu4fmfvhsuL2FSMW2wft1ELm53UpkrPRq68nGeegYMYuMCpoGUruvDCwVPwhP8DKq1cSrhRSxn6HzMCDa7zBQKrmKnksQbdeWWxSgVEosxtvdLtNZ6tDYPJe4q78a5PkyGVDdiAkYYo1CmRt46wYoMvYQPiG6vpt3fTK2oambanFSdXjtK4MBXZxpUKA4bhwTFjiFadCkkGAgkGkaHP6ztnYQP11YGP4huyfZH6WoYXwmWVXahipTAoQFpTPQTp9wLy3QS2o8iY7wT1SSweYNuzgwh31LFfcbs8pXNuJ5NFqUR5ygRQQcaVcq2D6dv35YSNi7pfzpgLk1WGdwbPfTpAssNCwETda6r1k6zwWmn3nqL8hsy381KyrQPRkHbeaYG2msZd61QEZFm1CHkbx5xMp17jiTMJ2gZwVx6SpSGCxLogpWBxxcTPfUKphW5bVUYn5aoxZsgBcg5MrExouV6fk82GYoAsZ4yR1F6J3onJkBejMvd6XXSPYAx2dS22VGJhjQpzy6woBgwiVCV3kCSfnoaru6NzkkjVfW7THTvWz2dLbMoToFnPLnaypEjfh1heF2Ypr8QmV3XLrzwHQ7G8ZPFLRDm2jL5Zp6rnZLErD9wbyiiRGda7mQqg1wR1FznsJ3XXatpJmn'}
+    'state': 'tx_DxpMPQqimD6NuzKT6SWXsnQY3c9hVxqughSXAkRZJQzCbUDM8HazSos6Xqkpw2ndfRu8NQwDLbU4SsLKb7xasMShPYRfW9oe55pEdXLZi9ZMa4nMKzSN45sxsupiJ815VnNNKTwqH8G8yU1snTKCUz4Sed2xUAjx5KADR5eEbNfDUMhseczXyYZ6tj9ahYVnjqdxqgBuLmrEXq8LMirPzNAfzKaz55NaLMxXkMCpRdxy9mBXLpwcvRM8DxzBbK7n28r3GKk99x9fwgP5Tv2psyyAEMgxhFznXVTvVnSZY1zT8eKc5LJEL6LKBxSkXJXdTqeZWmjeRZruEqcmygFD4Tvpr6LpSyXStoL9tV4B4nyYuJdpESNd35H6eL57MSKrpSpGSnnhgefJ4pqXmEut9XcKT1TsXR1BbTvDDYnBAgZhxvwq1NB9CQy2pibnz1G5XHJVu6QmSj5yQUxRYtsksbAkXL5xhiSZ6DWwynqVKiSThwvU9wHYDFJuWLYKrUCJuA1zu4fmfvhsuL2FSMW2wft1ELm53UpkrPRq68nGeegYMYuMCpoGUruvDCwVPwhP8DKq1cSrhRSxn6HzMCDa7zBQKrmKnksQbdeWWxSgVEosxtvdLtNZ6tDYPJe4q78a5PkyGVDdiAkYYo1CmRt46wYoMvYQPiG6vpt3fTK2oambanFSdXjtK4MBXZxpUKA4bhwTFjiFadCkkGAgkGkaHP6ztnYQP11YGP4huyfZH6WoYXwmWVXahipTAoQFpTPQTp9wLy3QS2o8iY7wT1SSweYNuzgwh31LFfcbs8pXNuJ5NFqUR5ygRQQcaVcq2D6dv35YSNi7pfzpgLk1WGdwbPfTpAssNCwETda6r1k6zwWmn3nqL8hsy381KyrQPRkHbeaYG2msZd61QEZFm1CHkbx5xMp17jiTMJ2gZwVx6SpSGCxLogpWBxxcTPfUKphW5bVUYn5aoxZsgBcg5MrExouV6fk82GYoAsZ4yR1F6J3onJkBejMvd6XXSPYAx2dS22VGJhjQpzy6woBgwiVCV3kCSfnoaru6NzkkjVfW7THTvWz2dLbMoToFnPLnaypEjfh1heF2Ypr8QmV3XLrzwHQ7G8ZPFLRDm2jL5Zp6rnZLErD9wbyiiRGda7mQqg1wR1FznsJ3XXatpJmn'}
  }
 ```
 After that a new state updated can be triggered.
@@ -493,7 +493,7 @@ The caller sends a message containing the desired change
 {'action': 'update',
  'tag': 'call_contract',
  'payload' :{
-      'contract': 'ct$9sRA9AVE4BYTAkh5RNfJYmwQe1NZ4MErasQLXZkFWG43TPBqa',
+      'contract': 'ct_9sRA9AVE4BYTAkh5RNfJYmwQe1NZ4MErasQLXZkFWG43TPBqa',
       'vm_version': 1,
       'amount': 0,
       'call_data': '0x0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000046d61696e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002a'
@@ -510,7 +510,7 @@ off-chain transaction
 {'action': 'sign',
  'tag': 'update',
  'payload' {
-    'tx': 'tx$Sweh544j3PL6BzGK8Sk6dqW9ywspMup8J8ETuajNnTGkx3vTbwCS8K8LWAPNSBrkDUWEQCxDR2Kyvuv2v19YtsiNxcetmwWwEjYicTaZ1nZ84PvVs5WoP4LgSgur5yaiDwvoY4xkk5dGjfiXGYWE7udn8HwbZdHUQPXWtJdeGhcApf31SPYWUkW3hWk8sKZeHKU6f9aLQgiSsP2MNoqzfiTL1xppK4NPrS6gje7iVGdz8zBbQ1TRXcTsN7pecY8fSPMwKhEtH88jRbmXouYxatBUvYLy4vRiQJBcsZaCXhHKezoXqggPsPDUjfaM1P1FMrC3GxWS3CHotuR588TuvaUwPBVjwwoMYL1MJcTYLvejnDktsisFtfhH811h7R7pazQuhqbmMSWhRkYMLfXXwTXs32q334CMEZpz1UpWWA1DRJMBUVWmE7FmPedZDaqobUbNe2CKPk8oMG9apvdrrxE6cQRGupVyjXNor'}
+    'tx': 'tx_Sweh544j3PL6BzGK8Sk6dqW9ywspMup8J8ETuajNnTGkx3vTbwCS8K8LWAPNSBrkDUWEQCxDR2Kyvuv2v19YtsiNxcetmwWwEjYicTaZ1nZ84PvVs5WoP4LgSgur5yaiDwvoY4xkk5dGjfiXGYWE7udn8HwbZdHUQPXWtJdeGhcApf31SPYWUkW3hWk8sKZeHKU6f9aLQgiSsP2MNoqzfiTL1xppK4NPrS6gje7iVGdz8zBbQ1TRXcTsN7pecY8fSPMwKhEtH88jRbmXouYxatBUvYLy4vRiQJBcsZaCXhHKezoXqggPsPDUjfaM1P1FMrC3GxWS3CHotuR588TuvaUwPBVjwwoMYL1MJcTYLvejnDktsisFtfhH811h7R7pazQuhqbmMSWhRkYMLfXXwTXs32q334CMEZpz1UpWWA1DRJMBUVWmE7FmPedZDaqobUbNe2CKPk8oMG9apvdrrxE6cQRGupVyjXNor'}
 }
 ```
 
@@ -520,7 +520,7 @@ it and then post it back via a WebSocket message:
 ```
 {'action': 'update',
  'payload': {
-    'tx': 'tx$C4TACwXiGbsZf6sCqqEkZU7ngzvoDdqPHQMfNVGZUMQhsT9Nj64j3DbGYE6nB8V7R56zmfY8zuGCjAWgZecsby4RCwDtm5nE57DcX3srHgrzt4NS1mFUq9Vuan57SXT8n4xA5BFjz8WvKEqFptsHqzRhv6veY5o9cmTi4ea1t21BaCdfZiVg6mkf4pvrAzsNtnQ149BxuCLqLJJdaJXVWzJthDXBHLcHmDRTvqYRpnH8gD2veHizbJqnvApeVGwMJ9m5rZc3Tw3EDcZnsiFzKXBiZ1FMMBqZtiNzCCRhhn7uANkJiSi8e8iHcBJLyFRPzSgU6KTVNVGcc2CZVh2RQcMoJXWecdHHeMiCnGaX2MiT2EyjEox9a7kZBkTAAnoeri5F2GhGvdK98a275PjaCrA16xizH2DnvRdw92HFA2PgjQmHE3SgxB7MMhTAkaR3LcqmR5KfwLqikneU9DNM5PQzvYTh1J7rupP9AHXUhhFpGQXYcakXQfmEt2D3D4E3zBGDWqJRfVG8xmxYftzefkx5X5CpeWnCyiCepnUSbNyHFxZS4vyzvhZnTHmWVZksyY68MJAMmERk9'
+    'tx': 'tx_C4TACwXiGbsZf6sCqqEkZU7ngzvoDdqPHQMfNVGZUMQhsT9Nj64j3DbGYE6nB8V7R56zmfY8zuGCjAWgZecsby4RCwDtm5nE57DcX3srHgrzt4NS1mFUq9Vuan57SXT8n4xA5BFjz8WvKEqFptsHqzRhv6veY5o9cmTi4ea1t21BaCdfZiVg6mkf4pvrAzsNtnQ149BxuCLqLJJdaJXVWzJthDXBHLcHmDRTvqYRpnH8gD2veHizbJqnvApeVGwMJ9m5rZc3Tw3EDcZnsiFzKXBiZ1FMMBqZtiNzCCRhhn7uANkJiSi8e8iHcBJLyFRPzSgU6KTVNVGcc2CZVh2RQcMoJXWecdHHeMiCnGaX2MiT2EyjEox9a7kZBkTAAnoeri5F2GhGvdK98a275PjaCrA16xizH2DnvRdw92HFA2PgjQmHE3SgxB7MMhTAkaR3LcqmR5KfwLqikneU9DNM5PQzvYTh1J7rupP9AHXUhhFpGQXYcakXQfmEt2D3D4E3zBGDWqJRfVG8xmxYftzefkx5X5CpeWnCyiCepnUSbNyHFxZS4vyzvhZnTHmWVZksyY68MJAMmERk9'
     }
 }
 ```
@@ -538,7 +538,7 @@ off-chain transaction
 {'action': 'sign',
  'tag': 'update_ack',
  'payload' {
-    'tx': 'tx$Sweh544j3PL6BzGK8Sk6dqW9ywspMup8J8ETuajNnTGkx3vTbwCS8K8LWAPNSBrkDUWEQCxDR2Kyvuv2v19YtsiNxcetmwWwEjYicTaZ1nZ84PvVs5WoP4LgSgur5yaiDwvoY4xkk5dGjfiXGYWE7udn8HwbZdHUQPXWtJdeGhcApf31SPYWUkW3hWk8sKZeHKU6f9aLQgiSsP2MNoqzfiTL1xppK4NPrS6gje7iVGdz8zBbQ1TRXcTsN7pecY8fSPMwKhEtH88jRbmXouYxatBUvYLy4vRiQJBcsZaCXhHKezoXqggPsPDUjfaM1P1FMrC3GxWS3CHotuR588TuvaUwPBVjwwoMYL1MJcTYLvejnDktsisFtfhH811h7R7pazQuhqbmMSWhRkYMLfXXwTXs32q334CMEZpz1UpWWA1DRJMBUVWmE7FmPedZDaqobUbNe2CKPk8oMG9apvdrrxE6cQRGupVyjXNor'
+    'tx': 'tx_Sweh544j3PL6BzGK8Sk6dqW9ywspMup8J8ETuajNnTGkx3vTbwCS8K8LWAPNSBrkDUWEQCxDR2Kyvuv2v19YtsiNxcetmwWwEjYicTaZ1nZ84PvVs5WoP4LgSgur5yaiDwvoY4xkk5dGjfiXGYWE7udn8HwbZdHUQPXWtJdeGhcApf31SPYWUkW3hWk8sKZeHKU6f9aLQgiSsP2MNoqzfiTL1xppK4NPrS6gje7iVGdz8zBbQ1TRXcTsN7pecY8fSPMwKhEtH88jRbmXouYxatBUvYLy4vRiQJBcsZaCXhHKezoXqggPsPDUjfaM1P1FMrC3GxWS3CHotuR588TuvaUwPBVjwwoMYL1MJcTYLvejnDktsisFtfhH811h7R7pazQuhqbmMSWhRkYMLfXXwTXs32q334CMEZpz1UpWWA1DRJMBUVWmE7FmPedZDaqobUbNe2CKPk8oMG9apvdrrxE6cQRGupVyjXNor'
     }
 }
 ```
@@ -547,7 +547,7 @@ it and then post it back via a WebSocket message:
 ```
 {'action': 'update_ack',
  'payload': {
-    'tx': 'tx$C4TACwXiGbsZg1Z9ChAEuaVJge62Uax5riSw4Tpp763SKTwLLGjhqPDUqjb9swx5X2G6XnpQk72v1yhFSLZvPtUv4JgoimKLqhAVUSoHB3btwEUTdgb3kVbaS6WLiaF86cqBZiDwbiL3GpThgZK7VhYedXFZK6PdK2RjywURhC9s8PNwP19Zetj19VkL4MYn1Z5tkoEh387dMfh9Mfh9jPf7gaBJjvwxNLuMjqHQXwSKPEpR8jYBF4cuzwaZzWeUSPKMxp44wDWQqqG8MTMwR1i8JbZjbAFtuj49TJWMw6xrvXski8XieHLHXrx5y4873CgD1FhRQT374Yvb5mYBTMtsYc8ttUCPiwi7AQteey7h1iRJgGc5bcd2omdGG8BmQZETfLaqwqXWN7mXXxPGfJQUaknHdocTum9FNyncYiAt6Y7znFJ1rZT2UkHvKwbvtJvhftWBJPrbExfeFMypn9DoW4SoaQ7RjBcmz5PWdt79BjRXhZpM7qbjvGF9i1f2cXiQFeKcj9FxXdzttN28kdtDvpYWdBbWcSMaWAYy7EBnMRHrGo2XdcDeJeGQdGnSBKaMHdN5LVhKF'
+    'tx': 'tx_C4TACwXiGbsZg1Z9ChAEuaVJge62Uax5riSw4Tpp763SKTwLLGjhqPDUqjb9swx5X2G6XnpQk72v1yhFSLZvPtUv4JgoimKLqhAVUSoHB3btwEUTdgb3kVbaS6WLiaF86cqBZiDwbiL3GpThgZK7VhYedXFZK6PdK2RjywURhC9s8PNwP19Zetj19VkL4MYn1Z5tkoEh387dMfh9Mfh9jPf7gaBJjvwxNLuMjqHQXwSKPEpR8jYBF4cuzwaZzWeUSPKMxp44wDWQqqG8MTMwR1i8JbZjbAFtuj49TJWMw6xrvXski8XieHLHXrx5y4873CgD1FhRQT374Yvb5mYBTMtsYc8ttUCPiwi7AQteey7h1iRJgGc5bcd2omdGG8BmQZETfLaqwqXWN7mXXxPGfJQUaknHdocTum9FNyncYiAt6Y7znFJ1rZT2UkHvKwbvtJvhftWBJPrbExfeFMypn9DoW4SoaQ7RjBcmz5PWdt79BjRXhZpM7qbjvGF9i1f2cXiQFeKcj9FxXdzttN28kdtDvpYWdBbWcSMaWAYy7EBnMRHrGo2XdcDeJeGQdGnSBKaMHdN5LVhKF'
   }
 }
 ```
@@ -559,9 +559,9 @@ co-signed off-chain update so the participants can persist it locally.
 
 ```
 {'action': 'update',
- 'channel_id: 'ch$RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
+ 'channel_id: 'ch_RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
  'payload': {
-    'state': 'tx$L1mTJpyV97nWgMAFmrqcwECSThovgaU9qv5DYeqn3YQgzjCShS96n6u2rACsXyXAJyRrqGNTv2ytC1LgmH8zSuD6SkDTEiT2eCGuCsM1xXyZGooq14nu8naSZ3rhJEwBoZLTn3Tt86W3eUc1rPs2HaFwtxwsFhFu4dXHJTjmaVjigG8Juhvq1oQytscRCPVt9sjijr8h1mCCj73yhnsvwwJuMLi9WgspqwJfHHRVc8RWPtvKg6hbUKxn4cEP2M1rpXhVEUhCAkgKVfm58m4xvnuCNhvJhi37cGeSMSJkdrs64111jnQY2nwpiiS5dRW8c3VcHt1Zm8Sg1fyQgdmgbr3Rwbez1L6hCndppgX1DA2UniQB1y7eqC8nYMe4DUmXxnjcFxCQyaiTCBGavjcZiQUThHzwoACJ1yf4fr1HXZ2BzsgeSsuE2AuvphAvtiPSDmRUiFwxt1KGg3YRBxsSqs2Ums7D6QDoju11VH3k8ERcb9Hj6uJmHFC2yGu48jKHPB8bUCm1qDBZqEiDBVTQo6E1AiSLtvJmLoRd1gyUZ4pvCPPmGPQJ4Qsb16xH6q4YnJVMVQb7TWSs5PorsdqV1XPKg8rZSwSZJGZ1gT7fkf75ocXt986k3PMNCa98cDQmwbqFuqYYC4iMixj6k2txsFYUCyxrucHidNC8MFC'}
+    'state': 'tx_L1mTJpyV97nWgMAFmrqcwECSThovgaU9qv5DYeqn3YQgzjCShS96n6u2rACsXyXAJyRrqGNTv2ytC1LgmH8zSuD6SkDTEiT2eCGuCsM1xXyZGooq14nu8naSZ3rhJEwBoZLTn3Tt86W3eUc1rPs2HaFwtxwsFhFu4dXHJTjmaVjigG8Juhvq1oQytscRCPVt9sjijr8h1mCCj73yhnsvwwJuMLi9WgspqwJfHHRVc8RWPtvKg6hbUKxn4cEP2M1rpXhVEUhCAkgKVfm58m4xvnuCNhvJhi37cGeSMSJkdrs64111jnQY2nwpiiS5dRW8c3VcHt1Zm8Sg1fyQgdmgbr3Rwbez1L6hCndppgX1DA2UniQB1y7eqC8nYMe4DUmXxnjcFxCQyaiTCBGavjcZiQUThHzwoACJ1yf4fr1HXZ2BzsgeSsuE2AuvphAvtiPSDmRUiFwxt1KGg3YRBxsSqs2Ums7D6QDoju11VH3k8ERcb9Hj6uJmHFC2yGu48jKHPB8bUCm1qDBZqEiDBVTQo6E1AiSLtvJmLoRd1gyUZ4pvCPPmGPQJ4Qsb16xH6q4YnJVMVQb7TWSs5PorsdqV1XPKg8rZSwSZJGZ1gT7fkf75ocXt986k3PMNCa98cDQmwbqFuqYYC4iMixj6k2txsFYUCyxrucHidNC8MFC'}
  }
 ```
 
@@ -572,8 +572,8 @@ there and inspect it, one shall send a WebSocket event
 {'action': 'get',
  'tag': 'contract_call',
  'payload': {
-    'contract_address': 'ct$9sRA9AVE4BYTAkh5RNfJYmwQe1NZ4MErasQLXZkFWG43TPBqa',
-    'caller_address': 'ak$2YeNqB4jQ1DG7QvUKgCkKeZAiXb2rnzkEoLTS8XeKF8Smgit2e',
+    'contract_address': 'ct_9sRA9AVE4BYTAkh5RNfJYmwQe1NZ4MErasQLXZkFWG43TPBqa',
+    'caller_address': 'ak_2YeNqB4jQ1DG7QvUKgCkKeZAiXb2rnzkEoLTS8XeKF8Smgit2e',
     'round': 8
     }
 }
@@ -586,8 +586,8 @@ Then the call is returned through an incoming message:
 {'action': 'get',
  'tag': 'contract_call',
  'payload': {
-      'contract_address': 'ct$9sRA9AVE4BYTAkh5RNfJYmwQe1NZ4MErasQLXZkFWG43TPBqa',
-      'caller_address': 'ak$2YeNqB4jQ1DG7QvUKgCkKeZAiXb2rnzkEoLTS8XeKF8Smgit2e',
+      'contract_address': 'ct_9sRA9AVE4BYTAkh5RNfJYmwQe1NZ4MErasQLXZkFWG43TPBqa',
+      'caller_address': 'ak_2YeNqB4jQ1DG7QvUKgCkKeZAiXb2rnzkEoLTS8XeKF8Smgit2e',
       'caller_nonce': 8,
       'gas_price': 0,
       'gas_used': 524,
@@ -626,9 +626,9 @@ Example:
 The fsm responds with the following type of report:
 ```javascript
 {'action': 'leave',
- 'channel_id': 'ch$FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR',
+ 'channel_id': 'ch_FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR',
  'payload':
-    {'state': 'tx$6jPYBUFTkcmQ7A3JYkUsYMChMHNqe3TMEhDZaSat7P1sbP4XXQP9QmaFfaAftUDjws3GhdKaBGyJRMBhHKyk2irBZsymgUVuxfQXR63ojEjg7C583D6cNKLSZtybZr9Cw6mmCkSDRVu41WbF1jKEkAkXbXznANm3AyJ1BLqNVB7qiAyFSVeq5qVcvHL4Z1y2DAhcLLw6YGSqFyuyg8pKVQRhL2LuePa9mdtoYZyY5VhvgShLz2oY8R3taBL8RrnnTvcwECvQu51yPKyM2pryoHaQbED5Zn7hdegZy6KN9wfpLXedtNB9ssmMvz5jHcK12vmtfeUMzRrySqtmBDGfiqwFZrYZ5A7xz1uqi'
+    {'state': 'tx_6jPYBUFTkcmQ7A3JYkUsYMChMHNqe3TMEhDZaSat7P1sbP4XXQP9QmaFfaAftUDjws3GhdKaBGyJRMBhHKyk2irBZsymgUVuxfQXR63ojEjg7C583D6cNKLSZtybZr9Cw6mmCkSDRVu41WbF1jKEkAkXbXznANm3AyJ1BLqNVB7qiAyFSVeq5qVcvHL4Z1y2DAhcLLw6YGSqFyuyg8pKVQRhL2LuePa9mdtoYZyY5VhvgShLz2oY8R3taBL8RrnnTvcwECvQu51yPKyM2pryoHaQbED5Zn7hdegZy6KN9wfpLXedtNB9ssmMvz5jHcK12vmtfeUMzRrySqtmBDGfiqwFZrYZ5A7xz1uqi'
     }
 }
 ```
@@ -641,7 +641,7 @@ matching the ones provided in the `leave` report above:
 
 ```
 $ wscat --connect
-'localhost:3014/channel?initiator=ak$...&role=initiator&existing_channel_id=ch$FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR&offchain_tx=tx$6jPYBUFTkcmQ7A3JYkUsYMChMHNqe3TMEhDZaSat7P1sbP4XXQP9QmaFfaAftUDjws3GhdKaBGyJRMBhHKyk2irBZsymgUVuxfQXR63ojEjg7C583D6cNKLSZtybZr9Cw6mmCkSDRVu41WbF1jKEkAkXbXznANm3AyJ1BLqNVB7qiAyFSVeq5qVcvHL4Z1y2DAhcLLw6YGSqFyuyg8pKVQRhL2LuePa9mdtoYZyY5VhvgShLz2oY8R3taBL8RrnnTvcwECvQu51yPKyM2pryoHaQbED5Zn7hdegZy6KN9wfpLXedtNB9ssmMvz5jHcK12vmtfeUMzRrySqtmBDGfiqwFZrYZ5A7xz1uqi
+'localhost:3014/channel?initiator=ak_...&role=initiator&existing_channel_id=ch_FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR&offchain_tx=tx_6jPYBUFTkcmQ7A3JYkUsYMChMHNqe3TMEhDZaSat7P1sbP4XXQP9QmaFfaAftUDjws3GhdKaBGyJRMBhHKyk2irBZsymgUVuxfQXR63ojEjg7C583D6cNKLSZtybZr9Cw6mmCkSDRVu41WbF1jKEkAkXbXznANm3AyJ1BLqNVB7qiAyFSVeq5qVcvHL4Z1y2DAhcLLw6YGSqFyuyg8pKVQRhL2LuePa9mdtoYZyY5VhvgShLz2oY8R3taBL8RrnnTvcwECvQu51yPKyM2pryoHaQbED5Zn7hdegZy6KN9wfpLXedtNB9ssmMvz5jHcK12vmtfeUMzRrySqtmBDGfiqwFZrYZ5A7xz1uqi
 ```
 
 The channel fsm responds with the following event reports if all goes well:
@@ -654,7 +654,7 @@ The channel fsm responds with the following event reports if all goes well:
 then the standard report indicating that the channel is open:
 ```javascript
 {'action': 'info',
- 'channel_id': 'ch$FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR',
+ 'channel_id': 'ch_FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR',
  'payload': {'event': 'open'}
 }
 ```
@@ -662,9 +662,9 @@ then the standard report indicating that the channel is open:
 followed by an update report with the latest mutually-signed state:
 ```javascript
 {'action': 'update',
- 'channel_id': 'ch$FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR',
+ 'channel_id': 'ch_FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR',
  'payload':
-   {'state': 'tx$6jPYBUFTkcmQ7A3JYkUsYMChMHNqe3TMEhDZaSat7P1sbP4XXQP9QmaFfaAftUDjws3GhdKaBGyJRMBhHKyk2irBZsymgUVuxfQXR63ojEjg7C583D6cNKLSZtybZr9Cw6mmCkSDRVu41WbF1jKEkAkXbXznANm3AyJ1BLqNVB7qiAyFSVeq5qVcvHL4Z1y2DAhcLLw6YGSqFyuyg8pKVQRhL2LuePa9mdtoYZyY5VhvgShLz2oY8R3taBL8RrnnTvcwECvQu51yPKyM2pryoHaQbED5Zn7hdegZy6KN9wfpLXedtNB9ssmMvz5jHcK12vmtfeUMzRrySqtmBDGfiqwFZrYZ5A7xz1uqi'
+   {'state': 'tx_6jPYBUFTkcmQ7A3JYkUsYMChMHNqe3TMEhDZaSat7P1sbP4XXQP9QmaFfaAftUDjws3GhdKaBGyJRMBhHKyk2irBZsymgUVuxfQXR63ojEjg7C583D6cNKLSZtybZr9Cw6mmCkSDRVu41WbF1jKEkAkXbXznANm3AyJ1BLqNVB7qiAyFSVeq5qVcvHL4Z1y2DAhcLLw6YGSqFyuyg8pKVQRhL2LuePa9mdtoYZyY5VhvgShLz2oY8R3taBL8RrnnTvcwECvQu51yPKyM2pryoHaQbED5Zn7hdegZy6KN9wfpLXedtNB9ssmMvz5jHcK12vmtfeUMzRrySqtmBDGfiqwFZrYZ5A7xz1uqi'
    }
 }
 ```
@@ -702,7 +702,7 @@ Then the starter receives a `channel_close_mutual_tx` to sign:
 {'action': 'sign',
  'tag': 'shutdown_sign',
  'payload': {
-    'tx': 'tx$SUBGDUaJgWhDYs73EPSiX42Xd3PSmHAhRmwd1th9ibGipCVVbsdS96roQZEH4MF'
+    'tx': 'tx_SUBGDUaJgWhDYs73EPSiX42Xd3PSmHAhRmwd1th9ibGipCVVbsdS96roQZEH4MF'
     }
 }
 ```
@@ -711,7 +711,7 @@ it and then post it back via a WebSocket message:
 ```
 {'action': 'shutdown_sign',
  'payload': {
-    'tx': 'tx$8oWtHcfnWDSQV6Wdehp1MdXYhcbV29a7tWe3LWDqU5RwKvMhzPQLiSJKaYhtw4NLaBN1m3pmEtsVjoygkohXi9i8e3vpYgenphdKJmYLrFqjouxmyC5yKbsQUY8m9i4EzcMNuHmrLwrXrrPhKC1qY25Pxb6u74VEVuk'
+    'tx': 'tx_8oWtHcfnWDSQV6Wdehp1MdXYhcbV29a7tWe3LWDqU5RwKvMhzPQLiSJKaYhtw4NLaBN1m3pmEtsVjoygkohXi9i8e3vpYgenphdKJmYLrFqjouxmyC5yKbsQUY8m9i4EzcMNuHmrLwrXrrPhKC1qY25Pxb6u74VEVuk'
     }
 }
 ```
@@ -721,7 +721,7 @@ Then the acknowledger receives a `channel_close_mutual_tx` to sign:
 {'action': 'sign',
  'tag': 'shutdown_sign_ack',
  'payload': {
-    'tx': 'tx$SUBGDUaJgWhDYs73EPSiX42Xd3PSmHAhRmwd1th9ibGipCVVbsdS96roQZEH4MF'
+    'tx': 'tx_SUBGDUaJgWhDYs73EPSiX42Xd3PSmHAhRmwd1th9ibGipCVVbsdS96roQZEH4MF'
     }
 }
 ```
@@ -730,7 +730,7 @@ it and then post it back via a WebSocket message:
 ```
 {'action': 'shutdown_sign_ack',
  'payload': {
-    'tx': 'tx$8oWtHcfnWDSYu4SfLLLHqYqM5JXiCZd6De7fLQZesMHrArZeWzP7893EVpBpUR56tKUeJXJ3YUTuqB8a4efiHaw6ai3GKwoeu3ZyzfGPUfb5EMG6viv2dM8mhtKqaG7fkEAWuswbmFN4bDjXANbAK2sMU36yfBc9p1h'
+    'tx': 'tx_8oWtHcfnWDSYu4SfLLLHqYqM5JXiCZd6De7fLQZesMHrArZeWzP7893EVpBpUR56tKUeJXJ3YUTuqB8a4efiHaw6ai3GKwoeu3ZyzfGPUfb5EMG6viv2dM8mhtKqaG7fkEAWuswbmFN4bDjXANbAK2sMU36yfBc9p1h'
     }
 }
 ```
@@ -739,7 +739,7 @@ it and then post it back via a WebSocket message:
 Both participants receive the co-signed `channel_close_mutual_tx`:
 ```
 {'action': 'on_chain_tx',
- 'payload': {'tx': 'tx$ERkuTBJfEHtrmDkFz7BaigSKsnqmsCc8MorKFUwAW5VmpSoatcN3Njy2Vda8asojeshjb7SoXsqevaDLzXj78GSPwTTfYJmJtwrewTwK3LSFBe5BEYMA8rxNAWSahW1ecp1wbkBgpdiUQn1Q1UFLcYVpWYGpTWFH5DXn69iz6kFWX8sa7c5PSTaLenjVZEkbV9pEgKHKbjfovvd15Jc821y3zhQvtfhcYKS89r7gnhi81LWsjnSghmjANgjiC'
+ 'payload': {'tx': 'tx_ERkuTBJfEHtrmDkFz7BaigSKsnqmsCc8MorKFUwAW5VmpSoatcN3Njy2Vda8asojeshjb7SoXsqevaDLzXj78GSPwTTfYJmJtwrewTwK3LSFBe5BEYMA8rxNAWSahW1ecp1wbkBgpdiUQn1Q1UFLcYVpWYGpTWFH5DXn69iz6kFWX8sa7c5PSTaLenjVZEkbV9pEgKHKbjfovvd15Jc821y3zhQvtfhcYKS89r7gnhi81LWsjnSghmjANgjiC'
             }
 }
 ```
@@ -759,7 +759,7 @@ Then the WebSocket connection is closed.
 After calculating the hash of the co-signed `channel_close_mutual_tx` parties can track
 its progress as they would do with any on-chain transaction
 ```
-curl 'http://127.0.0.1:3013/v2/transactions/th$2qkN973cNJiejXVJoXkXbttf1iKetWJCSY1W5VUBh3pnRS1kCC'
+curl 'http://127.0.0.1:3013/v2/transactions/th_2qkN973cNJiejXVJoXkXbttf1iKetWJCSY1W5VUBh3pnRS1kCC'
 ```
 if the `block_hash` is `none` - then the transaction is still in the mempool.
 
@@ -775,8 +775,8 @@ Example message for when the `from` does not have enough tokens to spend
  'payload': {'reason': 'insufficient_balance',
              'request': {'action': 'update',
                          'payload': {'amount': 10000,
-                                     'from': 'ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn',
-                                     'to': 'ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68'
+                                     'from': 'ak_4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn',
+                                     'to': 'ak_35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68'
                                      },
                           'tag': 'new'
                           }
@@ -806,7 +806,7 @@ state is reverted to the last mutually signed one. Both participant receive a
 message containing a reference to the correct state.
 ```
 {'action': 'conflict',
- 'payload': {'channel_id': 'ch$WmpDbaiCs5roqRCL5KEKbpsDNJSbcbiUvt2cs1qyj4sM9HA3b',
+ 'payload': {'channel_id': 'ch_WmpDbaiCs5roqRCL5KEKbpsDNJSbcbiUvt2cs1qyj4sM9HA3b',
              'round': 42
              }
 }
@@ -823,7 +823,7 @@ The `sender` pushes a message with the following structure:
 ```
 {'action': 'message',
  'payload': {'info': 'hejsan',
-             'to': 'ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68'
+             'to': 'ak_35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68'
              }
 }
 ```
@@ -833,9 +833,9 @@ details:
 
 ```
 {'action': 'message',
- 'payload': {'message': {'channel_id': 'ch$6SgSc7a14dGbwMNCsjjQZCYVreVLKkFwBzJEZ58ZSZnV9FiQ1',
-                         'from': 'ak$4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn',
-                         'to': 'ak$35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68',
+ 'payload': {'message': {'channel_id': 'ch_6SgSc7a14dGbwMNCsjjQZCYVreVLKkFwBzJEZ58ZSZnV9FiQ1',
+                         'from': 'ak_4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn',
+                         'to': 'ak_35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68',
                          'info': 'hejsan'
                          }
             }
@@ -911,7 +911,7 @@ The depositor receives a message containing the updated channel state as a
 {'action': 'sign',
  'tag': 'deposit_tx',
  'payload' {
-    'tx': 'tx$2C9es4FjJF3MtD1M3Np7tUzgCk8AE3ARVJe94Sxmh63feCNt2CekXvjLhBPS2i8pQ8JKGQfgzMQnvfntEdYmMYo7D1UP59UUQ31Bss5G1gz8sPhzmrx1cXCawF9eB27gjYVhTnaLXwUEqdJfHqfATuwLqJtc1p'}
+    'tx': 'tx_2C9es4FjJF3MtD1M3Np7tUzgCk8AE3ARVJe94Sxmh63feCNt2CekXvjLhBPS2i8pQ8JKGQfgzMQnvfntEdYmMYo7D1UP59UUQ31Bss5G1gz8sPhzmrx1cXCawF9eB27gjYVhTnaLXwUEqdJfHqfATuwLqJtc1p'}
 }
 ```
 The depositor is to decode the transaction, inspect its contents, sign it, encode
@@ -919,7 +919,7 @@ it and then post it back via a WebSocket message:
 ```
 {'action': 'deposit_tx',
  'payload': {
-    'tx': 'tx$i2WsEQsiC5XsnyKgLeXGW6b9ys87yoQzNB65csymQbK9AsuWApenk9ViHpzxb2oJwUCGiqzA1Cc1D6pJAjkLcQ6w3m8Bhvt41HSqtpSpEd1MciHMcFg1xsZG9CsPu1NUBey9EupgXFJtZ4caNMXcV4evV7ocBjzdBcJo5CUMQgapQZ8ajgUrPgfqQTb3Gq8FFCuHHaHytA7fTNik4KAAvyHiEDutXf1VJxXG2oYkpoNTQGuriV3g4Hxrms3r7LD8ko91'
+    'tx': 'tx_i2WsEQsiC5XsnyKgLeXGW6b9ys87yoQzNB65csymQbK9AsuWApenk9ViHpzxb2oJwUCGiqzA1Cc1D6pJAjkLcQ6w3m8Bhvt41HSqtpSpEd1MciHMcFg1xsZG9CsPu1NUBey9EupgXFJtZ4caNMXcV4evV7ocBjzdBcJo5CUMQgapQZ8ajgUrPgfqQTb3Gq8FFCuHHaHytA7fTNik4KAAvyHiEDutXf1VJxXG2oYkpoNTQGuriV3g4Hxrms3r7LD8ko91'
     }
 }
 ```
@@ -937,7 +937,7 @@ transaction for confirmation:
 {'action': 'sign',
  'tag': 'deposit_ack',
  'payload' {
-    'tx': 'tx$2C9es4FjJF3MtD1M3Np7tUzgCk8AE3ARVJe94Sxmh63feCNt2CekXvjLhBPS2i8pQ8JKGQfgzMQnvfntEdYmMYo7D1UP59UUQ31Bss5G1gz8sPhzmrx1cXCawF9eB27gjYVhTnaLXwUEqdJfHqfATuwLqJtc1p'
+    'tx': 'tx_2C9es4FjJF3MtD1M3Np7tUzgCk8AE3ARVJe94Sxmh63feCNt2CekXvjLhBPS2i8pQ8JKGQfgzMQnvfntEdYmMYo7D1UP59UUQ31Bss5G1gz8sPhzmrx1cXCawF9eB27gjYVhTnaLXwUEqdJfHqfATuwLqJtc1p'
     }
 }
 ```
@@ -946,7 +946,7 @@ it and then post it back via a WebSocket message:
 ```
 {'action': 'deposit_ack',
  'payload': {
-    'tx': 'tx$2WsEQsiC5Xso1aHppqY8EwniUa9demV2SAdrNckji4H5ZRDnakiMPAWRv4SSksecqXBCriNTTFg6c3dXK9TzmRV7DoqkKH68Vh7XbVGS7g9CQfaj46S8wgsFBdJtoBMnHV3xbbzSz36cMAAN3eosKaA74TMkgXWgrDCD619RnmskuyvArGbgy6fMFqSniG1s9a3WoTMLoFyw6ucpxgS523Dk3SQEbPAxznbL9KsBEjsCroe4HBVZZG5bX3LU8ZX9PUy'
+    'tx': 'tx_2WsEQsiC5Xso1aHppqY8EwniUa9demV2SAdrNckji4H5ZRDnakiMPAWRv4SSksecqXBCriNTTFg6c3dXK9TzmRV7DoqkKH68Vh7XbVGS7g9CQfaj46S8wgsFBdJtoBMnHV3xbbzSz36cMAAN3eosKaA74TMkgXWgrDCD619RnmskuyvArGbgy6fMFqSniG1s9a3WoTMLoFyw6ucpxgS523Dk3SQEbPAxznbL9KsBEjsCroe4HBVZZG5bX3LU8ZX9PUy'
   }
 }
 ```
@@ -956,7 +956,7 @@ After both parties had signed the deposit transaction, the transaction is posted
 both parties receive it:
 ```
 {'action': 'on_chain_tx',
- 'payload': {'tx': 'tx$3cDMp6242sBycND2FPT2jcDWFceRgA7zL3ckU8VzLQdvf2Uqjx5CKkjMXbYrmYjMnLnDihVTrF2fCLqNG93BTAsCNWT6QiJwdmXrTXLQ2d2d7rAc5bYepTC2w3LyrZ37jhx3dN7ATusjXtSu6jw9N8exaPxnjKD3twye5B6bdqbZEHKXXtqStUmaTmUDofEWtGaUCxTWKCboMH7T2mxEjzxgpaH2fbHRxA3GmxaTaKWoTfbnvqragH9QVo6QxiCRAGNUEkbRbPw8m1qPUKjVFWWQSZ9VcCdXte3DitS3anXv7jtTKAA7uuj5pbdG4qi64dDLTd52sSQP6JZpzMxa6oyJTDo5s'
+ 'payload': {'tx': 'tx_3cDMp6242sBycND2FPT2jcDWFceRgA7zL3ckU8VzLQdvf2Uqjx5CKkjMXbYrmYjMnLnDihVTrF2fCLqNG93BTAsCNWT6QiJwdmXrTXLQ2d2d7rAc5bYepTC2w3LyrZ37jhx3dN7ATusjXtSu6jw9N8exaPxnjKD3twye5B6bdqbZEHKXXtqStUmaTmUDofEWtGaUCxTWKCboMH7T2mxEjzxgpaH2fbHRxA3GmxaTaKWoTfbnvqragH9QVo6QxiCRAGNUEkbRbPw8m1qPUKjVFWWQSZ9VcCdXte3DitS3anXv7jtTKAA7uuj5pbdG4qi64dDLTd52sSQP6JZpzMxa6oyJTDo5s'
             }
 }
 ```
@@ -1038,7 +1038,7 @@ The withdrawer receives a message containing the updated channel state as a
 {'action': 'sign',
  'tag': 'withdraw_tx',
  'payload' {
-    'tx': 'tx$2C9estKT2f86WwC7LCa18cDTTmMCrXM7N2AcrXKmgnTo9DNchXjNmewbgNX2YW4RYk8iHkVRnPpeYLRgh6xH96mHNxCMW4aUL2hgTe6iqdrKyM5eqMbCN9YgTdDvUzDyASJwoicxXb7UeDF5kFWvsEMxXBKGX2'}
+    'tx': 'tx_2C9estKT2f86WwC7LCa18cDTTmMCrXM7N2AcrXKmgnTo9DNchXjNmewbgNX2YW4RYk8iHkVRnPpeYLRgh6xH96mHNxCMW4aUL2hgTe6iqdrKyM5eqMbCN9YgTdDvUzDyASJwoicxXb7UeDF5kFWvsEMxXBKGX2'}
 }
 ```
 The withdrawer is to decode the transaction, inspect its contents, sign it, encode
@@ -1046,7 +1046,7 @@ it and then post it back via a WebSocket message:
 ```
 {'action': 'withdraw_tx',
  'payload': {
-    'tx': 'tx$2WsEQsiC5Xsn85g88TmLYonFu2r8HT53jQPJ7f6Ai9uvnZGwnExRyJ51nHS2mU4g2FUTf2PHUsgs22X5Nwg1E1Zy8ofuoJAttqhXpySyYJhCwdWXYKF6bapSXCLwQoKJ9bWLYYZqudsiPfwv43ekzgJHtaWozzFjrEq835B7Xbd8LSd4znVh2FRWfAPW1Zvsm6nKjN2NfEPndwbps7zgqvbQYeKngwFk952CLtDEpGfXXiS5pUp5ExYTwsxGE4E6LKV'
+    'tx': 'tx_2WsEQsiC5Xsn85g88TmLYonFu2r8HT53jQPJ7f6Ai9uvnZGwnExRyJ51nHS2mU4g2FUTf2PHUsgs22X5Nwg1E1Zy8ofuoJAttqhXpySyYJhCwdWXYKF6bapSXCLwQoKJ9bWLYYZqudsiPfwv43ekzgJHtaWozzFjrEq835B7Xbd8LSd4znVh2FRWfAPW1Zvsm6nKjN2NfEPndwbps7zgqvbQYeKngwFk952CLtDEpGfXXiS5pUp5ExYTwsxGE4E6LKV'
     }
 }
 ```
@@ -1064,7 +1064,7 @@ transaction for confirmation:
 {'action': 'sign',
  'tag': 'withdraw_ack',
  'payload' {
-    'tx': 'tx$2C9estKT2f86WwC7LCa18cDTTmMCrXM7N2AcrXKmgnTo9DNchXjNmewbgNX2YW4RYk8iHkVRnPpeYLRgh6xH96mHNxCMW4aUL2hgTe6iqdrKyM5eqMbCN9YgTdDvUzDyASJwoicxXb7UeDF5kFWvsEMxXBKGX2'}
+    'tx': 'tx_2C9estKT2f86WwC7LCa18cDTTmMCrXM7N2AcrXKmgnTo9DNchXjNmewbgNX2YW4RYk8iHkVRnPpeYLRgh6xH96mHNxCMW4aUL2hgTe6iqdrKyM5eqMbCN9YgTdDvUzDyASJwoicxXb7UeDF5kFWvsEMxXBKGX2'}
     }
 }
 ```
@@ -1073,7 +1073,7 @@ it and then post it back via a WebSocket message:
 ```
 {'action': 'withdraw_ack',
  'payload': {
-    'tx': 'tx$2WsEQsiC5XsmkQF6BS1aUhB55XkktxRJi2ZWbpCbGVHgQNPQzUeaEJk57RrhWBagGqNUyUA9YY6PrZhTiXcYs6dK1BxASu8EummTYvfpTjfnA8hU21pw6Ms9fWbJbhBbLNai4hLGPEJZ12r1UHqxLTnq6nJ69vw6szeisRzVJ3XYNpvGgSR5dVyW7Yd2VvtW5CGEMCXCHVYquD8gt6RMBDDr1Q6LeLUTomBpgFGQknjKv56tLtZ2FHkWWa9mU22jXMS'
+    'tx': 'tx_2WsEQsiC5XsmkQF6BS1aUhB55XkktxRJi2ZWbpCbGVHgQNPQzUeaEJk57RrhWBagGqNUyUA9YY6PrZhTiXcYs6dK1BxASu8EummTYvfpTjfnA8hU21pw6Ms9fWbJbhBbLNai4hLGPEJZ12r1UHqxLTnq6nJ69vw6szeisRzVJ3XYNpvGgSR5dVyW7Yd2VvtW5CGEMCXCHVYquD8gt6RMBDDr1Q6LeLUTomBpgFGQknjKv56tLtZ2FHkWWa9mU22jXMS'
   }
 }
 ```
@@ -1083,7 +1083,7 @@ After both the parties had signed the withdraw transaction, the transaction is p
 both parties receive it:
 ```
 {'action': 'on_chain_tx',
- 'payload': {'tx': 'tx$3cDMp6242sByJUzkqj5qREcZdMg99K3hYXtj8LTJrYvFEcd2FUa4CNfUzhnUQDkzaeeexK1ejuYPMJDD5bwjuGibBYLE1AYPPncdzwe9dHhATA2ftRgouyUxztZoQKQ1jNCDUpgkWcYPiBBRfSUJhoGGLzTfMHrfU5UiiMkcCkv6CmSWEm8JsiGAciJFJzzsRQyCJTZ6a6JM7ztBikcs9sQsG6crEdfnMwjG3zEowFT4wpaYZAxH849Y7m3c3pQkkABtcAkXznZEmtS89H9GWaecxKWkaAipz6WvCKAu33haGb4SM3apigLUYZc6xa2KyTJ8CutCKYWP8Jacua6z8B4hg4qM4'
+ 'payload': {'tx': 'tx_3cDMp6242sByJUzkqj5qREcZdMg99K3hYXtj8LTJrYvFEcd2FUa4CNfUzhnUQDkzaeeexK1ejuYPMJDD5bwjuGibBYLE1AYPPncdzwe9dHhATA2ftRgouyUxztZoQKQ1jNCDUpgkWcYPiBBRfSUJhoGGLzTfMHrfU5UiiMkcCkv6CmSWEm8JsiGAciJFJzzsRQyCJTZ6a6JM7ztBikcs9sQsG6crEdfnMwjG3zEowFT4wpaYZAxH849Y7m3c3pQkkABtcAkXznZEmtS89H9GWaecxKWkaAipz6WvCKAu33haGb4SM3apigLUYZc6xa2KyTJ8CutCKYWP8Jacua6z8B4hg4qM4'
             }
 }
 ```
@@ -1123,8 +1123,8 @@ participant sends a WebSocket message
 {'action': 'get',
  'tag': 'balances'
  'payload': {
-    'accounts': ['ak$Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
-                 'ak$V6an1xhec1xVaAhLuak7QoEbi6t7w5hEtYWp9bMKaJ19i6A9E']
+    'accounts': ['ak_Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
+                 'ak_V6an1xhec1xVaAhLuak7QoEbi6t7w5hEtYWp9bMKaJ19i6A9E']
   }
 }
 ```
@@ -1138,9 +1138,9 @@ A response of this call looks like
 {'action': 'get',
  'tag': 'balances'
  'payload': [
-    {'account': 'ak$Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
+    {'account': 'ak_Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
      'balance': 700},
-    {'account': 'ak$V6an1xhec1xVaAhLuak7QoEbi6t7w5hEtYWp9bMKaJ19i6A9E',
+    {'account': 'ak_V6an1xhec1xVaAhLuak7QoEbi6t7w5hEtYWp9bMKaJ19i6A9E',
      'balance': 400}
   ]
 }
@@ -1159,9 +1159,9 @@ a participant sends a WebSocket message
 {'action': 'get',
  'tag': 'poi'
  'payload': {
-    'accounts': ['ak$Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
-                 'ak$V6an1xhec1xVaAhLuak7QoEbi6t7w5hEtYWp9bMKaJ19i6A9E'],
-    'contracts': ['ct$2dCUAWYZdrWfACz3a2faJeKVTVrfDYxCQHCqAt5zM15f3u2UfA']
+    'accounts': ['ak_Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
+                 'ak_V6an1xhec1xVaAhLuak7QoEbi6t7w5hEtYWp9bMKaJ19i6A9E'],
+    'contracts': ['ct_2dCUAWYZdrWfACz3a2faJeKVTVrfDYxCQHCqAt5zM15f3u2UfA']
   }
 }
 ```
@@ -1176,7 +1176,7 @@ A response of this call looks like
 {'action': 'get',
  'tag': 'balances'
  'payload': {
-    'poi': 'pi$g1JxqVQDQdvjvekeM8hEnVeMFUgfF7YYNjjtrvir7q5tAKq2hFVdtvQo7q4p5Aix1S5XNvKabjEwQVvYVezmnq9VWYoJcmctc5mAu6xVj7KgDk3aG5E7topuuLPXEyGP6hAzRPbr2KzQrQ7KZvTdH15bY1WW7D7XGBRmuiDgYiDj8MAVVjqRFnBS5C6GgevgCkUpKX2tyQL7Y3svSNwDiGxV1b3G6xMbhDeStzgtZ9SrsCaLArP1g9wCDJkChEDXneCmMcvEv2acGwsmXHPfT1uy8oSTVny8tbivnnET7XVdjPJZWuvFbwGAmywa4fRF7wkzn4FQjasLo24DRS5fGYg7Z3uwnFbt4U8sn6yg4FvUBUweW28qMjFRAqVJPH6JKU6o8kZjgRjXsC2L7fbhRkYboecoft11FkFuFXdPjsCj3XGXWtTTAXihPooyTpbjp9yszXZqVxLZ7ms7zc6qtPS8Arq8yTf7UmManvhpYKreDMUqPLtkbUTy32LmeRGBUdhhCzUSg49EHtRo5ti8SCrARQt11ScBJnytnok4o3WvmNVq7SRcWPQgH3ABa8g9csirhcZcrx4f2LQoJwQ2VRnkZUUuxDPNEGRwprVWeCU7KfB3CU86z1eHDQWLnodaxLLJnM1fvpdbrjknRcTSTUjPR7rHcsWVmtkNTVqajCZJKUZN2izAAq5qnQUZwkgFLokynCkMGnkV4woi8j4YKusqXUGZ9w5iFfFsSRjw7brqEBySpQa3QayBBmqKu5CF3pTvikRyGhigCDhmyB3QUQ9SQNr2e4r91hoJmfLXN9o1mkW5ndCuVkKoJjSqiscshpZnvUWVKhQZoHEacdZM5z6U42DfqEVDUR6ptokdNpkJtQtuKo1YD1SyhXgvoHh2d2QCpR29wgRkUKswEDru4sFMRaaxk4uL2MpJg3XaAFhxv6WeKeELCGuYRn9yFnhT9pntUkoFWSghcBkk73uN8sYGo9EkDFkV59Gyrra2hm8Dj7iSUUMqJSMApssN8dWzL9HhC5Hb12mFy8ZzAw1jdYmEYXSmjP859A8cKdP6StwwjuhLacfqv7BkFsQX6Rg4w3ykjRPF2Aj2cf4rTMsNnU4bKFmGYc5RPctTx5pj6PchPyX8GgXMf7EfedQNv7rtT8pCLZ199MRCnPy1X3HURAb8PE9Mj8aZz21N8FDU3nT2XraYKE4DBfnwPnqTV6YNcUVk7AYbJ42BZ2AhTwtZzDovZ3FhK6RvjvUtU4MBPcbYFnidFeqNHq3uM1UeWyaHZJwRoQiptojxCPaDLr7gfNb4jUYRihbbczgNgWwbBsahC75rJWUn7C3dSzJYBY5BbRtgAUivU7tQAhE1SCZ79RDsHwo9Md6iFdX1W1YRB3U9b4gi2NN3HfH4dnA7ediYgB1r9eNGh8mw8SYXSruHFLV59LkSRyR9rFeTCUSTt418fNZAftdbqWhd1UceLZhB3QsdKA8UmSKZcjx1q8ZF83m5zDDgJnkkpiqoHRpZ5pzogPWR8HiJpaDUySD1D8yGgMuGbfsxLhrBm9oDqB1QDqKEWgtsBgu5ZYNob7DqY9cwmsfKnssuNofMG3MqpsYe28ZwEAGfVi1wm87QkSNqyCHYUa3yQ7woeR4ZvQwWJPF3GcXKpBhjVuJusE'
+    'poi': 'pi_g1JxqVQDQdvjvekeM8hEnVeMFUgfF7YYNjjtrvir7q5tAKq2hFVdtvQo7q4p5Aix1S5XNvKabjEwQVvYVezmnq9VWYoJcmctc5mAu6xVj7KgDk3aG5E7topuuLPXEyGP6hAzRPbr2KzQrQ7KZvTdH15bY1WW7D7XGBRmuiDgYiDj8MAVVjqRFnBS5C6GgevgCkUpKX2tyQL7Y3svSNwDiGxV1b3G6xMbhDeStzgtZ9SrsCaLArP1g9wCDJkChEDXneCmMcvEv2acGwsmXHPfT1uy8oSTVny8tbivnnET7XVdjPJZWuvFbwGAmywa4fRF7wkzn4FQjasLo24DRS5fGYg7Z3uwnFbt4U8sn6yg4FvUBUweW28qMjFRAqVJPH6JKU6o8kZjgRjXsC2L7fbhRkYboecoft11FkFuFXdPjsCj3XGXWtTTAXihPooyTpbjp9yszXZqVxLZ7ms7zc6qtPS8Arq8yTf7UmManvhpYKreDMUqPLtkbUTy32LmeRGBUdhhCzUSg49EHtRo5ti8SCrARQt11ScBJnytnok4o3WvmNVq7SRcWPQgH3ABa8g9csirhcZcrx4f2LQoJwQ2VRnkZUUuxDPNEGRwprVWeCU7KfB3CU86z1eHDQWLnodaxLLJnM1fvpdbrjknRcTSTUjPR7rHcsWVmtkNTVqajCZJKUZN2izAAq5qnQUZwkgFLokynCkMGnkV4woi8j4YKusqXUGZ9w5iFfFsSRjw7brqEBySpQa3QayBBmqKu5CF3pTvikRyGhigCDhmyB3QUQ9SQNr2e4r91hoJmfLXN9o1mkW5ndCuVkKoJjSqiscshpZnvUWVKhQZoHEacdZM5z6U42DfqEVDUR6ptokdNpkJtQtuKo1YD1SyhXgvoHh2d2QCpR29wgRkUKswEDru4sFMRaaxk4uL2MpJg3XaAFhxv6WeKeELCGuYRn9yFnhT9pntUkoFWSghcBkk73uN8sYGo9EkDFkV59Gyrra2hm8Dj7iSUUMqJSMApssN8dWzL9HhC5Hb12mFy8ZzAw1jdYmEYXSmjP859A8cKdP6StwwjuhLacfqv7BkFsQX6Rg4w3ykjRPF2Aj2cf4rTMsNnU4bKFmGYc5RPctTx5pj6PchPyX8GgXMf7EfedQNv7rtT8pCLZ199MRCnPy1X3HURAb8PE9Mj8aZz21N8FDU3nT2XraYKE4DBfnwPnqTV6YNcUVk7AYbJ42BZ2AhTwtZzDovZ3FhK6RvjvUtU4MBPcbYFnidFeqNHq3uM1UeWyaHZJwRoQiptojxCPaDLr7gfNb4jUYRihbbczgNgWwbBsahC75rJWUn7C3dSzJYBY5BbRtgAUivU7tQAhE1SCZ79RDsHwo9Md6iFdX1W1YRB3U9b4gi2NN3HfH4dnA7ediYgB1r9eNGh8mw8SYXSruHFLV59LkSRyR9rFeTCUSTt418fNZAftdbqWhd1UceLZhB3QsdKA8UmSKZcjx1q8ZF83m5zDDgJnkkpiqoHRpZ5pzogPWR8HiJpaDUySD1D8yGgMuGbfsxLhrBm9oDqB1QDqKEWgtsBgu5ZYNob7DqY9cwmsfKnssuNofMG3MqpsYe28ZwEAGfVi1wm87QkSNqyCHYUa3yQ7woeR4ZvQwWJPF3GcXKpBhjVuJusE'
   }
 }
 ```
@@ -1193,8 +1193,8 @@ contract call, a participant sends a WebSocket message
 ```
 {'action': 'get',
  'tag': 'contract_call',
- 'payload': {'caller': 'ak$Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
-             'contract': 'ct$2qSaJ7pe3MTdPpzS69ZdtQsVTPSoj7yyYL2KJLxKQoAAHJQdjq',
+ 'payload': {'caller': 'ak_Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
+             'contract': 'ct_2qSaJ7pe3MTdPpzS69ZdtQsVTPSoj7yyYL2KJLxKQoAAHJQdjq',
              'round': 11
   }
 }
@@ -1208,9 +1208,9 @@ A non-error response of this call looks like this
 {'action': 'get',
  'tag': 'contract_call',
  'payload': {
-    'caller_address': 'ak$Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
+    'caller_address': 'ak_Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
     'caller_nonce': 11,
-    'contract_address': 'ct$2qSaJ7pe3MTdPpzS69ZdtQsVTPSoj7yyYL2KJLxKQoAAHJQdjq',
+    'contract_address': 'ct_2qSaJ7pe3MTdPpzS69ZdtQsVTPSoj7yyYL2KJLxKQoAAHJQdjq',
     'gas_price': 0,
     'gas_used': 561,
     'height': 11,
