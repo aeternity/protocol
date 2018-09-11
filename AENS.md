@@ -236,6 +236,9 @@ pre-claim | |              ||  _
 Note that `expire` is not an explicit message that is part
 of the protocol.
 
+The accurate binary representations of the messages involved can be found in the
+[serializations document](./serializations.md).
+
 
 #### Pre-claim
 
@@ -291,7 +294,8 @@ A `claim` transaction MUST NOT be in included in the same block as its
 `rent` is the reoccurring fee that has to be paid for names. Our first rent
 model is a naïve one, that just uses a flat fee. Our initial target is 4 aeons
 per year. This comes out to `4/floor(60 * 24 * 365/key_block_interval)` aeons
-per block.
+per block. This rent is paid up front.
+
 
 #### Update
 
@@ -299,7 +303,7 @@ per block.
  ------------ ----
 | hash       | 32 |
  ------------ ----
-| expire_by  | 8  |
+| name_ttl   | 8  |
  ------------ ----
 | client_ttl | 8  |
  ------------ ----
@@ -312,7 +316,7 @@ per block.
 The `update` transaction MUST be signed by the owner of the name entry to be
 updated.
 
-The `expire_by` MUST NOT be more than `floor(60 * 24 * (365/2)/key_block_interval)`,
+The `name_ttl` MUST NOT be more than `floor(60 * 24 * (365/2)/key_block_interval)`,
 i.e. half a year, blocks into the future.
 
 `update` transaction may be used to extend the lease of the name.
@@ -320,7 +324,7 @@ i.e. half a year, blocks into the future.
 `rent` is the reoccurring fee that has to be paid for names. Our target is to
 charge 4 aeons per year. This comes out to `4/floor(60 * 24 * 365/key_block_interval)`
 aeons per block. For an update, the rent charged is then
-`(new_expire_by - old_expire_by) * 4/floor(60 * 24 * 365/key_block_interval)`
+`(new_expire_by - old_expire_by) * 4/floor(60 * 24 * 365/key_block_interval)`.
 
 
 #### Transfer
@@ -345,8 +349,7 @@ transferred.
  ------------ ----
 ```
 
-The revoke transaction MUST be signed by the owner
-of a name entry.
+The revoke transaction MUST be signed by the owner of a name entry.
 
 After the `revoke` transaction has been included in the chain, the name enters
 the `revoked` state. After a fixed timeout of `floor(60 * 24 * 14/key_block_interval)`
