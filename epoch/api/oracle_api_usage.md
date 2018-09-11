@@ -47,7 +47,7 @@ This means that we have created the transaction to create the oracle, once the
 next block is mined this transaction will be included. We can verify that the
 oracle is created:
 ```
-curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov
+curl http://localhost:3013/v2/oracles/ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov
 
 {"expires":51,"id":"ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query_fee":4,"query_format":"the query spec","response_format":"the response spec"}
 ```
@@ -67,7 +67,7 @@ curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/
 
 Again, we can check that the TTL was extended:
 ```
-curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov
+curl http://localhost:3013/v2/oracles/ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov
 
 {"expires":151,"id":"ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query_fee":4,"query_format":"the query spec","response_format":"the response spec"}
 ```
@@ -92,7 +92,7 @@ Therefore the cost of the transaction is 6.
 
 We can check the active oracle queries:
 ```
-curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov/queries
+curl http://localhost:3013/v2/oracles/ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov/queries
 
 {"oracle_queries":[{"expires":13,"fee":4,"oracle_id":"ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query":"ov_9wnkKJ3Qf2trdpq9EQbWQC","query_id":"oq_2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","response":"or_3QJmnh","response_ttl":{"type":"delta","value":10},"sender_id":"ak_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","sender_nonce":3}]}
 ```
@@ -119,7 +119,7 @@ I.e. the cost for our test transaction is 2.
 If we then wait for another block to be mined (and the response transaction to
 be added to the chain), we see that there is a response for the query:
 ```
-curl http://localhost:3013/v2/oracles/ok%24EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov/queries
+curl http://localhost:3013/v2/oracles/ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov/queries
 
 {"oracle_queries":[{"expires":14,"fee":4,"oracle_id":"ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","query":"ov_9wnkKJ3Qf2trdpq9EQbWQC","query_id":"oq_2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m","response":"or_Lr9RvdW8vZR8wq14ic7yUyC2vzi4nT","response_ttl":{"type":"delta","value":10},"sender_id":"ak_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov","sender_nonce":3}]}
 ```
