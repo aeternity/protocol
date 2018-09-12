@@ -880,9 +880,9 @@ Data is encoded in memory as follows:
   - Records are encoded as a tuple of field values.
     - The order of values is specified as the order the fields appear in the record definition.
   - Maps are encoded as a list of key-value pairs. ***This is subject to change***
-  - The order of values is unspecified. For instance, in the encoding of a pair
-    of boxed values, the three cells (first component, second component, and
-    pair cell) can appear in any order in the encoded binary.
+    - The order of values is unspecified. For instance, in the encoding of a pair
+      of boxed values, the three cells (first component, second component, and
+      pair cell) can appear in any order in the encoded binary.
   - The option type is encoded as -1 for `None` and as a singleton tuple `{v}` for `Some(v)`.
   - Values of datatypes are encoded as tuples where the first component is a
     constructor tag (starting with 0 for the first constructor), and the
