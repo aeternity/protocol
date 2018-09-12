@@ -876,7 +876,7 @@ Data is encoded in memory as follows:
   - Tuples are encoded with one word per component (stored left-to-right) where
     each word is either an unboxed value or a pointer.
   - Lists are encoded by an unboxed -1 word for the empty list and an encoded
-    pair of the head and the tail for a cons cell.
+    pair (i.e. tuple of two components) of the head and the tail for a cons cell.
   - Records are encoded as a tuple of field values.
     - The order of values is specified as the order the fields appear in the record definition.
   - Maps are encoded as a list of key-value pairs. ***This is subject to change***
