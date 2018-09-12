@@ -40,7 +40,7 @@ i.e. it will prefer the block it received first.
 
 ### Blocks
 
-This document depends on Bitcoin-NG protocol that describes rules for building blockchain.
+This document depends on [Bitcoin-NG protocol][ng] that describes rules for building blockchain.
 
 Bitcoin NG introduces two types of blocks:
 
@@ -395,3 +395,5 @@ NewTarget = HIGHEST_TARGET * DesiredRate / EstimatedCapacity
           ≈ DesiredRate * TotalTime * K / Sum(K div Target[i])
           ≈ TotalTime * K div (DesiredTimeBetweenBlocks * Sum(K div Target[i]))
 ```
+
+[ng]: ./bitcoin-ng.md
