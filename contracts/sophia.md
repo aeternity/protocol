@@ -876,13 +876,13 @@ Data is encoded in memory as follows:
   - Tuples are encoded with one word per component (stored left-to-right) where
     each word is either an unboxed value or a pointer.
   - Lists are encoded by an unboxed -1 word for the empty list and an encoded
-    pair of the head and the tail for a cons cell.
+    pair (i.e. tuple of two components) of the head and the tail for a cons cell.
   - Records are encoded as a tuple of field values.
     - The order of values is specified as the order the fields appear in the record definition.
   - Maps are encoded as a list of key-value pairs. ***This is subject to change***
-  - The order of values is unspecified. For instance, in the encoding of a pair
-    of boxed values, the three cells (first component, second component, and
-    pair cell) can appear in any order in the encoded binary.
+    - The order of values is unspecified. For instance, in the encoding of a pair
+      of boxed values, the three cells (first component, second component, and
+      pair cell) can appear in any order in the encoded binary.
   - The option type is encoded as -1 for `None` and as a singleton tuple `{v}` for `Some(v)`.
   - Values of datatypes are encoded as tuples where the first component is a
     constructor tag (starting with 0 for the first constructor), and the
