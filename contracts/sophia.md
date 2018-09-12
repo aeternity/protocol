@@ -878,6 +878,7 @@ Data is encoded in memory as follows:
   - Lists are encoded by an unboxed -1 word for the empty list and an encoded
     pair of the head and the tail for a cons cell.
   - Records are encoded as a tuple of field values.
+    - The order of values is specified as the order the fields appear in the record definition.
   - Maps are encoded as a list of key-value pairs. ***This is subject to change***
   - The order of values is unspecified. For instance, in the encoding of a pair
     of boxed values, the three cells (first component, second component, and
