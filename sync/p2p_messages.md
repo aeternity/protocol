@@ -79,8 +79,7 @@ Message is RLP encoded, fields:
   - `Port :: int` - listen port
   - `Share :: int` - number of peers to share
   - `GenesisHash :: byte_array`
-  - `Difficulty :: byte_array` - string representation of float that
-    is the total difficulty of the chain.
+  - `Difficulty :: int` - the total difficulty of the chain.
   - `TopHash :: byte_array`
   - `sync_allowed :: bool` - if the sender of this ping message is accepting
     synchronization messages.
