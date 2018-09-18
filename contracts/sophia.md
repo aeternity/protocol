@@ -882,7 +882,6 @@ Data is encoded in memory as follows:
   - The order of values is unspecified. For instance, in the encoding of a pair
     of boxed values, the three cells (first component, second component, and
     pair cell) can appear in any order in the encoded binary.
-  - The option type is encoded as -1 for `None` and as a singleton tuple `{v}` for `Some(v)`.
   - Values of datatypes are encoded as tuples where the first component is a
     constructor tag (starting with 0 for the first constructor), and the
     following components are the constructor arguments. For instance, for
@@ -890,12 +889,12 @@ Data is encoded in memory as follows:
       datatype zeroOrTwo = Zero | Two(int, int)
     ```
     `Zero` is encoded as a singleton tuple `{0}` and `Two(a, b)` as the triple `{1, a, b}`.
+  - The option type is encoded as the datatype `datatype option('a) = None | Some('a)`.
   - Type representations are encoded as tuples as follows:
     - `word`: `{0}`  (any unboxed type)
     - `string`: `{1}`
     - `list(t)`: `{2, encode(t)}`
     - `tuple(ts)`: `{3, encode(ts)}`, where `ts : list(typerep)`
-    - `option(t)`: `{4, encode(t)}`
     - `datatype(cs)`: `{5, encode(cs)}`, where `cs : list(list(typerep))`
       are the type representations for the constructor arguments
   - The `ttl` type is encoded as the datatype `datatype ttl = RelativeTTL(int) | FixedTTL(int)`.
