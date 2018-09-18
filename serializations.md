@@ -23,23 +23,29 @@ does not contain any more information than the header, so the
 representation of the block and the header is the same. Micro blocks
 has a static size header and a dynamic size "body".
 
-The first bit of the headers are used as a tag to distinguish between
-a key block and a micro block.
+The header starts with a version number (32 bits), followed by a
+reserved flags field (32 bits). The first flag bit marks the header as
+a key or micro header. Other flag fields are defined separately for
+the header types. Note that unused flags must be set to zero.
 
-| Header type tag | Header type |
-| ---             | ---         |
-| 0               | micro       |
-| 1               | key         |
+| Header type flag | Header type |
+| ---              | ---         |
+| 0                | micro       |
+| 1                | key         |
 
 ### Key block/header
 
-All field sizes are statically known and can be constructed directly as
-a byte array.
+All field sizes are statically known and can be constructed directly
+as a byte array. The header starts with a version number (32 bits),
+followed by a reserved flags field (32 bits). Currently, only one flag
+bit is used, to mark the header as a key header. Other flags must be
+set to zero.
 
 | Fieldname  | Size (bytes) |
 | --- | ---  |
+| version     | 32 bits |
 | key_tag     | 1 bit   |
-| version     | 63 bits |
+| unused_flags| 31 bits (all set to 0) |
 | height      | 8    |
 | prev_hash   | 32   |
 | prev_key_hash | 32   |
@@ -55,28 +61,41 @@ a byte array.
 
 | Fieldname    | Size |
 | ---          | ---  |
-| Micro Header | 216 bytes |
+| Micro Header | 216 or 238 bytes (see below) |
 | [Micro Body](#micro-body)| variable |
 
 ### Micro block header
 
-All field sizes of a micro block header are statically known and can be
-constructed directly as a byte array.
-
 | Fieldname | Size (bytes) |
 | --- | --- |
+| version    | 32 bits |
 | micro_tag  | 1 bit   |
-| version    | 63 bits |
+| has_fraud  | 1 bit   |
+| unused_flags| 30 bits (all set to 0) |
 | height     | 8    |
 | prev_hash  | 32   |
 | prev_key_hash | 32   |
 | state_hash | 32   |
 | txs_hash   | 32   |
 | time       | 8    |
+| fraud_hash | 0 or 32 |
 | signature  | 64   |
 
-Note that the position for the signature (64 bytes) must be filled
-with only zeroes when constructing or validating the signature.
+Note:
+
+* The field for *signature* (64 bytes) must be filled
+  with only zeroes when constructing or validating the signature.
+
+* The micro block header has two valid sizes depending on whether the
+  block contains Proof of Fraud or not. This is signalled using the
+  *has_fraud* flag.
+
+| has_fraud | fraud_hash size |
+| ---       | ---             |
+| 1         | 32 bytes        |
+| 0         | 0  bytes        |
+
+
 
 ## Dynamic size object serialization
 
@@ -722,7 +741,19 @@ NOTE: As the POI contains the Merkle Patricia Tree nodes (e.g. not only their ha
 
 #### Micro Body
 ```
-[ <transactions> :: [binary()]
+[ <transactions>    :: [binary()]
+, <proof_of_fraud>> :: [binary()]
 ]
 ```
-NOTE: The transactions are signed transactions.
+NOTE:
+* The *transactions* are signed transactions.
+* The *proof_of_fraud* list is either empty (i.e., no fraud) or has one element (i.e., contains one proof of fraud).
+
+
+#### Proof of fraud
+```
+[ <header1>  :: binary()
+, <header2>  :: binary()
+, <pubkey>   :: binary()
+]
+```
