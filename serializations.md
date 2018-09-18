@@ -567,7 +567,7 @@ The payload is a serialized signed channel off-chain transaction and can not be 
 , <payload>         :: binary()
 , <round>           :: int()
 , <update>          :: binary()
-, <state_hash>      :: binary() 
+, <state_hash>      :: binary()
 , <addresses>       :: [id()]
 , <poi>             :: poi()
 , <ttl>             :: int()
