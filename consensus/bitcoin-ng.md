@@ -84,9 +84,41 @@ Bitcoin-NG inherits Bitcoin's ability to fork in case of multiple block producer
         mempool content MB(1)' and MB(2) should be very similar. Re-signing
         the delta of transactions missing in Leader 2's node is very cheap operation.
 
+Proof of Fraud
+==
 
+A malicious leader could construct forks in a generation of micro
+blocks, either by forking directly from his key block, or by forking
+on a micro block. This could be done to disrupt the network or to
+perform double spend attacks.
 
-References:
+To prevent this malicious behaviour, the miner of the next key block
+can submit Proof-of-Fraud in a micro block in its generation. Only
+this leader can submit Proof-of-Fraud to avoid flooding the network
+with reports, which in itself could be viewed as a DoS
+attack. Furthermore, reporting a key block more than once is regarded
+as a protocol violation, even if there is more than one act of fraud
+committed.
+
+The Proof-of-Fraud is constructed of two sibling micro headers (with
+the same previous pointer) along with the public key of the
+signer. The Proof-of-Fraud is included in a micro block body, and the
+header must contain the hash of the Proof-of-Fraud object to mark its
+existence in the block.
+
+If a miner is reported as fraudulent in this manner, its beneficiary
+will not get any mining reward for that key block (i.e., no coinbase
+and no fees for either generation). The reporter of the fraud will get
+a reward controlled by governance (initially set to 5% of the coinbase
+reward).
+
+The serialization format of the Proof-of-Fraud object can be found
+[here](../../serializations.md#proof-of-fraud), and the inclusion of
+the Proof-Of-Fraud object in micro blocks is defined
+[here](../../serializations.md#micro-block)
+
+---
+#### References
 
 1. Bitcoin-NG: A Scalable Blockchain Protocol, Ittay Eyal, Adem Efe Gencer, Emin Gün Sirer, and Robbert van Renesse,Cornell University, 2016
 
