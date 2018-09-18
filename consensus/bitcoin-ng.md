@@ -96,9 +96,13 @@ To prevent this malicious behaviour, the miner of the next key block
 can submit Proof-of-Fraud in a micro block in its generation. Only
 this leader can submit Proof-of-Fraud to avoid flooding the network
 with reports, which in itself could be viewed as a DoS
-attack. Furthermore, reporting a key block more than once is regarded
-as a protocol violation, even if there is more than one act of fraud
-committed.
+attack.
+
+Furthermore, reporting fraud for a given generation more than once is
+regarded as a protocol violation, even if there is more than one act
+of fraud committed. Under the constraint that only blocks from the
+previous generation can be reported, this means that only one fraud
+report is allowed in a generation.
 
 The Proof-of-Fraud is constructed of two sibling micro headers (with
 the same previous pointer) along with the public key of the
@@ -109,8 +113,7 @@ existence in the block.
 If a miner is reported as fraudulent in this manner, its beneficiary
 will not get any mining reward for that key block (i.e., no coinbase
 and no fees for either generation). The reporter of the fraud will get
-a reward controlled by governance (initially set to 5% of the coinbase
-reward).
+a reward controlled by governance.
 
 The serialization format of the Proof-of-Fraud object can be found
 [here](../../serializations.md#proof-of-fraud), and the inclusion of
