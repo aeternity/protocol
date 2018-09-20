@@ -269,6 +269,21 @@ The following builtin functions are defined on maps:
   Map.from_list(m : list(('k, 'v))) : map('k, 'v)
 ```
 
+### Strings
+
+There is a builtin type `string`, which can be seen as an array of bytes.
+Strings can be compared for equality (`==`, `!=`), used as keys in maps and
+records, and used in builtin functions `String.length` and `String.concat`.
+
+#### Builtin functions on strings
+
+The following builtin functions are defined on strings:
+
+```
+  String.length(s : string) : int
+  String.concat(s1 : string, s2 : string) : string
+```
+
 ### Builtins
 
 #### Account interface
