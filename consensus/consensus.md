@@ -136,7 +136,7 @@ PROTOCOL_VERSION: 22
 GENESIS_VERSION: 22
 ```
 
-- the timestamp of a key block MUST be smaller than `now() + 10m`
+- the timestamp of a key block MUST be smaller than `now() + 9m`
 - the timestamp of a key block MUST be bigger than:
   - the median timestamp of the last 11 blocks (if height >= 12)
   - the timestamp of the genesis block (if height <= 11)
@@ -157,7 +157,7 @@ PROTOCOL_VERSION: 22
 GENESIS_VERSION: 22
 ```
 
-- the timestamp of a micro block MUST be smaller than `now() + 10m`
+- the timestamp of a micro block MUST be smaller than `now() + 9m`
 - if the previous block is a micro block:
   - the timestamp MUST be bigger than or equal to the timestamp of the previous block + 3s
 - if the previous block is a key block:
@@ -374,7 +374,7 @@ TemperedTotalTime = 0.75 * N * DesiredTimeBetweenBlocks + 0.2523 * TotalTime
 ```
 
 Where FTL = Future Time Limit - i.e. the time a block is allowed to be
-"from the future". We use 10 minutes (600 s).
+"from the future". We use 9 minutes (540 s) i.e. 3 times the `DesiredTimeBetweenBlocks`.
 
 Now, the problem is that we can't do any floating point arithmetic (to
 ensure the calculation can be verified by other nodes), so we pick a
