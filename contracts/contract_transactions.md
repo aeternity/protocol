@@ -3,7 +3,7 @@
 
 Contract transactions are of four types:
 - Create
-- Attach
+- Attach -- Not implemented yet.
 - Call
 - Disable -- To be decided.
 
