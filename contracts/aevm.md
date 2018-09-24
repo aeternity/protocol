@@ -48,3 +48,13 @@ stored in the previous key block.
 When executing a contract in a state channel (either off-chain or in
 a force progress) COINBASE will return 0.
 
+The TIMESTAMP instruction returns the timestamp of the current micro block.
+When executing a contract in a state channel (either off-chain or in
+a force progress) TIMESTAMP will return *TODO*.
+
+The DIFFICULTY instruction returns the difficulty of the current
+generation stored in the previous key block.
+When executing a contract in a state channel (either off-chain or in
+a force progress) DIFFICULTY will return 0.
+
+
