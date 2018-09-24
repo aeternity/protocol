@@ -806,7 +806,7 @@ contract FundMe =
 
 ## The lifetime of a contract
 
-# Killing a contract
+### Killing a contract
 
 There is no selfdestruct instruction in the aevm as in the Ethereum
 Virtual Machine instead there is a disable transaction which the
@@ -834,137 +834,146 @@ free but the miner and the creator get half of the deposit fee each at
 contract disable thus encouraging creators to disable their contracts
 and miners to pick disable transactions.
 
-## The Sophia_01 ABI
+## The Sophia\_01 ABI
 
-The calldata contains a tuple with function name and argument, e.g. `("main", (1,2,3))`.
-The compiler will generate entry code to
-load the calldata to memory and then create a pattern matching switch on the function name
-and call the function with the second element as the argument:
+### Memory layout
 
+Sophia values are 256-bit words. In case of unboxed types (`int`, `uint`,
+`address`, `signature`, and `bool`) this is simply the value. For boxed types
+such as tuples and (non-empty) lists, the word is a pointer into the heap
+(memory).
 
-```
-CALLDATASIZE
-PUSH1 0
-PUSH1 32
-CALLDATACOPY  ;; Copy all calldata into address 32 (addr 0 is the state pointer)
-```
+More precisely
 
-followed by
+- Unboxed types are represented as a single big endian 256-bit (32 bytes) word.
+  Booleans are represented as 0 for `false` and 1 for `true`. The empty list is
+  represented as an unboxed -1.
 
-```
- switch(CallData)
-  ("fun1", arg) => fun1(arg)
-  ("fun2", arg) => fun2(arg)
-  ...
-```
+- Boxed types are represented as a 256-bit pointer to a contiguous sequence of
+  words, called a *heap object*, on the heap.
 
-The above could also be implemented as a search tree looking at one
-byte at the time of the function hash if that produces smaller
-code. The compiler could also choose to truncate the hash to the
-shortest unique prefix and shift the incoming hash down. E.g if there
-are only three functions in the contract and their hashes starts with
-0xA, 0xB nd 0xC respectively.
+  | Value/Type | Heap object
+  | --- | ---
+  | Tuple | The value of each component in left-to-right order.
+  | String | The length (number of bytes), followed by as many words as required to store the character data, padded on the right with 0.
 
-(Given that the contract invocation checks that the function call is to a valid address/hash before calling AEVM.)
+  The following types are represented in terms of other types:
 
-The shortest unique suffix could also be used, and the hash could be ANDed with the suffix length instead.
+  <table>
+  <tr><th>Type</th><th>Representation</th></tr>
+  <tr><td>Non-empty list</td><td>A pair of the head and the tail.</td></tr>
+  <tr><td>Record</td><td>A tuple of the field values.</td></tr>
+  <tr><td>Map</td><td>A list of key-value pairs. <b><i>This is subject to change</i></b></td></tr>
+  <tr><td>Data type</td>
+      <td>A tuple where the first component is a constructor
+          tag (starting with 0 for the first constructor), and the following
+          components are the constructor arguments. For instance, for<br/><br/>
+          <tt>datatype zeroOrTwo = Zero | Two(int, int)</tt><br/><br/>
+          <tt>Zero</tt> is encoded as a singleton tuple <tt>(0)</tt> and
+          <tt>Two(a, b)</tt> as the triple <tt>(1, a, b)</tt>.
+      </td></tr>
+  <tr><td>Option types</td><td><tt>datatype option('a) = None | Some('a)</tt>.</td></tr>
+  <tr><td><tt>ttl</tt></td><td><tt>datatype ttl = RelativeTTL(int) | FixedTTL(int)</tt></td></tr>
+  <tr><td>Type representations</td>
+      <td>
+      When types need to be encoded as data, they are represented as the following datatype<br/><br/>
+      <div>
+      <pre>
+        datatype typerep = Word  // any unboxed type
+                         | String
+                         | List(typerep)
+                         | Tuple(list(typerep))
+                         | Datatype(list(list(typerep)))
+                         | TypeRep
+      </pre></div>
+      The argument to the <tt>Datatype</tt> constructor is the list of type
+      representations of the constructor arguments.
+      </td></tr>
+  </table>
 
-Then each exported function starts with an exported entry point where it executes
-code to fetch the arguments to memory.
+### Encoding Sophia values as binaries
 
-### Data memory layout
-
-Data communicated between a contract and the outside world is encoded as binary
-block in the VM memory. This includes calldata, contract state, and return
-values. The contract is responsible for converting between such binaries and
-Sophia values.
-
-Data is encoded in memory as follows:
-
-- Unboxed types (`int`, `address`, and `bool`) are encoded as a single big
-  endian 256-bit word (32 bytes).
-
-- Boxed types are encoded as a pointer into a following binary. This binary is encoded as follows:
-  - Unboxed types are encoded as a single word.
-  - Strings are encoded with a 32 byte length (number of bytes), followed by as few 256-bit words
-    as needed padded on the right with 0.
-  - Tuples are encoded with one word per component (stored left-to-right) where
-    each word is either an unboxed value or a pointer.
-  - Lists are encoded by an unboxed -1 word for the empty list and an encoded
-    pair of the head and the tail for a cons cell.
-  - Records are encoded as a tuple of field values.
-  - Maps are encoded as a list of key-value pairs. ***This is subject to change***
-  - The order of values is unspecified. For instance, in the encoding of a pair
-    of boxed values, the three cells (first component, second component, and
-    pair cell) can appear in any order in the encoded binary.
-  - Values of datatypes are encoded as tuples where the first component is a
-    constructor tag (starting with 0 for the first constructor), and the
-    following components are the constructor arguments. For instance, for
-    ```
-      datatype zeroOrTwo = Zero | Two(int, int)
-    ```
-    `Zero` is encoded as a singleton tuple `{0}` and `Two(a, b)` as the triple `{1, a, b}`.
-  - The option type is encoded as the datatype `datatype option('a) = None | Some('a)`.
-  - Type representations are encoded as tuples as follows:
-    - `word`: `{0}`  (any unboxed type)
-    - `string`: `{1}`
-    - `list(t)`: `{2, encode(t)}`
-    - `tuple(ts)`: `{3, encode(ts)}`, where `ts : list(typerep)`
-    - `datatype(cs)`: `{5, encode(cs)}`, where `cs : list(list(typerep))`
-      are the type representations for the constructor arguments
-  - The `ttl` type is encoded as the datatype `datatype ttl = RelativeTTL(int) | FixedTTL(int)`.
-- Pointers are relative, with the address of the first word of the data being
-  the *base address*. For calldata, the base address is 32 and for return
-  values and contract state the base address is 0.
-
-
-
-#### Example
-
-A valid encoding of the value `("main", (1, 2, 3))` with base address 32 (`0x20`) would be
+When communicating Sophia values between a contract and the outside world they
+are encoded as a binary containing a heap whose first word is the encoded
+value. For example, the value `("main", (1, 2, 3))` can be encoded as
 ```
 Word       0       1       2       3       4       5       6       7
-Addr    0x20    0x40    0x60    0x80    0xA0    0xC0    0xE0   0x100
-Value   0x40    0x80    0xC0       4    "main"     1       2       3
+Addr    0x00    0x20    0x40    0x60    0x80    0xA0    0xC0    0xE0
+Value   0x20    0x60    0xA0       4   "main"      1       2       3
 ```
-(where `"main"` is the 32 byte word obtained by right padding the string
-`"main"` with zeroes.)
+where `"main"` is the 32 byte word obtained by right padding the string
+`"main"` with zeroes.
 
-### Contract state
-
-Before a contract call is executed the current state of the contract is loaded
-into memory encoded as described above. A pointer to the encoded state is stored at
-address 0. The Sophia compiler generates code to unpack the encoded state and
-update the state pointer with a pointer to decoded value. Before returning the
-contract should encode the updated state and point the state pointer to the
-encoded data. If the call did not update the state the contract can set the
-state pointer to 0.
-
-### Local function calls
-
-A local function call pushes the return address then the arguments.
-The callee pops the arguments and local variables then swaps the
-return address and the return value on the stack and jumps to
-the return value leaving only the return value on the stack.
-
-Call id(x):
-
+Note that the order of the heap objects on the heap is unspecified. Another
+valid encoding of the same value is
 ```
-            PUSHx RetAddress
-            DUP2              ; Get argument
-            PUSHx CalleeAdr
-            JUMP
-
-:RetAddress JUMPDEST          ; SP(0) contains ret address.
+Word       0       1       2       3       4       5       6       7
+Addr    0x00    0x20    0x40    0x60    0x80    0xA0    0xC0    0xE0
+Value   0x60       4   "main"   0x20    0xA0       1       2       3
 ```
 
-Return:
+### Initialization
 
-```
-            SWAP1            ; Swap retvalue with first arg (only one arg in this fun)
-            POP              ; Drop the argument
-            SWAP1            ; Swap retval and retaddress
-            JUMP             ; return to the caller
+When a Sophia contract is called the calldata should be a pair of a function
+name and a tuple of arguments, encoded as a binary as described above
+(***subject to change: function hashes instead of string names***).
+For instance, to call the function `foo` with arguments `1` and `"bar"`, the
+calldata should be `("foo", (1, "bar"))`. Before the contract starts executing
+the first word of the encoded calldata (i.e. the calldata value) is pushed on
+the stack and the rest of the calldata heap is written to address 32 in memory.
+The result is that the Sophia contract starts with the value of the calldata on
+top of the stack.
 
-```
+If the contract state has been initialized it is stored on the heap after the
+calldata and a pointer to it is written to address 0. If the contract state has
+not been initialized, for instance, when running the `init` function, 0 is
+written to address 0. Note that address 0 contains a *pointer* to the value of
+the state, not the value itself.
 
+The compiler is responsible for generating the appropriate dispatch code,
+looking at the calldata and calling the correct function.
+
+### Return
+
+When returning from a contract call (using the `RETURN` instruction) the
+contract should leave the type (as a type representation) of the return value,
+followed by the return value on top of the stack (***subject to change:
+function types to be stored in contract metadata***). The VM reads the return
+value from the heap and returns it to the caller, and reads the updated
+contract state using the state pointer at address 0. A contract can write 0
+to the state pointer to indicate that the state did not change.
+
+### Storing the contract state
+
+The contract state is stored in the *store* as a binary encoded as described
+above (a heap whose first word is the value) under key `0x00`. The type of the
+state is stored as an encoded type representation under key `0x01` (***subject
+to change: contract state type to be stored in contract metadata***).
+
+The `init` function of a contract should return a pair of the state type
+representation and the initial state, which are written to the store by the VM.
+Note that the Sophia code for `init` only returns the initial state value--the
+compiler is responsible for adding the type representation.
+
+### Remote contract calls
+
+The `CALL` instruction for calling another contract works differently for
+Sophia contracts than in the EVM. It expects on the stack (top to bottom):
+- `Gas` - the amount of gas to allocate to the call
+- `Address` - the address of the contract to call
+- `Amount` - the amount of tokens to transfer with the call
+- `Calldata` - the calldata value (pair of function name and arguments)
+- `CalldataType` - the type of the calldata (as a type representation)
+- `_` - unused (offset to write return value in the EVM)
+- `ReturnType` - the type of the return value
+
+The calldata is read from the heap guided by the calldata type and passed to
+the called contract. When the call returns the return value is pushed on top of
+the stack, and potential heap objects for the return value written to the top
+of the heap. The `ReturnType` is required to allow the VM to adjust any
+pointers in the return value when writing it to the heap.
+
+***Subject to change: function types to be stored in contract metadata,
+removing the need for `CalldataType` and `ReturnType` ***
+
+***To be determined: gas costs of `CALL` based on size of calldata and return value***
