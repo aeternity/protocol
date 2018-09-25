@@ -315,14 +315,15 @@ purging them from the tree.
 
 #### Contract call
 ```
-[ <caller_address>   :: id()
+[ <caller_id>        :: id()
 , <caller_nonce>     :: int()
 , <height>           :: int()
-, <contract_address> :: id()
+, <contract_id>      :: id()
 , <gas_price>        :: int()
 , <gas_used>         :: int()
 , <return_value>     :: binary()
 , <return_type>      :: int()
+, <log>              :: [{<<address>> :: id, [<<topics>> :: binary()], <<data>> :: binary()}]
 ]
 ```
 
