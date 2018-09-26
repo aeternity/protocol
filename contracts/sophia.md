@@ -134,7 +134,7 @@ Sophia has the following types:
 | state        | A record of blockstate key, value pairs  |
 | transactions | An append only list of blockchain transactions |
 | events       | An append only list of blockchain events (or log entries) |
-| signature    | A signature - 64 bytes - represented as two 256-bit words. | ```{81222...22336, 90751...60096}```
+| signature    | A signature - 64 bytes |
 | Chain.ttl    | Time-to-live (fixed height or relative to current block) | ```FixedTTL(1050)``` ```RelativeTTL(50)```
 | oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, sign, qfee, ttl)```
 | oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, qfee, qttl, rttl)```
@@ -326,7 +326,7 @@ Oracle.register(acct : address
 * The `sign` is a signature proving that the contract is allowed to register the account -
   the account address + the contract address (concatenated as byte arrays) is signed with the
   private key of the account, proving you have the private key of the oracle to be. If the
-  address is the same as the contract `sign` is 0.
+  address is the same as the contract `sign` is ignored.
 * The `qfee` is the minimum query fee to be paid by a user when asking a question of the oracle.
 * The `ttl` is the Time To Live for the oracle, either relative to the current
   height (`RelativeTTL(delta)`) or a fixed height (`FixedTTL(height)`).
@@ -462,15 +462,18 @@ Naming System (AENS):
   type checked against this type at run time.
 - AENS transactions
   ```
-  AENS.preclaim(owner : address, commitment_hash : hash, sig : signature) : ()
-  AENS.claim   (owner : address, name : string, salt : int, sig : signature) : ()
-  AENS.transfer(owner : address, new_owner : address, name_hash : hash, sig : signature) : ()
-  AENS.revoke  (owner : address, name_hash : hash, sig : signature) : ()
+  AENS.preclaim(owner : address, commitment_hash : hash, sign : signature) : ()
+  AENS.claim   (owner : address, name : string, salt : int, sign : signature) : ()
+  AENS.transfer(owner : address, new_owner : address, name_hash : hash, sign : signature) : ()
+  AENS.revoke  (owner : address, name_hash : hash, sign : signature) : ()
   ```
-  If `owner` is different from `Contract.address`, `sig` should be a signature
-  of the other arguments by the private key of the `owner` account.
-  (*TODO: make precise*, *TODO: not implemented*)
-
+  If `owner` is equal to `Contract.address` the signature `sign` is ignored.
+  Otherwise we need a signature to prove that we are allowed to do AENS
+  operations on behalf of `owner`. For `AENS.preclaim` the signature should be
+  over owner address + Contract.address (concatenated as byte arrays), for the
+  other three operations the signature should be over owner address +
+  `name_hash` + Contract.address using the private key of the `owner` account
+  for signing.
 
 #### Events
 
@@ -845,7 +848,7 @@ and miners to pick disable transactions.
 ### Memory layout
 
 Sophia values are 256-bit words. In case of unboxed types (`int`, `uint`,
-`address`, `signature`, and `bool`) this is simply the value. For boxed types
+`address`, and `bool`) this is simply the value. For boxed types
 such as tuples and (non-empty) lists, the word is a pointer into the heap
 (memory).
 
@@ -878,6 +881,7 @@ More precisely
           <tt>Zero</tt> is encoded as a singleton tuple <tt>(0)</tt> and
           <tt>Two(a, b)</tt> as the triple <tt>(1, a, b)</tt>.
       </td></tr>
+  <tr><td>Signature</td><td>A pair of two 256-bit words.</td></tr>
   <tr><td>Option types</td><td><tt>datatype option('a) = None | Some('a)</tt>.</td></tr>
   <tr><td><tt>ttl</tt></td><td><tt>datatype ttl = RelativeTTL(int) | FixedTTL(int)</tt></td></tr>
   <tr><td>Type representations</td>
