@@ -30,16 +30,18 @@ Unused tokens stay on the contract account.
 The first argument in the call specifies which primop to call.
 The following arguments are encoded as Sophia data.
 
-| OpNo | Name                |          Value |             Arguments | Return value    |
-| ---- | ------------------- | -------------- | --------------------- | --------------- |
-|    1 | Spend               | `Amount : int` | `Recipient : address` | `Nil`           |
-|  100 | Oracle register     | (Unused.)      | `Acct : address, Sign : signature, QFee : int, TTL : int, QType : typerep, RType : typerep` | `Oracle : address` |
-|  101 | Oracle query        | `QFee : int`   | `Oracle : address, Query : 'a, QTTL : int, RTTL : int` | `query : address` |
-|  102 | Oracle respond      | (Unused.)      | `Oracle : address, Query : address, Sign : signature, R : 'b` | `()` |
-|  103 | Oracle extend       | (Unused.)      | `Oracle : address, Sign : signature, TTL : int` | `()` |
-|  104 | Oracle get answer   | (Unused.)      | `Oracle : address, Query : address` | `option('b)` |
-|  105 | Oracle get question | (Unused.)      | `Oracle : address, Query : address` | `'a` |
-|  106 | Oracle query fee    | (Unused.)      | `Oracle : address`    | `int`           |
+| OpNo | Name                |          Value |             Arguments | Return value    | Gas cost |
+| ---- | ------------------- | -------------- | --------------------- | --------------- | -------- |
+|    1 | Spend               | `Amount : int` | `Recipient : address` | `Nil`           | 0        |
+|  100 | Oracle register     | (Unused.)      | `Acct : address, Sign : signature, QFee : int, TTL : Chain.ttl, QType : typerep, RType : typerep` | `Oracle : address` | Proportional to oracle TTL argument `TTL` (interpreted as relative), specifically: `ceiling(32000 * RelativeTTL / floor(60 * 24 * 365 / key_block_interval))` |
+|  101 | Oracle query        | `QFee : int`   | `Oracle : address, Query : 'a, QTTL : Chain.ttl, RTTL : Chain.ttl` | `query : address` | Proportional to oracle query TTL argument `QTTL` (interpreted as relative), specifically: `ceiling(32000 * RelativeTTL / floor(60 * 24 * 365 / key_block_interval))` |
+|  102 | Oracle respond      | (Unused.)      | `Oracle : address, Query : address, Sign : signature, R : 'b` | `()` | Proportional to oracle response TTL argument `RTTL` in oracle query (as found in the oracle query in the state, and interpreted as relative), specifically: `ceiling(32000 * RelativeTTL / floor(60 * 24 * 365 / key_block_interval))` |
+|  103 | Oracle extend       | (Unused.)      | `Oracle : address, Sign : signature, TTL : Chain.ttl` | `()` | Proportional to oracle TTL argument `TTL` (interpreted as relative), specifically: `ceiling(32000 * RelativeTTL / floor(60 * 24 * 365 / key_block_interval))` |
+|  104 | Oracle get answer   | (Unused.)      | `Oracle : address, Query : address` | `option('b)` | 0 |
+|  105 | Oracle get question | (Unused.)      | `Oracle : address, Query : address` | `'a` | 0     |
+|  106 | Oracle query fee    | (Unused.)      | `Oracle : address`    | `int`           | 0        |
+
+Note that the gas cost indicated in the table above does not include the gas required for the call instruction to the primop.
 
 ## Chain specific instructions
 
