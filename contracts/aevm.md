@@ -57,4 +57,9 @@ generation stored in the previous key block.
 When executing a contract in a state channel (either off-chain or in
 a force progress) DIFFICULTY will return 0.
 
-
+The BLOCKHASH instruction returns the hash of the key block at the specified height.
+If the height is below genesis height the instruction returns 0.
+If the height is higher than or equal to the current height the instruction returns 0.
+If the height is lower than current height minus 256 the instruction returns 0.
+When executing a contract in a state channel (either off-chain or in
+a force progress) BLOCKHASH will return 0.
