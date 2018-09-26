@@ -134,7 +134,7 @@ Sophia has the following types:
 | state        | A record of blockstate key, value pairs  |
 | transactions | An append only list of blockchain transactions |
 | events       | An append only list of blockchain events (or log entries) |
-| signature    | A signature. |
+| signature    | A signature - 64 bytes - represented as two 256-bit words. | ```{81222...22336, 90751...60096}```
 | Chain.ttl    | Time-to-live (fixed height or relative to current block) | ```FixedTTL(1050)``` ```RelativeTTL(50)```
 | oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, sign, qfee, ttl)```
 | oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, qfee, qttl, rttl)```
@@ -317,14 +317,16 @@ To register a new oracle answering questions of type `'a` with answers of type `
 call `Oracle.register`:
 ```
 Oracle.register(acct : address
-                sign : signature,   // Signed account address
+                sign : signature,   // Signed account address + contract address
                 qfee : int,
                 ttl  : Chain.ttl) : oracle('a, 'b)
 ```
 
 * The `acct` is the address of the oracle to register (can be the same as the contract).
-* The `sign` is a signature of the address to register proving you have the private key
-  of the oracle, or the integer 0 when address is the same as the contract.
+* The `sign` is a signature proving that the contract is allowed to register the account -
+  the account address + the contract address (concatenated as byte arrays) is signed with the
+  private key of the account, proving you have the private key of the oracle to be. If the
+  address is the same as the contract `sign` is 0.
 * The `qfee` is the minimum query fee to be paid by a user when asking a question of the oracle.
 * The `ttl` is the Time To Live for the oracle, either relative to the current
   height (`RelativeTTL(delta)`) or a fixed height (`FixedTTL(height)`).
@@ -336,13 +338,13 @@ Oracle.register(acct : address
 To extend the TTL of an oracle, call `Oracle.extend`:
 ```
 Oracle.extend(o    : oracle('a, 'b),
-              sign : signature,   // Signed oracle address
+              sign : signature,   // Signed oracle address + contract address
               ttl  : Chain.ttl) : ()
 ```
 
 The `ttl` is must be a relative TTL, relative to the current oracle expiry
 height. For instance, passing `RelativeTTL(100)` adds 100 blocks to the expiry
-time of the oracle.
+time of the oracle. The `sign` is the same as for `Oracle.register`.
 
 ##### Oracle get_question
 
@@ -357,9 +359,13 @@ To respond to an oracle question, use the `Oracle.respond` function:
 ```
 Oracle.respond(o    : oracle('a, 'b),
                q    : oracle_query('a, 'b),
-               sign : signature,
+               sign : signature, // Signed oracle query id + contract address
                r    : 'b)
 ```
+
+Unless the contract address is the same as the oracle address the `sign` needs
+to be provided. Proving that we have the private key of the oracle by signing
+the oracle query id + contract address.
 
 ##### Oracle query
 
@@ -399,7 +405,7 @@ Example for an oracle answering questions of type `string` with answers of type 
 contract Oracles =
 
   function registerOracle(acct : address,
-                          sign : signature,   // Signed account address
+                          sign : signature,   // Signed oracle address + contract address
                           qfee : int,
                           ttl  : Chain.ttl) : oracle(string, int) =
      Oracle.register(acct, sign, qfee, ttl)
@@ -416,13 +422,13 @@ contract Oracles =
     Oracle.query(o, q, qfee, qttl, RelativeTTL(rttl))
 
   function extendOracle(o    : oracle(string, int),
-                        sign : signature,   // Signed oracle address
+                        sign : signature,   // Signed oracle address + contract address
                         ttl  : Chain.ttl) : () =
     Oracle.extend(o, sign, ttl)
 
   function respond(o    : oracle(string, int),
                    q    : oracle_query(string, int),
-                   sign : signature,
+                   sign : signature,        // Signed oracle query id + contract address
                    r    : int) =
     Oracle.respond(o, q, sign, r)
 
