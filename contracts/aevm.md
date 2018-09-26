@@ -33,10 +33,10 @@ The following arguments are encoded as Sophia data.
 | OpNo | Name                |          Value |             Arguments | Return value    |
 | ---- | ------------------- | -------------- | --------------------- | --------------- |
 |    1 | Spend               | `Amount : int` | `Recipient : address` | `Nil`           |
-|  100 | Oracle register     | (Unused.)      | `Acct : address, Sign : signature, QFee : int, TTL : int, QType : typerep, RType : typerep` | `Oracle : address` |
-|  101 | Oracle query        | `QFee : int`   | `Oracle : address, Query : 'a, QTTL : int, RTTL : int` | `query : address` |
+|  100 | Oracle register     | (Unused.)      | `Acct : address, Sign : signature, QFee : int, TTL : Chain.ttl, QType : typerep, RType : typerep` | `Oracle : address` |
+|  101 | Oracle query        | `QFee : int`   | `Oracle : address, Query : 'a, QTTL : Chain.ttl, RTTL : Chain.ttl` | `query : address` |
 |  102 | Oracle respond      | (Unused.)      | `Oracle : address, Query : address, Sign : signature, R : 'b` | `()` |
-|  103 | Oracle extend       | (Unused.)      | `Oracle : address, Sign : signature, TTL : int` | `()` |
+|  103 | Oracle extend       | (Unused.)      | `Oracle : address, Sign : signature, TTL : Chain.ttl` | `()` |
 |  104 | Oracle get answer   | (Unused.)      | `Oracle : address, Query : address` | `option('b)` |
 |  105 | Oracle get question | (Unused.)      | `Oracle : address, Query : address` | `'a` |
 |  106 | Oracle query fee    | (Unused.)      | `Oracle : address`    | `int`           |
