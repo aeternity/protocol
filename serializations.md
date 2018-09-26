@@ -366,7 +366,7 @@ purging them from the tree.
 , <gas_used>         :: int()
 , <return_value>     :: binary()
 , <return_type>      :: int()
-, <log>              :: [{<<address>> :: id, [<<topics>> :: binary()], <<data>> :: binary()}]
+, <log>              :: [ { <address> :: id, [ <topics> :: binary() ], <data> :: binary() } ]
 ]
 ```
 
