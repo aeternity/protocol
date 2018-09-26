@@ -102,10 +102,12 @@ Note:
 In this section we use `[]` to mean lists, `<name>` to denote fields,
 `,` to separate fields in lists. We use `::` to separate fields from
 their types . We use `int()` to denote the integer type and `binary()`
-to denote the byte array type. Lists are denoted with `[]` in the type
-domain (e.g., `[int()]` is a list of integers). We use `++` as the
-list concatenation operator. We also use the `bool()` type as the
-special case of the integers `0` and `1` used as the boolean type.
+to denote the byte array type. Variable length lists are denoted with
+`[]` in the type domain (e.g., `[int()]` is a list of integers).
+Fixed length lists are denoted with '{}' (e.g. '{int(), int()}'
+denotes a list of exactly two integers. We use `++` as the list
+concatenation operator. We also use the `bool()` type as the special
+case of the integers `0` and `1` used as the boolean type.
 
 ### The id() type
 
