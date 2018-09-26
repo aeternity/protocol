@@ -105,7 +105,7 @@ state associated with each contract instance.
   its result is stored as the contract state.
 - The value of the state is accessible from inside the contract
   through an implicitly bound variable `state`.
-- State updates are performed by calling a function `put : state => unit`.
+- State updates are performed by calling a function `put : state => ()`.
 - Aside from the `put` function (and similar functions for transactions
   and events), the language is purely functional.
 - Functions modifying the state need to be annotated with the `stateful` keyword.
