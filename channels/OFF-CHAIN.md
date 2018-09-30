@@ -36,6 +36,7 @@
 - [Contracts](#contracts)
   + [On-chain enforcement](#on-chain-enforcement)
   + [Lifecycle](#contracts-lifecycle)
+  + [Referring on-chain objects](#contracts-referring-on-chain-data)
 
 
 ## Overview
