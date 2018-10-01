@@ -1010,19 +1010,19 @@ contract update](../serializations.md#channel-off-chain-update-call-contract). I
 information needed for a contract call, including the contract address. The other participant co-signs
 the changes and the contract call is considered to be executed. Its results can be extracted from the calls tree in the state tree.
 
-### Contracts referring on-chain data
+### Contracts referring to on-chain data
 
 Contracts being used in channels off-chain calls have the exact same semantics
 as one being used on-chain. Because of the different environment though, those
 might have different results as the on-chain ones.
 
-Since there is no signle source of truth, each participant considers one's chain
-to be the correct one. This is essential for the trustless environment. Every
-contract call is pinned to the top of the chain, as it is seen by each
-participant. This could cause some differences in local contracts executions.
-If those can not be resolved, participants can always rely on the blockchain
-as an arbiter by using forcing of progress. Then the top is being used as it
-is seen by the Bitcoin-NG leader.
+Since there is no single source of truth, each participant considers their
+curren view of the chain to be the correct one. This is essential for the
+trustless environment. Every off-chain contract call is based on the top of
+the chain, as it is seen by each participant. This could cause some differences
+in local contracts executions. If those can not be resolved, participants can
+always rely on the blockchain as an arbiter by using forcing of progress. Then
+the top is being used as it is seen by the Bitcoin-NG leader.
 
 It is worth mentioning that both local contracts' executions and the forced
 progress ones must be fully deterministic and this implies some restrictions
@@ -1059,7 +1059,7 @@ deleted from the blockchain only after no contract uses the one to be deleted.
 This can not be enforced for off-chain contracts because there is no knowledge
 for them on-chain. Also if we were to use an on-chain contract referencing it
 by a registered name, the name on-chain could be changed to point to another
-different contract. This opens a security whole especially if one of the
+different contract. This opens a security hole especially if one of the
 participants is in control of the name.
 For these reasons off-chain contracts are not allowed to use on-chain ones,
 not even stateless on-chain contracts. Participants can still use well-known
