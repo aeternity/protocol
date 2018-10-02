@@ -1017,7 +1017,7 @@ as one being used on-chain. Because of the different environment though, those
 might have different results as the on-chain ones.
 
 Since there is no single source of truth, each participant considers their
-curren view of the chain to be the correct one. This is essential for the
+current view of the chain to be the correct one. This is essential for the
 trustless environment. Every off-chain contract call is based on the top of
 the chain, as it is seen by each participant. This could cause some differences
 in local contracts executions. If those can not be resolved, participants can
@@ -1029,8 +1029,8 @@ progress ones must be fully deterministic and this implies some restrictions
 on using on-chain objects in the off-chain contracts. This is especially true
 for the `Chain` API:
 
-* `Chain.coinbase` - in off-chain calls we do not have miners and thus we can not
-  use the beneficiary of the generation. An address of `0` is returned instead.
+* `Chain.coinbase` - the beneficiary of the latest block (either key or micro
+  block) as seen by the channel participant executing the contract call
 * `Chain.timestamp` - the time as in the latest block (either key or micro
   block) as seen by the channel participant executing the contract call
 * `Chain.block_height` - the height of the chain as seen by the channel
