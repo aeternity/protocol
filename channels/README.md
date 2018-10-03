@@ -11,27 +11,30 @@ tries to act maliciously. This arbiter is the blockchain.
 - off chain vs on chain
 - same guarantees as blockchain
 
+Before describing the protocols involved, we are going to introduce some high
+level issues, that shaped our state channel design.
+
 
 ## Table of Contents
 
+- [Terms](#terms)
+- [Notation](#notation)
 - [Goals](#goals)
 	- [Privacy](#privacy)
 	- [Security](#security)
 	- [Speed](#speed)
 	- [Cost](#cost)
-- [Terms](#terms)
-- [High level overview](#high-level-overview)
 - [Channel types](#channel-types)
 - [Topology](#topology)
 - [Incentives](#incentives)
-- [Channel types](#channel-types)
 - [Artefacts](#artefacts)
+- [Fees](#fees)
 - [Protocol](#protocol)
-- [Communication](#communication)
-	- [Overview](#overview)
-- Messages
-	- [Off-chain](./OFF-CHAIN.md)
-	- [On-chain](./ON-CHAIN.md)
+	- [Communication](#communication)
+		- [Overview](#overview)
+	- Messages
+		- [Off-chain](./OFF-CHAIN.md)
+		- [On-chain](./ON-CHAIN.md)
 - [Contract execution in channels](#contract-execution)
 - [Light node requirements](#light-node-requirements)
 - [Examples](#examples)
@@ -39,10 +42,32 @@ tries to act maliciously. This arbiter is the blockchain.
 - [References](#references)
 
 
+## Terms
+
+We try to follow the naming conventions used by the lightning network, wherever
+it makes sense, in hope to be able to make it easier for others to adopt,
+although we try to enforce a `who - what - how` rule for naming, e.g.
+`channel_close_solo` as opposed to `solo_close_channel` or `channel_solo_close`.
+
+- ***node***: client connected to the blockchain, that can be addressed via an
+  IP address and port
+- ***peer***: participant in a channel
+- ***channel***: an off-chain method for two peers to exchange state updates,
+  each node can have multiple channels and a pair of nodes can also have
+  multiple channels between each other, which should be multiplexed over one
+  connection
+
+
+## Notation
+
+All objects on the blockchain have a type and are uniquely addressable. We will
+denote this by `Type(Id)`, e.g. `Account(A)` is the account at address `A`. If
+we then want to get the balance of that account we use `Account(A).balance`.
+
+
 ## Goals
 
-
-- generic solution that supports many (all?) smart contracts
+- generic solution that supports all smart contracts
 	- even better if one state channel is generic, s.t. it can be instantiated and
 	  then be used for many different contracts
 - composability of channels, i.e. an application works for the
@@ -112,29 +137,6 @@ if one already has other open channels and thus might stand to gain fees by
 relaying messages.
 
 
-## Terms
-
-We try to follow the naming conventions used by the lightning network, wherever
-it makes sense, in hope to be able to make it easier for others to adopt,
-although we try to enforce a `who - what - how` rule for naming, e.g.
-`channel_close_solo` as opposed to `solo_close_channel` or `channel_solo_close`.
-
-- ***node***: client connected to the blockchain, that can be addressed via an
-  IP address and port
-- ***peer***: participant in a channel
-- ***channel***: an off-chain method for two peers to exchange state updates,
-  each node can have multiple channels and a pair of nodes can also have
-  multiple channels between each other, which should be multiplexed over one
-  connection
-
-
-## Notation
-
-All objects on the blockchain have a type and are uniquely addressable. We will
-denote this by `Type(Id)`, e.g. `Account(A)` is the account at address `A`. If
-we then want to get the balance of that account we use `Account(A).balance`
-
-
 ## Channel types
 
 The most generic kind of channel would be one that lets peers instantiate any
@@ -143,7 +145,13 @@ peers that can participate in such a channel.
 
 Our construction will try to meet the former property, allowing any number of
 arbitrary smart contracts to be executed in the channel, but restrict the latter
-to two peers per channel.
+to two peers per channel. This restriction is mostly to keep the channel
+construction simple. It is certainly possible to have more than two participants
+per channel, requiring all of them to sign off every update, but it would incur
+a big overhead and lead to an increased likelihood of a channel getting stuck,
+whenever a peer stops responding. There are methods to avoid the liveness issue
+but at that point it becomes unclear if we are still operating a state channel
+or already dealing with a side-chain.
 
 With that in mind, the two peers in a channel will most likely not have the
 same roles but instead end up in a client-server arrangement for the majority of
@@ -153,9 +161,6 @@ quo of the current web.
 A popular example would be an exchange, where users connect to an exchange via
 state channels. This would process would be trustless, since exchanges can not
 lose funds, that haven't been signed over to them
-
-
-- offer (verified) library for standard functionality, e.g. simple payments
 
 
 ## Topology
@@ -170,32 +175,30 @@ incur a higher forwarding fee.
 In the hub and spoke model, we would have a number of big hubs, which would be
 involved in most routes through the network. These hubs would be tightly
 connected and offer highly available and short paths for most users. In turn, this would lead to a loss of privacy and making the network more fragile, since
-the disappearance of one of these hubs would have a big impact.
+the disappearance of one of these hubs would have a big impact on its overall
+connectedness.
 
 
 ## Incentives
 
-Operating a channel should be considered collaborative game with incentive for cooperation
-
 Operating a channel takes at least two on-chain operations and therefore has a base amount of fees is required and this fact could be abused by a malicious
 peer.
+Since closing a channel incurs a fee, they could open a channel with someone and
+subsequently refuse to cooperate, locking up coins and making the other party
+pay the fees required to close the channel again.
 
-(***TODO***: To discourage malicious behaviour, a successful slashing of a
-channel closing, forfeits the malicious party's funds to the slasher but how can
-we make that work without opening attack vectors?)
-
-If a malicious peer doesn't want to risk losing all its channel balance, it
-still has other options to disrupt or annoy others. Since closing a channel
-incurs a fee, they could open a channel with someone and subsequently refuse to
-cooperate, locking up coins and making the other party pay the fees required to
-close the channel again.
+Once a channel has been opened, all operations happening within need to be
+signed off by all participants. This creates a free option for whoever is
+signing off an update last. This problem is remedied by the ability to enforce
+progress on chain, that is taking the state from the channel and have miners
+execute the contract call, that other party wasn't willing to sign off.
 
 With that in mind, it is advised for users to be cautious with whom they open
 channels if they want to avoid the above issues.
 
 On the other hand, attributing every failure in a channel to malice would also
-be detrimental and cause both a loss of trust in the system and cause users to
-spend more on fees than they should.
+be detrimental and cause both a loss of trust in the system and users to spend
+more on fees than they should.
 
 
 ## Artefacts
@@ -203,9 +206,9 @@ spend more on fees than they should.
 What should the outcome of a state channel be? The simplest answer would be a
 change in on-chain balances of participants but it could also be desirable to
 use state channels as a poor man's MPC and have a contract with a non-empty
-state as the result on chain. (***TODO:*** would there be any way to verify that
-a state was actually produced by the given smart contract without having all the
-inputs?)
+state as the result on chain, which would, ideally, require a compact proof,
+that the given smart contract actually produced the state provided by the
+participants.
 
 
 ## Fees
@@ -213,7 +216,7 @@ inputs?)
 If we consider state channels to be long lived objects, then problems can arise
 around the handling of fees, that need to be paid for on chain transactions.
 
-Given that all parties need to sign of everything, a malicious party could
+Given that all parties need to sign off everything, a malicious party could
 potentially black mail a peer under some circumstances.
 If fees come from the channel balance, then one might end up in situations,
 where the channel balance is lower than the fee required for miners to pick up
@@ -230,19 +233,6 @@ To avoid this situation, a peer should consider halting any interactions if on-c
 manner approach the balance of the channel.
 
 
-## High level overview
-
-Participating in a state channel requires two nodes to be able to communicate
-with each other. Throughout this document we are going to assume that this
-happens via TCP/IP.
-The process of discovering the `IP_ADDR:PORT` pair of a remote node is not
-covered in this document and assumed to happen out of band, unless both of them are already part of the state channel network, where nodes can announce their identities `(IP_ADDR, PORT, ID)`.
-
-To open a channel, two nodes first establish a connection. If they already have
-an open channel, then creating a new one can be done via the same connection,
-using a new `temporary_channel_id` and multiplexing the messages.
-
-
 ## Protocol
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
@@ -250,21 +240,28 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 
-## Communication
+### Communication
 
 Communication between participants of a channel is peer to peer and SHOULD
 happen via a reliable and ordered protocol, e.g. TCP. Peers should expect to be
 running their own node, in order to be able to catch transactions relevant to
 the channels they are involved in, although outsourcing that job to a third party, while still being trustless, might be possible in the future.
 
-Messages will be both on- and off-chain.
+Participating in a state channel requires two nodes to be able to communicate
+with each other. Throughout this document we are going to assume that this
+happens via TCP/IP.
+The process of discovering the `IP_ADDR:PORT` pair of a remote node is not
+covered in this document and assumed to happen out of band, unless both of them are already part of a state channel network, where nodes can announce their identities `(IP_ADDR, PORT, ID)`.
+
+Messages will be sent both on- and off-chain.
 
 Off-chain communication MUST be encrypted. To satisfy this, we use the same
-transport protocol used for sync, which offers encryption and authentication.
+transport protocol used for sync, which offers encryption and authentication and
+is based on the Noise protocol.
 
 Each pair of nodes SHOULD have at most one open connection. Channels can be
 multiplexed easily, given that each channel has a unique id, so re-using
-connection does not pose any problems.
+connections does not pose any problems.
 
 
 ### Overview
@@ -294,7 +291,7 @@ The starting point for any channel is the `closed` state.
 |   |   [timeout]    +-------------+ -------------|----------------------> |   |
 |   |                       |    |  shutdown      |                        |   |
 |   |        funding_locked |    +------------+   |                        |   |
-|   |                       |             |   |                        |   |
+|   |                       |                 |   |                        |   |
 |   |                       |                 |   v                        |   |
 |   |                       v        [disconnect] +--------------+  error  |   |
 |   |                +-------------+ ---------|-> | disconnected | ------> |   |
@@ -349,34 +346,34 @@ channel_settle |   |     open     | -----+
 ```
 
 
-## Contract execution
-
-Each participant of a state channels keeps a state tree representing the
-internal channel's state. This tree consists of accounts, contracts and
-contract calls. Although this tree is internal to the channel, during a dispute
-resolution part of it is posted on-chain in order to use the blockchain as an
-arbiter. Despite the contract being internal in most cases, it is not in all
-cases. The privacy could be further improved.
+### Contract execution
 
 Off-chain contract life cycle closely represents the on-chain one. A contract
 is created via a co-signed off-chain transaction. Once this is done, the new
 contract can be called by both channel participants. Each contract has its own
-state and balance. They can be modified by contrat calls executions. 
+state and balance, which can be modified by contract calls.
 Contract calls are purged on every round. If the last round contained a call,
-it would be part of the calls tree. Otherwise the calls will be empty.
-Different client implementations cani keep old calls so participants can
-inspect their return values but this is not part of the protocol.
-Participants can remove an off-chain contract from a channel's state tree and
+it would be part of the calls tree, and otherwise the tree will be empty.
+Different client implementations can keep old calls in order for participants
+to be able to inspect their return values but this is not part of the protocol.
+Participants can remove an off-chain contracts from a channel's state tree and
 redistribute its balance amongst them.
 
-Contract calls execution relies on both participants agreeing on a state
-update. At one moment a participant can be missing or refusing to cooperate to
-a valid off-chain contract call. We call this a dispute and it can be resolved
-using forcing of progress on-chain. This requires the forcing party to provide
-enough information for the contract execution as well with a proof that the
-contract had been part of the channel's state. The result of a successful
-force progress is a new channel off-chain state. This way we keep contracts
-in channels trustless.
+Each participant of a state channels keeps a state tree representing the
+internal channel's state. This tree consists of accounts, contracts and
+contract calls. Although this tree is internal to the channel, during dispute
+resolution, part of it is posted on-chain in order to use the blockchain as an
+arbiter. Despite the contract being internal in most cases, it is not in all
+cases. The privacy could be further improved.
+
+Contract call execution relies on both participants agreeing on a state update.
+At any point a participant can be missing or refusing to cooperate to a valid
+off-chain contract call. We call this a dispute and it can be resolved using
+forcing of progress on-chain. This requires the forcing party to provide enough
+information for the contract execution as well with a proof that the contract
+had been part of the channel's state. The result of a successful force progress
+is a new channel off-chain state. This way we keep contracts in channels
+trustless.
 
 ## Light node requirements
 
