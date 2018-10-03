@@ -1041,14 +1041,9 @@ for the `Chain` API:
 In off-chain calls we allow only look-ups for various on-chain objects.
 Creating new on-chain objects does not make any sense as those off-chain
 calls will not make it on-chain. The following look-ups are allowed
-* `AENS.resolve(name : string, pointer : string) : option(string)` - a name's
-  pointer data
-* `Oracle.get_answer(oracle_id : oracle(query_t, answer_t), query_id :
-  oracle_query(query_t, answer_t)) : option(answer_t)` - and oracle's answer
-  to a specific query
-* `Oracle.get_question(oracle_id : oracle(query_t, answer_t), query_id :
-  oracle_query(query_t, answer_t)) : query_t` - and oracle's query
-  question
+* `AENS.resolve` - a name's pointer data
+* `Oracle.get_answer` - and oracle's answer to a specific query
+* `Oracle.get_question` - and oracle's query question
 
 Registration and updates of names or asking of oracles is impossible in the
 off-chain contract calls.
