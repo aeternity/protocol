@@ -121,7 +121,7 @@ sent along with this transaction will get locked up just like the initial
 deposit.
 
 While it could be desirable to allow anyone to deposit into a channel, we are
-going to restrict deposits to the peers of a channel. That means, the `from`
+going to restrict deposits to the peers of a channel. That means, the `from_id`
 field MUST be an address of one of the participants of the targeted channel and
 the standard transaction fee MUST be paid by the `from` account.
 
@@ -130,7 +130,7 @@ This operation is not mandatory for normal channel operation.
 Serialization defined [here](../serializations.md#channel-deposit-transaction)
 
 - `channel_id`: channel id as recorded on-chain
-- `from`: sender of the deposit
+- `from_id`: sender of the deposit
 - `amount`: amount of tokens deposited
 - `ttl`:
 - `fee`:
@@ -180,7 +180,7 @@ is represented by a `round` and a `state_hash`. After its inclusion the channel
 can not be closed using an older state—as indicated by the `round`—than the one
 provided in the snapshot.
 
-The `from` account MUST be a participant in the target channel. The `payload`
+The `from_id` account MUST be a participant in the target channel. The `payload`
 MUST be a co-signed off-chain state. It MUST be part of the same channel
 (containing same channel id) and it MUST have a `round` greater than the
 one currently recorded on-chain.
@@ -188,11 +188,11 @@ one currently recorded on-chain.
 Serialization defined [here](../serializations.md#channel-snapshot-solo-transaction)
 
 - `channel_id`: channel id as recorded on-chain
-- `from`: the account that posts the transaction
+- `from_id`: the account that posts the transaction
 - `payload`: co-signed off-chain state of the same channel
 - `ttl`:
 - `fee`:
-- `nonce`: the `from` account nonce
+- `nonce`: the `from_id` account nonce
 
 
 ## Closing channel on-chain
@@ -203,11 +203,12 @@ Serialization defined [here](../serializations.md#channel-snapshot-solo-transact
 Serialization defined [here](../serializations.md#channel-close-mutual-transaction)
 
 - `channel_id`: channel id as recorded on-chain
+- `from_id`: the account that posts the transaction
 - `initiator_amount_final`: final balance for the initiator
 - `responder_amount_final`: final balance for the responder
 - `ttl`:
 - `fee`:
-- `nonce`: taken from the `initiator` account
+- `nonce`: the `from_id` account nonce
 
 `initiator_amount_final` and `responder_amount_final` are the agreed upon distribution of coins.
 The initiator's and responder's account balances are incremented by
@@ -246,11 +247,11 @@ disputes in the form of `channel_slash` will be considered, is started.
 Serialization defined [here](../serializations.md#channel-close-solo-transaction)
 
 - `channel_id`: channel id as recorded on-chain
-- `from`: participant of the channel that posts the closing transaction
+- `from_id`: participant of the channel that posts the closing transaction
 - `payload`: empty or a transaction proving that the proof of inclusion is part of the channel
 - `poi`: proof of inclusion
 - `ttl`
-- `nonce`: taken from the `from`'s account
+- `nonce`: taken from the `from_id`'s account
 - `fee`
 
 Proof of inclusion represents the channel's internal state. At the bare minimum
@@ -291,11 +292,11 @@ Serialization defined [here](../serializations.md#channel-slash-transaction)
 
 
 - `channel_id`: channel id as recorded on-chain
-- `from`: participant or delegate of the channel that posts the slashing transaction
+- `from_id`: participant or delegate of the channel that posts the slashing transaction
 - `payload`: transaction proving that the proof of inclusion is part of the channel
 - `poi`: proof of inclusion
 - `ttl`
-- `nonce`: taken from the `from`'s account
+- `nonce`: taken from the `from_id`'s account
 - `fee`
 
 Proof of inclusion represents the channel's internal state. It has to include
@@ -323,7 +324,7 @@ If the payload is a transaction it MUST be a channel_offchain_tx. It MUST be co-
 
 #### Requirements
 
-MUST be signed using private key corresponding to the public key `from`.
+MUST be signed using private key corresponding to the public key `from_id`.
 
 
 ### `channel_settle`
@@ -343,12 +344,12 @@ The `channel_settle` MUST only be included in a block if:
 Serialization defined [here](../serializations.md#channel-settle-transaction)
 
 - `channel_id`: channel id as recorded on-chain
-- `from`: participant of the channel that posts the settling transaction
+- `from_id`: participant of the channel that posts the settling transaction
 - `initiator_amount_final`: unsigned amount of tokens the initiator gets from the channel
 - `responder_amount_final`: unsigned amount of tokens the responder gets from the channel
 - `ttl`
 - `fee`
-- `nonce`: taken from the `from`'s account
+- `nonce`: taken from the `from_id`'s account
 
 
 #### Requirements
@@ -356,7 +357,7 @@ Serialization defined [here](../serializations.md#channel-settle-transaction)
 After this transaction has been included in a block, the channel MUST be
 considered closed and allow no further modifications.
 
-The transaction MUST be signed using private key corresponding to the public key `from`.
+The transaction MUST be signed using private key corresponding to the public key `from_id`.
 
 The amounts must correspond to the ones on-chain, provided by the last
 channel_close_solo or channel_slash.
@@ -430,7 +431,7 @@ the block height timer for force progressing had passed.
 It consists of:
 
 - `channel_id`: channel id as recorded on-chain
-- `from`: participant of the channel that posts the force progress transaction
+- `from_id`: participant of the channel that posts the force progress transaction
 - `payload`: empty or a transaction proving that the proof of inclusion is part of the channel
 - `round`: channel's next round
 - `update`: channel off-chain update that contains the contract call with gas
@@ -440,7 +441,7 @@ It consists of:
   of inclusion
 - `poi`: proof of inclusion for the old channel state
 - `ttl`
-- `nonce`: taken from the `from`'s account
+- `nonce`: taken from the `from_id`'s account
 - `fee`
 
 Proof of inclusion represents the internal channel state. It has to include all

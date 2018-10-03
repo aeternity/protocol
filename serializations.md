@@ -494,7 +494,7 @@ purging them from the tree.
 #### Channel deposit transaction
 ```
 [ <channel_id> :: id()
-, <from>       :: id()
+, <from_id>    :: id()
 , <amount>     :: int()
 , <ttl>        :: int()
 , <fee>        :: int()
@@ -507,7 +507,7 @@ purging them from the tree.
 #### Channel withdraw transaction
 ```
 [ <channel_id> :: id()
-, <to>         :: id()
+, <to_id>      :: id()
 , <amount>     :: int()
 , <ttl>        :: int()
 , <fee>        :: int()
@@ -520,6 +520,7 @@ purging them from the tree.
 #### Channel close mutual transaction
 ```
 [ <channel_id>             :: id()
+, <from_id>                :: id()
 , <initiator_amount_final> :: int()
 , <responder_amount_final> :: int()
 , <ttl>                    :: int()
@@ -531,7 +532,7 @@ purging them from the tree.
 #### Channel close solo transaction
 ```
 [ <channel_id>      :: id()
-, <from>            :: id()
+, <from_id>         :: id()
 , <payload>         :: binary()
 , <poi>             :: poi()
 , <ttl>             :: int()
@@ -545,7 +546,7 @@ The payload is a serialized signed channel off-chain transaction or it is empty.
 #### Channel slash transaction
 ```
 [ <channel_id>      :: id()
-, <from>            :: id()
+, <from_id>         :: id()
 , <payload>         :: binary()
 , <poi>             :: poi()
 , <ttl>             :: int()
@@ -559,7 +560,7 @@ The payload is a serialized signed channel off-chain transaction or it is empty.
 #### Channel settle transaction
 ```
 [ <channel_id>             :: id()
-, <from>                   :: id()
+, <from_id>                :: id()
 , <initiator_amount_final> :: int()
 , <responder_amount_final> :: int()
 , <ttl>                    :: int()
@@ -571,7 +572,7 @@ The payload is a serialized signed channel off-chain transaction or it is empty.
 #### Channel snapshot solo transaction
 ```
 [ <channel_id>      :: id()
-, <from>            :: id()
+, <from_id>         :: id()
 , <payload>         :: binary()
 , <ttl>             :: int()
 , <fee>             :: int()
@@ -585,7 +586,7 @@ The payload is a serialized signed channel off-chain transaction and can not be 
 #### Channel solo force progress transaction
 ```
 [ <channel_id>      :: id()
-, <from>            :: id()
+, <from_id>         :: id()
 , <payload>         :: binary()
 , <round>           :: int()
 , <update>          :: binary()
