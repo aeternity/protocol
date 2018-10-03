@@ -836,7 +836,7 @@ Message code: 99
 This message is sent in response to a verified `shutdown` message. The sender
 may close once the message has been delivered. The receiver must, after
 verifying the payload of the `shutdown_ack` message (which must be the same
-`channel_close_mutual_tx` object, co-signed), push the `channel_close_mutua_tx`
+`channel_close_mutual_tx` object, co-signed), push the `channel_close_mutual_tx`
 transaction onto the chain, and then terminate.
 
 ```
