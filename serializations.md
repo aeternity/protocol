@@ -689,8 +689,10 @@ tree.
 #### Channel off-chain transaction
 
 The channel off-chain transaction is not included directly in the transaction tree but indirectly as payload of:
-* The channel close solo transaction;
+* The channel close solo transaction.
 * The channel slash transaction.
+* The channel snapshot solo transaction.
+* The channel force progress transaction.
 
 ```
 [ <channel_id>       :: id()
