@@ -121,3 +121,4 @@ All messages have the format:
 * [Naming system API usage](./naming_system_api_usage.md)
 * [Contract API usage](./contract_api_usage.md)
 * [Channels API usage](./channels_api_usage.md)
+* [Mining API usage](./mining_api_usage.md)
