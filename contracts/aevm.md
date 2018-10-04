@@ -47,21 +47,28 @@ Note that the gas cost indicated in the table above does not include the gas req
 
 The COINBASE instruction return the beneficiary of the current generation
 stored in the previous key block.
-When executing a contract in a state channel (either off-chain or in
-a force progress) COINBASE will return 0.
+When executing a contract in a state channel off-chain, COINBASE will return
+the beneficiary of the previous key block as seen by the participant executing
+the contract. In a forced progress call the COINBASE will return the
+current beneficiary.
 
 The TIMESTAMP instruction returns the timestamp of the current micro block.
-When executing a contract in a state channel (either off-chain or in
-a force progress) TIMESTAMP will return *TODO*.
+When executing a contract in a state channel off-chain TIMESTAMP will return
+the timestamp of the last block as seen by the participant executing the
+contract. In a forced progress call the TIMESTAMP will return the timestamp
+of the current micro block.
 
 The DIFFICULTY instruction returns the difficulty of the current
 generation stored in the previous key block.
-When executing a contract in a state channel (either off-chain or in
-a force progress) DIFFICULTY will return 0.
+When executing a contract in a state channel off-chain DIFFICULTY will return
+the difficulty of the current generation stored in the last key block as seen
+by the participant executing the contract. In a forced progress call the
+DIFFICULTY will return the difficulty of the current generation.
 
 The BLOCKHASH instruction returns the hash of the key block at the specified height.
 If the height is below genesis height the instruction returns 0.
 If the height is higher than or equal to the current height the instruction returns 0.
 If the height is lower than current height minus 256 the instruction returns 0.
 When executing a contract in a state channel (either off-chain or in
-a force progress) BLOCKHASH will return 0.
+a force progress) BLOCKHASH will return the hash of the key block at the
+specified heigh as seen by the one executing the contract.

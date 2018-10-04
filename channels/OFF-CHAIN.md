@@ -37,6 +37,7 @@
   + [On-chain enforcement](#on-chain-enforcement)
   + [Lifecycle](#contracts-lifecycle)
   + [Referring on-chain objects](#contracts-referring-on-chain-data)
+  + [Gas consumption](#gas-consumption)
 
 
 ## Overview
@@ -969,13 +970,14 @@ channel operations.
 Execution of a contract inside a state channel requires parties to be able to
 initialise a virtual machine to run their smart contracts in.
 
-Contracts are executed in rounds, which are denoted by rounds.
+Contracts are executed in rounds, which are denoted by `round`-s.
 
 Every party executes each smart contract locally and checks if the signed states
 they receive match up with theirs. In the case that states and signatures are
 valid, they apply the update and then send out their signature. If there was an
 error in either the execution of the contract or the signature does not match
-the state, they send a new update with the prior state but an increased round number—to avoid confusion–and their signature over it, to signal that something
+the state, they send a new update with the prior state but an increased round 
+number—to avoid confusion–and their signature over it, to signal that something
 went wrong.
 
 When operating in co-signing mode, contracts might need to be written in a way
@@ -1006,60 +1008,67 @@ the changes and the contract is considered to be created.
 
 After a contract is created it can be called. For this one of the participants
 initiates an update round containing a [channel call
-contract update](../serializations.md#channel-off-chain-update-call-contract). It contains all the
-information needed for a contract call, including the contract address. The other participant co-signs
-the changes and the contract call is considered to be executed. Its results can be extracted from the calls tree in the state tree.
+contract update](../serializations.md#channel-off-chain-update-call-contract).
+It contains all the information needed for a contract call, including the
+contract address. The other participant co-signs the changes and the contract
+call is considered to be executed. Its results can be extracted from the calls
+tree in the state tree.
+Part of the call is the `amount` a participants commits to the contract. This
+is not to be confused with [gas consumption](#gas-consumption) - `amount` are
+the tokens moved from the caller's off-chain balance to the off-chain balance
+of the contract been called.
 
 ### Contracts referring to on-chain data
 
 Contracts being used in channels off-chain calls have the exact same semantics
-as one being used on-chain. Because of the different environment though, those
-might have different results as the on-chain ones.
+as [those being used
+on-chain](/contracts/contract_transactions.md#contract-call-transaction). Because of the different environment however,
+off-chain callsoff-chain calls  might have different results as the on-chain ones.
 
 Since there is no single source of truth, each participant considers their
 current view of the chain to be the correct one. This is essential for the
 trustless environment. Every off-chain contract call is based on the top of
 the chain, as it is seen by each participant. This could cause some differences
-in local contracts executions. If those can not be resolved, participants can
+in local contract executions. If those can not be resolved, participants can
 always rely on the blockchain as an arbiter by using forcing of progress. Then
-the top is being used as it is seen by the Bitcoin-NG leader.
+the top is used as it is seen by the Bitcoin-NG leader.
 
 It is worth mentioning that both local contracts' executions and the forced
 progress ones must be fully deterministic and this implies some restrictions
-on using on-chain objects in the off-chain contracts. This is especially true
-for the `Chain` API:
-
-* `Chain.coinbase` - the beneficiary of the latest block (either key or micro
-  block) as seen by the channel participant executing the contract call
-* `Chain.timestamp` - the time as in the latest block (either key or micro
-  block) as seen by the channel participant executing the contract call
-* `Chain.block_height` - the height of the chain as seen by the channel
-  participant executing the contract call
-* `Chain.difficulty` - the difficulty of the chain as seen by the channel
-  participant executing the contract call
-
-In off-chain calls we allow only look-ups for various on-chain objects.
-Creating new on-chain objects does not make any sense as those off-chain
-calls will not make it on-chain. The following look-ups are allowed
-* `AENS.resolve` - a name's pointer data
-* `Oracle.get_answer` - and oracle's answer to a specific query
-* `Oracle.get_question` - and oracle's query question
-
-Registration and updates of names or asking of oracles is impossible in the
-off-chain contract calls.
+on using on-chain objects in the off-chain contracts.
+This is especially true for the chain-related primitives (e.g. coinbase,
+timestamp, block height, difficulty). Please refer to the documentation of the
+applicable VM version. Registration and updates of names or asking of oracles
+is impossible in the off-chain contract calls.
 
 Using on-chain contracts in off-chain ones is a tricky task. On-chain
-contracts reference count contracts that are using to them. They can be
-deleted from the blockchain only after no contract uses the one to be deleted.
+contracts reference-count contracts that refer to them. They can be deleted
+from the blockchain only once they are no longer referenced by any other
+contract.
 This can not be enforced for off-chain contracts because there is no knowledge
-for them on-chain. Also if we were to use an on-chain contract referencing it
+of them on-chain. Also if we were to use an on-chain contract referencing it
 by a registered name, the name on-chain could be changed to point to another
 different contract. This opens a security hole especially if one of the
 participants is in control of the name.
 For these reasons off-chain contracts are not allowed to use on-chain ones,
 not even stateless on-chain contracts. Participants can still use well-known
-contracts that are present on-chain but they have to copy them in their
-off-chain state. That way participants take care for their own data in a
+contracts that are present on-chain but they have to copy them into their
+off-chain state. That way participants take care of their own data in a
 trustless manner - they don't have to rely on other entities keeping contracts
 on-chain for them.
 
+### Gas consumption
+
+While making off-chain updates that both parties co-sign, no gas is being
+consumed. It is worth mentioning that although contract call updates do include
+values for the gas limit and the gas price, those are ignored. Assumption is
+that since both participants are executing the contracts locally, they are
+equal in their energy consumption.
+
+When a dispute arises and a contract is to be called on-chain, the miner that
+includes the transaction should be compensated for the energy used. That's why
+when forcing progress of off-chain contract calls gas is consumed. Gas limit
+and gas prices are specified in the contract call update itself. Now the
+values not being used off-chain come into play. Since the force progress is an
+unilateral act, it is the forcer that specifies them and it is the forcer's
+on-chain balance that is paying for the consumed gas.
