@@ -82,14 +82,14 @@ all other fields are as in create contract.
 ```
 { owner           :: public_key()
 , nonce           :: pos_integer()
-, code            :: hex_bytes()
-, vm_version      :: hex_byte()
+, code            :: bytes()
+, vm_version      :: byte()
 , fee             :: amount()
 , deposit         :: amount()
 , amount          :: amount()
 , gas             :: amount()
 , gas_price       :: amount()
-, call_data       :: hex_bytes()
+, call_data       :: bytes()
 }
 ```
 
