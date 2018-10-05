@@ -970,7 +970,7 @@ channel operations.
 Execution of a contract inside a state channel requires parties to be able to
 initialise a virtual machine to run their smart contracts in.
 
-Contracts are executed in rounds, which are denoted by `round`-s.
+Contracts are executed in rounds, which are denoted by `round` attribute.
 
 Every party executes each smart contract locally and checks if the signed states
 they receive match up with theirs. In the case that states and signatures are
