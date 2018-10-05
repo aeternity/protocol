@@ -466,7 +466,7 @@ An off-chain transaction payload is a valid transaction if it has:
 
 The round MUST be the incremented by one `round` provided in the `payload`.
 The update MUST be a call to a contract. The caller of this update MUST be the
-poster of the force progress transaction. `gas` and `gas_price` are
+poster of the force progress transaction. `amount`, `gas` and `gas_price` are
 specified in the update as well. The gas fees are going to be paid by the poster
 of the transaction.
 The state_hash will be the root hash of the updated channel's state trees. After
@@ -496,9 +496,25 @@ and modifies them. The modified trees have a root hash. It might be:
     participants are updated according to the ones in the modified channel state
     trees
 - not equal to the `state_hash` provided in the force progress transaction. The
-  hash provided was not confirmed to be the expected one. The on-chain channel
-  object is NOT modified. Gas is still consumed and a call object is created
-  on-chain.
+  hash provided was not confirmed to be the expected one. In this case the force
+  progress fails and no new state channel state is created. The on-chain channel
+  object is NOT modified and thus - the `round` and `state_hash` as stored
+  on-chain remain unchanged. Gas is still consumed and a call object is created
+  on-chain. 
+
+A special case would be the forcer providing an invalid update call to be forced.
+Examples for an invalid update calls would be:
+
+* A remote call to a missing contract
+
+* Spending too much tokens in the call so a participants's off-chain balance
+  goes bellow the `channel_reserve` threshold
+
+* Contract call being terminated due to a `out_of_gas` exception
+
+In this case the contract can not be executed and the forcing of progress
+fails to produce a new state. The end result is exactly the same as if there
+had been a mismatch of the produced `state_hash` and the expected one.
 
 #### Call object
 
