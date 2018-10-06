@@ -1,8 +1,19 @@
 # Off-chain
 
+Each party keeps a state tree specific for the channel. It consists of all the
+channel data: accounts, contracts and etc. and has the same structure as the
+on-chain state tree. Off-chain transactions update this channel auxiliary tree.
+It is a responsibility of the parties to keep this locally. Solo closing
+transactions provide a proof of inclusion for it instead of
+posting the whole tree.
+Each off-chain update consists of updates being applied on top of channel state
+tree and an integer value `round` representing when it happened. Since `round`
+must always be bumped, provided two off-chain transactions we can reason which
+was performed earlier than the other.
+
+
 ## Messages
 
-- [Overview](#overview)
 - [Control messages](#control-messages)
   + [`error`](#error)
   + [`ping`/`pong`](#pingpong)
@@ -976,7 +987,7 @@ Every party executes each smart contract locally and checks if the signed states
 they receive match up with theirs. In the case that states and signatures are
 valid, they apply the update and then send out their signature. If there was an
 error in either the execution of the contract or the signature does not match
-the state, they send a new update with the prior state but an increased round 
+the state, they send a new update with the prior state but an increased round
 number—to avoid confusion–and their signature over it, to signal that something
 went wrong.
 
