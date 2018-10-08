@@ -165,6 +165,8 @@ GENESIS_VERSION: 22
 - the version MUST match the `PROTOCOL_VERSION`
 - the signature must be a valid signature produced by the issuer of
   the previous key block
+- the sum of gas of transactions in a micro block MUST be lower or equal to
+  the gas limit per micro block
 - ***TODO***: fill in missing rules
 
 Header [serialization format](../serializations.md#micro-block-header)
