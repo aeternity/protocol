@@ -516,7 +516,7 @@ The block-chain environment available to a contract is defined in three name spa
 Contracts can fail with an (uncatchable) exception using the built-in function
 
 ```
-abort(reason : string) : 'a
+abort(reason : string) : ()
 ```
 
 ## Syntax
