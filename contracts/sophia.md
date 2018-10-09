@@ -513,10 +513,10 @@ The block-chain environment available to a contract is defined in three name spa
 
 ### Exceptions
 
-Contracts can fail with an (uncatchable) exception using the function
+Contracts can fail with an (uncatchable) exception using the built-in function
 
 ```
-abort(reason : string) : 'a
+abort(reason : string) : ()
 ```
 
 ## Syntax
@@ -755,9 +755,6 @@ contract FundMe =
                    beneficiary   : address,
                    deadline      : int,
                    goal          : int }
-
-  private function abort(err : string) =
-    switch(0) 1 => ()
 
   private function require(b : bool, err : string) =
     if(!b) abort(err)
