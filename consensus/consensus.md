@@ -212,6 +212,24 @@ Each (on-chain) transaction has the following fields:
  -------------- -----
 ```
 
+#### Gas
+
+In order to control the size and the number of transactions in a micro block,
+each transaction has a gas. The sum of gas of all the transactions cannot
+exceed the gas limit per micro block, which is 6 400 000 (***TODO***: this
+value is likely to change before the mainnet release).
+
+The gas of a transaction is the sum of:
+* the base transaction gas (15 000 ***TODO***: likely to change)
+* the byte size of a serialized transaction multiplied by the gas per byte
+  (20 ***TODO***: likely to change)
+* the gas that is needed for contract execution (this only applies to the
+  contract create and contract call transactions)
+
+***TODO***: the gas of a spend transaction with payload is not supposed to
+have the same gas as e.g. an oracle transaction of the same size. The gas of
+transactions is subject to change before the mainnet release.
+
 ### Proof of Work
 
 ```
