@@ -205,8 +205,8 @@ possibly different, types. For instance
 
 Maps, on the other hand, can contain an arbitrary number of key-value bindings,
 but of a fixed type. The type of maps with keys of type `'k` and values of type
-`'v` is written `map('k, 'v)`. Key types are restricted to atomic types (`int`,
-`address`, `bool`, and `string`).
+`'v` is written `map('k, 'v)`. The key type can be any type that does not
+contain a map or a function type.
 
 #### Constructing maps and records
 
@@ -262,12 +262,20 @@ The following builtin functions are defined on maps:
 
 ```
   Map.lookup(k : 'k, m : map('k, 'v)) : option('v)
+  Map.lookup_default(k : 'k, m : map('k, 'v), v : 'v) : 'v
   Map.member(k : 'k, m : map('k, 'v)) : bool
   Map.delete(k : 'k, m : map('k, 'v)) : map('k, 'v)
   Map.size(m : map('k, 'v)) : int
   Map.to_list(m : map('k, 'v)) : list(('k, 'v))
   Map.from_list(m : list(('k, 'v))) : map('k, 'v)
 ```
+
+#### Map implementation
+
+Internally in the VM maps are implemented as hash maps and support fast lookup
+and update. Large maps can be stored in the contract state and the size of the
+map does not contribute to the gas costs of a contract call reading or updating
+it.
 
 ### Strings
 
@@ -862,7 +870,9 @@ More precisely
 
 - Unboxed types are represented as a single big endian 256-bit (32 bytes) word.
   Booleans are represented as 0 for `false` and 1 for `true`. The empty list is
-  represented as an unboxed -1.
+  represented as an unboxed -1. In memory maps are represented by an unboxed
+  unique identifier. The contents of the map is stored separately in the VM
+  state.
 
 - Boxed types are represented as a 256-bit pointer to a contiguous sequence of
   words, called a *heap object*, on the heap.
@@ -878,7 +888,6 @@ More precisely
   <tr><th>Type</th><th>Representation</th></tr>
   <tr><td>Non-empty list</td><td>A pair of the head and the tail.</td></tr>
   <tr><td>Record</td><td>A tuple of the field values.</td></tr>
-  <tr><td>Map</td><td>A list of key-value pairs. <b><i>This is subject to change</i></b></td></tr>
   <tr><td>Data type</td>
       <td>A tuple where the first component is a constructor
           tag (starting with 0 for the first constructor), and the following
@@ -901,6 +910,7 @@ More precisely
                          | Tuple(list(typerep))
                          | Datatype(list(list(typerep)))
                          | TypeRep
+                         | Map(typerep, typerep)
       </pre></div>
       The argument to the <tt>Datatype</tt> constructor is the list of type
       representations of the constructor arguments.
@@ -910,8 +920,9 @@ More precisely
 ### Encoding Sophia values as binaries
 
 When communicating Sophia values between a contract and the outside world they
-are encoded as a binary containing a heap whose first word is the encoded
-value. For example, the value `("main", (1, 2, 3))` can be encoded as
+are encoded as a binary containing a heap whose first word is the encoded value
+(except in the case of maps, see below). For example, the value `("main", (1, 2, 3))`
+can be encoded as
 ```
 Word       0       1       2       3       4       5       6       7
 Addr    0x00    0x20    0x40    0x60    0x80    0xA0    0xC0    0xE0
@@ -928,23 +939,63 @@ Addr    0x00    0x20    0x40    0x60    0x80    0xA0    0xC0    0xE0
 Value   0x60       4   "main"   0x20    0xA0       1       2       3
 ```
 
+A canonical binary representation is obtained by storing heap objects in
+depth-first left-to-right order (as in the first example). This is the
+representation used in map keys.
+
+#### Binary encoding of Sophia maps
+
+In memory, maps are represented by their unique identifier, but in binary
+encodings the identifier is replaced by a boxed representation with a heap
+object of the shape
+```
+    MapSize (N)
+    KeySize1
+  +----------+
+  |   Key1   |
+  +----------+
+    ValSize1
+  +----------+
+  |   Val1   |
+  +----------+
+      ...
+    KeySizeN
+  +----------+
+  |   KeyN   |
+  +----------+
+    ValSizeN
+  +----------+
+  |   ValN   |
+  +----------+
+```
+The keys and values are encoded as standalone binaries, so the addresses in
+`KeyI` (say) are relative only to the `KeyI` binary.
+
 ### Initialization
 
-When a Sophia contract is called the calldata should be a pair of a function
-name and a tuple of arguments, encoded as a binary as described above
+When a Sophia contract is called the calldata should be a pair of a type
+representation and a value, encoded as a binary as described above
+(***subject to change: drop the type representation***).
+The value should be a pair of a function name and a tuple of arguments
 (***subject to change: function hashes instead of string names***).
 For instance, to call the function `foo` with arguments `1` and `"bar"`, the
-calldata should be `("foo", (1, "bar"))`. Before the contract starts executing
-the first word of the encoded calldata (i.e. the calldata value) is pushed on
-the stack and the rest of the calldata heap is written to address 32 in memory.
-The result is that the Sophia contract starts with the value of the calldata on
-top of the stack.
+calldata should be (the binary encoding of)
+```
+  (Tuple([String, Tuple([Word, String])]), ("foo", (1, "bar")))
+```
+(Note: type representations are not part of the Sophia surface language so the
+above is not valid Sophia code)
 
-If the contract state has been initialized it is stored on the heap after the
-calldata and a pointer to it is written to address 0. If the contract state has
-not been initialized, for instance, when running the `init` function, 0 is
-written to address 0. Note that address 0 contains a *pointer* to the value of
-the state, not the value itself.
+Before the contract starts executing the first word of the encoded calldata
+(i.e. the calldata value) is pushed on the stack and the rest of the calldata
+heap is written to memory. The result is that the Sophia contract starts with
+the value of the calldata on top of the stack.
+
+If the contract state has been initialized it is stored on the heap and a
+pointer to it is written to address 0. If the contract state has not been
+initialized, for instance, when running the `init` function, 0 is written to
+address 0. Note that address 0 contains a *pointer* to the value of the state,
+not the value itself.
 
 The compiler is responsible for generating the appropriate dispatch code,
 looking at the calldata and calling the correct function.
@@ -961,10 +1012,23 @@ to the state pointer to indicate that the state did not change.
 
 ### Storing the contract state
 
-The contract state is stored in the *store* as a binary encoded as described
-above (a heap whose first word is the value) under key `0x00`. The type of the
-state is stored as an encoded type representation under key `0x01` (***subject
-to change: contract state type to be stored in contract metadata***).
+The contract state is stored in the *store* as a binary heap whose first word
+is the value (with maps stored as their identifiers) under key `0x00`.
+The type of the state is stored as an encoded type representation under key
+`0x01` (***subject to change: contract state type to be stored in contract
+metadata***). The list of maps in the contract state is stored under key `0x02`
+as a sequence of 256-bit map identifiers. For each map there are mappings
+(where `[X]` denotes a single 256-bit word):
+```
+  [MapId]      => [RealId] [RefCount] [Size] Types
+  [RealId] Key => Val
+```
+`Types` is the binary encoding of the tuple `(KeyType, ValType)` of type
+representations for the key and value types of the map. `Key` and `Val` are
+stand-alone heap encodings with map identifiers for maps (although for keys
+there are no maps). The `RealId` field is an indirection to allow in-place
+updates of maps and the `RefCount` field is used to track the number of
+occurrences of a map in other maps for the purpose of garbage collection.
 
 The `init` function of a contract should return a pair of the state type
 representation and the initial state, which are written to the store by the VM.
@@ -990,6 +1054,6 @@ of the heap. The `ReturnType` is required to allow the VM to adjust any
 pointers in the return value when writing it to the heap.
 
 ***Subject to change: function types to be stored in contract metadata,
-removing the need for `CalldataType` and `ReturnType` ***
+removing the need for `CalldataType` and `ReturnType`***
 
 ***To be determined: gas costs of `CALL` based on size of calldata and return value***
