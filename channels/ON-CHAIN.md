@@ -322,7 +322,7 @@ If the payload is a transaction it MUST be a channel_offchain_tx. It MUST be co-
 The settlement transaction is the last one in the lifecycle of a channel, but
 only required if the parties involved did not manage to cooperate when trying
 to close the channel. It has to be issued after all possible disputes are
-resolved to then redistributes the locked coins.
+resolved to then redistribute the locked coins.
 
 The `channel_settle` MUST only be included in a block if:
 
@@ -395,9 +395,9 @@ Setup:
   `chain_height == 1100` and produces `round := 24` on chain
 
 With strategy (2), Bob does not have to wait for the `lock_period` to expire
-and can post as many `channel_force_progress_tx` as they want, e.g. at
-`chain_height := 1001` they produce `round := 25` and by `chain_height := 1011`
-arrived at `round := 31`. Each subsequent operation issued bumps the
+and can post as many `channel_force_progress_tx` as he wants, e.g. at
+`chain_height := 1001` he produces `round := 25` and by `chain_height := 1011`
+arrives at `round := 31`. Each subsequent operation issued bumps the
 `lock_period` ahead. That is, by `chain_height == 1011` the `lock_period` is set 
 to run out at `chain_height == 1111`.
 Now it is important to note, that at even at `chain_height := 1110` Alice can
@@ -409,15 +409,14 @@ providing a payload with `round := 24` or higher.
 
 If a malicious party sent a `channel_close_solo` or `channel_force_progress_tx`
 with an outdated state, the honest party has the opportunity to issue a
-`channel_slash` transaction. This transaction MUST to include a state with a
-higher sequence number signed by all peers for a successful challenge. 
+`channel_slash` transaction. This transaction MUST include a state with a higher
+round number signed by all peers for a successful challenge.
 
 Serialization defined [here](../serializations.md#channel-slash-transaction)
 
 
 - `channel_id`: channel id as recorded on-chain
-- `from_id`: participant or delegate of the channel that posts the slashing
-  transaction
+- `from_id`: channel participant or delegate that posts the slashing transaction
 - `payload`: transaction proving that the proof of inclusion is part of the
   channel
 - `poi`: proof of inclusion
@@ -426,7 +425,7 @@ Serialization defined [here](../serializations.md#channel-slash-transaction)
 - `nonce`: taken from the `from_id`'s account
 
 The proof of inclusion represents the channel's internal state. It has to
-include both participant's accounts and their balances.
+include both participants' accounts and their balances.
 If there are any contracts in the channel and those have balances of their own,
 they are not provided in the proof of inclusion but they are rather to be force
 pushed in subsequent transactions. It is up to participants to decide if they
@@ -607,7 +606,7 @@ if it was successful to update the on-chain channel object or not.
 
 ## Channel state tree
 
-Each block MUST commit to a Patricia Merkle tree of open channels, where the
+Each block MUST commit to a Merkle Patricia tree of open channels, where the
 `channel_id` specifies the path.
 At a leaf, nodes store information pertaining to the current state of the given
 channel.
