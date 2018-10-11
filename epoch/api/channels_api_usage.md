@@ -79,7 +79,7 @@ in the chain, and the others are metadata used for the connection itself.
   | timeouts | object | the maximum lenght of time waiting for the other party to respond in the different states| No | No |
   | minimum_depth | integer | the minimum amount of blocks to be mined | No | No |
 
-  `responder`'s port and host pair must be reachable from `initator` network
+  `responder`'s port and host pair must be reachable from `initiator` network
   so unless participants are part of a LAN, they should be exposed to the
   internet as described [here](../../epoch/api/README.md).
 
