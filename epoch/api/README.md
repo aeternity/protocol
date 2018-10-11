@@ -14,6 +14,7 @@ The epoch node exposes the following APIs:
   * The schema of its payload is [defined](/sync/);
   * It is meant to be exposed on the Internet;
   * Its TCP port is configurable.
+  * Its static Noise key pair is configurable.
 * User API. It consists of the following TCP endpoints:
   * External HTTP endpoint;
     * It is defined via Swagger schema;
