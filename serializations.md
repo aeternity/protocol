@@ -214,6 +214,7 @@ subsequent sections divided by object.
 | Channel | 58 |
 | Channel snapshot transaction | 59 |
 | POI | 60 |
+| Sophia byte code | 70 |
 | Micro body | 101 |
 | Light micro block | 102 |
 
@@ -744,6 +745,13 @@ NOTE: As the POI contains the Merkle Patricia Tree nodes (e.g. not only their ha
 * The key used for storing each object in each state subtree is not necessarily derived from the object itself.
 * The value(s) whose inclusion the POI proves is included in the POI itself.
 
+#### Sophia byte code
+```
+[ <source code hash> :: binary()
+, <type info>        :: [binary()]
+, <byte code>        :: binary()
+]
+```
 
 #### Micro Body
 ```

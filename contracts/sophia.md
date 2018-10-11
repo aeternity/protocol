@@ -842,6 +842,15 @@ and miners to pick disable transactions.
 
 ## The Sophia\_01 ABI
 
+### Byte code
+
+The byte code contains meta data about the original sophia source
+code. The layout of the encoding can be found
+[here](../serializations.md#sophia-byte-code).
+
+The encoded byte code contains the hash of the source code, compiler
+version, type information and the actual byte code.
+
 ### Memory layout
 
 Sophia values are 256-bit words. In case of unboxed types (`int`, `uint`,
