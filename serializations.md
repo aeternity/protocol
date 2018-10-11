@@ -347,15 +347,7 @@ The `<key>` is non-empty.
 Each value is just stored as a binary as is - without tag or version.
 If the value is the empty binary the key is pruned from the tree.
 
-Contracts with vm_version == 1, i.e. Sophia contracts on the AEVM stores the memory layout of the
-state as one binary value at address 0.
-
-Contracts with vm_version == 2, i.e. Solidity contracts on the AEVM
-stores the VM storage map containg 256 bit binaries for both keys and
-values in the MPT. Undefined keys are treated as having the value 0
-and keys bound to the value zero are stored as the empty binary, thus
-purging them from the tree.
-
+The content of the contract store depends on [the ABI of the vm_version](/contracts/contract_vms.md).
 
 #### Contract call
 ```
