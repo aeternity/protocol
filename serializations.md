@@ -52,7 +52,7 @@ set to zero.
 | state_hash  | 32   |
 | miner       | 32   |
 | beneficiary | 32   |
-| target      | 8    |
+| target      | 4    |
 | pow         | 168  |
 | nonce       | 8    |
 | time        | 8    |
