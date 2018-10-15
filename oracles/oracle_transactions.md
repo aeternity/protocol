@@ -124,6 +124,7 @@ The transaction contains
 - The oracle (address) + nonce
 - The oracle interaction ID (derived from the query)
 - The response in binary format
+- Response TTL (redundant, but makes the transaction self contained)
 - The transaction fee. It must be greater than or equal to the mimimum transaction fee plus a component proportional to the relative response TTL that is in the query (quotient of the Euclidean division between the number of blocks and 1000, plus 1 if non-zero remainder).
 
 See the [serialization specification](/serializations.md#oracle-response-transaction).
