@@ -43,6 +43,10 @@ The following arguments are encoded as Sophia data.
 
 Note that the gas cost indicated in the table above does not include the gas required for the call instruction to the primop.
 
+Calling state changing prim-ops in oracles, names and channel's trees in
+off-chain environment results in an error with output data
+`not_allowed_off_chain`.
+
 ## Chain specific instructions
 
 The COINBASE instruction return the beneficiary of the current generation
