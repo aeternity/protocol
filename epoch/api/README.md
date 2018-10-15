@@ -11,9 +11,10 @@ This document:
 The epoch node exposes the following APIs:
 * Peer-to-peer network API. It consists of one TCP endpoint:
   * It is encrypted and authenticated using the Noise protocol;
-  * It is not yet defined in a document. Advanced users may inspect the `aec_peer_connection` module;
+  * The schema of its payload is [defined](/sync/);
   * It is meant to be exposed on the Internet;
   * Its TCP port is configurable.
+  * Its static Noise key pair is configurable.
 * User API. It consists of the following TCP endpoints:
   * External HTTP endpoint;
     * It is defined via Swagger schema;
