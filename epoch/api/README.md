@@ -39,6 +39,7 @@ The epoch node exposes the following APIs:
       configuration is not part of `epoch`;
     * They are encrypted and authenticated using the Noise protocol using
       dynamic keys;
+    * The schema of its payload is [defined](/channels/OFF-CHAIN.md#messages);
     * They are meant to be exposed on the Internet;
 
 ## WebSocket API definition
