@@ -504,14 +504,14 @@ The block-chain environment available to a contract is defined in three name spa
   transaction.
 - `Contract.address` is the address of the contract account.
 - `Contract.balance` is the amount of coins currently in the contract account.
-  Equivalent to `Chain.get_balance(Contract.address)`.
+  Equivalent to `Chain.balance(Contract.address)`.
 - `Call.origin` is the address of the account that signed the call transaction that led to this call.
 - `Call.caller` is the address of the entity (possibly another contract)
   calling the contract.
 - `Call.value` is the amount of coins transferred to the contract in the call.
 - `Call.gas_price` is the gas price of the current call.
 - `Call.gas_left()` is the amount of gas left for the current call.
-- `Chain.get_balance(a : address)` returns the balance of account `a`.
+- `Chain.balance(a : address)` returns the balance of account `a`.
 - `Chain.block_hash(h)` returns the hash of the block at height `h`.
 - `Chain.block_height` is the height of the current block (i.e. the block in which the current call will be included).
 - `Chain.coinbase` is the address of the account that mined the current block.
