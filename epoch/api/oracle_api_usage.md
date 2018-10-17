@@ -107,7 +107,7 @@ We should note that in the response for the query request above we got the
 In order to ease the initial integration, the epoch node provides
 [/debug/oracles/respond endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostOracleRespond):
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/respond -d '{"query_id":"oq_2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m", "fee":2, "ttl":1234, "response":"I am fine, thanks!"}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/respond -d '{"query_id":"oq_2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m", "response_ttl":{"type":"delta", "value":10}, ""fee":2, "ttl":1234, "response":"I am fine, thanks!"}'
 {"tx":"..."}
 ```
 **NOTE** The _transaction fee_ depends on the response _TTL_ (as set in the query). The base

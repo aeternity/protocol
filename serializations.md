@@ -300,12 +300,14 @@ Signatures are sorted.
 
 #### Oracle response transaction
 ```
-[ <oracle>   :: id()
-, <nonce>    :: int()
-, <query_id> :: binary()
-, <response> :: binary()
-, <fee>      :: int()
-, <ttl>      :: int()
+[ <oracle>             :: id()
+, <nonce>              :: int()
+, <query_id>           :: binary()
+, <response>           :: binary()
+, <response_ttl_type>  :: int()
+, <response_ttl_value> :: int()
+, <fee>                :: int()
+, <ttl>                :: int()
 ]
 ```
 
