@@ -16,6 +16,9 @@ The execution of the call will use a certain amount of gas up to
 the maximum given: the unused portion of the gas is refunded to the caller's
 account; the used portion of the gas is added to the miner's account.
 
+Charges are debited to the account of the creator/caller before the contract is created/called.
+This is in order to prevent a malicious user from attempting to craft a contract that spends the balances in such a way that, having already consumed computational effort in the execution of the contract, inhibits the miner from debiting the charges.
+
 ### Create Contract Transaction
 
 Anyone can create a new contract by submitting a create contract transaction.
