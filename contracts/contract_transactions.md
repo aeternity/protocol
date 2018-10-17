@@ -10,12 +10,11 @@ Contract transactions are of four types:
 A contract is also a normal account with a balance,
 and the normal spend transaction can be applied to the account.
 
-When a contract is created or called, the miner checks that the
-creator/caller has gas*gas_price (*10^-18) aeons in the account.
-
+Before a contract is created or called, the miner subtracts from the
+creator's/caller's account gas*gas_price (*10^-18) aeons.
 The execution of the call will use a certain amount of gas up to
-the maximum given, that amount is deducted from the caller's
-account and added to the miner's account.
+the maximum given: the unused portion of the gas is refunded to the caller's
+account; the used portion of the gas is added to the miner's account.
 
 ### Create Contract Transaction
 
@@ -50,12 +49,12 @@ The contract address is created by hashing, using Blake2b (256 bits digest), the
  hash(owner, nonce)
 ```
 
-The fee, the deposit, the amount and the used gas will be
+Before the contract is created, the fee, the deposit and the amount will be
 subtracted from the owner account.
 
 The amount will be added to the contract account.
 
-The fee will added to the miner account.
+The fee will be added to the miner account.
 
 The deposit will be "held by the contract" until it is deactivated.
 
@@ -119,6 +118,12 @@ The transaction has to be signed with the private key of the caller.
 
 The call_data is encoded in accordance with the contract language ABI.
 (See e.g. the Sophia ABI.)
+
+Before the contract is called, the fee and the amount will be subtracted from the caller account.
+
+The amount will be added to the contract account.
+
+The fee will be added to the miner account.
 
 The miner will add the return data and the state of the call to the state
 tree.
