@@ -32,6 +32,16 @@ The epoch node exposes the following APIs:
     * It is defined in the rest of this document;
     * It is meant to be exposed on the Internet;
     * Its TCP port is configurable.
+  * Range of external Channels noise endpoints. It consists of as many TCP
+    endpoints as needed.
+    * They are used for connecting as a `responder` role in channel
+      communication;
+    * It is up to the node operator to define the range to be used; Their
+      configuration is not part of `epoch`;
+    * They are encrypted and authenticated using the Noise protocol using
+      dynamic keys;
+    * The schema of its payload is [defined](/channels/OFF-CHAIN.md#messages);
+    * They are meant to be exposed on the Internet;
 
 ## WebSocket API definition
 
