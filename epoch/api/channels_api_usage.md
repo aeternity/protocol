@@ -87,8 +87,8 @@ in the chain, and the others are metadata used for the connection itself.
 
   | Name | Value |
   | ---- | ----- |
-  | initiator_id | ak_4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn |
-  | responder_id | ak_35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68 |
+  | initiator_id | ak_8wWs1j2vhgjexQmKfgEBrG8ysAucRJdb3jsag3PJKjEeXswb7 |
+  | responder_id | ak_bmtGbfP3SdPoJNZCQGjjzbKRje15J9CEcWYaL1gZyv2qEyiMe |
   | lock_period | 10 |
   | push_amount | 3 |
   | initiator_amount | 10 |
@@ -100,27 +100,33 @@ in the chain, and the others are metadata used for the connection itself.
   We will be using the tool [wscat](https://github.com/websockets/wscat)
   We assume the channel's WebSocket listener is set on port 3014 (default one)
 
-### Initiator WebSocket open
-Using the set of prenegotiated parameters the initiator connects
-```
-$ wscat --connect
-'localhost:3014/channel?initiator_id=ak_4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn&responder_id=ak_35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68&lock_period=10&push_amount=3&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&host=localhost&port=1234&role=initiator'
-
-connected (press CTRL+C to quit)
-```
-
-Note the `role=initiator` as it is specific
-
 ### Responder WebSocket open
 Using the set of prenegotiated parameters the responder connects
 ```
-$ wscat --connect
-'localhost:3014/channel?initiator_id=ak_4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn&responder_id=ak_35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68&lock_period=10&push_amount=3&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&port=1234&role=responder'
+$ wscat --connect 'localhost:3014/channel?initiator_id=ak_8wWs1j2vhgjexQmKfgEBrG8ysAucRJdb3jsag3PJKjEeXswb7&responder_id=ak_bmtGbfP3SdPoJNZCQGjjzbKRje15J9CEcWYaL1gZyv2qEyiMe&lock_period=10&push_amount=3&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&port=1234&role=responder'
 
 connected (press CTRL+C to quit)
 ```
 
 Note the `role=responder` as it is specific. Note also that the `host` is missing - it is not required for the responder.
+The `port` being specified is the one the `responder`'s node will start
+listening for the `initiator`'s connection. If the `responder`'s node is
+behind a firewall or some port forwarding is done - this should be done before
+the initiator starts connecting as it will fail.
+
+At this point the `responder` is listening on address `0.0.0.0` for the `initiator`'s
+connection on the specified port - `1234`.
+
+### Initiator WebSocket open
+Using the set of prenegotiated parameters the initiator connects
+```
+$ wscat --connect 'localhost:3014/channel?initiator_id=ak_8wWs1j2vhgjexQmKfgEBrG8ysAucRJdb3jsag3PJKjEeXswb7&responder_id=ak_bmtGbfP3SdPoJNZCQGjjzbKRje15J9CEcWYaL1gZyv2qEyiMe&lock_period=10&push_amount=3&initiator_amount=10&responder_amount=10&channel_reserve=2&ttl=1000&host=localhost&port=1234&role=initiator'
+
+connected (press CTRL+C to quit)
+```
+
+Note the `role=initiator` as it is specific. Note also the `host` and `port`
+being provided by the `responder`.
 
 ### Connection opened messages
 Parties' WebSocket clients receive messages for the opening of the TCP
@@ -780,8 +786,8 @@ Example message for when the `from` does not have enough tokens to spend
  'payload': {'reason': 'insufficient_balance',
              'request': {'action': 'update',
                          'payload': {'amount': 10000,
-                                     'from': 'ak_4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn',
-                                     'to': 'ak_35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68'
+                                     'from': 'ak_8wWs1j2vhgjexQmKfgEBrG8ysAucRJdb3jsag3PJKjEeXswb7',
+                                     'to': 'ak_bmtGbfP3SdPoJNZCQGjjzbKRje15J9CEcWYaL1gZyv2qEyiMe'
                                      },
                           'tag': 'new'
                           }
@@ -828,7 +834,7 @@ The `sender` pushes a message with the following structure:
 ```
 {'action': 'message',
  'payload': {'info': 'hejsan',
-             'to': 'ak_35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68'
+             'to': 'ak_bmtGbfP3SdPoJNZCQGjjzbKRje15J9CEcWYaL1gZyv2qEyiMe'
              }
 }
 ```
@@ -839,8 +845,8 @@ details:
 ```
 {'action': 'message',
  'payload': {'message': {'channel_id': 'ch_6SgSc7a14dGbwMNCsjjQZCYVreVLKkFwBzJEZ58ZSZnV9FiQ1',
-                         'from': 'ak_4Kr76woCtc3ehZ45K1sCrmgKX6gnh7qGhjSU1GZYqfLTTjtCgn',
-                         'to': 'ak_35Wxqf2cbzQF5hEV1j9AdXQFTMxqKCwM7iMKNGcqSv47MXAj68',
+                         'from': 'ak_8wWs1j2vhgjexQmKfgEBrG8ysAucRJdb3jsag3PJKjEeXswb7',
+                         'to': 'ak_bmtGbfP3SdPoJNZCQGjjzbKRje15J9CEcWYaL1gZyv2qEyiMe',
                          'info': 'hejsan'
                          }
             }

@@ -27,9 +27,9 @@ The epoch node exposes the following APIs:
     * It is defined in the rest of this document;
     * It is **not** meant to be exposed on the Internet;
     * Its TCP port is configurable.
-  * External Channels WebSocket endpoint.
+  * Internal Channels WebSocket endpoint.
     * It is defined in the rest of this document;
-    * It is meant to be exposed on the Internet;
+    * It is not meant to be exposed on the Internet;
     * Its TCP port is configurable.
   * Range of external Channels noise endpoints. It consists of as many TCP
     endpoints as needed.
