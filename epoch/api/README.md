@@ -2,7 +2,6 @@
 
 This document:
 * Provides an overview of the API exposed by the epoch node;
-* Defines the WebSocket API of the epoch node;
 * Defines the Channels WebSocket API of the epoch node;
 * Describes the intended usage of the user API of the epoch node.
 
@@ -24,10 +23,6 @@ The epoch node exposes the following APIs:
     * It is defined via Swagger schema;
     * It is **not** meant to be exposed on the Internet;
     * Its TCP port is configurable.
-  * Internal WebSocket endpoint.
-    * It is defined in the rest of this document;
-    * It is **not** meant to be exposed on the Internet;
-    * Its TCP port is configurable.
   * External Channels WebSocket endpoint.
     * It is defined in the rest of this document;
     * It is meant to be exposed on the Internet;
@@ -42,54 +37,6 @@ The epoch node exposes the following APIs:
       dynamic keys;
     * The schema of its payload is [defined](/channels/OFF-CHAIN.md#messages);
     * They are meant to be exposed on the Internet;
-
-## WebSocket API definition
-
-### Connection
-The epoch node supports an endpoint with a configurable port where the
-WebSocket's clients connect. It is located on `/websocket`.
-
-The node could serve multiple WebSocket clients. Their number is configured in
-the epoch.yaml. When all WebSocket connections are consumed - any new incoming
-connections will be queued. The queue has a maximum size and when it is
-reached - any new incoming connections will be rejected with an error code 400.
-This is to prevent the node of being overloaded with WebSocket connections.
-
-### Subscription to events
-
-WebSocket clients will receive updates to events they've subscribed to. A
-client can subscribe (and unsubscribe) to events on the fly. Subscribe is
-described in [Chain WS API - Subscribe](./chain_ws_api.md#subscribe).
-
-### General Request/Response/Event types
-A request has the format:
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| target | string | what component to target | Yes |
-| action | string | what is the action | Yes |
-| tag | string | tag to be included in response | No |
-| payload | object | data for action | Yes |
-
-A response has the format:
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| origin | string | what component did the action | Yes |
-| action | string | what was the action | Yes |
-| tag | string | tag from request (or `untagged`) | Yes |
-| payload | object | data from the action | Yes |
-
-An event has the same type as a response, except for not having a tag:
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| origin | string | what component did the action | Yes |
-| action | string | what was the action | Yes |
-| payload | object | data from the action | Yes |
-
-### List of WS APIs
-* [Chain WS API](./chain_ws_api.md)
 
 ## Channels WebSocket API definition
 
