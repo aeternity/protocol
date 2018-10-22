@@ -47,7 +47,7 @@ was performed earlier than the other.
 - [Contracts](#contracts)
   + [On-chain enforcement](#on-chain-enforcement)
   + [Lifecycle](#contracts-lifecycle)
-  + [Referring on-chain objects](#contracts-referring-on-chain-data)
+  + [Referring to on-chain objects](#contracts-referring-to-on-chain-data)
   + [Gas consumption](#gas-consumption)
 
 
