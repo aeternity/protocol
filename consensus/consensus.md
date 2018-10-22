@@ -69,6 +69,24 @@ itself has many features built in, as opposed to e.g. Ethereum, which maps
 any functionality beyond basic transactions changing the state of an
 account to smart contracts.
 
+### Transaction signature
+
+We sign serialized transaction prefixed with the id of the network.
+See [serialization](../serializations.md#binary-serialization) definition for details.
+
+```
+NetworkId             :: binary()
+SerializedObject      :: binary()
+Signature             :: binary()
+
+Signature = sign(NetworkId + SerializedObject)
+```
+
+Prefix defaults to ``ae_mainnet`` (``binary()``) and it is configurable via node config.
+The prefix is not part of a serialized transaction. We add it only for signature.
+Consider changing the id in case of forking the blockchain network,
+in order to lower danger of replay attacks.
+
 ### Proof of Work
 
 [Cuckoo Cycle](https://github.com/tromp/cuckoo) is the algorithm used for proof of work.
