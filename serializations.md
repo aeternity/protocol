@@ -725,21 +725,18 @@ The channel off-chain transaction is not included directly in the transaction tr
 
 #### Proof of inclusion on state trees (POI) :: poi()
 ```
-[ {<accounts>  :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), [<mpt_value> :: binary()]}]}]}
-, {<calls>     :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), [<mpt_value> :: binary()]}]}]}
-, {<channels>  :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), [<mpt_value> :: binary()]}]}]}
-, {<contracts> :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), [<mpt_value> :: binary()]}]}]}
-, {<ns>        :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), [<mpt_value> :: binary()]}]}]}
-, {<oracles>   :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), [<mpt_value> :: binary()]}]}]}
+[ {<accounts>  :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), <mpt_value> :: [binary()]}]}]}
+, {<calls>     :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), <mpt_value> :: [binary()]}]}]}
+, {<channels>  :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), <mpt_value> :: [binary()]}]}]}
+, {<contracts> :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), <mpt_value> :: [binary()]}]}]}
+, {<ns>        :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), <mpt_value> :: [binary()]}]}]}
+, {<oracles>   :: [<proof_of_inclusion> :: {<root_hash> :: binary(), [{<mpt_hash> :: binary(), <mpt_value> :: [binary()]}]}]}
 ]
 ```
 
+If a subtree (e.g. `<accounts>`) is empty, then its serialization is just `[]` (e.g. `<accounts>` is `[]`) otherwise it contains at least its root hash (e.g. `<accounts>` is `[{<root_hash>, []}]`).
+
 NOTE: `[{<mpt_hash>, <mpt_value>}]` is the sorted list of Merkle Patricia Tree nodes in the proof.
-If the subtree (e.g. `<accounts>`) is empty,
-then the serialization is just `[]` (e.g. `<accounts>` is `[{<root_hash>, []}]`);
-otherwise it is a list of one element `[<proof_of_inclusion>]`
-(e.g. `<accounts>` is `[{<root_hash>, [{<mpt_hash>, <mpt_value>}, {<mpt_hash>, <mpt_value>}]}]`;
-`<accounts>` is `[{<root_hash>, []}]`).
 
 NOTE: As the POI contains the Merkle Patricia Tree nodes (e.g. not only their hashes):
 * Each state subtree does not necessarily contain elements of the same key length.
