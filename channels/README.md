@@ -321,30 +321,39 @@ the protocol but part of the underlying transport protocol.
 On-chain
 
 ```
-                   +--------------+
-               +-> |    closed    | <----+
-               |   +--------------+      |
-               |      | channel_create   |
-               |      v                  | channel_close_mutual
-               |   +--------------+      |
-channel_settle |   |     open     | -----+
-               |   +--------------+
-               |    ^ |    |
-               |    | | channel_withdraw/
-               |    | | channel_snapshot_solo/
-               |    | | channel_deposit/
-               |    | | channel_force_progress
-               |    +-+    |
-               |           | channel_close_solo
-               |           v
-               |   +--------------+
-               +-- |    closing   | ----+
-                   +--------------+     | channel_slash/
-                                 ^      | channel_force_progress
-                                 |      |
-                                 +------+
++---+           channel_create
+|   | --------------------------------> +--------------+
+|   |                                   |     open     |
+|   | <-------------------------------- +--------------+
+|   |         channel_close_mutual             |    ^ |   channel_withdraw/
+|   |                                          |    | | channel_snapshot_solo/
+|   |                       channel_close_solo |    | |   channel_deposit/
+|   |                                          |    | | channel_force_progress
+|   |                                          |    | |
+| c |                                          |    | |
+| l | channel_close_mutual                     |    +-+
+| o | <------------------- +--------------+    |
+| s |                      |    closing   |    |
+| e | <------------------- +--------------+    |
+| d |    channel_settle      |          ^      |
+|   |                        |          |      |
+|   |         channel_slash/ |   [lock_timeout]|
+|   |  channel_force_progress|          |      |
+|   |                        |          |      |
+|   |                        v          |      |
+|   | channel_close_mutual +--------------+    |
+|   | <------------------- |    locked    | <--+
+|   |                      +--------------+
++---+                       | ^
+                            | |
+                      channel_slash/
+                  channel_force_progress
+                            | |
+                            +-+
 ```
 
+***Note***: `[lock_timeout]` is not an explicit message of the protocol but the
+expiration of a timer.
 
 ### Contract execution
 

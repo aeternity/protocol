@@ -488,7 +488,7 @@ purging them from the tree.
 , <lock_period>      :: int()
 , <ttl>              :: int()
 , <fee>              :: int()
-, <delegates>        :: [id()]
+, <delegate_ids>     :: [id()]
 , <state_hash>       :: binary()
 , <nonce>            :: int()
 ]
@@ -714,12 +714,12 @@ The channel off-chain transaction is not included directly in the transaction tr
 , <initiator_amount>    :: int()
 , <responder_amount>    :: int()
 , <channel_reserve>     :: int()
-, <delegates>           :: [id()]
+, <delegate_ids>        :: [id()]
 , <state_hash>          :: binary()
 , <round>               :: int()
+, <solo_round>          :: int()
 , <lock_period>         :: int()
-, <closes_at>           :: int()
-, <force_blocked_until> :: int()
+, <locked_until>        :: int()
 ]
 ```
 
