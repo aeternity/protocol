@@ -93,6 +93,9 @@ without calling it you can write
     Chain.spend(v.address, amount)
 ```
 
+Note that reentrant calls are not permitted. In other words, when calling
+another contract it cannot call you back.
+
 ### Mutable state
 
 Sophia does not have arbitrary mutable state, but only a limited form of
