@@ -1,6 +1,9 @@
 [back](./README.md)
 # Channels - intended usage
 
+**NOTE:** A description of the newer JSON-RPC-based protocol [can be found here](./channel_ws_api_json-rpc.md)
+
+
 ## Introduction
 You interact with an Aeternity node both through HTTP requests and WebSocket
 connections.
@@ -58,6 +61,13 @@ There are two types of HTTP requests:
 ## Channel open
 In order to use a channel, it must be opened. Both parties negotiate parameters for the channel - for example the amounts to participate. Some of those are relevant to the chain and end up in a`channel_create_tx` that is posted on the chain. Once a certain amount of blocks have been mined on top of the one that included it, the channel is considered to be opened.
 
+### Websocket protocol
+
+The channel websocket api currently supports two protocols: [`json-rpc`](https://www.jsonrpc.org/specification) and `legacy`. Which protocol to use can be specified with the `protocol` option.
+ If omitted, `legacy` is chosen by default, although this default is likely to change in the future.
+ 
+ In the examples below, the `legacy` protocol is used. For a `json-rpc`, see [channels_api_usage_json-rpc.md](channels_api_usage_json-rpc.md).
+ 
 ### Channel parameters
 Each channel has a set of parameters that is required for opening a
 connection. Most of those are part of the `channel_create_tx` which is included
