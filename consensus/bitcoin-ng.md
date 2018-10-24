@@ -1,22 +1,15 @@
 Bitcoin-NG for Aeternity
 ==========
 
-Bitcoin-NG is a new consensus algorithm [1]. It depends on Proof-of-Work and uses chain of blocks with the most work done to resolve conflicts. Aeternity is PoW blockchain. Using Bitcoin-NG is very suitable for reducing on-chain confirmation latency. Bitcoin-NG is based on temporary leader that is elected randomly using Proof-of-Work.
+Bitcoin-NG is an evolution of the Bitcoin protocol [1]. It still uses Nakamoto consensus but separates leader election and block production. This separation is done by introducing two kinds of blocks, key and micro. Key blocks are used for leader election. They don't contain any transactions but do require a solution to a Proof of Work puzzle. Once a leader has been found, they can produce multiple micro blocks. Micro blocks include transactions but do not require solutions to Proof of Work puzzles. Instead they need to be cryptographically signed be the current leader to be considered valid.
 
-
-How to understand Bitcoin-NG?
-===
-
-To understand NG really quickly, we need to re-cap how we can think about classic Nakamoto consensus.
-
-Nakamoto consensus is based on crypto-puzzle that chooses a leader (miner) who confirms all the events included in the past block. New events are aggregated by all miners until one of them confirms them.
-
-Bitcoin-NG consensus is based on crypto-puzzle that chooses a leader (miner) who confirms all the events that will happen until the next miner solves the crypto-puzzle. The next miner takes over leadership.
+Splitting up leader election and block production allows a leader to produce micro blocks in rapid succession, increasing the transaction throughput significantly.
 
 
 Low level view of Bitcoin-NG
 ===
-Leaders are elected by solving Proof-of-Work puzzle. They broadcast the evidence that they solve the puzzle in Key Blocks (KB). The new Key Blocks holds PubKey representing the leader. From now on, the miner becomes a leader and gains right to broadcast signed blocks holding transactions. We call them Micro Blocks (MB). There is no Proof-of-work involved in emission of Micro Blocks.
+For a miner to become the leader for an epoch, they have to produce a Key block containing a valid Proof of Work solution and a public key to which they have the corresponding private key.
+Once they have produced such a block, they can start issuing Micro blocks. These Micro blocks do not require any Proof of Work puzzle solutions but must be signed by the private key belonging to the public key included in the Key block.
 
       ┌────────┐                        ┌────────┐
       │   1    │   ┌─────┐   ┌─────┐    │   2    │  ┌─────┐
@@ -124,4 +117,3 @@ the Proof-Of-Fraud object in micro blocks is defined
 #### References
 
 1. Bitcoin-NG: A Scalable Blockchain Protocol, Ittay Eyal, Adem Efe Gencer, Emin Gün Sirer, and Robbert van Renesse,Cornell University, 2016
-
