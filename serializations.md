@@ -779,7 +779,7 @@ All Merkle Patricia Values are serialized.
 ]
 ```
 
-All binaries are serialized as it follows:
+All binaries are serialized as follows:
 
 ##### Contracts' state tree
 ```

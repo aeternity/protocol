@@ -445,7 +445,7 @@ Serialization defined [here](../serializations.md#channel-solo-force-progress-tr
 The `offchain_trees` is the full off-chain state trees set: all accounts and
 all contracts. It MUST include both participants' off-chain accounts.
 Based on the `offchain_trees`, the next state is going to be computed and its
-root hash will become the new state's `state_hash`. The newly produces state
+root hash will become the new state's `state_hash`. The newly produced state
 trees will be different than the provided ones at least with the newly added
 `call` object. Thus even if the contract call fails a new `state_hash` is
 produced.
