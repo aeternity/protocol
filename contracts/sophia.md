@@ -139,7 +139,7 @@ Sophia has the following types:
 | events       | An append only list of blockchain events (or log entries) |
 | signature    | A signature - 64 bytes |
 | Chain.ttl    | Time-to-live (fixed height or relative to current block) | ```FixedTTL(1050)``` ```RelativeTTL(50)```
-| oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, sign, qfee, ttl)```
+| oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, qfee, ttl)```
 | oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, qfee, qttl, rttl)```
 
 ### Type aliases
@@ -327,35 +327,43 @@ An Oracle user will use the functions:
 To register a new oracle answering questions of type `'a` with answers of type `'b`,
 call `Oracle.register`:
 ```
-Oracle.register(acct : address
-                sign : signature,   // Signed account address + contract address
-                qfee : int,
-                ttl  : Chain.ttl) : oracle('a, 'b)
+Oracle.register(acct       : address,
+                <signature : signature>, // Signed account address + contract address
+                                         // named argument (and thus optional)
+                qfee       : int,
+                ttl        : Chain.ttl) : oracle('a, 'b)
 ```
 
 * The `acct` is the address of the oracle to register (can be the same as the contract).
-* The `sign` is a signature proving that the contract is allowed to register the account -
+* `signature` is a signature proving that the contract is allowed to register the account -
   the account address + the contract address (concatenated as byte arrays) is signed with the
   private key of the account, proving you have the private key of the oracle to be. If the
-  address is the same as the contract `sign` is ignored.
+  address is the same as the contract `sign` is ignored and can be left out entirely.
 * The `qfee` is the minimum query fee to be paid by a user when asking a question of the oracle.
 * The `ttl` is the Time To Live for the oracle, either relative to the current
   height (`RelativeTTL(delta)`) or a fixed height (`FixedTTL(height)`).
 * The type `'a` is the type of the question to ask.
 * The type `'b` is the type of the oracle answers.
 
+Examples:
+```
+  Oracle.register(addr0, 25, RelativeTTL(400))
+  Oracle.register(addr1, 25, RelativeTTL(500), signature = sign1)
+```
+
 ##### Oracle extend
 
 To extend the TTL of an oracle, call `Oracle.extend`:
 ```
-Oracle.extend(o    : oracle('a, 'b),
-              sign : signature,   // Signed oracle address + contract address
-              ttl  : Chain.ttl) : ()
+Oracle.extend(o          : oracle('a, 'b),
+              <signature : signature>,     // Signed oracle address + contract address
+                                           // named argument (and thus optional)
+              ttl        : Chain.ttl) : ()
 ```
 
 The `ttl` is must be a relative TTL, relative to the current oracle expiry
 height. For instance, passing `RelativeTTL(100)` adds 100 blocks to the expiry
-time of the oracle. The `sign` is the same as for `Oracle.register`.
+time of the oracle. The `signature` is the same as for `Oracle.register`.
 
 ##### Oracle get_question
 
@@ -368,15 +376,16 @@ Oracle.get_question(o : oracle('a, 'b), q : oracle_query('a, 'b)) : 'a
 
 To respond to an oracle question, use the `Oracle.respond` function:
 ```
-Oracle.respond(o    : oracle('a, 'b),
-               q    : oracle_query('a, 'b),
-               sign : signature, // Signed oracle query id + contract address
-               r    : 'b)
+Oracle.respond(oracle     : oracle('a, 'b),
+               query      : oracle_query('a, 'b),
+               <signature : signature>,             // Signed oracle query id + contract address
+                                                    // named argument (and thus optional)
+               response   : 'b)
 ```
 
-Unless the contract address is the same as the oracle address the `sign` needs
-to be provided. Proving that we have the private key of the oracle by signing
-the oracle query id + contract address.
+Unless the contract address is the same as the oracle address the `signature`
+needs to be provided. Proving that we have the private key of the oracle by
+signing the oracle query id + contract address.
 
 ##### Oracle query
 
@@ -419,7 +428,7 @@ contract Oracles =
                           sign : signature,   // Signed oracle address + contract address
                           qfee : int,
                           ttl  : Chain.ttl) : oracle(string, int) =
-     Oracle.register(acct, sign, qfee, ttl)
+     Oracle.register(acct, signature = sign, qfee, ttl)
 
   function queryFee(o : oracle(string, int)) : int =
     Oracle.query_fee(o)
@@ -433,15 +442,19 @@ contract Oracles =
     Oracle.query(o, q, qfee, qttl, RelativeTTL(rttl))
 
   function extendOracle(o    : oracle(string, int),
-                        sign : signature,   // Signed oracle address + contract address
                         ttl  : Chain.ttl) : () =
-    Oracle.extend(o, sign, ttl)
+    Oracle.extend(o, ttl)
+
+  function signExtendOracle(o    : oracle(string, int),
+                            sign : signature,   // Signed oracle address + contract address
+                            ttl  : Chain.ttl) : () =
+    Oracle.extend(o, signature = sign, ttl)
 
   function respond(o    : oracle(string, int),
                    q    : oracle_query(string, int),
                    sign : signature,        // Signed oracle query id + contract address
                    r    : int) =
-    Oracle.respond(o, q, sign, r)
+    Oracle.respond(o, q, signature = sign, r)
 
   function getQuestion(o : oracle(string, int),
                        q : oracle_query(string, int)) : string =
@@ -473,18 +486,18 @@ Naming System (AENS):
   type checked against this type at run time.
 - AENS transactions
   ```
-  AENS.preclaim(owner : address, commitment_hash : hash, sign : signature) : ()
-  AENS.claim   (owner : address, name : string, salt : int, sign : signature) : ()
-  AENS.transfer(owner : address, new_owner : address, name_hash : hash, sign : signature) : ()
-  AENS.revoke  (owner : address, name_hash : hash, sign : signature) : ()
+  AENS.preclaim(owner : address, commitment_hash : hash, <signature : signature>) : ()
+  AENS.claim   (owner : address, name : string, salt : int, <signature : signature>) : ()
+  AENS.transfer(owner : address, new_owner : address, name_hash : hash, <signature : signature>) : ()
+  AENS.revoke  (owner : address, name_hash : hash, <signature : signature>) : ()
   ```
-  If `owner` is equal to `Contract.address` the signature `sign` is ignored.
-  Otherwise we need a signature to prove that we are allowed to do AENS
-  operations on behalf of `owner`. For `AENS.preclaim` the signature should be
-  over owner address + Contract.address (concatenated as byte arrays), for the
-  other three operations the signature should be over owner address +
-  `name_hash` + Contract.address using the private key of the `owner` account
-  for signing.
+  If `owner` is equal to `Contract.address` the signature `signature` is
+  ignored, and can be left out since it is a named argument. Otherwise we need
+  a signature to prove that we are allowed to do AENS operations on behalf of
+  `owner`. For `AENS.preclaim` the signature should be over owner address +
+  Contract.address (concatenated as byte arrays), for the other three
+  operations the signature should be over owner address + `name_hash` +
+  Contract.address using the private key of the `owner` account for signing.
 
 #### Events
 
