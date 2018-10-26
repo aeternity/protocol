@@ -40,6 +40,8 @@ The epoch node exposes the following APIs:
 
 ## Channels WebSocket API definition
 
+**NOTE:** A description of the newer JSON-RPC-based protocol [can be found here](./channel_ws_api_json-rpc.md)
+
 ### Description
 Channels provide means for off-chain transactions with functionality of on-chain dispute resolution.
 Channels require persisted connections to Aeternity nodes. Each participant in
