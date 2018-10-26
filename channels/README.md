@@ -379,10 +379,9 @@ Contract call execution relies on both participants agreeing on a state update.
 At any point a participant can be missing or refusing to cooperate to a valid
 off-chain contract call. We call this a dispute and it can be resolved using
 forcing of progress on-chain. This requires the forcing party to provide enough
-information for the contract execution as well with a proof that the contract
-had been part of the channel's state. The result of a successful force progress
-is a new channel off-chain state. This way we keep contracts in channels
-trustless.
+information for the contract's execution. The result of a successful force
+progress is a new channel off-chain state. This way we keep contracts in
+channels trustless.
 
 ## Light node requirements
 

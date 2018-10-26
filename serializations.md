@@ -214,8 +214,19 @@ subsequent sections divided by object.
 | Channel | 58 |
 | Channel snapshot transaction | 59 |
 | POI | 60 |
+| Trees with DB | 61 |
+| State trees | 62 |
+| Merkle Patricia tree | 63 |
+| Merkle Patricia tree's value | 64 |
+| Contracts' Merkle Patricia tree's value | 621 |
+| Contract Calls' Merkle Patricia tree's value | 622 |
+| Channels' Merkle Patricia tree's value | 623 |
+| Nameservice's Merkle Patricia tree's value | 624 |
+| Oracles' Merkle Patricia tree's value | 625 |
+| Accounts' Merkle Patricia tree's value | 626 |
 | Sophia byte code | 70 |
-| Micro body | 101 |
+| Key block | 100 |
+| Micro block | 101 |
 | Light micro block | 102 |
 
 #### Accounts
@@ -586,8 +597,7 @@ The payload is a serialized signed channel off-chain transaction and can not be 
 , <round>           :: int()
 , <update>          :: binary()
 , <state_hash>      :: binary()
-, <addresses>       :: [id()]
-, <poi>             :: poi()
+, <offchain_trees>  :: trees()
 , <ttl>             :: int()
 , <fee>             :: int()
 , <nonce>           :: int()
@@ -735,6 +745,81 @@ NOTE: As the POI contains the Merkle Patricia Tree nodes (e.g. not only their ha
 * The object itself does not contain its own id as it can be derived from the location in the tree.
 * The key used for storing each object in each state subtree is not necessarily derived from the object itself.
 * The value(s) whose inclusion the POI proves is included in the POI itself.
+
+#### Merkle Patricia Value
+```
+[ <key>        :: binary()
+, <val>        :: binary()
+]
+```
+#### Merkle Patricia Tree :: mtree()
+```
+[ <values>        :: [binary()]
+]
+```
+
+All Merkle Patricia Values are serialized.
+
+#### State trees :: trees()
+```
+[ <contracts>   ::  binary()
+, <calls>       ::  binary()
+, <channels>    ::  binary()
+, <ns>          ::  binary()
+, <oracles>     ::  binary()
+, <accounts>    ::  binary()
+]
+```
+
+All binaries are serialized as follows:
+
+##### Contracts' state tree
+```
+[ <contracts>    :: binary()
+]
+```
+
+The binary is a serialized Merkle Patricia Tree.
+
+##### Contract Calls' state tree
+```
+[ <calls>        ::  binary()
+]
+```
+
+The binary is a serialized Merkle Patricia Tree.
+
+##### Channels' state tree
+```
+[ <channels>     :: binary()
+]
+```
+
+The binary is a serialized Merkle Patricia Tree.
+
+##### Nameservice's state tree
+```
+[ <mtree>       :: binary()
+]
+```
+
+The binary is a serialized Merkle Patricia Tree.
+
+##### Oracles' state tree
+```
+[ <otree>       :: binary()
+]
+```
+
+The binary is a serialized Merkle Patricia Tree.
+
+##### Accounts' state tree
+```
+[ <accounts>      :: binary()
+]
+```
+
+The binary is a serialized Merkle Patricia Tree.
 
 #### Sophia byte code
 ```

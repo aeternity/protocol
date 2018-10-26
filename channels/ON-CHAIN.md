@@ -398,8 +398,8 @@ The amounts must correspond to the ones on-chain, provided by the last
 
 Forcing progress is the mechanism to be used when a dispute arises between
 parties and one of them wants to use the blockchain as an arbiter. The poster
-provides enough state so that an off-chain contract can be executed on-chain and
-thus producing the channel's next off-chain state.
+provides the off-chain state so that an off-chain contract can be executed
+on-chain and thus producing the channel's next off-chain state.
 
 This can happen both while a channel is closing or while it is still active. If
 the channel is not closing, participants can continue using it from the on-chain
@@ -419,7 +419,7 @@ lock is necessary to prevent the channel from being closed immediately after
 a new round has been produced on chain.
 
 It is worth mentioning that what is to be disputed is the off-chain state that
-the force progress had been based on but not the forcing of progress itself. If
+the force progress had been based on and not the forcing of progress itself. If
 an older state had been provided by the forcing party, the other party can post
 a newer co-signed off-chain state (via a snapshot for example). The co-signed
 state with the same or greater round will replace the on-chain produced one.
@@ -431,26 +431,27 @@ Serialization defined [here](../serializations.md#channel-solo-force-progress-tr
 
 - `channel_id`: channel id as recorded on-chain
 - `from_id`: participant of the channel that posts the force progress transaction
-- `payload`: empty or a transaction proving that the proof of inclusion is part of the channel
+- `payload`: empty or a transaction proving that the state trees are part of the
+  channel
 - `round`: channel's next round
 - `update`: channel off-chain update that contains the contract call with gas
   limit and gas prices to be consumed for the on-chain execution
 - `state_hash`: channel's expected new root hash of off-chain state trees
-- `addresses` - a list of ids for accounts and contracts provided in the proof
-  of inclusion
-- `poi`: proof of inclusion for the old channel state
+- `offchain_trees`: the full state channel's state trees
 - `ttl`: blockheight target until which this transaction can be included
 - `fee`: transaction fee
 - `nonce`: taken from the `from_id`'s account
 
-Proof of inclusion represents the internal channel state. It has to include all
-accounts, all contracts and their balances.
-Based on this structure, the next `state_hash` is going to be computed, thus
-providing insufficient set of accounts and contracts provided will result in a
-different channel `state_hash`.
+The `offchain_trees` is the full off-chain state trees set: all accounts and
+all contracts. It MUST include both participants' off-chain accounts.
+Based on the `offchain_trees`, the next state is going to be computed and its
+root hash will become the new state's `state_hash`. The newly produced state
+trees will be different than the provided ones at least with the newly added
+`call` object. Thus even if the contract call fails a new `state_hash` is
+produced.
 
 If this transaction is sent while the channel is in the `closing` state, it will
-transition the channel into the `locked` state.
+transition the channel into the `locked` state for the next `lock_period` blocks.
 
 The payload can be either empty or a signed transaction.
 
@@ -458,8 +459,8 @@ The payload can be either empty or a signed transaction.
 #### Empty Payload
 
 If the payload is empty, the last on-chain persisted state and `solo_round` are
-used. In this case the proof of inclusion root hash MUST be equal to the one
-persisted for the channel on-chain.
+used. In this case the state trees root hash MUST be equal to the one persisted
+for the channel on-chain.
 
 If the contract execution is successful, the channel will be updated with:
 
@@ -478,8 +479,8 @@ co-signed.
 
 An off-chain transaction payload is a valid transaction if it has:
 
-* `state_hash` equal to the proof of inclusion's root hash. This is a proof
-  that the PoI is a correct one
+* `state_hash` equal to the state trees' root hash. This is a proof
+  that the `offchain_trees` are something both participants had agreed upon
 * `channel_id` being the same as the transaction `channel_id`
 * `round` greater than `Channel(channel_id).round`
 
@@ -488,7 +489,7 @@ poster of the force progress transaction. `amount`, `gas` and `gas_price` are
 specified in the update as well. The gas fees are going to be paid by the poster
 of the transaction.
 The state_hash will be the root hash of the updated channel's state trees. After
-applying the contract call to the provided `poi` and updating accounts
+applying the contract call to the provided `offchain_trees` and updating accounts
 accordingly, a new channel's state tree is produced. It MUST have the same
 value of root hash as the state hash. If those do not match the force progress
 fails but since this can only be determined after the call had been executed, a
@@ -509,12 +510,15 @@ Additionally, if the channel is in the `closing` state:
 
 ##### Updating channel object
 
-Channel state trees are recreated according to the `poi` being provided. The
-update is an off-chain contract call. It is applied on the channel's state trees
-and modifies them. The modified trees have a root hash. It might be:
+Channel state trees are recreated according to the `offchain_trees` being
+provided. The update is an off-chain contract call. It is applied on the
+channel's state trees and modifies them. The modified trees have a root
+hash. It might be:
 
-- equal to the `state_hash` provided in the force progress transaction. This hash indeed is the expected result of the contract call and the blockchain has
-  confirmed it. The on-chain channel object is updated accordingly:
+- equal to the `state_hash` provided in the force progress transaction.
+  This hash indeed is the expected result of the contract call and the
+  blockchain has confirmed it. The on-chain channel object is updated
+  accordingly:
   - channel's state hash is updated to be the newly computed one
   - channel's round is the one in the force progress transaction
   - if the channel had been in a closing state, closing balances of
@@ -543,10 +547,11 @@ had been a mismatch of the produced `state_hash` and the expected one.
 ##### Call object
 
 If the `channel_force_progress_tx` is valid, the contract call in the `update`
-is executed upon the MPT that had been produced by the `poi`. The output is a
-new MPT that will represent the new off-chain channel state. Participants are to
-either continue using the channel or close it. If there is no later off-chain
-update, they are expected to use this produced MPT in both cases.
+is executed upon the MPT that had been produced by the `offchain_trees`.
+The output is a new MPT that will represent the new off-chain channel state.
+Participants are to either continue using the channel or close it. If there is
+no later off-chain update, they are expected to use this produced MPT in both
+cases.
 
 The contract execution consumes gas. The `update` itself defines both the gas
 limit and the gas price. After the contract call has been executed and the real
