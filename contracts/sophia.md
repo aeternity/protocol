@@ -1051,12 +1051,14 @@ Sophia contracts than in the EVM. It expects on the stack (top to bottom):
 - `ReturnType` - the type of the return value
 
 The calldata is read from the heap guided by the calldata type and passed to
-the called contract. When the call returns the return value is pushed on top of
-the stack, and potential heap objects for the return value written to the top
-of the heap. The `ReturnType` is required to allow the VM to adjust any
-pointers in the return value when writing it to the heap.
+the called contract. Before the call is made gas is charged for the size of the
+expanded calldata (e.g. maps have to be made explicit when passed between
+contracts). When the call returns the return value is pushed on top of the
+stack, and potential heap objects for the return value written to the top of
+the heap. The `ReturnType` is required to allow the VM to adjust any pointers
+in the return value when writing it to the heap. Since maps are handled outside
+the heap, the caller explicitly pays gas for handling maps in the return value.
 
 ***Subject to change: function types to be stored in contract metadata,
 removing the need for `CalldataType` and `ReturnType`***
 
-***To be determined: gas costs of `CALL` based on size of calldata and return value***
