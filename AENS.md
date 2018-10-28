@@ -36,14 +36,14 @@ postfix, e.g. `mywallet.eth`. ENS currently allows users to associate a single
 
 ## Overview
 
-Names are part of a namespace, which works just like DNS, e.g. `mywallet.aet`
-or `привет.aet` are part of the same `.aet` namespace.
+Names are part of a namespace, which works just like DNS, e.g. `mywallet.test`
+or `привет.test` are part of the same `.test` namespace.
 
 
 ## Governance
 
 This first draft of the AENS is not going to have any governance mechanism but
-will only allow registrations under a single namespace: `.aet`.
+will only allow registrations under a single namespace: `.test`.
 We will also not include mechanisms similar to the `sunrise` and `landrush`
 periods, which are common for DNS, where registration is restricted to small
 select groups and trademark holders in order to avoid name squatting, before
@@ -63,7 +63,7 @@ fee to miners, they will be very hesitant to accept any changes, which
 will impact their income negatively. Thus starting out with burning
 could allow us an easier path for future update to the fee structures.
 
-Every entry in the `.aet` namespace pays the same amount of fees.
+Every entry in the `.test` namespace pays the same amount of fees.
 
 Each entry has a fixed expiration date on claim after which the entry should
 transition into the `revoked` state. Once it reaches this state, the name
@@ -145,14 +145,13 @@ See also [rfc3491](https://tools.ietf.org/html/rfc3491) and
 Names SHOULD be at most 253 characters long, in order to enable
 interoperability with DNS.
 
-***Note:*** For this first draft names MUST have `.aet` or `.test`
-as a suffix, i.e. `mywallet.aet`.
+***Note:*** For this first draft names MUST `.test` as a suffix, i.e. `mywallet.test`.
 
 
 ### Namespaces/Labels
 
 A name is split up into labels by the `FULL STOP (U+002E .)` character.
-These labels will also be referred to as namespaces, e.g. `mywallet.aet`
+These labels will also be referred to as namespaces, e.g. `mywallet.test`
 can be understood as the `mywallet` namespace in the `aet` namespace.
 
 Any label that is not at the top level, e.g. `aet`, MUST be longer than
@@ -169,17 +168,14 @@ A registrar controls who is allowed to claim names in their namespace
 and under what circumstances they are allowed to do so.
 
 The only available registrars for this AENS version will be hard-coded
-ones, which own the `.`, `.aet` and `.test` namespaces.
+ones, which own the `.` and `.test` namespaces.
 
 The `.` namespace registrar is restricted and MUST NOT allow anyone to
 claim any names in its namespace.
 
-The `.aet` namespace registrar allows users to claim any name that is
+The `.test` namespace registrar allows users to claim any name that is
 valid according to the validation rules if the name is currently not
 claimed and they pay the appropriate fee.
-
-`.aet` will be exclusively available on the mainnet and `.test`
-will be exclusive to the testnet.
 
 
 ### Commitment Scheme
@@ -375,11 +371,11 @@ give the name to.
 These sub-labels allow for further customisation and also for users to
 associate with particular namespaces, e.g. a cryptographic cat breeding
 game might associate a name entry with every of its cats such as
-`unicorn.kitty.aet` and then transfering that name to the person, who
+`unicorn.kitty.test` and then transfering that name to the person, who
 adopts the cat. The authorization policies for these will need some
 flexibility seeing as the owner of a namespace might want to prevent
-or allow users creating sub-sub-labels, e.g. the owner of `unicorn.kitty.aet`
-creating `rarest.`unicorn.kitty.aet`.
+or allow users creating sub-sub-labels, e.g. the owner of `unicorn.kitty.test`
+creating `rarest.`unicorn.kitty.test`.
 
 
 ### Auctions
