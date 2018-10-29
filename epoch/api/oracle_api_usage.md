@@ -18,16 +18,12 @@ The following assumes that the node exposes at address `localhost/127.0.0.1` the
 
 In order to work through the example we need the (Base58Check-encoded)
 public key of the account with positive balance. For simplicity, we will use
-beneficiary account. Public key can be found in configuration file
-( `mining > beneficiary` parameter).
+beneficiary account. It is easily retrieved from the running node:
 
 ```
-cat epoch.yaml
+curl http://127.0.0.1:3113/v2/debug/accounts/beneficiary
 
---CUT--
-mining:
-    beneficiary: "ak_jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"
---CUT--
+{"pub_key":"ak_jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}
 ```
 
 We need to wait for the first block to be mined by the node (or else our
