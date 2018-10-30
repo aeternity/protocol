@@ -16,10 +16,12 @@ The following assumes that the node exposes at address `localhost/127.0.0.1` the
 
 ## Oracle management flow
 
-In order to work through the example we also need the (Base58Check-encoded)
-public key of the node. This is easily retrieved from the running node:
+In order to work through the example we need the (Base58Check-encoded)
+public key of the account with positive balance. For simplicity, we will use
+beneficiary account. It is easily retrieved from the running node:
+
 ```
-curl http://127.0.0.1:3113/v2/debug/accounts/node
+curl http://127.0.0.1:3113/v2/debug/accounts/beneficiary
 
 {"pub_key":"ak_jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}
 ```

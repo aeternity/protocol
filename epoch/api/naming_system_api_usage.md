@@ -12,11 +12,18 @@ The following assumes that the node exposes at address 127.0.0.1 the following p
 
 ## Name management flow
 
-Check the public key of the node first (used as account key in later API calls):
+In order to work through the example we need the (Base58Check-encoded)
+public key of the account with positive balance. For simplicity, we will use
+beneficiary account. It is easily retrieved from the running node:
+
 ```
-curl http://127.0.0.1:3113/v2/debug/accounts/node
-{"pub_key":"ak_scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSf"}
+curl http://127.0.0.1:3113/v2/debug/accounts/beneficiary
+
+{"pub_key":"ak_jzZyCLFtHVD7yVdEhGJFM3LjeXrKqWxnHbCYzhnrrR4DkdF"}
 ```
+
+We need to wait for the first block to be mined by the node (or else our
+transactions will be rejected with _"Insufficient balance"_).
 
 ### Verify availability
 
