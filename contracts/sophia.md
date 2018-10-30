@@ -869,11 +869,30 @@ and miners to pick disable transactions.
 ### Byte code
 
 The byte code contains meta data about the original sophia source
-code. The layout of the encoding can be found
-[here](../serializations.md#sophia-byte-code).
+code.
 
-The encoded byte code contains the hash of the source code, compiler
-version, type information and the actual byte code.
+#### Meta data
+The byte code contains meta data for the contract.
+- source_code_hash - a sha256 hash of the source code string of the contract
+- type_info - see Type information below
+- byte_code - the actual byte code
+
+The layout of the encoding can be found
+[here](../serializations.md#sophia-byte-code). The encoding is tagged
+with the compiler version.
+
+#### Type information
+The type information of each function is encoded in the meta data. The function
+hash depends both on the function name and the type signature of the function.
+The function hash is also the identifier of a function when calling a contract.
+In this way, the function prototype in the calling function gets some level of
+type verification.
+
+The type information contains:
+- fun_hash - A sha256 hash of the function name and the function types
+- fun_name - The function name as a string
+- arg_type - The vm encoded typerep of the argument (as a tuple) of the function
+- out_type - The vm encoded typerep of the return type of the function
 
 ### Memory layout
 
@@ -989,19 +1008,15 @@ The keys and values are encoded as standalone binaries, so the addresses in
 
 ### Initialization
 
-When a Sophia contract is called the calldata should be a pair of a type
-representation and a value, encoded as a binary as described above
-(***subject to change: drop the type representation***).
-The value should be a pair of a function name and a tuple of arguments
-(***subject to change: function hashes instead of string names***).
-For instance, to call the function `foo` with arguments `1` and `"bar"`, the
-calldata should be (the binary encoding of)
+When a Sophia contract is called the calldata should be a pair of a function
+hash and a tuple of arguments, encoded as a binary as described above
+The value should be a pair of a function hash and a tuple of arguments
+For instance, to call the function `foo` (assuming the function
+hash 12345) with arguments `1` and `"bar"`, the calldata should be
+(the binary encoding of)
 ```
-  (Tuple([String, Tuple([Word, String])]), ("foo", (1, "bar")))
+  (12345, (1, "bar"))
 ```
-(Note: type representations are not part of the Sophia surface language so the
-above is not valid Sophia code)
-
 Before the contract starts executing the first word of the encoded calldata
 (i.e. the calldata value) is pushed on the stack and the rest of the calldata
 heap is written to memory. The result is that the Sophia contract starts with
@@ -1019,12 +1034,11 @@ looking at the calldata and calling the correct function.
 ### Return
 
 When returning from a contract call (using the `RETURN` instruction) the
-contract should leave the type (as a type representation) of the return value,
-followed by the return value on top of the stack (***subject to change:
-function types to be stored in contract metadata***). The VM reads the return
-value from the heap and returns it to the caller, and reads the updated
-contract state using the state pointer at address 0. A contract can write 0
-to the state pointer to indicate that the state did not change.
+type information from the meta data is used to encode the return value.
+The VM reads the return value from the heap and returns it to the caller,
+and reads the updated contract state using the state pointer at address 0.
+A contract can write 0 to the state pointer to indicate that the state
+did not change.
 
 ### Storing the contract state
 
@@ -1056,22 +1070,20 @@ compiler is responsible for adding the type representation.
 The `CALL` instruction for calling another contract works differently for
 Sophia contracts than in the EVM. It expects on the stack (top to bottom):
 - `Gas` - the amount of gas to allocate to the call
-- `Address` - the address of the contract to call
+- `Address` - the address of the contract to call (or 0 for primops)
 - `Amount` - the amount of tokens to transfer with the call
-- `Calldata` - the calldata value (pair of function name and arguments)
-- `CalldataType` - the type of the calldata (as a type representation)
+- `Calldata` - the calldata value (pair of function hash and arguments)
+- `TypeHash` - the function hash of primops that have dynamic types
+               (e.g., oracles). Otherwise unused.
 - `_` - unused (offset to write return value in the EVM)
-- `ReturnType` - the type of the return value
+- `_` - unused (return value size in the EVM)
 
 The calldata is read from the heap guided by the calldata type and passed to
 the called contract. Before the call is made gas is charged for the size of the
 expanded calldata (e.g. maps have to be made explicit when passed between
 contracts). When the call returns the return value is pushed on top of the
 stack, and potential heap objects for the return value written to the top of
-the heap. The `ReturnType` is required to allow the VM to adjust any pointers
-in the return value when writing it to the heap. Since maps are handled outside
-the heap, the caller explicitly pays gas for handling maps in the return value.
-
-***Subject to change: function types to be stored in contract metadata,
-removing the need for `CalldataType` and `ReturnType`***
+the heap. The return type from the contracts meta data is used when writing it
+ to the heap. Since maps are handled outside the heap, the caller explicitly
+pays gas for handling maps in the return value.
 
