@@ -24,8 +24,15 @@
 
 ### Oracles have a published API
 
-- The API defines the format that queries should have.
-- The API defined the format answers will have.
+- The API defines the format that queries should have. (query_format)
+- The API defines the format answers will have. (response_format)
+- The API defines the VM version under which the formats should be interpreted.
+  - If the VM version is 0 (?AEVM_NO_VM):
+    - the query and response formats are uninterpreted strings (byte arrays).
+    - the queries and responses are treated as strings when called from sophia contracts.
+  - For VM version corresponding to sophia:
+    - the query and response formats must be type representations, encoded according to the ABI.
+    - the queries and responses are interpreted as the types in the format specifications
 
 ### Oracle responses have a type declaration
 - Types should correspond to types in the smart contract language.

@@ -17,6 +17,7 @@ The transaction contains:
 - Response format definition
 - Query fee (that should be paid for posting a query to the oracle).
 - A TTL (relative in number of blocks, or absolute block height)
+- Vm version. (0 for no vm, 1 for aevm sophia)
 - Transaction fee. It must be greater than or equal to the mimimum transaction fee plus a component proportional to the relative TTL (quotient of the Euclidean division between the number of blocks and 1000, plus 1 if non-zero remainder).
   - Example: If the relative TTL is 10 blocks then the transaction fee must be greater than or equal to 2 (assumption: the minimum transaction fee is 1).
   - Example: If the relative TTL is 1000 blocks then the transaction fee must be greater than or equal to 2 (assumption: the minimum transaction fee is 1).

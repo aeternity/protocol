@@ -263,6 +263,7 @@ Signatures are sorted.
 , <response_format> :: binary()
 , <query_fee>       :: int()
 , <expires>         :: int()
+, <vm_version>>     :: int()
 ]
 ```
 
