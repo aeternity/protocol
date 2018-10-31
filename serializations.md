@@ -824,7 +824,7 @@ The binary is a serialized Merkle Patricia Tree.
 #### Sophia byte code
 ```
 [ <source code hash> :: binary()
-, <type info>        :: [binary()]
+, <type info>        :: [{<fun_hash> :: binary(), <fun_name> :: binary(), <arg_type> :: binary(), <out_type> :: binary()}]
 , <byte code>        :: binary()
 ]
 ```
