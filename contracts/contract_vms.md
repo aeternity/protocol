@@ -18,7 +18,7 @@ The current meaning of this field is:
 
 | Value (hex) | Machine  | ABI         | Description
 | ----------- | -------- | ----------- | -----------
-|   00        |          |             | RESERVED
+|   00        |          |             | NO_VM (Used in oracles)
 |   01        | [AEVM_01](aevm.md)  | [Sophia_01](sophia.md#the-sophia_01-abi)   | For Sophia contracts on the AEVM
 |   02        | [AEVM_01](aevm.md)  | [Solidity_01](solidity.md#the-solidity_01-abi) | For Solidity contracts on the AEVM
 |   03        | [FTWVM_01](contract_vms.md#ftwvm) | Sophia_02   | For Sophia contracts on the FTWVM
