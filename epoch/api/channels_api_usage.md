@@ -402,8 +402,8 @@ following structure:
   | ---- | ---- | ----------- |
   | vm_version | integer | version of the AEVM |
   | deposit | integer | initial amount the owner of the contract commits to it |
-  | code | string | base58c encoded compiled AEVM byte code |
-  | call_data | string | base58c encoded compiled AEVM call data for the code |
+  | code | string | api encoded compiled AEVM byte code |
+  | call_data | string | api encoded compiled AEVM call data for the code |
 
 That would create a contract with the poster being the `owner` of it. Poster
 commits initially a `deposit` amount of tokens to the new contract.
@@ -502,7 +502,7 @@ following structure.
   | contract | string | address of the contract to call |
   | vm_version | integer | version of the AEVM |
   | amount | integer | amount the caller of the contract commits to it |
-  | call_data | string | base58c encoded compiled AEVM call data for the code |
+  | call_data | string | api encoded compiled AEVM call data for the code |
 
 That would call a contract with the poster being the `caller` of it. Poster
 commits an `amount` amount of tokens to the contract.
