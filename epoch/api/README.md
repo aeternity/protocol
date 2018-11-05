@@ -75,6 +75,7 @@ All messages have the format:
 
 ## User API - intended usage
 
+* [Encoding scheme for API identifiers](./api_encoding.md)
 * [Account management user API usage](./account_api_usage.md)
 * [Spending tokens using user API](./spend_api_usage.md)
 * [Oracle user API usage](./oracle_api_usage.md)
