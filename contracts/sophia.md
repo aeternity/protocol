@@ -233,8 +233,9 @@ Record fields access is written `r.f` and map lookup `m[k]`. For instance,
   function get_balance(a : address, accounts : map(address, account)) =
     accounts[a].balance
 ```
-Looking up a non-existing key in a map results in the contract failing. See
-`Map.member` and `Map.lookup` below for safe lookups.
+Looking up a non-existing key in a map results in contract execution failing. A
+default value to return for non-existing keys can be provided using the syntax
+`m[k = default]`. See also `Map.member` and `Map.lookup` below.
 
 #### Updating a value
 
@@ -248,7 +249,9 @@ It is possible to give a name to the old value of a field or mapping in an
 update: instead of `acc{ balance = acc.balance + 100 }` it is possible to write
 `acc{ balance @ b = b + 100 }`, binding `b` to `acc.balance`. When giving a
 name to a map value (`m{ [k] @ x = v }`), the corresponding key must be present
-in the map or the contract will fail.
+in the map or execution fails, but a default value can be provided:
+`m{ [k = default] @ x = v }`. In this case `x` is bound to `default` if
+`k` is not in the map.
 
 Updates can be nested:
 ```
@@ -256,7 +259,11 @@ function clear_history(a : address, accounts : map(address, account)) : map(addr
   accounts{ [a].history = [] }
 ```
 This is equivalent to `accounts{ [a] @ acc = acc{ history = [] } }` and thus
-requires `a` to be present in the accounts map.
+requires `a` to be present in the accounts map. To have `clear_history` create
+an account if `a` is not in the map you can write (given a function `empty_account`):
+```
+  accounts{ [a = empty_account()].history = [] }
+```
 
 
 #### Builtin functions on maps
