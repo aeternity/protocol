@@ -275,7 +275,7 @@ Current defaults:
 
 ```
 PROOFSIZE: 42
-EDGEBITS: 28
+EDGEBITS: 29
 ```
 
 
@@ -316,7 +316,7 @@ A valid solution MUST:
 
 #### Solution Encoding Rules
 
-Since `EDGEBITS <= 32`, we can encode an edge as a 32bit integer, otherwise
+Since `EDGEBITS < 32`, we can encode an edge as a 32bit integer, otherwise
 it would have to be 64 bits. Therefore a solution is currently `[u32; 42]`.
 
 
