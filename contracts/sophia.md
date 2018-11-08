@@ -547,8 +547,13 @@ The block-chain environment available to a contract is defined in three name spa
 Contracts can fail with an (uncatchable) exception using the built-in function
 
 ```
-abort(reason : string) : ()
+abort(reason : string) : 'a
 ```
+
+Calling abort causes the top-level call transaction to return an error result
+containing the `reason` string. Only the gas used up to and including the abort
+call is charged. This is different from termination due to a crash which
+consumes all available gas.
 
 ## Syntax
 
