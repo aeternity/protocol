@@ -414,7 +414,7 @@ The content of the contract store depends on [the ABI of the vm_version](/contra
 , <expires_by> :: int()
 , <status>     :: binary()
 , <client_ttl> :: int()
-, <pointers>   :: binary() TODO: This is currently ambigous
+, <pointers>   :: [{binary(), id()}]
 ```
 
 #### Name service commitment
@@ -452,7 +452,7 @@ The content of the contract store depends on [the ABI of the vm_version](/contra
 , <nonce>      :: int()
 , <hash>       :: id()
 , <name_ttl>   :: int()
-, <pointers>   :: binary() TODO: This is currently ambigous
+, <pointers>   :: [{binary(), id()}]
 , <client_ttl> :: int()
 , <fee>        :: int()
 , <ttl>        :: int()
