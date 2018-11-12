@@ -256,6 +256,13 @@ Signatures are sorted.
 ]
 ```
 
+The recipient must be one of the following:
+* An account identifier.
+* An oracle identifier.
+* A contract identifier.
+* A name identifier, whose related name entry has an identifier as value of pointer with key `account_pubkey`.
+  If multiple pointer entries are present for such key, then the first of such entries is used.
+
 #### Oracles
 ```
 [ <owner>           :: id()
@@ -479,6 +486,11 @@ The content of the contract store depends on [the ABI of the vm_version](/contra
 , <ttl>       :: int()
 ]
 ```
+
+The recipient must be one of the following:
+* An account identifier.
+* A name identifier, whose related name entry has an identifier as value of pointer with key `account_pubkey`.
+  If multiple pointer entries are present for such key, then the first of such entries is used.
 
 ### Channels
 

@@ -74,9 +74,8 @@ Note that the name is claimed for the max period (50000 blocks) and relative to 
 
 In order to make better use of claimed name you need to specify where it should point to.
 To do so, specify pointers, which translates to different blockchain entities.
-In the initial version two pointers are available:
-* `account_id`
-* `oracle_id`
+In the initial version the following well-known pointer keys are available:
+* `account_pubkey`
 
 In order to update pointers:
 * prepare name update transaction as per [specification](../../serializations.md).
