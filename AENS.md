@@ -119,9 +119,9 @@ This entry is only relevant for clients and has no conensus
 impact.
 
 ***pointers***: a dictionary with all the values this entry
-points towards, e.g. `{kind: "ipfs", data: "QmVcSqVEsvm5RR9mBLjwpb2XjFVn5bPdPL69mL8PH45pPC"}`.
-This can have multiple entries, e.g. an ipfs hash which contains a
-profile picture and an payment address asssociated with the name.
+points towards.
+This can have multiple entries, e.g. a payment address associated
+with the name and an oracle address associated with the name.
 
 
 ### Name
@@ -229,6 +229,10 @@ pre-claim | |              ||  _
                           update
 ```
 
+The pointers field in the name entry:
+* On `claim` transaction, is initialized to the empty dictionary.
+* On `update` transaction, is replaced with the pointers in the transaction, keeping the order in the transaction.
+
 Note that `expire` is not an explicit message that is part
 of the protocol.
 
@@ -305,6 +309,8 @@ the future.
 
 `update` transaction may be used to extend the lease of the name.
 We do not require an additional fee for extending the lease.
+
+The `pointers` field SHOULD NOT contain multiple entries with the same key.
 
 #### Transfer
 
