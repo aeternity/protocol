@@ -116,7 +116,7 @@ expired.
 
 The oracle pays the fee of the response transaction. The mininimum fee
 is determined by the response TTL from the query and the size of the
-response (***TODO***: Consider size of response in minimum fee).
+response.
 
 Note that there is an incentive to keep the response precise (and
 small) since the oracle pays for the response transaction.
