@@ -57,10 +57,11 @@ like. If we imagine two actors both being interested in the same name,
 what would a »fair« solution be to resolve this?
 
 Fees are the main mechanism to discourage spam and squatting. This
-initial version will burn the governance fee, in order to enable us
+initial version will lock the governance fee in an account without
+private key access, in order to enable us
 to change this behaviour in the future. If we start out by giving this
 fee to miners, they will be very hesitant to accept any changes, which
-will impact their income negatively. Thus starting out with burning
+will impact their income negatively. Thus starting out with locking
 could allow us an easier path for future update to the fee structures.
 
 Every entry in the `.test` namespace pays the same amount of fees.
