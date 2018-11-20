@@ -53,9 +53,10 @@ The reward for mining a block is following a target curve of inflation that is d
 
 ![](./inflation.png)
 <!---
+f(h)=
 \left\{\begin{matrix}
-\frac{0.3x}{S} & \text{ for }x < S \\
-\frac{0.303}{1+(\frac{2(x-S)}{N})^{0.86}} - 0.003 & \text{ for }x >= S
+\frac{0.3h}{S} & \text{for }h < S \\
+\frac{0.30}{1+(\frac{h-S}{0.8N})^{1.3}} - 0.0003 & \text{ otherwise }
 \end{matrix}\right.
 -->
 where _I(x)_ is the inflation target at height _x_, _S_ is the slow start block height, and _N_ is the number of blocks in a year.
@@ -71,7 +72,7 @@ the actual coinbase is given as a table. Furthermore, the coinbase is
 always full values, without fractions. The table of coinbase at height
 can be found [here](./coinbase.md).
 
-The slow start height (_S_) is set to 1440 which corresponds to 72
+The slow start height (_S_) is set to 960 which corresponds to 48
 hours, the number of blocks in a year (_N_) is 175200, and the
 coinbase is computed from the initial total supply of
 276450333.499323152460728285.
