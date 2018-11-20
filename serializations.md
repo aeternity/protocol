@@ -299,6 +299,7 @@ The recipient must be one of the following:
 , <ttl_value>     :: int()
 , <fee>           :: int()
 , <ttl>           :: int()
+, <vm_version>    :: int()
 ]
 ```
 
