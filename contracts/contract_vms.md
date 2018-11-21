@@ -12,7 +12,7 @@ contract. The Æternity blockchain supports four virtual machines.
 A Create Contract transaction and the contract state tree contains a
 'vm_version' field. This field both describes the type and version of the
 virtual machine to use for the contract and the type and version
-of the application binary interface (ABI) of the contract. 
+of the application binary interface (ABI) of the contract.
 
 The current meaning of this field is:
 
@@ -25,6 +25,8 @@ The current meaning of this field is:
 |   04        | [HLM_01](contract_vms.md#hlm)   | Varna_01    | For Varna contracts on the HLM
 |   05        | [FAEVM_01](aevm.md#the-fast-%C3%86ternity-virtual-machine-faevm) | [Solidity_01](solidity.md#the-solidity_01-abi)| For fast execution of Solidity contracts
 | 06-FF       |          |             | UNUSED
+
+*NOTE:* Currently the only value accepted in ContractCreateTx, ContractCallTx, and ChannelForceProgressTx is `0x01`.
 
 The machine names corresponds to the machines described below (HLM, FTWVM, AEVM).
 The number after the machine name designates the version of the machine.
@@ -54,7 +56,7 @@ This allows for blindingly fast and cheap contracts with a known cost to be exec
 HLM statements are of the form:
 ```
  IF BoolExpr THEN Statement ELSE Statement
- IF BoolExpr THEN Statement 
+ IF BoolExpr THEN Statement
  TX(SpendTx, A, B, Amount)
  TX...
  put_number(StringExpr, Aexpr)
