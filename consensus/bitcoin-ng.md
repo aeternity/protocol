@@ -49,6 +49,33 @@ In Aeternity granting both fixed award and fees from the generation is delayed b
 ```
 180 * 3 minutes = 540 minutes = 9 hours
 ```
+The reward for mining a block is following a target curve of inflation that is described by the formula
+
+![](./inflation.png)
+<!---
+f(h)=
+\left\{\begin{matrix}
+\frac{0.3h}{S} & \text{for }h < S \\
+\frac{0.30}{1+(\frac{h-S}{0.8N})^{1.3}} - 0.0003 & \text{ otherwise }
+\end{matrix}\right.
+-->
+where _I(x)_ is the inflation target at height _x_, _S_ is the slow start block height, and _N_ is the number of blocks in a year.
+
+The slow start is an initial period where the mining rewards are
+linearly ramped up to the intended inflation. The intention of this is
+to stabilize the mining target before the full mining rewards are
+awarded.
+
+The coinbase at is computed from the above formula, but to simplify
+the protocol and avoid rounding errors in different implementations,
+the actual coinbase is given as a table. Furthermore, the coinbase is
+always full values, without fractions. The table of coinbase at height
+can be found [here](./coinbase.md).
+
+The slow start height (_S_) is set to 960 which corresponds to 48
+hours, the number of blocks in a year (_N_) is 175200, and the
+coinbase is computed from the initial total supply of
+276450333.499323152460728285.
 
 Forks
 ==
