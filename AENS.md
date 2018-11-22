@@ -287,6 +287,9 @@ The `claim` transaction MUST be signed by the same private key as a
 A `claim` transaction MUST NOT be in included in the same block as its
 `pre-claim`.
 
+The `claim` transaction, apart from standard transaction fee,
+locks additional fee in a restricted account (account with no private key access).
+
 
 #### Update
 
