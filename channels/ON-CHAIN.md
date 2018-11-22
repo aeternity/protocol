@@ -394,12 +394,9 @@ The transaction MUST be signed using private key corresponding to the public key
 
 The amounts must correspond to the ones on-chain, provided by the last
 `channel_close_solo` or `channel_slash`. The sum of those final amounts form
-the total closing amount of the channel.
-
-agreed upon amounts. The total closing amount of a channel is computed bydd
-adding the amounts of the initiator and responder (before the close) and the
-fee. If this total closing amount is lower than the total amount coins already
-dedicated to the channel, the excess of coins is [locked](../consensus/locking.md).
+the total closing amount of the channel. If this total closing amount is lower
+than the total amount coins already dedicated to the channel, the excess of
+coins is [locked](../consensus/locking.md).
 
 ## Forcing progress
 
