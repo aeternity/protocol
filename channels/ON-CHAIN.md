@@ -262,8 +262,10 @@ Serialization defined [here](../serializations.md#channel-close-mutual-transacti
 The initiator's and responder's account balances are incremented by
 `initiator_amount_final` and `responder_amount_final` respectively.
 The channel MUST have enough total coins to pay for the fee as well as the
-agreed upon amounts. The total of a channel is computed by adding the amounts of
-the initiator and responder (before the close) and the fee.
+agreed upon amounts. The total closing amount of a channel is computed by
+adding the amounts of the initiator and responder (before the close) and the
+fee. If this total closing amount is lower than the total amount coins already
+dedicated to the channel, the excess of coins is [locked](../consensus/locking.md).
 
 
 #### Requirements
@@ -391,8 +393,10 @@ considered closed and allow no further modifications.
 The transaction MUST be signed using private key corresponding to the public key `from_id`.
 
 The amounts must correspond to the ones on-chain, provided by the last
-`channel_close_solo` or `channel_slash`.
-
+`channel_close_solo` or `channel_slash`. The sum of those final amounts form
+the total closing amount of the channel. If this total closing amount is lower
+than the total amount coins already dedicated to the channel, the excess of
+coins is [locked](../consensus/locking.md).
 
 ## Forcing progress
 
