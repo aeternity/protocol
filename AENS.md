@@ -61,7 +61,7 @@ initial version will lock the governance fee in an account without
 private key access, in order to enable us
 to change this behaviour in the future. If we start out by giving this
 fee to miners, they will be very hesitant to accept any changes, which
-will impact their income negatively. Thus starting out with locking
+will impact their income negatively. Thus starting out with [locking](consensus/locking.md)
 could allow us an easier path for future update to the fee structures.
 
 Every entry in the `.test` namespace pays the same amount of fees.
