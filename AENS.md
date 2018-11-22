@@ -289,6 +289,7 @@ A `claim` transaction MUST NOT be in included in the same block as its
 
 The `claim` transaction, apart from standard transaction fee,
 locks additional fee in a restricted account (account with no private key access).
+See also [mechanisms section](#mechanisms).
 
 
 #### Update
