@@ -18,28 +18,15 @@ The transaction contains:
 - Query fee (that should be paid for posting a query to the oracle).
 - A TTL (relative in number of blocks, or absolute block height)
 - Vm version. (0 for no vm, 1 for aevm sophia)
-- Transaction fee. It must be greater than or equal to the mimimum transaction fee plus a component proportional to the relative TTL (quotient of the Euclidean division between the number of blocks and 1000, plus 1 if non-zero remainder).
-  - Example: If the relative TTL is 10 blocks then the transaction fee must be greater than or equal to 2 (assumption: the minimum transaction fee is 1).
-  - Example: If the relative TTL is 1000 blocks then the transaction fee must be greater than or equal to 2 (assumption: the minimum transaction fee is 1).
-  - Example: If the relative TTL is 1001 blocks then the transaction fee must be greater than or equal to 3 (assumption: the minimum transaction fee is 1).
+- Transaction fee.
 
 See the [serialization specification](/serializations.md#oracle-register-transaction).
-
-#### Questions/Later
-
-- Exact format for queries (API).
-  - Protobuf or something similar?
-- Exact format for responses.
-- Fee for posting a query. The fee can be 0.
-  - Fees are flat to begin with.
-  - We could imagine fees to be proportional to something.
 
 #### TODO
 
 - In the future we could imagine an oracle register transaction that
   creates a new account by double signing the request with the source
   account and the new account.
-- Decide on the minimum fee calculation.
 
 ### Oracle extend transaction
 
@@ -48,22 +35,9 @@ An oracle operator can extend the TTL of an existing oracle.
 The transaction contains:
 - The address/oracle that should be extended (and a nonce)
 - An extension to the TTL (relative to current expiry in number of blocks)
-- Transaction fee. It must be greater than or equal to the mimimum transaction fee plus a component proportional to the relative TTL extension (quotient of the Euclidean division between the number of blocks and 1000, plus 1 if non-zero remainder).
+- Transaction fee.
 
 See the [serialization specification](/serializations.md#oracle-extend-transaction).
-
-#### Questions/Later
-
-- Fee for posting a query. The fee can be 0.
-  - Fees are flat to begin with.
-  - We could imagine fees to be proportional to something.
-
-#### TODO
-
-- In the future we could imagine an oracle register transaction that
-  creates a new account by double signing the request with the source
-  account and the new account.
-- Decide on the minimum fee calculation.
 
 ### Oracle query transaction
 
@@ -76,7 +50,7 @@ See the [serialization specification](/serializations.md#oracle-extend-transacti
     - The TTL expire and the sender gets a refund
   - Query TTL
   - Response TTL
-  - The transaction fee. It must be greater than or equal to the mimimum transaction fee plus a component proportional to the relative query TTL (quotient of the Euclidean division between the number of blocks and 1000, plus 1 if non-zero remainder).
+  - The transaction fee.
 
 The transaction creates an oracle interaction object in the oracle
 state tree. The id of this object is constructed from the query
@@ -97,12 +71,6 @@ See the [serialization specification](/serializations.md#oracle-query-transactio
 
 #### Questions/Later
 
-- Should the query format be checked by the miner?
-- The size of this TX is variable (the Query), so fee will vary - also the
-sender will pay for storing the query, thus the TTL will also affect the
-transaction fee.
-- We could include a staged fee that pays more to the oracle if it
-responds earlier.
 - We could include an earliest time that the oracle can answer to
 protect against malicious oracles answering early and collect the fee.
 
@@ -126,7 +94,7 @@ The transaction contains
 - The oracle interaction ID (derived from the query)
 - The response in binary format
 - Response TTL (redundant, but makes the transaction self contained)
-- The transaction fee. It must be greater than or equal to the mimimum transaction fee plus a component proportional to the relative response TTL that is in the query (quotient of the Euclidean division between the number of blocks and 1000, plus 1 if non-zero remainder).
+- The transaction fee.
 
 See the [serialization specification](/serializations.md#oracle-response-transaction).
 
@@ -135,6 +103,4 @@ See the [serialization specification](/serializations.md#oracle-response-transac
 - Should we have an automatic callback defined in the query?
   - Any callback is paid by the oracle.
 - Should we be able to return parts of the fee if the oracle for some
-    reason could not provide an answer.
-- Should there be a generic _DATA TX_ and should the Oracle answer be a
-    special instance of this transaction.
+  reason could not provide an answer.
