@@ -33,7 +33,7 @@ channel data includes:
   the channel. It is initialized when the channel is opened on-chain and can
   later be updated by various transactions. At no point it can become
   negative.
-* Channel `round` - it represents the total amount of channel interactions. It
+* Channel `round` - it represents the total count of channel interactions. It
   is an integer starting with a value of 1 at channel open and it MUST be
   incremented on every state channels' state update. Using it we can compare
   off-chain channel states according to which is preceding which: a bigger
@@ -92,4 +92,71 @@ A full list of on-chain transactions is:
 
 ### Off-chain transactions
 
-TODO
+Once a channel is established, participants can start exchanging off-chain
+transactions. A basic rule would be that if a participant or participants don't
+feel a need for updating on-chain persisted channel object, they should use
+off-chain transactions. They cost no fee, neither they cost any gas. This
+makes them much cheaper than on-chain transactions: except for electricity
+and bandwidth costs, off-chain transactions are free. This makes them suitable
+for various purposes, for example micro payments. Nevertheless off-chain
+transactions are not a silver bullet and certain conditions like computation
+heavy contracts might result in those contracts becoming too expensive to
+force progress on-chain. All off-chain transactions are co-signed as to prove
+participants' mutual agreement upon the change being applied.
+
+#### Off-chain state
+
+Each state channel has its own set of tries for keeping balances, contracts
+and calls. In order to achieve a trustless communication, this set of tries
+is to be kept and updated locally by all participants. Although this is not
+enforced as participants are free to use any approach they want to, there are
+certain expectations for the data when if a channel has to touch the
+blockchain, especially in a situation of a dispute.
+
+There are a couple of important parameters of the channel's state:
+* `state_hash` being the root of the channel off-chain state tries
+* `round` being the total count of channel updates
+
+Those are also persisted in the channel on-chain object as most on-chain
+transactions also update the persisted object with the latest channel data.
+This adds some important guarantees for disabling posting some old state in a
+dispute.
+
+#### Off-chain transaction
+
+Changes in the channel off-chain states are done via off-chain transactions.
+Each one is two-phased: one participant offers the other for a certain change
+to be applied and the other either agrees or refuses. Agreement is proven by
+signing the off-chain transaction itself.
+It consists of:
+* `channel_id` - the ID of the state channel. This is importent if this state
+  update is to be brought on-chain in a dispute
+* `round` - the new round to be, if the off-chain transaction succeeds. This
+  MUST be the incremented previous round.
+* list of updates - those are to be applied in the correct order.
+* `state_hash` - the root of the channel's state trees after the updates had
+  been applied to them
+
+Co-siging such a transaction makes the updated state the new channels'
+off-chain state, the `round` in the transaction is the lates round. If a
+disputed arrises a honest party is to use the very latest channel state.
+
+#### Off-chain updates
+
+A full list of supported updates is:
+* [`transfer`](../serializations.md#channel-off-chain-update-transfer) - when
+  tokens are being moved from one account to another inside the off-chain
+  state
+* [`deposit`](../serializations.md#channel-off-chain-update-deposit) - when
+  tokens are being added to an off-chain account. This modifies the total
+  amount of tokens inside the channel off-chain state.
+* [`withdrawal`](../serializations.md#channel-off-chain-update-withdrawal) -
+  when tokens are being subtracted to an off-chain account. This modifies the
+  total amount of tokens inside the channel off-chain state.
+* [`create a
+  contract`](../serializations.md#channel-off-chain-update-create-contract) -
+  for creating a new smart contract in the channel's off-chain state
+* [`call a
+  contract`](../serializations.md#channel-off-chain-update-call-contract) -
+  for calling an existing smart contract in the channel's off-chain state
+

@@ -498,7 +498,7 @@ transaction has `minimum_depth` confirmations.
 State updates require consent of both parties.
 
 Each update MUST have a strictly increasing round, which SHOULD start
-at `0` on channel initialisation.
+at `1` on channel initialisation.
 
 Parameters:
 
