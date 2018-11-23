@@ -235,19 +235,41 @@ Each (on-chain) transaction has the following fields:
 
 In order to control the size and the number of transactions in a micro block,
 each transaction has a gas. The sum of gas of all the transactions cannot
-exceed the gas limit per micro block, which is 6 400 000 (***TODO***: this
-value is likely to change before the mainnet release).
+exceed the gas limit per micro block, which is 6 000 000.
 
 The gas of a transaction is the sum of:
-* the base transaction gas (15 000 ***TODO***: likely to change)
-* the byte size of a serialized transaction multiplied by the gas per byte
-  (20 ***TODO***: likely to change)
-* the gas that is needed for contract execution (this only applies to the
-  contract create and contract call transactions)
+* the base gas;
+* other gas components, such as gas proportional to the byte size of the
+  transaction or relative TTL, gas needed for contract execution.
 
-***TODO***: the gas of a spend transaction with payload is not supposed to
-have the same gas as e.g. an oracle transaction of the same size. The gas of
-transactions is subject to change before the mainnet release.
+| Transaction            | Base gas       | Other gas components  |
+| ---------------------- | -------------- | ---------------------- |
+| Spend                  | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(SpendTx) * GasPerByte` |
+| Oracle register        | `BaseGas`      | Proportional to oracle TTL argument `TTL` (interpreted as relative), specifically: `ceiling(32000 * RelativeTTL / floor(60 * 24 * 365 / key_block_interval))` and the byte size of the transaction, specifically: `byte_size(OracleRegisterTx) * GasPerByte` |
+| Oracle query           | `BaseGas`      | Proportional to oracle query TTL argument `QTTL` (interpreted as relative), specifically: `ceiling(32000 * RelativeTTL / floor(60 * 24 * 365 / key_block_interval))` and the byte size of the transaction, specifically: `byte_size(OracleQueryTx) * GasPerByte` |
+| Oracle respond         | `BaseGas`      | Proportional to oracle response TTL argument `RTTL` in oracle query (as found in the oracle query in the state, and interpreted as relative), specifically: `ceiling(32000 * RelativeTTL / floor(60 * 24 * 365 / key_block_interval))` and the byte size of the transaction, specifically: `byte_size(OracleRespondTx) * GasPerByte` |
+| Oracle extend          | `BaseGas`      | Proportional to oracle TTL argument `TTL` (interpreted as relative), specifically: `ceiling(32000 * RelativeTTL / floor(60 * 24 * 365 / key_block_interval))` and the byte size of the transaction, specifically: `byte_size(OracleExtendTx) * GasPerByte` |
+| Name preclaim          | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(NamePreclaimTx) * GasPerByte` |
+| Name claim             | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(NameClaimTx) * GasPerByte` |
+| Name update            | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(NameUpdateTx) * GasPerByte` |
+| Name transfer          | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(NameTransferTx) * GasPerByte` |
+| Name revoke            | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(NameRevokeTx) * GasPerByte` |
+| Channel create         | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelCreateTx) * GasPerByte` |
+| Channel deposit        | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelDepositTx) * GasPerByte` |
+| Channel withdraw       | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelWithdrawTx) * GasPerByte` |
+| Channel settle         | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelSettleTx) * GasPerByte` |
+| Channel slash          | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelSlashTx) * GasPerByte` |
+| Channel close solo     | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelCloseSoloTx) * GasPerByte` |
+| Channel close mutual   | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelCloseMutualTx) * GasPerByte` |
+| Channel snapshot solo  | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelSnapshotSoloTx) * GasPerByte` |
+| Channel force progress | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelForceProgressTx) * GasPerByte`. It may also include gas for contract execution. |
+| Channel offchain       |            0   |     0 |
+| Contract create        | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCreateTx) * GasPerByte`. It also includes gas for contract execution. |
+| Contract call          | `30 * BaseGas` | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCallTx) * GasPerByte`. It also includes gas for contract execution. |
+
+`BaseGas` is 15 000.
+
+`GasPerByte` is 20.
 
 ### Proof of Work
 
