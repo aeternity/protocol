@@ -150,8 +150,8 @@ nonce:
 #### Key Blocks
 
 ```
-PROTOCOL_VERSION: 25
-GENESIS_VERSION: 25
+PROTOCOL_VERSION: 1
+GENESIS_VERSION: 1
 ```
 
 - the timestamp of a key block MUST be smaller than `now() + 9m`
@@ -171,8 +171,8 @@ Block [serialization format](../serializations.md#key-block)
 #### Micro Blocks
 
 ```
-PROTOCOL_VERSION: 25
-GENESIS_VERSION: 25
+PROTOCOL_VERSION: 1
+GENESIS_VERSION: 1
 ```
 
 - the timestamp of a micro block MUST be smaller than `now() + 9m`
