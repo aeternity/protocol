@@ -1,5 +1,10 @@
 # State channels detailed description 
 
+This document provides a detailed description of how state channels work.
+While the [README.md](./README.md) answers the question _why_, this document
+focuses on all the _how_-s. The provided State Channels WebSocket API is
+described [here](../api/channels_api_usage.md).
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -9,42 +14,45 @@
 
 ## Overview
 
-State channels are a mechanism to scale transaction's throughput with
+State channels are a mechanism for scaling transaction's throughput with
 processing them only by concerned parties while keeping all the trustlessness
-the blockchain provides out of the box. Since not all channels' transactions
-land on-chain, channels can be cheaper to use and could provide some privacy.
-You can read more about motivation behind channels [here](./README.md). The
-protocol consists of two distinct transaction types:
+the blockchain provides. This is achieved by having distinct transaction types
+for the various actions. The protocol consists of two distinct transaction
+types:
 * [On-chain transactions](./ON-CHAIN.md)
 * [Off-chain transactions](./OFF-CHAIN.md)
+The main difference between the two is that on-chain ones update on-chain
+state persisted for the channel, while the off-chain ones are much cheaper.
+Except for opening and closing sequences, on-chain transactions can land
+on-chain in any order and they can be based on either off-chain transactions
+or on-chain ones.
 
 ### On-chain transactions
 
 In order for a state channel to provide on-chain guarantees and especially the
 dispute mechanism, it MUST comply to certain rules that are enforced on-chain
 with specific transactions.
-A channel can never create coins on-chain. An object is kept in the blockchain
-for every opened state channel that has not yet been closed. It tracks various
-channel-specific data. Some of the off-chain transactions land on-chain and
-then the channel representation is updated accordingly. On-chain persisted
-channel data includes:
+An object is kept in the blockchain for every opened state channel that has
+not yet been closed. It tracks various channel-specific data. Some of the
+off-chain transactions land on-chain and then the channel representation is
+updated accordingly. On-chain persisted channel data includes:
 
 * Total channel amount - it represents the total amount of tokens dedicated to
   the channel. It is initialized when the channel is opened on-chain and can
   later be updated by various transactions. At no point it can become
-  negative.
-* Channel `round` - it represents the total count of channel interactions. It
-  is an integer starting with a value of 1 at channel open and it MUST be
-  incremented on every state channels' state update. Using it we can compare
-  off-chain channel states according to which is preceding which: a bigger
-  round means a newer state.
+  negative. Channels can not create new coins.
+* Channel `round` - it represents the total count of interactions in a
+  specific channel. It is an integer starting with a value of 1 at channel
+  open and it MUST be incremented on every state channels' state update. Using
+  it we can compare off-chain channel states according to which is preceding
+  which: a bigger round means a newer state.
 * Channel's `state_hash` - the root of the state channel's off-chain state
   trees as last provided on-chain.
 
 There are two types of on-chain transactions:
 
 * Co-signed transactions are signed by all state channel participants and thus
-  represent a state of a mutual agreement and can not be disputed.
+  represent a state of a mutual agreement. They can not be disputed.
 * Solo transactions are signed by just one participant and represent one's
   unilateral intention. All but the `channel_settle_tx` provide a co-signed
   state. This state might not be the latest channel's state and thus it can
@@ -106,15 +114,15 @@ participants' mutual agreement upon the change being applied.
 
 #### Off-chain state
 
-Each state channel has its own set of tries for keeping balances, contracts
-and calls. In order to achieve a trustless communication, this set of tries
+Each state channel has its own set of trees for keeping balances, contracts
+and calls. In order to achieve a trustless communication, this set of trees
 is to be kept and updated locally by all participants. Although this is not
 enforced as participants are free to use any approach they want to, there are
-certain expectations for the data when if a channel has to touch the
-blockchain, especially in a situation of a dispute.
+certain expectations for the data if a channel has to touch the blockchain,
+especially in a situation of a dispute.
 
 There are a couple of important parameters of the channel's state:
-* `state_hash` being the root of the channel off-chain state tries
+* `state_hash` being the root of the channel off-chain state trees
 * `round` being the total count of channel updates
 
 Those are also persisted in the channel on-chain object as most on-chain
