@@ -304,7 +304,8 @@ initiating party.
 - `temporary_channel_id`: randomly chosen id unique between the involved parties,
 - `minimum_depth`: number of blocks until an opening transaction should be
   considered final. The `minimum_depth` is set by the responding party, since
-  they will typically be the one providing a service.
+  they will typically be the one providing a service. Note that a `minimum_depth` of 0
+  (zero) will result in a microblock confirmation (see below).
 - `initiator_amount`: amount the initiator is willing to commit
 - `responder_amount`: amount the initiator wants the responder to commit
 - `channel_reserve`: the minimum amount both parties need to maintain. This makes
@@ -324,6 +325,16 @@ different amounts, then that might communicate that it wants these instead.)
 - `lock_period` SHOULD be sufficient time to safely publish transactions to the
   blockchain to stop a cheater
 - `responder_pubkey` MUST be a valid ed25519 pubkey
+
+#### Microblock confirmation
+
+As outlined in [this Bitcoin-NG blog post](http://hackingdistributed.com/2015/11/09/bitcoin-ng-followup/), _an NG microblock offers strictly stronger guarantees than a 0-confirmation in Bitcoin_. In Aeternity, when the minimum-depth confirmation is set to zero, the system
+will still wait until the transaction is seen inside a microblock. This will mean that 
+the transaction has been gossiped, picked up from the mempool and accepted by a miner.
+
+Note that high-value transactions should wait for a number of keyblocks in order to
+guard against forks reorganizing the chain, but a microblock confirmation offers at least
+a receipt of that the transaction was initially accepted.
 
 ### `channel_reestablish`
 
