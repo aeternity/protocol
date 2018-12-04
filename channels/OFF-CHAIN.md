@@ -332,7 +332,7 @@ As outlined in [this Bitcoin-NG blog post](http://hackingdistributed.com/2015/11
 will still wait until the transaction is seen inside a microblock. This will mean that 
 the transaction has been gossiped, picked up from the mempool and accepted by a miner.
 
-Note that high-value transactions will still need to wait for a number of keyblocks, to
+Note that high-value transactions should wait for a number of keyblocks in order to
 guard against forks reorganizing the chain, but a microblock confirmation offers at least
 a receipt of that the transaction was initially accepted.
 
