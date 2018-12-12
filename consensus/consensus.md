@@ -320,11 +320,12 @@ h_header = Blake2b(header)
 
 The default `key` for cuckoo is 80 bytes long. The `nonce` here is expressed
 in little-endian notation, to keep consistent with cuckoo cycle, which does
-the same.
+the same. Note that both the hashed header and the nonce are base64 encoded.
+This means that the hashed header is 44 bytes long, and the nonce is 12 bytes.
 
 ```
 key = h_header || nonce || 0..0
-        256        64      192
+        352        92      196
 ```
 
 
