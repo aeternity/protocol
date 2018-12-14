@@ -745,7 +745,7 @@ Path ::= Id                 // Record field
        | Path '[' Expr ']'  // Nested map key
 
 BinOp ::= '||' | '&&' | '<' | '>' | '=<' | '>=' | '==' | '!='
-        | '::' | '++' | '+' | '-' | '*' | '/' | 'mod'
+        | '::' | '++' | '+' | '-' | '*' | '/' | 'mod' | '^'
         | 'bor' | 'bxor' | 'band' | 'bsr' | bsl'
 UnOp  ::= '-' | '!' | 'bnot'
 ```
@@ -754,7 +754,7 @@ UnOp  ::= '-' | '!' | 'bnot'
 
 | Operators | Type
 | --- | ---
-| `-` `+` `*` `/` `mod` | arithmetic operators
+| `-` `+` `*` `/` `mod` `^` | arithmetic operators
 | `bnot` `band` `bor` `bxor` `bsl` `bsr` | bitwise operators
 | `!` `&&` `\|\|` | logical operators
 | `==` `!=` `<` `>` `=<` `>=` | comparison operators
@@ -767,6 +767,7 @@ In order of highest to lowest precedence.
 | Operators | Associativity
 | --- | ---
 | `!` `bnot` | right
+| `^` | left
 | `*` `/` `mod` `band` | left
 | `-` (unary) | right
 | `+` `-` `bor` `bxor` `bsl` `bsr` | left
