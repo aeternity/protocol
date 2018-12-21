@@ -511,14 +511,27 @@ Naming System (AENS):
 #### Events
 
 Sophia contracts log structured messages to an event log in the resulting
-blockchain transaction. To use events a contract must declare a type `event`,
-and events are then logged using the `event` function:
+blockchain transaction. The event log is quite similar to [Events in
+Solidity](https://solidity.readthedocs.io/en/v0.4.24/contracts.html#events). To
+use events a contract must declare a datatype `event`, and events are then
+logged using the `Chain.event` function:
 
 ```
-event(e : event) : ()
+  datatype event =
+      Event1(indexed int, indexed int, string)
+    | Event2(string, indexed address)
+
+  Chain.event(e : event) : ()
 ```
 
-*NOTE: Events are not yet implemented*
+The event can have 0-3 `indexed` fields, they should have a type that is
+equivalent to a 32-byte word (i.e. `bool`, `int`, or `address`, or an alias for
+such a type). To index a `string` you can use the hash function
+`String.sha3(s)`. The event also has (optional) payload (not indexed), that is
+of type `string`.
+
+*NOTE:* Indexing is not part of the core aeternity node, but the `indexed` tag
+should serve as a hint to any software analysing the contract call transactions.
 
 #### Contract primitives
 
