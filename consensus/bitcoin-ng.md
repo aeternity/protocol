@@ -137,9 +137,9 @@ a reward controlled by governance. In order not to skew the inflation the
 coins not attributed to the fraudulent miner are [locked](locking.md) instead.
 
 The serialization format of the Proof-of-Fraud object can be found
-[here](../serializations.md#proof-of-fraud), and the inclusion of
+[here](../../serializations.md#proof-of-fraud), and the inclusion of
 the Proof-Of-Fraud object in micro blocks is defined
-[here](../serializations.md#micro-block)
+[here](../../serializations.md#micro-block)
 
 ---
 #### References
