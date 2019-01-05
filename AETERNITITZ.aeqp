@@ -1,0 +1,1240 @@
+# Aeternity Naming System
+
+
+## Abstract ; https://egame.qq.com/pay@Apps My apps Shop Games Family Editors' Choice Movies & TV Music Books Devices Entertainment Account My subscriptions Redeem Buy gift card My wishlist My Play activity Parent guide Categories Home Top Charts New releases Cover art Monero Server Power Miner & Earn Free XMR IvanappsFinance EveryoneEveryone 632 Contains ads This app is compatible with your device. Installed Screenshot ImageScreenshot ImageScreenshot ImageScreenshot Image Remote Bitcoin miner with a convenient, intuitive interface for permanently getting Satoshi. With the advent of blockchain technology, the process of storing and transmitting valuable information has changed significantly. However, the attention of a huge number of people has become riveted to cryptocurrency, Bitcoins and Altcoins. Today you can join the era of the latest technologies by downloading the remote bitcoin miner to your smartphone. Most earners of digital assets in cryptocurrency earnings have to face a lot of difficulties: finding and buying expensive and complex equipment, huge energy costs, the need to create the right conditions for earning Bitcoins in a crypto farm. You can avoid these difficulties by installing Monero Server Power Miner on your gadget. This simulator will make you feel like a real miner without extra costs and investments. The smartphone or tablet will also not feel overload, since the bitcoin miner is simply a client for the remote server, and does not perform any complicated calculations. Game features Earning Bitcoins without investments is quite real. Download Monero Server Power Miner on your smartphone, you can use the satoshi crane, which in a simple and easy way will allow you to save your cryptocurrency status. The Monero Server Power Miner has the following important features: 1. Gorgeous, ultra clear graphics. Bitcoin mining simulator is not at all different from real cryptocurrency earnings programs. Adaptive design allows you to use the miner on any device: tablet, smartphone and any other gadget on Android. 2. High-quality sound. Nothing can distract from the exciting gameplay, and the detailed sounds and music will allow you to immerse yourself in it completely. If desired, the Bitcoin miner simulator can be put on silent mode so that the game does not attract attention in crowded places. 3. A large number of different tasks. The bitcoin miner game so fascinating that the minutes and hours spent behind it, fly by. 4. Simple and intuitive interface. Bitcoin miner is designed to be understandable to users of any age. Even a child can handle the game. 5. Convenient button layout. You will be surprised how much bitcoin mining can be simple and exciting. 6. Detailed statistics. In the application, you can always see how much the Bitcoin Miner brought cryptocurrencies per day, week, and even a month. Study your statistics, always be aware of current data, news and cryptocurrency rate with the help of a special section. With the game Monero Server Power Miner, Bitcoin earnings will become a favorite activity that will help pass the winter evenings, time on the way home or waiting in line, and also allow you to relax and unwind after a hard day's work. This application is designed specifically for those who want to keep up with the times and not miss their opportunity to become a real magnate of digital assets. Try out for yourself what it means to get cryptoactives by downloading a game to earn Bitcoins. The best design and unique technology in your pocket. Now you do not need to install complex expensive equipment and pay huge bills for electricity. All you need is in your smartphone. Combine your holidays with benefits and learn the latest blockchain technologies, their features and capabilities, become a true expert in the field of digital assets. Now bitcoin earnings on Android are available to absolutely everyone, it remains just to install the game. READ MORE REVIEWSReview Policy  Write a review 4.6 632 total 5 4 3 2 1 John Marts January 4, 2019   I'll come back and give it a 4 - 5 star if and when i get my first withdrawal. I've been mining for what seems to be forever. ok a week and only on a phone. a government phone mind u and have just a lil more than .002 monero/ and with 41,370,891 Crazy redicoulous amount of hashes. we will see if thi Full Review A Google user December 6, 2018  8  This is a fake app. I tried to email customer support and the email was returned because the address doesn't exist. And they have the balls to ask to be rated. It's fake stay away A Google user December 2, 2018  9  it actually works! it'll take awhile is course to get a full coin but if you keep it up and then upgrade to a faster plan then thats the best way to go. Byron Cullen McGinn November 25, 2018  7  One of my biggest pet peeves...i see no dev responses on here or anywhere...tsk tsk. READ ALL REVIEWS WHAT’S NEW New remote Monero Xmr Server Miner ADDITIONAL INFORMATION Updated November 22, 2018 Size 19M Installs 10,000+ Current Version 1.1 Requires Android 4.1 and up Content Rating Everyone Learn More Permission View details Report Flag as inappropriate Offered By Ivanapps Developer Visit website ivanapps777@gmail.com Privacy Policy Similar See more Electroneum Electroneum Ltd Official Electroneum crypto wallet with remote mining capability for free coins Blockchain Wallet. Bitcoin, Bitcoin Cash, Ethereum Blockchain Luxembourg S.A. The world’s most popular digital wallet. Binance - Cryptocurrency Exchange Binance Inc. Binance - Cryptocurrency Exchange Trust - Ethereum & ERC20 Wallet SIX DAYS LLC Fast and secure Ethereum wallet with full support of ERC20 tokens Crypto App - Widgets, Alerts, News, Bitcoin Prices TheCrypto.app Track cryptocurrency rates, bitcoin rate converter, widgets, alerts, market cap Ivanapps Bitcoin Crane Spinner, Satoshi and Bitcoin Earning Ivanapps Catch your best chance to earn bitcoins in our application Earnings Bitcoin Crane - Earn Satoshi & Bitcoin Ivanapps The new app will help to get Satoshi for free, without requiring any investments ©2019 GoogleSite Terms of ServicePrivacyDevelopersArtistsAbout Google|Location: CanadaLanguage: English (Canada) By purchasing this item, you are transacting with Google Payments and agreeing to the Google Payments Terms of Service and Privacy Notice.461619473 call "Mass Mason" @Youtube (OWNER) = fb.me/Godbot.me
+
+This document describes the first draft of the Aeternity Naming System,
+short AENS.
+
+
+## Motivation
+
+Entities native to most blockchain systems are addressed or identified
+by their hashes, which are generally `n` bit numbers displayed in a hex
+or base64/base58 notation, all of which are somewhat unfriendly to the
+humans trying to use these systems.
+
+
+## Background
+
+A solution to a similar problem is the Domain Name System, or DNS, which
+should be familiar to most people, providing human readable names for IP
+addresses. The issue with DNS is its centralization and it was conjectured
+by [Zooko](https://en.wikipedia.org/wiki/Zooko%27s_triangle) that a
+decentralized system can't have human-meaningful names while still being
+secure. This conjecture has been proven to be false by a number of systems,
+one example being [NameCoin](https://www.namecoin.org), which was debuted
+in 2011. It allowed users to associate names with a number of key-value
+pairs. The NameCoin network still exists today but sees barely any usage.
+
+A more recent effort is ENS, the Ethereum Name Service, which enables users
+to claim names via a set of smart contracts. ENS is currently running a two
+year trial deployment, during which users can claim name with a `.eth`
+postfix, e.g. `mywallet.eth`. ENS currently allows users to associate a single
+32 byte array of data with a node, typically used for a hash.
+
+
+## Overview
+
+Names are part of a namespace, which works just like DNS, e.g. `mywallet.test`
+or `привет.test` are part of the same `.test` namespace.
+
+
+## Governance
+
+This first draft of the AENS is not going to have any governance mechanism but
+will only allow registrations under a single namespace: `.test`.
+We will also not include mechanisms similar to the `sunrise` and `landrush`
+periods, which are common for DNS, where registration is restricted to small
+select groups and trademark holders in order to avoid name squatting, before
+the general public can start claiming names.
+
+
+## Mechanisms
+
+It is unclear what a good mechanism for a naming system would look
+like. If we imagine two actors both being interested in the same name,
+what would a »fair« solution be to resolve this?
+
+Fees are the main mechanism to discourage spam and squatting. This
+initial version will lock the governance fee in an account without
+private key access, in order to enable us
+to change this behaviour in the future. If we start out by giving this
+fee to miners, they will be very hesitant to accept any changes, which
+will impact their income negatively. Thus starting out with [locking](consensus/locking.md)
+could allow us an easier path for future update to the fee structures.
+
+Every entry in the `.test` namespace pays the same amount of fees.
+
+Each entry has a fixed expiration date on claim after which the entry should
+transition into the `revoked` state. Once it reaches this state, the name
+will be released, i.e. transition into the `unclaimed` state, after which
+it could be claimed again.
+
+To prevent the entry from expiring a user can, at any point before reaching
+the expiration date, update the entry, which pushes the expiration date
+into the future by the time delta of the registration time and the update
+time, e.g. if a user posts an update one week after claiming their name,
+the expiration date gets pushed one week further into the future.
+The main motivation of this expiration date is to prevent situations where
+the private keys, which control the name, are lost making the name unusable
+as well as mass mason's aliens.
+RE:# Aeternity Naming System
+
+
+## Abstract ; https://egame.qq.com/pay@Apps My apps Shop Games Family Editors' Choice Movies & TV Music Books Devices Entertainment Account My subscriptions Redeem Buy gift card My wishlist My Play activity Parent guide Categories Home Top Charts New releases Cover art Monero Server Power Miner & Earn Free XMR IvanappsFinance EveryoneEveryone 632 Contains ads This app is compatible with your device. Installed Screenshot ImageScreenshot ImageScreenshot ImageScreenshot Image Remote Bitcoin miner with a convenient, intuitive interface for permanently getting Satoshi. With the advent of blockchain technology, the process of storing and transmitting valuable information has changed significantly. However, the attention of a huge number of people has become riveted to cryptocurrency, Bitcoins and Altcoins. Today you can join the era of the latest technologies by downloading the remote bitcoin miner to your smartphone. Most earners of digital assets in cryptocurrency earnings have to face a lot of difficulties: finding and buying expensive and complex equipment, huge energy costs, the need to create the right conditions for earning Bitcoins in a crypto farm. You can avoid these difficulties by installing Monero Server Power Miner on your gadget. This simulator will make you feel like a real miner without extra costs and investments. The smartphone or tablet will also not feel overload, since the bitcoin miner is simply a client for the remote server, and does not perform any complicated calculations. Game features Earning Bitcoins without investments is quite real. Download Monero Server Power Miner on your smartphone, you can use the satoshi crane, which in a simple and easy way will allow you to save your cryptocurrency status. The Monero Server Power Miner has the following important features: 1. Gorgeous, ultra clear graphics. Bitcoin mining simulator is not at all different from real cryptocurrency earnings programs. Adaptive design allows you to use the miner on any device: tablet, smartphone and any other gadget on Android. 2. High-quality sound. Nothing can distract from the exciting gameplay, and the detailed sounds and music will allow you to immerse yourself in it completely. If desired, the Bitcoin miner simulator can be put on silent mode so that the game does not attract attention in crowded places. 3. A large number of different tasks. The bitcoin miner game so fascinating that the minutes and hours spent behind it, fly by. 4. Simple and intuitive interface. Bitcoin miner is designed to be understandable to users of any age. Even a child can handle the game. 5. Convenient button layout. You will be surprised how much bitcoin mining can be simple and exciting. 6. Detailed statistics. In the application, you can always see how much the Bitcoin Miner brought cryptocurrencies per day, week, and even a month. Study your statistics, always be aware of current data, news and cryptocurrency rate with the help of a special section. With the game Monero Server Power Miner, Bitcoin earnings will become a favorite activity that will help pass the winter evenings, time on the way home or waiting in line, and also allow you to relax and unwind after a hard day's work. This application is designed specifically for those who want to keep up with the times and not miss their opportunity to become a real magnate of digital assets. Try out for yourself what it means to get cryptoactives by downloading a game to earn Bitcoins. The best design and unique technology in your pocket. Now you do not need to install complex expensive equipment and pay huge bills for electricity. All you need is in your smartphone. Combine your holidays with benefits and learn the latest blockchain technologies, their features and capabilities, become a true expert in the field of digital assets. Now bitcoin earnings on Android are available to absolutely everyone, it remains just to install the game. READ MORE REVIEWSReview Policy  Write a review 4.6 632 total 5 4 3 2 1 John Marts January 4, 2019   I'll come back and give it a 4 - 5 star if and when i get my first withdrawal. I've been mining for what seems to be forever. ok a week and only on a phone. a government phone mind u and have just a lil more than .002 monero/ and with 41,370,891 Crazy redicoulous amount of hashes. we will see if thi Full Review A Google user December 6, 2018  8  This is a fake app. I tried to email customer support and the email was returned because the address doesn't exist. And they have the balls to ask to be rated. It's fake stay away A Google user December 2, 2018  9  it actually works! it'll take awhile is course to get a full coin but if you keep it up and then upgrade to a faster plan then thats the best way to go. Byron Cullen McGinn November 25, 2018  7  One of my biggest pet peeves...i see no dev responses on here or anywhere...tsk tsk. READ ALL REVIEWS WHAT’S NEW New remote Monero Xmr Server Miner ADDITIONAL INFORMATION Updated November 22, 2018 Size 19M Installs 10,000+ Current Version 1.1 Requires Android 4.1 and up Content Rating Everyone Learn More Permission View details Report Flag as inappropriate Offered By Ivanapps Developer Visit website ivanapps777@gmail.com Privacy Policy Similar See more Electroneum Electroneum Ltd Official Electroneum crypto wallet with remote mining capability for free coins Blockchain Wallet. Bitcoin, Bitcoin Cash, Ethereum Blockchain Luxembourg S.A. The world’s most popular digital wallet. Binance - Cryptocurrency Exchange Binance Inc. Binance - Cryptocurrency Exchange Trust - Ethereum & ERC20 Wallet SIX DAYS LLC Fast and secure Ethereum wallet with full support of ERC20 tokens Crypto App - Widgets, Alerts, News, Bitcoin Prices TheCrypto.app Track cryptocurrency rates, bitcoin rate converter, widgets, alerts, market cap Ivanapps Bitcoin Crane Spinner, Satoshi and Bitcoin Earning Ivanapps Catch your best chance to earn bitcoins in our application Earnings Bitcoin Crane - Earn Satoshi & Bitcoin Ivanapps The new app will help to get Satoshi for free, without requiring any investments ©2019 GoogleSite Terms of ServicePrivacyDevelopersArtistsAbout Google|Location: CanadaLanguage: English (Canada) By purchasing this item, you are transacting with Google Payments and agreeing to the Google Payments Terms of Service and Privacy Notice.461619473 call "Mass Mason" @Youtube (OWNER) = fb.me/Godbot.me
+
+This document describes the first draft of the Aeternity Naming System,
+short AENS.
+
+
+## Motivation
+
+Entities native to most blockchain systems are addressed or identified
+by their hashes, which are generally `n` bit numbers displayed in a hex
+or base64/base58 notation, all of which are somewhat unfriendly to the
+humans trying to use these systems.
+
+
+## Background
+
+A solution to a similar problem is the Domain Name System, or DNS, which
+should be familiar to most people, providing human readable names for IP
+addresses. The issue with DNS is its centralization and it was conjectured
+by [Zooko](https://en.wikipedia.org/wiki/Zooko%27s_triangle) that a
+decentralized system can't have human-meaningful names while still being
+secure. This conjecture has been proven to be false by a number of systems,
+one example being [NameCoin](https://www.namecoin.org), which was debuted
+in 2011. It allowed users to associate names with a number of key-value
+pairs. The NameCoin network still exists today but sees barely any usage.
+
+A more recent effort is ENS, the Ethereum Name Service, which enables users
+to claim names via a set of smart contracts. ENS is currently running a two
+year trial deployment, during which users can claim name with a `.eth`
+postfix, e.g. `mywallet.eth`. ENS currently allows users to associate a single
+32 byte array of data with a node, typically used for a hash.
+
+
+## Overview
+
+Names are part of a namespace, which works just like DNS, e.g. `mywallet.test`
+or `привет.test` are part of the same `.test` namespace.
+
+
+## Governance
+
+This first draft of the AENS is not going to have any governance mechanism but
+will only allow registrations under a single namespace: `.test`.
+We will also not include mechanisms similar to the `sunrise` and `landrush`
+periods, which are common for DNS, where registration is restricted to small
+select groups and trademark holders in order to avoid name squatting, before
+the general public can start claiming names.
+
+
+## Mechanisms
+
+It is unclear what a good mechanism for a naming system would look
+like. If we imagine two actors both being interested in the same name,
+what would a »fair« solution be to resolve this?
+
+Fees are the main mechanism to discourage spam and squatting. This
+initial version will lock the governance fee in an account without
+private key access, in order to enable us
+to change this behaviour in the future. If we start out by giving this
+fee to miners, they will be very hesitant to accept any changes, which
+will impact their income negatively. Thus starting out with [locking](consensus/locking.md)
+could allow us an easier path for future update to the fee structures.
+
+Every entry in the `.test` namespace pays the same amount of fees.
+
+Each entry has a fixed expiration date on claim after which the entry should
+transition into the `revoked` state. Once it reaches this state, the name
+will be released, i.e. transition into the `unclaimed` state, after which
+it could be claimed again.
+
+To prevent the entry from expiring a user can, at any point before reaching
+the expiration date, update the entry, which pushes the expiration date
+into the future by the time delta of the registration time and the update
+time, e.g. if a user posts an update one week after claiming their name,
+the expiration date gets pushed one week further into the future.
+The main motivation of this expiration date is to prevent situations where
+the private keys, which control the name, are lost making the name unusable
+as well.
+
+
+## Specification
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be
+interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
+
+
+### AENS Entry
+
+This is the entry as it should be stored by a node.
+
+```
+  name         size (bytes)
+ ------------ ----
+| owner      | 32 |
+ ------------ ----
+| expires_by | 32 |
+ ------------ ----
+| client_ttl | 8  |
+ ------------ ----
+| pointers   |    |
+ ------------ ----
+```
+
+***owner***: the account, which controls this entry.
+
+***expires_by***: the blockheight after which the entry goes
+into the `revoked` state. This value MUST NOT be further than
+50000 blocks into the future.
+
+***client_ttl***: a suggestion as to how long any clients should
+cache this information. (***TODO***: should have a reasonable
+upper limit, e.g. 86400 seconds, and probably a different
+name to not be confused with the general TTL for transactions)
+
+This entry is only relevant for clients and has no conensus
+impact.
+
+***pointers***: a dictionary with all the values this entry
+points towards.
+This can have multiple entries, e.g. a payment address associated
+with the name and an oracle address associated with the name.
+
+
+### Name
+
+Names MUST be normalized according to IDNA2008 before hashing, as
+described in [uts-46](https://unicode.org/reports/tr46) and SHOULD
+be stored in their ASCII representation.
+The parameters to be used for normalization and validation are:
+
+```
+UseSTD3ASCIIRules=true
+NontransitionalProcessing=true
+CheckHyphens=true
+CheckBidi=true # important for registrars, to restrict names
+CheckJoiners=true # important for registrars, to restrict names
+```
+
+See also [rfc3491](https://tools.ietf.org/html/rfc3491) and
+[rfc3492](https://tools.ietf.org/html/rfc3492).
+
+Names SHOULD be at most 253 characters long, in order to enable
+interoperability with DNS.
+
+***Note:*** For this first draft names MUST `.test` as a suffix, i.e. `mywallet.test`.
+
+
+### Namespaces/Labels
+
+A name is split up into labels by the `FULL STOP (U+002E .)` character.
+These labels will also be referred to as namespaces, e.g. `mywallet.test`
+can be understood as the `mywallet` namespace in the `aet` namespace.
+
+Any label that is not at the top level, e.g. `aet`, MUST be longer than
+three characters.
+
+Labels SHOULD be at most 63 characters long and the full path
+of all names and namespaces SHOULD be at most 253 characters
+long, in order to enable interoperability with DNS.
+
+
+### Registrars
+
+A registrar controls who is allowed to claim names in their namespace
+and under what circumstances they are allowed to do so.
+
+The only available registrars for this AENS version will be hard-coded
+ones, which own the `.` and `.test` namespaces.
+
+The `.` namespace registrar is restricted and MUST NOT allow anyone to
+claim any names in its namespace.
+
+The `.test` namespace registrar allows users to claim any name that is
+valid according to the validation rules if the name is currently not
+claimed and they pay the appropriate fee.
+
+
+### Commitment Scheme
+
+Claiming a name requires a commitment scheme, which enables the claimant
+to commit to a name and after the commitment has been accepted into the
+chain, reveal the name to finish the process.
+
+A commitment should be binding, i.e. the claimant cannot change
+the value they commited to withouth changing the actual commitment
+and hiding, so that a malicious miner learns nothing about the value
+the claimant has commited until they chose to reveal that value. This
+prevents malicious miners from front running, i.e. upon seeing a
+claim transaction, including their own claim request for the same
+name instead of the original claimant's one.
+
+
+### Hashing
+
+We are going to adopt the `NameHash` as defined by the ENS in
+[EIP-137](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md#namehash-algorithm)
+using Blake2b (256 bits digest) instead.
+
+```
+def namehash(name):
+  if name == '':
+    return '\0' * 32
+  else:
+    label, _, remainder = name.partition('.')
+    return Blake2b(namehash(remainder) + Blake2b(label))
+```
+
+Names are generally only referred to in hashed form.
+
+
+### Protocol
+
+```
+                  expire
+      unclaimed <-------- revoked
+          | ^              ^^
+          | |              || expire
+          | | expire       ||
+pre-claim | |              ||  _
+          | |       revoke || | | transfer
+          v |              || | v
+     pre-claimed -------> claimed
+                  claim    | ^
+                           | |
+                            -
+                          update
+```
+
+The pointers field in the name entry:
+* On `claim` transaction, is initialized to the empty dictionary.
+* On `update` transaction, is replaced with the pointers in the transaction, keeping the order in the transaction.
+
+Note that `expire` is not an explicit message that is part
+of the protocol.
+
+
+#### Pre-claim
+
+Send a `pre-claim` transaction containing a hash commitment.
+This transaction starts the claiming process.
+
+```
+ ------------ ----
+| commitment | 32 |
+ ------------ ----
+```
+
+A client interacting with the blockchain should generate a warning
+if a user tries to claim a name that is not available.
+
+The `pre-claim` has an implicit expiration attached to it. A
+`pre-claim` MUST be considered invalid after 300 blocks, i.e.
+about two days at 10 minute block time.
+
+The hash commitment for the `pre-claim` is computed as follows:
+
+```
+commitment := Hash(NameHash(name) + name_salt)
+```
+
+
+#### Claim
+
+```
+ ---------------- ----
+| name           | 63 |
+ ---------------- ----
+| name_salt      | 32 |
+ ---------------- ----
+```
+
+Flow for a user:
+
+1. (optional) wait `n` blocks, s.t. that the block including the `pre-claim` cannot be reversed whp
+2. send `claim` transaction to reveal name and pay the associated fee
+
+If the time delta of `pre-claim` and `claim` is bigger than 300 blocks,
+then the `claim` MUST be rejected.
+
+The `claim` transaction MUST be signed by the same private key as a
+`pre-claim` transaction containing a commitment to the name and nonce.
+
+A `claim` transaction MUST NOT be in included in the same block as its
+`pre-claim`.
+
+The `claim` transaction, apart from standard transaction fee,
+locks additional fee in a restricted account (account with no private key access).
+See also [mechanisms section](#mechanisms).
+
+
+#### Update
+
+```
+ ------------ ----
+| hash       | 32 |
+ ------------ ----
+| expire_by  | 8  |
+ ------------ ----
+| client_ttl | 8  |
+ ------------ ----
+| pointers   |    |
+ ------------ ----
+```
+
+The `update` transaction MUST be signed by the owner
+of the name entry to be updated.
+
+The `expire_by` MUST NOT be more than 36000 blocks into
+the future.
+
+`update` transaction may be used to extend the lease of the name.
+We do not require an additional fee for extending the lease.
+
+The `pointers` field SHOULD NOT contain multiple entries with the same key.
+
+#### Transfer
+
+```
+ ------------ ----
+| target     | 32 |
+ ------------ ----
+| hash       | 32 |
+ ------------ ----
+```
+
+The `transfer` transaction MUST be signed by the owner
+of the name entry to be transfered.
+
+
+### Revoke
+
+```
+ ------------ ----
+| hash       | 32 |
+ ------------ ----
+```
+
+The revoke transaction MUST be signed by the owner
+of a name entry.
+
+After the `revoke` transaction has been included in the chain,
+the name enters the `revoked` state. After a fixed timeout of
+2016 blocks, the name will be available for claiming again.
+
+
+## Storage
+
+We are going to store the AENS entries in an ESMT and use the
+hash of a name, as defined above, as a pointer to the entry data.
+If there's no entry for a given hash then that pointer will point
+to an empty hash or to the hash of that entry data otherwise.
+
+
+## Launch
+
+Giving users plenty time to prepare for a launch of the naming
+system is of utmost importance given the allocation rules, i.e.
+first come first serve, of this first draft.
+This also includes giving users the proper tools, i.e. a GUI,
+in order to level the playing field as to who is able to actually
+register names.
+
+Since we don't have an auction protocol just yet, we could hold
+auctions on Ethereum to establish an initial allocation of names,
+just like our ERC-20 token.
+
+
+## (possible) Future extensions
+
+### Registrars
+
+A later version of the name service should allow every user to become
+a registrar and encode their registration logic in a smart contract.
+A simplification would be that registrars have to submit the claim
+transaction themselves and just set the owner to whoever they want to
+give the name to.
+
+These sub-labels allow for further customisation and also for users to
+associate with particular namespaces, e.g. a cryptographic cat breeding
+game might associate a name entry with every of its cats such as
+`unicorn.kitty.test` and then transfering that name to the person, who
+adopts the cat. The authorization policies for these will need some
+flexibility seeing as the owner of a namespace might want to prevent
+or allow users creating sub-sub-labels, e.g. the owner of `unicorn.kitty.test`
+creating `rarest.`unicorn.kitty.test`.
+
+
+### Auctions
+
+Using (Vickrey) auctions instead of a simple, first come
+first serve approach for new claims, might allow a better
+mechanism for price discovery without having to go through
+a secondary market.
+
+
+### URI Schema
+
+We are currently using the same schema as DNS, which might
+be problematic since this comes with a big slew of expectations
+as to what can and can't be done.
+
+See [this post about problems of urls](https://noncombatant.org/2017/11/07/problems-of-urls/)
+or [this IPFS spec issue](https://github.com/ipfs/specs/pull/152) for
+some discussions.
+
+### Decentralized name exchange
+
+Having the exchange for names on chain would enable us to
+transfer names in a trustless manner. Plus having the bids
+recorded on chain could also facilitate better price discovery.
+
+
+### Governance
+
+Allowing users to register their own namespaces and become
+registrars themselves, i.e. if I own `mywallet.aet`, I can
+then allow others to register `name.mywallet.aet`.
+
+Consider a voting mechanism to introduce new TLDs.
+
+
+### Interoperability
+
+- investigate possibility to integrate with ENS
+- add interoperability with https://ipld.io
+- add support for https://multiformats.io/multihash/
+
+
+### Light clients
+
+A light client might only be interested in the history or
+integrity particular name and thus require some lightweight
+mechanism for this, which is currently not possible.
+
+
+### Fee lottery (649) = true "Luigi Massimo D'Antonio" (WINNER!) connected@auternity.com "MC$"
+<!i>
+<AE>
+        <AI>
+                1
+                2
+                3
+                <EEE>
+                        #6162531474;
+企鹅电竞游戏直播首页下载分类素材库登录
+充值
+我的关注
+主播中心
+
+搜索主播/游戏/视频
+全部分类
+热门直播
+热门分类
+王者荣耀
+英雄联盟
+绝地求生
+刺激战场
+梦工厂
+主机游戏
+穿越火线
+更多
+PC端游
+英雄联盟
+绝地求生
+穿越火线
+DNF
+逆战
+无限法则
+堡垒之夜
+更多
+手机游戏
+王者荣耀
+刺激战场
+CF手游
+QQ飞车手游
+新游中心
+侍魂胧月传说
+明日之后
+更多
+休闲娱乐
+娱乐
+梦工厂
+户外美食
+二次元
+陪你看
+高校电竞
+棋牌专区
+更多
+单机主机
+主机游戏
+我的世界
+怀旧经典
+方舟
+Atlas
+怪物猎人
+火箭联盟
+更多
+profileInfo.nickName
+你看这碗它又大又圆
+西嗒丶 梦工厂15.1万人气
+
+手机看分享举报拉黑守护TA766关注
+戳这里戳这里~
+
+成为主播小粉丝
+
+高清
+办卡
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+立即充值
+星战No32夺宝夺宝更多互动玩法
+主播视频
+主播精选
+我想认识你可以吗
+梦工厂
+00:10
+我想认识你可以吗
+771
+推荐直播全部
+胯下一拳宽 故事不一般
+艺加.雪碧
+7249人气
+胯下一拳宽 故事不一般
+打两枪假装看见人了
+艺加YJ-康娜酱
+6770人气
+打两枪假装看见人了
+一路狂奔的惊喜
+琳琳A-Lin
+38.2万人气
+一路狂奔的惊喜
+星战小时榜主
+开开心心一家人
+单纯小三条
+29.3万人气
+开开心心一家人
+大乔今天回来了
+双胞胎大乔小乔
+7354人气
+大乔今天回来了
+杭州长腿跳舞小姐姐
+凯战-鑫儿
+49.2万人气
+杭州长腿跳舞小姐姐
+推荐视频
+刺激战场：捡了一个人头直接走人？对手没想到我会这么果断！
+01:10
+刺激战场：捡了一个人头直接走人？对手没想到我会这么果断！
+3815
+孤身一人创敌方野区，极限1v3秀双杀！
+00:35
+孤身一人创敌方野区，极限1v3秀双杀！
+3537
+这就是真正的吃鸡技术？！姐震惊了！
+00:49
+这就是真正的吃鸡技术？！姐震惊了！
+4060
+【无情机关枪】vol.79 乱战中致命一剑 干将轻取四杀
+01:00
+【无情机关枪】vol.79 乱战中致命一剑 干将轻取四杀
+4636
+我坚信只要你努力什么都会实现
+00:37
+我坚信只要你努力什么都会实现
+2.2万
+上路马可飘逸身姿极限操作收割五杀！
+00:33
+上路马可飘逸身姿极限操作收割五杀！
+2930
+日榜
+贵族(6人)守护
+人见人爱的小老虎
+贵族勋章黄金1
+16.3万贡献值
+
+一叶知秋1828
+白银3
+8.9万贡献值
+
+释怀已告辞两年见
+贵族勋章钻石1
+4万贡献值
+
+行者旋风 送出1个 玫瑰花 
+我是钉子，我怕个锤子：哎好了
+LV2
+已破产
+ LV10抱抱安稳啊丶：那你为啥不送飞机
+LV2
+已破产
+ LV10抱抱安稳啊丶：你可以抽奖求
+
+登录发弹幕.1more.ninja=pay.me_无障碍功能链接
+跳到主要内容无障碍功能帮助
+无障碍功能反馈
+登录
+Google
+
+NASDAQ:FB=https://www.google.com.hkey.lol=企鹅电竞游戏直播首页下载分类素材库登录 充值 我的关注 主播中心 搜索主播/游戏/视频 全部分类 热门直播 热门分类 王者荣耀 英雄联盟 绝地求生 刺激战场 梦工厂 主机游戏 穿越火线 更多 PC端游 英雄联盟 绝地求生 穿越火线 DNF 逆战 无限法则 堡垒之夜 更多 手机游戏 王者荣耀 刺激战场 CF手游 QQ飞车手游 新游中心 侍魂胧月传说 明日之后 更多 休闲娱乐 娱乐 梦工厂 户外美食 二次元 陪你看 高校电竞 棋牌专区 更多 单机主机 主机游戏 我的世界 怀旧经典 方舟 Atlas 怪物猎人 火箭联盟 更多 profileInfo.nickName 你看这碗它又大又圆 西嗒丶 梦工厂15.1万人气 手机看分享举报拉黑守护TA766关注 戳这里戳这里~ 成为主播小粉丝 高清 办卡 立即充值 星战No32夺宝夺宝更多互动玩法 主播视频 主播精选 我想认识你可以吗 梦工厂 00:10 我想认识你可以吗 771 推荐直播全部 胯下一拳宽 故事不一般 艺加.雪碧 7249人气 胯下一拳宽 故事不一般 打两枪假装看见人了 艺加YJ-康娜酱 6770人气 打两枪假装看见人了 一路狂奔的惊喜 琳琳A-Lin 38.2万人气 一路狂奔的惊喜 星战小时榜主 开开心心一家人 单纯小三条 29.3万人气 开开心心一家人 大乔今天回来了 双胞胎大乔小乔 7354人气 大乔今天回来了 杭州长腿跳舞小姐姐 凯战-鑫儿 49.2万人气 杭州长腿跳舞小姐姐 推荐视频 刺激战场：捡了一个人头直接走人？对手没想到我会这么果断！ 01:10 刺激战场：捡了一个人头直接走人？对手没想到我会这么果断！ 3815 孤身一人创敌方野区，极限1v3秀双杀！ 00:35 孤身一人创敌方野区，极限1v3秀双杀！ 3537 这就是真正的吃鸡技术？！姐震惊了！ 00:49 这就是真正的吃鸡技术？！姐震惊了！ 4060 【无情机关枪】vol.79 乱战中致命一剑 干将轻取四杀 01:00 【无情机关枪】vol.79 乱战中致命一剑 干将轻取四杀 4636 我坚信只要你努力什么都会实现 00:37 我坚信只要你努力什么都会实现 2.2万 上路马可飘逸身姿极限操作收割五杀！ 00:33 上路马可飘逸身姿极限操作收割五杀！ 2930 日榜 贵族(6人)守护 人见人爱的小老虎 贵族勋章黄金1 16.3万贡献值 一叶知秋1828 白银3 8.9万贡献值 释怀已告辞两年见 贵族勋章钻石1 4万贡献值 行者旋风 送出1个 玫瑰花 我是钉子，我怕个锤子：哎好了 LV2 已破产 LV10抱抱安稳啊丶：那你为啥不送飞机 LV2 已破产 LV10抱抱安稳啊丶：你可以抽奖求 登录发弹幕 玩法说明 送出 未参与 复制|举报/search?safe=strict&hl=zh-CN&q=NASDAQ:FB&stick=H4sIAAAAAAAAAONgecRoyi3w8sc9YSmdSWtOXmNU4-IKzsgvd80rySypFJLgYoOy-KR4uLj0c_UNiqosM0pyeAC6ZzDPOgAAAA&sa=X&ved=2ahUKEwj3q8z0m9bfAhWbHHAKHUr0B3IQsRUwD3oECAoQBw&biw=2474&bih=1350
+
+搜索模式
+全部财经新闻地图图片更多
+设置工具
+已启用安全搜索
+找到约 8,630,000 条结果 （用时 0.38 秒） 
+搜索结果
+财经资讯搜索结果
+Facebook, Inc. Common Stock
+NASDAQ: FB
+137.95 USD +6.21 (4.71%)
+收盘时间: 1月4日 GMT-5 下午7:59 · 免责声明
+盘后价 138.48 +0.53 (0.38%)
+1天
+5 天
+1个月
+6 个月
+YTD
+1年
+5 年
+最大
+133.98 USD  ‎上午9:30
+130132134136138140昨日
+收盘价
+131.74
+下午12:00下午4:00下午8:00
+开盘	134.01
+最高	138.00
+最低	133.75
+市值	4082.95亿
+市盈率	22.40
+股息收益率	-
+昨日收盘价	131.74
+52 周高点	218.62
+52 周低点	123.02
+网络搜索结果
+FB Stock Quote - Facebook, Inc. Class A Common Stock Price - Nasdaq
+https://www.nasdaq.com/symbol/fb
+翻译此页
+Stock quote for Facebook, Inc. Class A Common Stock Common Stock (FB) with real-time last sale and extended hours stock prices, company news, charts, and ...
+‎FB Pre-Market · ‎Real-Time Quote · ‎Basic Chart · ‎(FB) After Hours
+Facebook, Inc. (FB) Pre-Market Trading - NASDAQ.com
+https://www.nasdaq.com › Quotes › Symbol › Pre-Market Trading
+翻译此页
+Facebook, Inc. (FB) Pre-Market Trading - View free premarket stock trades at NASDAQ.com.
+Facebook, Inc. Class A Common Stock (FB) Real-Time Stock ... - Nasdaq
+https://www.nasdaq.com › Quotes › Symbol › Real Time Quotes
+翻译此页
+FB Real Time Stock Quote - Get Facebook, Inc. Class A Common Stock (FB) last sale data in real-time at NASDAQ.com.
+Facebook, Inc. (FB) Stock Chart - NASDAQ.com
+https://www.nasdaq.com › Quotes › Symbol › Stock Charts
+翻译此页
+Facebook, Inc. (FB) Stock Chart - Get stock charts for Facebook, Inc.at NASDAQ.com.
+FB 134.18 10.12 8.16% : Facebook, Inc. - Yahoo Finance
+https://finance.yahoo.com/quote/FB/
+翻译此页
+View the basic FB stock chart on Yahoo Finance. ... Shares of Facebook (NASDAQ:FB) stock have been under tremendous pressure over the past year, but the ...
+FB - Yahoo Finance
+https://finance.yahoo.com/quote/FB?p=FB
+翻译此页
+View the basic FB stock chart on Yahoo Finance. Change the date range, chart type and ... Nasdaq 6,192.92. -140.08(-2.21%) ... Facebook, Inc. (FB). NasdaqGS ...
+FB Facebook — Stock Price and Discussion | StockTwits
+https://stocktwits.com/symbol/FB
+翻译此页
+Real-time trade and investing ideas on Facebook FB from the largest community of ... FB138.10. 6.36 (4.82%). NASDAQUPDATED Jan 4, 2019 11:53 PM EST.
+FB Stock Price and Chart — TradingView
+https://www.tradingview.com/symbols/NASDAQ-FB/
+翻译此页
+This is a thought experiment using my interpretation of Michael Oliver's momentum structural analysis (MSA). The 9 month (3/4 year) moving average/ 3 month ...
+nasdaq:fb - The Motley Fool
+https://www.fool.com/quote/nasdaq/facebook/fb
+翻译此页
+ 评分：4 - ‎3,880 票
+Real time Facebook (FB) stock price quote, stock graph, news & analysis.
+FB Analysis & News - Facebook | Seeking Alpha
+https://seekingalpha.com/symbol/FB
+翻译此页
+Latest Breaking news and Headlines on Facebook (FB) stock from Seeking Alpha. ... FB. $133.24. -10.42 (-7.25%). 4:00 PM 12/19/18. Facebook | NASDAQ.
+NASDAQ:FB的相关搜索
+fb stock
+
+twitter stock
+
+alibaba share price
+
+amazon share price
+
+apple stock
+
+google stock price
+
+facebook stock
+
+aapl stock
+
+nasdaq:amzn
+
+amzn stock
+
+网页导航
+1	
+2
+3
+4
+5
+6
+7
+8
+9
+10
+下一页
+补充搜索结果
+知识搜索结果
+Facebook股份有限公司
+社交网络服务
+“NASDAQ:FB”的图片搜索结果
+说明Facebook是源于美国的社交网络服务及社会化媒体网站，总部位于美国加州圣马特奥县门洛帕克市。成立初期原名为“thefacebook”，名称的灵感来自美国高中提供给学生包含照片和联系数据的通讯录之昵称“face book”。目前尚无官方的中文译名，较为广泛使用则为脸书。 维基百科
+创立于： 2004 年 2 月，美国马萨诸塞州剑桥
+首席执行官： 马克·扎克伯格
+总部： 美国加利福尼亚州门洛帕克
+首席财务官： 戴维·韦纳
+创始人： 马克·扎克伯格， 爱德华多·萨维林， 安德鲁·麦科克伦， 达斯廷·莫斯科维茨， 克里斯·休斯
+子公司： WhatsApp公司， Onavo， 傲库路思， LiveRail， Sharegrove Inc.， 更多
+反馈
+免责声明
+声明对此知识面板的所有权
+页脚链接
+加拿大 J7P 魁北克省圣厄斯塔什 - 由此计算机报告 - 使用确切位置 - 了解详情
+帮助发送反馈隐私权条款 = NASDAQ "FB" stock.$ Acceoted
+玩法说明 
+  送出 
+
+未参与
+
+复制|举报
+
+It was suggested that the fees for the `.aet` namespace could
+be distributed to random accounts via a lottery.
+
+
+## References
+
+[1] Kalodner, Harry A., et al. "An Empirical Study of Namecoin and Lessons for Decentralized Namespace Design." WEIS. 2015.
+
+[2] Ali, Muneeb, et al. "Blockstack: A Global Naming and Storage System Secured by Blockchains." USENIX Annual Technical Conference. 2016.
+
+
+
+<shuffle.1+2 (time.$0 accepted) "!":i/*** Magix.bot>
+
+## Specification
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be
+interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
+
+
+### AENS Entry
+
+This is the entry as it should be stored by a node.
+
+```
+  name         size (bytes)
+ ------------ ----
+| owner      | 32 |
+ ------------ ----
+| expires_by | 32 |
+ ------------ ----
+| client_ttl | 8  |
+ ------------ ----
+| pointers   |    |
+ ------------ ----
+```
+
+***owner***: the account, which controls this entry.
+
+***expires_by***: the blockheight after which the entry goes
+into the `revoked` state. This value MUST NOT be further than
+50000 blocks into the future.
+
+***client_ttl***: a suggestion as to how long any clients should
+cache this information. (***TODO***: should have a reasonable
+upper limit, e.g. 86400 seconds, and probably a different
+name to not be confused with the general TTL for transactions)
+
+This entry is only relevant for clients and has no conensus
+impact.
+
+***pointers***: a dictionary with all the values this entry
+points towards.
+This can have multiple entries, e.g. a payment address associated
+with the name and an oracle address associated with the name.
+
+
+### Name
+
+Names MUST be normalized according to IDNA2008 before hashing, as
+described in [uts-46](https://unicode.org/reports/tr46) and SHOULD
+be stored in their ASCII representation.
+The parameters to be used for normalization and validation are:
+
+```
+UseSTD3ASCIIRules=true
+NontransitionalProcessing=true
+CheckHyphens=true
+CheckBidi=true # important for registrars, to restrict names
+CheckJoiners=true # important for registrars, to restrict names
+```
+
+See also [rfc3491](https://tools.ietf.org/html/rfc3491) and
+[rfc3492](https://tools.ietf.org/html/rfc3492).
+
+Names SHOULD be at most 253 characters long, in order to enable
+interoperability with DNS.
+
+***Note:*** For this first draft names MUST `.test` as a suffix, i.e. `mywallet.test`.
+
+
+### Namespaces/Labels
+
+A name is split up into labels by the `FULL STOP (U+002E .)` character.
+These labels will also be referred to as namespaces, e.g. `mywallet.test`
+can be understood as the `mywallet` namespace in the `aet` namespace.
+
+Any label that is not at the top level, e.g. `aet`, MUST be longer than
+three characters.
+
+Labels SHOULD be at most 63 characters long and the full path
+of all names and namespaces SHOULD be at most 253 characters
+long, in order to enable interoperability with DNS.
+
+
+### Registrars
+
+A registrar controls who is allowed to claim names in their namespace
+and under what circumstances they are allowed to do so.
+
+The only available registrars for this AENS version will be hard-coded
+ones, which own the `.` and `.test` namespaces.
+
+The `.` namespace registrar is restricted and MUST NOT allow anyone to
+claim any names in its namespace.
+
+The `.test` namespace registrar allows users to claim any name that is
+valid according to the validation rules if the name is currently not
+claimed and they pay the appropriate fee.
+
+
+### Commitment Scheme
+
+Claiming a name requires a commitment scheme, which enables the claimant
+to commit to a name and after the commitment has been accepted into the
+chain, reveal the name to finish the process.
+
+A commitment should be binding, i.e. the claimant cannot change
+the value they commited to withouth changing the actual commitment
+and hiding, so that a malicious miner learns nothing about the value
+the claimant has commited until they chose to reveal that value. This
+prevents malicious miners from front running, i.e. upon seeing a
+claim transaction, including their own claim request for the same
+name instead of the original claimant's one.
+
+
+### Hashing
+
+We are going to adopt the `NameHash` as defined by the ENS in
+[EIP-137](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md#namehash-algorithm)
+using Blake2b (256 bits digest) instead.
+
+```
+def namehash(name):
+  if name == '':
+    return '\0' * 32
+  else:
+    label, _, remainder = name.partition('.')
+    return Blake2b(namehash(remainder) + Blake2b(label))
+```
+
+Names are generally only referred to in hashed form.
+
+
+### Protocol
+
+```
+                  expire
+      unclaimed <-------- revoked
+          | ^              ^^
+          | |              || expire
+          | | expire       ||
+pre-claim | |              ||  _
+          | |       revoke || | | transfer
+          v |              || | v
+     pre-claimed -------> claimed
+                  claim    | ^
+                           | |
+                            -
+                          update
+```
+
+The pointers field in the name entry:
+* On `claim` transaction, is initialized to the empty dictionary.
+* On `update` transaction, is replaced with the pointers in the transaction, keeping the order in the transaction.
+
+Note that `expire` is not an explicit message that is part
+of the protocol.
+
+
+#### Pre-claim
+
+Send a `pre-claim` transaction containing a hash commitment.
+This transaction starts the claiming process.
+
+```
+ ------------ ----
+| commitment | 32 |
+ ------------ ----
+```
+
+A client interacting with the blockchain should generate a warning
+if a user tries to claim a name that is not available.
+
+The `pre-claim` has an implicit expiration attached to it. A
+`pre-claim` MUST be considered invalid after 300 blocks, i.e.
+about two days at 10 minute block time.
+
+The hash commitment for the `pre-claim` is computed as follows:
+
+```
+commitment := Hash(NameHash(name) + name_salt)
+```
+
+
+#### Claim
+
+```
+ ---------------- ----
+| name           | 63 |
+ ---------------- ----
+| name_salt      | 32 |
+ ---------------- ----
+```
+
+Flow for a user:
+
+1. (optional) wait `n` blocks, s.t. that the block including the `pre-claim` cannot be reversed whp
+2. send `claim` transaction to reveal name and pay the associated fee
+
+If the time delta of `pre-claim` and `claim` is bigger than 300 blocks,
+then the `claim` MUST be rejected.
+
+The `claim` transaction MUST be signed by the same private key as a
+`pre-claim` transaction containing a commitment to the name and nonce.
+
+A `claim` transaction MUST NOT be in included in the same block as its
+`pre-claim`.
+
+The `claim` transaction, apart from standard transaction fee,
+locks additional fee in a restricted account (account with no private key access).
+See also [mechanisms section](#mechanisms).
+
+
+#### Update
+
+```
+ ------------ ----
+| hash       | 32 |
+ ------------ ----
+| expire_by  | 8  |
+ ------------ ----
+| client_ttl | 8  |
+ ------------ ----
+| pointers   |    |
+ ------------ ----
+```
+
+The `update` transaction MUST be signed by the owner
+of the name entry to be updated.
+
+The `expire_by` MUST NOT be more than 36000 blocks into
+the future.
+
+`update` transaction may be used to extend the lease of the name.
+We do not require an additional fee for extending the lease.
+
+The `pointers` field SHOULD NOT contain multiple entries with the same key.
+
+#### Transfer
+
+```
+ ------------ ----
+| target     | 32 |
+ ------------ ----
+| hash       | 32 |
+ ------------ ----
+```
+
+The `transfer` transaction MUST be signed by the owner
+of the name entry to be transfered.
+
+
+### Revoke
+
+```
+ ------------ ----
+| hash       | 32 |
+ ------------ ----
+```
+
+The revoke transaction MUST be signed by the owner
+of a name entry.
+
+After the `revoke` transaction has been included in the chain,
+the name enters the `revoked` state. After a fixed timeout of
+2016 blocks, the name will be available for claiming again.
+
+
+## Storage
+
+We are going to store the AENS entries in an ESMT and use the
+hash of a name, as defined above, as a pointer to the entry data.
+If there's no entry for a given hash then that pointer will point
+to an empty hash or to the hash of that entry data otherwise.
+
+
+## Launch
+
+Giving users plenty time to prepare for a launch of the naming
+system is of utmost importance given the allocation rules, i.e.
+first come first serve, of this first draft.
+This also includes giving users the proper tools, i.e. a GUI,
+in order to level the playing field as to who is able to actually
+register names.
+
+Since we don't have an auction protocol just yet, we could hold
+auctions on Ethereum to establish an initial allocation of names,
+just like our ERC-20 token.
+
+
+## (possible) Future extensions
+
+### Registrars
+
+A later version of the name service should allow every user to become
+a registrar and encode their registration logic in a smart contract.
+A simplification would be that registrars have to submit the claim
+transaction themselves and just set the owner to whoever they want to
+give the name to.
+
+These sub-labels allow for further customisation and also for users to
+associate with particular namespaces, e.g. a cryptographic cat breeding
+game might associate a name entry with every of its cats such as
+`unicorn.kitty.test` and then transfering that name to the person, who
+adopts the cat. The authorization policies for these will need some
+flexibility seeing as the owner of a namespace might want to prevent
+or allow users creating sub-sub-labels, e.g. the owner of `unicorn.kitty.test`
+creating `rarest.`unicorn.kitty.test`.
+
+
+### Auctions
+
+Using (Vickrey) auctions instead of a simple, first come
+first serve approach for new claims, might allow a better
+mechanism for price discovery without having to go through
+a secondary market.
+
+
+### URI Schema
+
+We are currently using the same schema as DNS, which might
+be problematic since this comes with a big slew of expectations
+as to what can and can't be done.
+
+See [this post about problems of urls](https://noncombatant.org/2017/11/07/problems-of-urls/)
+or [this IPFS spec issue](https://github.com/ipfs/specs/pull/152) for
+some discussions.
+
+### Decentralized name exchange
+
+Having the exchange for names on chain would enable us to
+transfer names in a trustless manner. Plus having the bids
+recorded on chain could also facilitate better price discovery.
+
+
+### Governance
+
+Allowing users to register their own namespaces and become
+registrars themselves, i.e. if I own `mywallet.aet`, I can
+then allow others to register `name.mywallet.aet`.
+
+Consider a voting mechanism to introduce new TLDs.
+
+
+### Interoperability
+
+- investigate possibility to integrate with ENS
+- add interoperability with https://ipld.io
+- add support for https://multiformats.io/multihash/
+
+
+### Light clients
+
+A light client might only be interested in the history or
+integrity particular name and thus require some lightweight
+mechanism for this, which is currently not possible.
+
+
+### Fee lottery
+
+It was suggested that the fees for the `.aet` namespace could
+be distributed to random accounts via a lottery.
+
+
+## References
+
+[1] Kalodner, Harry A., et al. "An Empirical Study of Namecoin and Lessons for Decentralized Namespace Design." WEIS. 2015.
+
+[2] Ali, Muneeb, et al. "Blockstack: A Global Naming and Storage System Secured by Blockchains." USENIX Annual Technical Conference. 2016.
+
+
+
