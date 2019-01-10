@@ -303,6 +303,21 @@ The following builtin functions are defined on strings:
   String.concat(s1 : string, s2 : string) : string
   String.sha3(s : string) : int
 ```
+#### Builtin functions on integers
+
+The following builtin functions are defined on integers:
+
+```
+  Int.to_str(i : int) : string
+```
+
+#### Builtin functions on addresses
+
+The following builtin functions are defined on addresses:
+
+```
+  Address.to_str(a : address) : string  // Base58 encoded string
+```
 
 ### Builtins
 
