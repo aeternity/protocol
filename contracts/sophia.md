@@ -124,7 +124,6 @@ Sophia has the following types:
 
 | Type       | Description                     | Example
 | ---------- | ------------------------------- | -------:
-| uint       | A 256 bit integer               | ```42```
 | int        | A 256 bit 2-complement integer  | ```-1```
 | address    | A 256 bit number given as a hex | ```ff00```
 | bool       | A Boolean                       | ```true```
