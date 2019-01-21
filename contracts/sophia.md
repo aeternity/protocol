@@ -292,7 +292,7 @@ it.
 There is a builtin type `string`, which can be seen as an array of bytes.
 Strings can be compared for equality (`==`, `!=`), used as keys in maps and
 records, and used in builtin functions `String.length`, `String.concat` and
-`String.sha3`.
+the hash functions described below.
 
 #### Builtin functions on strings
 
@@ -301,8 +301,13 @@ The following builtin functions are defined on strings:
 ```
   String.length(s : string) : int
   String.concat(s1 : string, s2 : string) : string
-  String.sha3(s : string) : int
+  String.sha3(s : string) : hash
+  String.sha256(s : string) : hash
+  String.blake2b(s : string) : hash
 ```
+
+The hash functions hashes the string represented as byte array.
+
 #### Builtin functions on integers
 
 The following builtin functions are defined on integers:
@@ -320,6 +325,25 @@ The following builtin functions are defined on addresses:
 ```
 
 ### Builtins
+
+#### Cryptographic primitives
+
+The following hash functions are supported:
+
+```
+  Crypto.sha3(x : 'a) : hash
+  Crypto.sha256(x : 'a) : hash
+  Crypto.blake2b(x : 'a) : hash
+  String.sha3(s : string) : hash
+  String.sha256(s : string) : hash
+  String.blake2b(s : string) : hash
+```
+
+The hash functions in `String` hashes a string interpreted as a byte array, and
+the `Crypto` hash functions accept an element of any (first-order) type. The
+result is the hash of the binary encoding of the argument as [described
+below](#encoding-sophia-values-as-binaries). Note that this means that for `s :
+string`, `String.sha3(s)` and `Crypto.sha3(s)` gives different results.
 
 #### Account interface
 
