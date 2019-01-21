@@ -270,7 +270,7 @@ The recipient must be one of the following:
 , <response_format> :: binary()
 , <query_fee>       :: int()
 , <expires>         :: int()
-, <vm_version>>     :: int()
+, <abi_version>>    :: int()
 ]
 ```
 
@@ -299,7 +299,7 @@ The recipient must be one of the following:
 , <ttl_value>     :: int()
 , <fee>           :: int()
 , <ttl>           :: int()
-, <vm_version>    :: int()
+, <abi_version>   :: int()
 ]
 ```
 
@@ -348,7 +348,7 @@ For a contract with address `<contractpubkey>`, the fields of the contract objec
 
 ```
 [ <owner>      :: id()
-, <vm_version> :: int()
+, <ct_version> :: int()
 , <code>       :: binary()
 , <log>        :: binary(),
 , <active>     :: bool(),
@@ -369,7 +369,7 @@ The `<key>` is non-empty.
 Each value is just stored as a binary as is - without tag or version.
 If the value is the empty binary the key is pruned from the tree.
 
-The content of the contract store depends on [the ABI of the vm_version](/contracts/contract_vms.md).
+The content of the contract store depends on [the ABI and the VM version](/contracts/contract_vms.md).
 
 #### Contract call
 ```
@@ -390,7 +390,7 @@ The content of the contract store depends on [the ABI of the vm_version](/contra
 [ <owner>      :: id()
 , <nonce>      :: int()
 , <code>       :: binary()
-, <vm_version> :: int()
+, <ct_version> :: int()
 , <fee>        :: int()
 , <ttl>        :: int()
 , <deposit>    :: int()
@@ -403,16 +403,16 @@ The content of the contract store depends on [the ABI of the vm_version](/contra
 
 #### Contract call transaction
 ```
-[ <caller>     :: id()
-, <nonce>      :: int()
-, <contract>   :: id()
-, <vm_version> :: int()
-, <fee>        :: int()
-, <ttl>        :: int()
-, <amount>     :: int()
-, <gas>        :: int()
-, <gas_price>  :: int()
-, <call_data>  :: binary()
+[ <caller>      :: id()
+, <nonce>       :: int()
+, <contract>    :: id()
+, <abi_version> :: int()
+, <fee>         :: int()
+, <ttl>         :: int()
+, <amount>      :: int()
+, <gas>         :: int()
+, <gas_price>   :: int()
+, <call_data>   :: binary()
 ]
 ```
 
@@ -679,11 +679,11 @@ This is an update for creating new contracts inside channel's off-chain state
 tree.
 
 ```
-[ <owner>    			:: id()
-, <vm_version>  	:: int()
-, <code>  	      :: binary()
-, <deposit>  	    :: int()
-, <call_data>     :: binary()
+[ <owner>      :: id()
+, <ct_version> :: int()
+, <code>       :: binary()
+, <deposit>    :: int()
+, <call_data>  :: binary()
 ]
 
 ```
@@ -694,14 +694,14 @@ This is an update for calling a contract inside channel's off-chain state
 tree.
 
 ```
-[ <caller>  			:: id()
-, <contract>      :: id(),
-, <vm_version>  	:: int()
-, <amount>  	    :: int()
-, <call_data>     :: binary()
-, <call_stack>    :: [int()]
-, <gas_price>     :: int()
-, <gas_limit>	    :: int()
+[ <caller>      :: id()
+, <contract>    :: id(),
+, <abi_version> :: int()
+, <amount>      :: int()
+, <call_data>   :: binary()
+, <call_stack>  :: [int()]
+, <gas_price>   :: int()
+, <gas_limit>   :: int()
 ]
 
 ```
