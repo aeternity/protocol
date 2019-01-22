@@ -345,6 +345,15 @@ result is the hash of the binary encoding of the argument as [described
 below](#encoding-sophia-values-as-binaries). Note that this means that for `s :
 string`, `String.sha3(s)` and `Crypto.sha3(s)` gives different results.
 
+There is also a function for signature verification `Crypto.ecverify`:
+
+```
+  Crypto.ecverify(msg : hash, pubkey : address, sig : signature) : bool
+```
+
+The signature verification returns true if `sig` is the signature of `msg`
+using the private key corresponding to `pubkey`.
+
 #### Account interface
 
 To spend tokens from the contract account to the account "to" you call the `Chain.spend` function.
