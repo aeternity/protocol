@@ -303,8 +303,8 @@ EDGEBITS: 29
 
 
 ```
-header = version || height || prev_hash || state_hash || miner || beneficiary || target || evidence || nonce || time
-           64         64         256          256         256         256          64       42*32       64       64
+header = version || flags || height || prev_hash || prev_key_hash || state_hash || miner || beneficiary || target || evidence || nonce || time
+           32         32       64         256            256            256         256         256          32       42*32       64       64
 ```
 
 For the purpose of computing a proof of work puzzle solution, the evidence and
