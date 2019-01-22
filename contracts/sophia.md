@@ -291,7 +291,8 @@ it.
 
 There is a builtin type `string`, which can be seen as an array of bytes.
 Strings can be compared for equality (`==`, `!=`), used as keys in maps and
-records, and used in builtin functions `String.length` and `String.concat`.
+records, and used in builtin functions `String.length`, `String.concat` and
+`String.sha3`.
 
 #### Builtin functions on strings
 
@@ -300,6 +301,22 @@ The following builtin functions are defined on strings:
 ```
   String.length(s : string) : int
   String.concat(s1 : string, s2 : string) : string
+  String.sha3(s : string) : int
+```
+#### Builtin functions on integers
+
+The following builtin functions are defined on integers:
+
+```
+  Int.to_str(i : int) : string
+```
+
+#### Builtin functions on addresses
+
+The following builtin functions are defined on addresses:
+
+```
+  Address.to_str(a : address) : string  // Base58 encoded string
 ```
 
 ### Builtins
@@ -509,14 +526,27 @@ Naming System (AENS):
 #### Events
 
 Sophia contracts log structured messages to an event log in the resulting
-blockchain transaction. To use events a contract must declare a type `event`,
-and events are then logged using the `event` function:
+blockchain transaction. The event log is quite similar to [Events in
+Solidity](https://solidity.readthedocs.io/en/v0.4.24/contracts.html#events). To
+use events a contract must declare a datatype `event`, and events are then
+logged using the `Chain.event` function:
 
 ```
-event(e : event) : ()
+  datatype event =
+      Event1(indexed int, indexed int, string)
+    | Event2(string, indexed address)
+
+  Chain.event(e : event) : ()
 ```
 
-*NOTE: Events are not yet implemented*
+The event can have 0-3 `indexed` fields, they should have a type that is
+equivalent to a 32-byte word (i.e. `bool`, `int`, or `address`, or an alias for
+such a type). To index a `string` you can use the hash function
+`String.sha3(s)`. The event also has (optional) payload (not indexed), that is
+of type `string`.
+
+*NOTE:* Indexing is not part of the core aeternity node, but the `indexed` tag
+should serve as a hint to any software analysing the contract call transactions.
 
 #### Contract primitives
 
@@ -745,7 +775,7 @@ Path ::= Id                 // Record field
        | Path '[' Expr ']'  // Nested map key
 
 BinOp ::= '||' | '&&' | '<' | '>' | '=<' | '>=' | '==' | '!='
-        | '::' | '++' | '+' | '-' | '*' | '/' | 'mod'
+        | '::' | '++' | '+' | '-' | '*' | '/' | 'mod' | '^'
         | 'bor' | 'bxor' | 'band' | 'bsr' | bsl'
 UnOp  ::= '-' | '!' | 'bnot'
 ```
@@ -754,7 +784,7 @@ UnOp  ::= '-' | '!' | 'bnot'
 
 | Operators | Type
 | --- | ---
-| `-` `+` `*` `/` `mod` | arithmetic operators
+| `-` `+` `*` `/` `mod` `^` | arithmetic operators
 | `bnot` `band` `bor` `bxor` `bsl` `bsr` | bitwise operators
 | `!` `&&` `\|\|` | logical operators
 | `==` `!=` `<` `>` `=<` `>=` | comparison operators
@@ -767,6 +797,7 @@ In order of highest to lowest precedence.
 | Operators | Associativity
 | --- | ---
 | `!` `bnot` | right
+| `^` | left
 | `*` `/` `mod` `band` | left
 | `-` (unary) | right
 | `+` `-` `bor` `bxor` `bsl` `bsr` | left
