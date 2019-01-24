@@ -13,7 +13,7 @@ payload is a byte array, and messages are either fixed binary data or encoded
 using [RLP](https://github.com/ethereum/wiki/wiki/RLP).
 
 The following P2P messages are implemented in
-[epoch](https://github.com/aeternity/epoch/blob/master/apps/aecore/src/aec_peer_messages.erl)
+the [Aeternity node](https://github.com/aeternity/epoch/blob/master/apps/aecore/src/aec_peer_messages.erl)
   - [MSG_FRAGMENT](#msg_fragment)
   - [MSG_P2P_RESPONSE](#msg_p2p_response)
   - [MSG_PING](#msg_ping)
