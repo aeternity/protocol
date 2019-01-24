@@ -31,7 +31,7 @@ want to fragment relevant information too much, documentation specific to Epoch,
 such as API descriptions, will be kept in this repository until we decide for a
 better solution.
 
-- [API](./epoch/api/README.md)
+- [API](./node/api/README.md)
 
 ## Security
 
