@@ -8,7 +8,7 @@ To learn more about contracts and contract life cycles see [the doc](/contracts/
 There are two basic types of API calls, off-chain operations and on-chain transactions.
 
 For an up to date list of all HTTP API endpoints and their arguments see
-[Aeternity node HTTP API](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json)
+[Aeternity node HTTP API](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json)
 
 ## Sophia calldata creation
 
@@ -44,13 +44,13 @@ An Aeternity node provides some utility functions to help you create contract tr
 
 
 ### Contract Compile
-[/debug/contracts/code/compile doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/CompileContract)
+[/debug/contracts/code/compile doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/CompileContract)
 
 ### Encode Call Data
-[/debug/contracts/code/encode-calldata doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/EncodeCalldata)
+[/debug/contracts/code/encode-calldata doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/EncodeCalldata)
 
 ### Call
-[/debug/contracts/code/call doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/CallContract)
+[/debug/contracts/code/call doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/CallContract)
 
 The arguments to the /debug/contracts/code/call endpoint are:
 * `code` - an address of a contract on chain.
@@ -60,7 +60,7 @@ The arguments to the /debug/contracts/code/call endpoint are:
 * `abi` - Currently only "sophia-address" is supported.
 
 ### Dry-run
-[/debug/transactions/dry-run doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/DryRunTxs)
+[/debug/transactions/dry-run doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/DryRunTxs)
 
 The arguments to the /debug/transactions/dry-run endpoint are:
 * `txs` - a list of *unsigned* transactions to execute.
@@ -68,7 +68,7 @@ The arguments to the /debug/transactions/dry-run endpoint are:
 * `accounts` - a list of "extra" accounts to be used in the dry-run.
 
 ### Decode Call Data
-[/debug/contracts/code/decode-data doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/DecodeData)
+[/debug/contracts/code/decode-data doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/DecodeData)
 
 ## On chain transactions
 
@@ -79,22 +79,22 @@ There are two contract transactions available: create and call.
 You:
 * Format the contract transaction using the corresponding API;
 * (As for any other transaction) sign offline (i.e. outside of the Aeternity node) the transaction according to consensus;
-* (As for any other transaction) submit the transaction to the Aeternity node using [its API](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/PostTransaction).
+* (As for any other transaction) submit the transaction to the Aeternity node using [its API](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/external/PostTransaction).
 
 In order to affect the state of the chain you have to submit the signed transaction to a mining node.
 
 ### Contract Create
-[/debug/contracts/create doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostContractCreate)
+[/debug/contracts/create doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/PostContractCreate)
 
-[/debug/contracts/create/compute doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostContractCreateCompute)
+[/debug/contracts/create/compute doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/PostContractCreateCompute)
 
 ### Contract Call
-[/debug/contracts/call doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostContractCall)
+[/debug/contracts/call doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/PostContractCall)
 
-[/debug/contracts/call/compute doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostContractCallCompute)
+[/debug/contracts/call/compute doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/PostContractCallCompute)
 
 ## Reading chain data
 
 ### Contract Call Result
-[/transactions/{hash}/info doc](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/GetTransactionInfoByHash)
+[/transactions/{hash}/info doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/external/GetTransactionInfoByHash)
 
