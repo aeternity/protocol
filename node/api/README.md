@@ -1,13 +1,13 @@
-# Æternity epoch node API
+# Æternity node API
 
 This document:
-* Provides an overview of the API exposed by the epoch node;
-* Defines the Channels WebSocket API of the epoch node;
-* Describes the intended usage of the user API of the epoch node.
+* Provides an overview of the API exposed by the Aeternity node;
+* Defines the Channels WebSocket API of the Aeternity node;
+* Describes the intended usage of the user API of the Aeternity node.
 
 ## Overview
 
-The epoch node exposes the following APIs:
+The Aeternity node exposes the following APIs:
 * Peer-to-peer network API. It consists of one TCP endpoint:
   * It is encrypted and authenticated using the Noise protocol;
   * The schema of its payload is [defined](/sync/);
@@ -32,7 +32,7 @@ The epoch node exposes the following APIs:
     * They are used for connecting as a `responder` role in channel
       communication;
     * It is up to the node operator to define the range to be used; Their
-      configuration is not part of `epoch`;
+      configuration is not part of the Aeternity node;
     * They are encrypted and authenticated using the Noise protocol using
       dynamic keys;
     * The schema of its payload is [defined](/channels/OFF-CHAIN.md#messages);
@@ -55,7 +55,7 @@ channel. At any point in time channel can be closed either unilaterally or
 through mutual agreement.
 
 ### Connection
-The epoch node supports an endpoint with a configurable port where the
+The Aeternity node supports an endpoint with a configurable port where the
 WebSocket's clients connect. It is located on `/channel`.
 
 The node could serve multiple channel WebSocket clients. Their number is configured in

@@ -181,7 +181,7 @@ synchronize the chain, and the current list of unconfirmed transactions.
 Synchronizing the chain is (potentially) a big task, and the node will utilize
 all its connected peers to fetch blocks and transactions.
 
-(***TODO***: Write a detailed description of the epoch implementation.)
+(***TODO***: Write a detailed description of the Aeternity node implementation.)
 
 Synchronizing the unconfirmed transactions is a smaller task and the
 node will pick one other peer and synchronize (only the missing) transactions
