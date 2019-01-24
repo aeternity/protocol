@@ -124,14 +124,13 @@ Sophia has the following types:
 
 | Type       | Description                     | Example
 | ---------- | ------------------------------- | -------:
-| uint       | A 256 bit integer               | ```42```
 | int        | A 256 bit 2-complement integer  | ```-1```
 | address    | A 256 bit number given as a hex | ```ff00```
 | bool       | A Boolean                       | ```true```
 | string     | An array of bytes               | ```"Foo"```
 | list       | A homogeneous immutable singly linked list. | ```[1, 2, 3]```
 | tuple      | An ordered heterogeneous array   | ```(42, "Foo", true)```
-| record     | An immutable key value store with fixed key names and typed values | ``` record balance = { owner: address, value: uint } ```
+| record     | An immutable key value store with fixed key names and typed values | ``` record balance = { owner: address, value: int } ```
 | map        | An immutable key value store with dynamic mapping of keys of one type to values of one type | ```type accounts = map(string, address)```
 | option('a) | An optional value either None or Some('a) | ```Some(42)```
 | state        | A record of blockstate key, value pairs  |
@@ -755,7 +754,7 @@ switch(f(x))
 ```c
 Expr ::= '(' Args ')' '=>' Block(Stmt)      // Anonymous function    (x) => x + 1
        | 'if' '(' Expr ')' Expr 'else' Expr // If expression         if(x < y) y else x
-       | Expr ':' Type                      // Type annotation       5 : uint
+       | Expr ':' Type                      // Type annotation       5 : int
        | Expr BinOp Expr                    // Binary operator       x + y
        | UnOp Expr                          // Unary operator        ! b
        | Expr '(' Sep(Expr, ',') ')'        // Application           f(x, y)
@@ -939,7 +938,7 @@ The type information contains:
 
 ### Memory layout
 
-Sophia values are 256-bit words. In case of unboxed types (`int`, `uint`,
+Sophia values are 256-bit words. In case of unboxed types (`int`,
 `address`, and `bool`) this is simply the value. For boxed types
 such as tuples and (non-empty) lists, the word is a pointer into the heap
 (memory).
