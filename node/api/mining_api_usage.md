@@ -3,7 +3,7 @@
 
 ## Introduction
 
-In order to get a reward and transaction fees, the epoch node needs to mine
+In order to get a reward and transaction fees, the Aeternity node needs to mine
 a key block. With increased difficulty, the probability of mining a key block
 is lower. Therefore, the miners can form mining pools where they share the
 processing power over the network so they can mine key blocks more often. They
@@ -11,21 +11,21 @@ split the reward according to the amount of work they contribute to mine a
 block. The mining pool is formed of a mining pool manager that manages the
 pool (and gets a fee for that) and the miners.
 
-The epoch node provides very basic API that allows to retrieve a pending key
+The Aeternity node provides very basic API that allows to retrieve a pending key
 block and submit a mined key block.
 
-The way to interact with the epoch node is to use HTTP API.
+The way to interact with the Aeternity node is to use HTTP API.
 
 The following assumes that the node exposes at address 127.0.0.1 the following
 ports:
 * User API external HTTP endpoint: 3013
 * User API internal HTTP endpoint: 3113
 
-## Epoch node modes
+## Aeternity node modes
 
 ### Pool manager
 
-The epoch node can be configured (using `autostart: false`) not to mine key
+The Aeternity node can be configured (using `autostart: false`) not to mine key
 blocks. Even though the node does not mine the key blocks, it still produces
 the key block candidates that do not have `nonce` and `pow` set. These key
 block candidates can be retrieved using the

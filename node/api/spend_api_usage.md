@@ -10,7 +10,7 @@ In order to send tokens, you need to have tokens i.e. a positive (non-zero) bala
 You obtain tokens e.g. after having mined successfully a block or received tokens through a transaction.
 
 In order to transfer tokens from an account (`sender_id`) to another account (`recipient_id`):
-* prepare spend transaction as per [specification](../../serializations.md). In order to ease the initial integration, the epoch node provides [/debug/transactions/spend endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostSpend)):
+* prepare spend transaction as per [specification](../../serializations.md). In order to ease the initial integration, the Aeternity node provides [/debug/transactions/spend endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostSpend)):
 ``` bash
 curl -X POST -H "Content-Type: application/json" -d '{"sender_id":"...", "recipient_id":"...", "amount":2, "fee":1, "ttl":1234, "payload":"any public message"}' http://127.0.0.1:3113/v2/debug/transactions/spend
 {"tx":"..."}

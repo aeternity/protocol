@@ -8,7 +8,7 @@ To learn more about contracts and contract life cycles see [the doc](/contracts/
 There are two basic types of API calls, off-chain operations and on-chain transactions.
 
 For an up to date list of all HTTP API endpoints and their arguments see
-[Epoch HTTP API](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json)
+[Aeternity node HTTP API](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json)
 
 ## Sophia calldata creation
 
@@ -40,7 +40,7 @@ function and arguments to the call:
 
 ## Off chain operations
 
-An epoch node provides some utility functions to help you create contract transactions and test contracts.
+An Aeternity node provides some utility functions to help you create contract transactions and test contracts.
 
 
 ### Contract Compile
@@ -72,14 +72,14 @@ The arguments to the /debug/transactions/dry-run endpoint are:
 
 ## On chain transactions
 
-An epoch node provides some APIs to format contract transactions and an API for submitting a signed transaction.
+An Aeternity node provides some APIs to format contract transactions and an API for submitting a signed transaction.
 
 There are two contract transactions available: create and call.
 
 You:
 * Format the contract transaction using the corresponding API;
-* (As for any other transaction) sign offline (i.e. outside of the epoch node) the transaction according to consensus;
-* (As for any other transaction) submit the transaction to the epoch node using [its API](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/PostTransaction).
+* (As for any other transaction) sign offline (i.e. outside of the Aeternity node) the transaction according to consensus;
+* (As for any other transaction) submit the transaction to the Aeternity node using [its API](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/external/PostTransaction).
 
 In order to affect the state of the chain you have to submit the signed transaction to a mining node.
 

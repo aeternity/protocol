@@ -39,7 +39,7 @@ curl http://localhost:3113/v2/debug/names/commitment-id\?name\=foobar.test\&salt
 
 To preclaim a name:
 * prepare name preclaim transaction as per [specification](../../serializations.md).
-In order to ease the initial integration, the epoch node provides
+In order to ease the initial integration, the Aeternity node provides
 [/debug/names/preclaim endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostNamePreclaim):
 ```
 curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/names/preclaim -d '{"commitment_id":"cm_2ijL6NFZ11RsBVWwFB69oZYp6gFV9JSB71xccbnqrPisEiMrji", "fee": 1, "ttl":1234, "account_id":"ak_tjnw1KcmnwfqXvhtGa9GRjanbHM3t6PmEWEWtNMM3ouvNKRu5"}'
@@ -56,7 +56,7 @@ To check the height of the blockchain use the [/generations/current endpoint](ht
 
 When a name is preclaimed, you are in a position to claim it:
 * prepare name claim transaction as per [specification](../../serializations.md).
-In order to ease the initial integration, the epoch node provides
+In order to ease the initial integration, the Aeternity node provides
 [/debug/names/claim endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostNameClaim).
 You must use the name with the same salt as used in commitment hash computation:
 ```
@@ -79,7 +79,7 @@ In the initial version the following well-known pointer keys are available:
 
 In order to update pointers:
 * prepare name update transaction as per [specification](../../serializations.md).
-In order to ease the initial integration, the epoch node provides
+In order to ease the initial integration, the Aeternity node provides
 [/debug/names/update endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostNameUpdate):
 ```
 curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/names/update -d '{"name_id": "nm_2S4U3A6LGh2LASvbA1RgA6WVq9FDBCfEZK6FN5uL65MPVhiVGL", "name_ttl": 10000, "client_ttl": 50, "pointers":[{"key":"account_pubkey", "id":"ak_3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw"}], "fee": 1, "ttl":1234, "account_id":"ak_tjnw1KcmnwfqXvhtGa9GRjanbHM3t6PmEWEWtNMM3ouvNKRu5"}'
@@ -102,7 +102,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"sender_id":"...", "recipi
 
 In order to transfer a name to another user:
 * prepare name transfer transaction as per [specification](../../serializations.md).
-In order to ease the initial integration, the epoch node provides
+In order to ease the initial integration, the Aeternity node provides
 [/debug/names/transfer endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostNameTransfer):
 ```
 curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/names/transfer -d '{name_id": "nm_2S4U3A6LGh2LASvbA1RgA6WVq9FDBCfEZK6FN5uL65MPVhiVGL", "recipient_id": "ak_3scLu3oJbhsdCJkDjfJ6BUPJ4M9ZZJe57CQ56deSbEXhaTSfG3Wf3i2GYZV6APX7RDDVk4Weewb7oLePte3H3QdBw4rMZw", "account_id":"ak_tjnw1KcmnwfqXvhtGa9GRjanbHM3t6PmEWEWtNMM3ouvNKRu5", "fee": 1, "ttl":1234}'
@@ -115,7 +115,7 @@ curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/
 
 In order to revoke a name:
 * prepare name revoke transaction as per [specification](../../serializations.md).
-In order to ease the initial integration, the epoch node provides
+In order to ease the initial integration, the Aeternity node provides
 [/debug/names/revoke endpoint](https://aeternity.github.io/epoch-api-docs/?config=https://raw.githubusercontent.com/aeternity/epoch/master/apps/aehttp/priv/swagger.json#/internal/PostNameRevoke):
 ```
 curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/names/revoke -d '{"name_id": "nm_2S4U3A6LGh2LASvbA1RgA6WVq9FDBCfEZK6FN5uL65MPVhiVGL", "fee": 1, "ttl":1234, "account_id":"ak_tjnw1KcmnwfqXvhtGa9GRjanbHM3t6PmEWEWtNMM3ouvNKRu5"}'
