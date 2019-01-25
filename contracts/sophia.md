@@ -142,6 +142,25 @@ Sophia has the following types:
 | oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, qfee, ttl)```
 | oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, qfee, qttl, rttl)```
 
+### Arithmetic
+
+Sophia integers (`int`) are represented by 256-bit signed words and supports the following
+arithmetic operations:
+- addition (`x + y`)
+- subtraction (`x - y`)
+- multiplication (`x * y`)
+- division (`x / y`), truncated towards zero
+- remainder (`x mod y`), satisfying `y * (x / y) + x mod y == x` for non-zero `y`
+- exponentiation (`x ^ y`)
+
+All operations are *safe*, in the sense that they behave as the corresponding
+operations on arbitrary-size integers and fail with `arithmetic_error` if the
+result cannot be represented by a 256-bit signed word. For example, `2 ^ 255`
+fails rather than wrapping around to -2²⁵⁵.
+
+The division and remained operations also throw an arithmetic error if the
+second argument is zero.
+
 ### Type aliases
 
 Type aliases can be introduced with the `type` keyword and can be
