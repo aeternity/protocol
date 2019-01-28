@@ -164,7 +164,7 @@ second argument is zero.
 
 ### Bit fields
 
-Sophia integers does not support bit arithmetic. Instead there is a separate
+Sophia integers do not support bit arithmetic. Instead there is a separate
 type `bits` of bit fields that support similar operations:
 
 ```javascript
