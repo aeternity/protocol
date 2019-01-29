@@ -127,6 +127,7 @@ Sophia has the following types:
 | int        | A 256 bit 2-complement integer  | ```-1```
 | address    | A 256 bit number given as a hex | ```ff00```
 | bool       | A Boolean                       | ```true```
+| bits       | A bit field (with 256 bits)     | ```Bits.none```
 | string     | An array of bytes               | ```"Foo"```
 | list       | A homogeneous immutable singly linked list. | ```[1, 2, 3]```
 | tuple      | An ordered heterogeneous array   | ```(42, "Foo", true)```
@@ -159,6 +160,43 @@ fails rather than wrapping around to -2²⁵⁵.
 
 The division and remained operations also throw an arithmetic error if the
 second argument is zero.
+
+### Bit fields
+
+Sophia integers do not support bit arithmetic. Instead there is a separate
+type `bits` of bit fields that support similar operations:
+
+```javascript
+// A bit field with all bits cleared
+Bits.none : bits
+
+// A bit field with all bits set
+Bits.all : bits
+
+// Set bit i
+Bits.set(b : bits, i : int) : bits
+
+// Clear bit i
+Bits.clear(b : bits, i : int) : bits
+
+// Check if bit i is set
+Bits.test(b : bits, i : int) : bool
+
+// Count the number of set bits
+Bits.sum(b : bits) : int
+
+// Bits.test(Bits.union(a, b), i) == (Bits.test(a, i) || Bits.test(b, i))
+Bits.union(a : bits, b : bits) : bits
+
+// Bits.test(Bits.intersection(a, b), i) == (Bits.test(a, i) && Bits.test(b, i))
+Bits.intersection(a : bits, b : bits) : bits
+
+// Bits.test(Bits.difference(a, b), i) == (Bits.test(a, i) && !Bits.test(b, i))
+Bits.difference(a : bits, b : bits) : bits
+```
+
+A bit field is represented by a 256-bit word and reading or writing a bit
+outside the 0..255 range fails with an `arithmetic_error`.
 
 ### Type aliases
 
@@ -648,8 +686,8 @@ and `*/` and can be nested.
 #### Keywords
 
 ```
-and band bnot bor bsl bsr bxor contract elif else false function if import
-internal let mod private public rec stateful switch true type record datatype
+and contract elif else false function if import internal let mod private public
+rec stateful switch true type record datatype
 ```
 
 #### Tokens
@@ -827,8 +865,7 @@ Path ::= Id                 // Record field
 
 BinOp ::= '||' | '&&' | '<' | '>' | '=<' | '>=' | '==' | '!='
         | '::' | '++' | '+' | '-' | '*' | '/' | 'mod' | '^'
-        | 'bor' | 'bxor' | 'band' | 'bsr' | bsl'
-UnOp  ::= '-' | '!' | 'bnot'
+UnOp  ::= '-' | '!'
 ```
 
 ### Operators types
@@ -836,7 +873,6 @@ UnOp  ::= '-' | '!' | 'bnot'
 | Operators | Type
 | --- | ---
 | `-` `+` `*` `/` `mod` `^` | arithmetic operators
-| `bnot` `band` `bor` `bxor` `bsl` `bsr` | bitwise operators
 | `!` `&&` `\|\|` | logical operators
 | `==` `!=` `<` `>` `=<` `>=` | comparison operators
 | `::` `++` | list operators
@@ -847,11 +883,11 @@ In order of highest to lowest precedence.
 
 | Operators | Associativity
 | --- | ---
-| `!` `bnot` | right
+| `!` | right
 | `^` | left
-| `*` `/` `mod` `band` | left
+| `*` `/` `mod` | left
 | `-` (unary) | right
-| `+` `-` `bor` `bxor` `bsl` `bsr` | left
+| `+` `-` | left
 | `::` `++` | right
 | `<` `>` `=<` `>=` `==` `!=` | none
 | `&&` | right
