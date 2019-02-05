@@ -513,6 +513,8 @@ Roles:
 ```
 
 ## Info messages
+
+### Info
  * **action:** `info`
  * **payload:**
 
@@ -527,3 +529,14 @@ Roles:
  }
 ```
 
+### Latest state
+ * **action:** `get`
+ * **tag:** `offchain_state`
+
+#### Response
+ | Field name | Value |
+ | ---- | ---- |
+ | `trees` | channel state trees |
+ | `calls` | channel call state tree |
+ | `half_signed_tx` | channel latest half signed tx or `""` if equal to latest signed tx |
+ | `signed_tx` | channel latest fully signed tx or `""` if not available |
