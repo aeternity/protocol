@@ -114,10 +114,54 @@ state associated with each contract instance.
 - Functions modifying the state need to be annotated with the `stateful` keyword.
 
 To make it convenient to update parts of a deeply nested state Sophia
-provides special syntax for map/record updates.  Open
-question: we likely want to make it possible to have immutable state
-(parameters). Keep separate from mutable state or annotate certain
-fields as immutable?
+provides special syntax for map/record updates.
+
+### Namespaces
+
+Code can be split into libraries using the `namespace` construct. Namespaces
+can appear at the top-level and can contain type and function definitions.
+Outside the namespace you can refer to the (public) names by qualifying them
+with the namespace (`Namespace.name`).
+For example,
+
+```
+namespace Library =
+  type number = int
+  function inc(x : number) : number = x + 1
+
+contract MyContract =
+  function plus2(x) : Library.number =
+    Library.inc(Library.inc(x))
+```
+
+Functions in namespaces have access to the same environment (including the
+`Chain`, `Call`, and `Contract`, builtin namespaces) as function in a contract,
+with the exception of `state`, `put` and `Chain.event` since these are
+dependent on the specific state and event types of the contract.
+
+### Splitting code over multiple files
+
+Code from another file can be included in a contract using an `include`
+statement. These must appear at the top-level (outside the main contract). The
+included file can contain one or more namespaces and abstract contracts. For
+example, if the file `library.aes` contains
+
+```
+namespace Library =
+  function inc(x) = x + 1
+```
+
+you can use it from another file using an `include`:
+
+```
+include "library.aes"
+contract MyContract =
+  function plus2(x) = Library.inc(Library.inc(x))
+```
+
+This behaves as if the contents of `library.aes` was textually inserted into
+the file, except that error messages will refer to the original source
+locations.
 
 ### Types
 Sophia has the following types:
@@ -686,8 +730,8 @@ and `*/` and can be nested.
 #### Keywords
 
 ```
-and contract elif else false function if import internal let mod private public
-rec stateful switch true type record datatype
+and contract elif else false function if import include internal let mod namespace
+private public rec stateful switch true type record datatype
 ```
 
 #### Tokens
@@ -745,6 +789,8 @@ A Sophia file consists of a sequence of *declarations* in a layout block.
 ```c
 File ::= Block(Decl)
 Decl ::= 'contract' Con '=' Block(Decl)
+       | 'namespace' Con '=' Block(Decl)
+       | 'include' String
        | 'type'     Id ['(' TVar* ')'] ['=' TypeAlias]
        | 'record'   Id ['(' TVar* ')'] '=' RecordType
        | 'datatype' Id ['(' TVar* ')'] '=' DataType
