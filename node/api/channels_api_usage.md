@@ -638,7 +638,7 @@ current mutually signed state and then terminates. The `'reestablish'` request
 is very similar to a [Channel open](#channel-open) request, but also requires
 the channel id and the latest mutually signed state.
 
-The full state, including state trees, is cached internally by the `epoch`
+The full state, including state trees, is cached internally by the Aeternity
 node, and upon reestablish, it is verified that the encoded state provided
 by the client corresponds to the latest full state retrieved from the cache.
 
