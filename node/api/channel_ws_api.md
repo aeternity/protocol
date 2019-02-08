@@ -540,3 +540,22 @@ Roles:
  | `calls` | channel call state tree |
  | `half_signed_tx` | channel latest half signed tx or `""` if equal to latest signed tx |
  | `signed_tx` | channel latest fully signed tx or `""` if not available |
+
+#### Example
+
+##### Request
+```javascript
+{'action': 'get', 'payload': {}, 'tag': 'offchain_state'}
+```
+##### Response
+```javascript
+{'action': 'get',
+ 'channel_id': 'ch_2eYSahMjyrytqyd28iyNGK8ETBTW868yki8pYUxDBd6Akp29k4',
+ 'payload': {
+   'calls': 'cs_yYICbgGEwz8BwHtqgWY=',
+    'half_signed_tx': '',
+    'signed_tx': 'tx_+QEhCwH4hLhABA9QLTLb8+EWeN+ZCL3GmcwlOczQobsgHqDnYWuX+oUmyBKcBLEgDngf2phxqzQZEI5UDsI4/a6raPh9ddP1BLhA5sF1rvkHi3hD6Ms7TpMpkGs/dEOVGFv7LeWnxQ+h8N23Hr2eU5g3C7UMnSiLM97kpVDExjobRWi6eYGHgF1wCriX+JU5AaEG2PCjn3Eu3YTF4cstNGAp7ZGDxjcJrqUCFEU8sIMWbggC+E24S/hJggI6AaEB7qS1cNCbw3GpiqMXadWS4UkmP7hy9Gwff3kErkNExqqhAViP6Wm0p2j/DY8a9978psqBZF9cAupp5+Qfq/jmCizCAaA8q/nvdMUP6xOxo0AYP43zXUs+3k+b8J85LY3cFMzlYBFnSEA=',
+    'trees': 'ss_+KQ+AIrJggJtAYTDPwHAismCAm4BhMM/AcCKyYICbwGEwz8BwIrJggJwAYTDPwHAismCAnEBhMM/AcC4afhnggJyAbhh+F8/AfhbrexAAaDupLVw0JvDcamKoxdp1ZLhSSY/uHL0bB9/eQSuQ0TGqojHCgEAgwERbqzrQAGgWI/pabSnaP8Njxr33vymyoFkX1wC6mnn5B+r+OYKLMKHxgoBAIKcQquqkGQ='},
+  'tag': 'offchain_state',
+  'version': 1}
+```
