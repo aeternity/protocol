@@ -1221,7 +1221,7 @@ returns the `call` object.
  'tag': 'call_contract',
  'payload' :{
       'contract': 'ct_9sRA9AVE4BYTAkh5RNfJYmwQe1NZ4MErasQLXZkFWG43TPBqa',
-      'vm_version': 1,
+      'abi_version': 1,
       'amount': 0,
       'call_data': 'cb_1111111111111111111111111111111yC4CoPDhKfwheTUFxWaEmAud5DzXdDtnFd3Pdr7SkLrw9ze6ZF21i8tR8VyUz4zLwTwBhFi3dCvp4fSTk38mdQ2ov8GPqznR3G83irbxNjrHkfS9nQDcRnFEZ17EfeXqBgB5Q6k6H3JLjPns3ZGECU3rf9gzbbFmwxJbMFsjK2vhxRBmpXoaq4RUqAEu5KZ8xfuCHG17vJn33UmvtayzkJvYTUYQcprT2'
     },
