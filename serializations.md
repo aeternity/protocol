@@ -835,11 +835,20 @@ The binary is a serialized Merkle Patricia Tree.
 
 The binary is a serialized Merkle Patricia Tree.
 
-#### Sophia byte code
+#### Sophia byte code (version 1, Roma release)
 ```
 [ <source code hash> :: binary()
 , <type info>        :: [{<fun_hash> :: binary(), <fun_name> :: binary(), <arg_type> :: binary(), <out_type> :: binary()}]
 , <byte code>        :: binary()
+]
+```
+
+#### Sophia byte code (version 2, Minerva release)
+```
+[ <source code hash> :: binary()
+, <type info>        :: [{<fun_hash> :: binary(), <fun_name> :: binary(), <arg_type> :: binary(), <out_type> :: binary()}]
+, <byte code>        :: binary()
+, <compiler version> :: binary()
 ]
 ```
 
