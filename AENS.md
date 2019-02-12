@@ -309,7 +309,7 @@ See also [mechanisms section](#mechanisms).
 The `update` transaction MUST be signed by the owner
 of the name entry to be updated.
 
-The `expire_by` MUST NOT be more than 36000 blocks into
+The `expire_by` MUST NOT be more than 50000 blocks into
 the future.
 
 `update` transaction may be used to extend the lease of the name.
