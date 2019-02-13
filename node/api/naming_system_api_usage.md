@@ -58,9 +58,10 @@ When a name is preclaimed, you are in a position to claim it:
 * prepare name claim transaction as per [specification](../../serializations.md).
 In order to ease the initial integration, the Aeternity node provides
 [/debug/names/claim endpoint](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/PostNameClaim).
-You must use the name with the same salt as used in commitment hash computation:
+You must use the name with the same salt as used in commitment hash computation.
+Note that the name should be API encoded in the same way as a name hash.
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/names/claim -d '{"name": "foobar.test", "name_salt": 123, "fee": 1, "ttl":1234, "account_id":"ak_tjnw1KcmnwfqXvhtGa9GRjanbHM3t6PmEWEWtNMM3ouvNKRu5"}'
+curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/names/claim -d '{"name": ""nm_3sDdKewfAc1ektVJpwuTD", "name_salt": 123, "fee": 1, "ttl":1234, "account_id":"ak_tjnw1KcmnwfqXvhtGa9GRjanbHM3t6PmEWEWtNMM3ouvNKRu5"}'
 {"tx":"..."}
 ```
 * sign the prepared transaction (e.g. by using the SDK)
