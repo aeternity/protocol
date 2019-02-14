@@ -27,7 +27,7 @@ level issues, that shaped our state channel design.
 - [Channel types](#channel-types)
 - [Topology](#topology)
 - [Incentives](#incentives)
-- [Artefacts](#artefacts)
+- [Artifacts](#artifacts)
 - [Fees](#fees)
 - [Protocol](#protocol)
 	- [Communication](#communication)
@@ -201,7 +201,7 @@ be detrimental and cause both a loss of trust in the system and users to spend
 more on fees than they should.
 
 
-## Artefacts
+## Artifacts
 
 What should the outcome of a state channel be? The simplest answer would be a
 change in on-chain balances of participants but it could also be desirable to
