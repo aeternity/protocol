@@ -41,7 +41,7 @@ followed by a reserved flags field (32 bits).
 
 For flag bits:
 * In Roma release, only one flag bit is used, to mark the header as a key header.
-* In Minerva release, another bit is used, to mark the presens of an optional info field in the header.
+* In Minerva release, another bit is used, to mark the presence of an optional info field in the header.
 * Other flags must be set to zero.
 
 | Fieldname  | Size (bytes) | Notes |
@@ -66,7 +66,7 @@ For flag bits:
 Note:
 
 * The info field is either present, and of size 4 bytes, or not
-  present (0 bytes). The presens of the info field must be signalled
+  present (0 bytes). The presence of the info field must be signalled
   by setting the info_flag to 1. The contents of the info field has no
   current interpretation, but the plan is to use it to signal
   information about the miners (e.g., if the miners are aware of a
@@ -150,7 +150,7 @@ In Erlang notation, the `id()` type pattern is:
 
 ### RLP Encoding
 
-We use the Recursive Length Prefix encodng
+We use the Recursive Length Prefix encoding
 (https://github.com/ethereum/wiki/wiki/RLP) for serializing objects that
 have dynamic sizes of the fields.
 
