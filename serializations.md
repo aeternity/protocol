@@ -48,8 +48,9 @@ For flag bits:
 | --- | ---  |
 | version     | 32 bits |
 | key_tag     | 1 bit   |
-| info_flag   | 1 bit   |
-| unused_flags| 31 bits (all set to 0) |
+| info_flag   | 1 bit            | From Minerva protocol
+| unused_flag | 1 bit (set to 0) | For Roma protocol
+| unused_flags| 30 bits (all set to 0) |
 | height      | 8    |
 | prev_hash   | 32   |
 | prev_key_hash | 32   |
@@ -60,7 +61,7 @@ For flag bits:
 | pow         | 168  |
 | nonce       | 8    |
 | time        | 8    |
-| info        | 0 or 4 |
+| info        | 0 or 4 | From Minerva protocol
 
 Note:
 
