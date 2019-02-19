@@ -538,8 +538,8 @@ Roles:
  | ---- | ---- |
  | `trees` | channel state trees |
  | `calls` | channel call state tree |
- | `half_signed_tx` | channel latest half signed tx or `""` if equal to latest signed tx |
- | `signed_tx` | channel latest fully signed tx or `""` if not available |
+ | `half_signed_tx` | channel latest half signed tx or `''` if equal to latest signed tx |
+ | `signed_tx` | channel latest fully signed tx or `''` if not available |
 
 #### Example
 
@@ -558,4 +558,59 @@ Roles:
     'trees': 'ss_+KQ+AIrJggJtAYTDPwHAismCAm4BhMM/AcCKyYICbwGEwz8BwIrJggJwAYTDPwHAismCAnEBhMM/AcC4afhnggJyAbhh+F8/AfhbrexAAaDupLVw0JvDcamKoxdp1ZLhSSY/uHL0bB9/eQSuQ0TGqojHCgEAgwERbqzrQAGgWI/pabSnaP8Njxr33vymyoFkX1wC6mnn5B+r+OYKLMKHxgoBAIKcQquqkGQ='},
   'tag': 'offchain_state',
   'version': 1}
+```
+
+### Latest contract state
+ * **action:** `get`
+ * **tag:** `contract`
+ * **payload:**
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | pubkey | string | requested contract pubkey | Yes |
+
+#### Response
+ | Field name | Value |
+ | ---- | ---- |
+ | `contract` | object with contract details |
+ | `contract->id` | contract id (equals to the requested pubkey) |
+ | `contract->owner_id` | contract owner id |
+ | `contract->vm_version` | contract vm version (integer) |
+ | `contract->abi_version` | contract ABI version (integer) |
+ | `contract->active` | "is contract active?" boolean |
+ | `contract->referrer_ids` | referrer ids list |
+ | `contract->deposit` | contract deposit |
+ | `contract_state` | object with contract state |
+
+#### Example
+
+##### Request
+```javascript
+{'action': 'get', 'payload': {'pubkey': 'ct_GZk4K59CD3vsPJdrD2AqjQqcmJZBhbmutBDRLjVKo6vQv5XSF'}, 'tag': 'contract'}
+```
+
+##### Response
+```javascript
+{
+  'action': 'get',
+  'channel_id': 'ch_2mSyZiicECmC2uDHQvW59gQYgSaKyNErtEdn2HUrkwDo9UgiWh',
+  'payload': {
+    'contract': {
+      'abi_version': 1,
+      'active': true,
+      'deposit': 10,
+      'id': 'ct_GZk4K59CD3vsPJdrD2AqjQqcmJZBhbmutBDRLjVKo6vQv5XSF',
+      'owner_id': 'ak_HAMKne7TMiXpjYvejPA1TPph4gvxGPW2id39ik2xRx9mDggLn',
+      'referrer_ids': [],
+      'vm_version': 3
+    },
+    'contract_state': {
+      'ck_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArMtts': 'cv_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPE19M0=',
+      'ck_ABQG4Fg=': 'cv_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACALwdrjmVFjHOdmmbn42HQvOTUqy2+eXrhvc8AvA2XSaQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJEZpbGwgbWUgaW4gd2l0aCBzb21ldGhpbmcgcmVhc29uYWJsZQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABCOMlT',
+      'ck_AZwSz9w=': 'cv_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWD//////////////////////////////////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyVHQH',
+     'ck_AhzDreo=': 'cv_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArMtts'
+    }
+  },
+  'tag': 'contract',
+  'version': 1
+}
 ```
