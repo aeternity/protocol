@@ -150,8 +150,8 @@ nonce:
 #### Key Blocks
 
 ```
-PROTOCOL_VERSION: 1
-GENESIS_VERSION: 1
+PROTOCOL_VERSION: 1 (Roma release)
+GENESIS_VERSION: 1 (Roma release)
 ```
 
 - the timestamp of a key block MUST be smaller than `now() + 9m`
@@ -163,6 +163,15 @@ GENESIS_VERSION: 1
 - MUST have `0 <= nonce <= MAX_NONCE`
 - txs_hash MUST be correct root hash of the merkle tree of all transactions.
 - ***TODO***: fill in missing rules
+
+```
+PROTOCOL_VERSION: 2 (Minerva release)
+GENESIS_VERSION: 1 (Roma release)
+```
+- an optional info field is added to the key header
+- the presense of the info field MUST be marked by setting the info field flag to 1
+- the absense of the info field MUST be marked by setting the info field flag to 0
+- the info field, if present, is uninterpreted, but included in the block hash (i,e., it is under consensus).
 
 Header [serialization format](../serializations.md#key-blockheader)
 
