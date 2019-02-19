@@ -44,24 +44,24 @@ For flag bits:
 * In Minerva release, another bit is used, to mark the presens of an optional info field in the header.
 * Other flags must be set to zero.
 
-| Fieldname  | Size (bytes) |
-| --- | ---  |
-| version     | 32 bits |
-| key_tag     | 1 bit   |
-| info_flag   | 1 bit            | From Minerva protocol
-| unused_flag | 1 bit (set to 0) | For Roma protocol
-| unused_flags| 30 bits (all set to 0) |
-| height      | 8    |
-| prev_hash   | 32   |
-| prev_key_hash | 32   |
-| state_hash  | 32   |
-| miner       | 32   |
-| beneficiary | 32   |
-| target      | 4    |
-| pow         | 168  |
-| nonce       | 8    |
-| time        | 8    |
-| info        | 0 or 4 | From Minerva protocol
+| Fieldname  | Size (bytes) | Notes |
+| --- | ---  | --- |
+| version     | 32 bits | |
+| key_tag     | 1 bit   | |
+| info_flag   | 1 bit            | From Minerva protocol |
+| unused_flag | 1 bit (set to 0) | For Roma protocol |
+| unused_flags| 30 bits (all set to 0) | |
+| height      | 8    | |
+| prev_hash   | 32   | |
+| prev_key_hash | 32   | |
+| state_hash  | 32   | |
+| miner       | 32   | |
+| beneficiary | 32   | |
+| target      | 4    | |
+| pow         | 168  | |
+| nonce       | 8    | |
+| time        | 8    | |
+| info        | 0 or 4 | From Minerva protocol |
 
 Note:
 
