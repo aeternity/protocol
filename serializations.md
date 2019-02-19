@@ -37,14 +37,18 @@ the header types. Note that unused flags must be set to zero.
 
 All field sizes are statically known and can be constructed directly
 as a byte array. The header starts with a version number (32 bits),
-followed by a reserved flags field (32 bits). Currently, only one flag
-bit is used, to mark the header as a key header. Other flags must be
-set to zero.
+followed by a reserved flags field (32 bits).
+
+For flag bits:
+* In Roma release, only one flag bit is used, to mark the header as a key header.
+* In Minerva release, another bit is used, to mark the presens of an optional info field in the header.
+* Other flags must be set to zero.
 
 | Fieldname  | Size (bytes) |
 | --- | ---  |
 | version     | 32 bits |
 | key_tag     | 1 bit   |
+| info_flag   | 1 bit   |
 | unused_flags| 31 bits (all set to 0) |
 | height      | 8    |
 | prev_hash   | 32   |
@@ -56,6 +60,16 @@ set to zero.
 | pow         | 168  |
 | nonce       | 8    |
 | time        | 8    |
+| info        | 0 or 4 |
+
+Note:
+
+* The info field is either present, and of size 4 bytes, or not
+  present (0 bytes). The presens of the info field must be signalled
+  by setting the info_flag to 1. The contents of the info field has no
+  current interpretation, but the plan is to use it to signal
+  information about the miners (e.g., if the miners are aware of a
+  coming hard fork).
 
 ### Micro block
 
