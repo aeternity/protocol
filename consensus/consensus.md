@@ -220,7 +220,9 @@ MUST have valid signature from private key belonging to `sender`.
 
 Each (on-chain) transaction has the following fields:
 * Fee. It MUST be at least the gas for the transaction multiplied by the
-  minimal gas price, which is `1` (*10^-18) aeons.
+  minimal gas price, which (after MINERVA hard fork height) is
+  `1000000` (*10^-18) aeons. (Before MINERVA hard fork height it was
+  `1` (*10^-18) aeons.)
 * Time to live (TTL).
 
 #### Spend
