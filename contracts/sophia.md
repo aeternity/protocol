@@ -114,10 +114,54 @@ state associated with each contract instance.
 - Functions modifying the state need to be annotated with the `stateful` keyword.
 
 To make it convenient to update parts of a deeply nested state Sophia
-provides special syntax for map/record updates.  Open
-question: we likely want to make it possible to have immutable state
-(parameters). Keep separate from mutable state or annotate certain
-fields as immutable?
+provides special syntax for map/record updates.
+
+### Namespaces
+
+Code can be split into libraries using the `namespace` construct. Namespaces
+can appear at the top-level and can contain type and function definitions.
+Outside the namespace you can refer to the (public) names by qualifying them
+with the namespace (`Namespace.name`).
+For example,
+
+```
+namespace Library =
+  type number = int
+  function inc(x : number) : number = x + 1
+
+contract MyContract =
+  function plus2(x) : Library.number =
+    Library.inc(Library.inc(x))
+```
+
+Functions in namespaces have access to the same environment (including the
+`Chain`, `Call`, and `Contract`, builtin namespaces) as function in a contract,
+with the exception of `state`, `put` and `Chain.event` since these are
+dependent on the specific state and event types of the contract.
+
+### Splitting code over multiple files
+
+Code from another file can be included in a contract using an `include`
+statement. These must appear at the top-level (outside the main contract). The
+included file can contain one or more namespaces and abstract contracts. For
+example, if the file `library.aes` contains
+
+```
+namespace Library =
+  function inc(x) = x + 1
+```
+
+you can use it from another file using an `include`:
+
+```
+include "library.aes"
+contract MyContract =
+  function plus2(x) = Library.inc(Library.inc(x))
+```
+
+This behaves as if the contents of `library.aes` was textually inserted into
+the file, except that error messages will refer to the original source
+locations.
 
 ### Types
 Sophia has the following types:
@@ -127,6 +171,7 @@ Sophia has the following types:
 | int        | A 256 bit 2-complement integer  | ```-1```
 | address    | A 256 bit number given as a hex | ```ff00```
 | bool       | A Boolean                       | ```true```
+| bits       | A bit field (with 256 bits)     | ```Bits.none```
 | string     | An array of bytes               | ```"Foo"```
 | list       | A homogeneous immutable singly linked list. | ```[1, 2, 3]```
 | tuple      | An ordered heterogeneous array   | ```(42, "Foo", true)```
@@ -140,6 +185,62 @@ Sophia has the following types:
 | Chain.ttl    | Time-to-live (fixed height or relative to current block) | ```FixedTTL(1050)``` ```RelativeTTL(50)```
 | oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, qfee, ttl)```
 | oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, qfee, qttl, rttl)```
+
+### Arithmetic
+
+Sophia integers (`int`) are represented by 256-bit signed words and supports the following
+arithmetic operations:
+- addition (`x + y`)
+- subtraction (`x - y`)
+- multiplication (`x * y`)
+- division (`x / y`), truncated towards zero
+- remainder (`x mod y`), satisfying `y * (x / y) + x mod y == x` for non-zero `y`
+- exponentiation (`x ^ y`)
+
+All operations are *safe*, in the sense that they behave as the corresponding
+operations on arbitrary-size integers and fail with `arithmetic_error` if the
+result cannot be represented by a 256-bit signed word. For example, `2 ^ 255`
+fails rather than wrapping around to -2²⁵⁵.
+
+The division and remained operations also throw an arithmetic error if the
+second argument is zero.
+
+### Bit fields
+
+Sophia integers do not support bit arithmetic. Instead there is a separate
+type `bits` of bit fields that support similar operations:
+
+```javascript
+// A bit field with all bits cleared
+Bits.none : bits
+
+// A bit field with all bits set
+Bits.all : bits
+
+// Set bit i
+Bits.set(b : bits, i : int) : bits
+
+// Clear bit i
+Bits.clear(b : bits, i : int) : bits
+
+// Check if bit i is set
+Bits.test(b : bits, i : int) : bool
+
+// Count the number of set bits
+Bits.sum(b : bits) : int
+
+// Bits.test(Bits.union(a, b), i) == (Bits.test(a, i) || Bits.test(b, i))
+Bits.union(a : bits, b : bits) : bits
+
+// Bits.test(Bits.intersection(a, b), i) == (Bits.test(a, i) && Bits.test(b, i))
+Bits.intersection(a : bits, b : bits) : bits
+
+// Bits.test(Bits.difference(a, b), i) == (Bits.test(a, i) && !Bits.test(b, i))
+Bits.difference(a : bits, b : bits) : bits
+```
+
+A bit field is represented by a 256-bit word and reading or writing a bit
+outside the 0..255 range fails with an `arithmetic_error`.
 
 ### Type aliases
 
@@ -291,7 +392,7 @@ it.
 There is a builtin type `string`, which can be seen as an array of bytes.
 Strings can be compared for equality (`==`, `!=`), used as keys in maps and
 records, and used in builtin functions `String.length`, `String.concat` and
-`String.sha3`.
+the hash functions described below.
 
 #### Builtin functions on strings
 
@@ -300,8 +401,13 @@ The following builtin functions are defined on strings:
 ```
   String.length(s : string) : int
   String.concat(s1 : string, s2 : string) : string
-  String.sha3(s : string) : int
+  String.sha3(s : string) : hash
+  String.sha256(s : string) : hash
+  String.blake2b(s : string) : hash
 ```
+
+The hash functions hashes the string represented as byte array.
+
 #### Builtin functions on integers
 
 The following builtin functions are defined on integers:
@@ -319,6 +425,34 @@ The following builtin functions are defined on addresses:
 ```
 
 ### Builtins
+
+#### Cryptographic primitives
+
+The following hash functions are supported:
+
+```
+  Crypto.sha3(x : 'a) : hash
+  Crypto.sha256(x : 'a) : hash
+  Crypto.blake2b(x : 'a) : hash
+  String.sha3(s : string) : hash
+  String.sha256(s : string) : hash
+  String.blake2b(s : string) : hash
+```
+
+The hash functions in `String` hashes a string interpreted as a byte array, and
+the `Crypto` hash functions accept an element of any (first-order) type. The
+result is the hash of the binary encoding of the argument as [described
+below](#encoding-sophia-values-as-binaries). Note that this means that for `s :
+string`, `String.sha3(s)` and `Crypto.sha3(s)` gives different results.
+
+There is also a function for signature verification `Crypto.ecverify`:
+
+```
+  Crypto.ecverify(msg : hash, pubkey : address, sig : signature) : bool
+```
+
+The signature verification returns true if `sig` is the signature of `msg`
+using the private key corresponding to `pubkey`.
 
 #### Account interface
 
@@ -596,8 +730,8 @@ and `*/` and can be nested.
 #### Keywords
 
 ```
-and band bnot bor bsl bsr bxor contract elif else false function if import
-internal let mod private public rec stateful switch true type record datatype
+and contract elif else false function if import include internal let mod namespace
+private public rec stateful switch true type record datatype
 ```
 
 #### Tokens
@@ -655,6 +789,8 @@ A Sophia file consists of a sequence of *declarations* in a layout block.
 ```c
 File ::= Block(Decl)
 Decl ::= 'contract' Con '=' Block(Decl)
+       | 'namespace' Con '=' Block(Decl)
+       | 'include' String
        | 'type'     Id ['(' TVar* ')'] ['=' TypeAlias]
        | 'record'   Id ['(' TVar* ')'] '=' RecordType
        | 'datatype' Id ['(' TVar* ')'] '=' DataType
@@ -775,8 +911,7 @@ Path ::= Id                 // Record field
 
 BinOp ::= '||' | '&&' | '<' | '>' | '=<' | '>=' | '==' | '!='
         | '::' | '++' | '+' | '-' | '*' | '/' | 'mod' | '^'
-        | 'bor' | 'bxor' | 'band' | 'bsr' | bsl'
-UnOp  ::= '-' | '!' | 'bnot'
+UnOp  ::= '-' | '!'
 ```
 
 ### Operators types
@@ -784,7 +919,6 @@ UnOp  ::= '-' | '!' | 'bnot'
 | Operators | Type
 | --- | ---
 | `-` `+` `*` `/` `mod` `^` | arithmetic operators
-| `bnot` `band` `bor` `bxor` `bsl` `bsr` | bitwise operators
 | `!` `&&` `\|\|` | logical operators
 | `==` `!=` `<` `>` `=<` `>=` | comparison operators
 | `::` `++` | list operators
@@ -795,11 +929,11 @@ In order of highest to lowest precedence.
 
 | Operators | Associativity
 | --- | ---
-| `!` `bnot` | right
+| `!` | right
 | `^` | left
-| `*` `/` `mod` `band` | left
+| `*` `/` `mod` | left
 | `-` (unary) | right
-| `+` `-` `bor` `bxor` `bsl` `bsr` | left
+| `+` `-` | left
 | `::` `++` | right
 | `<` `>` `=<` `>=` `==` `!=` | none
 | `&&` | right

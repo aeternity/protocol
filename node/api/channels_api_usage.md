@@ -401,6 +401,7 @@ following structure:
   | Name | Type | Description |
   | ---- | ---- | ----------- |
   | vm_version | integer | version of the AEVM |
+  | abi_version | integer | version of the ABI |
   | deposit | integer | initial amount the owner of the contract commits to it |
   | code | string | api encoded compiled AEVM byte code |
   | call_data | string | api encoded compiled AEVM call data for the code |
@@ -418,7 +419,8 @@ The owner sends a message containing the desired change
     'code' : 'cb_HKtpipK4aCgYb17wZcAGDdbYRuQPiQwNR6zb1g67sksoVdSbY2a9zsZsBnQ3bNCTNHDpTn4RochKB7bSuLrmEx2MW8UGN5omnH8wapTCNbyYNqPfvXCfYGqrqpzW8PzG1srqg2xf5kzDEKjfbndQB2oNgbUv1ibvjs77iPvADVnJeVHn2EfqvwJQ3M3L4nyR2ETAFmVb8E3HdRaghd84NerKmjFGqUFEt59GXGjoybGuzwL3YyQz6M6tbvUTHnCrVub2wiUsBpkULW94eBWW9ieFy6XYSaPDbGWaM2DwZYrziK3E1rMAHeFd4JZDtfF6SPU5zS9fyMZH8cKFTjLQQgaAHZMzjzkVpnAzgwco9G8GM6SjP1BSK2oinioBuC6DVhKq98W9MppUzaVpZe16xCQo9U7Nj1mafijumtmALtLG7Az7imLQ12wnj8wLxb4mDroxbqxg1sNV1j1no6pj6Yfo9o1c435s2sfhVNAe2PrecuTa4knduHn4ChYWLNG1VnzvJ2Z8WcVccYKpVSdzmZLyin,
     'call_data': 'cb_1111111111111111111111111111111yC4CoPDhKfwheTUFxWaEmAud5DzXdDtnFd3Pdr7SkLrw9ze6ZF21i8tR8VyUz4zLwTwBhFi3dCvp4fSTk38mdQ2ov8GPqznR3G83irbxNjrHkfS9nQDcRnFEZ17EfeXqBgB5Pan1iiLG8EqjL316nF6YPZUxV1L52TQFrot1HRtcHT5zkgwDtQvi5muwgToWBQYd4LhYeBRn3VKpEd1nBaNvra18S4KRU',
     'deposit': 10,
-    'vm_version': 1}
+    'vm_version': 3,
+    'abi_version': 1}
 }
 ```
 ##### Owner signs updated state
@@ -500,9 +502,9 @@ following structure.
   | Name | Type | Description |
   | ---- | ---- | ----------- |
   | contract | string | address of the contract to call |
-  | vm_version | integer | version of the AEVM |
+  | abi_version | integer | version of the ABI |
   | amount | integer | amount the caller of the contract commits to it |
-  | call_data | string | api encoded compiled AEVM call data for the code |
+  | call_data | string | ABI encoded compiled AEVM call data for the code |
 
 That would call a contract with the poster being the `caller` of it. Poster
 commits an `amount` amount of tokens to the contract.
@@ -517,7 +519,7 @@ The caller sends a message containing the desired change
  'tag': 'call_contract',
  'payload' :{
       'contract': 'ct_9sRA9AVE4BYTAkh5RNfJYmwQe1NZ4MErasQLXZkFWG43TPBqa',
-      'vm_version': 1,
+      'abi_version': 1,
       'amount': 0,
       'call_data': 'cb_1111111111111111111111111111111yC4CoPDhKfwheTUFxWaEmAud5DzXdDtnFd3Pdr7SkLrw9ze6ZF21i8tR8VyUz4zLwTwBhFi3dCvp4fSTk38mdQ2ov8GPqznR3G83irbxNjrHkfS9nQDcRnFEZ17EfeXqBgB5Q6k6H3JLjPns3ZGECU3rf9gzbbFmwxJbMFsjK2vhxRBmpXoaq4RUqAEu5KZ8xfuCHG17vJn33UmvtayzkJvYTUYQcprT2'
     },

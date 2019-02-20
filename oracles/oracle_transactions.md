@@ -17,7 +17,7 @@ The transaction contains:
 - Response format definition
 - Query fee (that should be paid for posting a query to the oracle).
 - A TTL (relative in number of blocks, or absolute block height)
-- Vm version. (0 for no vm, 1 for aevm sophia)
+- Vm version (see [VM description](../contracts/contract_vms.md)).
 - Transaction fee.
 
 See the [serialization specification](/serializations.md#oracle-register-transaction).
