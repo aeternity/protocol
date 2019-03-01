@@ -40,12 +40,12 @@ If you are using the release binaries (i.e. not the Docker image) and you want t
 * For each node, before starting the node edit the user configuration file to specify distinct TCP ports;
 * For each node, before starting the node change the node name of each node.
 
-In order to change the node name of node #1, change directory (`cd`) to the directory where you deployed node #1 then run (change "0.5.0" in the command with the version of the release you deployed):
+In order to change the node name of node #1, change directory (`cd`) to the directory where you deployed node #1 then run (change "2.0.0" in the command with the version of the release you deployed):
 ```bash
-sed -ibkp 's/-sname epoch/-sname epoch1/g' releases/0.5.0/vm.args
+sed -ibkp 's/-sname aeternity/-sname aeternity1/g' releases/2.0.0/vm.args
 ```
 
-In order to change the node name of node #2, change directory (`cd`) to the directory where you deployed node #2 then run (change "0.5.0" in the command with the version of the release you deployed):
+In order to change the node name of node #2, change directory (`cd`) to the directory where you deployed node #2 then run (change "2.0.0" in the command with the version of the release you deployed):
 ```bash
-sed -ibkp 's/-sname epoch/-sname epoch2/g' releases/0.5.0/vm.args
+sed -ibkp 's/-sname aeternity/-sname aeternity2/g' releases/2.0.0/vm.args
 ```
