@@ -1229,13 +1229,13 @@ returns the `call` object.
 ```
 
 The `payload` is an mirror image of the [call contract
-update](#trigger-a-contract-call-update), only difference being that the
+update](#trigger-a-contract-call-update), the only difference being that the
 dry-run does not impact the state and it does not need signing. The call is
 executed in the channel's state but it does not impact the state whatsoever.
 It uses as an environment the latest channel's state and the current top of
 the blockchain as seen by the node.
 
-A response of this call looks like
+A response to this call looks like
 ```
 {'action': 'dry_run',
  'tag': 'call_contract'
