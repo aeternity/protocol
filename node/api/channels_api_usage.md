@@ -1237,8 +1237,8 @@ the blockchain as seen by the node.
 
 A response of this call looks like
 ```
-{'action': 'get',
- 'tag': 'balances'
+{'action': 'dry_run',
+ 'tag': 'call_contract'
  'payload': {
     'channel_id': 'ch_t6X88VVTiXwRzdpW1UMkgqihsoJu7aTswUaw5grrqUd3NWg1m',
     'data': {
