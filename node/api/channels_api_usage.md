@@ -47,6 +47,8 @@ but are not necessarily part of the channel's life cycle.
 
   * [Proof of inclusion](#get-proof-of-inclusion)
 
+  * [Dry-run a contract](#dry-run-a-contract)
+
   * [Contract call](#get-contract-calls)
 
 * [Cleaning local contract calls](#pruning-contract-calls)
@@ -1208,6 +1210,51 @@ A response of this call looks like
 
 If a certain address of an account or a contract is not found in the state tree -
 the response is an error.
+
+#### Dry-run a contract
+In order to get the result of a potential contract call, one might need to
+dry-run a contract call. It takes the exact same arguments as a call would and
+returns the `call` object.
+
+```
+{'action': 'dry_run',
+ 'tag': 'call_contract',
+ 'payload' :{
+      'contract': 'ct_9sRA9AVE4BYTAkh5RNfJYmwQe1NZ4MErasQLXZkFWG43TPBqa',
+      'abi_version': 1,
+      'amount': 0,
+      'call_data': 'cb_1111111111111111111111111111111yC4CoPDhKfwheTUFxWaEmAud5DzXdDtnFd3Pdr7SkLrw9ze6ZF21i8tR8VyUz4zLwTwBhFi3dCvp4fSTk38mdQ2ov8GPqznR3G83irbxNjrHkfS9nQDcRnFEZ17EfeXqBgB5Q6k6H3JLjPns3ZGECU3rf9gzbbFmwxJbMFsjK2vhxRBmpXoaq4RUqAEu5KZ8xfuCHG17vJn33UmvtayzkJvYTUYQcprT2'
+    },
+}
+```
+
+The `payload` is an mirror image of the [call contract
+update](#trigger-a-contract-call-update), the only difference being that the
+dry-run does not impact the state and it does not need signing. The call is
+executed in the channel's state but it does not impact the state whatsoever.
+It uses as an environment the latest channel's state and the current top of
+the blockchain as seen by the node.
+
+A response to this call looks like
+```
+{'action': 'dry_run',
+ 'tag': 'call_contract'
+ 'payload': {
+    'channel_id': 'ch_t6X88VVTiXwRzdpW1UMkgqihsoJu7aTswUaw5grrqUd3NWg1m',
+    'data': {
+        'caller_id': 'ak_2PYxWHAsK2jYaca2EQBiJwZrgxJf6AzebE96ZVe2NwGtjaCdvs',
+        'caller_nonce': 8,
+        'contract_id': 'ct_2GPzqsJ7quu1xqnYBedwvn7SQ3DEaQf1BKNyf5ZpAB7yZ4uWAk',
+        'gas_price': 1,
+        'gas_used': 192,
+        'height': 8,
+        'log': [],
+        'return_type': 'ok',
+        'return_value': 'cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACr8s/aY'
+        }
+  }
+}
+```
 
 #### Get contract calls
 Each participant persists contract call results locally. It is not required of
