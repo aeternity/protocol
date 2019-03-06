@@ -571,21 +571,19 @@ Addresses: 32 bytes
 Byte arrays: RLP encoded.
 Tuples: 1 byte length, [encoded types], [encoded elements]
 Lists: encoded type, RLP encoded size, [encoded elements] (Size can be 0)
-Maps: encoded key type, encoded value type, 1 byte size, [encoded key, encoded value] 
-           Note: immediate maps are limited in size to 255 for larger map constants the compiler must create two or more maps and merge them. 
+Maps: encoded key type, encoded value type, 1 byte size, [encoded key, encoded value]
+           Note: immediate maps are limited in size to 255 for larger map constants the compiler must create two or more maps and merge them.
 
 Byte encoded type descriptors:
-Void: 0
-Integer: 1
-Boolean: 2
-Address: 3
-String: 4
-Tuple: 5 + [types]
-Nil: 6
-List: 7 + type
-Map: 8 + type + type   
-Variant Type: 9 + RLP size + [RLP size +  [type]]
-Empty map: 10
+Integer: 0
+Boolean: 1
+List: 2 + type
+Tuple: 3, size,  [types]
+Address: 4
+Bits: 5
+Map: 6 + type + type
+String: 7
+Variant: 8 + size + [3, size, type]
 
 
 # Appendix 2: Fate ABI
