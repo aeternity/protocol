@@ -331,10 +331,12 @@ the destination for the operation.
 
 
 | value: | arg3 | arg3 | arg2 | arg2 | arg1 | arg1 | arg0 | arg0 |
+| ---    | ---  | ---  | ---  | ---  | ---  | ---  | ---  | ---  |
 | bit:   |    7 |   6  |    5 |    4 |    3 |    2 |    1 |   0  |
 
 
 | value: | arg8 | arg7 | arg6 | arg6 | arg5 | arg5 | arg4 | arg4 |
+| ---    | ---  | ---  | ---  | ---  | ---  | ---  | ---  | ---  |
 | bit:   |    7 |   6  |    5 |    4 |    3 |    2 |    1 |   0  |
 
 
@@ -348,6 +350,7 @@ pattern 00 11 00 00.
 
 
 | OpCode | Name | Args | Description |
+| ---    | ---  | ---  |        ---  |
 | 0x0 | 'RETURN' |  | Return from function call pop stack to arg0. The type of the retun value has to match the return type of the function. |
 | 0x1 | 'RETURNR' | Arg0 | Return from function call copy Arg0 to arg0. The type of the retun value has to match the return type of the function. |
 | 0x2 | 'CALL' | Identifier | Call given function with args on stack. The types of the arguments has to match the argument typs of the function. |
