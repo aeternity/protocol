@@ -315,6 +315,7 @@ Operand specifiers are
 
 The specifiers are encoded as
 
+
 | immediate | 11 |
 |       var | 10 |
 |       arg | 01 |
@@ -327,8 +328,10 @@ are stored in the two bytes following the opcode.
 Note that for many operation the first argument (arg0) is
 the destination for the operation.
 
+
 | value: | arg3 | arg3 | arg2 | arg2 | arg1 | arg1 | arg0 | arg0 |
 | bit:   |    7 |   6  |    5 |    4 |    3 |    2 |    1 |   0  |
+
 
 | value: | arg8 | arg7 | arg6 | arg6 | arg5 | arg5 | arg4 | arg4 |
 | bit:   |    7 |   6  |    5 |    4 |    3 |    2 |    1 |   0  |
@@ -341,6 +344,7 @@ E.g. an a :=  immediate + a would have the bit
 pattern 00 11 00 00.
 
 ### Operations
+
 
 | OpCode | Name | Args | Description |
 | 0x0 | 'RETURN' |  | Return from function call pop stack to arg0. The type of the retun value has to match the return type of the function. |
