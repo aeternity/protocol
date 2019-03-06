@@ -317,6 +317,7 @@ The specifiers are encoded as
 
 
 | immediate | 11 |
+| --------- | --- |
 |       var | 10 |
 |       arg | 01 |
 |     stack | 00 |
