@@ -176,6 +176,7 @@ If an error occurs, a JSON-RPC error object is returned. It has the following fo
  | 1004   | Call not found            |  3          |  [3]   |
  | 1005   | Broken encoding: accounts |  3          |  [3]   |
  | 1006   | Broken encoding: contracts|  3          |  [3]   |
+ | 1007   | Contract init failed      |  3          |  [3]   |
  
  #### Example, error object:
  ```javascript
