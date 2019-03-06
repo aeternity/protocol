@@ -8,6 +8,7 @@ Version 20181212
 * 20181210 Second Draft - New execution model.
 * 20181211 Third Draft - Fleshing out description.
 * 20181212 4th Draft - Data serialization schema.
+* 20190306 5th Draft - Instructions.
 
 WARNING: Work in progress, major parts are missing and nothing is settled yet.
 
@@ -40,6 +41,11 @@ FATE is “functional” in the sense that “updates” of data structures,
 such as tuples, lists or maps does not change the old values of the
 structure, instead a new version is created. Unless specific
 operations to write to the contract store are used.
+
+FATE does have the ability to write the value of an operation back to the
+same register or stack position as one of the arguments, in effect updating
+the memory. Still, any other references to the structure before the operation
+will have the same structure as before the operation.
 
 ## Components
 
@@ -145,23 +151,19 @@ A contract can emit events similar to the EVM.
 ## Types
 
 The machine supports the following types:
-* Void [0]
 * Integer (signed arbitrary precision integers) [I]
 * Boolean (true | false) [B]
 * Addresses (A pointer into the state tree) [A]
 * Strings (utf8 encoded byte arrays) [S]
-* Tuples [T]
+* Tuples (), ('a), ('a, 'b, ...) [T]
 * Lists: Cons cells (‘a) | Nil (Ʇ)  [L],[C],[Ʇ]
 * Maps (‘a, ‘b),  (Key: ‘a -> Value: ‘b)  ‘a not a map [M]
-* Variant Types, (Name, [  [Type] ])  [V]
+* Variant Types, (| Size | Tag | Elements  |)  [V]
+* Bits <Bits> or !<Bits>
 * TypeRep [R]
 
 These types can be used as argument and return types of functions and
 also as the type of the elements in the contract store.
-
-### Void
-
-The type Void indicates the lack of any value.
 
 ### Integer
 
@@ -257,26 +259,41 @@ Type: Map(Integer, String)
 
 ### Variant Types
 
-The variant type is a type consisting of a tag (index) where each tag
-represents a series of values of specified types. For example you
-could have the Option type which could be None or Some(Integer). The
-value None would be indicated by tag 0. The value Some(42) would be
-represented by tag 1 followed by the integer.
+The variant type is a type consisting of a size and a tag (index)
+where each tag represents a series of values of specified types. For
+example you could have the Option type which could be None or
+Some(Integer). The size of the variant is 2 (there are two varaints),
+The value None would be indicated by tag 0. The value
+Some(42) would be represented by tag 1 followed by the integer.
 
 Examples:
 ```
-  (0, [])
-  (1, [42])
-  (3, [42, “foo”, true])
+  (| 2 | 0 | [] |)      ;; None
+  (| 2 | 1 | (42) |)    ;; Some(42)
+
+  (| 4 | 3 | (42, “foo”, true) |) ;; Three(42, "foo", true)
 ```
 
-Note that the list syntax here does not indicate a Fate list but a
-series of values.
+Note that the tuple syntax for the elements does not indicate a Fate
+tuple but a series of values.
 
 ### TypeRep
 
 A TypeRep is the representation of a type as a value.
+A typerep is one of
+* integer
+* boolean
+* {list, T}
+* {tuple, Ts}
+* address
+* bits
+* {map, K, V}
+* string
+* {variant, ListOfVariants}
 
+where T, K and V are TypeReps, Ts is a list of typereps ([T1, T2, ... ]),
+and ListOfVariants is a list ([]) of tuples of typereps
+([{tuple, [Ts1]}, {tuple, [Ts2]} ... ]).
 
 ## Operations
 
@@ -288,93 +305,160 @@ type.
 ### Operands
 
 Operand specifiers are
-*  a - accumulator - 00
-*  i - immediate - 01
-*  m - memory/name - 10
-*  s - state/name - 11
+*  immediate
+*  arg
+*  var
+*  stack
 
-Operand specifiers for binary operations are stored in the byte
-following the opcode.
+*  a (accumulator == stack 0)
 
-| value: | arg3 | arg3 | arg2 | arg2 | arg1 | arg1 | dest | dest |
+
+The specifiers are encoded as
+
+| immediate | 11 |
+|       var | 10 |
+|       arg | 01 |
+|     stack | 00 |
+
+Operand specifiers for operations with 1 to 4 arguments
+are stored in the byte following the opcode.
+Operand specifiers for operations with 5 to 8 arguments
+are stored in the two bytes following the opcode.
+Note that for many operation the first argument (arg0) is
+the destination for the operation.
+
+| value: | arg3 | arg3 | arg2 | arg2 | arg1 | arg1 | arg0 | arg0 |
 | bit:   |    7 |   6  |    5 |    4 |    3 |    2 |    1 |   0  |
+
+| value: | arg8 | arg7 | arg6 | arg6 | arg5 | arg5 | arg4 | arg4 |
+| bit:   |    7 |   6  |    5 |    4 |    3 |    2 |    1 |   0  |
+
+
 
 Unused arguments should be set to 0.
 
-E.g. an accumulator + immediate -> accumulator would have the bit
-pattern 00 01 00 00.
+E.g. an a :=  immediate + a would have the bit
+pattern 00 11 00 00.
 
-### Arithmetic operations ([I] x [I] -> [I])
-#### ADD
-#### SUB
-#### DIV
-#### MUL
-#### MOD
-#### EXP
-#### BAND
-#### BOR
-#### BNOT
+### Operations
 
-### Logic operations ([B] x [B] -> [B])
-#### AND
-#### OR
-#### NOT (unary)
+| OpCode | Name | Args | Description |
+| 0x0 | 'RETURN' |  | Return from function call pop stack to arg0. The type of the retun value has to match the return type of the function. |
+| 0x1 | 'RETURNR' | Arg0 | Return from function call copy Arg0 to arg0. The type of the retun value has to match the return type of the function. |
+| 0x2 | 'CALL' | Identifier | Call given function with args on stack. The types of the arguments has to match the argument typs of the function. |
+| 0x3 | 'CALL_R' | Arg0 Identifier | Remote call to given contract and function.  The types of the arguments has to match the argument typs of the function. |
+| 0x4 | 'CALL_T' | Identifier | Tail call to given function. The types of the arguments has to match the argument typs of the function. And the return type of the called function has to match the type of the current function. |
+| 0x5 | 'CALL_TR' | Arg0 Identifier | Remote tail call to given contract and function. The types of the arguments has to match the argument typs of the function. And the return type of the called function has to match the type of the current function. |
+| 0x6 | 'JUMP' | Integer | Jump to a basic block. The basic block has to exist in the current function. |
+| 0x7 | 'JUMPIF' | Arg0 Integer | Conditional jump to a basic block. If Arg0 then jump to Arg1. |
+| 0x8 | 'SWITCH_V2' | Arg0 Integer Integer | Conditional jump to a basic block on variant tag. |
+| 0x9 | 'SWITCH_V3' | Arg0 Integer Integer Integer | Conditional jump to a basic block on variant tag. |
+| 0xa | 'SWITCH_VN' | Arg0 [Integers] | Conditional jump to a basic block on variant tag. |
+| 0xb | 'PUSH' | Arg0 | Push argument to stack. |
+| 0xc | 'DUPA' |  | push copy of accumulator on stack. |
+| 0xd | 'DUP' | Arg0 | push Arg0 stack pos on top of stack. |
+| 0xe | 'POP' | Arg0 | Arg0 := top of stack. |
+| 0xf | 'STORE' | Arg0 Arg1 | Arg0 := Arg1. |
+| 0x10 | 'INCA' |  | Increment accumulator. |
+| 0x11 | 'INC' | Arg0 | Increment argument. |
+| 0x12 | 'DECA' |  | Decrement accumulator. |
+| 0x13 | 'DEC' | Arg0 | Decrement argument. |
+| 0x14 | 'ADD' | Arg0 Arg1 Arg2 | Arg0 := Arg1 + Arg2. |
+| 0x15 | 'SUB' | Arg0 Arg1 Arg2 | Arg0 := Arg1 - Arg2. |
+| 0x16 | 'MUL' | Arg0 Arg1 Arg2 | Arg0 := Arg1 * Arg2. |
+| 0x17 | 'DIV' | Arg0 Arg1 Arg2 | Arg0 := Arg1 / Arg2. |
+| 0x18 | 'MOD' | Arg0 Arg1 Arg2 | Arg0 := Arg1 mod Arg2. |
+| 0x19 | 'POW' | Arg0 Arg1 Arg2 | Arg0 := Arg1  ^ Arg2. |
+| 0x20 | 'LT' | Arg0 Arg1 Arg2 | Arg0 := Arg1  < Arg2. |
+| 0x21 | 'GT' | Arg0 Arg1 Arg2 | Arg0 := Arg1  > Arg2. |
+| 0x22 | 'EQ' | Arg0 Arg1 Arg2 | Arg0 := Arg1  = Arg2. |
+| 0x23 | 'ELT' | Arg0 Arg1 Arg2 | Arg0 := Arg1 =< Arg2. |
+| 0x24 | 'EGT' | Arg0 Arg1 Arg2 | Arg0 := Arg1 >= Arg2. |
+| 0x25 | 'NEQ' | Arg0 Arg1 Arg2 | Arg0 := Arg1 /= Arg2. |
+| 0x26 | 'AND' | Arg0 Arg1 Arg2 | Arg0 := Arg1 and Arg2. |
+| 0x27 | 'OR' | Arg0 Arg1 Arg2 | Arg0 := Arg1  or Arg2. |
+| 0x28 | 'NOT' | Arg0 Arg1 | Arg0 := not Arg1. |
+| 0x29 | 'TUPLE' | Integer | Create a tuple of size = Arg0. Elements on stack. |
+| 0x2a | 'ELEMENT' | Type Arg1 Arg2 Arg3 | Arg1 := element(Arg2, Arg3). The element should be of type Arg1 |
+| 0x2b | 'MAP_EMPTY' | Arg0 | Arg0 := #{}. |
+| 0x2c | 'MAP_LOOKUP' | Arg0 Arg1 Arg2 | Arg0 := lookup key Arg2 in map Arg1. |
+| 0x2d | 'MAP_LOOKUPD' | Arg0 Arg1 Arg2 Arg3 | Arg0 := lookup key Arg2 in map Arg1 if key exists in map otherwise Arg0 := Arg3. |
+| 0x2e | 'MAP_UPDATE' | Arg0 Arg1 Arg2 Arg3 | Arg0 := update key Arg2 in map Arg1 with value Arg3. |
+| 0x2f | 'MAP_DELETE' | Arg0 Arg1 Arg2 | Arg0 := delete key Arg2 from map Arg1. |
+| 0x30 | 'MAP_MEMBER' | Arg0 Arg1 Arg2 | Arg0 := true if key Arg2 is in map Arg1. |
+| 0x31 | 'MAP_FROM_LIST' | Arg0 Arg1 | Arg0 := make a map from (key, value) list in Arg1. |
+| 0x32 | 'NIL' | Arg0 | Arg0 := []. |
+| 0x33 | 'IS_NIL' | Arg0 Arg1 | Arg0 := true if Arg1 == []. |
+| 0x34 | 'CONS' | Arg0 Arg1 Arg2 | Arg0 := [Arg1|Arg2]. |
+| 0x35 | 'HD' | Arg0 Arg1 | Arg0 := head of list Arg1. |
+| 0x36 | 'TL' | Arg0 Arg1 | Arg0 := tail of list Arg1. |
+| 0x37 | 'LENGTH' | Arg0 Arg1 | Arg0 := length of list Arg1. |
+| 0x38 | 'STR_EQ' | Arg0 Arg1 Arg2 | Arg0 := true iff the strings Arg1 and Arg2 are the same. |
+| 0x39 | 'STR_JOIN' | Arg0 Arg1 Arg2 | Arg0 := string Arg1 followed by string Arg2. |
+| 0x40 | 'INT_TO_STR' | Arg0 Arg1 | Arg0 := turn integer Arg1 into a string. |
+| 0x41 | 'ADDR_TO_STR' | Arg0 Arg1 | Arg0 := turn address Arg1 into a string. |
+| 0x42 | 'STR_REVERSE' | Arg0 Arg1 | Arg0 := the reverse of string Arg1. |
+| 0x43 | 'INT_TO_ADDR' | Arg0 Arg1 | Arg0 := turn integer Arg1 into an address. |
+| 0x44 | 'VARIANT' | Arg0 Arg1 Arg2 Arg3 | Arg0 := create a variant of size Arg1 with the tag Arg2 (Arg2 < Arg1) and take Arg3 elements from the stack. |
+| 0x45 | 'VARIANT_TEST' | Arg0 Arg1 Arg2 | Arg0 := true if variant Arg1 has the tag Arg2. |
+| 0x46 | 'VARIANT_ELEMENT' | Arg0 Arg1 Arg2 | Arg0 := element number Arg2 from variant Arg1. |
+| 0x47 | 'BITS_NONEA' |  | accumulator := empty bitmap. |
+| 0x48 | 'BITS_NONE' | Arg0 | Arg0 := empty bitmap. |
+| 0x49 | 'BITS_ALLA' |  | accumulator := full bitmap. |
+| 0x50 | 'BITS_ALL' | Arg0 | Arg0 := full bitmap. |
+| 0x51 | 'BITS_ALL_N' | Arg0 Arg1 | Arg0 := bitmap with Arg1 bits set. |
+| 0x52 | 'BITS_SET' | Arg0 Arg1 Arg2 | Arg0 := set bit Arg2 of bitmap Arg1. |
+| 0x53 | 'BITS_CLEAR' | Arg0 Arg1 Arg2 | Arg0 := clear bit Arg2 of bitmap Arg1. |
+| 0x54 | 'BITS_TEST' | Arg0 Arg1 Arg2 | Arg0 := true if bit Arg2 of bitmap Arg1 is set. |
+| 0x55 | 'BITS_SUM' | Arg0 Arg1 | Arg0 := sum of set bits in bitmap Arg1. Exception if infinit bitmap. |
+| 0x56 | 'BITS_OR' | Arg0 Arg1 Arg2 | Arg0 := Arg1 v Arg2. |
+| 0x57 | 'BITS_AND' | Arg0 Arg1 Arg2 | Arg0 := Arg1 ^ Arg2. |
+| 0x58 | 'BITS_DIFF' | Arg0 Arg1 Arg2 | Arg0 := Arg1 - Arg2. |
+| 0x59 | 'ADDRESS' | Arg0 | Arg0 := The current contract address. |
+| 0x5a | 'BALANCE' | Arg0 | Arg0 := The current contract address. |
+| 0x5b | 'ORIGIN' | Arg0 | Arg0 := Address of contract called by the call transaction. |
+| 0x5c | 'CALLER' | Arg0 | Arg0 := The address that signed the call transaction. |
+| 0x5d | 'GASPRICE' | Arg0 | Arg0 := The current gas price. |
+| 0x5e | 'BLOCKHASH' | Arg0 | Arg0 := The current blockhash. |
+| 0x5f | 'BENEFICIARY' | Arg0 | Arg0 := The address of the current beneficiary. |
+| 0x60 | 'TIMESTAMP' | Arg0 | Arg0 := The current timestamp. Unrelaiable, don't use for anything. |
+| 0x61 | 'GENERATION' | Arg0 | Arg0 := The block height of the cureent generation. |
+| 0x62 | 'MICROBLOCK' | Arg0 | Arg0 := The current micro block number. |
+| 0x63 | 'DIFFICULTY' | Arg0 | Arg0 := The current difficulty. |
+| 0x64 | 'GASLIMIT' | Arg0 | Arg0 := The current gaslimit. |
+| 0x65 | 'GAS' | Arg0 | Arg0 := The amount of gas left. |
+| 0x66 | 'LOG0' | Arg0 Arg1 | Create a log message in the call object. |
+| 0x67 | 'LOG1' | Arg0 Arg1 Arg2 | Create a log message with one topic in the call object. |
+| 0x68 | 'LOG2' | Arg0 Arg1 Arg2 Arg3 | Create a log message with two topics in the call object. |
+| 0x69 | 'LOG3' | Arg0 Arg1 Arg2 Arg3 Arg4 | Create a log message with three topics in the call object. |
+| 0x6a | 'LOG4' | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 | Create a log message with four topics in the call object. |
+| 0x6b | 'DEACTIVATE' |  | Mark the current contract for deactication. |
+| 0x6c | 'SPEND' | Arg0 Arg1 | Transfer Arg0 tokens to account Arg1. (If the contract account has at least that many tokens. |
+| 0x6d | 'ORACLE_REGISTER' | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 | Mark the current contract for deactication. |
+| 0x6e | 'ORACLE_QUERY' |  |  |
+| 0x6f | 'ORACLE_RESPOND' |  |  |
+| 0x70 | 'ORACLE_EXTEND' |  |  |
+| 0x71 | 'ORACLE_GET_ANSWER' |  |  |
+| 0x72 | 'ORACLE_GET_QUESTION' |  |  |
+| 0x73 | 'ORACLE_QUERY_FEE' |  |  |
+| 0x74 | 'AENS_RESOLVE' |  |  |
+| 0x75 | 'AENS_PRECLAIM' |  |  |
+| 0x76 | 'AENS_CLAIM' |  |  |
+| 0x77 | 'AENS_UPDATE' |  |  |
+| 0x78 | 'AENS_TRANSFER' |  |  |
+| 0x79 | 'AENS_REVOKE' |  |  |
+| 0x7a | 'ECVERIFY' |  |  |
+| 0x7b | 'SHA3' |  |  |
+| 0x7c | 'SHA256' |  |  |
+| 0x7d | 'BLAKE2B' |  |  |
+| 0xf9 | 'DUMMY7ARG' | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 Arg6 | Temporary dummy instruction to test 7 args. |
+| 0xfa | 'DUMMY8ARG' | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 Arg6 Arg7 | Temporary dummy instruction to test 8 args. |
+| 0xfb | 'ABORT' | Arg0 | Abort execution (dont use all gas) with error message in Arg0. |
+| 0xfc | 'EXIT' | Arg0 | Abort execution (use upp all gas) with error message in Arg0. |
+| 0xfd | 'NOP' |  | The no op. does nothing. |
 
-### Comparison ([I] x [I] -> [B])
-#### LT
-#### GT
-#### EQ
-#### ISZERO
 
 
-### Memory
-#### MLOADI ([N] -> [I])
-#### MLOADA ([N]-> [A])
-#### MLOADB ([N]-> [B])
-#### MLOADC ([N]-> [C])
-#### MLOADM ([N]-> [M])
-#### MLOADS ([N]-> [S])
-#### MLOADT ([N]-> [T])
-
-### Store
-#### MSTORE[‘a]
-#### SLOAD[‘a]
-#### SSTORE[‘a]
-
-### Control flow
-
-#### JUMPDEST
-#### JUMP
-#### JUMPI
-#### CALL
-#### RETURN
-
-### Events
-### Hashing
-#### Blake ([S] -> [A])
-
-### Spend
-#### Spend ([I,A] -> [B])
-Send N tokens to account address. Returns true if successful.
-#### Spend ([I,A] -> [I])
-Send N tokens to account address. Returns the balance left if successful and throws an exception if not.
-
-TODO:
-Think about calls that take non-spendable tokens by default.
-Oracle
-register
-query
-respond
-extend
-get_answer
-get_question
-query_fee
-Name
-resolve
-preclaim
-claim
-transfer
-revoke
 
 ## Gas
 ## Exceptions
@@ -529,3 +613,23 @@ false        : 01111111
 true         : 11111111
 ```
 
+# Notation
+
+Some notes on notation and definition of terms used in this document.
+
+## Bits
+
+Bits are counted from the least significant bit, starting on 0. When
+bits are written out they are written from the most significant bit to
+the least significant bit.
+
+Example the number 1 in a byte would be written in binary as:
+```
+0000001
+```
+And we would say that bit 0 is set to 1. All other bits 1 to 7 are set to 0.
+
+## Word size
+
+The word size of the machine is 8 bits (one byte) but each type and instruction
+uses words of varying sizes, all multiples of bytes though.
