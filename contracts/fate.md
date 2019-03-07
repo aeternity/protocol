@@ -519,11 +519,6 @@ to a server that can validate it and offer tab completion.
 #### TOdos
 
 * Contact aeps team to find responsible contact  (TA)
-* Sophia stand alone (Robert)
-* AEVM opcodes  -> repo  (Robert)
-* AEVM /Sophia ABI code in separate library/cleanup
-* Sophia server http interface (separate repo)
-* Sophia contract interface (also called “ABI”) 45 min
 * Trace / debug
 * Side effects (Tx : contract)
 * Non spendables (fun and contract)
@@ -534,7 +529,6 @@ to a server that can validate it and offer tab completion.
 * Sophia inheritance (compile time code organization)
 * Polymorphism
 * Standard Lib
-
 * FATE spec (Erik)
 ** ABI
 ** Instruction set
@@ -552,6 +546,14 @@ to a server that can validate it and offer tab completion.
 ** String hash
 ** Phash
 
+
+Done:
+
+* Sophia stand alone (Robert)
+* AEVM opcodes  -> repo  (Robert)
+* AEVM /Sophia ABI code in separate library/cleanup
+* Sophia server http interface (separate repo)
+* Sophia contract interface (also called “ABI”) 45 min
 * Hard fork support
 * VM version handling
 
@@ -587,35 +589,39 @@ Variant: 8 + size + [3, size, type]
 
 
 # Appendix 2: Fate ABI
+
 The Fate ABI describes how Fate data are serialized to byte representations.
-ABI Encoding
-In the ABI (arguments to remote calls, remote return values, in the store and in oracles) data is serialized to bytes by a staged tag scheme describing the types of data:
+
+## ABI Serializations
+
+In the ABI (arguments to remote calls, remote return values, in the
+store and in oracles) data is serialized to bytes by a staged tag
+scheme describing the types of data.  When we say "RLP encoded
+integer" below we mean an integer encoded as the smalles big endian byte array
+then this byte array is RLP encoded.
 
 ```
-small integer: sxxxxxx0 6 bit integer with sign bit
-short string : xxxxxx01 (at least one x =/= 0) xxxxxx = byte array size + [bytes]
-string       : 00000001 + RLP encoded array
-tuple        : xxxx1011 + [encoded elements] when 0 < size(tuple) < 16
-tuple        : 00001011 + 1 byte size + [encoded elements]
-list         : xxxx0011 + typerep + [encoded elements],  0 < length < 16, xxxx = length
-list         : 00000011 + typerep + encoded length + [encoded elements]
-                    111  Set below
-               xxxx0111 Free (16)
-               00001111 Free
-               10001111 Free
-               01001111 Free
-               11001111 Free
-map          : 00101111 + RLP encoded size + typerep(A) + typerep(B) + [encoded key, encoded value]
-variant type : 10101111 + RLP encoded size + [RLP encoded size + [typereps]]
-integer      : 10101111 + RLP encoded integer
--integer     : 01101111 + RLP encoded integer
-long list    : 00011111 + typerep + RLP encoded length + [Elements]
-address      : 10011111 + [32 bytes]
-""           : 01011111
-#{}          : 11011111
-{}/unit      : 00111111
-nil          : 10111111
+integer      : sxxxxxx0 : 6 bit integer with sign bit when integer < 64
+string       : xxxxxx01 | size | [bytes] : when 0 < size < 64
+string       : 00000001 | RLP encoded byte array : when size >= 64
+list         : 00000011 | RLP encoded (length - 16) | [encoded elements] : when length >= 16
+list         : xxxx0011 | [encoded elements] : when 0 < length < 16, xxxx = length
+             : xxxx0111 : FREE (For typedefs in future)
+tuple        : 00001011 | RLP encoded (size - 16) | [encoded elements] : when size >= 16
+tuple        : xxxx1011 | [encoded elements] : when 0 < size(tuple) < 16
+map          : 00101111 | RLP encoded size | [encoded key, encoded value]
+tuple        : 00111111 : when size(tuple) == 0
+bits         : 01001111 | RLP encoded integer when bits are finate
+string       : 01011111 : when size == 0
+integer      : 01101111 | RLP encoded (integer - 64) when size >= 64 and integer >= 0
 false        : 01111111
+             : 10001111 : FREE (Possibly for bytecode in the future.)
+address      : 10011111 | [32 bytes]
+varaint      : 10101111 | RLP encoded variant size field | encoded tag | encoded values
+list         : 10111111 : when length == 0
+bits         : 11001111 | RLP encoded integer : when bits are in infinite
+map          : 11011111 : when size == 0
+integer      : 11101111 | RLP encoded ((- integer) - 64)
 true         : 11111111
 ```
 
