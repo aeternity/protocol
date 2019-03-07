@@ -2,13 +2,14 @@
 The Fast æternity Transaction Engine
 ISA
 
-Version 20181212
+Version 20190307
 
 * 20181209 Initial Draft
 * 20181210 Second Draft - New execution model.
 * 20181211 Third Draft - Fleshing out description.
 * 20181212 4th Draft - Data serialization schema.
 * 20190306 5th Draft - Instructions.
+* 20190307 6th Draft - New data serialization schema.
 
 WARNING: Work in progress, major parts are missing and nothing is settled yet.
 
