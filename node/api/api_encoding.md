@@ -50,6 +50,7 @@ tag.
 | pp      | base58   | Peer pubkey |
 | sg      | base58   | Signature |
 | ss      | base64   | State trees |
+| cs      | base64   | Contract calls state tree |
 | st      | base64   | State |
 | th      | base58   | Transaction hash |
 | tx      | base64   | Transaction |
