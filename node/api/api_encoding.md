@@ -51,6 +51,8 @@ tag.
 | sg      | base58   | Signature |
 | ss      | base64   | State trees |
 | cs      | base64   | Contract calls state tree |
+| ck      | base64   | Contract state key |
+| cv      | base64   | Contract state value |
 | st      | base64   | State |
 | th      | base58   | Transaction hash |
 | tx      | base64   | Transaction |
