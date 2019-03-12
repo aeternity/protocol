@@ -564,6 +564,7 @@ Roles:
  * **action:** `get`
  * **tag:** `contract`
  * **payload:**
+
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | pubkey | string | requested contract pubkey | Yes |
