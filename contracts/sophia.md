@@ -178,7 +178,7 @@ Sophia has the following types:
 | record     | An immutable key value store with fixed key names and typed values | ``` record balance = { owner: address, value: int } ```
 | map        | An immutable key value store with dynamic mapping of keys of one type to values of one type | ```type accounts = map(string, address)```
 | option('a) | An optional value either None or Some('a) | ```Some(42)```
-| state        | A record of blockstate key, value pairs  |
+| state        | A record of key, value pairs storing all data of the contract's current state |
 | transactions | An append only list of blockchain transactions |
 | events       | An append only list of blockchain events (or log entries) |
 | signature    | A signature - 64 bytes |
