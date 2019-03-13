@@ -26,7 +26,7 @@ Implementation support exists for batch processing, however this is not yet test
 
 ### Examples
 
-Detailed message transcripts from test suites can be found [for JSON-RPC](./examples/aehttp_integration_SUITE/json-rpc/) and [for legacy](./examples/aehttp_integration_SUITE/legacy/).
+Detailed message transcripts from test suites can be found [for JSON-RPC](./examples/channels/json-rpc/) and [for legacy](./examples/channels/legacy/).
 
 #### Example, legacy:
 
