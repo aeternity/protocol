@@ -1,15 +1,15 @@
 
-#### initiator opens a WebSocket connection (2019-03-18 14:15:06.219)
+#### initiator opens a WebSocket connection
 ```
 ws://localhost:3014/channel?channel_reserve=2&host=localhost&initiator_amount=70000000000000&initiator_id=ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm&lock_period=10&port=12340&protocol=legacy&push_amount=1&responder_amount=40000000000000&responder_id=ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC&role=initiator
 ```
 
-#### responder opens a WebSocket connection (2019-03-18 14:15:06.239)
+#### responder opens a WebSocket connection
 ```
 ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&initiator_id=ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm&lock_period=10&port=12340&protocol=legacy&push_amount=1&responder_amount=40000000000000&responder_id=ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC&role=responder
 ```
 
-#### responder <--- node (2019-03-18 14:15:07.296)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -21,7 +21,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:07.299)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -33,7 +33,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:07.342)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -46,7 +46,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:07.432)
+#### initiator ---> node
 ```javascript
 {
   "action": "initiator_sign",
@@ -56,7 +56,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:07.471)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -68,7 +68,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:07.473)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -81,7 +81,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:15:07.475)
+#### responder ---> node
 ```javascript
 {
   "action": "responder_sign",
@@ -91,7 +91,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:07.496)
+#### responder <--- node
 ```javascript
 {
   "action": "on_chain_tx",
@@ -103,7 +103,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:07.497)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -115,7 +115,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:07.498)
+#### initiator <--- node
 ```javascript
 {
   "action": "on_chain_tx",
@@ -127,7 +127,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:08.203)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -141,7 +141,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:08.217)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -161,7 +161,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:09.31)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -173,7 +173,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.37)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -185,7 +185,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:09.37)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -197,7 +197,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.39)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -209,7 +209,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.54)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -221,7 +221,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:09.57)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -233,7 +233,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.57)
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -245,7 +245,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:09.59)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -257,25 +257,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator: (2019-03-18 14:15:09.285)
-> Funding has been confirmed locally on-chain
-
-#### responder: (2019-03-18 14:15:09.285)
-> Funding has been confirmed locally on-chain
-
-#### responder: (2019-03-18 14:15:09.285)
-> Funding has been confirmed on-chain by other party
-
-#### initiator: (2019-03-18 14:15:09.285)
-> Funding has been confirmed on-chain by other party
-
-#### responder: (2019-03-18 14:15:09.285)
-> Channel is `open` and ready to use
-
-#### initiator: (2019-03-18 14:15:09.285)
-> Channel is `open` and ready to use
-
-#### initiator ---> node (2019-03-18 14:15:09.285)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -289,7 +271,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.291)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -309,7 +291,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.292)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -322,7 +304,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.335)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -335,7 +317,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.336)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -345,7 +327,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:09.375)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -357,7 +339,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:09.376)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -370,7 +352,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:15:09.377)
+#### responder ---> node
 ```javascript
 {
   "action": "update_ack",
@@ -380,7 +362,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:09.401)
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -392,7 +374,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.420)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -404,7 +386,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.431)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -418,7 +400,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.436)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -438,7 +420,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.437)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -449,7 +431,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.441)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -465,7 +447,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.449)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -479,7 +461,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.464)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -499,7 +481,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:15:09.465)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -512,7 +494,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:09.478)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -525,7 +507,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:15:09.479)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -535,7 +517,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.519)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -547,7 +529,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.520)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -560,7 +542,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.522)
+#### initiator ---> node
 ```javascript
 {
   "action": "update_ack",
@@ -570,7 +552,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.548)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -582,7 +564,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:09.562)
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -594,7 +576,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.574)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -608,7 +590,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.580)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -628,7 +610,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.580)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -639,7 +621,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.595)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -655,7 +637,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.605)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -669,7 +651,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.613)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -689,7 +671,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:15:09.614)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -702,7 +684,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:09.628)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -715,7 +697,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:15:09.630)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -725,7 +707,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.671)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -737,7 +719,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.672)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -750,7 +732,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.673)
+#### initiator ---> node
 ```javascript
 {
   "action": "update_ack",
@@ -760,7 +742,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.703)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -772,7 +754,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:09.718)
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -784,7 +766,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.736)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -798,7 +780,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.741)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -818,7 +800,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.742)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -829,7 +811,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.748)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -845,7 +827,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.758)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -859,7 +841,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.764)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -879,7 +861,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.765)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -892,7 +874,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.781)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -905,7 +887,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.782)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -915,7 +897,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:09.842)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -927,7 +909,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:09.843)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -940,7 +922,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:15:09.844)
+#### responder ---> node
 ```javascript
 {
   "action": "update_ack",
@@ -950,7 +932,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:09.869)
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -962,7 +944,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.884)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -974,7 +956,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.894)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -988,7 +970,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.900)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -1008,7 +990,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.901)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -1019,7 +1001,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.907)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -1035,7 +1017,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.915)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -1049,7 +1031,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.928)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -1069,7 +1051,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:15:09.930)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -1082,7 +1064,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:09.944)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -1095,7 +1077,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:15:09.945)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -1105,7 +1087,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.986)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -1117,7 +1099,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:09.987)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -1130,7 +1112,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:09.989)
+#### initiator ---> node
 ```javascript
 {
   "action": "update_ack",
@@ -1140,7 +1122,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:10.28)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -1152,7 +1134,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:10.47)
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -1164,7 +1146,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:10.65)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -1178,7 +1160,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:10.71)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -1198,7 +1180,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:10.71)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -1209,7 +1191,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:10.77)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",

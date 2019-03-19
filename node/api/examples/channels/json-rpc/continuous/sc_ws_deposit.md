@@ -1,5 +1,5 @@
 
-#### initiator ---> node (2019-03-18 14:06:37.3)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -10,7 +10,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:37.43)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -25,7 +25,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:37.62)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -36,7 +36,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:37.91)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -51,7 +51,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:37.95)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -66,7 +66,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:06:37.96)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -77,7 +77,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:37.119)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -92,7 +92,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:37.133)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -107,7 +107,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:39.581)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -122,22 +122,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:39.590)
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.info",
-  "params": {
-    "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
-    "data": {
-      "event": "deposit_locked"
-    }
-  },
-  "version": 1
-}
-```
-
-#### initiator <--- node (2019-03-18 14:06:39.596)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -152,7 +137,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:39.598)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -167,7 +152,22 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:39.603)
+#### responder <--- node
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
+    "data": {
+      "event": "deposit_locked"
+    }
+  },
+  "version": 1
+}
+```
+
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -182,7 +182,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:39.616)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -197,7 +197,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:06:41.54)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -208,7 +208,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:41.87)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -223,7 +223,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:06:41.88)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -234,7 +234,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:41.122)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -249,7 +249,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:41.123)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -264,7 +264,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:41.124)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -275,7 +275,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:41.145)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -290,7 +290,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:41.164)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -305,7 +305,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:44.646)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -320,7 +320,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:44.651)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -335,7 +335,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:44.652)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -350,7 +350,22 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:44.664)
+#### initiator <--- node
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
+    "data": {
+      "event": "deposit_locked"
+    }
+  },
+  "version": 1
+}
+```
+
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -365,22 +380,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:44.665)
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.info",
-  "params": {
-    "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
-    "data": {
-      "event": "deposit_locked"
-    }
-  },
-  "version": 1
-}
-```
-
-#### responder <--- node (2019-03-18 14:06:44.682)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",

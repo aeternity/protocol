@@ -1,5 +1,5 @@
 
-#### initiator ---> node (2019-03-18 14:15:56.779)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -12,7 +12,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:15:56.779)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -25,7 +25,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:56.797)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -38,7 +38,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:56.802)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -51,7 +51,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:56.804)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -61,7 +61,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:15:56.805)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -71,7 +71,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:56.844)
+#### responder <--- node
 ```javascript
 {
   "action": "conflict",
@@ -84,7 +84,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:56.847)
+#### initiator <--- node
 ```javascript
 {
   "action": "conflict",
@@ -97,20 +97,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:56.848)
-```javascript
-{
-  "action": "conflict",
-  "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
-  "payload": {
-    "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
-    "round": 5
-  },
-  "version": 1
-}
-```
-
-#### responder ---> node (2019-03-18 14:15:56.849)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -123,7 +110,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:56.849)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -136,7 +123,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:56.853)
+#### initiator <--- node
 ```javascript
 {
   "action": "conflict",
@@ -149,30 +136,20 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:56.872)
+#### responder <--- node
 ```javascript
 {
-  "action": "sign",
+  "action": "conflict",
   "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
   "payload": {
-    "tx": "tx_+JU5AaEGxg0THRn6EnayrKAiA7XHtC8jht9LlO75Omp4uAd28NUG+E24S/hJggI6AaEBZxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oShAbG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmAaDYTo7iKW4pok1Wlbwhz4YiC9oAIRiuehUOjC8hE90TsfdTdV0="
+    "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
+    "round": 5
   },
-  "tag": "update",
   "version": 1
 }
 ```
 
-#### responder ---> node (2019-03-18 14:15:56.874)
-```javascript
-{
-  "action": "update",
-  "payload": {
-    "tx": "tx_+N8LAfhCuEATbgyjHT777sQwUZ5HpCkiIfLk7E3zA389FnfKLUzh42tJbVzAncoecVvYcAWm1fLUBU1xAh5rFr2lLQXOWfkJuJf4lTkBoQbGDRMdGfoSdrKsoCIDtce0LyOG30uU7vk6ani4B3bw1Qb4TbhL+EmCAjoBoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhKEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YBoNhOjuIpbimiTVaVvCHPhiIL2gAhGK56FQ6MLyET3ROxMAAcuQ=="
-  }
-}
-```
-
-#### initiator <--- node (2019-03-18 14:15:56.880)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -185,7 +162,30 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:56.881)
+#### responder <--- node
+```javascript
+{
+  "action": "sign",
+  "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
+  "payload": {
+    "tx": "tx_+JU5AaEGxg0THRn6EnayrKAiA7XHtC8jht9LlO75Omp4uAd28NUG+E24S/hJggI6AaEBZxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oShAbG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmAaDYTo7iKW4pok1Wlbwhz4YiC9oAIRiuehUOjC8hE90TsfdTdV0="
+  },
+  "tag": "update",
+  "version": 1
+}
+```
+
+#### responder ---> node
+```javascript
+{
+  "action": "update",
+  "payload": {
+    "tx": "tx_+N8LAfhCuEATbgyjHT777sQwUZ5HpCkiIfLk7E3zA389FnfKLUzh42tJbVzAncoecVvYcAWm1fLUBU1xAh5rFr2lLQXOWfkJuJf4lTkBoQbGDRMdGfoSdrKsoCIDtce0LyOG30uU7vk6ani4B3bw1Qb4TbhL+EmCAjoBoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhKEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YBoNhOjuIpbimiTVaVvCHPhiIL2gAhGK56FQ6MLyET3ROxMAAcuQ=="
+  }
+}
+```
+
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -195,7 +195,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:56.900)
+#### initiator <--- node
 ```javascript
 {
   "action": "conflict",
@@ -208,7 +208,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:56.901)
+#### responder <--- node
 ```javascript
 {
   "action": "conflict",
@@ -221,7 +221,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:56.902)
+#### responder <--- node
 ```javascript
 {
   "action": "conflict",
@@ -234,7 +234,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:56.905)
+#### initiator <--- node
 ```javascript
 {
   "action": "conflict",

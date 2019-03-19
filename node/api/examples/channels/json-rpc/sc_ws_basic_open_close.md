@@ -1,15 +1,15 @@
 
-#### initiator opens a WebSocket connection (2019-03-18 14:06:04.510)
+#### initiator opens a WebSocket connection
 ```
 ws://localhost:3014/channel?channel_reserve=2&host=localhost&initiator_amount=70000000000000&initiator_id=ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm&lock_period=10&port=12340&protocol=json-rpc&push_amount=1&responder_amount=40000000000000&responder_id=ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC&role=initiator
 ```
 
-#### responder opens a WebSocket connection (2019-03-18 14:06:04.538)
+#### responder opens a WebSocket connection
 ```
 ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&initiator_id=ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm&lock_period=10&port=12340&protocol=json-rpc&push_amount=1&responder_amount=40000000000000&responder_id=ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC&role=responder
 ```
 
-#### responder <--- node (2019-03-18 14:06:05.592)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -24,7 +24,10 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:05.597)
+#### responder info
+> Received an WebSocket opening request
+
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -39,7 +42,10 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:05.654)
+#### initiator info
+> Received an WebSocket connection accepted
+
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -54,7 +60,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:05.751)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -65,7 +71,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:05.770)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -80,7 +86,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:05.773)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -95,7 +101,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:06:05.774)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -106,7 +112,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:05.801)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -121,7 +127,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:05.804)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -136,7 +142,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:05.805)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -151,7 +157,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:08.81)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423488,
@@ -166,7 +172,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:08.86)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": null,
@@ -186,7 +192,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:09.541)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -201,7 +207,10 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:09.541)
+#### responder info
+> Funding has been confirmed locally on-chain
+
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -216,7 +225,10 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:09.544)
+#### initiator info
+> Funding has been confirmed locally on-chain
+
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -231,7 +243,10 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:09.544)
+#### responder info
+> Funding has been confirmed on-chain by other party
+
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -246,7 +261,10 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:09.569)
+#### initiator info
+> Funding has been confirmed on-chain by other party
+
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -261,7 +279,10 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:09.570)
+#### initiator info
+> Channel is `open` and ready to use
+
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -276,7 +297,10 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:09.573)
+#### responder info
+> Channel is `open` and ready to use
+
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -291,7 +315,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:09.574)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -306,25 +330,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder: (2019-03-18 14:06:09.769)
-> Funding has been confirmed locally on-chain
-
-#### initiator: (2019-03-18 14:06:09.770)
-> Funding has been confirmed locally on-chain
-
-#### responder: (2019-03-18 14:06:09.770)
-> Funding has been confirmed on-chain by other party
-
-#### initiator: (2019-03-18 14:06:09.770)
-> Funding has been confirmed on-chain by other party
-
-#### responder: (2019-03-18 14:06:09.770)
-> Channel is `open` and ready to use
-
-#### initiator: (2019-03-18 14:06:09.770)
-> Channel is `open` and ready to use
-
-#### initiator ---> node (2019-03-18 14:06:09.770)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423487,
@@ -339,7 +345,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:09.794)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
@@ -359,7 +365,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:09.795)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -372,7 +378,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:09.849)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -387,7 +393,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:09.883)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -398,7 +404,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:09.923)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -413,7 +419,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:09.925)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -428,7 +434,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:06:09.926)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -439,7 +445,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:09.954)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -454,7 +460,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:09.972)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -469,7 +475,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:09.988)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423486,
@@ -484,7 +490,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:09.993)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
@@ -504,7 +510,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:09.994)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423485,
@@ -514,7 +520,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.1)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
@@ -530,7 +536,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.189)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423484,
@@ -545,7 +551,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.195)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
@@ -565,7 +571,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:06:10.196)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -578,7 +584,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:10.215)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -593,7 +599,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:06:10.220)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -604,7 +610,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.283)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -619,7 +625,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.286)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -634,7 +640,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.288)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -645,7 +651,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.340)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -660,7 +666,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:10.371)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -675,7 +681,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.384)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423483,
@@ -690,7 +696,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.389)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
@@ -710,7 +716,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.389)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423482,
@@ -720,7 +726,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.394)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
@@ -736,7 +742,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.401)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423481,
@@ -751,7 +757,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.408)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
@@ -771,7 +777,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:06:10.409)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -784,7 +790,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:10.424)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -799,7 +805,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:06:10.426)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -810,7 +816,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.466)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -825,7 +831,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.468)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -840,7 +846,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.469)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -851,7 +857,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.499)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -866,7 +872,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:10.523)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -881,7 +887,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.538)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423480,
@@ -896,7 +902,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.543)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
@@ -916,7 +922,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.544)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423479,
@@ -926,7 +932,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.549)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
@@ -942,7 +948,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.556)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423478,
@@ -957,7 +963,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.562)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
@@ -977,7 +983,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.563)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -990,7 +996,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.576)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1005,7 +1011,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.577)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1016,7 +1022,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:10.620)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1031,7 +1037,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:10.621)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1046,7 +1052,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:06:10.622)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1057,7 +1063,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:10.652)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1072,7 +1078,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.669)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1087,7 +1093,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.686)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423477,
@@ -1102,7 +1108,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.696)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
@@ -1122,7 +1128,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.697)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423476,
@@ -1132,7 +1138,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.703)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
@@ -1148,7 +1154,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.711)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423475,
@@ -1163,7 +1169,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.716)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
@@ -1183,7 +1189,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:06:10.717)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1196,7 +1202,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:10.731)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1211,7 +1217,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder ---> node (2019-03-18 14:06:10.732)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1222,7 +1228,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.775)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1237,7 +1243,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.777)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1252,7 +1258,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.778)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1263,7 +1269,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.814)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1278,7 +1284,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:10.846)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1293,7 +1299,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.865)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423474,
@@ -1308,7 +1314,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.869)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
@@ -1328,7 +1334,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:10.870)
+#### initiator ---> node
 ```javascript
 {
   "id": -576460752303423473,
@@ -1338,7 +1344,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:10.880)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",

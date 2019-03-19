@@ -1,5 +1,5 @@
 
-#### initiator ---> node (2019-03-18 14:06:56.760)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -11,7 +11,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:56.770)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -31,7 +31,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:06:56.771)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -43,7 +43,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:56.781)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -63,7 +63,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:56.782)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -75,7 +75,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:56.791)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -95,7 +95,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:06:56.792)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -107,7 +107,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:56.842)
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -127,7 +127,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:06:56.842)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -139,7 +139,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:56.852)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -159,7 +159,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:06:56.853)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -171,7 +171,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:56.895)
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",

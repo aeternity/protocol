@@ -1,5 +1,5 @@
 
-#### initiator ---> node (2019-03-18 14:15:44.854)
+#### initiator ---> node
 ```javascript
 {
   "action": "withdraw",
@@ -9,7 +9,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:44.895)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -22,7 +22,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:44.896)
+#### initiator ---> node
 ```javascript
 {
   "action": "withdraw_tx",
@@ -32,7 +32,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:44.927)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -44,7 +44,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:44.929)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -57,7 +57,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:15:44.930)
+#### responder ---> node
 ```javascript
 {
   "action": "withdraw_ack",
@@ -67,7 +67,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:44.949)
+#### responder <--- node
 ```javascript
 {
   "action": "on_chain_tx",
@@ -79,7 +79,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:44.977)
+#### initiator <--- node
 ```javascript
 {
   "action": "on_chain_tx",
@@ -91,7 +91,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:48.615)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -103,7 +103,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:48.617)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -115,7 +115,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:48.618)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -127,7 +127,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:48.619)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -139,7 +139,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:48.642)
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -151,7 +151,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:48.655)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -163,7 +163,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:15:51.983)
+#### responder ---> node
 ```javascript
 {
   "action": "withdraw",
@@ -173,7 +173,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:52.8)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -186,7 +186,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:15:52.10)
+#### responder ---> node
 ```javascript
 {
   "action": "withdraw_tx",
@@ -196,7 +196,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:52.46)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -208,7 +208,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:52.47)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -221,7 +221,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:15:52.48)
+#### initiator ---> node
 ```javascript
 {
   "action": "withdraw_ack",
@@ -231,7 +231,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:52.78)
+#### initiator <--- node
 ```javascript
 {
   "action": "on_chain_tx",
@@ -243,7 +243,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:52.92)
+#### responder <--- node
 ```javascript
 {
   "action": "on_chain_tx",
@@ -255,7 +255,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:55.765)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -267,7 +267,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:55.768)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -279,7 +279,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:55.774)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -291,7 +291,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:55.775)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -303,7 +303,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:55.789)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -315,7 +315,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:55.790)
+#### responder <--- node
 ```javascript
 {
   "action": "update",

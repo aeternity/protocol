@@ -1,8 +1,8 @@
 
-#### initiator: (2019-03-18 14:15:56.438)
+#### initiator info
 > Failing update, insufficient balance
 
-#### initiator ---> node (2019-03-18 14:15:56.438)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -15,7 +15,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:56.452)
+#### initiator <--- node
 ```javascript
 {
   "action": "error",
@@ -35,10 +35,10 @@
 }
 ```
 
-#### initiator: (2019-03-18 14:15:56.453)
+#### initiator info
 > Failing update, negative amount
 
-#### initiator ---> node (2019-03-18 14:15:56.453)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -51,7 +51,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:56.455)
+#### initiator <--- node
 ```javascript
 {
   "action": "error",
@@ -71,10 +71,10 @@
 }
 ```
 
-#### initiator: (2019-03-18 14:15:56.455)
+#### initiator info
 > Failing update, invalid pubkeys
 
-#### initiator ---> node (2019-03-18 14:15:56.456)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -87,7 +87,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:15:56.461)
+#### initiator <--- node
 ```javascript
 {
   "action": "error",
@@ -107,10 +107,10 @@
 }
 ```
 
-#### responder: (2019-03-18 14:15:56.462)
+#### responder info
 > Failing update, insufficient balance
 
-#### responder ---> node (2019-03-18 14:15:56.462)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -123,7 +123,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:56.487)
+#### responder <--- node
 ```javascript
 {
   "action": "error",
@@ -143,10 +143,10 @@
 }
 ```
 
-#### responder: (2019-03-18 14:15:56.488)
+#### responder info
 > Failing update, negative amount
 
-#### responder ---> node (2019-03-18 14:15:56.488)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -159,7 +159,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:56.493)
+#### responder <--- node
 ```javascript
 {
   "action": "error",
@@ -179,10 +179,10 @@
 }
 ```
 
-#### responder: (2019-03-18 14:15:56.494)
+#### responder info
 > Failing update, invalid pubkeys
 
-#### responder ---> node (2019-03-18 14:15:56.495)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -195,7 +195,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:15:56.502)
+#### responder <--- node
 ```javascript
 {
   "action": "error",

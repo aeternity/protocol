@@ -1,8 +1,8 @@
 
-#### initiator: (2019-03-18 14:06:56.627)
+#### initiator info
 > Failing update, insufficient balance
 
-#### initiator ---> node (2019-03-18 14:06:56.628)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -15,7 +15,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:56.643)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
@@ -44,10 +44,10 @@
 }
 ```
 
-#### initiator: (2019-03-18 14:06:56.643)
+#### initiator info
 > Failing update, negative amount
 
-#### initiator ---> node (2019-03-18 14:06:56.643)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -60,7 +60,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:56.645)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
@@ -89,10 +89,10 @@
 }
 ```
 
-#### initiator: (2019-03-18 14:06:56.645)
+#### initiator info
 > Failing update, invalid pubkeys
 
-#### initiator ---> node (2019-03-18 14:06:56.646)
+#### initiator ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -105,7 +105,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:06:56.652)
+#### initiator <--- node
 ```javascript
 {
   "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
@@ -134,10 +134,10 @@
 }
 ```
 
-#### responder: (2019-03-18 14:06:56.652)
+#### responder info
 > Failing update, insufficient balance
 
-#### responder ---> node (2019-03-18 14:06:56.653)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -150,7 +150,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:56.680)
+#### responder <--- node
 ```javascript
 {
   "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
@@ -179,10 +179,10 @@
 }
 ```
 
-#### responder: (2019-03-18 14:06:56.680)
+#### responder info
 > Failing update, negative amount
 
-#### responder ---> node (2019-03-18 14:06:56.681)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -195,7 +195,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:56.682)
+#### responder <--- node
 ```javascript
 {
   "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
@@ -224,10 +224,10 @@
 }
 ```
 
-#### responder: (2019-03-18 14:06:56.682)
+#### responder info
 > Failing update, invalid pubkeys
 
-#### responder ---> node (2019-03-18 14:06:56.683)
+#### responder ---> node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -240,7 +240,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:06:56.690)
+#### responder <--- node
 ```javascript
 {
   "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",

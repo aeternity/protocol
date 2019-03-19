@@ -1,5 +1,5 @@
 
-#### initiator ---> node (2019-03-18 14:23:23.282)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -14,7 +14,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:23.310)
+#### initiator <--- node
 ```javascript
 {
   "action": "error",
@@ -36,7 +36,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:24.594)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -51,7 +51,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:24.619)
+#### responder <--- node
 ```javascript
 {
   "action": "error",
@@ -73,7 +73,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:23:25.876)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -88,7 +88,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:25.905)
+#### initiator <--- node
 ```javascript
 {
   "action": "error",
@@ -110,7 +110,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:27.144)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -125,7 +125,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:27.172)
+#### responder <--- node
 ```javascript
 {
   "action": "error",
@@ -147,7 +147,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:23:28.424)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -162,7 +162,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:28.454)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -175,7 +175,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:23:28.457)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -185,7 +185,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:28.575)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -197,7 +197,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:28.579)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -210,7 +210,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:28.582)
+#### responder ---> node
 ```javascript
 {
   "action": "update_ack",
@@ -220,7 +220,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:28.669)
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -232,7 +232,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:28.691)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -244,7 +244,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:23:29.912)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -258,7 +258,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:29.933)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -271,7 +271,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:23:29.934)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -281,7 +281,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:30.25)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -293,7 +293,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:30.29)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -306,7 +306,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:30.31)
+#### responder ---> node
 ```javascript
 {
   "action": "update_ack",
@@ -316,7 +316,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:23:30.31)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -329,7 +329,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:30.96)
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -341,7 +341,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:30.121)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -362,7 +362,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:30.122)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -374,7 +374,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:31.376)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -389,7 +389,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:31.416)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -402,7 +402,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:31.420)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -412,7 +412,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:31.522)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -424,7 +424,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:31.527)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -437,7 +437,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:23:31.530)
+#### initiator ---> node
 ```javascript
 {
   "action": "update_ack",
@@ -447,7 +447,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:31.624)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -459,7 +459,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:31.654)
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -471,7 +471,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:32.853)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -485,7 +485,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:32.877)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -498,7 +498,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:32.879)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -508,7 +508,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:32.964)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -520,7 +520,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:32.964)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -533,7 +533,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:23:32.966)
+#### initiator ---> node
 ```javascript
 {
   "action": "update_ack",
@@ -543,7 +543,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:32.966)
+#### responder ---> node
 ```javascript
 {
   "action": "get",
@@ -556,7 +556,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:33.18)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -568,7 +568,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:33.50)
+#### responder <--- node
 ```javascript
 {
   "action": "get",
@@ -589,7 +589,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:33.54)
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -601,7 +601,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:23:34.333)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -616,7 +616,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:34.381)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -629,7 +629,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:23:34.385)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -639,7 +639,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:34.478)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -651,7 +651,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:34.481)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -664,7 +664,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:34.486)
+#### responder ---> node
 ```javascript
 {
   "action": "update_ack",
@@ -674,7 +674,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:34.557)
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -686,7 +686,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:34.598)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -698,7 +698,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:23:35.797)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -712,7 +712,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:35.820)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -725,7 +725,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:23:35.822)
+#### initiator ---> node
 ```javascript
 {
   "action": "update",
@@ -735,7 +735,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:35.898)
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -747,7 +747,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:35.899)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -760,7 +760,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:35.900)
+#### responder ---> node
 ```javascript
 {
   "action": "update_ack",
@@ -770,7 +770,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:23:35.901)
+#### initiator ---> node
 ```javascript
 {
   "action": "get",
@@ -783,7 +783,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:35.950)
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -795,7 +795,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:35.986)
+#### initiator <--- node
 ```javascript
 {
   "action": "get",
@@ -816,7 +816,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:35.987)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -828,7 +828,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:37.261)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -843,7 +843,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:37.295)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -856,7 +856,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:37.298)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -866,7 +866,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:37.396)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -878,7 +878,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:37.399)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -891,7 +891,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:23:37.402)
+#### initiator ---> node
 ```javascript
 {
   "action": "update_ack",
@@ -901,7 +901,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:37.463)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -913,7 +913,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:37.509)
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -925,7 +925,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:38.690)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -939,7 +939,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:38.715)
+#### responder <--- node
 ```javascript
 {
   "action": "sign",
@@ -952,7 +952,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:38.717)
+#### responder ---> node
 ```javascript
 {
   "action": "update",
@@ -962,7 +962,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:38.796)
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -974,7 +974,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:38.799)
+#### initiator <--- node
 ```javascript
 {
   "action": "sign",
@@ -987,7 +987,7 @@
 }
 ```
 
-#### initiator ---> node (2019-03-18 14:23:38.801)
+#### initiator ---> node
 ```javascript
 {
   "action": "update_ack",
@@ -997,7 +997,7 @@
 }
 ```
 
-#### responder ---> node (2019-03-18 14:23:38.802)
+#### responder ---> node
 ```javascript
 {
   "action": "get",
@@ -1010,7 +1010,7 @@
 }
 ```
 
-#### initiator <--- node (2019-03-18 14:23:38.858)
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -1022,7 +1022,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:38.886)
+#### responder <--- node
 ```javascript
 {
   "action": "get",
@@ -1043,7 +1043,7 @@
 }
 ```
 
-#### responder <--- node (2019-03-18 14:23:38.887)
+#### responder <--- node
 ```javascript
 {
   "action": "update",
