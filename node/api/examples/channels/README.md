@@ -80,17 +80,25 @@ An opening message includes all the needed parameters and looks like this:
 ws://localhost:3014/channel?channel_reserve=2&host=localhost&initiator_amount=70000000000000&initiator_id=ak_HkRcJAFekttmTHyeZUQkAiqMRvTQ7h9ekQsHWFYMaoNw1JNWs&lock_period=10&port=12340&protocol=json-rpc&push_amount=1&responder_amount=40000000000000&responder_id=ak_2QhXumV8mm8Ni9ew5ZFsgcSysB9FtxjpqPWDSehgs7MJvFNoV3&role=initiator
 ```
 
-##### Sending and receiving a message 
+###### Sending and receiving a message 
 In the section, right after the participant, there is an arror indicating the
 direction of the message:
 
 * `<--- node` means that a message had been received from the node
 * `---> node` means that a message had been sent to the node
 
-##### Continuous example
+###### Information log messages
+Some WebSocket events represent important milestones regarding the example
+logic and those are followed by a special information message that is a
+comment of what had just happened. They look like this:
+
+###### responder info
+> Received an WebSocket opening request
+
+#### Continuous example
 
 There are two types of examples: that show a full open-close scenario or those
-that are built on top of the previous ones'state. The latter are in `./*continuous/`
+that are built on top of the previous ones'state. The latter are in `./*/continuous/`
 and the former are outside it. The continuous ones have one single opening of
 the state channel and the following examples are focused on specific actions.
 The opening with initial balances is described in
