@@ -107,7 +107,7 @@
 }
 ```
 
-#### initiator <--- node
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -122,7 +122,7 @@
 }
 ```
 
-#### responder <--- node
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -167,7 +167,7 @@
 }
 ```
 
-#### responder <--- node
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -182,7 +182,7 @@
 }
 ```
 
-#### initiator <--- node
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -335,7 +335,7 @@
 }
 ```
 
-#### responder <--- node
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -350,7 +350,7 @@
 }
 ```
 
-#### initiator <--- node
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",

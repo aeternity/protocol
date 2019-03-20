@@ -115,18 +115,6 @@
 }
 ```
 
-#### responder <--- node
-```javascript
-{
-  "action": "info",
-  "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
-  "payload": {
-    "event": "withdraw_locked"
-  },
-  "version": 1
-}
-```
-
 #### initiator <--- node
 ```javascript
 {
@@ -139,7 +127,7 @@
 }
 ```
 
-#### responder <--- node
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
@@ -151,7 +139,19 @@
 }
 ```
 
-#### initiator <--- node
+#### responder <--- node
+```javascript
+{
+  "action": "info",
+  "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
+  "payload": {
+    "event": "withdraw_locked"
+  },
+  "version": 1
+}
+```
+
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -279,18 +279,6 @@
 }
 ```
 
-#### initiator <--- node
-```javascript
-{
-  "action": "info",
-  "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
-  "payload": {
-    "event": "withdraw_locked"
-  },
-  "version": 1
-}
-```
-
 #### responder <--- node
 ```javascript
 {
@@ -304,6 +292,18 @@
 ```
 
 #### initiator <--- node
+```javascript
+{
+  "action": "info",
+  "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
+  "payload": {
+    "event": "withdraw_locked"
+  },
+  "version": 1
+}
+```
+
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -315,7 +315,7 @@
 }
 ```
 
-#### responder <--- node
+#### initiator <--- node
 ```javascript
 {
   "action": "update",

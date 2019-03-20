@@ -209,18 +209,6 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node
-```javascript
-{
-  "action": "info",
-  "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
-  "payload": {
-    "event": "open"
-  },
-  "version": 1
-}
-```
-
 #### responder <--- node
 ```javascript
 {
@@ -240,6 +228,18 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
   "payload": {
     "state": "tx_+QENCwH4hLhAB2c+N2Enud4n4yxcjN/L+2Ef7LyAPACA2ZDcsm1+uUa8GfgpCZhoiwBzi05sCMSIsAW/cwpRNfYEqPXyT0X+DrhAPKjlEqJhL+L2A6yO/Fb2KOf4YFyF8xxX7byFlSj9T+jfNt1T4KbRo+vvCYHLSmTSB60af93QKYP9yxFZXqDkDriD+IEyAaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGP6olImAAoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhIYkYTnKgAACCgCGEjCc5UAAwKCjPk7CXWjSHTO8V2Y9WTad6D/5sB8yCR8WumWh0WxWvwHTqe+I"
+  },
+  "version": 1
+}
+```
+
+#### initiator <--- node
+```javascript
+{
+  "action": "info",
+  "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
+  "payload": {
+    "event": "open"
   },
   "version": 1
 }

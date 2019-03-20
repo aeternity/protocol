@@ -91,6 +91,18 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
+#### responder <--- node
+```javascript
+{
+  "action": "on_chain_tx",
+  "channel_id": null,
+  "payload": {
+    "tx": "tx_+QENCwH4hLhAmh8azl0Aethe8y1ckQBKUfy8VcBanJ+l5VlZpMXg/yETtDewIgOTCOaSQJaXIKA1kuozLM2rZsw8lpuvfDlHAbhA9N56tzbvdVaLbvxgXWuNcdcgvNuriHjeqxeLL60IKJpAYcFD7QFxrqPXcHrc1u5LvQqOiUNLHhrc7eJ8wP8LA7iD+IEyAaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGP6olImAAoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhIYkYTnKgAACCgCGEjCc5UAAwKCjPk7CXWjSHTO8V2Y9WTad6D/5sB8yCR8WumWh0WxWvwZdPEBJ"
+  },
+  "version": 1
+}
+```
+
 #### initiator <--- node
 ```javascript
 {
@@ -104,18 +116,6 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 ```
 
 #### initiator <--- node
-```javascript
-{
-  "action": "on_chain_tx",
-  "channel_id": null,
-  "payload": {
-    "tx": "tx_+QENCwH4hLhAmh8azl0Aethe8y1ckQBKUfy8VcBanJ+l5VlZpMXg/yETtDewIgOTCOaSQJaXIKA1kuozLM2rZsw8lpuvfDlHAbhA9N56tzbvdVaLbvxgXWuNcdcgvNuriHjeqxeLL60IKJpAYcFD7QFxrqPXcHrc1u5LvQqOiUNLHhrc7eJ8wP8LA7iD+IEyAaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGP6olImAAoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhIYkYTnKgAACCgCGEjCc5UAAwKCjPk7CXWjSHTO8V2Y9WTad6D/5sB8yCR8WumWh0WxWvwZdPEBJ"
-  },
-  "version": 1
-}
-```
-
-#### responder <--- node
 ```javascript
 {
   "action": "on_chain_tx",
@@ -209,18 +209,6 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node
-```javascript
-{
-  "action": "info",
-  "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
-  "payload": {
-    "event": "open"
-  },
-  "version": 1
-}
-```
-
 #### responder <--- node
 ```javascript
 {
@@ -233,7 +221,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -245,7 +233,19 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node
+#### initiator <--- node
+```javascript
+{
+  "action": "info",
+  "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
+  "payload": {
+    "event": "open"
+  },
+  "version": 1
+}
+```
+
+#### initiator <--- node
 ```javascript
 {
   "action": "update",

@@ -137,7 +137,7 @@
 }
 ```
 
-#### responder <--- node
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -152,7 +152,7 @@
 }
 ```
 
-#### initiator <--- node
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -320,6 +320,21 @@
 }
 ```
 
+#### initiator <--- node
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
+    "data": {
+      "event": "withdraw_locked"
+    }
+  },
+  "version": 1
+}
+```
+
 #### responder <--- node
 ```javascript
 {
@@ -350,22 +365,7 @@
 }
 ```
 
-#### initiator <--- node
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.info",
-  "params": {
-    "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
-    "data": {
-      "event": "withdraw_locked"
-    }
-  },
-  "version": 1
-}
-```
-
-#### initiator <--- node
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -380,7 +380,7 @@
 }
 ```
 
-#### responder <--- node
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",

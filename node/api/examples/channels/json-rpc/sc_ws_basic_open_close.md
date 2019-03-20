@@ -192,24 +192,6 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.info",
-  "params": {
-    "channel_id": null,
-    "data": {
-      "event": "own_funding_locked"
-    }
-  },
-  "version": 1
-}
-```
-
-#### responder info
-> Funding has been confirmed locally on-chain
-
 #### initiator <--- node
 ```javascript
 {
@@ -234,6 +216,24 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
+    "channel_id": null,
+    "data": {
+      "event": "own_funding_locked"
+    }
+  },
+  "version": 1
+}
+```
+
+#### responder info
+> Funding has been confirmed locally on-chain
+
+#### initiator <--- node
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
     "channel_id": "ch_2TPA12qYnQUE6359Vmg55SD5wMvKUQxZA9wWChWSsRkFvvYAUd",
     "data": {
       "event": "funding_locked"
@@ -243,10 +243,10 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder info
+#### initiator info
 > Funding has been confirmed on-chain by other party
 
-#### initiator <--- node
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -261,7 +261,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator info
+#### responder info
 > Funding has been confirmed on-chain by other party
 
 #### initiator <--- node
@@ -300,7 +300,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 #### responder info
 > Channel is `open` and ready to use
 
-#### responder <--- node
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -315,7 +315,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
