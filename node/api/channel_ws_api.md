@@ -246,7 +246,7 @@ Roles:
 
 ### Depositor receives unsigned deposit transaction
  * **method:** `channels.sign.deposit_tx`
- * **payload:**
+ * **params:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
@@ -303,7 +303,7 @@ Roles:
 
 ### Acknowledger receives unsigned deposit transaction
  * **method:** `channels.sign.deposit_ack`
- * **payload:**
+ * **params:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
