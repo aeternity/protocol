@@ -62,12 +62,11 @@ In order to use a channel, it must be opened. Both parties negotiate parameters 
 
 ### Websocket protocol
 
-The channel websocket api currently supports two protocols: [`json-rpc`](https://www.jsonrpc.org/specification) and `legacy`. Which protocol to use can be specified with the `protocol` option.
- If omitted, `legacy` is chosen by default, although this default is likely to change in the future.
+The channel websocket api currently supports one protocol: [`json-rpc`](https://www.jsonrpc.org/specification). `legacy` protocol was removed. Choosen protocol has to be specified with the `protocol` option.
 
- In the examples below, the `legacy` protocol is used. For a description on how to translate into the `json-rpc` format, see [channel_ws_api_json-rpc.md](channel_ws_api_json-rpc.md).
+In the examples below, the `json-rpc` protocol is used.
 
-Detailed message transcripts from test suites can also be found [for JSON-RPC](./examples/aehttp_integration_SUITE/json-rpc/) and [for `legacy`](./examples/aehttp_integration_SUITE/legacy/)
+Detailed message transcripts from test suites can also be found [here](./examples/aehttp_integration_SUITE/json-rpc/).
 
 ### Channel parameters
 Each channel has a set of parameters that is required for opening a
