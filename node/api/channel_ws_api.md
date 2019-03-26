@@ -5,6 +5,7 @@ The WebSocket API provides the following actions:
  * [Off-chain update](#update)
  * [On-chain deposit](#deposit)
  * [On-chain withdrawal](#withdrawal)
+ * [Contracts](#contracts)
  * [Generic message](#generic-message)
  * [Close mutual](#close-mutual)
  * [Leave](#leave)
@@ -332,6 +333,98 @@ Roles:
  'payload': {
     'tx': 'tx_2WsEQsiC5XsmkQF6BS1aUhB55XkktxRJi2ZWbpCbGVHgQNPQzUeaEJk57RrhWBagGqNUyUA9YY6PrZhTiXcYs6dK1BxASu8EummTYvfpTjfnA8hU21pw6Ms9fWbJbhBbLNai4hLGPEJZ12r1UHqxLTnq6nJ69vw6szeisRzVJ3XYNpvGgSR5dVyW7Yd2VvtW5CGEMCXCHVYquD8gt6RMBDDr1Q6LeLUTomBpgFGQknjKv56tLtZ2FHkWWa9mU22jXMS'
     }
+}
+```
+
+## Contracts
+
+### Contract create
+
+ * **action:** `update`
+ * **tag:** `new_contract`
+ * **payload:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | code | contract code | contract code | Yes |
+  | call\_data | call data | call data for contract creation | Yes |
+  | vm\_version | integer | contract virtual machine version (vm for which code was compiled) | Yes |
+  | abi\_version | integer | contract virtual machine abi version | Yes |
+  | deposit | integer | contract creation deposit | Yes |
+
+ * **no response**
+
+#### Example
+
+```javascript
+{
+  "action": "update",
+  "payload": {
+    "abi_version": 1,
+    "call_data": "cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACC5yVbyizFJqfWYeqUF89obIgnMVzkjQAYrtsG9n5+Z6gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAnHQYrA==",
+    "code": "cb_+QTcRgGgMGbgp7wD6B3+n/ohfx9EzDl65rI64xWTcLSo2cJ7otP5A2P5AcuguclW8osxSan1mHqlBfPaGyIJzFc5I0AGK7bBvZ+fmeqEaW5pdLhgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA///////////////////////////////////////////uQFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQD//////////////////////////////////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///////////////////////////////////////////5AZKg7nfmdqoCk7VwhfBIleas1RJ1aXkZ3la8nAyrmjkRcHSLY2FuX3Jlc29sdmW5ASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAP//////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG4QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC5AVBiAABkYgAAhJGAgIBRf7nJVvKLMUmp9Zh6pQXz2hsiCcxXOSNABiu2wb2fn5nqFGIAAURXUIBRf+535naqApO1cIXwSJXmrNUSdWl5Gd5WvJwMq5o5EXB0FGIAAK9XUGABGVEAW2AAGVlgIAGQgVJgIJADYAOBUpBZYABRWVJgAFJgAPNbYACAUmAA81tZWWAgAZCBUmAgkANgABlZYCABkIFSYCCQA2ADgVKBUpBWW2AgAVGAUZBgIAFRWVCBgZJQklBQYABgAH9hktnKsTLmK0AbjhU+HchD/pn4We3jfElNxXAcNfa1ZGABWZCBUllgYAGQgVJgIJADhIFSYCCQA4WBUmAgkANgyIFSYABgAFrxgFFgABRiAAEsV4BRYAEUYgABNldQYAEZUQBbUGAAW5FQUJBWW2AgAVFgAZBQYgABMFZbUFCCkVBQYgAAjFZiG02X",
+    "deposit": 10,
+    "vm_version": 3
+  },
+  "tag": "new_contract"
+}
+```
+
+### Contract create from on-chain contract
+
+ * **action:** `update`
+ * **tag:** `new_contract_from_onchain`
+ * **payload:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | contract | contract id | on-chain contract id | Yes |
+  | call\_data | call data | call data for contract creation | Yes |
+  | deposit | integer | contract creation deposit | Yes |
+
+ * **no response**
+
+#### Example
+
+```javascript
+{
+  "action": "update",
+  "payload": {
+    "call_data": "cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACC5yVbyizFJqfWYeqUF89obIgnMVzkjQAYrtsG9n5+Z6gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAnHQYrA==",
+    "contract": "ct_26WLX27MDif5WcqBXX8ndnQ2TQQvLgZ4TfL299BmteioZsJYER",
+    "deposit": 10,
+  },
+  "tag": "new_contract_from_onchain"
+}
+```
+
+### Contract call
+
+ * **action:** `update`
+ * **tag:** `call_contract`
+ * **payload:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | contract | contract id | contract to call | Yes |
+  | call\_data | call data | call data | Yes |
+  | abi\_version | integer | call abi version | Yes |
+  | amount | integer | amount of tokens to transfer to contract | Yes |
+
+ * **no response**
+
+#### Example
+
+```javascript
+{
+  "action": "update",
+  "payload": {
+    "abi_version": 1,
+    "amount": 0,
+    "call_data": "cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACDud+Z2qgKTtXCF8EiV5qzVEnVpeRneVrycDKuaORFwdAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATQ2VUVHRZWW5Wb25ZWUQudGVzdAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABm9yYWNsZQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD16MlQ==",
+    "contract": "ct_2BwwHijMMhHYSYfxHgwqKpWwcFfFGroTvoVMHoFXpEh9a6Mnht"
+  },
+  "tag": "call_contract"
 }
 ```
 
