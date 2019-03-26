@@ -372,6 +372,8 @@ For a contract with address `<contractpubkey>`, the fields of the contract objec
 ]
 ```
 
+The log field is always the empty binary.
+
 The balance of the account is stored in the account state tree.
 
 The contract storage (or state) which is a key value map from (key::binary() to value::binary())
