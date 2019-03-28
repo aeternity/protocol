@@ -147,6 +147,15 @@ In Erlang notation, the `id()` type pattern is:
 <<Tag:1/unsigned-integer-unit:8, Hash:32/binary-unit:8>>
 ```
 
+### The call_return_type() type
+
+The special type `call_return_type()` is an `int()` denoting the outcome of a contract call.
+
+| Value | Return type |
+| ---   | ---         |
+| 0     | ok          |
+| 1     | error       |
+| 2     | revert      |
 
 ### RLP Encoding
 
@@ -395,7 +404,7 @@ The content of the contract store depends on [the ABI and the VM version](/contr
 , <gas_price>        :: int()
 , <gas_used>         :: int()
 , <return_value>     :: binary()
-, <return_type>      :: int()
+, <return_type>      :: call_return_type()
 , <log>              :: [ { <address> :: id, [ <topics> :: binary() ], <data> :: binary() } ]
 ]
 ```
