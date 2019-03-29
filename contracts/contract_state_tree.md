@@ -11,7 +11,6 @@ state tree for one block. The existence of the call in that block can be proven.
 The contract state tree contains objects:
 - The contract definition (code binary)
 - The contract store (data binary)
-- The contract log (data binary)
 - Active flag (Boolean)
 - List of referring contracts (Note this will be changed to a list of referred contracts and a refcount.)
 - Deposit (amount)
@@ -42,7 +41,7 @@ The contract's account state tree is updated:
   (This is subject to change in future versions.)
 
 The contract's state tree is updated:
-- Upon success of a contract call the contract log and the contract's storage sub tree is updated.
+- Upon success of a contract call the contract's storage sub tree is updated.
 - When another contract is created and that new contract refers to the contract in the code, the refcount is increased.
 - When another contract that refers to the contract is deleted the refcount is decreased.
 - When the contract executes the deactivate instruction the active field is set to false.
