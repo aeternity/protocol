@@ -113,6 +113,7 @@ and another for optional timeouts.
   milliseconds.
 
   | Name | Description | Default value |
+  | ---- | ----------- | ------------- |
   | timeout_idle | the time waiting for a new event to be initiated | 600000 |
   | timeout_funding_create | the time waiting for the `initiator` to produce the create channel transaction after the `noise` session had been established | 120000 |
   | timeout_funding_sign | the time frame the other client has to sign an off-chain update after our client had initiated and signed it. This applies only for double signed on-chain intended updates: channel create transaction, deposit, withdrawal and etc. | 120000 |
