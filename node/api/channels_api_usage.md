@@ -76,7 +76,7 @@ Detailed message transcripts from test suites can also be found [for JSON-RPC](.
 Each channel has a set of parameters that is required for opening a
 connection. Most of those are part of the `channel_create_tx` which is included
 in the chain, and the others are metadata used for the connection itself. We
-will describe them in two separate groups: one for the channel esatblishing
+will describe them in two separate groups: one for the channel establishing
 and another for optional timeouts.
 
   | Name | Type | Description | Required | Part of the `channel_create_tx` |
