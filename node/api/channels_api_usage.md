@@ -102,7 +102,7 @@ and another for optional timeouts.
   transitions](/channels/README.md#overview). The implementation protects the
   client from edge cases when transitions take too long or never happen using
   a set of different timers - if the event doesn't occur in the specified time
-  frame - the off-chain protocol is considered to be violated and the
+  frame then the off-chain protocol is considered to be violated and the
   WebSocket connection is killed. Those are optionally configurable alongside
   with the channel establish settings. Keep in mind that those are only local
   values for the specific participant, protecting one's own interest. The two
