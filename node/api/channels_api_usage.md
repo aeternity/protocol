@@ -75,7 +75,9 @@ Detailed message transcripts from test suites can also be found [for JSON-RPC](.
 ### Channel parameters
 Each channel has a set of parameters that is required for opening a
 connection. Most of those are part of the `channel_create_tx` which is included
-in the chain, and the others are metadata used for the connection itself.
+in the chain, and the others are metadata used for the connection itself. We
+will describe them in two separate groups: one for the channel establishing
+and another for optional timeouts.
 
   | Name | Type | Description | Required | Part of the `channel_create_tx` |
   | ---- | ---- | ----------- | -------- |------------------------------ |
@@ -90,12 +92,36 @@ in the chain, and the others are metadata used for the connection itself.
   | host | string | host of the `responder`'s node| Yes if `role=initiator` | No |
   | port | integer | the port of the `responder`s node| Yes if `role=initiator` | No |
   | role | string | the role of the client - either `initiator` or `responder` | Yes | No |
-  | timeouts | object | the maximum lenght of time waiting for the other party to respond in the different states| No | No |
   | minimum_depth | integer | the minimum amount of blocks to be mined | No | No |
 
   `responder`'s port and host pair must be reachable from `initiator` network
   so unless participants are part of a LAN, they should be exposed to the
   internet as described [here](../../node/api/README.md).
+  
+  Once established, the channel follows a [predefined set of state
+  transitions](/channels/README.md#overview). The implementation protects the
+  client from edge cases when transitions take too long or never happen using
+  a set of different timers - if the event doesn't occur in the specified time
+  frame then the off-chain protocol is considered to be violated and the
+  WebSocket connection is killed. Those are optionally configurable alongside
+  with the channel establish settings. Keep in mind that those are only local
+  values for the specific participant, protecting one's own interest. The two
+  participants can have different timeout settings and still doing updates, as
+  long as no timer fires.
+
+  All timeout values are integers and represent the waiting time in
+  milliseconds.
+
+  | Name | Description | Default value |
+  | ---- | ----------- | ------------- |
+  | timeout_idle | the time waiting for a new event to be initiated | 600000 |
+  | timeout_funding_create | the time waiting for the `initiator` to produce the create channel transaction after the `noise` session had been established | 120000 |
+  | timeout_funding_sign | the time frame the other client has to sign an off-chain update after our client had initiated and signed it. This applies only for double signed on-chain intended updates: channel create transaction, deposit, withdrawal and etc. | 120000 |
+  | timeout_funding_lock | the time frame the other client has to confirm an on-chain transaction reaching maturity (passing minimum depth) after the local node has detected this. This applies only for double signed on-chain intended updates: channel create transaction, deposit, withdrawal and etc. | 360000 |
+  | timeout_sign | the time frame the client has to return a signed off-chain update or to decline it. This applies for all off-chain updates | 500000 |
+  | timeout_accept | the time frame the other client has to react to an event. This applies for all off-chain updates that are not meant to land on-chain, as well as some special cases: opening a `noise` connection, mutual closing acknowledgement and reestablishing an existing channel | 120000 |
+  | timeout_initialized | the time frame the responder has to accept an incoming noise session. Applicable only for initiator | timeout_accept's value |
+  | timeout_awaiting_open | the time frame the initiator has to start an outgoing noise session to the responder's node. Applicable only for responder | timeout_idle's value |
 
   In the following examples we will be using the following parameters:
 
@@ -1369,7 +1395,7 @@ overwrites the previous one. If there had been none of those, then the
 `round = 1`.
 
 Either by having a value in the `payload` or not having one, the
-`channel_solo_close` and `channel_slash` provide a channnel's `round` and a `state_hash`.
+`channel_solo_close` and `channel_slash` provide a channel's `round` and a `state_hash`.
 In order to determine the order of the channel's states received - we compare
 the `rounds` and keep the state with the greatest `round`, considered to be
 the _newest_ and _latest_ state. They also provide the `state_hash` the
