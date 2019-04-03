@@ -177,7 +177,7 @@ If an error occurs, a JSON-RPC error object is returned. It has the following fo
  | 1005   | Broken encoding: accounts |  3          |  [3]   |
  | 1006   | Broken encoding: contracts|  3          |  [3]   |
  | 1007   | Contract init failed      |  3          |  [3]   |
- | 1008   | Invalid number            |  3          |  [3]   |
+ | 1008   | Not a number              |  3          |  [3]   |
  
  #### Example, error object:
  ```javascript
