@@ -121,6 +121,7 @@ worked out).
   state. However, the state of an inherited contract cannot be
   accessed other than through internal functions defined by that
   contract.
+- Tail calls to functions inside the same contract are optimized.
 - Open question: should we allow overriding defined functions? I would
   suggest no, but there might be compelling use cases that I'm
   missing.
