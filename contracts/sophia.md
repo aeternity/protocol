@@ -108,11 +108,11 @@ worked out).
   contract. This is done by the init function which can take arbitrary
   arguments and is called on contract instance creation.
 - Contracts have a public API, comprising the functions and types
-  annotated with the public keyword. These can be used from outside
-  the contract. Functions and types with no annotation (or internal)
+  annotated with the `public` keyword. These can be used from outside
+  the contract. Functions and types with no annotation (or `internal`)
   are part of the internal API and can be used by contracts inheriting
   (see below) the given contract. Functions and types annotated with
-  private can only be used locally.
+  `private` can only be used locally.
 - Contracts can inherit one (or more?) other contract(s). In this case
   the public functions (and types) of the inherited contract are
   included in the public API and internal functions are included in
@@ -121,6 +121,7 @@ worked out).
   state. However, the state of an inherited contract cannot be
   accessed other than through internal functions defined by that
   contract.
+- Tail calls to functions inside the same contract are optimized.
 - Open question: should we allow overriding defined functions? I would
   suggest no, but there might be compelling use cases that I'm
   missing.
