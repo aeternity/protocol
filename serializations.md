@@ -269,7 +269,7 @@ subsequent sections divided by object.
 [ <flags>       :: int()
 , <nonce>       :: int()
 , <balance>     :: int()
-, <ga_contract> :: binary()
+, <ga_contract> :: id()
 , <ga_auth_fun> :: binary()
 ]
 ```
@@ -804,7 +804,7 @@ The channel off-chain transaction is not included directly in the transaction tr
 * The channel snapshot solo transaction.
 * The channel force progress transaction.
 
-version 1: 
+version 1:
 ```
 [ <channel_id>       :: id()
 , <round>            :: int()
@@ -845,7 +845,7 @@ version 2 (valid from Fortuna hardfork on)
 ]
 ```
 
-#### Channel (version 1, from Fortuna release)
+#### Channel (version 2, from Fortuna release)
 ```
 [ <initiator>           :: id()
 , <responder>           :: id()
@@ -978,7 +978,12 @@ The binary is a serialized Merkle Patricia Tree.
 ```
 
 ### Generalized accounts
-Generalized accounts are available from version 3, Fortuna release
+Generalized accounts are available from version 3, Fortuna release. A
+generalized account is interchangeable with a basic (non-generalized) account
+everywhere, the only difference is that it is not able to directly sign a
+transaction. Instead the transaction has to be wrapped in a [meta
+transaction](#generalized-accounts-meta-transaction) with the correct
+authorization data.
 
 #### Generalized accounts attach transaction
 ```

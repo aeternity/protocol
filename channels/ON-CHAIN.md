@@ -101,7 +101,8 @@ taken from their balance and the `nonce` of their account MUST be incremented.
 If either of the participants is a [Generalized
 account](../generalized_accounts/generalized_accounts.md) the channel create
 will also create an extra entry in the contract state tree, containing a frozen
-authentication state that will be used for off-chain signing and verification.
+authentication state that will be used for off-chain signing and verification
+in off-chain updates (potentially eventually enforced on-chain).
 
 #### Requirements
 
@@ -762,7 +763,7 @@ channel.
 - `lock_period`: agreed upon locking period by peers
 - `locked_until`: on-chain channel height after which the channel can be settled
 - `initiator_auth`: (from Fortuna release) signing/authentication data for initiator
-- `responder_auth`: (from Fortuna release) signing/authentication data for initiator
+- `responder_auth`: (from Fortuna release) signing/authentication data for responder
 
 Keeping track of the `state_hash`, `round`, `locked_until`, and `lock_period` is
 necessary for nodes to be able to assess the validity of `channel_slash` and

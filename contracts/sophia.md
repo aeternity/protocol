@@ -531,8 +531,8 @@ using the private key corresponding to `pubkey`.
 
 When a Generalized account is authorized, the authorization function needs
 access to the transaction hash for the wrapped transaction. (A `GAMetaTx`
-wrapping a transaction.) The transaction hash is availble in the primitive
-`Auth.tx_hash`, it is *only* available during authentication if invoced by a
+wrapping a transaction.) The transaction hash is available in the primitive
+`Auth.tx_hash`, it is *only* available during authentication if invoked by a
 normal contract call it returns `none`.
 
 ```

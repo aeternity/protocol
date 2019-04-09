@@ -22,7 +22,7 @@ The current meaning of the VM field is:
 |   02        | [AEVM_01](aevm.md)  | For Solidity contracts on the AEVM
 |   03        | [AEVM_02](aevm.md)  | Improved AEVM for Sophia, Minerva release
 |   04        | [AEVM_03](aevm.md)  | Improved AEVM for Sophia, Fortuna release
-|   04-FFFF   |          | UNUSED
+|   05-FFFF   |          | UNUSED
 
 The current meaning of the ABI field is:
 

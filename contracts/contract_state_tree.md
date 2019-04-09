@@ -26,6 +26,7 @@ tokens from the balance of the contract.
 #### The contract definition
 
 - Created by a contract create transaction.
+- Created by a generalized account attach transaction
 - Deleted when an inactive contract has no more referrers.
 
 ### Contract state tree update
