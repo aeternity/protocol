@@ -17,7 +17,7 @@ some blockchain specific primitives, constructions and types have been added.
     -  [Mutable state](#mutable-state)
     -  [Namespaces](#namespaces)
     -  [Splitting code over multiple files](#splitting-code-over-multiple-files)
-    -  [Types](#types) 
+    -  [Types](#types)
     -  [Arithmetic](#arithmetic)
     -  [Bit fields](#bit-fields)
     -  [Type aliases](#type-aliases)
@@ -35,6 +35,7 @@ some blockchain specific primitives, constructions and types have been added.
         - [Builtin functions on addresses](#builtin-functions-on-addresses)
     - [Builtins](#builtins)
         - [Cryptographic primitives](#cryptographic-primitives)
+        - [Authorization interface](#authorization-interface)
         - [Account interface](#account-interface)
         - [Oracle interface](#oracle-interface)
             - [Oracle register](#oracle-register)
@@ -76,7 +77,7 @@ some blockchain specific primitives, constructions and types have been added.
     - [Return](#return)
     - [Storing the contract state](#storing-the-contract-state)
     - [Remote contract calls](#remote-contract-calls)
-    
+
 ## Language Features
 ### Contracts
 
@@ -525,6 +526,18 @@ There is also a function for signature verification `Crypto.ecverify`:
 
 The signature verification returns true if `sig` is the signature of `msg`
 using the private key corresponding to `pubkey`.
+
+#### Authorization interface
+
+When a Generalized account is authorized, the authorization function needs
+access to the transaction hash for the wrapped transaction. (A `GAMetaTx`
+wrapping a transaction.) The transaction hash is availble in the primitive
+`Auth.tx_hash`, it is *only* available during authentication if invoced by a
+normal contract call it returns `none`.
+
+```
+Auth.tx_hash : option(hash)
+```
 
 #### Account interface
 

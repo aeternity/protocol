@@ -20,7 +20,8 @@ The current meaning of the VM field is:
 |   00        | none     | NO_VM ("Used" in oracles)
 |   01        | [AEVM_01](aevm.md)  | For Sophia contracts on the AEVM
 |   02        | [AEVM_01](aevm.md)  | For Solidity contracts on the AEVM
-|   03        | [AEVM_02](aevm.md)  | Containing improvments of the AEVM for Sophia
+|   03        | [AEVM_02](aevm.md)  | Improved AEVM for Sophia, Minerva release
+|   04        | [AEVM_03](aevm.md)  | Improved AEVM for Sophia, Fortuna release
 |   04-FFFF   |          | UNUSED
 
 The current meaning of the ABI field is:
@@ -41,6 +42,9 @@ Which VM versions are accepted are different based on consensus protocol version
 | Minerva          | contract call        | `0x1`, `0x3`       | `0x1`
 |                  | contract create      | `0x3`              | `0x1`
 |                  | oracle register      | `0x3`              | `0x0`, `0x1`
+| Fortuna          | contract call        | `0x1`, `0x3`, `0x4`| `0x1`
+|                  | contract create      | `0x4`              | `0x1`
+|                  | oracle register      |                    | `0x0`, `0x1`
 
 The number after the machine name designates the version of the machine.
 In the future new versions of the machine can be implemented with new instructions,
@@ -62,3 +66,9 @@ See [The AEVM](./aevm.md).
 * Oracle query fee of unknown oracle
   * AEVM_01: Succeeded with bogus value
   * AEVM_02: Fails with exception
+* New crypto/hash primitives
+* New VM instructions (bit shift operations)
+
+### AEVM_02 -> AEVM_03
+* New primitive operations (`Auth.tx_hash`)
+* New crypto primitives
