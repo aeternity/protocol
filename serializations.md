@@ -235,6 +235,7 @@ subsequent sections divided by object.
 | Channel off-chain update withdrawal | 572 |
 | Channel off-chain update create contract | 573 |
 | Channel off-chain update call contract | 574 |
+| Channel pinned environment block hash | 575 |
 | Channel | 58 |
 | Channel snapshot transaction | 59 |
 | POI | 60 |
@@ -630,6 +631,7 @@ The payload is a serialized signed channel off-chain transaction and can not be 
 
 
 #### Channel solo force progress transaction
+version 1:
 ```
 [ <channel_id>      :: id()
 , <from_id>         :: id()
@@ -644,6 +646,22 @@ The payload is a serialized signed channel off-chain transaction and can not be 
 ]
 ```
 
+version 2:
+```
+[ <channel_id>      :: id()
+, <from_id>         :: id()
+, <payload>         :: binary()
+, <round>           :: int()
+, <update>          :: binary()
+, <state_hash>      :: binary()
+, <offchain_trees>  :: trees()
+, <ttl>             :: int()
+, <fee>             :: int()
+, <nonce>           :: int()
+, <block_hash>       :: binary()
+]
+```
+
 The payload is a serialized co-signed channel off-chain transaction or it is empty.
 The round is the new channel's round that will be produced by the forcing of
 progress.
@@ -654,6 +672,9 @@ after the update had been applied to the channel state provided in the proof
 of inclusion.
 The proof of inclusion has the same root hash as the state hash of the co-signed
 payload.
+The block_hash is the serialized `pinned_block` that describes the environment
+the force progress update is to be executed on. If using a version 1, the top
+block is used instead.
 
 #### Channel off-chain update
 
@@ -732,6 +753,28 @@ tree.
 
 ```
 
+###### Channel off-chain pinned block for on-chain environment
+
+Each update can be optionally based on an on-chain block that is used for an
+environment for on-chain lookups: accounts, oracles queries, responses and
+etc. This is to improve the process of both reaching an off-chain conesus
+regarding changes and having more predictable on-chain forced progress
+executions.
+
+```
+[ <hash>      :: binary()
+, <type>      :: int()
+]
+```
+Hash is the block hash to be used.
+Type is the expected block type:
+* 1 stands for a keyblock
+* 2 stands for a microblock
+It is worth mentioning that the pinned block could as well be missing in the
+current longest fork and this will make the transaction that is using it
+invalid.
+
+
 #### Channel off-chain transaction
 
 The channel off-chain transaction is not included directly in the transaction tree but indirectly as payload of:
@@ -739,7 +782,7 @@ The channel off-chain transaction is not included directly in the transaction tr
 * The channel slash transaction.
 * The channel snapshot solo transaction.
 * The channel force progress transaction.
-
+version 1: 
 ```
 [ <channel_id>       :: id()
 , <round>            :: int()
@@ -747,6 +790,21 @@ The channel off-chain transaction is not included directly in the transaction tr
 , <state_hash>       :: binary()
 ]
 ```
+
+version 2: 
+```
+[ <channel_id>       :: id()
+, <round>            :: int()
+, <updates>          :: [update()]
+, <state_hash>       :: binary()
+, <block_hash>       :: binary()
+]
+```
+* `block_hash` is the serialized `pinned_block` that describes the environment
+  the off-chain updates are to be executed on. If version 1 serialization is used
+  there is no `block_hash` and the current top block is used instead, as it is
+  seen by each participant. Note that could yeld different results because of
+  their different view of the chain.
 
 #### Channel
 ```
