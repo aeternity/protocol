@@ -646,7 +646,7 @@ version 1:
 ]
 ```
 
-version 2:
+version 2 (valid from Fortuna hardfork on)
 ```
 [ <channel_id>      :: id()
 , <from_id>         :: id()
@@ -792,7 +792,7 @@ version 1:
 ]
 ```
 
-version 2: 
+version 2 (valid from Fortuna hardfork on)
 ```
 [ <channel_id>       :: id()
 , <round>            :: int()
