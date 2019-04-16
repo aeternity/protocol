@@ -755,11 +755,18 @@ tree.
 
 ###### Channel off-chain pinned block for on-chain environment
 
-Each update can be optionally based on an on-chain block that is used for an
-environment for on-chain lookups: accounts, oracles queries, responses and
-etc. This is to improve the process of both reaching an off-chain consensus
-regarding changes and having more predictable on-chain forced progress
-executions.
+Each channel round can be optionally based on an on-chain block that is used
+for an environment for on-chain lookups: accounts, oracles queries, responses
+and etc. It can be used both on-chain and off-chain.
+
+When used in a force progess it applies to the forced contract call and
+improves predictability of the execution.
+
+When used in an off-chain transaction it defines the environment in which the
+adjacent updates are based upon. This is only used in an off-chain environment
+and enhances the consesus reaching between channel participants. When the
+off-chain is being provided on-chain as a payload, this pinned environment is
+not taken into account as it determines only the off-chain's state.
 
 ```
 [ <hash>      :: binary()
