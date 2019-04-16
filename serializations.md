@@ -770,6 +770,7 @@ Hash is the block hash to be used.
 Type is the expected block type:
 * 1 stands for a keyblock
 * 2 stands for a microblock
+
 It is worth mentioning that the pinned block could as well be missing in the
 current longest fork and this will make the transaction that is using it
 invalid.
