@@ -782,6 +782,7 @@ The channel off-chain transaction is not included directly in the transaction tr
 * The channel slash transaction.
 * The channel snapshot solo transaction.
 * The channel force progress transaction.
+
 version 1: 
 ```
 [ <channel_id>       :: id()
