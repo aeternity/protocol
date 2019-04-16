@@ -764,7 +764,7 @@ improves predictability of the execution.
 
 When used in an off-chain transaction it defines the environment in which the
 adjacent updates are based upon. This is only used in an off-chain environment
-and enhances the consesus reaching between channel participants. When the
+and enhances the consensus reaching between channel participants. When the
 off-chain is being provided on-chain as a payload, this pinned environment is
 not taken into account as it determines only the off-chain's state.
 
