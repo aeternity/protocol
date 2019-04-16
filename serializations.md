@@ -757,7 +757,7 @@ tree.
 
 Each update can be optionally based on an on-chain block that is used for an
 environment for on-chain lookups: accounts, oracles queries, responses and
-etc. This is to improve the process of both reaching an off-chain conesus
+etc. This is to improve the process of both reaching an off-chain consensus
 regarding changes and having more predictable on-chain forced progress
 executions.
 
