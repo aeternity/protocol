@@ -1285,7 +1285,7 @@ A response to this call looks like
 #### Get contract calls
 Each participant persists contract call results locally. It is not required of
 both participants to share the same list of contract calls as this does not
-impact consesus bethween them. Any participant can prune his local set of
+impact consensus between them. Any participant can prune his local set of
 calls in order to free some memory. In order to inspect the result value of a
 contract call, a participant sends a WebSocket message
 ```
