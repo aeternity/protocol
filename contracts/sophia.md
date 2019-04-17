@@ -17,7 +17,7 @@ some blockchain specific primitives, constructions and types have been added.
     -  [Mutable state](#mutable-state)
     -  [Namespaces](#namespaces)
     -  [Splitting code over multiple files](#splitting-code-over-multiple-files)
-    -  [Types](#types) 
+    -  [Types](#types)
     -  [Arithmetic](#arithmetic)
     -  [Bit fields](#bit-fields)
     -  [Type aliases](#type-aliases)
@@ -76,7 +76,7 @@ some blockchain specific primitives, constructions and types have been added.
     - [Return](#return)
     - [Storing the contract state](#storing-the-contract-state)
     - [Remote contract calls](#remote-contract-calls)
-    
+
 ## Language Features
 ### Contracts
 
@@ -241,22 +241,47 @@ Sophia has the following types:
 | Type       | Description                     | Example
 | ---------- | ------------------------------- | -------:
 | int        | A 256 bit 2-complement integer  | ```-1```
-| address    | A 256 bit number given as a hex | ```ff00```
+| address    | Aeternity address, 32 bytes     | ```Call.origin```
 | bool       | A Boolean                       | ```true```
 | bits       | A bit field (with 256 bits)     | ```Bits.none```
+| bytes(n)   | A byte array with `n` bytes     | ```#fedcba9876543210```
 | string     | An array of bytes               | ```"Foo"```
 | list       | A homogeneous immutable singly linked list. | ```[1, 2, 3]```
 | tuple      | An ordered heterogeneous array   | ```(42, "Foo", true)```
 | record     | An immutable key value store with fixed key names and typed values | ``` record balance = { owner: address, value: int } ```
 | map        | An immutable key value store with dynamic mapping of keys of one type to values of one type | ```type accounts = map(string, address)```
 | option('a) | An optional value either None or Some('a) | ```Some(42)```
-| state        | A record of blockstate key, value pairs  |
-| transactions | An append only list of blockchain transactions |
-| events       | An append only list of blockchain events (or log entries) |
-| signature    | A signature - 64 bytes |
-| Chain.ttl    | Time-to-live (fixed height or relative to current block) | ```FixedTTL(1050)``` ```RelativeTTL(50)```
+| state      | A user defined type holding the contract state | ```record state = { owner: address, magic_key: bytes(4) }```
+| event      | An append only list of blockchain events (or log entries) | ```datatype event = EventX(indexed int, string)```
+| hash       | A 32-byte hash - equivalent to `bytes(32)` |
+| signature  | A signature - equivalent to `bytes(64)` |
+| Chain.ttl  | Time-to-live (fixed height or relative to current block) | ```FixedTTL(1050)``` ```RelativeTTL(50)```
 | oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, qfee, ttl)```
 | oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, qfee, qttl, rttl)```
+| contract   | A user defined, typed, contract address | ```function call_remote(r : RemoteContract) = r.fun()```
+
+### Literals
+| Type       | Constant/Literal example(s)
+| ---------- | -------------------------------
+| int        | `-1`, `2425`, `4598275923475723498573485768`
+| address    | `ak_2gx9MEFxKvY9vMG5YnqnXWv1hCsX7rgnfvBLJS4aQurustR1rt`
+| bool       | `true`, `false`
+| bits       | `Bits.none`, `Bits.all`
+| bytes(n)   | `#fedcba9876543210`
+| string     | `"This is a string"`
+| list       | `[1, 2, 3]`, `[(true, 24), (false, 19), (false, -42)]`
+| tuple      | `(42, "Foo", true)`
+| record     | `balance{ owner = Call.origin, value = 100000000 }`
+| map        | `{["foo"] = 19, ["bar"] => 42}`, `{}`
+| option('a) | `Some(42)`, `None`
+| state      | `state{ owner = Call.origin, magic_key = #a298105f }`
+| event      | `EventX(0, "Hello")`
+| hash       | `#000102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f`
+| signature  | `#000102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f`
+| Chain.ttl  |  `FixedTTL(1050)`, `RelativeTTL(50)`
+| oracle('a, 'b)       | `ok_2YNyxd6TRJPNrTcEDCe9ra59SVUdp9FR9qWC5msKZWYD9bP9z5`
+| oracle_query('a, 'b) | `oq_2oRvyowJuJnEkxy58Ckkw77XfWJrmRgmGaLzhdqb67SKEL1gPY`
+| contract   | `ct_Ez6MyeTMm17YnTnDdHTSrzMEBKmy7Uz2sXu347bTDPgVH2ifJ`
 
 ### Arithmetic
 
@@ -517,10 +542,11 @@ result is the hash of the binary encoding of the argument as [described
 below](#encoding-sophia-values-as-binaries). Note that this means that for `s :
 string`, `String.sha3(s)` and `Crypto.sha3(s)` gives different results.
 
-There is also a function for signature verification `Crypto.ecverify`:
+There are also functions for signature verification:
 
 ```
   Crypto.ecverify(msg : hash, pubkey : address, sig : signature) : bool
+  Crypto.ecverify_secp256k1(msg : hash, pubkey : bytes(64), sig : bytes(64)) : bool
 ```
 
 The signature verification returns true if `sig` is the signature of `msg`
@@ -814,7 +840,7 @@ private public rec stateful switch true type record datatype
 - `QCon = (Con\.)+Con` qualified constructor
 - `TVar = 'Id` type variable (e.g `'a`, `'b`)
 - `Int = [0-9]+|0x[0-9A-Fa-f]+` integer literal
-- `Hash = #[0-9A-Fa-f]+` hash literal
+- `Bytes = #[0-9A-Fa-f]+` byte array literal
 - `String` string literal enclosed in `"` with escape character `\`
 - `Char` character literal enclosed in `'` with escape character `\`
 
@@ -973,7 +999,7 @@ Expr ::= '(' Args ')' '=>' Block(Stmt)      // Anonymous function    (x) => x + 
        | '{' Sep(FieldUpdate, ',') '}'      // Record or map value   {x = 0, y = 1}, {[key] = val}
        | '(' Expr ')'                       // Parens                (1 + 2) * 3
        | Id | Con | QId | QCon              // Identifiers           x, None, Map.member, AELib.Token
-       | Int | Hash | String | Char         // Literals              123, 0xff, #00abc123, "foo", '%'
+       | Int | Bytes | String | Char        // Literals              123, 0xff, #00abc123, "foo", '%'
 
 FieldUpdate ::= Path '=' Expr
 Path ::= Id                 // Record field
@@ -1121,7 +1147,7 @@ code.
 
 #### Meta data
 The byte code contains meta data for the contract.
-- source_code_hash - a sha256 hash of the source code string of the contract
+- source_code_hash - a Blake2b hash of the source code string of the contract
 - type_info - see Type information below
 - byte_code - the actual byte code
 
@@ -1137,7 +1163,7 @@ In this way, the function prototype in the calling function gets some level of
 type verification.
 
 The type information contains:
-- fun_hash - A sha256 hash of the function name and the function types
+- fun_hash - A Blake2b hash of the function name and the function types
 - fun_name - The function name as a string
 - arg_type - The vm encoded typerep of the argument (as a tuple) of the function
 - out_type - The vm encoded typerep of the return type of the function
