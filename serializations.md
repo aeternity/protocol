@@ -250,14 +250,27 @@ subsequent sections divided by object.
 | Oracles' Merkle Patricia tree's value | 625 |
 | Accounts' Merkle Patricia tree's value | 626 |
 | Sophia byte code | 70 |
+| Generalized accounts attach transaction | 80 |
+| Generalized accounts meta transaction | 81 |
 | Key block | 100 |
 | Micro block | 101 |
 | Light micro block | 102 |
+| Proof of Fraud | 200 |
 
-#### Accounts
+#### Accounts (version 1, Basic accounts))
 ```
 [ <nonce>   :: int()
 , <balance> :: int()
+]
+```
+
+#### Accounts (version 2, Generalized accounts, from Fortuna release)
+```
+[ <flags>       :: int()
+, <nonce>       :: int()
+, <balance>     :: int()
+, <ga_contract> :: id()
+, <ga_auth_fun> :: binary()
 ]
 ```
 ### Signed transaction
@@ -791,7 +804,7 @@ The channel off-chain transaction is not included directly in the transaction tr
 * The channel snapshot solo transaction.
 * The channel force progress transaction.
 
-version 1: 
+version 1:
 ```
 [ <channel_id>       :: id()
 , <round>            :: int()
@@ -815,7 +828,7 @@ version 2 (valid from Fortuna hardfork on)
   seen by each participant. Note that could yeld different results because of
   their different view of the chain.
 
-#### Channel
+#### Channel (version 1, until Fortuna release)
 ```
 [ <initiator>           :: id()
 , <responder>           :: id()
@@ -829,6 +842,25 @@ version 2 (valid from Fortuna hardfork on)
 , <solo_round>          :: int()
 , <lock_period>         :: int()
 , <locked_until>        :: int()
+]
+```
+
+#### Channel (version 2, from Fortuna release)
+```
+[ <initiator>           :: id()
+, <responder>           :: id()
+, <channel_amount>      :: int()
+, <initiator_amount>    :: int()
+, <responder_amount>    :: int()
+, <channel_reserve>     :: int()
+, <delegate_ids>        :: [id()]
+, <state_hash>          :: binary()
+, <round>               :: int()
+, <solo_round>          :: int()
+, <lock_period>         :: int()
+, <locked_until>        :: int()
+, <initiator_auth>      :: binary()
+, <responder_auth>      :: binary()
 ]
 ```
 
@@ -944,6 +976,43 @@ The binary is a serialized Merkle Patricia Tree.
 , <compiler version> :: binary()
 ]
 ```
+
+### Generalized accounts
+Generalized accounts are available from version 3, Fortuna release. A
+generalized account is interchangeable with a basic (non-generalized) account
+everywhere, the only difference is that it is not able to directly sign a
+transaction. Instead the transaction has to be wrapped in a [meta
+transaction](#generalized-accounts-meta-transaction) with the correct
+authorization data.
+
+#### Generalized accounts attach transaction
+```
+[ <owner_id>   :: id()
+, <nonce>      :: int()
+, <code>       :: binary()
+, <auth_fun>   :: binary()
+, <ct_version> :: int()
+, <fee>        :: int()
+, <ttl>        :: int()
+, <gas>        :: int()
+, <gas_price>  :: int()
+, <call_data>  :: binary()
+]
+```
+
+#### Generalized accounts meta transaction
+```
+[ <ga_id>       :: id()
+, <auth_data>   :: binary()
+, <abi_version> :: int()
+, <fee>         :: int()
+, <gas>         :: int()
+, <gas_price>   :: int()
+, <ttl>         :: int()
+, <tx>          :: binary()
+]
+```
+
 
 #### Micro Body
 ```

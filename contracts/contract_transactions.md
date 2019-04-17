@@ -3,7 +3,7 @@
 
 Contract transactions are of four types:
 - Create
-- Attach -- Not implemented yet.
+- Attach
 - Call
 - Disable -- To be decided.
 
@@ -79,32 +79,8 @@ init succeeds).
 
 ### Attach Contract Transaction
 
-Attach contract code to an existing account.
-In this case owner == the account address and no new account will be created,
-all other fields are as in create contract.
-
-
-```
-{ owner           :: public_key()
-, nonce           :: pos_integer()
-, code            :: bytes()
-, vm_version      :: integer()
-, abi_version     :: integer()
-, fee             :: amount()
-, deposit         :: amount()
-, amount          :: amount()
-, gas             :: amount()
-, gas_price       :: amount()
-, call_data       :: bytes()
-}
-```
-
-The special variable "caller" will be set to the same value as "owner"
-for the initial call.
-
-The miner will add the return data and the state from the initial call
-to the state tree.
-
+This is introduced in the Fortuna release. Attaching a contract to an account
+will make the contract a [Generalized account](../generalized_accounts/generalized_accounts.md)
 
 ### Contract call transaction
 
