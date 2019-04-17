@@ -79,20 +79,20 @@ in the chain, and the others are metadata used for the connection itself. We
 will describe them in two separate groups: one for the channel establishing
 and another for optional timeouts.
 
-  | Name | Type | Description | Required | Part of the `channel_create_tx` |
-  | ---- | ---- | ----------- | -------- |------------------------------ |
-  | initiator_id | string | initiator's public key | Yes | Yes |
-  | responder_id | string | responder's public key | Yes | Yes |
-  | lock_period | integer | amount of blocks for disputing a solo close | Yes | Yes |
-  | push_amount | integer | initial deposit in favour of the responder by the initiator | Yes | No |
-  | initiator_amount | integer | amount of tokens the initiator has committed to the channel | Yes | Yes |
-  | responder_amount | integer | amount of tokens the responder has committed to the channel | Yes | Yes |
-  | channel_reserve | integer | the minimum amount both peers need to maintain | Yes | Yes |
-  | ttl | integer | minimum block height to include the `channel_create_tx` | No | Yes |
-  | host | string | host of the `responder`'s node| Yes if `role=initiator` | No |
-  | port | integer | the port of the `responder`s node| Yes if `role=initiator` | No |
-  | role | string | the role of the client - either `initiator` or `responder` | Yes | No |
-  | minimum_depth | integer | the minimum amount of blocks to be mined | No | No |
+  | Name | Type | Description | Required for open | Required/Used in reestablish | Part of the `channel_create_tx` |
+  | ---- | ---- | ----------- | ----------------- | ---------------------------- | ------------------------------- |
+  | initiator_id | string | initiator's public key | Yes | No | Yes |
+  | responder_id | string | responder's public key | Yes | No | Yes |
+  | lock_period | integer | amount of blocks for disputing a solo close | Yes | No | Yes |
+  | push_amount | integer | initial deposit in favour of the responder by the initiator | Yes | No | No |
+  | initiator_amount | integer | amount of tokens the initiator has committed to the channel | Yes | No | Yes |
+  | responder_amount | integer | amount of tokens the responder has committed to the channel | Yes | No | Yes |
+  | channel_reserve | integer | the minimum amount both peers need to maintain | Yes | No | Yes |
+  | ttl | integer | minimum block height to include the `channel_create_tx` | No | No | Yes |
+  | host | string | host of the `responder`'s node| Yes if `role=initiator` | No | No | No |
+  | port | integer | the port of the `responder`s node| Yes if `role=initiator` | No | No | No |
+  | role | string | the role of the client - either `initiator` or `responder` | Yes | Yes | No |
+  | minimum_depth | integer | the minimum amount of blocks to be mined | No | No | No |
 
   `responder`'s port and host pair must be reachable from `initiator` network
   so unless participants are part of a LAN, they should be exposed to the
@@ -690,7 +690,7 @@ The fsm responds with the following type of report:
 Open the channel in the same way as in the
 [Initiator WebSocket open](#initiator-websocket-open) example,
 adding the parameters `existing_channel_id` and `offchain_tx` with values
-matching the ones provided in the `leave` report above:
+matching the ones provided in the `leave` report above. Some parameters (related to open transaction) are not required and ignored. See [Channel parameters](#channel-parameters):
 
 ```
 $ wscat --connect
