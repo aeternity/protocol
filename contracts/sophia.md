@@ -843,6 +843,13 @@ private public rec stateful switch true type record datatype
 - `Bytes = #[0-9A-Fa-f]+` byte array literal
 - `String` string literal enclosed in `"` with escape character `\`
 - `Char` character literal enclosed in `'` with escape character `\`
+- `AccountAddress` base58-encoded 32 byte account pubkey with `ak_` prefix
+- `ContractAddress` base58-encoded 32 byte contract address with `ct_` prefix
+- `OracleAddress` base58-encoded 32 byte oracle address with `ok_` prefix
+- `OracleQueryId` base58-encoded 32 byte oracle query id with `oq_` prefix
+
+See the [identifier encoding scheme](./node/api/api_encoding.md) for the
+details on the base58 literals.
 
 ### Layout blocks
 
@@ -1000,6 +1007,8 @@ Expr ::= '(' Args ')' '=>' Block(Stmt)      // Anonymous function    (x) => x + 
        | '(' Expr ')'                       // Parens                (1 + 2) * 3
        | Id | Con | QId | QCon              // Identifiers           x, None, Map.member, AELib.Token
        | Int | Bytes | String | Char        // Literals              123, 0xff, #00abc123, "foo", '%'
+       | AccountAddress | ContractAddress   // Chain identifiers
+       | OracleAddress | OracleQueryId      // Chain identifiers
 
 FieldUpdate ::= Path '=' Expr
 Path ::= Id                 // Record field
