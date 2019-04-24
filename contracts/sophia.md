@@ -848,7 +848,7 @@ private public rec stateful switch true type record datatype
 - `OracleAddress` base58-encoded 32 byte oracle address with `ok_` prefix
 - `OracleQueryId` base58-encoded 32 byte oracle query id with `oq_` prefix
 
-See the [identifier encoding scheme](./node/api/api_encoding.md) for the
+See the [identifier encoding scheme](/node/api/api_encoding.md) for the
 details on the base58 literals.
 
 ### Layout blocks
