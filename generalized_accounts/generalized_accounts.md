@@ -214,8 +214,8 @@ verification of the signature attached to transactions. In this case, a
 transaction MUST only be considered valid, if
 	1. a signature is attached, that has been produced by the private key that
 	   belongs to the account id
-	2. the `nonce` included in the transaction is bigger than the nonce stored
-     in the account.
+	2. the `nonce` included in the transaction is the successor of the nonce
+	   stored in the account.
 
 
 ## Transactions
