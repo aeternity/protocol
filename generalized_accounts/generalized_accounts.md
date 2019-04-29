@@ -266,7 +266,7 @@ is valid. If the account at `owner_id` is already a GA, the transaction MUST be
 considered invalid.
 
 The transaction MUST include a signature created by the private key belonging to
-the `ownder_id`.
+the `owner_id`.
 
 The `auth_fun` is a function hash as described in the [Sophia](../contracts/sophia.md)
 section.
