@@ -416,9 +416,9 @@ Message code: 5
 In order to open a channel on chain, parties need to cooperate and co-sign the
 `channel_create` transaction. The `funding_created` message is used by the
 initiator to send an initial state - a `channel_create_tx` object, signed
-by the Initiator. The `block_hash` specifies the on-chain environment one
-prepared the transaction ensuring both participants share a common view of the
-chain.
+by the Initiator. The `block_hash` specifies which on-chain environment was
+used to prepare the transaction ensuring both participants share a common view
+of the chain.
 
 ```
   name                  size (bytes)
@@ -454,9 +454,8 @@ Message code: 6
 If the responder was able to validate the initiator's signature sent in the
 `funding_created` message, then it should add its own signature to the state
 object. The co-signed object will become the initial off-chain state of the
-channel. Responder provides the `block_hash` to specify the on-chain
-environment ones signature or meta transaction were created at so they must be
-checked at this or a later block.
+channel. Responder provides the `block_hash` to specify which on-chain
+environment was used for producing the signature or meta transaction.
 
 ```
   name                  size (bytes)
@@ -542,12 +541,13 @@ root hash of the resulting state trees. The receiver must verify that the
 state is a valid outcome, then return it, co-signed, in an `update_ack`
 message.
 
-The `block_hash` is the hash of the on-chain environment the state
-had been computed and it or any more recent block could be used to validate
-it. Signatures or Generic Account's meta transactions are checked according to
-the latest channel object persisted on-chain. If there are updates that are
-contact executions using on-chain data: the block of `block_hash` is being
-used for building a consistent state on both participant's side.
+The `block_hash` is the hash of which on-chain environment was used for
+computing the state and either this blcok or any more recent one could be used
+to validate the state. Signatures or Generic Account's meta transactions are
+checked according to the latest channel object persisted on-chain. If there are
+updates that are contact executions using on-chain data: the block of
+`block_hash` is being used for building a consistent state on both participant's
+side.
 
 ```
   name                  size (bytes)
@@ -625,7 +625,7 @@ operation an on-chain snapshot.
 The receiving side verifies the operation and co-signs the state, returning it
 in an `deposit_signed` message.
 
-The `block_hash` defines the block the deposit had been created and
+The `block_hash` defines the block used for deposit creation and
 depositor's signature will be according to the latest on-chain persisted
 account and not the on-chain persisted channel object.
 
@@ -654,7 +654,7 @@ indeed the state resulting from the proposed deposit operation. The
 confirmations (`minimum_depth`) are awaited. Once confirmation has been
 received, a `deposit_locked` message is sent, with the hash of the
 `channel_deposit_tx` transaction.
-The `block_hash` defines the block the deposit had been co-signed and
+The `block_hash` defines at which block deposit had been co-signed and
 the second signature will be according to the latest on-chain persisted
 account and not the on-chain persisted channel object.
 
@@ -730,7 +730,7 @@ operation an on-chain snapshot.
 The receiving side verifies the operation and co-signs the state, returning it
 in an `withdraw_signed` message.
 
-The `block_hash` defines the block the withdrawal had been created and
+The `block_hash` defines on which block the withdrawal had been created and
 the withdrawer signature will be according to the latest on-chain persisted
 account and not the on-chain persisted channel object.
 
@@ -758,7 +758,7 @@ indeed the state resulting from the proposed withdrawal operation. The
 confirmations (`minimum_depth`) are awaited. Once confirmation has been
 received, a `withdraw_locked` message is sent, with the hash of the
 `channel_withdraw_tx` transaction.
-The `block_hash` defines the block the withdrawal had been co-signed and
+The `block_hash` defines on which block the withdrawal had been co-signed and
 the second signature will be according to the latest on-chain persisted
 account and not the on-chain persisted channel object.
 
@@ -888,7 +888,7 @@ as payload. The sender creates the `channel_close_mutual_tx` from the latest
 co-signed state, including the root hash of the corresponding state tree.
 The receiver must verify that the payload corresponds to its latest co-signed
 state, and then replies with a `shutdown_ack` message.
-The `block_hash` defines the block the close mutual had been created and
+The `block_hash` defines on which block the close mutual had been created and
 the closer's signature will be according to the latest on-chain persisted
 account and not the on-chain persisted channel object.
 
@@ -914,7 +914,7 @@ may close once the message has been delivered. The receiver must, after
 verifying the payload of the `shutdown_ack` message (which must be the same
 `channel_close_mutual_tx` object, co-signed), push the `channel_close_mutual_tx`
 transaction onto the chain, and then terminate.
-The `block_hash` defines the block the close mutual had been co-signed and
+The `block_hash` defines on which block the close mutual had been co-signed and
 the second signature will be according to the latest on-chain persisted
 account and not the on-chain persisted channel object.
 
