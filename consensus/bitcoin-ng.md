@@ -1,7 +1,7 @@
 Bitcoin-NG for Aeternity
 ==========
 
-Bitcoin-NG is an evolution of the Bitcoin protocol [1]. It still uses Nakamoto consensus but separates leader election and block production. This separation is done by introducing two kinds of blocks, key and micro. Key blocks are used for leader election. They don't contain any transactions but do require a solution to a Proof of Work puzzle. Once a leader has been found, they can produce multiple micro blocks. Micro blocks include transactions but do not require solutions to Proof of Work puzzles. Instead they need to be cryptographically signed be the current leader to be considered valid.
+Bitcoin-NG is an evolution of the Bitcoin protocol [1]. It still uses Nakamoto consensus but separates leader election and block production. This separation is done by introducing two kinds of blocks, key and micro. Key blocks are used for leader election. They don't contain any transactions but do require a solution to a Proof of Work puzzle. Once a leader has been found, he can produce multiple micro blocks. Micro blocks include transactions but do not require solutions to Proof of Work puzzles. Instead they need to be cryptographically signed be the current leader to be considered valid.
 
 Splitting up leader election and block production allows a leader to produce micro blocks in rapid succession, increasing the transaction throughput significantly.
 
