@@ -133,7 +133,7 @@ existence in the block.
 If a miner is reported as fraudulent in this manner, its beneficiary
 will not get any mining reward for that key block (i.e., no coinbase
 and no fees for either generation). The reporter of the fraud will get
-a reward controlled by governance. In order not to skew the inflation the
+a reward controlled by governance (i.e. a portion of coinbase). In order not to skew the inflation the
 coins not attributed to the fraudulent miner are [locked](locking.md) instead.
 
 The serialization format of the Proof-of-Fraud object can be found
