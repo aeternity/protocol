@@ -18,7 +18,7 @@
 #### initiator <--- node
 ```javascript
 {
-  "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
+  "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
   "error": {
     "code": 3,
     "data": [
@@ -63,7 +63,7 @@
 #### initiator <--- node
 ```javascript
 {
-  "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
+  "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
   "error": {
     "code": 3,
     "data": [
@@ -108,7 +108,7 @@
 #### initiator <--- node
 ```javascript
 {
-  "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
+  "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
   "error": {
     "code": 3,
     "data": [
@@ -153,7 +153,7 @@
 #### responder <--- node
 ```javascript
 {
-  "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
+  "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
   "error": {
     "code": 3,
     "data": [
@@ -198,7 +198,7 @@
 #### responder <--- node
 ```javascript
 {
-  "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
+  "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
   "error": {
     "code": 3,
     "data": [
@@ -243,7 +243,7 @@
 #### responder <--- node
 ```javascript
 {
-  "channel_id": "ch_2WDx2uyKSNAMSEb11eczNNtSMyRLNfhFAUwwP73xDk4cngy9u9",
+  "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
   "error": {
     "code": 3,
     "data": [

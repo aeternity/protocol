@@ -17,6 +17,8 @@ was performed earlier than the other.
 - [Control messages](#control-messages)
   + [`error`](#error)
   + [`ping`/`pong`](#pingpong)
+- [Sub-messages](#sub-messages)
+  + [`Updates list`](#updates-list)
 - [Establishing channel off-chain](#establishing-channel-off-chain)
   + [`channel_open`](#channel_open)
   + [`channel_accept`](#channel_accept)
@@ -142,6 +144,28 @@ reserved for unrecoverable failures only.
 
 
 ### `ping`/`pong`
+
+## Sub-messages
+
+The following serializations can be consistently used below.
+
+### Updates list
+
+Progess off-chain is achieved by one participant proposing a set of updates to
+be applied on top of the last state as well with the next state that is
+produced.
+A single off-chain update's serialization has the following structure:
+
+  name                  size (bytes)
+ ---------------------- ----
+| length               | 2  |
+ ---------------------- ----
+| data                 | N  |
+ ---------------------- ----
+
+The length is the size of the data field.
+
+A list of updates is a appended list of 0 or more such updates.
 
 
 ## Establishing channel off-chain
@@ -427,9 +451,11 @@ of the chain.
  ---------------------- ----
 | block_hash           | 32 |
  ---------------------- ----
-| length               | 2  |
+| length of create tx  | 2  |
  ---------------------- ----
-| data                 | N  |
+| channel_create tx    | N  |
+ ---------------------- ----
+| list of updates      |    |
  ---------------------- ----
 ```
 
@@ -438,14 +464,15 @@ of the chain.
 
 *Responder*:
 
-- MUST abort if the size of the payload does not match `length`
+- MUST abort if the size of the serialized channel_create transaction does not
+  match `length`
 - MUST abort if the `data` cannot be deserialized into a valid
   `channel_create_tx` object
 - MUST abort if the provided `block_hash` is not part of the main chain as the
   responder sees it or if one considers it too old
 - MUST abort if the signature is invalid for the provided transaction data on
   the current top block
-
+- MUST abort if disagrees with updates provided
 
 ### `funding_signed`
 
@@ -466,7 +493,7 @@ environment was used for producing the signature or meta transaction.
  ---------------------- ----
 | length               | 2  |
  ---------------------- ----
-| data                 | N  |
+| channel_create tx    | N  |
  ---------------------- ----
 ```
 
@@ -474,7 +501,8 @@ environment was used for producing the signature or meta transaction.
 
 *Initiator*:
 
-- MUST abort if the size of the payload does not match `length`
+- MUST abort if the size of the channel_create transaction does not match
+  `length`
 - MUST abort if the `data` cannot be deserialized into a valid
   `channel_create_tx` object
 - MUST abort if the `data` object isn't the offered initial state
@@ -534,12 +562,12 @@ Message code: 8
 
 Once `funding_locked` messages have been exchanged, the channel enters the
 `open` state. Changes to the off-chain state can be effected by sending an
-`update` message. The payload of this message must be a singly-signed
-off-chain state, where the `updates` element contains a list of operations
-to be performed on the previous state, and the `state_hash` is the aggregated
-root hash of the resulting state trees. The receiver must verify that the
-state is a valid outcome, then return it, co-signed, in an `update_ack`
-message.
+`update` message. It consists of a singly-signed off-chain transaction and
+an updates list that contains a list of operations to be performed on the
+previous state. The `state_hash` of the off-chain transaction is the
+aggregated root hash of the resulting state trees. The receiver must verify
+that the state is a valid outcome, then return it, co-signed, in an
+`update_ack` message.
 
 The `block_hash` is the hash of which on-chain environment was used for
 computing the state and either this blcok or any more recent one could be used
@@ -558,7 +586,9 @@ side.
  ---------------------- ----
 | length               | 2  |
  ---------------------- ----
-| data                 | N  |
+| channel_offchain tx  | N  |
+ ---------------------- ----
+| list of updates      |    |
  ---------------------- ----
 ```
 
@@ -567,7 +597,7 @@ side.
 Message code: 9
 
 In response to an `update` message, the receiving side verifies that the
-operations listed in the `updates` list, applied to the most recent co-signed
+operations listed in the updates list, applied to the most recent co-signed
 state, results in a state tree corresponding to `state_hash`. If so, the
 state object is co-signed, then returned as payload in an `update_ack`
 message. The `block_hash` is the environment the co-signing had been done. The
@@ -583,7 +613,7 @@ must be used.
  ---------------------- ----
 | length               | 2  |
  ---------------------- ----
-| data                 | N  |
+| channel_offchain tx  | N  |
  ---------------------- ----
 ```
 
@@ -613,11 +643,10 @@ be the last mutually signed state. The receiver does not reply.
 Message code: 11
 
 In order to deposit more funds into the channel, one party can initiate
-a `deposit_created` request. The payload is a singly signed
-`channel_deposit_tx` object, which includes the state hash and round of the
-next off-chain state, after applying a deposit operation with the expected
-amount. The initiating side can only deposit coins from its own on-chain
-account (same public key) to its own off-chain account in the channel state.
+a `deposit_created` request. It consists of singly signed `channel_deposit_tx`
+transaction as well as a list of updates. The transaction includes the state
+hash and round of the next off-chain state, after applying the updates on top
+of latest state. 
 
 Note that it is possible to deposit a zero amount, essentially making the
 operation an on-chain snapshot.
@@ -636,9 +665,11 @@ account and not the on-chain persisted channel object.
  ---------------------- ----
 | block_hash           | 32 |
  ---------------------- ----
-| length               | 2  |
+| length of deposit tx | 2  |
  ---------------------- ----
-| data                 | N  |
+| channel_deposit tx   | N  |
+ ---------------------- ----
+| list of updates      |    |
  ---------------------- ----
 ```
 
@@ -665,9 +696,9 @@ account and not the on-chain persisted channel object.
  ---------------------- ----
 | block_hash           | 32 |
  ---------------------- ----
-| length               | 2  |
+| length of deposit tx | 2  |
  ---------------------- ----
-| data                 | N  |
+| channel_deposit tx   | N  |
  ---------------------- ----
 ```
 
@@ -686,9 +717,7 @@ useable.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 2  |
- ---------------------- ----
-| data                 | N  |
+| tx hash              | 32 |
  ---------------------- ----
 ```
 
@@ -719,11 +748,9 @@ be the last mutually signed state. The receiver does not reply.
 Message code: 15
 
 In order to withdraw coins from the channel, one party can initiate
-a `withdraw_created` request. The payload is a singly signed
-`channel_withdraw_tx` object, which includes the state hash and round of the
-next off-chain state, after applying a withdrawal operation with the expected
-amount. The initiating side can only withdraw coins from its own off-chain
-account in the channel state (same public key) to its own on-chain account.
+a `withdraw_created` request. It consists of a singly signed
+`channel_withdraw_tx` and a list of updates. The transaction includes the state
+hash and round of the next off-chain state, after applying the updates.
 Note that it is possible to withdraw a zero amount, essentially making the
 operation an on-chain snapshot.
 
@@ -741,9 +768,11 @@ account and not the on-chain persisted channel object.
  ---------------------- ----
 | block_hash           | 32 |
  ---------------------- ----
-| length               | 2  |
+| length of withdrawal | 2  |
  ---------------------- ----
-| data                 | N  |
+| channel_withdraw_tx  | N  |
+ ---------------------- ----
+| list of updates      |    |
  ---------------------- ----
 ```
 
@@ -770,9 +799,9 @@ account and not the on-chain persisted channel object.
  ---------------------- ----
 | block_hash           | 32 |
  ---------------------- ----
-| length               | 2  |
+| length of withdrawal | 2  |
  ---------------------- ----
-| data                 | N  |
+| channel_withdraw_tx  | N  |
  ---------------------- ----
 ```
 
@@ -791,9 +820,7 @@ useable.
  ---------------------- ----
 | channel_id           | 32 |
  ---------------------- ----
-| length               | 2  |
- ---------------------- ----
-| data                 | N  |
+| tx hash              | 32 |
  ---------------------- ----
 ```
 
@@ -901,7 +928,7 @@ account and not the on-chain persisted channel object.
  ---------------------- ----
 | length               | 2  |
  ---------------------- ----
-| data                 | N  |
+| close mutual tx      | N  |
  ---------------------- ----
 ```
 
@@ -927,7 +954,7 @@ account and not the on-chain persisted channel object.
  ---------------------- ----
 | length               | 2  |
  ---------------------- ----
-| data                 | N  |
+| close mutual tx      | N  |
  ---------------------- ----
 ```
 
