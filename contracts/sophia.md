@@ -865,8 +865,8 @@ and `*/` and can be nested.
 #### Keywords
 
 ```
-and contract elif else false function if import include internal let mod namespace
-private public rec stateful switch true type record datatype
+contract elif else false function if import include internal let mod namespace
+private public stateful switch true type record datatype
 ```
 
 #### Tokens
@@ -1003,7 +1003,6 @@ Stmt ::= 'switch' '(' Expr ')' Block(Case)
        | 'elif' '(' Expr ')' Block(Stmt)
        | 'else' Block(Stmt)
        | 'let' LetDef
-       | 'let' 'rec' Sep1(LetDef, 'and')  // (Mutually) recursive binding
        | Expr
 
 LetDef ::= Id [Args] [':' Type] '=' Block(Stmt)
