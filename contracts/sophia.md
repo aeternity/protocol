@@ -519,7 +519,9 @@ The following builtin functions are defined on integers:
 The following builtin functions are defined on addresses:
 
 ```
-  Address.to_str(a : address) : string  // Base58 encoded string
+  Address.to_str(a : address) : string    // Base58 encoded string
+  Address.is_contract(a : address) : bool // Is the address a contract
+  Address.is_oracle(a : address) : bool   // Is the address a registered oracle
 ```
 
 ### Builtins
@@ -589,6 +591,10 @@ An Oracle user will use the functions:
 * `Oracle.query_fee`
 * `Oracle.query`
 * `Oracle.get_answer`
+
+Additional safety checks can use the functions:
+* `Oracle.check`
+* `Oracle.check_query`
 
 ##### Oracle register
 
@@ -739,6 +745,24 @@ contract Oracles =
     Oracle.get_answer(o, q)
 ```
 
+##### Oracle check
+No deep check is performed when an Oracle literal is passed to a contract, for
+extra safety a check function `Oracle.check` is provided. It returns true if
+the oracle exist and has the expected type.
+```
+Oracle.check(o : oracle('a, 'b)) : bool
+```
+
+##### Oracle check_query
+
+No deep check is performed when an Oracle query literal is passed to a
+contract, for extra safety a check function `Oracle.check_query` is provided.
+It returns true if the oracle query exist and has the expected type.
+
+```
+Oracle.check_query(o : oracle('a, 'b), q : oracle_query('a, 'b)) : bool
+```
+
 #### AENS interface
 
 The following primitives are available for interacting with the Aeternity
@@ -798,7 +822,7 @@ The block-chain environment available to a contract is defined in three name spa
 `Contract`, `Call`, and `Chain`:
 
 - `Contract.creator` is the address of the entity that signed the contract creation
-  transaction.
+  transaction. (Available from Fortuna release.)
 - `Contract.address` is the address of the contract account.
 - `Contract.balance` is the amount of coins currently in the contract account.
   Equivalent to `Chain.balance(Contract.address)`.
