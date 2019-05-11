@@ -734,7 +734,6 @@ The caller sends a message containing the desired change
     "contract": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5"
   }
 }
-
 ```
 
 ##### Caller signs updated state

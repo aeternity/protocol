@@ -93,18 +93,6 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node
-```javascript
-{
-  "action": "on_chain_tx",
-  "channel_id": null,
-  "payload": {
-    "tx": "tx_+QENCwH4hLhAP+EiPpXFO80MdqGnw6GkaAYpOHCvcP/KBKJZ5IIicYBItA9s95zZA+RX1DNNheorlbZYKHctN3ZyvKnsFa7HDrhAYqWNrW8oDAaLj0JCUeW0NfNNhs4dKDJoHuuCdWhnX4r802c5ZAFKV7EV/mHihVXzgLyaRaI/SVw2KS+z471bAriD+IEyAaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGP6olImAAoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhIYkYTnKgAACCgCGEjCc5UAAwKCjPk7CXWjSHTO8V2Y9WTad6D/5sB8yCR8WumWh0WxWvwdz6zEk"
-  },
-  "version": 1
-}
-```
-
 #### initiator <--- node
 ```javascript
 {
@@ -112,6 +100,18 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "channel_id": null,
   "payload": {
     "event": "funding_signed"
+  },
+  "version": 1
+}
+```
+
+#### responder <--- node
+```javascript
+{
+  "action": "on_chain_tx",
+  "channel_id": null,
+  "payload": {
+    "tx": "tx_+QENCwH4hLhAP+EiPpXFO80MdqGnw6GkaAYpOHCvcP/KBKJZ5IIicYBItA9s95zZA+RX1DNNheorlbZYKHctN3ZyvKnsFa7HDrhAYqWNrW8oDAaLj0JCUeW0NfNNhs4dKDJoHuuCdWhnX4r802c5ZAFKV7EV/mHihVXzgLyaRaI/SVw2KS+z471bAriD+IEyAaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGP6olImAAoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhIYkYTnKgAACCgCGEjCc5UAAwKCjPk7CXWjSHTO8V2Y9WTad6D/5sB8yCR8WumWh0WxWvwdz6zEk"
   },
   "version": 1
 }
@@ -211,18 +211,6 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node
-```javascript
-{
-  "action": "info",
-  "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
-  "payload": {
-    "event": "open"
-  },
-  "version": 1
-}
-```
-
 #### responder <--- node
 ```javascript
 {
@@ -235,7 +223,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -247,7 +235,19 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node
+#### initiator <--- node
+```javascript
+{
+  "action": "info",
+  "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+  "payload": {
+    "event": "open"
+  },
+  "version": 1
+}
+```
+
+#### initiator <--- node
 ```javascript
 {
   "action": "update",

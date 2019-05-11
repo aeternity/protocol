@@ -3,7 +3,7 @@
 ```javascript
 {
   "jsonrpc": "2.0",
-  "method": "channels.deposit",
+  "method": "channels.withdraw",
   "params": {
     "amount": "2"
   }
@@ -25,7 +25,7 @@
     "message": "Rejected",
     "request": {
       "jsonrpc": "2.0",
-      "method": "channels.deposit",
+      "method": "channels.withdraw",
       "params": {
         "amount": "2"
       }
@@ -219,7 +219,7 @@
 }
 ```
 
-#### responder <--- node
+#### initiator <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -234,7 +234,7 @@
 }
 ```
 
-#### initiator <--- node
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -253,7 +253,7 @@
 ```javascript
 {
   "jsonrpc": "2.0",
-  "method": "channels.deposit",
+  "method": "channels.withdraw",
   "params": {
     "amount": "2"
   }
@@ -275,7 +275,7 @@
     "message": "Rejected",
     "request": {
       "jsonrpc": "2.0",
-      "method": "channels.deposit",
+      "method": "channels.withdraw",
       "params": {
         "amount": "2"
       }
@@ -454,6 +454,21 @@
 }
 ```
 
+#### responder <--- node
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.update",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "state": "tx_+P4LAfiEuEC+Kq1Ma46dojlaplHUNPB1GoGgriOGmrqFvMuTwgO8WI1Oz5IvSqjKKKSvDLeeatz8SIpPaLBuih0Ta3vR0O0HuED1O7wMWz3k97CV3vccDCOXDocd9pPvb8bJP5vAlkeEs5I/T2sTPlSbn+zHiZZg8tQeItSmoDycE1CbyLhl98kNuHT4cjQBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBZxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oQCAIYSMJzlQACgoz5Owl1o0h0zvFdmPVk2neg/+bAfMgkfFrplodFsVr8FAwJQUb0="
+    }
+  },
+  "version": 1
+}
+```
+
 #### initiator <--- node
 ```javascript
 {
@@ -470,21 +485,6 @@
 ```
 
 #### initiator <--- node
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.update",
-  "params": {
-    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
-    "data": {
-      "state": "tx_+P4LAfiEuEC+Kq1Ma46dojlaplHUNPB1GoGgriOGmrqFvMuTwgO8WI1Oz5IvSqjKKKSvDLeeatz8SIpPaLBuih0Ta3vR0O0HuED1O7wMWz3k97CV3vccDCOXDocd9pPvb8bJP5vAlkeEs5I/T2sTPlSbn+zHiZZg8tQeItSmoDycE1CbyLhl98kNuHT4cjQBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBZxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oQCAIYSMJzlQACgoz5Owl1o0h0zvFdmPVk2neg/+bAfMgkfFrplodFsVr8FAwJQUb0="
-    }
-  },
-  "version": 1
-}
-```
-
-#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",

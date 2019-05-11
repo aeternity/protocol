@@ -9,18 +9,6 @@ ws://localhost:3014/channel?channel_reserve=2&host=localhost&initiator_amount=70
 ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&initiator_id=ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm&lock_period=10&port=12340&protocol=legacy&push_amount=1&responder_amount=40000000000000&responder_id=ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC&role=responder
 ```
 
-#### initiator <--- node
-```javascript
-{
-  "action": "info",
-  "channel_id": null,
-  "payload": {
-    "event": "channel_accept"
-  },
-  "version": 1
-}
-```
-
 #### responder <--- node
 ```javascript
 {
@@ -28,6 +16,18 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "channel_id": null,
   "payload": {
     "event": "channel_open"
+  },
+  "version": 1
+}
+```
+
+#### initiator <--- node
+```javascript
+{
+  "action": "info",
+  "channel_id": null,
+  "payload": {
+    "event": "channel_accept"
   },
   "version": 1
 }
@@ -163,7 +163,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node
+#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -176,18 +176,6 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 ```
 
 #### initiator <--- node
-```javascript
-{
-  "action": "info",
-  "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
-  "payload": {
-    "event": "funding_locked"
-  },
-  "version": 1
-}
-```
-
-#### responder <--- node
 ```javascript
 {
   "action": "info",
@@ -211,7 +199,31 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
+#### initiator <--- node
+```javascript
+{
+  "action": "info",
+  "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+  "payload": {
+    "event": "funding_locked"
+  },
+  "version": 1
+}
+```
+
 #### responder <--- node
+```javascript
+{
+  "action": "info",
+  "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+  "payload": {
+    "event": "open"
+  },
+  "version": 1
+}
+```
+
+#### initiator <--- node
 ```javascript
 {
   "action": "info",
@@ -230,18 +242,6 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
   "payload": {
     "state": "tx_+QENCwH4hLhAe3emwy3TOhBG+P4PHO6neJqCrrTNAGmDAgn5OnrBEnolO1bbptEtvhGO7YiQhhwv9PrMN6yoJo8sIpkvXl/XBbhAzw/GMFHUWeIRF/LbSk9KFDCVC/bELXyniyW8ywF2Lj+EcFP99dU2vmA9Ny2uLmCONnCmkjKfsm0sotP501R0DLiD+IEyAaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGP6olImAAoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhIYkYTnKgAACCgCGEjCc5UAAwKCjPk7CXWjSHTO8V2Y9WTad6D/5sB8yCR8WumWh0WxWvwiMpqfr"
-  },
-  "version": 1
-}
-```
-
-#### initiator <--- node
-```javascript
-{
-  "action": "info",
-  "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
-  "payload": {
-    "event": "open"
   },
   "version": 1
 }

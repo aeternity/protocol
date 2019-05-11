@@ -209,6 +209,9 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
+#### initiator info
+> Funding has been confirmed locally on-chain
+
 #### responder <--- node
 ```javascript
 {
@@ -224,26 +227,8 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator info
-> Funding has been confirmed locally on-chain
-
 #### responder info
 > Funding has been confirmed locally on-chain
-
-#### initiator <--- node
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.info",
-  "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
-    "data": {
-      "event": "funding_locked"
-    }
-  },
-  "version": 1
-}
-```
 
 #### responder <--- node
 ```javascript
@@ -260,13 +245,43 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator info
-> Funding has been confirmed on-chain by other party
-
 #### responder info
 > Funding has been confirmed on-chain by other party
 
 #### initiator <--- node
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "data": {
+      "event": "funding_locked"
+    }
+  },
+  "version": 1
+}
+```
+
+#### initiator info
+> Funding has been confirmed on-chain by other party
+
+#### initiator <--- node
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "data": {
+      "event": "open"
+    }
+  },
+  "version": 1
+}
+```
+
+#### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -283,21 +298,6 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 
 #### initiator info
 > Channel is `open` and ready to use
-
-#### responder <--- node
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.info",
-  "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
-    "data": {
-      "event": "open"
-    }
-  },
-  "version": 1
-}
-```
 
 #### responder info
 > Channel is `open` and ready to use

@@ -9,18 +9,6 @@ ws://localhost:3014/channel?channel_reserve=2&host=localhost&initiator_amount=70
 ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&initiator_id=ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm&lock_period=10&minimum_depth=4&port=12340&protocol=legacy&push_amount=1&responder_amount=40000000000000&responder_id=ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC&role=responder
 ```
 
-#### responder <--- node
-```javascript
-{
-  "action": "info",
-  "channel_id": null,
-  "payload": {
-    "event": "channel_open"
-  },
-  "version": 1
-}
-```
-
 #### initiator <--- node
 ```javascript
 {
@@ -28,6 +16,18 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "channel_id": null,
   "payload": {
     "event": "channel_accept"
+  },
+  "version": 1
+}
+```
+
+#### responder <--- node
+```javascript
+{
+  "action": "info",
+  "channel_id": null,
+  "payload": {
+    "event": "channel_open"
   },
   "version": 1
 }
@@ -235,7 +235,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### initiator <--- node
+#### responder <--- node
 ```javascript
 {
   "action": "update",
@@ -247,7 +247,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 }
 ```
 
-#### responder <--- node
+#### initiator <--- node
 ```javascript
 {
   "action": "update",
