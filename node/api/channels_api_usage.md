@@ -171,7 +171,7 @@ connection.
 
 #### Initiator connection opened message
 The initiator receives the following message
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
@@ -186,7 +186,7 @@ The initiator receives the following message
 ```
 #### Responder connection opened message
 The responder receives the following message
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
@@ -206,7 +206,7 @@ it. Then it is posted to the chain.
 
 #### Initiator signs the tx
 The initiator receives a message containing the unsigned transaction
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.sign.initiator_sign",
@@ -222,7 +222,7 @@ The initiator receives a message containing the unsigned transaction
 ```
 Initiator is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.initiator_sign",
@@ -237,7 +237,7 @@ different values for those.
 
 #### Responder is informed
 The responder receives the following message
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
@@ -253,7 +253,7 @@ The responder receives the following message
 
 #### Responder signs the tx
 After being informed for the initiator's signing the responder receives a message containing the unsigned transaction to be signed as well
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.sign.responder_sign",
@@ -270,7 +270,7 @@ After being informed for the initiator's signing the responder receives a messag
 Note that this is the same transaction and same updates list. Responder is to
 decode the transaction, inspect its contents, sign it, encode it and then post
 it back via a WebSocket message:
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.responder_sign",
@@ -281,7 +281,7 @@ it back via a WebSocket message:
 ```
 #### Initiator is informed
 The initiator receives the following message
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
@@ -297,7 +297,7 @@ The initiator receives the following message
 
 #### Signed channel_create_tx
 Both participants receive the co-signed `channel_create_tx`:
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.on_chain_tx",
@@ -327,7 +327,7 @@ it is 4, so 5 blocks need to be mined. As a result, each party will receive
 two kinds of confirmation.
 
 An update from one's own node that the block height needed is reached:
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
@@ -342,7 +342,7 @@ An update from one's own node that the block height needed is reached:
 ```
 An update from one's own node that the other party had confirmed that the block
 height needed is reached:
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
@@ -363,7 +363,7 @@ described in the create transaction.
 
 #### Open confirmation
 After both parties have co-signed the state update both of them will receive a info for the channel open:
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
@@ -431,7 +431,7 @@ can take those roles. Any public key outside of the channel is considered invali
 #### Start transfer update
 ##### Trigger a transfer update
 The starter sends a message containing the desired change
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.update.new",
@@ -448,7 +448,7 @@ trigger sending or request for tokens.
 ##### Starter signs updated state
 The starter receives a message containing the updated channel state as an
 off-chain transaction
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.sign.update",
@@ -471,7 +471,7 @@ off-chain transaction
 ```
 The starter is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.update",
@@ -482,7 +482,7 @@ it and then post it back via a WebSocket message:
 ```
 #### Acknowledger update
 The acknowledger receives an info message indicating an upcoming change:
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
@@ -497,7 +497,7 @@ The acknowledger receives an info message indicating an upcoming change:
 ```
 Then the acknowledger receives a new message containing the updated channel state as an
 off-chain transaction
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.sign.update_ack",
@@ -520,7 +520,7 @@ off-chain transaction
 ```
 Note that this is the same transaction as the one that the starter had already signed. The acknowledger is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.update_ack",
@@ -534,7 +534,7 @@ After both the parties have signed the new updated state of the channel - it is
 considered the latest one. Corresponding update messages are sent to both
 parties to indicate it. The payload of the message contains the latest
 co-signed off-chain update so the participants can persist it locally.
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.update",
@@ -567,7 +567,7 @@ commits initially a `deposit` amount of tokens to the new contract.
 #### Start create contract update
 ##### Trigger a create contract update
 The owner sends a message containing the desired change
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.update.new_contract",
@@ -584,7 +584,7 @@ The owner sends a message containing the desired change
 The owner receives a message containing the updated channel state as an
 off-chain transaction
 
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.sign.update",
@@ -612,7 +612,7 @@ off-chain transaction
 The owner is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
 
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.update",
@@ -624,7 +624,7 @@ it and then post it back via a WebSocket message:
 
 #### Acknowledger update
 The acknowledger receives an info message indicating an upcoming change:
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
@@ -639,7 +639,7 @@ The acknowledger receives an info message indicating an upcoming change:
 ```
 Then the acknowledger receives a new message containing the updated channel state as an
 off-chain transaction
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.sign.update_ack",
@@ -665,7 +665,7 @@ off-chain transaction
 ```
 Note that this is the same transaction as the one that the owner had already signed. The acknowledger is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.update_ack",
@@ -679,7 +679,7 @@ After both the parties have signed the new updated state of the channel - it is
 considered the latest one. Corresponding update messages are sent to both
 parties to indicate it. The payload of the message contains the latest
 co-signed off-chain update so the participants can persist it locally.
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.update",
@@ -723,65 +723,115 @@ The call would also create a `call` object inside the channel state tree. It con
 #### Start call a contract update
 ##### Trigger a contract call update
 The caller sends a message containing the desired change
-```
+```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.update.call_contract",
   "params": {
     "abi_version": 1,
-    "amount": "1",
+    "amount": 0,
     "call_data": "cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACBo8mdjOP9QiDmrpHdJ7/qL6H7yhPIH+z2ZmHAc1TiHxQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACo7dbVl",
     "contract": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5"
   }
 }
+
 ```
 
 ##### Caller signs updated state
 The caller receives a message containing the updated channel state as an
 off-chain transaction
 
-```
-{'action': 'sign',
- 'tag': 'update',
- 'payload' {
-    'tx': 'tx_Sweh544j3PL6BzGK8Sk6dqW9ywspMup8J8ETuajNnTGkx3vTbwCS8K8LWAPNSBrkDUWEQCxDR2Kyvuv2v19YtsiNxcetmwWwEjYicTaZ1nZ84PvVs5WoP4LgSgur5yaiDwvoY4xkk5dGjfiXGYWE7udn8HwbZdHUQPXWtJdeGhcApf31SPYWUkW3hWk8sKZeHKU6f9aLQgiSsP2MNoqzfiTL1xppK4NPrS6gje7iVGdz8zBbQ1TRXcTsN7pecY8fSPMwKhEtH88jRbmXouYxatBUvYLy4vRiQJBcsZaCXhHKezoXqggPsPDUjfaM1P1FMrC3GxWS3CHotuR588TuvaUwPBVjwwoMYL1MJcTYLvejnDktsisFtfhH811h7R7pazQuhqbmMSWhRkYMLfXXwTXs32q334CMEZpz1UpWWA1DRJMBUVWmE7FmPedZDaqobUbNe2CKPk8oMG9apvdrrxE6cQRGupVyjXNor'}
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.update",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "tx": "tx_+QEeOQGhBoKHxseeenUyEqm0v3trQqdUTgoKKLYqDOBR73bgh24FCPjWuNT40oICPgGhAWccVUZGSUV1srSU9lFoIXEGY9hIk83S0jYDelTDPu6EoQXMSDYKchQbN/BdXL3PgW4GBwYGgLkzPIGiw15gFwyhlgEAgw9CQAG4gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgaPJnYzj/UIg5q6R3Se/6i+h+8oTyB/s9mZhwHNU4h8UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAqwKBmNmU3LwTMKrAhSxwIUR59mTgDbVqjhQNnALqIc1ncQ5mkxak=",
+      "updates": [
+        {
+          "abi_version": 1,
+          "amount": 0,
+          "call_data": "cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACBo8mdjOP9QiDmrpHdJ7/qL6H7yhPIH+z2ZmHAc1TiHxQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACo7dbVl",
+          "call_stack": [],
+          "caller": "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC",
+          "contract": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5",
+          "gas": 1000000,
+          "gas_price": 1,
+          "op": "OffChainCallContract"
+        }
+      ]
+    }
+  },
+  "version": 1
 }
 ```
 
 The caller is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
 
-```
-{'action': 'update',
- 'payload': {
-    'tx': 'tx_C4TACwXiGbsZf6sCqqEkZU7ngzvoDdqPHQMfNVGZUMQhsT9Nj64j3DbGYE6nB8V7R56zmfY8zuGCjAWgZecsby4RCwDtm5nE57DcX3srHgrzt4NS1mFUq9Vuan57SXT8n4xA5BFjz8WvKEqFptsHqzRhv6veY5o9cmTi4ea1t21BaCdfZiVg6mkf4pvrAzsNtnQ149BxuCLqLJJdaJXVWzJthDXBHLcHmDRTvqYRpnH8gD2veHizbJqnvApeVGwMJ9m5rZc3Tw3EDcZnsiFzKXBiZ1FMMBqZtiNzCCRhhn7uANkJiSi8e8iHcBJLyFRPzSgU6KTVNVGcc2CZVh2RQcMoJXWecdHHeMiCnGaX2MiT2EyjEox9a7kZBkTAAnoeri5F2GhGvdK98a275PjaCrA16xizH2DnvRdw92HFA2PgjQmHE3SgxB7MMhTAkaR3LcqmR5KfwLqikneU9DNM5PQzvYTh1J7rupP9AHXUhhFpGQXYcakXQfmEt2D3D4E3zBGDWqJRfVG8xmxYftzefkx5X5CpeWnCyiCepnUSbNyHFxZS4vyzvhZnTHmWVZksyY68MJAMmERk9'
-    }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.update",
+  "params": {
+    "tx": "tx_+QFqCwH4QrhAsiGALSOnzLx95Bk8unNXuxeRKqRRxisVaIKMajNFLhSkieah4h96xwIu0FpsRjFgblzGjHOZSQlsAH/iUvpoCrkBIfkBHjkBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBQj41rjU+NKCAj4BoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhKEFzEg2CnIUGzfwXVy9z4FuBgcGBoC5MzyBosNeYBcMoZYBAIMPQkABuIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIGjyZ2M4/1CIOaukd0nv+ovofvKE8gf7PZmYcBzVOIfFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKsCgZjZlNy8EzCqwIUscCFEefZk4A21ao4UDZwC6iHNZ3EPscgv1"
+  }
 }
 ```
 
 #### Acknowledger update
 The acknowledger receives an info message indicating an upcoming change:
-```
-{'action': 'info',
- 'payload': {'event': 'update'}
- }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "event": "update"
+    }
+  },
+  "version": 1
+}
 ```
 Then the acknowledger receives a new message containing the updated channel state as an
 off-chain transaction
-```
-{'action': 'sign',
- 'tag': 'update_ack',
- 'payload' {
-    'tx': 'tx_Sweh544j3PL6BzGK8Sk6dqW9ywspMup8J8ETuajNnTGkx3vTbwCS8K8LWAPNSBrkDUWEQCxDR2Kyvuv2v19YtsiNxcetmwWwEjYicTaZ1nZ84PvVs5WoP4LgSgur5yaiDwvoY4xkk5dGjfiXGYWE7udn8HwbZdHUQPXWtJdeGhcApf31SPYWUkW3hWk8sKZeHKU6f9aLQgiSsP2MNoqzfiTL1xppK4NPrS6gje7iVGdz8zBbQ1TRXcTsN7pecY8fSPMwKhEtH88jRbmXouYxatBUvYLy4vRiQJBcsZaCXhHKezoXqggPsPDUjfaM1P1FMrC3GxWS3CHotuR588TuvaUwPBVjwwoMYL1MJcTYLvejnDktsisFtfhH811h7R7pazQuhqbmMSWhRkYMLfXXwTXs32q334CMEZpz1UpWWA1DRJMBUVWmE7FmPedZDaqobUbNe2CKPk8oMG9apvdrrxE6cQRGupVyjXNor'
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.update_ack",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "tx": "tx_+QEeOQGhBoKHxseeenUyEqm0v3trQqdUTgoKKLYqDOBR73bgh24FCPjWuNT40oICPgGhAWccVUZGSUV1srSU9lFoIXEGY9hIk83S0jYDelTDPu6EoQXMSDYKchQbN/BdXL3PgW4GBwYGgLkzPIGiw15gFwyhlgEAgw9CQAG4gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgaPJnYzj/UIg5q6R3Se/6i+h+8oTyB/s9mZhwHNU4h8UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAqwKBmNmU3LwTMKrAhSxwIUR59mTgDbVqjhQNnALqIc1ncQ5mkxak=",
+      "updates": [
+        {
+          "abi_version": 1,
+          "amount": 0,
+          "call_data": "cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACBo8mdjOP9QiDmrpHdJ7/qL6H7yhPIH+z2ZmHAc1TiHxQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACo7dbVl",
+          "call_stack": [],
+          "caller": "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC",
+          "contract": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5",
+          "gas": 1000000,
+          "gas_price": 1,
+          "op": "OffChainCallContract"
+        }
+      ]
     }
+  },
+  "version": 1
 }
 ```
 Note that this is the same transaction as the one that the caller had already signed. The acknowledger is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
-```
-{'action': 'update_ack',
- 'payload': {
-    'tx': 'tx_C4TACwXiGbsZg1Z9ChAEuaVJge62Uax5riSw4Tpp763SKTwLLGjhqPDUqjb9swx5X2G6XnpQk72v1yhFSLZvPtUv4JgoimKLqhAVUSoHB3btwEUTdgb3kVbaS6WLiaF86cqBZiDwbiL3GpThgZK7VhYedXFZK6PdK2RjywURhC9s8PNwP19Zetj19VkL4MYn1Z5tkoEh387dMfh9Mfh9jPf7gaBJjvwxNLuMjqHQXwSKPEpR8jYBF4cuzwaZzWeUSPKMxp44wDWQqqG8MTMwR1i8JbZjbAFtuj49TJWMw6xrvXski8XieHLHXrx5y4873CgD1FhRQT374Yvb5mYBTMtsYc8ttUCPiwi7AQteey7h1iRJgGc5bcd2omdGG8BmQZETfLaqwqXWN7mXXxPGfJQUaknHdocTum9FNyncYiAt6Y7znFJ1rZT2UkHvKwbvtJvhftWBJPrbExfeFMypn9DoW4SoaQ7RjBcmz5PWdt79BjRXhZpM7qbjvGF9i1f2cXiQFeKcj9FxXdzttN28kdtDvpYWdBbWcSMaWAYy7EBnMRHrGo2XdcDeJeGQdGnSBKaMHdN5LVhKF'
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.update_ack",
+  "params": {
+    "tx": "tx_+QFqCwH4QrhAFTUbMymALIdq1DFUQLov+rItP4g6pIc5IVxUoT5Gt3XlXI+zYYyeFC2aoAv+BMghSuF3bR77a9ZqsabtfLH1B7kBIfkBHjkBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBQj41rjU+NKCAj4BoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhKEFzEg2CnIUGzfwXVy9z4FuBgcGBoC5MzyBosNeYBcMoZYBAIMPQkABuIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIGjyZ2M4/1CIOaukd0nv+ovofvKE8gf7PZmYcBzVOIfFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKsCgZjZlNy8EzCqwIUscCFEefZk4A21ao4UDZwC6iHNZ3ENFKkBe"
   }
 }
 ```
@@ -791,44 +841,57 @@ considered the latest one. Corresponding update messages are sent to both
 parties to indicate it. The payload of the message contains the latest
 co-signed off-chain update so the participants can persist it locally.
 
-```
-{'action': 'update',
- 'channel_id: 'ch_RnmrHrmv7m37fMS9RfWAGZMhtDbYnqJk4n7G9X9bTyepzwm5t',
- 'payload': {
-    'state': 'tx_L1mTJpyV97nWgMAFmrqcwECSThovgaU9qv5DYeqn3YQgzjCShS96n6u2rACsXyXAJyRrqGNTv2ytC1LgmH8zSuD6SkDTEiT2eCGuCsM1xXyZGooq14nu8naSZ3rhJEwBoZLTn3Tt86W3eUc1rPs2HaFwtxwsFhFu4dXHJTjmaVjigG8Juhvq1oQytscRCPVt9sjijr8h1mCCj73yhnsvwwJuMLi9WgspqwJfHHRVc8RWPtvKg6hbUKxn4cEP2M1rpXhVEUhCAkgKVfm58m4xvnuCNhvJhi37cGeSMSJkdrs64111jnQY2nwpiiS5dRW8c3VcHt1Zm8Sg1fyQgdmgbr3Rwbez1L6hCndppgX1DA2UniQB1y7eqC8nYMe4DUmXxnjcFxCQyaiTCBGavjcZiQUThHzwoACJ1yf4fr1HXZ2BzsgeSsuE2AuvphAvtiPSDmRUiFwxt1KGg3YRBxsSqs2Ums7D6QDoju11VH3k8ERcb9Hj6uJmHFC2yGu48jKHPB8bUCm1qDBZqEiDBVTQo6E1AiSLtvJmLoRd1gyUZ4pvCPPmGPQJ4Qsb16xH6q4YnJVMVQb7TWSs5PorsdqV1XPKg8rZSwSZJGZ1gT7fkf75ocXt986k3PMNCa98cDQmwbqFuqYYC4iMixj6k2txsFYUCyxrucHidNC8MFC'}
- }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.update",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "state": "tx_+QGsCwH4hLhAFTUbMymALIdq1DFUQLov+rItP4g6pIc5IVxUoT5Gt3XlXI+zYYyeFC2aoAv+BMghSuF3bR77a9ZqsabtfLH1B7hAsiGALSOnzLx95Bk8unNXuxeRKqRRxisVaIKMajNFLhSkieah4h96xwIu0FpsRjFgblzGjHOZSQlsAH/iUvpoCrkBIfkBHjkBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBQj41rjU+NKCAj4BoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhKEFzEg2CnIUGzfwXVy9z4FuBgcGBoC5MzyBosNeYBcMoZYBAIMPQkABuIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIGjyZ2M4/1CIOaukd0nv+ovofvKE8gf7PZmYcBzVOIfFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKsCgZjZlNy8EzCqwIUscCFEefZk4A21ao4UDZwC6iHNZ3EMR8cBv"
+    }
+  },
+  "version": 1
+}
 ```
 
 #### Getting a call result
 All calls are stored in the channel state tree. In order to extract one out of
 there and inspect it, one shall send a WebSocket event
-```
-{'action': 'get',
- 'tag': 'contract_call',
- 'payload': {
-    'contract_address': 'ct_9sRA9AVE4BYTAkh5RNfJYmwQe1NZ4MErasQLXZkFWG43TPBqa',
-    'caller_address': 'ak_2YeNqB4jQ1DG7QvUKgCkKeZAiXb2rnzkEoLTS8XeKF8Smgit2e',
-    'round': 8
-    }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.get.contract_call",
+  "params": {
+    "caller": "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC",
+    "contract": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5",
+    "round": 8
+  }
 }
 ```
 The `contract_address` is the address of the contract that had been called, the `round` is the round of the update and
 `caller_address` is the address of the caller.
 
 Then the call is returned through an incoming message:
-```
-{'action': 'get',
- 'tag': 'contract_call',
- 'payload': {
-      'contract_address': 'ct_9sRA9AVE4BYTAkh5RNfJYmwQe1NZ4MErasQLXZkFWG43TPBqa',
-      'caller_address': 'ak_2YeNqB4jQ1DG7QvUKgCkKeZAiXb2rnzkEoLTS8XeKF8Smgit2e',
-      'caller_nonce': 8,
-      'gas_price': 0,
-      'gas_used': 524,
-      'height': 8,
-      'return_type': 'ok',
-      'return_value': 'cb_11111111111111111111111111111115rHyByZ'
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.get.contract_call.reply",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "caller_id": "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC",
+      "caller_nonce": 8,
+      "contract_id": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5",
+      "gas_price": 1,
+      "gas_used": 192,
+      "height": 8,
+      "log": [],
+      "return_type": "ok",
+      "return_value": "cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACr8s/aY"
     }
+  },
+  "version": 1
 }
 ```
 
@@ -854,16 +917,25 @@ by the client corresponds to the latest full state retrieved from the cache.
 ### Leave request
 Example:
 ```javascript
-{'action': 'leave'}
+{
+  "jsonrpc": "2.0",
+  "method": "channels.leave",
+  "params": {}
+}
 ```
 
 The fsm responds with the following type of report:
 ```javascript
-{'action': 'leave',
- 'channel_id': 'ch_FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR',
- 'payload':
-    {'state': 'tx_6jPYBUFTkcmQ7A3JYkUsYMChMHNqe3TMEhDZaSat7P1sbP4XXQP9QmaFfaAftUDjws3GhdKaBGyJRMBhHKyk2irBZsymgUVuxfQXR63ojEjg7C583D6cNKLSZtybZr9Cw6mmCkSDRVu41WbF1jKEkAkXbXznANm3AyJ1BLqNVB7qiAyFSVeq5qVcvHL4Z1y2DAhcLLw6YGSqFyuyg8pKVQRhL2LuePa9mdtoYZyY5VhvgShLz2oY8R3taBL8RrnnTvcwECvQu51yPKyM2pryoHaQbED5Zn7hdegZy6KN9wfpLXedtNB9ssmMvz5jHcK12vmtfeUMzRrySqtmBDGfiqwFZrYZ5A7xz1uqi'
+{
+  "jsonrpc": "2.0",
+  "method": "channels.leave",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "state": "tx_+QENCwH4hLhAP+EiPpXFO80MdqGnw6GkaAYpOHCvcP/KBKJZ5IIicYBItA9s95zZA+RX1DNNheorlbZYKHctN3ZyvKnsFa7HDrhAYqWNrW8oDAaLj0JCUeW0NfNNhs4dKDJoHuuCdWhnX4r802c5ZAFKV7EV/mHihVXzgLyaRaI/SVw2KS+z471bAriD+IEyAaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGP6olImAAoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhIYkYTnKgAACCgCGEjCc5UAAwKCjPk7CXWjSHTO8V2Y9WTad6D/5sB8yCR8WumWh0WxWvwdz6zEk"
     }
+  },
+  "version": 1
 }
 ```
 
@@ -875,31 +947,51 @@ matching the ones provided in the `leave` report above. Some parameters (related
 
 ```
 $ wscat --connect
-'localhost:3014/channel?initiator=ak_...&role=initiator&existing_channel_id=ch_FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR&offchain_tx=tx_6jPYBUFTkcmQ7A3JYkUsYMChMHNqe3TMEhDZaSat7P1sbP4XXQP9QmaFfaAftUDjws3GhdKaBGyJRMBhHKyk2irBZsymgUVuxfQXR63ojEjg7C583D6cNKLSZtybZr9Cw6mmCkSDRVu41WbF1jKEkAkXbXznANm3AyJ1BLqNVB7qiAyFSVeq5qVcvHL4Z1y2DAhcLLw6YGSqFyuyg8pKVQRhL2LuePa9mdtoYZyY5VhvgShLz2oY8R3taBL8RrnnTvcwECvQu51yPKyM2pryoHaQbED5Zn7hdegZy6KN9wfpLXedtNB9ssmMvz5jHcK12vmtfeUMzRrySqtmBDGfiqwFZrYZ5A7xz1uqi
+localhost:3014/channel?existing_channel_id=ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR&host=localhost&offchain_tx=tx_%2BQENCwH4hLhAP%2BEiPpXFO80MdqGnw6GkaAYpOHCvcP%2FKBKJZ5IIicYBItA9s95zZA%2BRX1DNNheorlbZYKHctN3ZyvKnsFa7HDrhAYqWNrW8oDAaLj0JCUeW0NfNNhs4dKDJoHuuCdWhnX4r802c5ZAFKV7EV%2FmHihVXzgLyaRaI%2FSVw2KS%2Bz471bAriD%2BIEyAaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe%2BrdZ5BW2aGP6olImAAoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhIYkYTnKgAACCgCGEjCc5UAAwKCjPk7CXWjSHTO8V2Y9WTad6D%2F5sB8yCR8WumWh0WxWvwdz6zEk&port=12341&protocol=json-rpc&role=initiator
 ```
 
 The channel fsm responds with the following event reports if all goes well:
 ```javascript
-{'action': 'info',
- 'payload': {'event': 'channel_reestablished'}
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": null,
+    "data": {
+      "event": "channel_reestablished"
+    }
+  },
+  "version": 1
 }
 ```
 
 then the standard report indicating that the channel is open:
 ```javascript
-{'action': 'info',
- 'channel_id': 'ch_FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR',
- 'payload': {'event': 'open'}
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "event": "open"
+    }
+  },
+  "version": 1
 }
 ```
 
 followed by an update report with the latest mutually-signed state:
 ```javascript
-{'action': 'update',
- 'channel_id': 'ch_FhYNM5KorNAcRwexe1CE3jH5DZd7FBD2g9XhBDHGEouDqVRCR',
- 'payload':
-   {'state': 'tx_6jPYBUFTkcmQ7A3JYkUsYMChMHNqe3TMEhDZaSat7P1sbP4XXQP9QmaFfaAftUDjws3GhdKaBGyJRMBhHKyk2irBZsymgUVuxfQXR63ojEjg7C583D6cNKLSZtybZr9Cw6mmCkSDRVu41WbF1jKEkAkXbXznANm3AyJ1BLqNVB7qiAyFSVeq5qVcvHL4Z1y2DAhcLLw6YGSqFyuyg8pKVQRhL2LuePa9mdtoYZyY5VhvgShLz2oY8R3taBL8RrnnTvcwECvQu51yPKyM2pryoHaQbED5Zn7hdegZy6KN9wfpLXedtNB9ssmMvz5jHcK12vmtfeUMzRrySqtmBDGfiqwFZrYZ5A7xz1uqi'
-   }
+{
+  "jsonrpc": "2.0",
+  "method": "channels.update",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "state": "tx_+QENCwH4hLhAP+EiPpXFO80MdqGnw6GkaAYpOHCvcP/KBKJZ5IIicYBItA9s95zZA+RX1DNNheorlbZYKHctN3ZyvKnsFa7HDrhAYqWNrW8oDAaLj0JCUeW0NfNNhs4dKDJoHuuCdWhnX4r802c5ZAFKV7EV/mHihVXzgLyaRaI/SVw2KS+z471bAriD+IEyAaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGP6olImAAoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhIYkYTnKgAACCgCGEjCc5UAAwKCjPk7CXWjSHTO8V2Y9WTad6D/5sB8yCR8WumWh0WxWvwdz6zEk"
+    }
+  },
+  "version": 1
 }
 ```
 
@@ -926,67 +1018,116 @@ for the peer that triggers the process and `acknowledger` for the other one.
 
 ### Initiate mutual close
 The starter sends the following message and triggers the closing procedure:
-```
-{'action': 'shutdown'}
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.shutdown",
+  "params": {}
+}
 ```
 
 ### Starter signing
 Then the starter receives a `channel_close_mutual_tx` to sign:
-```
-{'action': 'sign',
- 'tag': 'shutdown_sign',
- 'payload': {
-    'tx': 'tx_SUBGDUaJgWhDYs73EPSiX42Xd3PSmHAhRmwd1th9ibGipCVVbsdS96roQZEH4MF'
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.shutdown_sign",
+  "params": {
+    "channel_id": "ch_iNuPMRW1pCL17hXT8nHQgW1vMKfpBdsvztuYdM2VpPRh8PYVP",
+    "data": {
+      "tx": "tx_+F01AaEGXfP3k2aiLfV2X4HR75EK/1UzKSNqQqHHe0CN8/jQc6GhAbG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmhjaR1q+//4YbSOtX4AEAhhIwnOVAAAWwHvpF",
+      "updates": []
     }
+  },
+  "version": 1
 }
 ```
 Starter is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
-```
-{'action': 'shutdown_sign',
- 'payload': {
-    'tx': 'tx_8oWtHcfnWDSQV6Wdehp1MdXYhcbV29a7tWe3LWDqU5RwKvMhzPQLiSJKaYhtw4NLaBN1m3pmEtsVjoygkohXi9i8e3vpYgenphdKJmYLrFqjouxmyC5yKbsQUY8m9i4EzcMNuHmrLwrXrrPhKC1qY25Pxb6u74VEVuk'
-    }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.shutdown_sign",
+  "params": {
+    "tx": "tx_+KcLAfhCuEC1uzCpbr9f7MYnkb5u/iL9okyhJTcRMGlTIqgMsari9Kdomn+Z+P3FmcAw1ma4GENBPYF/hl/X9EJi1fktkKAOuF/4XTUBoQZd8/eTZqIt9XZfgdHvkQr/VTMpI2pCocd7QI3z+NBzoaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGNpHWr7//hhtI61fgAQCGEjCc5UAABc176hQ="
+  }
 }
 ```
 ### Acknowledger signing
 Then the acknowledger receives a `channel_close_mutual_tx` to sign:
-```
-{'action': 'sign',
- 'tag': 'shutdown_sign_ack',
- 'payload': {
-    'tx': 'tx_SUBGDUaJgWhDYs73EPSiX42Xd3PSmHAhRmwd1th9ibGipCVVbsdS96roQZEH4MF'
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.shutdown_sign_ack",
+  "params": {
+    "channel_id": "ch_iNuPMRW1pCL17hXT8nHQgW1vMKfpBdsvztuYdM2VpPRh8PYVP",
+    "data": {
+      "tx": "tx_+F01AaEGXfP3k2aiLfV2X4HR75EK/1UzKSNqQqHHe0CN8/jQc6GhAbG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmhjaR1q+//4YbSOtX4AEAhhIwnOVAAAWwHvpF",
+      "updates": []
     }
+  },
+  "version": 1
 }
 ```
 Note that this is the same transaction. The acknowledger is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
-```
-{'action': 'shutdown_sign_ack',
- 'payload': {
-    'tx': 'tx_8oWtHcfnWDSYu4SfLLLHqYqM5JXiCZd6De7fLQZesMHrArZeWzP7893EVpBpUR56tKUeJXJ3YUTuqB8a4efiHaw6ai3GKwoeu3ZyzfGPUfb5EMG6viv2dM8mhtKqaG7fkEAWuswbmFN4bDjXANbAK2sMU36yfBc9p1h'
-    }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.shutdown_sign_ack",
+  "params": {
+    "tx": "tx_+KcLAfhCuEA2hK6nlhTF+hVjLYYoh09xVn5M4BrSwB3dXyjteMotYj8/+WpdbJwvO1KBUsg2p2zedlZnnVfR5g7O4m1q9OkOuF/4XTUBoQZd8/eTZqIt9XZfgdHvkQr/VTMpI2pCocd7QI3z+NBzoaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGNpHWr7//hhtI61fgAQCGEjCc5UAABY9XDr0="
+  }
 }
 ```
 
 #### Signed channel_close_mutual_tx
 Both participants receive the co-signed `channel_close_mutual_tx`:
-```
-{'action': 'on_chain_tx',
- 'payload': {'tx': 'tx_ERkuTBJfEHtrmDkFz7BaigSKsnqmsCc8MorKFUwAW5VmpSoatcN3Njy2Vda8asojeshjb7SoXsqevaDLzXj78GSPwTTfYJmJtwrewTwK3LSFBe5BEYMA8rxNAWSahW1ecp1wbkBgpdiUQn1Q1UFLcYVpWYGpTWFH5DXn69iz6kFWX8sa7c5PSTaLenjVZEkbV9pEgKHKbjfovvd15Jc821y3zhQvtfhcYKS89r7gnhi81LWsjnSghmjANgjiC'
-            }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_iNuPMRW1pCL17hXT8nHQgW1vMKfpBdsvztuYdM2VpPRh8PYVP",
+    "data": {
+      "tx": "tx_+OkLAfiEuEA2hK6nlhTF+hVjLYYoh09xVn5M4BrSwB3dXyjteMotYj8/+WpdbJwvO1KBUsg2p2zedlZnnVfR5g7O4m1q9OkOuEC1uzCpbr9f7MYnkb5u/iL9okyhJTcRMGlTIqgMsari9Kdomn+Z+P3FmcAw1ma4GENBPYF/hl/X9EJi1fktkKAOuF/4XTUBoQZd8/eTZqIt9XZfgdHvkQr/VTMpI2pCocd7QI3z+NBzoaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGNpHWr7//hhtI61fgAQCGEjCc5UAABVYF49s="
+    }
+  },
+  "version": 1
 }
 ```
 Using its hash, participants can track its progress on the chain: entering the mempool, block inclusion and a number of confirmations.
 
 ### Channel closing
-After both parties have received the co-signed `channel_close_mutual_tx` transaction, it is posted on the chain and the microservice handling the off-chain
-requests dies. Parties receive the following info:
+After both parties have received the co-signed `channel_close_mutual_tx`
+transaction, it is posted on the chain and the microservice handling the
+off-chain requests dies. Parties receive the following infos:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_iNuPMRW1pCL17hXT8nHQgW1vMKfpBdsvztuYdM2VpPRh8PYVP",
+    "data": {
+      "event": "close_mutual"
+    }
+  },
+  "version": 1
+}
 ```
-{'action': 'info',
- 'payload': {'event': 'died'}
- }
-```
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_iNuPMRW1pCL17hXT8nHQgW1vMKfpBdsvztuYdM2VpPRh8PYVP",
+    "data": {
+      "event": "died"
+    }
+  },
+  "version": 1
+}
 Then the WebSocket connection is closed.
 
 ### Tracking the progress of the onchain transaction
@@ -1004,30 +1145,44 @@ more tokens that one currently has in the channel's balance. This diverges
 from the update flow [described above](#channel-off-chain-update).
 
 Example message for when the `from` does not have enough tokens to spend
-```
-{'action': 'error',
- 'payload': {'reason': 'insufficient_balance',
-             'request': {'action': 'update',
-                         'payload': {'amount': 10000,
-                                     'from': 'ak_8wWs1j2vhgjexQmKfgEBrG8ysAucRJdb3jsag3PJKjEeXswb7',
-                                     'to': 'ak_bmtGbfP3SdPoJNZCQGjjzbKRje15J9CEcWYaL1gZyv2qEyiMe'
-                                     },
-                          'tag': 'new'
-                          }
-              }
+```javascript
+{
+  "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+  "error": {
+    "code": 3,
+    "data": [
+      {
+        "code": 1001,
+        "message": "Insufficient balance"
+      }
+    ],
+    "message": "Rejected",
+    "request": {
+      "jsonrpc": "2.0",
+      "method": "channels.update.new",
+      "params": {
+        "amount": 10000000000000000,
+        "from": "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC",
+        "to": "ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm"
+      }
+    }
+  },
+  "id": null,
+  "jsonrpc": "2.0",
+  "version": 1
 }
 ```
 
 The structure is having a `reason` and `request` holding the request being
 sent. Possible error reasons are:
 
-* `insufficient_balance` - when `from` does not have enough tokens in the
+* `Insufficient balance` - when `from` does not have enough tokens in the
   channel. Keep in mind that there is a minimal amount of `channel_reserve`
   tokens to be kept by both parties.
 
-* `negative_amount` - the `udpate` event contained a negative amount
+* `Negative amount` - the `udpate` event contained a negative amount
 
-* `invalid_pubkeys` - at least one of the addresses in the `update` event is
+* `Invalid pubkeys` - at least one of the addresses in the `update` event is
   not present in the channel.
 
 #### Update conflict
@@ -1038,11 +1193,18 @@ started by a participant while the other participant has started an `update` of
 ones' own - a conflict occurs. Then both `update`-s are invalidated and the
 state is reverted to the last mutually signed one. Both participant receive a
 message containing a reference to the correct state.
-```
-{'action': 'conflict',
- 'payload': {'channel_id': 'ch_WmpDbaiCs5roqRCL5KEKbpsDNJSbcbiUvt2cs1qyj4sM9HA3b',
-             'round': 42
-             }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.conflict",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+      "round": 5
+    }
+  },
+  "version": 1
 }
 ```
 
@@ -1054,25 +1216,36 @@ and a `receiver`. These roles can be taken by any of the participants, anytime.
 
 The `sender` pushes a message with the following structure:
 
-```
-{'action': 'message',
- 'payload': {'info': 'hejsan',
-             'to': 'ak_bmtGbfP3SdPoJNZCQGjjzbKRje15J9CEcWYaL1gZyv2qEyiMe'
-             }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.message",
+  "params": {
+    "info": "hejsan",
+    "to": "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC"
+  }
 }
 ```
 
 Then the `receiver` gets an event containing the info being sent and some
 details:
 
-```
-{'action': 'message',
- 'payload': {'message': {'channel_id': 'ch_6SgSc7a14dGbwMNCsjjQZCYVreVLKkFwBzJEZ58ZSZnV9FiQ1',
-                         'from': 'ak_8wWs1j2vhgjexQmKfgEBrG8ysAucRJdb3jsag3PJKjEeXswb7',
-                         'to': 'ak_bmtGbfP3SdPoJNZCQGjjzbKRje15J9CEcWYaL1gZyv2qEyiMe',
-                         'info': 'hejsan'
-                         }
-            }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.message",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "message": {
+        "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+        "from": "ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm",
+        "info": "hejsan",
+        "to": "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC"
+      }
+    }
+  },
+  "version": 1
 }
 ```
 
@@ -1130,57 +1303,96 @@ Any of the participants can initiate a deposit. Only requirements are:
 ##### Trigger a deposit
 
 The depositor sends a WebSocket message containing the desired change
-```
-{'action': 'deposit',
- 'payload': {
-    'amount': 2
-    }
- }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.deposit",
+  "params": {
+    "amount": 2
+  }
+}
 ```
 
 ##### Depositor signs updated state
 The depositor receives a message containing the updated channel state as a
 `channel_deposit_tx` transaction
-```
-{'action': 'sign',
- 'tag': 'deposit_tx',
- 'payload' {
-    'tx': 'tx_2C9es4FjJF3MtD1M3Np7tUzgCk8AE3ARVJe94Sxmh63feCNt2CekXvjLhBPS2i8pQ8JKGQfgzMQnvfntEdYmMYo7D1UP59UUQ31Bss5G1gz8sPhzmrx1cXCawF9eB27gjYVhTnaLXwUEqdJfHqfATuwLqJtc1p'}
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.deposit_tx",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "tx": "tx_+HIzAaEGgofGx556dTISqbS/e2tCp1ROCgootioM4FHvduCHbgWhAbG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmAgCGEjCc5UAAoIGnTOuUnVM9QThcVqCCAFeJ51D7a6A4ldyhd3nuKg7lAglKqnZP",
+      "updates": [
+        {
+          "amount": 2,
+          "from": "ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm",
+          "op": "OffChainDeposit"
+        }
+      ]
+    }
+  },
+  "version": 1
 }
 ```
 The depositor is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
-```
-{'action': 'deposit_tx',
- 'payload': {
-    'tx': 'tx_i2WsEQsiC5XsnyKgLeXGW6b9ys87yoQzNB65csymQbK9AsuWApenk9ViHpzxb2oJwUCGiqzA1Cc1D6pJAjkLcQ6w3m8Bhvt41HSqtpSpEd1MciHMcFg1xsZG9CsPu1NUBey9EupgXFJtZ4caNMXcV4evV7ocBjzdBcJo5CUMQgapQZ8ajgUrPgfqQTb3Gq8FFCuHHaHytA7fTNik4KAAvyHiEDutXf1VJxXG2oYkpoNTQGuriV3g4Hxrms3r7LD8ko91'
-    }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.deposit_tx",
+  "params": {
+    "tx": "tx_+LwLAfhCuEBpdn6/h5FeyYL9/JMO3XqEDdmaxrtsqamG4XJJAUNoQI0DtzQVkGHWC4lia9rcsNa9vdBj0a5o8S7fGE3I8Z0FuHT4cjMBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YCAIYSMJzlQACggadM65SdUz1BOFxWoIIAV4nnUPtroDiV3KF3ee4qDuUCCYBI8r0="
+  }
 }
 ```
 
 #### Acknowledger update
 The acknowledger receives an info message indicating an upcoming change:
-```
-{'action': 'info',
- 'payload': {'event': 'deposit_created'}
- }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "event": "deposit_created"
+    }
+  },
+  "version": 1
+}
 ```
 Then the acknowledger receives a new message containing the deposit
 transaction for confirmation:
-```
-{'action': 'sign',
- 'tag': 'deposit_ack',
- 'payload' {
-    'tx': 'tx_2C9es4FjJF3MtD1M3Np7tUzgCk8AE3ARVJe94Sxmh63feCNt2CekXvjLhBPS2i8pQ8JKGQfgzMQnvfntEdYmMYo7D1UP59UUQ31Bss5G1gz8sPhzmrx1cXCawF9eB27gjYVhTnaLXwUEqdJfHqfATuwLqJtc1p'
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.deposit_ack",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "tx": "tx_+HIzAaEGgofGx556dTISqbS/e2tCp1ROCgootioM4FHvduCHbgWhAbG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmAgCGEjCc5UAAoIGnTOuUnVM9QThcVqCCAFeJ51D7a6A4ldyhd3nuKg7lAglKqnZP",
+      "updates": [
+        {
+          "amount": 2,
+          "from": "ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm",
+          "op": "OffChainDeposit"
+        }
+      ]
     }
+  },
+  "version": 1
 }
 ```
 Note that this is the same transaction as the one that the depositor had already signed. The acknowledger is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
-```
-{'action': 'deposit_ack',
- 'payload': {
-    'tx': 'tx_2WsEQsiC5Xso1aHppqY8EwniUa9demV2SAdrNckji4H5ZRDnakiMPAWRv4SSksecqXBCriNTTFg6c3dXK9TzmRV7DoqkKH68Vh7XbVGS7g9CQfaj46S8wgsFBdJtoBMnHV3xbbzSz36cMAAN3eosKaA74TMkgXWgrDCD619RnmskuyvArGbgy6fMFqSniG1s9a3WoTMLoFyw6ucpxgS523Dk3SQEbPAxznbL9KsBEjsCroe4HBVZZG5bX3LU8ZX9PUy'
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.deposit_ack",
+  "params": {
+    "tx": "tx_+LwLAfhCuEBa3V9ZXezm+ya0GQGg7RBpS6DbYhiE10oRgSuHpn0JFsdcUz0f2Ldsi1I62JxkLmDAqhxIgYUeya0PP1M4PXsOuHT4cjMBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YCAIYSMJzlQACggadM65SdUz1BOFxWoIIAV4nnUPtroDiV3KF3ee4qDuUCCXv07Q4="
   }
 }
 ```
@@ -1188,10 +1400,17 @@ it and then post it back via a WebSocket message:
 #### Finish deposit
 After both parties had signed the deposit transaction, the transaction is posted on-chain and
 both parties receive it:
-```
-{'action': 'on_chain_tx',
- 'payload': {'tx': 'tx_3cDMp6242sBycND2FPT2jcDWFceRgA7zL3ckU8VzLQdvf2Uqjx5CKkjMXbYrmYjMnLnDihVTrF2fCLqNG93BTAsCNWT6QiJwdmXrTXLQ2d2d7rAc5bYepTC2w3LyrZ37jhx3dN7ATusjXtSu6jw9N8exaPxnjKD3twye5B6bdqbZEHKXXtqStUmaTmUDofEWtGaUCxTWKCboMH7T2mxEjzxgpaH2fbHRxA3GmxaTaKWoTfbnvqragH9QVo6QxiCRAGNUEkbRbPw8m1qPUKjVFWWQSZ9VcCdXte3DitS3anXv7jtTKAA7uuj5pbdG4qi64dDLTd52sSQP6JZpzMxa6oyJTDo5s'
-            }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "tx": "tx_+P4LAfiEuEBa3V9ZXezm+ya0GQGg7RBpS6DbYhiE10oRgSuHpn0JFsdcUz0f2Ldsi1I62JxkLmDAqhxIgYUeya0PP1M4PXsOuEBpdn6/h5FeyYL9/JMO3XqEDdmaxrtsqamG4XJJAUNoQI0DtzQVkGHWC4lia9rcsNa9vdBj0a5o8S7fGE3I8Z0FuHT4cjMBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YCAIYSMJzlQACggadM65SdUz1BOFxWoIIAV4nnUPtroDiV3KF3ee4qDuUCCZiFbkw="
+    }
+  },
+  "version": 1
 }
 ```
 They are both to compute the transaction hash. Using it,
@@ -1200,17 +1419,33 @@ inclusion and a number of confirmations.
 
 After the `minimum_depth` block confirmations each participant is informed
 for the deposit progress on-chain by one's own node:
-```
-{'action': 'info',
- 'payload': {'event': 'own_deposit_locked'}
- }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "event": "own_deposit_locked"
+    }
+  },
+  "version": 1
+}
 ```
 An update from one's own node that the other party had confirmed that the block
 height needed is reached:
-```
-{'action': 'info',
- 'payload': {'event': 'deposit_locked'}
- }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "event": "deposit_locked"
+    }
+  },
+  "version": 1
+}
 ```
 With this the deposit sequence is complete and the channel can continue with
 other updates. Note that the deposit transaction's `round` and `state_hash`
@@ -1257,57 +1492,96 @@ Any of the participants can initiate a withdrawal. The only requirements are:
 ##### Trigger a withdrawal
 
 The withdrawer sends a WebSocket message containing the desired change
-```
-{'action': 'withdraw',
- 'payload': {
-    'amount': 2
-    }
- }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.withdraw",
+  "params": {
+    "amount": 2
+  }
+}
 ```
 
 ##### Withdrawer signs updated state
 The withdrawer receives a message containing the updated channel state as a
 `channel_withdraw_tx` transaction
-```
-{'action': 'sign',
- 'tag': 'withdraw_tx',
- 'payload' {
-    'tx': 'tx_2C9estKT2f86WwC7LCa18cDTTmMCrXM7N2AcrXKmgnTo9DNchXjNmewbgNX2YW4RYk8iHkVRnPpeYLRgh6xH96mHNxCMW4aUL2hgTe6iqdrKyM5eqMbCN9YgTdDvUzDyASJwoicxXb7UeDF5kFWvsEMxXBKGX2'}
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.withdraw_tx",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "tx": "tx_+HI0AaEGgofGx556dTISqbS/e2tCp1ROCgootioM4FHvduCHbgWhAbG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmAgCGEjCc5UAAoEUfp6Gv3gLYNHIy08ITGVY9Xv7I69D5Yu0FUzyRePtuBAqOT2uR",
+      "updates": [
+        {
+          "amount": 2,
+          "op": "OffChainWithdrawal",
+          "to": "ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm"
+        }
+      ]
+    }
+  },
+  "version": 1
 }
 ```
 The withdrawer is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
-```
-{'action': 'withdraw_tx',
- 'payload': {
-    'tx': 'tx_2WsEQsiC5Xsn85g88TmLYonFu2r8HT53jQPJ7f6Ai9uvnZGwnExRyJ51nHS2mU4g2FUTf2PHUsgs22X5Nwg1E1Zy8ofuoJAttqhXpySyYJhCwdWXYKF6bapSXCLwQoKJ9bWLYYZqudsiPfwv43ekzgJHtaWozzFjrEq835B7Xbd8LSd4znVh2FRWfAPW1Zvsm6nKjN2NfEPndwbps7zgqvbQYeKngwFk952CLtDEpGfXXiS5pUp5ExYTwsxGE4E6LKV'
-    }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.withdraw_tx",
+  "params": {
+    "tx": "tx_+LwLAfhCuECmn6QR8/VwIvc9avwtzuauqSn0NmmDZxYud6Oik+Q0pp6Lev/oK++PdEvZciumZpUbBdlfl3LIqHxc31+43NINuHT4cjQBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YCAIYSMJzlQACgRR+noa/eAtg0cjLTwhMZVj1e/sjr0Pli7QVTPJF4+24ECi9pymI="
+  }
 }
 ```
 
 #### Acknowledger update
 The acknowledger receives an info message indicating an upcoming change:
-```
-{'action': 'info',
- 'payload': {'event': 'withdraw_created'}
- }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "event": "withdraw_created"
+    }
+  },
+  "version": 1
+}
 ```
 Then the acknowledger receives a new message containing the withdraw
 transaction for confirmation:
-```
-{'action': 'sign',
- 'tag': 'withdraw_ack',
- 'payload' {
-    'tx': 'tx_2C9estKT2f86WwC7LCa18cDTTmMCrXM7N2AcrXKmgnTo9DNchXjNmewbgNX2YW4RYk8iHkVRnPpeYLRgh6xH96mHNxCMW4aUL2hgTe6iqdrKyM5eqMbCN9YgTdDvUzDyASJwoicxXb7UeDF5kFWvsEMxXBKGX2'}
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.withdraw_ack",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "tx": "tx_+HI0AaEGgofGx556dTISqbS/e2tCp1ROCgootioM4FHvduCHbgWhAbG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmAgCGEjCc5UAAoEUfp6Gv3gLYNHIy08ITGVY9Xv7I69D5Yu0FUzyRePtuBAqOT2uR",
+      "updates": [
+        {
+          "amount": 2,
+          "op": "OffChainWithdrawal",
+          "to": "ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm"
+        }
+      ]
     }
+  },
+  "version": 1
 }
 ```
 Note that this is the same transaction as the one that the withdrawer has already signed. The acknowledger is to decode the transaction, inspect its contents, sign it, encode
 it and then post it back via a WebSocket message:
-```
-{'action': 'withdraw_ack',
- 'payload': {
-    'tx': 'tx_2WsEQsiC5XsmkQF6BS1aUhB55XkktxRJi2ZWbpCbGVHgQNPQzUeaEJk57RrhWBagGqNUyUA9YY6PrZhTiXcYs6dK1BxASu8EummTYvfpTjfnA8hU21pw6Ms9fWbJbhBbLNai4hLGPEJZ12r1UHqxLTnq6nJ69vw6szeisRzVJ3XYNpvGgSR5dVyW7Yd2VvtW5CGEMCXCHVYquD8gt6RMBDDr1Q6LeLUTomBpgFGQknjKv56tLtZ2FHkWWa9mU22jXMS'
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.withdraw_ack",
+  "params": {
+    "tx": "tx_+LwLAfhCuEBWNxnIoMVbGTp+NkKKg8NlXbgVe7PbdpiTBsq0qGD3gwDE4waZEjmlWUJKVi3VxHbmdhdKdZ1lFKkVtBfMM3YEuHT4cjQBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YCAIYSMJzlQACgRR+noa/eAtg0cjLTwhMZVj1e/sjr0Pli7QVTPJF4+24ECjOLPuM="
   }
 }
 ```
@@ -1315,10 +1589,17 @@ it and then post it back via a WebSocket message:
 #### Finish withdrawal
 After both the parties had signed the withdraw transaction, the transaction is posted on-chain and
 both parties receive it:
-```
-{'action': 'on_chain_tx',
- 'payload': {'tx': 'tx_3cDMp6242sByJUzkqj5qREcZdMg99K3hYXtj8LTJrYvFEcd2FUa4CNfUzhnUQDkzaeeexK1ejuYPMJDD5bwjuGibBYLE1AYPPncdzwe9dHhATA2ftRgouyUxztZoQKQ1jNCDUpgkWcYPiBBRfSUJhoGGLzTfMHrfU5UiiMkcCkv6CmSWEm8JsiGAciJFJzzsRQyCJTZ6a6JM7ztBikcs9sQsG6crEdfnMwjG3zEowFT4wpaYZAxH849Y7m3c3pQkkABtcAkXznZEmtS89H9GWaecxKWkaAipz6WvCKAu33haGb4SM3apigLUYZc6xa2KyTJ8CutCKYWP8Jacua6z8B4hg4qM4'
-            }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "tx": "tx_+P4LAfiEuEBWNxnIoMVbGTp+NkKKg8NlXbgVe7PbdpiTBsq0qGD3gwDE4waZEjmlWUJKVi3VxHbmdhdKdZ1lFKkVtBfMM3YEuECmn6QR8/VwIvc9avwtzuauqSn0NmmDZxYud6Oik+Q0pp6Lev/oK++PdEvZciumZpUbBdlfl3LIqHxc31+43NINuHT4cjQBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YCAIYSMJzlQACgRR+noa/eAtg0cjLTwhMZVj1e/sjr0Pli7QVTPJF4+24EChZDmcY="
+    }
+  },
+  "version": 1
 }
 ```
 They are both to compute the transaction hash. Using it,
@@ -1327,17 +1608,33 @@ inclusion and a number of confirmations.
 
 After the `minimum_depth` block confirmations each participant is informed
 for the withdraw progress on-chain by one's own node:
-```
-{'action': 'info',
- 'payload': {'event': 'own_withdraw_locked'}
- }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "event": "own_withdraw_locked"
+    }
+  },
+  "version": 1
+}
 ```
 An update from one's own node that the other party had confirmed that the block
 height needed is reached:
-```
-{'action': 'info',
- 'payload': {'event': 'withdraw_locked'}
- }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "event": "withdraw_locked"
+    }
+  },
+  "version": 1
+}
 ```
 With this the withdrawal sequence is complete and the channel can continue with
 other updates. Note that the withdraw transaction's `round` and `state_hash`
@@ -1353,12 +1650,16 @@ FSM and compute state locally.
 #### Get balances
 In order to get the balances as those are part from the channel's state tree, a
 participant sends a WebSocket message
-```
-{'action': 'get',
- 'tag': 'balances'
- 'payload': {
-    'accounts': ['ak_Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
-                 'ak_V6an1xhec1xVaAhLuak7QoEbi6t7w5hEtYWp9bMKaJ19i6A9E']
+```javascript
+{
+  "id": -576460752303423431,
+  "jsonrpc": "2.0",
+  "method": "channels.get.balances",
+  "params": {
+    "accounts": [
+      "ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm",
+      "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC"
+    ]
   }
 }
 ```
@@ -1368,15 +1669,22 @@ balances of. Those can be either account balances or a contract ones, encoded
 as an account addresses.
 
 A response of this call looks like
-```
-{'action': 'get',
- 'tag': 'balances'
- 'payload': [
-    {'account': 'ak_Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
-     'balance': 700},
-    {'account': 'ak_V6an1xhec1xVaAhLuak7QoEbi6t7w5hEtYWp9bMKaJ19i6A9E',
-     'balance': 400}
-  ]
+```javascript
+{
+  "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+  "id": -576460752303423431,
+  "jsonrpc": "2.0",
+  "result": [
+    {
+      "account": "ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm",
+      "balance": 69999999999969
+    },
+    {
+      "account": "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC",
+      "balance": 39999999999981
+    }
+  ],
+  "version": 1
 }
 ```
 
@@ -1389,13 +1697,18 @@ a minimal view of the internal channel's state.
 
 In order to fetch a proof of inclusion from the latest modified state tree,
 a participant sends a WebSocket message
-```
-{'action': 'get',
- 'tag': 'poi'
- 'payload': {
-    'accounts': ['ak_Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
-                 'ak_V6an1xhec1xVaAhLuak7QoEbi6t7w5hEtYWp9bMKaJ19i6A9E'],
-    'contracts': ['ct_2dCUAWYZdrWfACz3a2faJeKVTVrfDYxCQHCqAt5zM15f3u2UfA']
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.get.poi",
+  "params": {
+    "accounts": [
+      "ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm",
+      "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC"
+    ],
+    "contracts": [
+      "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5"
+    ]
   }
 }
 ```
@@ -1406,12 +1719,17 @@ the only difference being that contract's accounts will be automatically be adde
 to proof of inclusion as well as their state.
 
 A response of this call looks like
-```
-{'action': 'get',
- 'tag': 'balances'
- 'payload': {
-    'poi': 'pi_g1JxqVQDQdvjvekeM8hEnVeMFUgfF7YYNjjtrvir7q5tAKq2hFVdtvQo7q4p5Aix1S5XNvKabjEwQVvYVezmnq9VWYoJcmctc5mAu6xVj7KgDk3aG5E7topuuLPXEyGP6hAzRPbr2KzQrQ7KZvTdH15bY1WW7D7XGBRmuiDgYiDj8MAVVjqRFnBS5C6GgevgCkUpKX2tyQL7Y3svSNwDiGxV1b3G6xMbhDeStzgtZ9SrsCaLArP1g9wCDJkChEDXneCmMcvEv2acGwsmXHPfT1uy8oSTVny8tbivnnET7XVdjPJZWuvFbwGAmywa4fRF7wkzn4FQjasLo24DRS5fGYg7Z3uwnFbt4U8sn6yg4FvUBUweW28qMjFRAqVJPH6JKU6o8kZjgRjXsC2L7fbhRkYboecoft11FkFuFXdPjsCj3XGXWtTTAXihPooyTpbjp9yszXZqVxLZ7ms7zc6qtPS8Arq8yTf7UmManvhpYKreDMUqPLtkbUTy32LmeRGBUdhhCzUSg49EHtRo5ti8SCrARQt11ScBJnytnok4o3WvmNVq7SRcWPQgH3ABa8g9csirhcZcrx4f2LQoJwQ2VRnkZUUuxDPNEGRwprVWeCU7KfB3CU86z1eHDQWLnodaxLLJnM1fvpdbrjknRcTSTUjPR7rHcsWVmtkNTVqajCZJKUZN2izAAq5qnQUZwkgFLokynCkMGnkV4woi8j4YKusqXUGZ9w5iFfFsSRjw7brqEBySpQa3QayBBmqKu5CF3pTvikRyGhigCDhmyB3QUQ9SQNr2e4r91hoJmfLXN9o1mkW5ndCuVkKoJjSqiscshpZnvUWVKhQZoHEacdZM5z6U42DfqEVDUR6ptokdNpkJtQtuKo1YD1SyhXgvoHh2d2QCpR29wgRkUKswEDru4sFMRaaxk4uL2MpJg3XaAFhxv6WeKeELCGuYRn9yFnhT9pntUkoFWSghcBkk73uN8sYGo9EkDFkV59Gyrra2hm8Dj7iSUUMqJSMApssN8dWzL9HhC5Hb12mFy8ZzAw1jdYmEYXSmjP859A8cKdP6StwwjuhLacfqv7BkFsQX6Rg4w3ykjRPF2Aj2cf4rTMsNnU4bKFmGYc5RPctTx5pj6PchPyX8GgXMf7EfedQNv7rtT8pCLZ199MRCnPy1X3HURAb8PE9Mj8aZz21N8FDU3nT2XraYKE4DBfnwPnqTV6YNcUVk7AYbJ42BZ2AhTwtZzDovZ3FhK6RvjvUtU4MBPcbYFnidFeqNHq3uM1UeWyaHZJwRoQiptojxCPaDLr7gfNb4jUYRihbbczgNgWwbBsahC75rJWUn7C3dSzJYBY5BbRtgAUivU7tQAhE1SCZ79RDsHwo9Md6iFdX1W1YRB3U9b4gi2NN3HfH4dnA7ediYgB1r9eNGh8mw8SYXSruHFLV59LkSRyR9rFeTCUSTt418fNZAftdbqWhd1UceLZhB3QsdKA8UmSKZcjx1q8ZF83m5zDDgJnkkpiqoHRpZ5pzogPWR8HiJpaDUySD1D8yGgMuGbfsxLhrBm9oDqB1QDqKEWgtsBgu5ZYNob7DqY9cwmsfKnssuNofMG3MqpsYe28ZwEAGfVi1wm87QkSNqyCHYUa3yQ7woeR4ZvQwWJPF3GcXKpBhjVuJusE'
-  }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.get.poi.reply",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "poi": "pi_+QjLPAH5Aar5AaegUHXVJYllXPYCKsNzFPm556q8IgudzPRI4O/BDFpobNP5AYP4lKBQddUliWVc9gIqw3MU+bnnqrwiC53M9Ejg78EMWmhs0/hxgICAgICAoO0CFjxibIfdehu8wgGaVHmkULhlWpsI0fCWsUChDyMJgICAgKCQ1bLD69k9BcQwVvuyoPXBJe++idIJ/lwoO4qPYlt0YaCmyjgxBha42v7WL6pOfqG1Ttf6NYVnqZHqR+T0JmGLxYCAgID4T6CQ1bLD69k9BcQwVvuyoPXBJe++idIJ/lwoO4qPYlt0Ye2gMbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aLygoBAIY/qiUiX/X4SaCmyjgxBha42v7WL6pOfqG1Ttf6NYVnqZHqR+T0JmGLxeegPEg2CnIUGzfwXVy9z4FuBgcGBoC5MzyBosNeYBcMoZaFxAoBAAr4T6DtAhY8YmyH3XobvMIBmlR5pFC4ZVqbCNHwlrFAoQ8jCe2gNxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oSLygoBAIYkYTnKgAHj4qAjoqXI5ZEb6//BQUWWVlPkHd4lWRhzVFmXY/6F2X4ZBMDA+Qby+QbvoCP+J+CKG9HLoyiF11XYCmZ637Cc43DhBKz5ZV3DDp7r+QbL+IagCHQOBl3W9IhcdkmZJCJrKJ+h0G8+ZeIKUZ3W5p9/Nez4YyC4YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///////////////////////////////////////////hmoCP+J+CKG9HLoyiF11XYCmZ637Cc43DhBKz5ZV3DDp7r+EOhAMxINgpyFBs38F1cvc+BbgYHBgaAuTM8gaLDXmAXDKGWoFfuIRzcN3UiqZeS8ooxO7bH4x9PphQ5GgpJtO3WWhJu+ESgJ6ky/mLaY+D64bXs7TR5BIRxO0hOakcKlSHrfu7sP7/iEKA1jHy+JkYGJXeg4QZT9QYTyIjuaukMdPKoxXeDh8vbz/hToDWMfL4mRgYld6DhBlP1BhPIiO5q6Qx08qjFd4OHy9vP8aCFlE6Nir08G/FQ+dPMIRjPZKt+jIKfH4aEhiH2DCC/C4CAgICAgICAgICAgICAgAD4RKA/cNKMPbnMACszBp/R0S52OAbwRhxnBpoCOSMcfJ92pOIgoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+QSBoFfuIRzcN3UiqZeS8ooxO7bH4x9PphQ5GgpJtO3WWhJu+QRdgKAnqTL+Ytpj4PrhteztNHkEhHE7SE5qRwqVIet+7uw/v4CAgICAgICAgICAgICAuQQq+QQnKAGhAbG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmgwMAAbkD+PkD9UYCoP7pKBTItkQVCAzR2d6TDMx0qz7P7ipMDv7xH+3EZ4ra+QL7+QEqoGjyZ2M4/1CIOaukd0nv+ovofvKE8gf7PZmYcBzVOIfFhG1haW64wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACg//////////////////////////////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALhAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPkBy6C5yVbyizFJqfWYeqUF89obIgnMVzkjQAYrtsG9n5+Z6oRpbml0uGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//////////////////////////////////////////+5AUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAP//////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//////////////////////////////////////////7jMYgAAZGIAAISRgICAUX+5yVbyizFJqfWYeqUF89obIgnMVzkjQAYrtsG9n5+Z6hRiAADAV1CAUX9o8mdjOP9QiDmrpHdJ7/qL6H7yhPIH+z2ZmHAc1TiHxRRiAACvV1BgARlRAFtgABlZYCABkIFSYCCQA2ADgVKQWWAAUVlSYABSYADzW2AAgFJgAPNbWVlgIAGQgVJgIJADYAAZWWAgAZCBUmAgkANgA4FSgVKQVltgIAFRUVlQgJFQUICQUJBWW1BQgpFQUGIAAIxWhTIuMS4wgAHACvh0oIWUTo2KvTwb8VD508whGM9kq36Mgp8fhoSGIfYMIL8L+FGgP3DSjD25zAArMwaf0dEudjgG8EYcZwaaAjkjHHyfdqSgCHQOBl3W9IhcdkmZJCJrKJ+h0G8+ZeIKUZ3W5p9/NeyAgICAgICAgICAgICAgIDAwC95Gqk="
+    }
+  },
+  "version": 1
 }
 ```
 
@@ -1423,15 +1741,16 @@ In order to get the result of a potential contract call, one might need to
 dry-run a contract call. It takes the exact same arguments as a call would and
 returns the `call` object.
 
-```
-{'action': 'dry_run',
- 'tag': 'call_contract',
- 'payload' :{
-      'contract': 'ct_9sRA9AVE4BYTAkh5RNfJYmwQe1NZ4MErasQLXZkFWG43TPBqa',
-      'abi_version': 1,
-      'amount': 0,
-      'call_data': 'cb_1111111111111111111111111111111yC4CoPDhKfwheTUFxWaEmAud5DzXdDtnFd3Pdr7SkLrw9ze6ZF21i8tR8VyUz4zLwTwBhFi3dCvp4fSTk38mdQ2ov8GPqznR3G83irbxNjrHkfS9nQDcRnFEZ17EfeXqBgB5Q6k6H3JLjPns3ZGECU3rf9gzbbFmwxJbMFsjK2vhxRBmpXoaq4RUqAEu5KZ8xfuCHG17vJn33UmvtayzkJvYTUYQcprT2'
-    },
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.dry_run.call_contract",
+  "params": {
+    "abi_version": 1,
+    "amount": 0,
+    "call_data": "cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACBJ7EkHbAIDcSakMwPq3OQ7LiwylFexE8UKfiLciYCUtwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYPjVAQ==",
+    "contract": "ct_2A67iNjuNd2erJdzDMCzVeJkj82cS1krGGFbQeheBhFELktpo4"
+  }
 }
 ```
 
@@ -1443,23 +1762,25 @@ It uses as an environment the latest channel's state and the current top of
 the blockchain as seen by the node.
 
 A response to this call looks like
-```
-{'action': 'dry_run',
- 'tag': 'call_contract'
- 'payload': {
-    'channel_id': 'ch_t6X88VVTiXwRzdpW1UMkgqihsoJu7aTswUaw5grrqUd3NWg1m',
-    'data': {
-        'caller_id': 'ak_2PYxWHAsK2jYaca2EQBiJwZrgxJf6AzebE96ZVe2NwGtjaCdvs',
-        'caller_nonce': 8,
-        'contract_id': 'ct_2GPzqsJ7quu1xqnYBedwvn7SQ3DEaQf1BKNyf5ZpAB7yZ4uWAk',
-        'gas_price': 1,
-        'gas_used': 192,
-        'height': 8,
-        'log': [],
-        'return_type': 'ok',
-        'return_value': 'cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACr8s/aY'
-        }
-  }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.dry_run.call_contract.reply",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "caller_id": "ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm",
+      "caller_nonce": 11,
+      "contract_id": "ct_2A67iNjuNd2erJdzDMCzVeJkj82cS1krGGFbQeheBhFELktpo4",
+      "gas_price": 1,
+      "gas_used": 220,
+      "height": 11,
+      "log": [],
+      "return_type": "ok",
+      "return_value": "cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABX4y1tk"
+    }
+  },
+  "version": 1
 }
 ```
 
@@ -1469,12 +1790,14 @@ both participants to share the same list of contract calls as this does not
 impact consensus between them. Any participant can prune his local set of
 calls in order to free some memory. In order to inspect the result value of a
 contract call, a participant sends a WebSocket message
-```
-{'action': 'get',
- 'tag': 'contract_call',
- 'payload': {'caller': 'ak_Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
-             'contract': 'ct_2qSaJ7pe3MTdPpzS69ZdtQsVTPSoj7yyYL2KJLxKQoAAHJQdjq',
-             'round': 11
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.get.contract_call",
+  "params": {
+    "caller": "ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm",
+    "contract": "ct_2A67iNjuNd2erJdzDMCzVeJkj82cS1krGGFbQeheBhFELktpo4",
+    "round": 10
   }
 }
 ```
@@ -1483,19 +1806,25 @@ contract call. Providing an incorrect set of those results in an error response.
 
 A non-error response of this call looks like this
 
-```
-{'action': 'get',
- 'tag': 'contract_call',
- 'payload': {
-    'caller_address': 'ak_Y1NRjHuoc3CGMYMvCmdHSBpJsMDR6Ra2t5zjhRcbtMeXXLpLH',
-    'caller_nonce': 11,
-    'contract_address': 'ct_2qSaJ7pe3MTdPpzS69ZdtQsVTPSoj7yyYL2KJLxKQoAAHJQdjq',
-    'gas_price': 0,
-    'gas_used': 561,
-    'height': 11,
-    'return_type': 'ok',
-    'return_value': 'cb_11111111111111111111111111111113Un1fbh'
-  }
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.get.contract_call.reply",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "caller_id": "ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm",
+      "caller_nonce": 10,
+      "contract_id": "ct_2A67iNjuNd2erJdzDMCzVeJkj82cS1krGGFbQeheBhFELktpo4",
+      "gas_price": 1,
+      "gas_used": 220,
+      "height": 10,
+      "log": [],
+      "return_type": "ok",
+      "return_value": "cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABX4y1tk"
+    }
+  },
+  "version": 1
 }
 ```
 
@@ -1513,13 +1842,27 @@ and those will no longer be available for fetching and inspection.
 In order to prune local calls, a participant sends the following WebSocket
 message:
 
-```
-{'action': 'clean_contract_calls'}
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.clean_contract_calls",
+  "params": {}
+}
 ```
 
 Once calls are pruned, the same participant receives the following message:
-```
-{'action': 'calls_pruned'}
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.calls_pruned.reply",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "action": "calls_pruned"
+    }
+  },
+  "version": 1
+}
 ```
 
 ### Solo closing sequence
