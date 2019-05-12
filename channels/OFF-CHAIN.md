@@ -152,7 +152,7 @@ The following serializations can be consistently used below.
 ### Updates list
 
 Progress off-chain is achieved by one participant proposing a set of updates to
-be applied on top of the last state as well with the next state that is
+be applied on top of the last state as well as the next state that is
 produced.
 A single off-chain update's serialization has the following structure:
 
