@@ -563,7 +563,7 @@ Message code: 8
 Once `funding_locked` messages have been exchanged, the channel enters the
 `open` state. Changes to the off-chain state can be effected by sending an
 `update` message. It consists of a single-signed off-chain transaction and
-an updates list that contains a list of operations to be performed on the
+a list of updates list containing the operations to be performed on the
 previous state. The `state_hash` of the off-chain transaction is the
 aggregated root hash of the resulting state trees. The receiver must verify
 that the state is a valid outcome, then return it, co-signed, in an
