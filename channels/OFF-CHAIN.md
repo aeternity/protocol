@@ -566,7 +566,7 @@ Once `funding_locked` messages have been exchanged, the channel enters the
 a list of updates list containing the operations to be performed on the
 previous state. The `state_hash` of the off-chain transaction is the
 aggregated root hash of the resulting state trees. The receiver must verify
-that the state is a valid outcome, then return it, co-signed, in an
+that the state is the correct outcome, then return it, co-signed, in an
 `update_ack` message.
 
 The `block_hash` is the hash of which on-chain environment was used for
