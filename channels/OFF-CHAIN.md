@@ -748,7 +748,7 @@ be the last mutually signed state. The receiver does not reply.
 Message code: 15
 
 In order to withdraw coins from the channel, one party can initiate
-a `withdraw_created` request. It consists of a singly signed
+a `withdraw_created` request. It consists of a single-signed
 `channel_withdraw_tx` and a list of updates. The transaction includes the state
 hash and round of the next off-chain state, after applying the updates.
 Note that it is possible to withdraw a zero amount, essentially making the
