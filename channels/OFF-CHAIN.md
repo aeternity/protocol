@@ -643,7 +643,7 @@ be the last mutually signed state. The receiver does not reply.
 Message code: 11
 
 In order to deposit more funds into the channel, one party can initiate
-a `deposit_created` request. It consists of singly signed `channel_deposit_tx`
+a `deposit_created` request. It consists of a single-signed `channel_deposit_tx`
 transaction as well as a list of updates. The transaction includes the state
 hash and round of the next off-chain state, after applying the updates on top
 of latest state. 
