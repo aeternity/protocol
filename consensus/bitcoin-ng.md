@@ -36,7 +36,7 @@ On average in Bitcoin blocks are broadcasted every 10 minutes - it is driven by 
 
 Rewards
 ==
-There is major challenge in providing liveness and integrity of the chain in the scheme proposed by Bitcoin-NG. It is solved by crypto-economic incentives. To guarantee that the next leader follows as much as possible of Micro Blocks the next leader receives fixed award on the top of 60% of fees from the previous generation of Micro Blocks. The previous leader receives 40% of the fees included in transactions he confirmed.
+There is major challenge in providing liveness and integrity of the chain in the scheme proposed by Bitcoin-NG. It is solved by crypto-economic incentives. To guarantee that the next leader follows as much as possible of Micro Blocks the next leader receives 60% of fees from the previous generation of Micro Blocks - on top of a fixed award. The previous leader receives 40% of the fees included in transactions he confirmed.
 
      ┌────────┐                        ┌────────┐
      │        │   ┌─────┐   ┌─────┐    │        │  ┌─────┐
