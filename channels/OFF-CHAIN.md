@@ -156,12 +156,14 @@ be applied on top of the last state as well as the next state that is
 produced.
 A single off-chain update's serialization has the following structure:
 
+```
   name                  size (bytes)
  ---------------------- ----
 | length               | 2  |
  ---------------------- ----
 | data                 | N  |
  ---------------------- ----
+```
 
 The length is the size of the data field.
 
