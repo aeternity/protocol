@@ -231,7 +231,7 @@ The `'data'` element may contain more detailed information inside `'data'`:
   "jsonrpc": "2.0"
 }
 ```
-Detailed message transcripts from test suites can be found [here](./examples/aehttp_integration_SUITE/json-rpc/).
+Detailed message transcripts from test suites can be found [here](./examples/channels/json-rpc/).
 
 ## User API - intended usage
 
