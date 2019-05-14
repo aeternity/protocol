@@ -36,7 +36,7 @@ On average in Bitcoin blocks are broadcasted every 10 minutes - it is driven by 
 
 Rewards
 ==
-There is major challenge in providing liveness and integrity of the chain in the scheme proposed by Bitcoin-NG. It is solved by crypto-economic incentives. To guarantee that the next leader follows as much as possible of Micro Blocks the next leader receives fixed award on the top of 60% of fees from the previous generation of Micro Blocks. The previous leader receives 40% of the fees included in transactions he confirmed.
+There is major challenge in providing liveness and integrity of the chain in the scheme proposed by Bitcoin-NG. It is solved by crypto-economic incentives. To guarantee that the next leader follows as much as possible of Micro Blocks the next leader receives 60% of fees from the previous generation of Micro Blocks - on top of a fixed award. The previous leader receives 40% of the fees included in transactions he confirmed.
 
      ┌────────┐                        ┌────────┐
      │        │   ┌─────┐   ┌─────┐    │        │  ┌─────┐
@@ -133,7 +133,7 @@ existence in the block.
 If a miner is reported as fraudulent in this manner, its beneficiary
 will not get any mining reward for that key block (i.e., no coinbase
 and no fees for either generation). The reporter of the fraud will get
-a reward controlled by governance (i.e. a portion of coinbase). In order not to skew the inflation the
+a reward controlled by governance (i.e. a portion of coinbase), unless reported as fraudulent too. In order not to skew the inflation the
 coins not attributed to the fraudulent miner are [locked](locking.md) instead.
 
 The serialization format of the Proof-of-Fraud object can be found
