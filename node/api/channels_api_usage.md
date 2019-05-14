@@ -66,7 +66,7 @@ The channel websocket api currently supports one protocol: [`json-rpc`](https://
 
 In the examples below, the `json-rpc` protocol is used.
 
-Detailed message transcripts from test suites can also be found [here](./examples/aehttp_integration_SUITE/json-rpc/).
+Detailed message transcripts from test suites can also be found [here](./examples/channels/json-rpc/).
 
 ### Channel parameters
 Each channel has a set of parameters that is required for opening a
