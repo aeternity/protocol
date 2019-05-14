@@ -184,10 +184,44 @@ state associated with each contract instance.
 - State updates are performed by calling a function `put : state => ()`.
 - Aside from the `put` function (and similar functions for transactions
   and events), the language is purely functional.
-- Functions modifying the state need to be annotated with the `stateful` keyword.
+- Functions modifying the state need to be annotated with the `stateful` keyword (see below).
 
 To make it convenient to update parts of a deeply nested state Sophia
 provides special syntax for map/record updates.
+
+#### Stateful functions
+
+Top-level functions (both private and public) must be annotated with the
+`stateful` keyword to be allowed to affect the state of the running contract.
+For instance,
+
+```javascript
+  stateful function set_state(s : state) =
+    put(s)
+```
+
+Without the `stateful` annotation the compiler does not allow the call to
+`put`. A `stateful` annotation is required to
+
+* Use a stateful primitive function. These are
+  - `put`
+  - `Chain.spend`
+  - `Oracle.register`
+  - `Oracle.query`
+  - `Oracle.respond`
+  - `Oracle.extend`
+  - `AENS.preclaim`
+  - `AENS.claim`
+  - `AENS.transfer`
+  - `AENS.revoke`
+* Call a `stateful` function in the current contract
+* Call another contract with a non-zero `value` argument.
+
+A `stateful` annotation *is not* required to
+
+* Read the contract state.
+* Issue an event using the `event` function.
+* Call another contract with `value = 0`, even if the called function is stateful.
 
 ### Namespaces
 
