@@ -227,7 +227,7 @@ Each (on-chain) transaction has the following fields:
 
 *Note*: There is also a node configurable minimum gas price - this is the
 minimum gas price a node accepts and is not under consensus. This value is
-normally higher than the minimal gas price as dictated by consensus. For
+higher than or equal to the minimal gas price as dictated by consensus. For
 contract transactions (Create, Call, GAAttach, GAMeta), the minumum applies to
 both the `Fee` and the `GasPrice`.
 
