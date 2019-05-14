@@ -284,7 +284,7 @@ The gas of a transaction is the sum of:
 | Contract create        | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCreateTx) * GasPerByte`. It also includes gas for contract execution. |
 | Contract call          | `30 * BaseGas` | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCallTx) * GasPerByte`. It also includes gas for contract execution. |
 | GA Attach              | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(GAAttachTx) * GasPerByte`. It also includes gas for execution of the init function. |
-| GA Meta                | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(GAMetaTx) * GasPerByte`. It also includes gas for execution of the authentication function + gas for the wrapped transaction. |
+| GA Meta                | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(GAMetaTx) * GasPerByte`. It also includes gas for execution of the authentication function + recursively gas corresponding to the wrapped transaction(s). |
 
 `BaseGas` is 15 000.
 
