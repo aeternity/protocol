@@ -32,6 +32,7 @@ tag.
 | Prefix  | Encoding | Description |
 | ---     | ---      | --- |
 | ak      | base58   | Account pubkey |
+| ba      | base64   | Byte array |
 | bf      | base58   | Block Proof of Fraud hash |
 | bs      | base58   | Block State hash |
 | bx      | base58   | Block transaction hash |
