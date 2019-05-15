@@ -146,6 +146,8 @@ Reward Split
 
 From the Fortuna release, a governance-controlled portion of the rewards - i.e. the key block coinbase, any transaction fees and any reward for having reported a fraud - is dedicated to protocol protected address `ak_2KAcA2Pp1nrR8Wkt3FtCkReGzAi8vJ9Snxa4PcmrthVx8AhPe8`.
 
+The weighted average of the BRI voting of 1% to 20% (yes) votes is 10.89869526640124746202%, 109 of 1000 shares will be the protocol reward split.
+
 ---
 #### References
 
