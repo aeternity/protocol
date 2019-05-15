@@ -1,6 +1,8 @@
 [back](./README.md)
 # State channel WebSocket API
 
+Messages on the WebSocket API have to follow JSON-RPC specification version 2.0. See: [www.jsonrpc.org](https://www.jsonrpc.org/specification)
+
 The WebSocket API provides the following actions:
  * [Off-chain update](#update)
  * [On-chain deposit](#deposit)
@@ -244,7 +246,7 @@ Roles:
 
 ### Depositor receives unsigned deposit transaction
  * **method:** `channels.sign.deposit_tx`
- * **payload:**
+ * **params:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
@@ -301,7 +303,7 @@ Roles:
 
 ### Acknowledger receives unsigned deposit transaction
  * **method:** `channels.sign.deposit_ack`
- * **payload:**
+ * **params:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
