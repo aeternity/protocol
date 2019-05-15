@@ -105,18 +105,18 @@ The peer-to-peer network is not part of the consensus and will be described in a
 
 ### Coins and tokens
 
-#### Aeons
+#### Aeternity tokens
 
-Aeon is the main coin used in the Æternity system. We use the following denominations:
+We use the following denominations:
 
 ```
-1
+1                          | aetto
 1_000
 1_000_000
 1_000_000_000
 1_000_000_000_000
 1_000_000_000_000_000
-1_000_000_000_000_000_000 | aeon
+1_000_000_000_000_000_000
 ```
 
 ## Specification
@@ -225,6 +225,12 @@ Each (on-chain) transaction has the following fields:
   `1` (*10^-18) aeons.)
 * Time to live (TTL).
 
+*Note*: There is also a node configurable minimum gas price - this is the
+minimum gas price a node accepts and is not under consensus. This value is
+higher than or equal to the minimal gas price as dictated by consensus. For
+contract transactions (Create, Call, GAAttach, GAMeta), the minumum applies to
+both the `Fee` and the `GasPrice`.
+
 #### Spend
 
 ```
@@ -277,6 +283,8 @@ The gas of a transaction is the sum of:
 | Channel offchain       |            0   |     0 |
 | Contract create        | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCreateTx) * GasPerByte`. It also includes gas for contract execution. |
 | Contract call          | `30 * BaseGas` | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCallTx) * GasPerByte`. It also includes gas for contract execution. |
+| GA Attach              | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(GAAttachTx) * GasPerByte`. It also includes gas for execution of the init function. |
+| GA Meta                | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(GAMetaTx) * GasPerByte`. It also includes gas for execution of the authentication function + recursively gas corresponding to the wrapped transaction(s) (excluding the byte size portion - in order not to account for the size of wrapped transactions multiple times). |
 
 `BaseGas` is 15 000.
 
