@@ -279,7 +279,7 @@ The gas of a transaction is the sum of:
 | Channel close solo     | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelCloseSoloTx) * GasPerByte` |
 | Channel close mutual   | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelCloseMutualTx) * GasPerByte` |
 | Channel snapshot solo  | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelSnapshotSoloTx) * GasPerByte` |
-| Channel force progress | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelForceProgressTx) * GasPerByte`. It may also include gas for contract execution. |
+| Channel force progress | `BaseGas` before Fortuna and `30 * BaseGas` from Fortuna on | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelForceProgressTx) * GasPerByte`. It may also include gas for contract execution. |
 | Channel offchain       |            0   |     0 |
 | Contract create        | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCreateTx) * GasPerByte`. It also includes gas for contract execution. |
 | Contract call          | `30 * BaseGas` | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCallTx) * GasPerByte`. It also includes gas for contract execution. |
