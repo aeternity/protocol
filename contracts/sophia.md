@@ -732,36 +732,36 @@ Example for an oracle answering questions of type `string` with answers of type 
 ```
 contract Oracles =
 
-  function registerOracle(acct : address,
-                          sign : signature,   // Signed oracle address + contract address
-                          qfee : int,
-                          ttl  : Chain.ttl) : oracle(string, int) =
+  stateful function registerOracle(acct : address,
+                                   sign : signature,   // Signed oracle address + contract address
+                                   qfee : int,
+                                   ttl  : Chain.ttl) : oracle(string, int) =
      Oracle.register(acct, signature = sign, qfee, ttl)
 
   function queryFee(o : oracle(string, int)) : int =
     Oracle.query_fee(o)
 
   // Do not use in production!
-  function unsafeCreateQuery(o    : oracle(string, int),
-                       q    : string,
-                       qfee  : int,
-                       qttl : Chain.ttl,
-                       rttl : int) : oracle_query(string, int) =
+  stateful function unsafeCreateQuery(o    : oracle(string, int),
+                                      q    : string,
+                                      qfee : int,
+                                      qttl : Chain.ttl,
+                                      rttl : int) : oracle_query(string, int) =
     Oracle.query(o, q, qfee, qttl, RelativeTTL(rttl))
 
-  function extendOracle(o    : oracle(string, int),
-                        ttl  : Chain.ttl) : () =
+  stateful function extendOracle(o   : oracle(string, int),
+                                 ttl : Chain.ttl) : () =
     Oracle.extend(o, ttl)
 
-  function signExtendOracle(o    : oracle(string, int),
-                            sign : signature,   // Signed oracle address + contract address
-                            ttl  : Chain.ttl) : () =
+  stateful function signExtendOracle(o    : oracle(string, int),
+                                     sign : signature,   // Signed oracle address + contract address
+                                     ttl  : Chain.ttl) : () =
     Oracle.extend(o, signature = sign, ttl)
 
-  function respond(o    : oracle(string, int),
-                   q    : oracle_query(string, int),
-                   sign : signature,        // Signed oracle query id + contract address
-                   r    : int) =
+  stateful function respond(o    : oracle(string, int),
+                            q    : oracle_query(string, int),
+                            sign : signature,        // Signed oracle query id + contract address
+                            r    : int) =
     Oracle.respond(o, q, signature = sign, r)
 
   function getQuestion(o : oracle(string, int),
