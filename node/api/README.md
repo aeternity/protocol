@@ -186,24 +186,26 @@ The codes and error messages include those specified in the [JSON-RPC 2.0
 
 The `'data'` element may contain more detailed information inside `'data'`:
 
- | Code   | Message                   | Parent Code | Origin |
- | ------ | ------------------------- | ----------- | ------ |
- | 100    | X doesn't exist           |  3          |  [2]   |
- | 101    | Requires coin             |  3          |  [2]   |
- | 102    | Gas too low               |  3          |  [2]   |
- | 103    | Gas limit exceeded        |  3          |  [2]   |
- | 104    | Rejected                  |  3          |  [2]   |
- | 105    | Value too low             |  3          |  [2]   |
- | 106    | Timeout                   |  3          |  [2]   |
- | 107    | Conflict                  |  3          |  [2]   |
- | 1001   | Insufficient balance      |  3          |  [3]   |
- | 1002   | Negative amount           |  3          |  [3]   |
- | 1003   | Invalid pubkeys           |  3          |  [3]   |
- | 1004   | Call not found            |  3          |  [3]   |
- | 1005   | Broken encoding: accounts |  3          |  [3]   |
- | 1006   | Broken encoding: contracts|  3          |  [3]   |
- | 1007   | Contract init failed      |  3          |  [3]   |
- | 1008   | Not a number              |  3          |  [3]   |
+ | Code   | Message                            | Parent Code | Origin |
+ | ------ | ---------------------------------- | ----------- | ------ |
+ | 100    | X doesn't exist                    |  3          |  [2]   |
+ | 101    | Requires coin                      |  3          |  [2]   |
+ | 102    | Gas too low                        |  3          |  [2]   |
+ | 103    | Gas limit exceeded                 |  3          |  [2]   |
+ | 104    | Rejected                           |  3          |  [2]   |
+ | 105    | Value too low                      |  3          |  [2]   |
+ | 106    | Timeout                            |  3          |  [2]   |
+ | 107    | Conflict                           |  3          |  [2]   |
+ | 1001   | Insufficient balance               |  3          |  [3]   |
+ | 1002   | Negative amount                    |  3          |  [3]   |
+ | 1003   | Invalid pubkeys                    |  3          |  [3]   |
+ | 1004   | Call not found                     |  3          |  [3]   |
+ | 1005   | Broken encoding: account pubkey    |  3          |  [3]   |
+ | 1006   | Broken encoding: contract pubkey   |  3          |  [3]   |
+ | 1007   | Contract init failed               |  3          |  [3]   |
+ | 1008   | Not a number                       |  3          |  [3]   |
+ | 1009   | Broken encoding: contract bytecode |  3          |  [3]   |
+ | 1010   | Broken encoding: transaction       |  3          |  [3]   |
 
 #### Example, error object
  ```javascript
