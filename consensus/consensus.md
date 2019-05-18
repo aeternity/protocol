@@ -135,7 +135,7 @@ The public key is 32 byte.
 
 #### Signatures
 
-ECDSA, DER encoding (~72 bytes in size)
+EDDSA (curve 25519), signature is 64 bytes.
 
 ## Accounts
 
