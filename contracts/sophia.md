@@ -1,5 +1,4 @@
 [back](./contracts.md)
-[back](./contracts.md)
 ## The Sophia Language
 An Æternity BlockChain Language
 The Sophia is a language in the ML family. It is strongly typed and has
@@ -849,6 +848,9 @@ of type `string`.
 
 *NOTE:* Indexing is not part of the core aeternity node, but the `indexed` tag
 should serve as a hint to any software analysing the contract call transactions.
+
+Events are further discussed in [Sophia explained -
+Events](./sophia_explained.md#events).
 
 #### Contract primitives
 
