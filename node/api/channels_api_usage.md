@@ -25,7 +25,7 @@ attempt using a meta transaction. This means that:
   the closing of a channel with a mutual agreement. In that case tokens will
   be temporarily locked using the FSM provided but participants could still
   produce and authenticate those transactions without the support of FSM. They
-  could still continue producing an signing off-chain transactions and those
+  could still continue producing and signing off-chain transactions and those
   are usable in on-chain disputes. In this case both users are safe from
   malicious behaviour.
 
