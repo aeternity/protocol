@@ -1,6 +1,34 @@
 [back](./README.md)
 # Channels - intended usage
 
+## Important
+
+AE State Channels are missing key parts of their integration with Generalized
+Accounts.
+
+With introduction of GAs, all on-chain state channel transactions
+are to be signed using the on-chain account's authentication method and
+off-chain transactions are to be signed using the accounts' authentication
+method at channel creation.
+
+The FSM does not yet support GAs and it will automatically reject any signing
+attempt using a meta transaction. This means that:
+
+* if a participant has already upgraded their account, AE channels'
+  implementation will reject the authentication of the channel create
+  transaction and the channel will fail to open. In that case both users are
+  safe from malicious behaviour.
+* if a participant upgrades their account after a channel had been opened, any
+  on-chain transactions produced by the FSM will fail their authentication
+  checks in the FSM and the FSM will not proceed posting those on-chain. That
+  would result in a failure of successfully making deposits, withdrawals and
+  the closing of a channel with a mutual agreement. In that case tokens will
+  be temporarily locked using the FSM provided but participants could still
+  produce and authenticate those transactions without the support of FSM. They
+  could still continue producing and signing off-chain transactions and those
+  are usable in on-chain disputes. In this case both users are safe from
+  malicious behaviour.
+
 ## Introduction
 You interact with an Aeternity node both through HTTP requests and WebSocket
 connections.
