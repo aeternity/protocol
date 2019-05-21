@@ -88,7 +88,24 @@ of the event constructor name, i.e. `Keccak("TheFirstEvent")` and
   157,0,241,233,150,150,117,1,154,28,43,125,65,8,...>>
 ```
 
-The implicit value goes first in the `topics` array.
+The implicit value goes first in the `topics` array. The topics are (currently,
+this might change in the future) presented as 256-bit unsigned integers - i.e.
+`1875564187002476023854543820981509249331367502514562901623081521315128929137`
+in the second event in the example corresponds to `<<"ct_2pvLLjPfjq...">>`. A
+boolean argument would come out as `0` (= false) or `1` (= true).
+
+### Argument order
+
+It is only possible to have one (1) `string` parameter in the event, but it can
+be placed in any position (and its value will end up in the `data` field), i.e.
+```
+AnotherEvent(string, indexed address)
+
+...
+
+Chain.event(AnotherEvent("This is not indexed", Contract.address))
+```
+would yield exactly the same result in the example above!
 
 ### Event indexing
 
