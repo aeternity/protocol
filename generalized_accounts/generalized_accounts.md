@@ -340,3 +340,5 @@ Some mechanisms, that we had in mind, as motivation for GA:
 - multi-sig (e.g. phone + hardware wallet, or multiple people)
 - using different signature algorithms (i.e. other than EdDSA)
 
+GAs are further explained and an example (EdDSA) is provided in (Generalized
+accounts explained)[ga_explained.md].
