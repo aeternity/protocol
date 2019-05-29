@@ -10,6 +10,8 @@ The WebSocket API provides the following actions:
  * [Contracts](#contracts)
  * [Generic message](#generic-message)
  * [Close mutual](#close-mutual)
+ * [Close solo](#close-solo)
+ * [Settle](#settle)
  * [Leave](#leave)
  * [On-chain transactions](#on-chain-transactions)
  * [Info messages](#info-messages)
@@ -796,6 +798,138 @@ Roles:
     }
   },
   "version": 1
+}
+```
+
+## Close solo
+Roles:
+ * Closer
+
+### Closer initiated solo close
+ * **method:** `channels.close_solo`
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.close_solo",
+  "params": {}
+}
+```
+
+### Closer receives solo close
+ * **method:** `channels.sign.close_solo_sign`
+ * **params:**
+ 
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | channel_id | string | channel ID | Yes |
+ | data  | object | closing data | Yes |
+ 
+ * **data:**
+ 
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | tx | string | unsigned `channel_close_solo` transaction | Yes |
+ | updates | list | off-chain updates | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.close_solo_sign",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "tx": "tx_+QGfNgGhBnHSbcHwBwtR5QRwS0O1mI1Gw/8pkaOwcHQap09BPoMFoQGxtXe80yfLOeVebAJr1qdKGzXebAZQxK5R76t1nkFbZoC5AUz5AUk8AfkBP/kBPKAeoRWJfw9r7+McQQHdwLN6tS/aqbQUwm8iJYXMIOcncfkBGPh0oB6hFYl/D2vv4xxBAd3As3q1L9qptBTCbyIlhcwg5ydx+FGAgICAgICg7QIWPGJsh916G7zCAZpUeaRQuGVamwjR8JaxQKEPIwmAgICAoEJmfgNwrMeYsFATTDpQ+Y9abOcHR6KUvw5o9LdShJsUgICAgID4T6BCZn4DcKzHmLBQE0w6UPmPWmznB0eilL8OaPS3UoSbFO2gMbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aLygoBAIY/qiUiX//4T6DtAhY8YmyH3XobvMIBmlR5pFC4ZVqbCNHwlrFAoQ8jCe2gNxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oSLygoBAIYkYTnKgAHAwMDAwACGG0jrV+AACPykTFA=",
+      "updates": []
+    }
+  },
+  "version": 1
+}
+```
+
+### Closer returns signed solo close
+ * **method:** `channels.close_solo_sign`
+ * **params:**
+ 
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | tx | string | signed `channel_close_solo` transaction | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.close_solo_sign",
+  "params": {
+    "tx": "tx_+QHrCwH4QrhACuHMgbcTg1inUPAUSmhXfODKWI2CFchqpav9VDaBlw+xng9Ld0eLPgysTvks47iVHn4d/11VlkEi6iLRBDkIBLkBovkBnzYBoQZx0m3B8AcLUeUEcEtDtZiNRsP/KZGjsHB0GqdPQT6DBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aAuQFM+QFJPAH5AT/5ATygHqEViX8Pa+/jHEEB3cCzerUv2qm0FMJvIiWFzCDnJ3H5ARj4dKAeoRWJfw9r7+McQQHdwLN6tS/aqbQUwm8iJYXMIOcncfhRgICAgICAoO0CFjxibIfdehu8wgGaVHmkULhlWpsI0fCWsUChDyMJgICAgKBCZn4DcKzHmLBQE0w6UPmPWmznB0eilL8OaPS3UoSbFICAgICA+E+gQmZ+A3Csx5iwUBNMOlD5j1ps5wdHopS/Dmj0t1KEmxTtoDG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmi8oKAQCGP6olIl//+E+g7QIWPGJsh916G7zCAZpUeaRQuGVamwjR8JaxQKEPIwntoDccVUZGSUV1srSU9lFoIXEGY9hIk83S0jYDelTDPu6Ei8oKAQCGJGE5yoABwMDAwMAAhhtI61fgAAiybuMt"
+  }
+}
+```
+
+## Settle
+Roles:
+ * Settler
+
+### Settler initiates settle
+ * **method:** `channels.settle`
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.settle",
+  "params": {}
+}
+```
+### Settler receives settle
+ * **method:** `channels.sign.settle_sign`
+ * **params:**
+ 
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | channel_id | string | channel ID | Yes |
+ | data | object | settle data | Yes |
+
+ * **data:**
+ 
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | tx | string | unsigned `channel_settle` transaction | Yes |
+ | updates | list | off-chain updates | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.settle_sign",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "tx": "tx_+F04AaEGcdJtwfAHC1HlBHBLQ7WYjUbD/ymRo7BwdBqnT0E+gwWhAWccVUZGSUV1srSU9lFoIXEGY9hIk83S0jYDelTDPu6Ehj+qJSJf/4YkYTnKgAEAhhtI61fgAAIwYkCX",
+      "updates": []
+    }
+  },
+  "version": 1
+}
+```
+### Settler returns signed settle
+ * **method:** `channels.settle_sign`
+ * **params:**
+ 
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | tx | string | signed `channel_settle` transaction | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.settle_sign",
+  "params": {
+    "tx": "tx_+KcLAfhCuEBdI4Uesh3hYjGQ2BAo0FzD1YPyZlzhy8HyNgf7OzrQdVM44oWQX0yFtmk31HaSLuIJGNDv3hEgdLwe0iZz3LEEuF/4XTgBoQZx0m3B8AcLUeUEcEtDtZiNRsP/KZGjsHB0GqdPQT6DBaEBZxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oSGP6olIl//hiRhOcqAAQCGG0jrV+AAAgurGvs="
+  }
 }
 ```
 

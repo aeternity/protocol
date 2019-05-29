@@ -24,6 +24,8 @@ expected. The flow is the following:
   * [Call a contract](#call-a-contract)
 3. [Optionally leave/reestablish](#leave-reestablish)
 4. [Channel mutual close](#channel-mutual-close)
+  * [Channel solo close](#channel-solo-close)
+  * [Channel settle](#channel-settle)
 
 There are a some WebSocket events that can occur while the connection is open
 but are not necessarily part of the channel's life cycle.
@@ -1079,7 +1081,7 @@ it and then post it back via a WebSocket message:
 }
 ```
 
-#### Signed channel_close_mutual_tx
+#### Signed `channel_close_mutual_tx`
 Both participants receive the co-signed `channel_close_mutual_tx`:
 ```javascript
 {
@@ -1126,6 +1128,8 @@ off-chain requests dies. Parties receive the following infos:
   },
   "version": 1
 }
+```
+
 Then the WebSocket connection is closed.
 
 ### Tracking the progress of the onchain transaction
@@ -1135,6 +1139,179 @@ its progress as they would do with any on-chain transaction
 curl 'http://127.0.0.1:3013/v2/transactions/th_2qkN973cNJiejXVJoXkXbttf1iKetWJCSY1W5VUBh3pnRS1kCC'
 ```
 if the `block_hash` is `none` - then the transaction is still in the mempool.
+
+## Channel solo close
+It is possible to close the channel unilaterally, e.g. if the other party has
+disconnected and is expected never to return. The channel fsm can be asked
+to generate a `channel_close_solo` transaction and post it on-chain. The
+resulting transaction will include the latest mutually signed offchain state,
+or the empty string, indicating that the latest state is what's on the chain.
+
+The `channel_close_solo` transaction only needs a single signature, and is described in more detail in [this section](#channel-solo-close).
+
+The channel fsm does not support picking an earlier state to close with, as
+this is a form of cheating.
+
+Since any of the participants can initiate a solo-closing, we will use
+`requester` for the peer that triggers the process. The other peer is not
+necessarily involved at all, but will be informed if it is actually connected.
+For this description, we simply call it `other`.
+
+### Initiate solo close
+The requester sends the following message and triggers the closing procedure:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.close_solo",
+  "params": {}
+}
+```
+
+### Requester signing
+Then the requester receives a `channel_close_solo_tx` to sign:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.close_solo_sign",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "tx": "tx_+QGfNgGhBnHSbcHwBwtR5QRwS0O1mI1Gw/8pkaOwcHQap09BPoMFoQGxtXe80yfL
+OeVebAJr1qdKGzXebAZQxK5R76t1nkFbZoC5AUz5AUk8AfkBP/kBPKAeoRWJfw9r7+McQQHdwLN6tS/a
+qbQUwm8iJYXMIOcncfkBGPh0oB6hFYl/D2vv4xxBAd3As3q1L9qptBTCbyIlhcwg5ydx+FGAgICAgICg7QIWPGJsh916G7zCAZpUeaRQuGVamwjR8JaxQKEPIwmAgICAoEJmfgNwrMeYsFATTDpQ+Y9abOcHR6KUvw5o9LdShJsUgICAgID4T6BCZn4DcKzHmLBQE0w6UPmPWmznB0eilL8OaPS3UoSbFO2gMbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aLygoBAIY/qiUiX//4T6DtAhY8YmyH3XobvMIBmlR5pFC4ZVqbCNHwlrFAoQ8jCe2gNxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oSLygoBAIYkYTnKgAHAwMDAwACGG0jrV+AACPykTFA=",
+      "updates": []
+    }
+  },
+  "version": 1
+}
+```
+
+Requester is to decode the transaction, inspect its contents, sign it, encode it
+and then post it back via a WebSocket message:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.close_solo_sign",
+  "params": {
+    "tx": "tx_+QHrCwH4QrhACuHMgbcTg1inUPAUSmhXfODKWI2CFchqpav9VDaBlw+xng9Ld0eLPgysTvks47iVHn4d/11VlkEi6iLRBDkIBLkBovkBnzYBoQZx0m3B8AcLUeUEcEtDtZiNRsP/KZGjsHB0GqdPQT6DBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aAuQFM+QFJPAH5AT/5ATygHqEViX8Pa+/jHEEB3cCzerUv2qm0FMJvIiWFzCDnJ3H5ARj4dKAeoRWJfw9r7+McQQHdwLN6tS/aqbQUwm8iJYXMIOcncfhRgICAgICAoO0CFjxibIfdehu8wgGaVHmkULhlWpsI0fCWsUChDyMJgICAgKBCZn4DcKzHmLBQE0w6UPmPWmznB0eilL8OaPS3UoSbFICAgICA+E+gQmZ+A3Csx5iwUBNMOlD5j1ps5wdHopS/Dmj0t1KEmxTtoDG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmi8oKAQCGP6olIl//+E+g7QIWPGJsh916G7zCAZpUeaRQuGVamwjR8JaxQKEPIwntoDccVUZGSUV1srSU9lFoIXEGY9hIk83S0jYDelTDPu6Ei8oKAQCGJGE5yoABwMDAwMAAhhtI61fgAAiybuMt"
+  }
+}
+```
+
+As the channel fsm receives the signed solo close transaction, verifies it
+and posts it to the chain, it should eventually detect the transaction appearing
+on the chain, and inform its client with the following WebSocket message.
+The other peer will receive the same message if it is online:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "info": "solo_closing",
+      "tx": "tx_+QHrCwH4QrhACuHMgbcTg1inUPAUSmhXfODKWI2CFchqpav9VDaBlw+xng9Ld0eLPgysTvks47iVHn4d/11VlkEi6iLRBDkIBLkBovkBnzYBoQZx0m3B8AcLUeUEcEtDtZiNRsP/KZGjsHB0GqdPQT6DBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aAuQFM+QFJPAH5AT/5ATygHqEViX8Pa+/jHEEB3cCzerUv2qm0FMJvIiWFzCDnJ3H5ARj4dKAeoRWJfw9r7+McQQHdwLN6tS/aqbQUwm8iJYXMIOcncfhRgICAgICAoO0CFjxibIfdehu8wgGaVHmkULhlWpsI0fCWsUChDyMJgICAgKBCZn4DcKzHmLBQE0w6UPmPWmznB0eilL8OaPS3UoSbFICAgICA+E+gQmZ+A3Csx5iwUBNMOlD5j1ps5wdHopS/Dmj0t1KEmxTtoDG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmi8oKAQCGP6olIl//+E+g7QIWPGJsh916G7zCAZpUeaRQuGVamwjR8JaxQKEPIwntoDccVUZGSUV1srSU9lFoIXEGY9hIk83S0jYDelTDPu6Ei8oKAQCGJGE5yoABwMDAwMAAhhtI61fgAAiybuMt",
+      "type": "channel_close_solo_tx"
+    }
+  },
+  "version": 1
+}
+```
+
+As the channel object status also changes to `closing`, the peer(s) will
+receive another information message:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "event": "closing"
+    }
+  },
+  "version": 1
+}
+```
+
+## Channel settle
+Once a 'dispute' process has been initiated with a `channel_close_tx`, and
+once the lock period has expired, it is possible to finally close the channel
+with a `channel_settle_tx` transaction. The channel fsm can assist if asked
+with the following WebSocket request:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.settle",
+  "params": {}
+}
+```
+
+#### Requester signing
+Then the requester receives a `channel_settle_tx` to sign:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.settle_sign",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "tx": "tx_+F04AaEGcdJtwfAHC1HlBHBLQ7WYjUbD/ymRo7BwdBqnT0E+gwWhAWccVUZGSUV1srSU9lFoIXEGY9hIk83S0jYDelTDPu6Ehj+qJSJf/4YkYTnKgAEAhhtI61fgAAIwYkCX",
+      "updates": []
+    }
+  },
+  "version": 1
+}
+```
+
+The requester is to decode the transaction, inspect its contents, sign it,
+encode it and then post it back via a WebSocket message:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.settle_sign",
+  "params": {
+    "tx": "tx_+KcLAfhCuEBdI4Uesh3hYjGQ2BAo0FzD1YPyZlzhy8HyNgf7OzrQdVM44oWQX0yFtmk31HaSLuIJGNDv3hEgdLwe0iZz3LEEuF/4XTgBoQZx0m3B8AcLUeUEcEtDtZiNRsP/KZGjsHB0GqdPQT6DBaEBZxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oSGP6olIl//hiRhOcqAAQCGG0jrV+AAAgurGvs="
+  }
+}
+```
+As the channel fsm receives the signed settle transaction, verifies it
+and posts it to the chain, it should eventually detect the transaction appearing
+on the chain, and inform its client with the following WebSocket message.
+The other peer will receive the same message if it is online:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "info": "channel_closed",
+      "tx": "tx_+KcLAfhCuEBdI4Uesh3hYjGQ2BAo0FzD1YPyZlzhy8HyNgf7OzrQdVM44oWQX0yFtmk31HaSLuIJGNDv3hEgdLwe0iZz3LEEuF/4XTgBoQZx0m3B8AcLUeUEcEtDtZiNRsP/KZGjsHB0GqdPQT6DBaEBZxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oSGP6olIl//hiRhOcqAAQCGG0jrV+AAAgurGvs=",
+      "type": "channel_settle_tx"
+    }
+  },
+  "version": 1
+}
+```
+
+Once the fsm has confirmed the transaction to be safely on-chain, the following
+information message is sent to the connected peers, signaling that the channel
+is finally closed, and the channel object removed:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "event": "closed_confirmed"
+    }
+  },
+  "version": 1
+}
+```
 
 ### Other WebSocket events
 #### Update error
