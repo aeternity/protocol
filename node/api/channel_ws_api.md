@@ -154,6 +154,7 @@ Roles:
   | data | object | description of the last co-signed state | Yes |
 
  * **data:**
+ 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | channel_id | string | channel id| Yes |
@@ -931,6 +932,7 @@ Roles:
 
 #### Response
  * **result:**
+
  | Field name | Value |
  | ---- | ---- |
  | `contract` | object with contract details |
