@@ -186,6 +186,7 @@ Roles:
   | request | json | the failed request | Yes |
 
  * **data:**
+ 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | message | string | JSON-RPC error message | Yes |
