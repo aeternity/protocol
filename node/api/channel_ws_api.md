@@ -13,6 +13,7 @@ The WebSocket API provides the following actions:
  * [Leave](#leave)
  * [On-chain transactions](#on-chain-transactions)
  * [Info messages](#info-messages)
+ * [System messages](#system-messages)
 
 ## Update
 Roles:
@@ -986,3 +987,50 @@ Roles:
   "version": 1
 }
 ```
+## System messages
+
+### ping
+ * **method:** `channels.system`
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | action | string | the value "ping" | Yes |
+
+#### Response
+ * **method:** `channels.system`
+ * **params.data:**
+
+ | Field name | Value |
+ | ---- | ---- |
+ | `action` | "system" |
+ | `tag` | "pong" |
+
+#### Example
+
+##### Request
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.system",
+  "params": {
+    "action": "ping"
+  }
+}
+```
+##### Response
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.system.pong",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "action": "system",
+      "tag": "pong"
+    }
+  },
+  "version": 1
+}
+```
+
