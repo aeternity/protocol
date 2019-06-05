@@ -78,6 +78,8 @@ but are not necessarily part of the channel's life cycle.
 
 * [Cleaning local contract calls](#pruning-contract-calls)
 
+* [Connection keep alive](#connection-keep-alive)
+
 Only steps 1 and 4 require chain interactions, step 2 and 3 are off-chain.
 
 ### HTTP requests
@@ -2056,3 +2058,51 @@ The transaction has the following structure:
   | nonce | integer | settler's nonce |
 
 The amounts are the exact amounts stored in the channel object on-chain.
+
+#### Connection keep alive
+
+WebSocket connection handlers are to identify abrupt network disconnects.
+Thus the WebSocket protocol defines special control frames to be used: sending
+`ping` and `pong`. Clients that are run in a browser have no access nor do
+they have any control over those frames. They are to be handled by browsers
+and this could introduce some undesired incompatibilities.
+
+In order to provide best user experience, we've kept the functionality of the
+node to respond with a `pong` control frame to every `ping` received as well
+as enhanced the State Channel's WebSocket API with the option of sending data
+frames that act like the corresponding control frames. Depending on the
+environment to be run, the client can use either approach.
+
+If no frames have been received for 1 minute, the node will consider the
+connection to the client to be lost.
+
+A data frame `ping` message has the following structure:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.system",
+  "params": {
+    "action": "ping"
+  }
+}
+```
+
+If the connection is still open, the node will respond to the same participant
+with the following message:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.system.pong",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "action": "system",
+      "tag": "pong"
+    }
+  },
+  "version": 1
+}
+```
+Where `channel_id` has the correct value of the channel's ID.
+
