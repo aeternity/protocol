@@ -2071,9 +2071,9 @@ In order to provide best user experience, we've kept the functionality of the
 node to respond with a `pong` control frame to every `ping` received as well
 as enhanced the State Channel's WebSocket API with the option of sending data
 frames that act like the corresponding control frames. Depending on the
-environment to be ran, the client can use either approach.
+environment to be run, the client can use either approach.
 
-If no frames had been received for 1 minute, the node will consider the
+If no frames have been received for 1 minute, the node will consider the
 connection to the client to be lost.
 
 A data frame `ping` message has the following structure:
