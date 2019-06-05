@@ -155,6 +155,7 @@ Roles:
   | data | object | description of the last co-signed state | Yes |
 
  * **data:**
+ 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | channel_id | string | channel id| Yes |
@@ -187,6 +188,7 @@ Roles:
   | request | json | the failed request | Yes |
 
  * **data:**
+ 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | message | string | JSON-RPC error message | Yes |
@@ -931,6 +933,7 @@ Roles:
 
 #### Response
  * **result:**
+
  | Field name | Value |
  | ---- | ---- |
  | `contract` | object with contract details |
