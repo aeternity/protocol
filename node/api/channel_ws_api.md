@@ -783,8 +783,35 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
+  | info | string | specific type of event | Yes |
   | tx | string | co-signed transaction that is posted on-chain | Yes |
-  | updates | list | off-chain updates | Yes |
+  | type | transaction type | Yes |
+
+ The `info` values could be:
+ * `"funding_signed"` - reported by the `initiator`, indicating that a `channel_create_tx` has been
+   singly signed by the `initiator` client, and sent to the `responder` for co-signing.
+ * `"funding_created"` - reported by the `responder`, indicating that a `channel_create_tx` has been
+   co-signed, and will be pushed to the mempool.
+ * `"deposit_signed"` - reported by the `depositor`, indicating that a `channel_deposit_tx` has been
+   singly signed by the `depositor` client, and sent to the `acknowledger` for co-signing.
+ * `"deposit_created"` - reported by the `acknowledger`, indicating that a `channel_deposit_tx` has been
+   co-signed, and will be pushed to the mempool.
+ * `"withdraw_signed"` - reported by the `withdrawer`, indicating that a `channel_withdraw_tx` has been
+   singly signed by the `withdrawer` client, and sent to the `acknowledger` for co-signing.
+ * `"withdraw_created"` - reported by the `acknowledger`, indicating that a `channel_withdraw_tx` has been
+   co-signed, and will be pushed to the mempool.
+ * `"channel_changed"` - reported by both parties, indicating that the fsm has detected a channel-related
+   transaction on-chain. Note that this will be reported also for the `channel_create_tx`, once it
+   appears on-chain. This means that each client will get _two_ `on_chain_tx` reports for the
+   create, deposit, withdraw and close_mutual transactions.
+ * `"close_mutual"` - reported by both parties, indicating that a `channel_close_mutual_tx` has been
+   co-signed, and will be pushed to the mempool.
+ * `"channel_closed"` - reported by both parties, when the on-chain channel state is detected to transition
+   to a `closed` state.
+ * `"solo_closing"` - reported by both parties, when the on-chain channel state is detected to transition
+   to a proper `solo_closing` state - that is, with the latest known state.
+ * `"can_slash"` - reported by both parties, when the on-chain channel state is detected to transition to
+   to an improper `solo_closing` state - that is, when there exists a later mutually signed state.
 
 #### Example
 ```javascript
@@ -794,7 +821,9 @@ Roles:
   "params": {
     "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
     "data": {
-      "tx": "tx_+P4LAfiEuEBa3V9ZXezm+ya0GQGg7RBpS6DbYhiE10oRgSuHpn0JFsdcUz0f2Ldsi1I62JxkLmDAqhxIgYUeya0PP1M4PXsOuEBpdn6/h5FeyYL9/JMO3XqEDdmaxrtsqamG4XJJAUNoQI0DtzQVkGHWC4lia9rcsNa9vdBj0a5o8S7fGE3I8Z0FuHT4cjMBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YCAIYSMJzlQACggadM65SdUz1BOFxWoIIAV4nnUPtroDiV3KF3ee4qDuUCCZiFbkw="
+      "info": "deposit_signed",
+      "tx": "tx_+P4LAfiEuEBa3V9ZXezm+ya0GQGg7RBpS6DbYhiE10oRgSuHpn0JFsdcUz0f2Ldsi1I62JxkLmDAqhxIgYUeya0PP1M4PXsOuEBpdn6/h5FeyYL9/JMO3XqEDdmaxrtsqamG4XJJAUNoQI0DtzQVkGHWC4lia9rcsNa9vdBj0a5o8S7fGE3I8Z0FuHT4cjMBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YCAIYSMJzlQACggadM65SdUz1BOFxWoIIAV4nnUPtroDiV3KF3ee4qDuUCCZiFbkw=",
+      "type": "channel_deposit_tx"
     }
   },
   "version": 1
