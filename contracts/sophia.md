@@ -302,7 +302,7 @@ Sophia has the following types:
 | list       | `[1, 2, 3]`, `[(true, 24), (false, 19), (false, -42)]`
 | tuple      | `(42, "Foo", true)`
 | record     | `balance{ owner = Call.origin, value = 100000000 }`
-| map        | `{["foo"] = 19, ["bar"] => 42}`, `{}`
+| map        | `{["foo"] = 19, ["bar"] = 42}`, `{}`
 | option('a) | `Some(42)`, `None`
 | state      | `state{ owner = Call.origin, magic_key = #a298105f }`
 | event      | `EventX(0, "Hello")`
