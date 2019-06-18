@@ -45,13 +45,13 @@ Roles:
 }
 ```
 
-### Sender receives unsigned off-chain state
+### Sender receives a non-authenticated off-chain state
  * **method:** `channels.sign.update`
  * **params:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsigned `channel_offchain` transaction | Yes |
+  | signed_tx | string | `channel_offchain` transaction wrapped in a `signed_tx` with no authentication | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -62,7 +62,7 @@ Roles:
   "params": {
     "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
     "data": {
-      "tx": "tx_+JU5AaEGrATZCq2SbvoJPO8phULArHp0My7fBW9SSptJ+5ys02IC+E24S/hJggI6AaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2ahAWccVUZGSUV1srSU9lFoIXEGY9hIk83S0jYDelTDPu6EAaDVKneBkzhWnEbC2q9FakzUh62kF75skKy/zAal9PdC4Zxbb8Q=",
+      "signed_tx": "tx_+JU5AaEGrATZCq...",
       "updates": [
         {
           "amount": 1,
@@ -77,13 +77,13 @@ Roles:
 }
 ```
 
-### Sender signed off-chain state responsse
+### Sender authenticates off-chain state responsse
  * **method:** `channels.update`
  * **params:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | signed `channel_offchain` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_offchain` transaction | Yes |
 
 #### Example
 ```javascript
@@ -91,18 +91,18 @@ Roles:
   "jsonrpc": "2.0",
   "method": "channels.update",
   "params": {
-    "tx": "tx_+N8LAfhCuEAFOva8xKyh9tzeIps9Tum89u4xTvbT0yokbLnu78KnIK6wZRZiYlwrBujUEQg0t3Tud9BXDn5oKwnkdJizmA0GuJf4lTkBoQasBNkKrZJu+gk87ymFQsCsenQzLt8Fb1JKm0n7nKzTYgL4TbhL+EmCAjoBoQGxtXe80yfLOeVebAJr1qdKGzXebAZQxK5R76t1nkFbZqEBZxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oQBoNUqd4GTOFacRsLar0VqTNSHraQXvmyQrL/MBqX090Lh+pkf9A=="
+    "signed_tx": "tx_+N8LAfhCuEA..."
   }
 }
 ```
 
-### Acknowledger receives unsigned off-chain state
+### Acknowledger receives a non-authenticated off-chain state
  * **method:** `channels.sign.update_ack`
  * **params:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsigned `channel_offchain` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_offchain` transaction | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -113,7 +113,7 @@ Roles:
   "params": {
     "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
     "data": {
-      "tx": "tx_+JU5AaEGrATZCq2SbvoJPO8phULArHp0My7fBW9SSptJ+5ys02IC+E24S/hJggI6AaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2ahAWccVUZGSUV1srSU9lFoIXEGY9hIk83S0jYDelTDPu6EAaDVKneBkzhWnEbC2q9FakzUh62kF75skKy/zAal9PdC4Zxbb8Q=",
+      "signed_tx": "tx_+JU5AaEGrATZCq...",
       "updates": [
         {
           "amount": 1,
@@ -128,13 +128,13 @@ Roles:
 }
 ```
 
-### Acknowledger signed off-chain state responsse
+### Acknowledger authenticated off-chain state responsse
  * **method:** `channels.update_ack`
  * **params:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | signed `channel_offchain` transaction | Yes |
+  | signed_tx | string | co-authenticated `channel_offchain` transaction | Yes |
 
 #### Example
 ```javascript
@@ -142,7 +142,7 @@ Roles:
   "jsonrpc": "2.0",
   "method": "channels.update_ack",
   "params": {
-    "tx": "tx_+N8LAfhCuEAGx0qykrlj5/DVq6RJ2AsMe6uiCL4TX8Emv1sC3TL2IdDp9S3jrzRQnIe6gWtM/9kR++JRGwVL+gs+O7SjCKYIuJf4lTkBoQasBNkKrZJu+gk87ymFQsCsenQzLt8Fb1JKm0n7nKzTYgL4TbhL+EmCAjoBoQGxtXe80yfLOeVebAJr1qdKGzXebAZQxK5R76t1nkFbZqEBZxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oQBoNUqd4GTOFacRsLar0VqTNSHraQXvmyQrL/MBqX090LhNHGU2A=="
+    "signed_tx": "tx_+N8LAfhCuE..."
   }
 }
 ```
@@ -154,14 +154,14 @@ Roles:
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | channel_id | string | channel id| Yes |
-  | data | object | description of the last co-signed state | Yes |
+  | data | object | description of the last mutually authenticated state | Yes |
 
  * **data:**
  
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | channel_id | string | channel id| Yes |
-  | round | object | the round of the last co-signed state | Yes |
+  | round | object | the round of the last mutually authenticated state | Yes |
 
 #### Example
 ```javascript
@@ -249,7 +249,7 @@ Roles:
 }
 ```
 
-### Depositor receives unsigned deposit transaction
+### Depositor receives an non-authenticated deposit transaction
  * **method:** `channels.sign.deposit_tx`
  * **params:**
 
@@ -262,7 +262,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsigned `channel_deposit` transaction | Yes |
+  | signed_tx | string | `channel_deposit` transaction wrapped in a `signed_tx` with no authentication | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -273,7 +273,7 @@ Roles:
   "params": {
     "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
     "data": {
-      "tx": "tx_+HIzAaEGgofGx556dTISqbS/e2tCp1ROCgootioM4FHvduCHbgWhAbG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmAgCGEjCc5UAAoIGnTOuUnVM9QThcVqCCAFeJ51D7a6A4ldyhd3nuKg7lAglKqnZP",
+      "signed_tx": "tx_+HIzAaEGgofGx...",
       "updates": [
         {
           "amount": 2,
@@ -287,13 +287,13 @@ Roles:
 }
 ```
 
-### Depositor signed deposit response
+### Depositor authenticates deposit response
  * **method:** `channels.deposit_tx`
  * **params:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | signed `channel_deposit` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_deposit` transaction | Yes |
 
 #### Example
 ```javascript
@@ -301,12 +301,12 @@ Roles:
   "jsonrpc": "2.0",
   "method": "channels.deposit_tx",
   "params": {
-    "tx": "tx_+LwLAfhCuEBpdn6/h5FeyYL9/JMO3XqEDdmaxrtsqamG4XJJAUNoQI0DtzQVkGHWC4lia9rcsNa9vdBj0a5o8S7fGE3I8Z0FuHT4cjMBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YCAIYSMJzlQACggadM65SdUz1BOFxWoIIAV4nnUPtroDiV3KF3ee4qDuUCCYBI8r0="
+    "signed_tx": "tx_+LwLAfhCuEB..."
   }
 }
 ```
 
-### Acknowledger receives unsigned deposit transaction
+### Acknowledger receives a non-authenticated deposit transaction
  * **method:** `channels.sign.deposit_ack`
  * **params:**
 
@@ -319,7 +319,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsigned `channel_deposit` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_deposit` transaction | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -330,7 +330,7 @@ Roles:
   "params": {
     "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
     "data": {
-      "tx": "tx_+HIzAaEGgofGx556dTISqbS/e2tCp1ROCgootioM4FHvduCHbgWhAbG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmAgCGEjCc5UAAoIGnTOuUnVM9QThcVqCCAFeJ51D7a6A4ldyhd3nuKg7lAglKqnZP",
+      "signed_tx": "tx_+LwLAfhCuEB..."
       "updates": [
         {
           "amount": 2,
@@ -344,13 +344,13 @@ Roles:
 }
 ```
 
-### Acknowledger signed deposit responsse
+### Acknowledger authenticates deposit responsse
  * **method:** `channels.deposit_ack`
  * **params:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | signed `channel_deposit` transaction | Yes |
+  | signed_tx | string | co-authenticated `channel_deposit` transaction | Yes |
 
 #### Example
 ```javascript
@@ -358,7 +358,7 @@ Roles:
   "jsonrpc": "2.0",
   "method": "channels.deposit_ack",
   "params": {
-    "tx": "tx_+LwLAfhCuEBa3V9ZXezm+ya0GQGg7RBpS6DbYhiE10oRgSuHpn0JFsdcUz0f2Ldsi1I62JxkLmDAqhxIgYUeya0PP1M4PXsOuHT4cjMBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YCAIYSMJzlQACggadM65SdUz1BOFxWoIIAV4nnUPtroDiV3KF3ee4qDuUCCXv07Q4="
+    "signed_tx": "tx_+LwLAfhCu..."
   }
 }
 ```
@@ -387,7 +387,7 @@ Roles:
 }
 ```
 
-### Withdrawer receives unsigned withdraw transaction
+### Withdrawer receives a non-authenticated withdraw transaction
  * **method:** `channels.sign.withdraw_tx`
  * **payload:**
 
@@ -400,7 +400,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsigned `channel_withdraw` transaction | Yes |
+  | signed_tx | string | `channel_withdraw` transaction wrapped in a `signed_tx` with no authentication | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -411,7 +411,7 @@ Roles:
   "params": {
     "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
     "data": {
-      "tx": "tx_+HI0AaEGgofGx556dTISqbS/e2tCp1ROCgootioM4FHvduCHbgWhAbG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmAgCGEjCc5UAAoEUfp6Gv3gLYNHIy08ITGVY9Xv7I69D5Yu0FUzyRePtuBAqOT2uR",
+      "signed_tx": "tx_+HI0AaEG...",
       "updates": [
         {
           "amount": 2,
@@ -425,13 +425,13 @@ Roles:
 }
 ```
 
-### Withdrawer signed withdraw response
+### Withdrawer authenticates withdraw response
  * **method:** `channels.withdraw_tx`
  * **params:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | signed `channel_withdraw` transaction | Yes |
+  | signed_tx | string | co-authenticated `channel_withdraw` transaction | Yes |
 
 #### Example
 ```javascript
@@ -439,12 +439,12 @@ Roles:
   "jsonrpc": "2.0",
   "method": "channels.withdraw_tx",
   "params": {
-    "tx": "tx_+LwLAfhCuECmn6QR8/VwIvc9avwtzuauqSn0NmmDZxYud6Oik+Q0pp6Lev/oK++PdEvZciumZpUbBdlfl3LIqHxc31+43NINuHT4cjQBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YCAIYSMJzlQACgRR+noa/eAtg0cjLTwhMZVj1e/sjr0Pli7QVTPJF4+24ECi9pymI="
+    "signed_tx": "tx_+LwLAfhC..."
   }
 }
 ```
 
-### Acknowledger receives unsigned withdraw transaction
+### Acknowledger receives a non-authenticated withdraw transaction
  * **method:** `channels.sign.withdraw_ack`
  * **params:**
 
@@ -457,7 +457,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsigned `channel_withdraw` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_withdraw` transaction | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -468,7 +468,7 @@ Roles:
   "params": {
     "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
     "data": {
-      "tx": "tx_+HI0AaEGgofGx556dTISqbS/e2tCp1ROCgootioM4FHvduCHbgWhAbG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmAgCGEjCc5UAAoEUfp6Gv3gLYNHIy08ITGVY9Xv7I69D5Yu0FUzyRePtuBAqOT2uR",
+      "signed_tx": "tx_+LwLAfhC..."
       "updates": [
         {
           "amount": 2,
@@ -482,13 +482,13 @@ Roles:
 }
 ```
 
-### Acknowledger signed withdraw responsse
+### Acknowledger authenticates withdraw responsse
  * **method:** `channels.withdraw_ack`
  * **params:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | signed `channel_withdraw` transaction | Yes |
+  | signed_tx | string | co-authenticated `channel_withdraw` transaction | Yes |
 
 #### Example
 ```javascript
@@ -496,7 +496,7 @@ Roles:
   "jsonrpc": "2.0",
   "method": "channels.withdraw_ack",
   "params": {
-    "tx": "tx_+LwLAfhCuEBWNxnIoMVbGTp+NkKKg8NlXbgVe7PbdpiTBsq0qGD3gwDE4waZEjmlWUJKVi3VxHbmdhdKdZ1lFKkVtBfMM3YEuHT4cjQBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YCAIYSMJzlQACgRR+noa/eAtg0cjLTwhMZVj1e/sjr0Pli7QVTPJF4+24ECjOLPuM="
+    "signed_tx": "tx_+LwLAf..."
   }
 }
 ```
@@ -684,7 +684,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsigned `channel_close_mutual` transaction | Yes |
+  | signed_tx | string | `channel_close_mutual` transaction wrapped in a `signed_tx` with no authentication | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -695,7 +695,7 @@ Roles:
   "params": {
     "channel_id": "ch_iNuPMRW1pCL17hXT8nHQgW1vMKfpBdsvztuYdM2VpPRh8PYVP",
     "data": {
-      "tx": "tx_+F01AaEGXfP3k2aiLfV2X4HR75EK/1UzKSNqQqHHe0CN8/jQc6GhAbG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmhjaR1q+//4YbSOtX4AEAhhIwnOVAAAWwHvpF",
+      "signed_tx": "tx_+F01Aa...",
       "updates": []
     }
   },
@@ -703,13 +703,13 @@ Roles:
 }
 ```
 
-### Closer returns signed mutual close
+### Closer returns an authenticated mutual close
  * **method:** `channels.shutdown_sign`
  * **params:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | signed `channel_close_mutual` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_close_mutual` transaction | Yes |
 
 #### Example
 ```javascript
@@ -717,7 +717,7 @@ Roles:
   "jsonrpc": "2.0",
   "method": "channels.shutdown_sign",
   "params": {
-    "tx": "tx_+KcLAfhCuEC1uzCpbr9f7MYnkb5u/iL9okyhJTcRMGlTIqgMsari9Kdomn+Z+P3FmcAw1ma4GENBPYF/hl/X9EJi1fktkKAOuF/4XTUBoQZd8/eTZqIt9XZfgdHvkQr/VTMpI2pCocd7QI3z+NBzoaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGNpHWr7//hhtI61fgAQCGEjCc5UAABc176hQ="
+    "signed_tx": "tx_+KcLAfhC..."
   }
 }
 ```
@@ -735,7 +735,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | unsigned `channel_close_mutual` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_close_mutual` transaction | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -746,7 +746,7 @@ Roles:
   "params": {
     "channel_id": "ch_iNuPMRW1pCL17hXT8nHQgW1vMKfpBdsvztuYdM2VpPRh8PYVP",
     "data": {
-      "tx": "tx_+F01AaEGXfP3k2aiLfV2X4HR75EK/1UzKSNqQqHHe0CN8/jQc6GhAbG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmhjaR1q+//4YbSOtX4AEAhhIwnOVAAAWwHvpF",
+      "signed_tx": "tx_+KcLAfhC..."
       "updates": []
     }
   },
@@ -754,13 +754,13 @@ Roles:
 }
 ```
 
-### Acknowledger returns signed mutual close
+### Acknowledger returns an authenticated mutual close
  * **method:** `channels.shutdown_sign_ack`
  * **params:**
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | tx | string | signed `channel_close_mutual` transaction | Yes |
+  | signed_tx | string | co-authenticated `channel_close_mutual` transaction | Yes |
 
 #### Example
 ```javascript
@@ -768,7 +768,7 @@ Roles:
   "jsonrpc": "2.0",
   "method": "channels.shutdown_sign_ack",
   "params": {
-    "tx": "tx_+KcLAfhCuEA2hK6nlhTF+hVjLYYoh09xVn5M4BrSwB3dXyjteMotYj8/+WpdbJwvO1KBUsg2p2zedlZnnVfR5g7O4m1q9OkOuF/4XTUBoQZd8/eTZqIt9XZfgdHvkQr/VTMpI2pCocd7QI3z+NBzoaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGNpHWr7//hhtI61fgAQCGEjCc5UAABY9XDr0="
+    "signed_tx": "tx_+KcLAf..."
   }
 }
 ```
@@ -787,34 +787,34 @@ Roles:
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | info | string | specific type of event | Yes |
-  | tx | string | co-signed transaction that is posted on-chain | Yes |
+  | signed_tx | string | a mutually authenticated transaction that is posted on-chain | Yes |
   | type | transaction type | Yes |
 
  The `info` values could be:
  * `"funding_signed"` - reported by the `initiator`, indicating that a `channel_create_tx` has been
-   singly signed by the `initiator` client, and sent to the `responder` for co-signing.
+   singly authenticated by the `initiator` client, and sent to the `responder` for co-signing.
  * `"funding_created"` - reported by the `responder`, indicating that a `channel_create_tx` has been
-   co-signed, and will be pushed to the mempool.
+   co-authenticated, and will be pushed to the mempool.
  * `"deposit_signed"` - reported by the `depositor`, indicating that a `channel_deposit_tx` has been
-   singly signed by the `depositor` client, and sent to the `acknowledger` for co-signing.
+   singly authenticated by the `depositor` client, and sent to the `acknowledger` for co-signing.
  * `"deposit_created"` - reported by the `acknowledger`, indicating that a `channel_deposit_tx` has been
-   co-signed, and will be pushed to the mempool.
+   co-authenticated, and will be pushed to the mempool.
  * `"withdraw_signed"` - reported by the `withdrawer`, indicating that a `channel_withdraw_tx` has been
-   singly signed by the `withdrawer` client, and sent to the `acknowledger` for co-signing.
+   singly authenticated by the `withdrawer` client, and sent to the `acknowledger` for co-signing.
  * `"withdraw_created"` - reported by the `acknowledger`, indicating that a `channel_withdraw_tx` has been
-   co-signed, and will be pushed to the mempool.
+   co-authenticated, and will be pushed to the mempool.
  * `"channel_changed"` - reported by both parties, indicating that the fsm has detected a channel-related
    transaction on-chain. Note that this will be reported also for the `channel_create_tx`, once it
    appears on-chain. This means that each client will get _two_ `on_chain_tx` reports for the
    create, deposit, withdraw and close_mutual transactions.
  * `"close_mutual"` - reported by both parties, indicating that a `channel_close_mutual_tx` has been
-   co-signed, and will be pushed to the mempool.
+   co-authenticated, and will be pushed to the mempool.
  * `"channel_closed"` - reported by both parties, when the on-chain channel state is detected to transition
    to a `closed` state.
  * `"solo_closing"` - reported by both parties, when the on-chain channel state is detected to transition
    to a proper `solo_closing` state - that is, with the latest known state.
  * `"can_slash"` - reported by both parties, when the on-chain channel state is detected to transition to
-   to an improper `solo_closing` state - that is, when there exists a later mutually signed state.
+   to an improper `solo_closing` state - that is, when there exists a later mutually authenticated state.
 
 #### Example
 ```javascript
@@ -825,7 +825,7 @@ Roles:
     "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
     "data": {
       "info": "deposit_signed",
-      "tx": "tx_+P4LAfiEuEBa3V9ZXezm+ya0GQGg7RBpS6DbYhiE10oRgSuHpn0JFsdcUz0f2Ldsi1I62JxkLmDAqhxIgYUeya0PP1M4PXsOuEBpdn6/h5FeyYL9/JMO3XqEDdmaxrtsqamG4XJJAUNoQI0DtzQVkGHWC4lia9rcsNa9vdBj0a5o8S7fGE3I8Z0FuHT4cjMBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YCAIYSMJzlQACggadM65SdUz1BOFxWoIIAV4nnUPtroDiV3KF3ee4qDuUCCZiFbkw=",
+      "signed_tx": "tx_+KcLAf..."
       "type": "channel_deposit_tx"
     }
   },
@@ -862,7 +862,7 @@ Roles:
  
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
- | tx | string | unsigned `channel_close_solo` transaction | Yes |
+ | signed_tx | string | `channel_close_solo` transaction wrapped in a `signed_tx` with no authentication | Yes |
  | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -873,7 +873,7 @@ Roles:
   "params": {
     "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
     "data": {
-      "tx": "tx_+QGfNgGhBnHSbcHwBwtR5QRwS0O1mI1Gw/8pkaOwcHQap09BPoMFoQGxtXe80yfLOeVebAJr1qdKGzXebAZQxK5R76t1nkFbZoC5AUz5AUk8AfkBP/kBPKAeoRWJfw9r7+McQQHdwLN6tS/aqbQUwm8iJYXMIOcncfkBGPh0oB6hFYl/D2vv4xxBAd3As3q1L9qptBTCbyIlhcwg5ydx+FGAgICAgICg7QIWPGJsh916G7zCAZpUeaRQuGVamwjR8JaxQKEPIwmAgICAoEJmfgNwrMeYsFATTDpQ+Y9abOcHR6KUvw5o9LdShJsUgICAgID4T6BCZn4DcKzHmLBQE0w6UPmPWmznB0eilL8OaPS3UoSbFO2gMbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aLygoBAIY/qiUiX//4T6DtAhY8YmyH3XobvMIBmlR5pFC4ZVqbCNHwlrFAoQ8jCe2gNxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oSLygoBAIYkYTnKgAHAwMDAwACGG0jrV+AACPykTFA=",
+      "signed_tx": "tx_+QGfNgGhBn...",
       "updates": []
     }
   },
@@ -881,13 +881,13 @@ Roles:
 }
 ```
 
-### Closer returns signed solo close
+### Closer returns an authenticated solo close
  * **method:** `channels.close_solo_sign`
  * **params:**
  
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
- | tx | string | signed `channel_close_solo` transaction | Yes |
+ | signed_tx | string | solo-authenticated `channel_close_solo` transaction | Yes |
 
 #### Example
 ```javascript
@@ -895,7 +895,7 @@ Roles:
   "jsonrpc": "2.0",
   "method": "channels.close_solo_sign",
   "params": {
-    "tx": "tx_+QHrCwH4QrhACuHMgbcTg1inUPAUSmhXfODKWI2CFchqpav9VDaBlw+xng9Ld0eLPgysTvks47iVHn4d/11VlkEi6iLRBDkIBLkBovkBnzYBoQZx0m3B8AcLUeUEcEtDtZiNRsP/KZGjsHB0GqdPQT6DBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aAuQFM+QFJPAH5AT/5ATygHqEViX8Pa+/jHEEB3cCzerUv2qm0FMJvIiWFzCDnJ3H5ARj4dKAeoRWJfw9r7+McQQHdwLN6tS/aqbQUwm8iJYXMIOcncfhRgICAgICAoO0CFjxibIfdehu8wgGaVHmkULhlWpsI0fCWsUChDyMJgICAgKBCZn4DcKzHmLBQE0w6UPmPWmznB0eilL8OaPS3UoSbFICAgICA+E+gQmZ+A3Csx5iwUBNMOlD5j1ps5wdHopS/Dmj0t1KEmxTtoDG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmi8oKAQCGP6olIl//+E+g7QIWPGJsh916G7zCAZpUeaRQuGVamwjR8JaxQKEPIwntoDccVUZGSUV1srSU9lFoIXEGY9hIk83S0jYDelTDPu6Ei8oKAQCGJGE5yoABwMDAwMAAhhtI61fgAAiybuMt"
+    "signed_tx": "tx_+QHrCwH4Q..."
   }
 }
 ```
@@ -928,7 +928,7 @@ Roles:
  
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
- | tx | string | unsigned `channel_settle` transaction | Yes |
+ | signed_tx | string | `channel_settle` transaction wrapped in a `signed_tx` with no authentication | Yes |
  | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -939,20 +939,20 @@ Roles:
   "params": {
     "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
     "data": {
-      "tx": "tx_+F04AaEGcdJtwfAHC1HlBHBLQ7WYjUbD/ymRo7BwdBqnT0E+gwWhAWccVUZGSUV1srSU9lFoIXEGY9hIk83S0jYDelTDPu6Ehj+qJSJf/4YkYTnKgAEAhhtI61fgAAIwYkCX",
+      "signed_tx": "tx_+F04AaE...",
       "updates": []
     }
   },
   "version": 1
 }
 ```
-### Settler returns signed settle
+### Settler returns an authenticated settle
  * **method:** `channels.settle_sign`
  * **params:**
  
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
- | tx | string | signed `channel_settle` transaction | Yes |
+ | signed_tx | string | solo-authenticated `channel_settle` transaction | Yes |
 
 #### Example
 ```javascript
@@ -960,7 +960,7 @@ Roles:
   "jsonrpc": "2.0",
   "method": "channels.settle_sign",
   "params": {
-    "tx": "tx_+KcLAfhCuEBdI4Uesh3hYjGQ2BAo0FzD1YPyZlzhy8HyNgf7OzrQdVM44oWQX0yFtmk31HaSLuIJGNDv3hEgdLwe0iZz3LEEuF/4XTgBoQZx0m3B8AcLUeUEcEtDtZiNRsP/KZGjsHB0GqdPQT6DBaEBZxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oSGP6olIl//hiRhOcqAAQCGG0jrV+AAAgurGvs="
+    "signed_tx": "tx_+KcLAfhCuEBdI..."
   }
 }
 ```
@@ -996,7 +996,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | state | string | co-signed last state transaction | Yes |
+  | state | string | a mutually authenticated last state transaction | Yes |
 
 #### Example
 
@@ -1007,7 +1007,7 @@ Roles:
   "params": {
     "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
     "data": {
-      "state": "tx_+QENCwH4hLhAP+EiPpXFO80MdqGnw6GkaAYpOHCvcP/KBKJZ5IIicYBItA9s95zZA+RX1DNNheorlbZYKHctN3ZyvKnsFa7HDrhAYqWNrW8oDAaLj0JCUeW0NfNNhs4dKDJoHuuCdWhnX4r802c5ZAFKV7EV/mHihVXzgLyaRaI/SVw2KS+z471bAriD+IEyAaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGP6olImAAoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhIYkYTnKgAACCgCGEjCc5UAAwKCjPk7CXWjSHTO8V2Y9WTad6D/5sB8yCR8WumWh0WxWvwdz6zEk"
+      "state": "tx_+QENCwH4hLh..."
     }
   },
   "version": 1
@@ -1056,8 +1056,8 @@ Roles:
  | ---- | ---- |
  | `trees` | channel state trees |
  | `calls` | channel call state tree |
- | `half_signed_tx` | channel latest half signed tx or `''` if equal to latest signed tx |
- | `signed_tx` | channel latest fully signed tx or `''` if not available |
+ | `half_signed_tx` | channel latest half authenticated tx or `''` if equal to latest authenticated tx |
+ | `signed_tx` | channel latest mutually authenticated tx or `''` if not available |
 
 #### Example
 
@@ -1079,8 +1079,8 @@ Roles:
   "result": {
     "calls": "cs_yYICbgGEwz8BwHtqgWY=",
     "half_signed_tx": "",
-    "signed_tx": "tx_+QEhCwH4hLhABTr2vMSsofbc3iKbPU7pvPbuMU7209MqJGy57u/CpyCusGUWYmJcKwbo1BEINLd07nfQVw5+aCsJ5HSYs5gNBrhABsdKspK5Y+fw1aukSdgLDHurogi+E1/BJr9bAt0y9iHQ6fUt4680UJyHuoFrTP/ZEfviURsFS/oLPju0owimCLiX+JU5AaEGrATZCq2SbvoJPO8phULArHp0My7fBW9SSptJ+5ys02IC+E24S/hJggI6AaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2ahAWccVUZGSUV1srSU9lFoIXEGY9hIk83S0jYDelTDPu6EAaDVKneBkzhWnEbC2q9FakzUh62kF75skKy/zAal9PdC4ffJBsU=",
-    "trees": "ss_+Ks+AIrJggJtAYTDPwHAismCAm4BhMM/AcCKyYICbwGEwz8BwIrJggJwAYTDPwHAismCAnEBhMM/AcC4cPhuggJyAbho+GY/AfhisO9AAaCxtXe80yfLOeVebAJr1qdKGzXebAZQxK5R76t1nkFbZovKCgEAhj+qJSJf/rDvQAGgZxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oSLygoBAIYkYTnKgAJXk16b"
+    "signed_tx": "tx_+QEhCwH4hLhA...",
+    "trees": "ss_+Ks+AIrJggJtAY..."
   },
   "version": 1
 }
@@ -1140,13 +1140,13 @@ Roles:
       "vm_version": 3
     },
     "contract_state": {
-      "ck_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFSSB3aW4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACG5Hw1": "cv_sbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YlrDqa",
-      "ck_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJbm8sIEkgd2luAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8NuDd": "cv_sbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YlrDqa",
-      "ck_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMSSBjbGFpbSB0aGlzAAAAAAAAAAAAAAAAAAAAAAAAAACEEDl2": "cv_sbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YlrDqa",
-      "ck_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArMtts": "cv_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPE19M0=",
-      "ck_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPJ9AW0": "cv_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAS0AfA=",
-      "ck_ABQG4Fg=": "cv_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACDIq10LA12xQcUbe3+xpb7TFHBPbFVOWLUaz7/TKOGKmgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJEZpbGwgbWUgaW4gd2l0aCBzb21ldGhpbmcgcmVhc29uYWJsZQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKcyIL",
-      "ck_AZwSz9w=": "cv_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWD//////////////////////////////////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyVHQH",
+      "ck_AAAAAAAAAAAAAAAAAAAAAAA...": "cv_sbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YlrDqa",
+      "ck_AAAAAAAAAAAAAAAAAAAAAAA...": "cv_sbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YlrDqa",
+      "ck_AAAAAAAAAAAAAAAAAAAAAAA...": "cv_sbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YlrDqa",
+      "ck_AAAAAAAAAAAAAAAAAAAAAAA...": "cv_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA...",
+      "ck_AAAAAAAAAAAAAAAAAAAAAAA...": "cv_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA...",
+      "ck_ABQG4Fg=": "cv_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACDIq10LA12xQcUbe3+xpb7...",
+      "ck_AZwSz9w=": "cv_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAA...",
       "ck_AhzDreo=": "cv_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPJ9AW0"
     }
   },

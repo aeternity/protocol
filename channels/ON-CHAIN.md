@@ -2,18 +2,22 @@
 
 Operating a state channel requires, at least, an initial setup via a
 `channel_create` transaction, that locks up a configurable amount of coins from
-each involved party in the channel. This requires consent, in the form of
-signatures, from all participants.
+each involved party in the channel. This requires a consent, in the form of
+either signatures or generalized authentication contract call, from all
+participants. More information regarding authentication can be found
+[here](./authentication.md)
 
-In the ideal case, all on-chain transactions get signed off by all participants,
-implying that there are no disagreements. These operations can be committed
-immediately and will generally override all operations initiated unilaterally.
+In the ideal case, all on-chain transactions get authenticated by all
+participants, implying that there are no disagreements. These operations can
+be committed immediately and will generally override all operations initiated
+unilaterally.
 
-Transactions not signed off by everyone, except the `channel_snapshot_solo`, can
-be disputed via `channel_slash` and `channel_force_progress_tx` transactions.
-During normal operation, these solo transactions can be disputed indefinitely.
-If the channel is in the closing state, disputes have to happen within the
-pre-negotiated `lock_period`, given that closure requires a bounded finality.
+Transactions not authenticated by everyone, except the `channel_snapshot_solo`,
+can be disputed via `channel_slash` and `channel_force_progress_tx`
+transactions. During normal operation, these solo transactions can be disputed
+indefinitely. If the channel is in the closing state, disputes have to happen
+within the pre-negotiated `lock_period`, given that closure requires a bounded
+finality.
 
 Each transaction updating on-chain state provides two fields essential for
 future conflict resolution: `round` and `state_hash`. The state hash is the root
@@ -101,8 +105,9 @@ taken from their balance and the `nonce` of their account MUST be incremented.
 If either of the participants is a [Generalized
 account](../generalized_accounts/generalized_accounts.md) the channel create
 will also create an extra entry in the contract state tree, containing a frozen
-authentication state that will be used for off-chain signing and verification
-in off-chain updates (potentially eventually enforced on-chain).
+authentication state that will be used for off-chain authentication and
+verification in off-chain updates (potentially eventually enforced on-chain).
+A more detailed explaination can be found [here](./authentication.md)
 
 #### Requirements
 
@@ -117,12 +122,12 @@ in off-chain updates (potentially eventually enforced on-chain).
 
 ## Updating a channel
 
-An update to an open channel requires the signatures of all participants and a
-channel identification (`channel_id`).
+An update to an open channel requires the authentication of all participants
+and a channel identification (`channel_id`).
 
-Both `channel_deposit` and `channel_withdraw` MUST be signed by all involved
-parties, since changing channel balances might change the dynamics of code
-running in a channel.
+Both `channel_deposit` and `channel_withdraw` MUST be authenticated by all
+involved parties, since changing channel balances might change the dynamics
+of code running in a channel.
 
 The `channel_id` is computed from the public key of the initiator, the nonce of
 the create transaction and the public key of the responder using Blake2b (256
@@ -222,15 +227,16 @@ Serialization defined [here](../serializations.md#channel-snapshot-solo-transact
 
 - `channel_id`: channel id as recorded on-chain
 - `from_id`: the account that posts the transaction
-- `payload`: co-signed off-chain state of the same channel
+- `payload`: an off-chain state transaction of the same channel authenticated
+  by both parties
 - `ttl`: blockheight target until which this transaction can be included
 - `fee`: transaction fee
 - `nonce`: the `from_id` account nonce
 
 The `from_id` account MUST be a participant in the target channel. The `payload`
-MUST be a co-signed off-chain state. It MUST be part of the same channel
-(containing same channel id) and it MUST have a `round` greater than the
-one currently recorded on-chain.
+MUST be an off-chain state. It MUST provide correct authentication methods for
+both parties. It MUST be part of the same channel (containing same channel id)
+and it MUST have a `round` greater than the one currently recorded on-chain.
 
 This transaction MUST NOT trigger the `lock_period` and MUST NOT be used when
 the channel is in the locked state. It can be used to overwrite a state produced
@@ -247,7 +253,7 @@ If this transaction is valid then it sets:
 
 We expect channels to be only closed in the case of non-cooperation or malicious
 behaviour. If all parties decide to close the channel, closing is just a matter
-of issuing one on-chain transaction, signed by everyone involved.
+of issuing one on-chain transaction, authenticated by everyone involved.
 
 In the case of a solo closing, operations are subject to the `lock_period`,
 during which they can be disputed via a `channel_slash`.
@@ -277,7 +283,7 @@ dedicated to the channel, the excess of coins is [locked](../consensus/locking.m
 
 #### Requirements
 
-This transaction MUST have valid signatures of all involved parties.
+This transaction MUST have valid authentication of all involved parties.
 
 This transaction MUST NOT be disputed and any ongoing dispute MUST be considered
 resolved by this transaction.
@@ -310,8 +316,8 @@ Serialization defined [here](../serializations.md#channel-close-solo-transaction
 
 - `channel_id`: channel id as recorded on-chain
 - `from_id`: participant of the channel that posts the closing transaction
-- `payload`: empty or a transaction proving that the proof of inclusion is part
-  of the channel
+- `payload`: empty or an authenticated off-chain state proving that the proof
+  of inclusion is part of the channel
 - `poi`: proof of inclusion
 - `ttl`: blockheight target until which this transaction can be included
 - `fee`: transaction fee
@@ -328,7 +334,8 @@ pushed in subsequent transactions. It is up to participants to decide if they
 want to post them at all. Thus the accumulative balances of the accounts in the
 solo-close transaction can be lower than the channel balance persisted on-chain.
 
-The `payload` can be either empty or a signed transaction.
+The `payload` can be either empty or an authentication off-chain state
+transaction.
 
 
 #### Empty payload
@@ -343,10 +350,10 @@ based on the `solo_round` and thus can still be disputed.
 - `Channel(channel_id).locked_until := Block.height + Channel(channel_id).lock_period`
 
 
-#### Transaction payload
+#### Off-chain transaction payload
 
 If the payload is a transaction it MUST be a `channel_offchain_tx`. It MUST be
-co-signed.
+authenticated by both participants.
 
 Payload is a valid transaction that has:
 
@@ -397,7 +404,8 @@ Serialization defined [here](../serializations.md#channel-settle-transaction)
 After this transaction has been included in a block, the channel MUST be
 considered closed and allow no further modifications.
 
-The transaction MUST be signed using private key corresponding to the public key `from_id`.
+The transaction MUST be authenticated using method corresponding to the public
+key `from_id`.
 
 The amounts must correspond to the ones on-chain, provided by the last
 `channel_close_solo` or `channel_slash`. The sum of those final amounts form
@@ -420,9 +428,9 @@ participant (according to the contract's execution).
 
 The force progress is based on what is considered to be the latest off-chain
 state. We have no way of proving that this state is actually up-to-date so any
-progress on chain can always be disputed by providing a co-signed state with a
-higher round number than the round number that the to be disputed
-`channel_force_progress_tx` transaction used.
+progress on chain can always be disputed by providing an authenticated by both
+participants off-chain state with a higher round number than the round number
+that the to be disputed `channel_force_progress_tx` transaction used.
 
 If the channel is in the closing state, issuing a `channel_force_progress_tx`
 locks it for `lock_period` blocks, during which the update can be disputed. This
@@ -432,8 +440,9 @@ a new round has been produced on chain.
 It is worth mentioning that what is to be disputed is the off-chain state that
 the force progress had been based on and not the forcing of progress itself. If
 an older state had been provided by the forcing party, the other party can post
-a newer co-signed off-chain state (via a snapshot for example). The co-signed
-state with the same or greater round will replace the on-chain produced one.
+a newer authenticated off-chain state (via a snapshot for example). The
+authenticated by both participants off-chain state with the same or greater
+round will replace the on-chain produced one.
 
 
 ### `channel_force_progress_tx`
@@ -442,8 +451,8 @@ Serialization defined [here](../serializations.md#channel-solo-force-progress-tr
 
 - `channel_id`: channel id as recorded on-chain
 - `from_id`: participant of the channel that posts the force progress transaction
-- `payload`: empty or a transaction proving that the state trees are part of the
-  channel
+- `payload`: empty or an off-chain state transaction proving that the state trees
+  are part of the channel
 - `round`: channel's next round
 - `update`: channel off-chain update that contains the contract call with gas
   limit and gas prices to be consumed for the on-chain execution
@@ -464,7 +473,7 @@ produced.
 If this transaction is sent while the channel is in the `closing` state, it will
 transition the channel into the `locked` state for the next `lock_period` blocks.
 
-The payload can be either empty or a signed transaction.
+The payload can be either empty or an authenticated off-chain state transaction.
 
 
 #### Empty Payload
@@ -483,10 +492,10 @@ Additionally, if the channel is in the `closing` state:
 - `Channel(channel_id).locked_until := Block.height + Channel(channel_id).lock_period`
 
 
-#### Transaction Payload
+#### Off-chain transaction Payload
 
 If the payload is a transaction it MUST be a `channel_offchain_tx`. It MUST be
-co-signed.
+authenticated by both participants.
 
 An off-chain transaction payload is a valid transaction if it has:
 
@@ -567,7 +576,7 @@ cases.
 The contract execution consumes gas. The `update` itself defines both the gas
 limit and the gas price. After the contract call has been executed and the real
 gas consumption has been calculated, the balance of the account posting the
-transaction is updated to pay the gas fee. Since this is not a co-signed
+transaction is updated to pay the gas fee. Since this is not a mutual
 transaction but rather a unilateral one, the initiator of the progress
 enforcement pays the fees.
 
@@ -644,9 +653,9 @@ expire and can post as many `channel_force_progress_tx` as he wants, e.g. at
 arrives at `solo_round := 31`. The `round` is still at 23.
 
 Now if Alice returns at `chain_height := 1110`, she can still dispute the
-*initial* update issued by Bob at `chain_height := 1000` by providing a
-co-signed payload with `round := 24` or higher via either a `channel_force_progress_tx`
-or a `channel_snapshot_solo`.
+*initial* update issued by Bob at `chain_height := 1000` by providing an
+authenticated by both payload with `round := 24` or higher via either a
+`channel_force_progress_tx` or a `channel_snapshot_solo`.
 
 
 ### Force progress dispute with closing channel example
@@ -668,8 +677,8 @@ to run out at `chain_height == 1111`.
 
 Now it is important to note, that at even at `chain_height := 1110` Alice can
 still dispute the *initial* update issued by Bob at `chain_height := 1000` by
-providing a co-signed payload with `round := 24` or higher but her dispute would
-bump the lock by `lock_period` too.
+providing an authenticated by both payload with `round := 24` or higher but her
+dispute would bump the lock by `lock_period` too.
 
 
 ### `channel_slash`
@@ -677,16 +686,16 @@ bump the lock by `lock_period` too.
 If a malicious party sent a `channel_close_solo` or `channel_force_progress_tx`
 with an outdated state, the honest party has the opportunity to issue a
 `channel_slash` transaction. This transaction MUST include a state with a higher
-`round` number than the one being disputed, signed by all peers for a successful
-challenge.
+`round` number than the one being disputed, authenticated by all peers for a
+successful challenge.
 
 Serialization defined [here](../serializations.md#channel-slash-transaction)
 
 
 - `channel_id`: channel id as recorded on-chain
 - `from_id`: channel participant or delegate that posts the slashing transaction
-- `payload`: transaction proving that the proof of inclusion is part of the
-  channel
+- `payload`: an off-chain transaction proving that the proof of inclusion is part
+  of the channel
 - `poi`: proof of inclusion
 - `ttl`: blockheight target until which this transaction can be included
 - `fee`: transaction fee
@@ -700,7 +709,8 @@ pushed in subsequent transactions. It is up to participants to decide if they
 want to post them at all. Thus the accumulative balances of the accounts in the
 slash transaction can be lower than the channel balance persisted on-chain.
 
-The payload can be either empty or a signed transaction.
+The payload can be either empty or an authenticated by both off-chain state
+transaction.
 
 
 #### Empty payload
@@ -715,10 +725,10 @@ based on the `solo_round` and thus can still be disputed.
 - `Channel(channel_id).locked_until := Block.height + Channel(channel_id).lock_period`
 
 
-#### Transaction payload
+#### Off-chain transaction payload
 
 If the payload is a transaction it MUST be a `channel_offchain_tx`. It MUST be
-co-signed.
+authenticated by both peers.
 
 Payload is a valid transaction that has:
 
@@ -739,7 +749,7 @@ If true, the following changes will be made:
 
 #### Requirements
 
-MUST be signed using private key corresponding to the public key `from_id`.
+MUST be authenticated using the method corresponding to the public key `from_id`.
 
 
 ## Channel state tree
@@ -758,7 +768,7 @@ channel.
 - `responder_amount`
 - `channel_reserve`
 - `state_hash`: last published state_hash
-- `round`: last known co-signed round
+- `round`: last known round
 - `solo_round`: last round produced via a `channel_force_progress_tx`
 - `lock_period`: agreed upon locking period by peers
 - `locked_until`: on-chain channel height after which the channel can be settled
