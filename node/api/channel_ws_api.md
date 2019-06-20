@@ -10,6 +10,8 @@ The WebSocket API provides the following actions:
  * [Contracts](#contracts)
  * [Generic message](#generic-message)
  * [Close mutual](#close-mutual)
+ * [Close solo](#close-solo)
+ * [Settle](#settle)
  * [Leave](#leave)
  * [On-chain transactions](#on-chain-transactions)
  * [Info messages](#info-messages)
@@ -784,8 +786,35 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
+  | info | string | specific type of event | Yes |
   | tx | string | co-signed transaction that is posted on-chain | Yes |
-  | updates | list | off-chain updates | Yes |
+  | type | transaction type | Yes |
+
+ The `info` values could be:
+ * `"funding_signed"` - reported by the `initiator`, indicating that a `channel_create_tx` has been
+   singly signed by the `initiator` client, and sent to the `responder` for co-signing.
+ * `"funding_created"` - reported by the `responder`, indicating that a `channel_create_tx` has been
+   co-signed, and will be pushed to the mempool.
+ * `"deposit_signed"` - reported by the `depositor`, indicating that a `channel_deposit_tx` has been
+   singly signed by the `depositor` client, and sent to the `acknowledger` for co-signing.
+ * `"deposit_created"` - reported by the `acknowledger`, indicating that a `channel_deposit_tx` has been
+   co-signed, and will be pushed to the mempool.
+ * `"withdraw_signed"` - reported by the `withdrawer`, indicating that a `channel_withdraw_tx` has been
+   singly signed by the `withdrawer` client, and sent to the `acknowledger` for co-signing.
+ * `"withdraw_created"` - reported by the `acknowledger`, indicating that a `channel_withdraw_tx` has been
+   co-signed, and will be pushed to the mempool.
+ * `"channel_changed"` - reported by both parties, indicating that the fsm has detected a channel-related
+   transaction on-chain. Note that this will be reported also for the `channel_create_tx`, once it
+   appears on-chain. This means that each client will get _two_ `on_chain_tx` reports for the
+   create, deposit, withdraw and close_mutual transactions.
+ * `"close_mutual"` - reported by both parties, indicating that a `channel_close_mutual_tx` has been
+   co-signed, and will be pushed to the mempool.
+ * `"channel_closed"` - reported by both parties, when the on-chain channel state is detected to transition
+   to a `closed` state.
+ * `"solo_closing"` - reported by both parties, when the on-chain channel state is detected to transition
+   to a proper `solo_closing` state - that is, with the latest known state.
+ * `"can_slash"` - reported by both parties, when the on-chain channel state is detected to transition to
+   to an improper `solo_closing` state - that is, when there exists a later mutually signed state.
 
 #### Example
 ```javascript
@@ -795,10 +824,144 @@ Roles:
   "params": {
     "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
     "data": {
-      "tx": "tx_+P4LAfiEuEBa3V9ZXezm+ya0GQGg7RBpS6DbYhiE10oRgSuHpn0JFsdcUz0f2Ldsi1I62JxkLmDAqhxIgYUeya0PP1M4PXsOuEBpdn6/h5FeyYL9/JMO3XqEDdmaxrtsqamG4XJJAUNoQI0DtzQVkGHWC4lia9rcsNa9vdBj0a5o8S7fGE3I8Z0FuHT4cjMBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YCAIYSMJzlQACggadM65SdUz1BOFxWoIIAV4nnUPtroDiV3KF3ee4qDuUCCZiFbkw="
+      "info": "deposit_signed",
+      "tx": "tx_+P4LAfiEuEBa3V9ZXezm+ya0GQGg7RBpS6DbYhiE10oRgSuHpn0JFsdcUz0f2Ldsi1I62JxkLmDAqhxIgYUeya0PP1M4PXsOuEBpdn6/h5FeyYL9/JMO3XqEDdmaxrtsqamG4XJJAUNoQI0DtzQVkGHWC4lia9rcsNa9vdBj0a5o8S7fGE3I8Z0FuHT4cjMBoQaCh8bHnnp1MhKptL97a0KnVE4KCii2KgzgUe924IduBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2YCAIYSMJzlQACggadM65SdUz1BOFxWoIIAV4nnUPtroDiV3KF3ee4qDuUCCZiFbkw=",
+      "type": "channel_deposit_tx"
     }
   },
   "version": 1
+}
+```
+
+## Close solo
+Roles:
+ * Closer
+
+### Closer initiated solo close
+ * **method:** `channels.close_solo`
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.close_solo",
+  "params": {}
+}
+```
+
+### Closer receives solo close
+ * **method:** `channels.sign.close_solo_sign`
+ * **params:**
+ 
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | channel_id | string | channel ID | Yes |
+ | data  | object | closing data | Yes |
+ 
+ * **data:**
+ 
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | tx | string | unsigned `channel_close_solo` transaction | Yes |
+ | updates | list | off-chain updates | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.close_solo_sign",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "tx": "tx_+QGfNgGhBnHSbcHwBwtR5QRwS0O1mI1Gw/8pkaOwcHQap09BPoMFoQGxtXe80yfLOeVebAJr1qdKGzXebAZQxK5R76t1nkFbZoC5AUz5AUk8AfkBP/kBPKAeoRWJfw9r7+McQQHdwLN6tS/aqbQUwm8iJYXMIOcncfkBGPh0oB6hFYl/D2vv4xxBAd3As3q1L9qptBTCbyIlhcwg5ydx+FGAgICAgICg7QIWPGJsh916G7zCAZpUeaRQuGVamwjR8JaxQKEPIwmAgICAoEJmfgNwrMeYsFATTDpQ+Y9abOcHR6KUvw5o9LdShJsUgICAgID4T6BCZn4DcKzHmLBQE0w6UPmPWmznB0eilL8OaPS3UoSbFO2gMbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aLygoBAIY/qiUiX//4T6DtAhY8YmyH3XobvMIBmlR5pFC4ZVqbCNHwlrFAoQ8jCe2gNxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oSLygoBAIYkYTnKgAHAwMDAwACGG0jrV+AACPykTFA=",
+      "updates": []
+    }
+  },
+  "version": 1
+}
+```
+
+### Closer returns signed solo close
+ * **method:** `channels.close_solo_sign`
+ * **params:**
+ 
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | tx | string | signed `channel_close_solo` transaction | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.close_solo_sign",
+  "params": {
+    "tx": "tx_+QHrCwH4QrhACuHMgbcTg1inUPAUSmhXfODKWI2CFchqpav9VDaBlw+xng9Ld0eLPgysTvks47iVHn4d/11VlkEi6iLRBDkIBLkBovkBnzYBoQZx0m3B8AcLUeUEcEtDtZiNRsP/KZGjsHB0GqdPQT6DBaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aAuQFM+QFJPAH5AT/5ATygHqEViX8Pa+/jHEEB3cCzerUv2qm0FMJvIiWFzCDnJ3H5ARj4dKAeoRWJfw9r7+McQQHdwLN6tS/aqbQUwm8iJYXMIOcncfhRgICAgICAoO0CFjxibIfdehu8wgGaVHmkULhlWpsI0fCWsUChDyMJgICAgKBCZn4DcKzHmLBQE0w6UPmPWmznB0eilL8OaPS3UoSbFICAgICA+E+gQmZ+A3Csx5iwUBNMOlD5j1ps5wdHopS/Dmj0t1KEmxTtoDG1d7zTJ8s55V5sAmvWp0obNd5sBlDErlHvq3WeQVtmi8oKAQCGP6olIl//+E+g7QIWPGJsh916G7zCAZpUeaRQuGVamwjR8JaxQKEPIwntoDccVUZGSUV1srSU9lFoIXEGY9hIk83S0jYDelTDPu6Ei8oKAQCGJGE5yoABwMDAwMAAhhtI61fgAAiybuMt"
+  }
+}
+```
+
+## Settle
+Roles:
+ * Settler
+
+### Settler initiates settle
+ * **method:** `channels.settle`
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.settle",
+  "params": {}
+}
+```
+### Settler receives settle
+ * **method:** `channels.sign.settle_sign`
+ * **params:**
+ 
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | channel_id | string | channel ID | Yes |
+ | data | object | settle data | Yes |
+
+ * **data:**
+ 
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | tx | string | unsigned `channel_settle` transaction | Yes |
+ | updates | list | off-chain updates | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.settle_sign",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "tx": "tx_+F04AaEGcdJtwfAHC1HlBHBLQ7WYjUbD/ymRo7BwdBqnT0E+gwWhAWccVUZGSUV1srSU9lFoIXEGY9hIk83S0jYDelTDPu6Ehj+qJSJf/4YkYTnKgAEAhhtI61fgAAIwYkCX",
+      "updates": []
+    }
+  },
+  "version": 1
+}
+```
+### Settler returns signed settle
+ * **method:** `channels.settle_sign`
+ * **params:**
+ 
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | tx | string | signed `channel_settle` transaction | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.settle_sign",
+  "params": {
+    "tx": "tx_+KcLAfhCuEBdI4Uesh3hYjGQ2BAo0FzD1YPyZlzhy8HyNgf7OzrQdVM44oWQX0yFtmk31HaSLuIJGNDv3hEgdLwe0iZz3LEEuF/4XTgBoQZx0m3B8AcLUeUEcEtDtZiNRsP/KZGjsHB0GqdPQT6DBaEBZxxVRkZJRXWytJT2UWghcQZj2EiTzdLSNgN6VMM+7oSGP6olIl//hiRhOcqAAQCGG0jrV+AAAgurGvs="
+  }
 }
 ```
 
