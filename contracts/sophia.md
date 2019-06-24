@@ -539,6 +539,25 @@ The following builtin functions are defined on strings:
 
 The hash functions hashes the string represented as byte array.
 
+#### Builtin functions on byte arrays
+
+The following builtin functions are defined on byte arrays:
+```
+  Bytes.to_int(b : bytes(_)) : int
+  Bytes.to_str(b : bytes(_)) : string
+```
+These convert arbitrary byte arrays to integers and strings respectively. Note
+that the type `bytes(_)` cannot be given by the user and is only valid for
+these builtin functions.
+
+`Bytes.to_int` interprets the byte array as a big endian integer. In the AEVM
+backend it is truncated to fit in a 256-bit word. `Bytes.to_str` returns the
+hexadecimal representation of the byte array. For instance
+```
+  Bytes.to_int(#01ff) == 511
+  Bytes.to_str(#10ff) == "10FF"
+```
+
 #### Builtin functions on integers
 
 The following builtin functions are defined on integers:
