@@ -85,17 +85,17 @@ contracts. Contracts are similar to classes in object oriented
 languages and support local state and inheritance. More specifically:
 
 - A contract implementation, or simply a contract, is the code for a
-  smart contract and consists of a list of types and functions that
-  may or may not have a definition. A contract where all types and
-  functions are defined is called a concrete contract. Only concrete
+  smart contract and consists of a list of types, entrypoints (that
+  may or may not have a definition) and local functions. A contract where all
+  entrypoints are defined is called a concrete contract. Only concrete
   contracts can be instantiated. (Used in a create contract transaction.)
 
-- A contract can be abstract where no types or functions have definitions. Example:
+- A contract can be abstract where no entrypoints have definitions. Example:
 
 ```javascript
 // An abstract contract
 contract VotingType =
-  public stateful function vote : string => ()
+  stateful entrypoint vote : string => ()
 ```
 
 - A contract instance is an entity living on the block chain (or in a state channel). Each
@@ -105,16 +105,15 @@ how to store and check API information on the chain is still to be
 worked out).
 - A contract may define a type state encapsulating its local
   state. The state must be initialised when instantiating a
-  contract. This is done by the init function which can take arbitrary
+  contract. This is done by the init entrypoint which can take arbitrary
   arguments and is called on contract instance creation.
-- Contracts have a public API, comprising the functions and types
-  annotated with the `public` keyword. These can be used from outside
-  the contract. Functions and types with no annotation (or `internal`)
-  are part of the internal API and can be used by contracts inheriting
-  (see below) the given contract. Functions and types annotated with
-  `private` can only be used locally.
+- Contracts have a public API, comprising the entrypoints and types
+  defined in the contract. These can be used from outside
+  the contract. Functions with no annotation are part of the internal API and
+  can be used by contracts inheriting (see below) the given contract. Functions
+  annotated with `private` can only be used locally.
 - Contracts can inherit one (or more?) other contract(s). In this case
-  the public functions (and types) of the inherited contract are
+  the entrypoints (and types) of the inherited contract are
   included in the public API and internal functions are included in
   the internal API of the current contract. The state of the contract
   contains the states of all inherited contracts as well as the local
@@ -122,9 +121,6 @@ worked out).
   accessed other than through internal functions defined by that
   contract.
 - Tail calls to functions inside the same contract are optimized.
-- Open question: should we allow overriding defined functions? I would
-  suggest no, but there might be compelling use cases that I'm
-  missing.
 
 *NOTE: Contract inheritance is not yet implemented.*
 
@@ -136,7 +132,7 @@ instance, given the `VotingType` contract above we can define a contract
 
 ```javascript
 contract VoteTwice =
-  public function voteTwice(v : VotingType, alt : string) =
+  entrypoint voteTwice(v : VotingType, alt : string) =
     v.vote(alt)
     v.vote(alt)
 ```
@@ -146,7 +142,7 @@ that lets you set a gas limit and provide tokens to a contract call. If omitted
 the defaults are no gas limit and no tokens. Suppose there is a fee for voting:
 
 ```javascript
-  function voteTwice(v : VotingType, fee : int, alt : string) =
+  entrypoint voteTwice(v : VotingType, fee : int, alt : string) =
     v.vote(value = fee, alt)
     v.vote(value = fee, alt)
 ```
@@ -158,7 +154,7 @@ To recover the underlying address of a contract instance there is a field
 without calling it you can write
 
 ```javascript
-  function pay(v : VotingType, amount : int) =
+  entrypoint pay(v : VotingType, amount : int) =
     Chain.spend(v.address, amount)
 ```
 
@@ -175,7 +171,7 @@ state associated with each contract instance.
 - The initial state of a contract is computed by the contract's `init`
   function. The `init` function is *pure* and returns the initial state as its
   return value.
-  If the type `state` is `()`, the `init` function defaults to returning the literal tuple with zero elements.
+  If the type `state` is `()`, the `init` function defaults to returning the value `()`.
   At contract creation time, the `init` function is executed and
   its result is stored as the contract state.
 - The value of the state is accessible from inside the contract
@@ -190,12 +186,12 @@ provides special syntax for map/record updates.
 
 #### Stateful functions
 
-Top-level functions (both private and public) must be annotated with the
+Top-level functions and entrypoints must be annotated with the
 `stateful` keyword to be allowed to affect the state of the running contract.
 For instance,
 
 ```javascript
-  stateful function set_state(s : state) =
+  stateful entrypoint set_state(s : state) =
     put(s)
 ```
 
@@ -225,9 +221,9 @@ A `stateful` annotation *is not* required to
 ### Namespaces
 
 Code can be split into libraries using the `namespace` construct. Namespaces
-can appear at the top-level and can contain type and function definitions.
-Outside the namespace you can refer to the (public) names by qualifying them
-with the namespace (`Namespace.name`).
+can appear at the top-level and can contain type and function definitions, but
+not entrypoints. Outside the namespace you can refer to the (non-private) names
+by qualifying them with the namespace (`Namespace.name`).
 For example,
 
 ```
@@ -236,7 +232,7 @@ namespace Library =
   function inc(x : number) : number = x + 1
 
 contract MyContract =
-  function plus2(x) : Library.number =
+  entrypoint plus2(x) : Library.number =
     Library.inc(Library.inc(x))
 ```
 
@@ -262,7 +258,7 @@ you can use it from another file using an `include`:
 ```
 include "library.aes"
 contract MyContract =
-  function plus2(x) = Library.inc(Library.inc(x))
+  entrypoint plus2(x) = Library.inc(Library.inc(x))
 ```
 
 This behaves as if the contents of `library.aes` was textually inserted into
@@ -750,49 +746,49 @@ Example for an oracle answering questions of type `string` with answers of type 
 ```
 contract Oracles =
 
-  stateful function registerOracle(acct : address,
+  stateful entrypoint registerOracle(acct : address,
                                    sign : signature,   // Signed oracle address + contract address
                                    qfee : int,
                                    ttl  : Chain.ttl) : oracle(string, int) =
      Oracle.register(acct, signature = sign, qfee, ttl)
 
-  function queryFee(o : oracle(string, int)) : int =
+  entrypoint queryFee(o : oracle(string, int)) : int =
     Oracle.query_fee(o)
 
   // Do not use in production!
-  stateful function unsafeCreateQuery(o    : oracle(string, int),
+  stateful entrypoint unsafeCreateQuery(o    : oracle(string, int),
                                       q    : string,
                                       qfee : int,
                                       qttl : Chain.ttl,
                                       rttl : int) : oracle_query(string, int) =
     Oracle.query(o, q, qfee, qttl, RelativeTTL(rttl))
 
-  stateful function extendOracle(o   : oracle(string, int),
+  stateful entrypoint extendOracle(o   : oracle(string, int),
                                  ttl : Chain.ttl) : () =
     Oracle.extend(o, ttl)
 
-  stateful function signExtendOracle(o    : oracle(string, int),
+  stateful entrypoint signExtendOracle(o    : oracle(string, int),
                                      sign : signature,   // Signed oracle address + contract address
                                      ttl  : Chain.ttl) : () =
     Oracle.extend(o, signature = sign, ttl)
 
-  stateful function respond(o    : oracle(string, int),
+  stateful entrypoint respond(o    : oracle(string, int),
                             q    : oracle_query(string, int),
                             sign : signature,        // Signed oracle query id + contract address
                             r    : int) =
     Oracle.respond(o, q, signature = sign, r)
 
-  function getQuestion(o : oracle(string, int),
+  entrypoint getQuestion(o : oracle(string, int),
                        q : oracle_query(string, int)) : string =
     Oracle.get_question(o, q)
 
-  function hasAnswer(o : oracle(string, int),
+  entrypoint hasAnswer(o : oracle(string, int),
                      q : oracle_query(string, int)) =
     switch(Oracle.get_answer(o, q))
       None    => false
       Some(_) => true
 
-  function getAnswer(o : oracle(string, int),
+  entrypoint getAnswer(o : oracle(string, int),
                      q : oracle_query(string, int)) : option(int) =
     Oracle.get_answer(o, q)
 ```
@@ -853,20 +849,27 @@ logged using the `Chain.event` function:
 
 ```
   datatype event =
-      Event1(indexed int, indexed int, string)
-    | Event2(string, indexed address)
+      Event1(int, int, string)
+    | Event2(string, address)
 
   Chain.event(e : event) : ()
 ```
 
-The event can have 0-3 `indexed` fields, they should have a type that is
-equivalent to a 32-byte word (i.e. `bool`, `int`, or `address`, or an alias for
-such a type). To index a `string` you can use the hash function
-`String.sha3(s)`. The event also has (optional) payload (not indexed), that is
-of type `string`.
+The event can have 0-3 *indexed* fields, and an optional *payload* field. A
+field is indexed if it fits in a 32-byte word, i.e.
+- `bool`
+- `int`
+- `bits`
+- `address`
+- `oracle(_, _)`
+- `oracle_query(_, _)`
+- contract types
+- `bytes(n)` for `n` ≤ 32, in particular `hash`
 
-*NOTE:* Indexing is not part of the core aeternity node, but the `indexed` tag
-should serve as a hint to any software analysing the contract call transactions.
+The payload field must be either a string or a byte array of more than 32 bytes.
+The fields can appear in any order.
+
+*NOTE:* Indexing is not part of the core aeternity node.
 
 Events are further discussed in [Sophia explained -
 Events](./sophia_explained.md#events).
@@ -920,8 +923,8 @@ and `*/` and can be nested.
 #### Keywords
 
 ```
-contract elif else false function if import include internal let mod namespace
-private public stateful switch true type record datatype
+contract elif else entrypoint false function if import include let mod namespace
+private stateful switch true type record datatype
 ```
 
 #### Tokens
@@ -991,10 +994,11 @@ Decl ::= 'contract' Con '=' Block(Decl)
        | 'type'     Id ['(' TVar* ')'] ['=' TypeAlias]
        | 'record'   Id ['(' TVar* ')'] '=' RecordType
        | 'datatype' Id ['(' TVar* ')'] '=' DataType
-       | Modifier* 'function' Id ':' Type
+       | [stateful] 'entrypoint' Id ':' Type
+       | [stateful] 'entrypoint' Id Args [':' Type] '=' Block(Stmt)
        | Modifier* 'function' Id Args [':' Type] '=' Block(Stmt)
 
-Modifier ::= 'stateful' | 'public' | 'private' | 'internal'
+Modifier ::= 'stateful' | 'private'
 
 Args ::= '(' Sep(Arg, ',') ')'
 Arg  ::= Id [':' Type]
@@ -1006,7 +1010,7 @@ For example,
 ```
 contract Test =
   type t = int
-  public function add (x : t, y : t) = x + y
+  entrypoint add (x : t, y : t) = x + y
 ```
 
 There are three forms of type declarations: type aliases (declared with the
@@ -1154,23 +1158,23 @@ contract FundMe =
                    deadline      : int,
                    goal          : int }
 
-  private function require(b : bool, err : string) =
+  function require(b : bool, err : string) =
     if(!b) abort(err)
 
-  private function spend(args : spend_args) =
+  function spend(args : spend_args) =
     raw_spend(args.recipient, args.amount)
 
-  public function init(beneficiary, deadline, goal) : state =
+  entrypoint init(beneficiary, deadline, goal) : state =
     { contributions = {},
       beneficiary   = beneficiary,
       deadline      = deadline,
       total         = 0,
       goal          = goal }
 
-  private function is_contributor(addr) =
+  function is_contributor(addr) =
     Map.member(addr, state.contributions)
 
-  public stateful function contribute() =
+  stateful entrypoint contribute() =
     if(Chain.block_height >= state.deadline)
       spend({ recipient = Call.caller, amount = Call.value }) // Refund money
       false
@@ -1183,7 +1187,7 @@ contract FundMe =
                  total @ tot = tot + Call.value })
       true
 
-  public stateful function withdraw() =
+  stateful entrypoint withdraw() =
     if(Chain.block_height < state.deadline)
       abort("Cannot withdraw before deadline")
     if(Call.caller == state.beneficiary)
@@ -1193,13 +1197,13 @@ contract FundMe =
     else
       abort("Not a contributor or beneficiary")
 
-  private stateful function withdraw_beneficiary() =
+  stateful function withdraw_beneficiary() =
     require(state.total >= state.goal, "Project was not funded")
     spend({recipient = state.beneficiary,
            amount    = Contract.balance })
     put(state{ beneficiary = #0 })
 
-  private stateful function withdraw_contributor() =
+  stateful function withdraw_contributor() =
     if(state.total >= state.goal)
       abort("Project was funded")
     let to = Call.caller
