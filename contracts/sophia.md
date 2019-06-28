@@ -849,20 +849,27 @@ logged using the `Chain.event` function:
 
 ```
   datatype event =
-      Event1(indexed int, indexed int, string)
-    | Event2(string, indexed address)
+      Event1(int, int, string)
+    | Event2(string, address)
 
   Chain.event(e : event) : ()
 ```
 
-The event can have 0-3 `indexed` fields, they should have a type that is
-equivalent to a 32-byte word (i.e. `bool`, `int`, or `address`, or an alias for
-such a type). To index a `string` you can use the hash function
-`String.sha3(s)`. The event also has (optional) payload (not indexed), that is
-of type `string`.
+The event can have 0-3 *indexed* fields, and an optional *payload* field. A
+field is indexed if it fits in a 32-byte word, i.e.
+- `bool`
+- `int`
+- `bits`
+- `address`
+- `oracle(_, _)`
+- `oracle_query(_, _)`
+- contract types
+- `bytes(n)` for `n` ≤ 32, in particular `hash`
 
-*NOTE:* Indexing is not part of the core aeternity node, but the `indexed` tag
-should serve as a hint to any software analysing the contract call transactions.
+The payload field must be either a string or a byte array of more than 32 bytes.
+The fields can appear in any order.
+
+*NOTE:* Indexing is not part of the core aeternity node.
 
 Events are further discussed in [Sophia explained -
 Events](./sophia_explained.md#events).
