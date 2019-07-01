@@ -443,7 +443,7 @@ contain a map or a function type.
 A value of record type is constructed by giving a value for each of the fields.
 For the example above,
 ```
-  function new_account(name) =
+  function new_account(name: string) : account =
     {name = name, balance = 0, history = []}
 ```
 Maps are constructed similarly, with keys enclosed in square brackets
