@@ -166,7 +166,7 @@ for a reason as to why `subscribe` includes a host and port.
 	- MUST be `null` if an error occurred or otherwise
 		1. If the server supports session resumption, then this SHOULD be a unique
        session id, `null` otherwise
-    2. The first bytes of the 8 byte nonce, hex encoded
+		2. The last bytes of the 8 byte nonce, hex encoded
 - [ `error` : (`int`, `string`, `object`) ]
 
 This nonce sent by the server is usually referred to as the extranonce, i.e.
