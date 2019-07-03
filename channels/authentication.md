@@ -82,7 +82,7 @@ depending on whether the transaction is meant to be processed on-chain or not:
 
 * for on-chain transactions (`channel_create`, `channel_deposit` and etc.) the
   `sequential` behavior is used and each layer of meta transactions
-  authenticates the topmost transaction it wraps. This is the standart
+  authenticates the outermost transaction it wraps. This is the standard
   behaviour used for all on-chain transactions.
 * for off-chain transactions (namely `channel_offchain`) the `parallel`
   behaviour is used and all meta transactions authenticate the innermost
