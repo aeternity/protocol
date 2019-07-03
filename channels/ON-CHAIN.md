@@ -3,7 +3,7 @@
 Operating a state channel requires, at least, an initial setup via a
 `channel_create` transaction, that locks up a configurable amount of coins from
 each involved party in the channel. This requires a consent, in the form of
-either signatures or generalized authentication contract call, from all
+either signatures or generalized account authentication call data, from all
 participants. More information regarding authentication can be found
 [here](./authentication.md)
 
