@@ -34,7 +34,7 @@ Currently there are two different authentication methods:
   Generalized Accounts can be found [here](../generalized_accounts/generalized_accounts.md).
 
 Since a participant can upgrade their account from a `basic` to `generalized`
-one any time, we have three options relating to channel's opening transaction.
+at any time, we have three options relating to channel's opening transaction.
 In all cases, latest on-chain authentication is being used in the on-chain
 transactions and for the off-chain ones - the one being present at channel's
 creation time.
