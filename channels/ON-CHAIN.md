@@ -7,7 +7,7 @@ either signatures or generalized account authentication call data, from all
 participants. More information regarding authentication can be found
 [here](./authentication.md)
 
-In the ideal case, all on-chain transactions get authenticated by all
+In the ideal case, all on-chain transactions gets authenticated by all
 participants, implying that there are no disagreements. These operations can
 be committed immediately and will generally override all operations initiated
 unilaterally.
