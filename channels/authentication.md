@@ -76,7 +76,7 @@ in which authentications are to be checked, we have two different types:
 * `parallel` - when order is irrelevant to the validation process and checks
   can be performed in a concurrent manner.
 
-For `basic` authentication always `sequential` behavior is used.
+For `basic` authentication always `parallel` behavior is used.
 For `generalized` authentication methods, different approaches are used
 depending on whether the transaction is meant to be processed on-chain or not:
 
