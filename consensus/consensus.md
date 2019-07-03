@@ -71,8 +71,10 @@ account to smart contracts.
 
 ### Transaction signature
 
-We sign serialized transaction prefixed with the id of the network.
-See [serialization](../serializations.md#binary-serialization) definition for details.
+We sign serialized transaction (or the hash of the serialized transaction -
+from Lima hard-fork) prefixed with the id of the network. See
+[serialization](../serializations.md#binary-serialization) definition for
+details.
 
 ```
 NetworkId             :: binary()
@@ -80,12 +82,16 @@ SerializedObject      :: binary()
 Signature             :: binary()
 
 Signature = sign(NetworkId + SerializedObject)
+or Signature = sign(NetworkId + Blake2b(SerializedObject))
 ```
 
 Prefix defaults to ``ae_mainnet`` (``binary()``) and it is configurable via node config.
 The prefix is not part of a serialized transaction. We add it only for signature.
 Consider changing the id in case of forking the blockchain network,
 in order to lower danger of replay attacks.
+
+**Note:** Post Lima hard-fork it is allowed to sign either the full serialized object, or
+the hash of the serialized object; prefixed with the network id in either case.
 
 ### Proof of Work
 
