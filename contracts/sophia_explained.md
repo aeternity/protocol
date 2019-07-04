@@ -25,14 +25,14 @@ different events `TheFirstEvent` and `AnotherEvent`.
     | AnotherEvent(indexed address, string)
 ```
 
-An event may have 0-3 `indexed` fields, these fields should have a Sophia type
-that is represented as one 32-byte word at the VM level (for example int, bool
-and address). An event may also have an additional non-indexed field, this
-field should be of type `string`. (Note: the `indexed` keyword is currently
-mandatory, there are no non-indexed word arguments, this keyword might be
-removed in later versions of Sophia.) Events are emitted by using the
-`Chain.event` function. The following function will emit one Event of each kind
-in the example.
+An event may have 0-3 fixed width (32 bytes) fields (sometimes refered to as
+`indexed`), these fields should have a Sophia type that is represented as one
+32-byte word at the VM level (for example int, bool, short byte arrays, bits,
+and addresses). An event may also have an additional non-indexed field, this
+field should be of type `string`. (Note: the `indexed` keyword was previously
+mandatory, but is not anymore; since there are no non-indexed word arguments)
+Events are emitted by using the `Chain.event` function. The following function
+will emit one Event of each kind in the example.
 
 ```
   public function emit_events() : () =
@@ -59,11 +59,11 @@ from our example, was called in a transaction with transaction hash
   <<"log">> =>
       [#{<<"address">> => <<"ct_2pvLLjPfjqRMSX91BgDRK8gLzeJD4qaQtNF5F6GdWKamCCnZc">>,
          <<"data">> => <<"cb_Xfbg4g==">>,
-         <<"topics">> => [100682519114738024061100211920083630085287628982043971034774722609724357358252,
+         <<"topics">> => [25381774165057387707802602748622431964055296361151037811644748771109370239835,
                           42]},
        #{<<"address">> => <<"ct_2pvLLjPfjqRMSX91BgDRK8gLzeJD4qaQtNF5F6GdWKamCCnZc">>,
          <<"data">> => <<"cb_VGhpcyBpcyBub3QgaW5kZXhlZK+w140=">>,
-         <<"topics">> => [84776946516659401778974935644603388793657850787716942371444147005700991736047,
+         <<"topics">> => [101640830366340000167918459210098337687948756568954742276612796897811614700269,
                           1875564187002476023854543820981509249331367502514562901623081521315128929137]}],
   <<"return_type">> => <<"ok">>,
   <<"return_value">> => <<"cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArMtts">>}
@@ -75,17 +75,17 @@ not have any extra data.). For the second event we see
 `<<"cb_VGhpcyBpcyBub3QgaW5kZXhlZK+w140=">>` which decodes to `<<"This is not
 indexed">>`. For the `topics` field we see that there is actually two values
 per event. The events only contain one value each, but there is *one extra
-implicit topic* added per event. This additional value is the SHA3/Keccak hash
-of the event constructor name, i.e. `Keccak("TheFirstEvent")` and
-`Keccak("AnotherEvent")` respectively:
+implicit topic* added per event. This additional value is the Blake2b hash
+of the event constructor name, i.e. `Blake2b("TheFirstEvent")` and
+`Blake2b("AnotherEvent")` respectively:
 
 ```
-(aeternity_ct@localhost)1> aec_hash:hash(evm, <<"TheFirstEvent">>).
-<<222,152,73,79,171,192,51,152,246,23,99,251,158,247,42,
-  157,0,241,233,150,150,117,1,154,28,43,125,65,8,...>>
-(aeternity_ct@localhost)2> <<100682519114738024061100211920083630085287628982043971034774722609724357358252:256>>.
-<<222,152,73,79,171,192,51,152,246,23,99,251,158,247,42,
-  157,0,241,233,150,150,117,1,154,28,43,125,65,8,...>>
+(aeternity_ct@localhost)1> aec_hash:blake2b_256_hash(<<"TheFirstEvent">>).
+<<56,29,147,56,123,224,214,195,32,234,189,161,114,143,4,
+  86,229,198,194,243,62,145,21,48,213,185,208,190,17,...>>
+(aeternity_ct@localhost)2> <<25381774165057387707802602748622431964055296361151037811644748771109370239835:256>>.
+<<56,29,147,56,123,224,214,195,32,234,189,161,114,143,4,
+  86,229,198,194,243,62,145,21,48,213,185,208,190,17,...>>
 ```
 
 The implicit value goes first in the `topics` array. The topics are (currently,
