@@ -1131,7 +1131,7 @@ of the contract been called.
 Contracts being used in channels off-chain calls have the exact same semantics
 as [those being used
 on-chain](/contracts/contract_transactions.md#contract-call-transaction). Because of the different environment however,
-off-chain callsoff-chain calls  might have different results as the on-chain ones.
+off-chain calls  might have different results as the on-chain ones.
 
 Since there is no single source of truth, each participant considers their
 current view of the chain to be the correct one. This is essential for the
