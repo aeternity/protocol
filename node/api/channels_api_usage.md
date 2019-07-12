@@ -58,6 +58,8 @@ expected. The flow is the following:
 There are a some WebSocket events that can occur while the connection is open
 but are not necessarily part of the channel's life cycle.
 
+* [Open error](#open-error)
+
 * [Update error](#update-error)
 
 * [Update conflict](#update-conflict)
@@ -1489,6 +1491,77 @@ is finally closed, and the channel object removed:
 ```
 
 ### Other WebSocket events
+#### Open error
+
+At channel's WebSocket connection is opened according to initial parameters.
+If correct, everything proceeds as planned. If there are some issues with
+them, the user receives an error describing the issue and the WebSocket
+connection is closed.
+
+##### Missing participant
+
+If a user tries opening a WebSocket and either of the participants is not
+present on-chain, the message received is:
+
+```javascript
+{
+   "channel_id":null,
+   "error":{
+      "code":3,
+      "data":[
+         {
+            "code":1011,
+            "message":"Participant not found"
+         }
+      ],
+      "message":"Rejected",
+      "request":{
+      }
+   },
+   "id":null,
+   "jsonrpc":"2.0",
+   "version":1
+}
+```
+
+Note that since it is the `initiator` that pays the `channel_create`
+transaction fee, it is a must that the `initiator` is present on-chain.
+Although this is not the case with the `responder`, having too litle coins in
+their on-chain balance is a risk both parties must clearly understand: this
+could make it impossible for them to make a dispute. A missing `responder` is
+still rejected in the WebSocket connection to protect them from doing this
+error involuntary.
+
+##### Integer value is too low
+
+If a user tries opening a WebSocket and any of the integer values is too low
+the message received is:
+
+```javascript
+{
+   "channel_id":null,
+   "error":{
+      "code":3,
+      "data":[
+         {
+            "code":105,
+            "message":"Value too low"
+         }
+      ],
+      "message":"Rejected",
+      "request":{
+      }
+   },
+   "id":null,
+   "jsonrpc":"2.0",
+   "version":1
+}
+```
+
+Examples for this would be either opening amount being bellow the threshold
+defined by `channel_reserve`, or any of `channel_reserve`, `push_amount` or
+`lock_period` being a negative number.
+
 #### Update error
 Updates are not always successful, for example one participant tries to spend
 more tokens that one currently has in the channel's balance. This diverges
