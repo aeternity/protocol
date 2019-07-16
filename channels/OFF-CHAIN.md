@@ -56,13 +56,15 @@ was performed earlier than the other.
 ## Overview
 
 The protocol parties use to run smart contracts is a two phase commit protocol,
-where one party proposes a change, gets it signed off by the others and then
+where one party proposes a change, gets it authenticated by the other and then
 commits the update locally. These checks are necessary to avoid parties getting
 confused if updates are being proposed simultaneously.
 On a higher level, to keep off-chain and on-chain state in sync, parties should
-refuse to sign updates for either without also getting a signature for the
-other, e.g. don't sign an on chain `channel_deposit` transaction without also
-updating the state in channel as well.
+refuse to authenticate updates for either without also getting an authentication
+for the updates state_hash, e.g. don't authenticate an on chain `channel_deposit`
+transaction without also updating the state trees in channel as well.
+Authentication methods differences depending on if the transaction is on-chain
+or off-chain one can be found [here](./authentication.md).
 
 With the consistency of state updates being secured between parties, it is
 essential that parties make absolutely sure to not lose their local state, since
@@ -258,14 +260,14 @@ party, simplifies the common case of wanting to open a channel and pay someone
 immediately. An exchange might want to send you funds via this mechanism, since
 it requires only one on-chain transaction and has the side effect of also
 opening a channel.
-If `push_amount > 0` then the initiator should send along a signed update,
-assigning that amount to the responder, before sending the `funding_created`
-message.
+If `push_amount > 0` then the initiator should send along an authenticated
+update, assigning that amount to the responder, before sending the
+`funding_created` message.
 
 A `channel_reserve` ensures that parties have something to lose in the case that
 they start acting maliciously. Enforcement of this rule must be done by the
-clients, which in practice means they should not sign any updates that end up
-violating this invariant.
+clients, which in practice means they should not authenticate any updates that
+end up violating this invariant.
 
 
 #### Requirements
@@ -382,15 +384,16 @@ to client failure or by the participants mutually agreeing to leave.
  ---------------------- ----
 ```
 
-The payload (`data`) must be the latest mutually signed offchain state, and
-the clients must verify that they have the corresponding state trees to match
-the state (otherwise, it will not be possible to use the channel later on.)
+The payload (`data`) must be the latest mutually authenticated offchain state,
+and the clients must verify that they have the corresponding state trees to
+match the state (otherwise, it will not be possible to use the channel later
+on.)
 
 In the Aeternity node implementation, the state trees are cached inside the node.
 Note that if the node restarts, cached data is not likely to survive (it is
 not persisted on each update for performance reasons.) The Aeternity node channel
 fsm automatically recovers the state trees and verifies that the provided
-state is in fact the last mutually signed state.
+state is in fact the last mutually authenticated state.
 
 #### Requirements
 
@@ -398,7 +401,7 @@ state is in fact the last mutually signed state.
 
 - MUST abort if the `chain_id` doesn't match the current chain.
 - MUST abort if the payload does not correspond to the last known mutually
-  signed state.
+  authenticated state.
 - MUST abort if it doesn't have a corresponding state tree (is able to verify
   proof-of-inclusion) for the provided state.
 
@@ -430,7 +433,7 @@ identical information.
   `channel_reestablish`
 - MUST abort if the `chain_id` doesn't match the current chain.
 - MUST abort if the payload does not correspond to the last known mutually
-  signed state.
+  authenticated state.
 - MUST abort if it doesn't have a corresponding state tree (is able to verify
   proof-of-inclusion) for the provided state.
 
@@ -439,12 +442,12 @@ identical information.
 
 Message code: 5
 
-In order to open a channel on chain, parties need to cooperate and co-sign the
-`channel_create` transaction. The `funding_created` message is used by the
-initiator to send an initial state - a `channel_create_tx` object, signed
-by the Initiator. The `block_hash` specifies which on-chain environment was
-used to prepare the transaction ensuring both participants share a common view
-of the chain.
+In order to open a channel on chain, parties need to cooperate and mutually
+authenticate the `channel_create` transaction. The `funding_created` message
+is used by the initiator to send an initial state - a `channel_create_tx`
+object, authenticated by the Initiator. The `block_hash` specifies which
+on-chain environment was used to prepare the transaction ensuring both
+participants share a common view of the chain.
 
 ```
   name                  size (bytes)
@@ -472,19 +475,20 @@ of the chain.
   `channel_create_tx` object
 - MUST abort if the provided `block_hash` is not part of the main chain as the
   responder sees it or if one considers it too old
-- MUST abort if the signature is invalid for the provided transaction data on
-  the current top block
+- MUST abort if the authentication method used is invalid for the provided
+  transaction data on the current top block
 - MUST abort if disagrees with updates provided
 
 ### `funding_signed`
 
 Message code: 6
 
-If the responder was able to validate the initiator's signature sent in the
-`funding_created` message, then it should add its own signature to the state
-object. The co-signed object will become the initial off-chain state of the
-channel. Responder provides the `block_hash` to specify which on-chain
-environment was used for producing the signature or meta transaction.
+If the responder was able to validate the initiator's authentication method
+sent in the `funding_created` message, then it should add its own authentication
+to the state object. The mutually authenticated object will become the initial
+off-chain state of the channel. Responder provides the `block_hash` to specify
+which on-chain environment was used for producing the signature or meta
+transaction.
 
 ```
   name                  size (bytes)
@@ -508,7 +512,7 @@ environment was used for producing the signature or meta transaction.
 - MUST abort if the `data` cannot be deserialized into a valid
   `channel_create_tx` object
 - MUST abort if the `data` object isn't the offered initial state
-- MUST abort if the `data` object isn't mutually signed by both parties.
+- MUST abort if the `data` object isn't mutually authenticated by both parties.
 - MUST abort if the `block_hash` is too old
 
 
@@ -564,12 +568,12 @@ Message code: 8
 
 Once `funding_locked` messages have been exchanged, the channel enters the
 `open` state. Changes to the off-chain state can be effected by sending an
-`update` message. It consists of a single-signed off-chain transaction and
-a list of updates list containing the operations to be performed on the
+`update` message. It consists of a single-authenticated off-chain transaction
+and a list of updates list containing the operations to be performed on the
 previous state. The `state_hash` of the off-chain transaction is the
 aggregated root hash of the resulting state trees. The receiver must verify
-that the state is the correct outcome, then return it, co-signed, in an
-`update_ack` message.
+that the state is the correct outcome, then return it, mutually authenticated,
+in an `update_ack` message.
 
 The `block_hash` is the hash of which on-chain environment was used for
 computing the state and either this blcok or any more recent one could be used
@@ -599,12 +603,12 @@ side.
 Message code: 9
 
 In response to an `update` message, the receiving side verifies that the
-operations listed in the updates list, applied to the most recent co-signed
-state, results in a state tree corresponding to `state_hash`. If so, the
-state object is co-signed, then returned as payload in an `update_ack`
-message. The `block_hash` is the environment the co-signing had been done. The
-signing approach described in the latest channel on-chain persisted object
-must be used.
+operations listed in the updates list, applied to the most recent mutually
+authenticated state, results in a state tree corresponding to `state_hash`. If
+so, the state object is mutually authenticated, then returned as payload in an
+`update_ack` message. The `block_hash` is the environment the authentication
+had been done. The authentication method described in the latest channel
+on-chain persisted object must be used.
 
 ```
   name                  size (bytes)
@@ -626,10 +630,10 @@ Message code: 10
 Since both sides may initiate an `update` request, it is possible that both
 may do so at roughly the same time. In particular, in the Aeternity node system,
 if an `update` request arrives while the fsm is waiting for its client to
-sign a new state update, it reverts both its own update attempt and the
+authenticate a new state update, it reverts both its own update attempt and the
 other participant's update request by sending an `update_error` message.
 The `round` element signifies the round of the fallback state, which must
-be the last mutually signed state. The receiver does not reply.
+be the last mutually authenticated state. The receiver does not reply.
 
 ```
   name                  size (bytes)
@@ -645,20 +649,20 @@ be the last mutually signed state. The receiver does not reply.
 Message code: 11
 
 In order to deposit more funds into the channel, one party can initiate
-a `deposit_created` request. It consists of a single-signed `channel_deposit_tx`
-transaction as well as a list of updates. The transaction includes the state
-hash and round of the next off-chain state, after applying the updates on top
-of latest state. 
+a `deposit_created` request. It consists of a single-authenticated
+`channel_deposit_tx` transaction as well as a list of updates. The transaction
+includes the state hash and round of the next off-chain state, after applying
+the updates on top of latest state. 
 
 Note that it is possible to deposit a zero amount, essentially making the
 operation an on-chain snapshot.
 
-The receiving side verifies the operation and co-signs the state, returning it
-in an `deposit_signed` message.
+The receiving side verifies the operation and authenticate the state, returning
+it in an `deposit_signed` message.
 
 The `block_hash` defines the block used for deposit creation and
-depositor's signature will be according to the latest on-chain persisted
-account and not the on-chain persisted channel object.
+depositor's authentication method will be according to the latest on-chain
+persisted account and not the on-chain persisted channel object.
 
 ```
   name                  size (bytes)
@@ -681,15 +685,15 @@ account and not the on-chain persisted channel object.
 Message code: 12
 
 This is an acknowledgement of a preceding `deposit_created` message (see
-above). Upon receipt of a co-signed state, the receiver verifies that it is
-indeed the state resulting from the proposed deposit operation. The
+above). Upon receipt of a mutually authenticated state, the receiver verifies
+that it is indeed the state resulting from the proposed deposit operation. The
 `channel_deposit_tx` is then pushed to the chain, and the requisit number of
 confirmations (`minimum_depth`) are awaited. Once confirmation has been
 received, a `deposit_locked` message is sent, with the hash of the
 `channel_deposit_tx` transaction.
-The `block_hash` defines at which block deposit had been co-signed and
-the second signature will be according to the latest on-chain persisted
-account and not the on-chain persisted channel object.
+The `block_hash` defines at which block deposit had been mutually
+authenticated and the second authentication will be according to the latest
+on-chain persisted account and not the on-chain persisted channel object.
 
 ```
   name                  size (bytes)
@@ -730,10 +734,10 @@ Message code: 14
 Since both sides may initiate a `deposit_created` request, it is possible
 that both may do so at roughly the same time. In particular, in the Aeternity node
 system, if a `deposit_created` request arrives while the fsm is waiting for
-its client to sign a new state update, it reverts both its own update attempt
-and the other participant's update request by sending a `deposit_error` message.
-The `round` element signifies the round of the fallback state, which must
-be the last mutually signed state. The receiver does not reply.
+its client to authenticate a new state update, it reverts both its own update
+attempt and the other participant's update request by sending a `deposit_error`
+message. The `round` element signifies the round of the fallback state, which
+must be the last mutually authenticated state. The receiver does not reply.
 
 ```
   name                  size (bytes)
@@ -750,18 +754,18 @@ be the last mutually signed state. The receiver does not reply.
 Message code: 15
 
 In order to withdraw coins from the channel, one party can initiate
-a `withdraw_created` request. It consists of a single-signed
+a `withdraw_created` request. It consists of a single-authenticated
 `channel_withdraw_tx` and a list of updates. The transaction includes the state
 hash and round of the next off-chain state, after applying the updates.
 Note that it is possible to withdraw a zero amount, essentially making the
 operation an on-chain snapshot.
 
-The receiving side verifies the operation and co-signs the state, returning it
-in an `withdraw_signed` message.
+The receiving side verifies the operation and mutually authenticated the state,
+returning it in an `withdraw_signed` message.
 
 The `block_hash` defines on which block the withdrawal had been created and
-the withdrawer signature will be according to the latest on-chain persisted
-account and not the on-chain persisted channel object.
+the withdrawer authentication method will be according to the latest on-chain
+persisted account and not the on-chain persisted channel object.
 
 ```
   name                  size (bytes)
@@ -783,15 +787,15 @@ account and not the on-chain persisted channel object.
 Message code: 16
 
 This is an acknowledgement of a preceding `withdraw_created` message (see
-above). Upon receipt of a co-signed state, the receiver verifies that it is
-indeed the state resulting from the proposed withdrawal operation. The
-`channel_withdraw_tx` is then pushed to the chain, and the requisit number of
-confirmations (`minimum_depth`) are awaited. Once confirmation has been
+above). Upon receipt of a mutually authenticated state, the receiver verifies
+that it is indeed the state resulting from the proposed withdrawal operation.
+The `channel_withdraw_tx` is then pushed to the chain, and the requisit number
+of confirmations (`minimum_depth`) are awaited. Once confirmation has been
 received, a `withdraw_locked` message is sent, with the hash of the
 `channel_withdraw_tx` transaction.
-The `block_hash` defines on which block the withdrawal had been co-signed and
-the second signature will be according to the latest on-chain persisted
-account and not the on-chain persisted channel object.
+The `block_hash` defines on which block the withdrawal had been mutually
+authenticated and the second authentication method will be according to the
+latest on-chain persisted account and not the on-chain persisted channel object.
 
 
 ```
@@ -833,10 +837,11 @@ Message code: 18
 Since both sides may initiate a `withdraw_created` request, it is possible
 that both may do so at roughly the same time. In particular, in the Aeternity node
 system, if a `withdraw_created` request arrives while the fsm is waiting for
-its client to sign a new state update, it reverts both its own update attempt
-and the other participant's withdraw request by sending a `withdraw_error`
-message. The `round` element signifies the round of the fallback state, which
-must be the last mutually signed state. The receiver does not reply.
+its client to authentication a new state update, it reverts both its own update
+attempt and the other participant's withdraw request by sending a
+`withdraw_error` message. The `round` element signifies the round of the
+fallback state, which must be the last mutually authenticated state. The
+receiver does not reply.
 
 ```
   name                  size (bytes)
@@ -912,14 +917,15 @@ the `leave_ack` before it terminates.
 Message code: 98
 
 In order to close the channel in an orderly fashion, a `shutdown` message
-is sent, passing a singly signed `channel_close_mutual_tx` transaction object
-as payload. The sender creates the `channel_close_mutual_tx` from the latest
-co-signed state, including the root hash of the corresponding state tree.
-The receiver must verify that the payload corresponds to its latest co-signed
-state, and then replies with a `shutdown_ack` message.
-The `block_hash` defines on which block the close mutual had been created and
-the closer's signature will be according to the latest on-chain persisted
-account and not the on-chain persisted channel object.
+is sent, passing a singly authenticated `channel_close_mutual_tx` transaction
+object as payload. The sender creates the `channel_close_mutual_tx` from the
+latest mutually authenticated state, including the root hash of the
+corresponding state tree. The receiver must verify that the payload corresponds
+to its latest mutually authenticated state, and then replies with a
+`shutdown_ack` message. The `block_hash` defines on which block the close
+mutual had been created and the closer's authentication method will be according
+to the latest on-chain persisted account and not the on-chain persisted channel
+object.
 
 ```
   name                  size (bytes)
@@ -941,11 +947,11 @@ Message code: 99
 This message is sent in response to a verified `shutdown` message. The sender
 may close once the message has been delivered. The receiver must, after
 verifying the payload of the `shutdown_ack` message (which must be the same
-`channel_close_mutual_tx` object, co-signed), push the `channel_close_mutual_tx`
-transaction onto the chain, and then terminate.
-The `block_hash` defines on which block the close mutual had been co-signed and
-the second signature will be according to the latest on-chain persisted
-account and not the on-chain persisted channel object.
+`channel_close_mutual_tx` object, mutually authenticated), push the
+`channel_close_mutual_tx` transaction onto the chain, and then terminate.
+The `block_hash` defines on which block the close mutual had been mutually
+authenticated and the second authentication method will be according to the
+latest on-chain persisted account and not the on-chain persisted channel object.
 
 ```
   name                  size (bytes)
@@ -964,16 +970,17 @@ account and not the on-chain persisted channel object.
 
 A channel can be closed under three circumstances:
 
-1. Both parties agree to the close and sign the closing transaction together,
-   which then gets broadcasted and included in the blockchain.
+1. Both parties agree to the close and authenticate the closing transaction
+   together, which then gets broadcasted and included in the blockchain.
 2. One party wants to close the channel: the other party might had been missing
    for some time or had been trying to cheat. In this case either side can publish 
-   the latest state signed by both parties and claim their balance after the
-   negotiated timeout.
+   the latest state authenticated by both parties and claim their balance after
+   the negotiated timeout.
 3. A malicious party tries to publish an outdated state, which it prefers over a
-   later state. In this case the honest party can publish a state signed by both
-   with a higher round and thereby prove that the other one is trying to cheat.
-   A transaction with a higher round overwrites the one with a lower one.
+   later state. In this case the honest party can publish a state
+   authenticated by both with a higher round and thereby prove that the other
+   one is trying to cheat. A transaction with a higher round overwrites the one
+   with a lower one.
 
 In the case that both parties decide to close the channel, funds are accessible
 immediately after the transaction of their agreement is included in a block,
@@ -1020,7 +1027,7 @@ else
 This is an example distribution of the fee. If this is to be accepted as a
 norm - it means that one of the parties will propose these final amounts in the
 closing transaction and the other, also following this advise, will
-happily sign it.
+happily authenticate it.
 What ends up on-chain is the fee and the closing amounts of
 the parties. The process by which they got to agreement is not part of the
 protocol itself.
@@ -1043,16 +1050,18 @@ more update messages.
 
 #### Requirements
 
-A shutdown cannot be initiated before the on-chain channel opening is signed.
+A shutdown cannot be initiated before the on-chain channel opening is
+authenticated.
 
-The initiator MUST NOT send a `shutdown` before a `funding_created` and the responder MUST NOT send a `shutdown` before a `funding_signed` has been sent.
+The initiator MUST NOT send a `shutdown` before a `funding_created` and the
+responder MUST NOT send a `shutdown` before a `funding_signed` has been sent.
 Prior to the respective points parties can still safely abort the procedure
 without having committed to anything.
 
 ### `closing_created`
 
-If the parties agree to a shutdown then they both need to sign the `channel_close_mutual`
-transaction
+If the parties agree to a shutdown then they both need to authenticate the
+`channel_close_mutual` transaction
 
 ### `closing_signed`
 
@@ -1080,16 +1089,16 @@ initialise a virtual machine to run their smart contracts in.
 
 Contracts are executed in rounds, which are denoted by `round` attribute.
 
-Every party executes each smart contract locally and checks if the signed states
-they receive match up with theirs. In the case that states and signatures are
-valid, they apply the update and then send out their signature. If there was an
-error in either the execution of the contract or the signature does not match
-the state, they send a new update with the prior state but an increased round
-number—to avoid confusion–and their signature over it, to signal that something
-went wrong.
+Every party executes each smart contract locally and checks if the
+authenticated state they receive match up with theirs. In the case that state
+and authentication are valid, they apply the update and then send out their
+own authentication. If there was an error in either the execution of the
+contract or the authentication failed, they send a new update with the prior
+state but an increased round number—to avoid confusion–and their authentication
+method over it, to signal that something went wrong.
 
-When operating in co-signing mode, contracts might need to be written in a way
-to avoid the free option problem.
+When operating in mutually authenticated mode, contracts might need to be
+written in a way to avoid the free option problem.
 
 ### On-chain enforcement
 
@@ -1111,14 +1120,14 @@ updates that are being used. Serialization of those can be found [here](../seria
 
 First one participant initiates an update round containing a [channel create
 contract update](../serializations.md#channel-off-chain-update-create-contract). It contains all the
-information needed for a contract creation. The other participant co-signs
-the changes and the contract is considered to be created.
+information needed for a contract creation. The other participant
+authenticates the changes and the contract is considered to be created.
 
 After a contract is created it can be called. For this one of the participants
 initiates an update round containing a [channel call
 contract update](../serializations.md#channel-off-chain-update-call-contract).
 It contains all the information needed for a contract call, including the
-contract address. The other participant co-signs the changes and the contract
+contract address. The other participant authenticates the changes and the contract
 call is considered to be executed. Its results can be extracted from the calls
 tree in the state tree.
 Part of the call is the `amount` a participants commits to the contract. This
@@ -1167,7 +1176,7 @@ on-chain for them.
 
 ### Gas consumption
 
-While making off-chain updates that both parties co-sign, no gas is being
+While making off-chain updates that both parties authenticate, no gas is being
 consumed. It is worth mentioning that although contract call updates do include
 values for the gas limit and the gas price, those are ignored. Assumption is
 that since both participants are executing the contracts locally, they are
