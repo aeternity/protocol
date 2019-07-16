@@ -539,7 +539,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | contract | contract id | on-chain contract id | Yes |
+  | contract_id | contract id | on-chain contract id | Yes |
   | call\_data | call data | call data for contract creation | Yes |
   | deposit | integer | contract creation deposit | Yes |
 
@@ -551,7 +551,7 @@ Roles:
   "method": "channels.update.new_contract_from_onchain",
   "params": {
     "call_data": "cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACC5yVbyizFJqfWYeqUF89obIgnMVzkjQAYrtsG9n5+Z6gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAnHQYrA==",
-    "contract": "ct_26WLX27MDif5WcqBXX8ndnQ2TQQvLgZ4TfL299BmteioZsJYER",
+    "contract_id": "ct_26WLX27MDif5WcqBXX8ndnQ2TQQvLgZ4TfL299BmteioZsJYER",
     "deposit": 10
   }
 }
@@ -564,7 +564,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | contract | contract id | contract to call | Yes |
+  | contract_id | contract id | contract to call | Yes |
   | call\_data | call data | call data | Yes |
   | abi\_version | integer | call abi version | Yes |
   | amount | integer | amount of tokens to transfer to contract | Yes |
@@ -579,7 +579,7 @@ Roles:
     "abi_version": 1,
     "amount": 0,
     "call_data": "cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACBo8mdjOP9QiDmrpHdJ7/qL6H7yhPIH+z2ZmHAc1TiHxQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACo7dbVl",
-    "contract": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5"
+    "contract_id": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5"
   }
 }
 ```

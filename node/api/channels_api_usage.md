@@ -874,12 +874,12 @@ following structure.
 
   | Name | Type | Description |
   | ---- | ---- | ----------- |
-  | contract | string | address of the contract to call |
+  | contract_id | string | address of the contract to call |
   | abi_version | integer | version of the ABI |
   | amount | integer | amount the caller of the contract commits to it |
   | call_data | string | ABI encoded compiled AEVM call data for the code |
 
-That would call a contract with the poster being the `caller` of it. Poster
+That would call a contract with the poster being the `caller_id` of it. Poster
 commits an `amount` amount of tokens to the contract.
 
 The call would also create a `call` object inside the channel state tree. It contains the result of the contract call.
@@ -895,7 +895,7 @@ The caller sends a message containing the desired change
     "abi_version": 1,
     "amount": 0,
     "call_data": "cb_AAAAAAAAA...",
-    "contract": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5"
+    "contract_id": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5"
   }
 }
 ```
@@ -918,8 +918,8 @@ off-chain transaction
           "amount": 0,
           "call_data": "cb_AAAAAAAAA...",
           "call_stack": [],
-          "caller": "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC",
-          "contract": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5",
+          "caller_id": "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC",
+          "contract_id": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5",
           "gas": 1000000,
           "gas_price": 1,
           "op": "OffChainCallContract"
@@ -975,8 +975,8 @@ off-chain transaction
           "amount": 0,
           "call_data": "cb_AAAAAAAAA...",
           "call_stack": [],
-          "caller": "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC",
-          "contract": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5",
+          "caller_id": "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC",
+          "contract_id": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5",
           "gas": 1000000,
           "gas_price": 1,
           "op": "OffChainCallContract"
@@ -1027,14 +1027,14 @@ there and inspect it, one shall send a WebSocket event
   "jsonrpc": "2.0",
   "method": "channels.get.contract_call",
   "params": {
-    "caller": "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC",
-    "contract": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5",
+    "caller_id": "ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC",
+    "contract_id": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5",
     "round": 8
   }
 }
 ```
-The `contract_address` is the address of the contract that had been called, the `round` is the round of the update and
-`caller_address` is the address of the caller.
+The `contract_id` is the address of the contract that had been called, the `round` is the round of the update and
+`caller_id` is the address of the caller.
 
 Then the call is returned through an incoming message:
 ```javascript
@@ -2106,7 +2106,7 @@ returns the `call` object.
     "abi_version": 1,
     "amount": 0,
     "call_data": "cb_AAAAAAA...",
-    "contract": "ct_2A67iNjuNd2erJdzDMCzVeJkj82cS1krGGFbQeheBhFELktpo4"
+    "contract_id": "ct_2A67iNjuNd2erJdzDMCzVeJkj82cS1krGGFbQeheBhFELktpo4"
   }
 }
 ```
@@ -2152,13 +2152,13 @@ contract call, a participant sends a WebSocket message
   "jsonrpc": "2.0",
   "method": "channels.get.contract_call",
   "params": {
-    "caller": "ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm",
-    "contract": "ct_2A67iNjuNd2erJdzDMCzVeJkj82cS1krGGFbQeheBhFELktpo4",
+    "caller_id": "ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm",
+    "contract_id": "ct_2A67iNjuNd2erJdzDMCzVeJkj82cS1krGGFbQeheBhFELktpo4",
     "round": 10
   }
 }
 ```
-The combination of a `caller`, `contract` and a `round` of execution determines the
+The combination of a `caller_id`, `contract_id` and a `round` of execution determines the
 contract call. Providing an incorrect set of those results in an error response.
 
 A non-error response of this call looks like this
