@@ -1558,7 +1558,7 @@ the message received is:
 }
 ```
 
-Examples for this would be either opening amount being bellow the threshold
+Examples for this would be either opening amount being below the threshold
 defined by `channel_reserve`, or any of `channel_reserve`, `push_amount` or
 `lock_period` being a negative number.
 
