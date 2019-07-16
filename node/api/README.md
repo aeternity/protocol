@@ -207,6 +207,7 @@ The `'data'` element may contain more detailed information inside `'data'`:
  | 1008   | Not a number                       |  3          |  [3]   |
  | 1009   | Broken encoding: contract bytecode |  3          |  [3]   |
  | 1010   | Broken encoding: transaction       |  3          |  [3]   |
+ | 1011   | Participant not found              |  3          |  [3]   |
 
 #### Example, error object
  ```javascript
