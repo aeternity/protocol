@@ -42,8 +42,7 @@ or `привет.test` are part of the same `.test` namespace.
 
 ## Governance
 
-This first draft of the AENS is not going to have any governance mechanism but
-will only allow registrations under a single namespace: `.test`.
+Lima hard fork is introducing final `.aet` registration namespace. It also retires and purges `.test` namespace.
 We will also not include mechanisms similar to the `sunrise` and `landrush`
 periods, which are common for DNS, where registration is restricted to small
 select groups and trademark holders in order to avoid name squatting, before
@@ -66,6 +65,9 @@ could allow us an easier path for future update to the fee structures.
 
 Every entry in the `.test` namespace pays the same amount of fees.
 
+The new mechanism planted in Lima hard fork introduces auctions.
+We propose very simplistic scheme. The claim action becomes claim attempt. It can be followed by another claim from an account different than one set in preclaim for given name. There is finite amount of time when the follow up claim is allowed. This time is expressed in height delta computed from function of length of the name. In practice it means that the shorter the name, the longer we wait for another claim attempt. This should work as bidding. Furthermore, the initial fee is also a value of the function of a name length. Each next bid has to be higher by `X` tokens. Finally, we set a protocol protected length of name that is not subject to bidding and will be claimed immediately after confirming claim transaction. All, functions, base fee, free length value and price progression may be subject to changes with governance mechanism. Non-bidding path of the name claim is purposed for development or testing. Initial non-bidding length will be 32.
+
 Each entry has a fixed expiration date on claim after which the entry should
 transition into the `revoked` state. Once it reaches this state, the name
 will be released, i.e. transition into the `unclaimed` state, after which
@@ -73,12 +75,8 @@ it could be claimed again.
 
 To prevent the entry from expiring a user can, at any point before reaching
 the expiration date, update the entry, which pushes the expiration date
-into the future by the time delta of the registration time and the update
-time, e.g. if a user posts an update one week after claiming their name,
-the expiration date gets pushed one week further into the future.
-The main motivation of this expiration date is to prevent situations where
-the private keys, which control the name, are lost making the name unusable
-as well.
+into the future by at most the maximum rent time e.g. if a user posts an update one week after claiming their name, the expiration date gets pushed for a full term from the previous expiration date. Follow up updates will have no effect, until we enter the new rent period. We also introduce rent payment for each update. The rent is locked in lock account and the rent fee is computed based on name length by function defined in governance.
+The main motivation of this expiration date is to prevent lack of use for very descriptive names that have no use for the previous owner.
 
 
 ## Specification
@@ -168,8 +166,10 @@ long, in order to enable interoperability with DNS.
 A registrar controls who is allowed to claim names in their namespace
 and under what circumstances they are allowed to do so.
 
-The only available registrars for this AENS version will be hard-coded
+The only available registrars up to Lima version will be hard-coded
 ones, which own the `.` and `.test` namespaces.
+
+From Lima we will support `.aet` and purge `.test` namespace.
 
 The `.` namespace registrar is restricted and MUST NOT allow anyone to
 claim any names in its namespace.
@@ -192,6 +192,8 @@ the claimant has commited until they chose to reveal that value. This
 prevents malicious miners from front running, i.e. upon seeing a
 claim transaction, including their own claim request for the same
 name instead of the original claimant's one.
+
+After the claim transaction auctioning the name is conducted in clear
 
 
 ### Hashing
@@ -224,10 +226,10 @@ pre-claim | |              ||  _
           | |       revoke || | | transfer
           v |              || | v
      pre-claimed -------> claimed
-                  claim    | ^
-                           | |
-                            -
-                          update
+         | ^    <timeout>  | ^
+         | |               | |
+          -                 -
+        claim            update
 ```
 
 The pointers field in the name entry:
@@ -270,6 +272,8 @@ commitment := Hash(NameHash(name) + name_salt)
 | name           | 63 |
  ---------------- ----
 | name_salt      | 32 |
+ ---------------- ----|
+| name_fee       | 32 |
  ---------------- ----
 ```
 
@@ -445,6 +449,3 @@ be distributed to random accounts via a lottery.
 [1] Kalodner, Harry A., et al. "An Empirical Study of Namecoin and Lessons for Decentralized Namespace Design." WEIS. 2015.
 
 [2] Ali, Muneeb, et al. "Blockstack: A Global Naming and Storage System Secured by Blockchains." USENIX Annual Technical Conference. 2016.
-
-
-
