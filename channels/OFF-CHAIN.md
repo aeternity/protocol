@@ -225,6 +225,8 @@ it needs to assess whether or not it should accept the channel.
  ---------------------- ----
 | initiator_pubkey     | 32 |
  ---------------------- ----
+| responder_pubkey     | 32 |
+ ---------------------- ----
 ```
 
 - `chain_hash`: transaction hash of the chain you want to use, e.g. hash of the
@@ -239,6 +241,8 @@ it needs to assess whether or not it should accept the channel.
   coins a party is to lose in case of acting maliciously
 - `initiator_pubkey`: the account that the initiator wants to use to open the
   channel
+- `responder_pubkey`: the account that the initiator expects as a responder on
+  the channel
 
 
 (***TODO***: what's the appropriate size for the amounts. Do we want to
@@ -324,6 +328,8 @@ initiating party.
  ---------------------- ----
 | channel_reserve      | 8  |
  ---------------------- ----
+| initiator_pubkey     | 32 |
+ ---------------------- ----
 | responder_pubkey     | 32 |
  ---------------------- ----
 ```
@@ -338,7 +344,8 @@ initiating party.
 - `responder_amount`: amount the initiator wants the responder to commit
 - `channel_reserve`: the minimum amount both parties need to maintain. This makes
   sure that both have to lose something in case they act maliciously
-- `responder_pubkey`: the account that the initiator wants to use to open the
+- `initiator_pubkey`: the account that the initiator used to open the channel
+- `responder_pubkey`: the account that the responder used to open the
   channel
 
 (***TODO***: This could be interactive, i.e. if the responding party sends

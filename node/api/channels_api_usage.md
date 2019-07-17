@@ -109,7 +109,11 @@ and another for optional timeouts.
 
   `responder`'s port and host pair must be reachable from `initiator` network
   so unless participants are part of a LAN, they should be exposed to the
-  internet as described [here](../../node/api/README.md).
+  internet as described [here](../../node/api/README.md). It is possible to use the
+  same port number for different responder pubkeys and multiple simultaneous
+  responders. If the `responder` sets `initiator_id` to `"any"`, the responder will
+  accept a connection request from any initiator, and fetch the proper `initiator_id`
+  from the `channel_open` message.
   
   Once established, the channel follows a [predefined set of state
   transitions](/channels/README.md#overview). The implementation protects the
