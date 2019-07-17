@@ -66,7 +66,30 @@ could allow us an easier path for future update to the fee structures.
 Every entry in the `.test` namespace pays the same amount of fees.
 
 The new mechanism planted in Lima hard fork introduces auctions.
-We propose very simplistic scheme. The claim action becomes claim attempt. It can be followed by another claim from an account different than one set in preclaim for given name. There is finite amount of time when the follow up claim is allowed. This time is expressed in height delta computed from function of length of the name. In practice it means that the shorter the name, the longer we wait for another claim attempt. This should work as bidding. Furthermore, the initial fee is also a value of the function of a name length. Each next bid has to be higher by `X` tokens. Finally, we set a protocol protected length of name that is not subject to bidding and will be claimed immediately after confirming claim transaction. All, functions, base fee, free length value and price progression may be subject to changes with governance mechanism. Non-bidding path of the name claim is purposed for development or testing. Initial non-bidding length will be 32.
+
+The claim action becomes claim attempt. For short names claim transaction
+doesn't set ownership of the name. It can be followed by another
+claim from an account different than one set in preclaim for given name.
+Names below 32 characters are considered short.
+
+There is finite amount of time when the follow up claim is allowed.
+This time is expressed in height delta computed from function of length of the name.
+
+The function will return higher value for shorter names. In practice it means
+that the shorter the name, the longer another claim transaction is valid.
+Claim transaction becomes a bid in an auction.
+
+Furthermore, the initial fee for name is also a value of the function of
+a name length. The function is decreasing function: for shorter names the initial
+fee will be higher.
+
+Also bidding by claim transaction is constrained by price progression.
+Each next bid has to be higher by `X` tokens, determined by percent of the price
+defined in governance.
+
+All, functions, base fee, free length value and price progression may be subject
+to changes with governance mechanism. Non-bidding path of the name claim is purposed
+for development or testing.
 
 Each entry has a fixed expiration date on claim after which the entry should
 transition into the `revoked` state. Once it reaches this state, the name
@@ -75,8 +98,14 @@ it could be claimed again.
 
 To prevent the entry from expiring a user can, at any point before reaching
 the expiration date, update the entry, which pushes the expiration date
-into the future by at most the maximum rent time e.g. if a user posts an update one week after claiming their name, the expiration date gets pushed for a full term from the previous expiration date. Follow up updates will have no effect, until we enter the new rent period. We also introduce rent payment for each update. The rent is locked in lock account and the rent fee is computed based on name length by function defined in governance.
-The main motivation of this expiration date is to prevent lack of use for very descriptive names that have no use for the previous owner.
+into the future by at most the maximum rent time e.g. if a user posts an update
+one week after claiming their name, the expiration date gets pushed for a full
+term from the previous expiration date. Follow up updates will have no effect,
+until we enter the new rent period. We also introduce rent payment for each update.
+The rent is locked in lock account and the rent fee is computed based on name
+length by function defined in governance. The main motivation of this expiration
+date is to prevent lack of use for very descriptive names that have no use for
+the previous owner.
 
 
 ## Specification
