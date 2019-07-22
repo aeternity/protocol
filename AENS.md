@@ -278,9 +278,6 @@ Flow for a user:
 1. (optional) wait `n` blocks, s.t. that the block including the `pre-claim` cannot be reversed whp
 2. send `claim` transaction to reveal name and pay the associated fee
 
-If the time delta of `pre-claim` and `claim` is bigger than 300 blocks,
-then the `claim` MUST be rejected.
-
 The `claim` transaction MUST be signed by the same private key as a
 `pre-claim` transaction containing a commitment to the name and nonce.
 
