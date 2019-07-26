@@ -173,9 +173,7 @@ GENESIS_VERSION: 1 (Roma release)
 - the absense of the info field MUST be marked by setting the info field flag to 0
 - the info field, if present, is uninterpreted, but included in the block hash (i,e., it is under consensus).
 
-Header [serialization format](../serializations.md#key-blockheader)
-
-Block [serialization format](../serializations.md#key-block)
+Block/header [serialization format](../serializations.md#key-blockheader)
 
 #### Micro Blocks
 
