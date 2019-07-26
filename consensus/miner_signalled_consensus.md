@@ -56,7 +56,8 @@ It should be pseudorandom.
 
 #### Signalling block interval start
 
-The height at which the "signalling" block interval starts. Let us call it HS.
+The height at which the "signalling" block interval starts -
+included. Let us call it HS.
 
 HS should cater for the time required by most willing miners to adopt a version
 of the node able to signal and able to follow the new consensus protocol e.g. at
@@ -64,13 +65,15 @@ least two weeks.
 
 HS must be strictly greater than H1.
 
-#### Signalling block interval duration
+#### Signalling block interval end
 
-The number of key blocks of the "signalling" block interval. Let us call it TS.
+The height at which the "signalling" block interval ends -
+excluded. Let us call it HE.
 
-TS must be positive.
+HE must be strictly greater than HS.
 
-TS is recommended to be approximately a week i.e. 3360 (`= 7 * 24 * 20`).
+The difference between HE and HS is recommended to be approximately a
+week i.e. 3360 (`= 7 * 24 * 20`).
 
 #### Proposed new consensus protocol height
 
@@ -79,9 +82,9 @@ The height at which the new consensus protocol may be active. Let us call it H2.
 H2 should cater for the time required by the node for aggregating the results of
 the "signalling" block interval.
 
-H2 must be strictly greater than HS + TS.
+H2 must be strictly greater than HE.
 
-The difference between H2 and (HS + TS) is recommended to be approximately two
+The difference between H2 and HE is recommended to be approximately two
 hours i.e. 40 (`= 2 * 20`).
 
 #### Majority
@@ -91,8 +94,8 @@ activate the new consensus protocol.
 
 It must be positive.
 
-It is recommended to be 90% of TS. So it is 3024 (that is - 90% of 3360) if TS
-is 3360.
+It is recommended to be 90% of (HE - HS). So it is 3024 (that is - 90%
+of 3360) if (HE - HS) is 3360.
 
 ## Rationale
 
