@@ -56,11 +56,15 @@ The node keeps the decision to activate the new consensus protocol local to the 
 
 The signalling using the block header field `info` is backward compatible, as the meaning of the value of such field is not under consensus.
 
-The usage of the block header field `info` offers room for optimization for accommodating simultaneous hard-forking or soft-forking consensus proposals, by interpreting such `info` field as a bitmask rather than a value.
-
 The activation of the new consensus protocol based on miner signalling is meant to be a temporary measure during the time interval when the new protocol may be activated on the network while the node is running. Once the network reasonably settles on whether to activate the new consensus protocol, the user:
 - Is meant to enforce such decision on the eventual node restart either by configuration or by upgrading the node to a new version.
 - Shall be recommended to discard the persisted storage on the eventual node restart - as distinct persisted chain forks may have distinct consensus protocols at the same height.
+
+## (possible) Future extensions
+
+### Simultaneous consensus proposals
+
+The usage of the block header field `info` offers room for optimization for accommodating simultaneous hard-forking or soft-forking consensus proposals, by interpreting such `info` field as a bitmask rather than a value.
 
 ## Implementation
 
