@@ -1,6 +1,8 @@
+# Miner Signalled Consensus Upgrade
+
 ## Simple Summary
 
-Teach the node to activate a new consensus protocol based on miner signalling.
+This document describes the proposal of how nodes in the peer-to-peer network may activate a new consensus protocol based on miner signalling.
 
 ## Motivation
 
