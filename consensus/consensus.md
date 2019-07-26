@@ -61,6 +61,7 @@ contains the initial state of the Æternity blockchain. Part of initial state
 is generated from the distribution of the Æternity ERC20 token on the
 Ethereum blockchain.
 
+The genesis block is a key block.
 
 ### Transactions
 
@@ -159,27 +160,36 @@ EDDSA (curve 25519), signature is 64 bytes.
 
 ### Blocks
 
+#### Consensus protocol versions
+
+| `PROTOCOL_VERSION` | Name    | Minimum height at which protocol is effective |
+| ---                | ---     | ---                                           |
+| 1                  | Roma    | 0 (genesis)                                   |
+| 2                  | Minerva | 47800                                         |
+| 3                  | Fortuna | 90800                                         |
+
+The consensus protocol version number in each block is monotonically increasing in the chain of blocks.
+
 #### Key Blocks
 
 ```
-PROTOCOL_VERSION: 1 (Roma release)
-GENESIS_VERSION: 1 (Roma release)
+PROTOCOL_VERSION: 1 (Roma release) or greater
 ```
 
 - the timestamp of a key block MUST be smaller than `now() + 9m`
 - the timestamp of a key block MUST be bigger than:
   - the median timestamp of the last 11 blocks (if height >= 12)
   - the timestamp of the genesis block (if height <= 11)
-- the version MUST match the `PROTOCOL_VERSION`
+- the version MUST match the expected `PROTOCOL_VERSION`
 - the `pow_evidence` MUST be valid
 - MUST have `0 <= nonce <= MAX_NONCE`
 - txs_hash MUST be correct root hash of the merkle tree of all transactions.
 - ***TODO***: fill in missing rules
 
 ```
-PROTOCOL_VERSION: 2 (Minerva release)
-GENESIS_VERSION: 1 (Roma release)
+PROTOCOL_VERSION: 2 (Minerva release) or greater
 ```
+
 - an optional info field is added to the key header
 - the presense of the info field MUST be marked by setting the info field flag to 1
 - the absense of the info field MUST be marked by setting the info field flag to 0
@@ -190,8 +200,7 @@ Block/header [serialization format](../serializations.md#key-blockheader)
 #### Micro Blocks
 
 ```
-PROTOCOL_VERSION: 1
-GENESIS_VERSION: 1
+PROTOCOL_VERSION: 1 (Roma release) or greater
 ```
 
 - the timestamp of a micro block MUST be smaller than `now() + 9m`
@@ -199,7 +208,7 @@ GENESIS_VERSION: 1
   - the timestamp MUST be bigger than or equal to the timestamp of the previous block + 3s
 - if the previous block is a key block:
   - the timestamp MUST be bigger than the timestamp of the previous block
-- the version MUST match the `PROTOCOL_VERSION`
+- the version MUST match the expected `PROTOCOL_VERSION`
 - the signature must be a valid signature produced by the issuer of
   the previous key block
 - the sum of gas of transactions in a micro block MUST be lower or equal to
