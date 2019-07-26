@@ -68,6 +68,8 @@ The usage of the block header field `info` offers room for optimization for acco
 
 ## Implementation
 
-The implementation needs to cater for the performance of the aggregation of the signalling e.g. slow multiple lookups on the storage.
+Any implementation needs to cater for the performance of the aggregation of the signalling e.g. slow multiple lookups on the storage.
 
-The implementation needs to consider that the storage may contain blocks with the old and new consensus protocols at heights at which the new consensus protocol should have been applied. This is because the node is aware of multiple chain forks and peers.
+Any implementation needs to consider that the storage may contain blocks with the old and new consensus protocols at heights at which the new consensus protocol should have been applied. This is because the node should be aware of multiple chain forks and peers.
+
+The reference implementation of the node is meant to implement this specification. **TODO Not implemented yet.**
