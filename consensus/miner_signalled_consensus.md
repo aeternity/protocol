@@ -12,7 +12,7 @@ Activating a hard-forking new consensus protocol based on miner signalling preve
 
 ### Overview
 
-In a chain fork, the new consensus protocol becomes active at a determined height if at least a determined majority of the key blocks in a determined "signalling" block interval in such chain fork contains a determined value in the [header field `info`](https://github.com/aeternity/protocol/blame/aeternity-node-v3.3.0/serializations.md#L64).
+In a chain fork, the new consensus protocol becomes active at a determined height if at least a determined majority of the key blocks in a determined "signalling" block interval in such chain fork contains a determined value in the header field `info`.
 
 The "signalling" block interval has a determined number of confirmations before the determined height at which the new consensus protocol may become active. This is in order to prevent the node from having to aggregate the results of the "signalling" block interval in a too short time interval.
 
