@@ -96,6 +96,14 @@ The activation of the new consensus protocol based on miner signalling is meant 
 
 The usage of the block header field `info` offers room for optimization for accommodating simultaneous hard-forking or soft-forking consensus proposals, by interpreting such `info` field as a bitmask rather than a value.
 
+### Soft-forking consensus proposals
+
+This proposal may be extended to soft-forking consensus proposals - as opposed to only hard-forking ones - by:
+relaxing the strict monotonicity of consensus versions; and
+excluding the value in the key block header field `info` in the "signalling" block interval from the validation rules of the new consensus protocol.
+
+Such extension should preferably be accompanied by a working implementation.
+
 ## Implementation
 
 Any implementation needs to cater for the performance of the aggregation of the signalling e.g. slow multiple lookups on the storage.
