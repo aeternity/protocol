@@ -213,7 +213,9 @@ Block [serialization format](../serializations.md#micro-block)
 
 ### Transactions
 
-#### Signed transaction
+#### Authorization transactions
+
+##### Signed transaction
 
 ```
  Fieldname       Size (bytes)
@@ -225,6 +227,12 @@ Block [serialization format](../serializations.md#micro-block)
 ```
 
 MUST have valid signature from private key belonging to `sender`.
+
+For the actual wire format please consult the [serialisation](/serializations.md) document.
+
+##### Generic account meta transaction
+
+Please refer to the [dedicated document](/generalized_accounts/generalized_accounts.md).
 
 #### Common fields for transactions
 
@@ -241,7 +249,7 @@ higher than or equal to the minimal gas price as dictated by consensus. For
 contract transactions (Create, Call, GAAttach, GAMeta), the minumum applies to
 both the `Fee` and the `GasPrice`.
 
-#### Spend
+#### Spend transaction
 
 ```
  Fieldname       Size (bytes)
@@ -257,6 +265,26 @@ both the `Fee` and the `GasPrice`.
 | nonce        | 8   |
  -------------- -----
 ```
+
+#### Contract transactions
+
+Please refer to the [dedicated document](/contracts/contract_transactions.md).
+
+#### Oracle transactions
+
+Please refer to the [dedicated document](/oracles/oracle_transactions.md).
+
+#### Naming system transactions
+
+Please refer to the [dedicated document](/AENS.md).
+
+#### Channel transactions
+
+Please refer to the [dedicated document](/channels/ON-CHAIN.md).
+
+#### Generic account attach transation
+
+Please refer to the [dedicated document](/generalized_accounts/generalized_accounts.md).
 
 #### Gas
 
