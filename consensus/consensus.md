@@ -170,6 +170,9 @@ EDDSA (curve 25519), signature is 64 bytes.
 
 The consensus protocol version number in each block is monotonically increasing in the chain of blocks.
 
+A means - not under consensus - of activating upgrades to the consensus protocol
+is [miner signalling](./miner_signalled_consensus.md).
+
 #### Key Blocks
 
 ```
