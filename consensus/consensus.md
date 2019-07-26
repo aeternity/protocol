@@ -99,6 +99,26 @@ Bitcoin-NG. Micro blocks do not require any proof of work.
 
 ### Accounts
 
+Each account holds a balance, and can be of any one of the following types.
+
+#### Basic (or plain old) account
+
+The address is a public key.
+It has an increasing nonce.
+It authorizes a transaction by signing it.
+
+For the actual wire format please consult the [serialisation](/serializations.md) document.
+
+#### Account associated to a contract
+
+Please refer to the [dedicated document](/contracts/contract_state_tree.md).
+
+#### Generic account
+
+Please refer to the [dedicated document](/generalized_accounts/generalized_accounts.md).
+
+Available from the Fortuna consensus protocol version.
+
 ### P2P network
 
 The peer-to-peer network is not part of the consensus and will be described in a separate document.
@@ -136,14 +156,6 @@ The public key is 32 byte.
 #### Signatures
 
 EDDSA (curve 25519), signature is 64 bytes.
-
-## Accounts
-
-```
-address: public key
-balance:
-nonce:
-```
 
 ### Blocks
 
