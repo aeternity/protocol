@@ -2,7 +2,7 @@
 
 ## Simple Summary
 
-This document describes the proposal of how nodes in the peer-to-peer network may activate a new consensus protocol based on miner signalling.
+This document describes the proposal of how nodes in the peer-to-peer network may activate a new hard-forking consensus protocol based on miner signalling.
 
 ## Motivation
 
@@ -19,7 +19,7 @@ The "signalling" block interval has a determined number of confirmations before 
 The value in the key block header field `info`:
 - Uses the whole field `info` i.e. is not a bitmask.
 - Is meant to be a pseudorandom number, so to limit the risk of the same value being used by simultaneous competing consensus protocol proposals.
-- Is part of the validation rules of the consensus protocol on the "signalling" block interval.
+- Is part of the validation rules of the new consensus protocol on the "signalling" block interval.
 - Is user configurable.
 
 ### Parameters
