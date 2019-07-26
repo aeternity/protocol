@@ -20,7 +20,6 @@ The value in the key block header field `info`:
 - Uses the whole field `info` i.e. is not a bitmask.
 - Is meant to be a pseudorandom number, so to limit the risk of the same value being used by simultaneous competing consensus protocol proposals.
 - Is part of the validation rules of the new consensus protocol on the "signalling" block interval.
-- Is user configurable.
 
 ### Parameters
 
