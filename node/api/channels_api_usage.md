@@ -101,7 +101,7 @@ and another for optional timeouts.
   | initiator_amount | integer | amount of tokens the initiator has committed to the channel | Yes | No | Yes |
   | responder_amount | integer | amount of tokens the responder has committed to the channel | Yes | No | Yes |
   | channel_reserve | integer | the minimum amount both peers need to maintain | Yes | No | Yes |
-  | ttl | integer | minimum block height to include the `channel_create_tx` | No | No | Yes |
+  | ttl | integer | maximum height of a block to include the `channel_create_tx` | No | No | Yes |
   | host | string | host of the `responder`'s node| Yes if `role=initiator` | No | No | No |
   | port | integer | the port of the `responder`s node| Yes if `role=initiator` | No | No | No |
   | role | string | the role of the client - either `initiator` or `responder` | Yes | Yes | No |
