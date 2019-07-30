@@ -64,9 +64,9 @@ same nonce handling as for POA, i.e. nonces have to be sequential.
 contract EdDSAAuth =
   record state = { nonce : int, owner : bytes(64) }
 
-  function init(owner' : bytes(64)) = { nonce = 1, owner = owner' }
+  entrypoint init(owner' : bytes(64)) = { nonce = 1, owner = owner' }
 
-  stateful function authorize(n : int, s : signature) : bool =
+  stateful entrypoint authorize(n : int, s : signature) : bool =
     require(n >= state.nonce, "Nonce too low")
     require(n =< state.nonce, "Nonce too high")
     put(state{ nonce = n + 1 })
@@ -76,9 +76,6 @@ contract EdDSAAuth =
 
   function to_sign(h : hash, n : int) : hash =
     Crypto.blake2b((h, n))
-
-  private function require(b : bool, err : string) =
-    if(!b) abort(err)
 ```
 
 ### Contract state/initialization
