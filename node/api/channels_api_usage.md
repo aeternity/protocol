@@ -43,6 +43,8 @@ but are not necessarily part of the channel's life cycle.
 
 * [Open error](#open-error)
 
+* [Timeout error](#timeout-error)
+
 * [Update error](#update-error)
 
 * [Update conflict](#update-conflict)
@@ -1563,7 +1565,54 @@ Examples for this would be either opening amount being below the threshold
 defined by `channel_reserve`, or any of `channel_reserve`, `push_amount` or
 `lock_period` being a negative number.
 
+#### Timeout error
+
+In order to prevent zombie states of the state channel which run indefinitely
+the protocol defines a set of timeouts for each participant a set of timeouts
+defined by each specific participant [at WebSocket connection opening
+time](#channel-parameters). A triggered timeout is a violation of the
+off-chain protocol and the non-responsive participant is considered to be
+missing. In this case the connection is interrupted and the client is expected
+either to try reaching for the other party and reconnecting or going through
+the solo closing sequence.
+
+The client receives the following message indicating the timeout:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_...",
+    "data": {
+      "event": "timeout"
+    }
+  },
+  "version": 1
+}
+```
+
+Subsequently the client receives the following message indicating the closing of
+the WebSocket connection:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_...",
+    "data": {
+      "event": "died"
+    }
+  },
+  "version": 1
+}
+```
+
+
+
 #### Update error
+
 Updates are not always successful, for example one participant tries to spend
 more tokens that one currently has in the channel's balance. This diverges
 from the update flow [described above](#channel-off-chain-update).
