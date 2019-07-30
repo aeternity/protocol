@@ -1567,13 +1567,14 @@ defined by `channel_reserve`, or any of `channel_reserve`, `push_amount` or
 
 #### Timeout error
 
-In order to prevent zombie states of the state channel that run indefinitely,
-there are a set of timeouts defined by each specific participant [at WebSocket
-connection opening time](#channel-parameters). Violating those is a violation
-of the off-chain protocol and the non-responsive participant is considered for
-being missing. In this case the connection is interrupted and the client is
-expected either to try reaching for the other party and reconnecting or going
-through the solo closing sequence.
+In order to prevent zombie states of the state channel which run indefinitely
+the protocol defines a set of timeouts for each participant a set of timeouts
+defined by each specific participant [at WebSocket connection opening
+time](#channel-parameters). A triggered timeout is a violation of the
+off-chain protocol and the non-responsive participant is considered to be
+missing. In this case the connection is interrupted and the client is expected
+either to try reaching for the other party and reconnecting or going through
+the solo closing sequence.
 
 The client receives the following message indicating the timeout:
 
@@ -1591,7 +1592,7 @@ The client receives the following message indicating the timeout:
 }
 ```
 
-After it the client receives the following message indicating the closing of
+Subsequently the client receives the following message indicating the closing of
 the WebSocket connection:
 
 ```javascript
