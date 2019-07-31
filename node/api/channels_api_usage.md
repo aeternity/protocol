@@ -29,6 +29,7 @@ These are used for the scenario when all parties behave correctly and as
 expected. The flow is the following:
 
 1. [Channel open](#channel-open)
+  * [Client reconnect](#client-reconnect)
 2. [Channel off-chain update](#channel-off-chain-update)
   * [Transfer](#transfer)
   * [Create a contract](#create-a-contract)
@@ -464,6 +465,34 @@ present the initial off-chain state:
   "version": 1
 }
 ```
+
+### Client reconnect
+Once the `channel_create_tx` has been signed, the client Websocket connection may close
+without causing the FSM to terminate. The client may reconnect by signing a special
+`channel_client_reconnect_tx` transaction, partly to identify the right FSM instance
+to connect to, and partly to prove identity. The transaction has the following structure:
+
+ | Name | Type | Description |
+ | ---- | ---- | ----------- |
+ | channel id | string | ID of the channel |
+ | role | string | Role of the instance (initiator or responder) |
+ | pub key | string | Public key of the client |
+
+Information about serialization can be found [here](../../serializations.md#channel-client-reconnect-transaction).
+
+After signing the reconnect transaction, the client connects using the parameters `protocol`
+and `reconnect_tx` as illustrated below. Note that the `reconnect_tx` parameter uses a
+serialized transaction.
+
+```
+$ wscat --connect 'localhost:3014/channel?protocol=json-rpc&reconnect_tx=tx_%2BJwLAfhCuEBcOkx9CFjb8i7AsTT5%2BIkuSxG5SKKrSLweRz%2BeIThEXNIq42AQjKyBQGDkT6QEyxbQH5XSSaaojvt%2B2BYJu2wNuFT4UoICPwGhBrBnp1GFwypFOxF3uxx9KK6ZNyKMgeZJFKRgUhZ4U1WfiWluaXRpYXRvcqEBQrhkAQ8qujZTeNSsuZiVkaLuejuljb%2BPfdvSsAm2SNIJAuU9'
+
+connected (press CTRL+C to quit)
+```
+
+While the client is disconnected, the corresponding FSM will reject any protocol request that
+requires signing. An attempt to reconnect to an FSM that already has a client connected will
+be rejected.
 
 ## Channel off-chain update
 After the channel has been opened and before it has been closed there is a
