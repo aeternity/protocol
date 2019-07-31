@@ -29,6 +29,7 @@ These are used for the scenario when all parties behave correctly and as
 expected. The flow is the following:
 
 1. [Channel open](#channel-open)
+  * [Client reconnect](#client-reconnect)
 2. [Channel off-chain update](#channel-off-chain-update)
   * [Transfer](#transfer)
   * [Create a contract](#create-a-contract)
@@ -464,6 +465,35 @@ present the initial off-chain state:
   "version": 1
 }
 ```
+
+### Client reconnect
+Once the `channel_create_tx` has been signed, the client Websocket connection may close
+without causing the FSM to terminate. The client may reconnect by signing a special
+`channel_client_reconnect_tx` transaction, partly to identify the right FSM instance
+to connect to, and partly to prove identity. The transaction has the following structure:
+
+ | Name | Type | Description |
+ | ---- | ---- | ----------- |
+ | channel id | string | ID of the channel |
+ | round | integer | Must be higher than at the last reconnect |
+ | role | string | Role of the instance (initiator or responder) |
+ | pub key | string | Public key of the client |
+
+Information about serialization can be found [here](../../serializations.md#channel-client-reconnect-transaction).
+
+After signing the reconnect transaction, the client connects using the parameters `protocol`
+and `reconnect_tx` as illustrated below. Note that the `reconnect_tx` parameter uses a
+serialized transaction.
+
+```
+$ wscat --connect 'localhost:3014/channel?protocol=json-rpc&reconnect_tx=tx_%2BJ0LAfhCuECD0kyElzq1A4bRqUUlIvwqo3UpNLZr07K6f6ZzCMjOY6nVLowEyewiEfDOGu0yy%2BrS2pSOWZzumSKLpNAOwQsBuFX4U4ICPwGhBiPYP7m2R8Z36J9C1yWyKO6C0GoclMWjkh8mGyYcwiNkAYlpbml0aWF0b3KhARZ7k%2B1MUXursizzqkphuO8bCDRo8DrnsRvekHG5Ry3bV0P6XA%3D%3D'
+
+connected (press CTRL+C to quit)
+```
+
+While the client is disconnected, the corresponding FSM will reject any protocol request that
+requires signing. An attempt to reconnect to an FSM that already has a client connected will
+be rejected.
 
 ## Channel off-chain update
 After the channel has been opened and before it has been closed there is a
