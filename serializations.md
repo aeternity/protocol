@@ -778,7 +778,7 @@ wants to reconnect to an already running FSM. It cannot be introduced into the
 mempool. The elements of the transaction are:
 * The channel id of the channel that the client wants to connect to
 * The role (`initiator` or `responder`) of the FSM instance in question
-* The public key of the client; must correspond to the private key used for
+* The public key of the client; must correspond to the authentication used for
   signing the transaction.
 
 ```
