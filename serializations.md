@@ -777,12 +777,14 @@ The channel client reconnect transaction is used only when a Websocket client
 wants to reconnect to an already running FSM. It cannot be introduced into the
 mempool. The elements of the transaction are:
 * The channel id of the channel that the client wants to connect to
+* A round (integer), which must be higher than at the last attempt
 * The role (`initiator` or `responder`) of the FSM instance in question
 * The public key of the client; must correspond to the private key used for
   signing the transaction.
 
 ```
 [ <channel_id>    :: id()
+, <round>         :: int()
 , <role>          :: binary()
 , <pub_key>       :: id()
 ]
