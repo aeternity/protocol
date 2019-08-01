@@ -43,7 +43,7 @@ Which VM versions are accepted are different based on consensus protocol version
 |                  | contract create      | `0x3`              | `0x1`
 |                  | oracle register      | `0x3`              | `0x0`, `0x1`
 | Fortuna          | contract call        | `0x1`, `0x3`, `0x4`| `0x1`
-|                  | contract create      | `0x4`              | `0x1`
+|                  | contract create      | `0x3`, `0x4`       | `0x1`
 |                  | oracle register      |                    | `0x0`, `0x1`
 
 The number after the machine name designates the version of the machine.
