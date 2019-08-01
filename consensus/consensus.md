@@ -167,6 +167,7 @@ EDDSA (curve 25519), signature is 64 bytes.
 | 1                  | Roma    | 0 (genesis)                                   |
 | 2                  | Minerva | 47800                                         |
 | 3                  | Fortuna | 90800                                         |
+| 4                  | Lima    | TODO-TO-BE-DECIDED                            |
 
 The consensus protocol version number in each block is monotonically increasing in the chain of blocks.
 
