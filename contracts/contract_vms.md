@@ -22,7 +22,9 @@ The current meaning of the VM field is:
 |   02        | [AEVM_01](aevm.md)  | For Solidity contracts on the AEVM
 |   03        | [AEVM_02](aevm.md)  | Improved AEVM for Sophia, Minerva release
 |   04        | [AEVM_03](aevm.md)  | Improved AEVM for Sophia, Fortuna release
-|   05-FFFF   |          | UNUSED
+|   05        |          | UNUSED
+|   06        | [AEVM_04](aevm.md)  | Improved AEVM for Sophia, Lima release
+|   07-FFFF   |          | UNUSED
 
 The current meaning of the ABI field is:
 
@@ -44,6 +46,9 @@ Which VM versions are accepted are different based on consensus protocol version
 |                  | oracle register      | (Not applicable.)  | `0x0`, `0x1`
 | Fortuna          | contract call        | `0x1`, `0x3`, `0x4`| `0x1`
 |                  | contract create      | `0x3`, `0x4`       | `0x1`
+|                  | oracle register      | (Not applicable.)  | `0x0`, `0x1`
+| Lima             | contract call        | `0x1`, `0x3`, `0x4`, `0x6` | `0x1`
+|                  | contract create      | `0x6`       | `0x1`
 |                  | oracle register      | (Not applicable.)  | `0x0`, `0x1`
 
 The number after the machine name designates the version of the machine.
@@ -72,3 +77,7 @@ See [The AEVM](./aevm.md).
 ### AEVM_02 -> AEVM_03
 * New primitive operations (`Auth.tx_hash`)
 * New crypto primitives
+
+### AEVM_03 -> AEVM_04
+* Name revoke: change argument from name hash to name.
+* Name tranfer: change argument from name hash to name.
