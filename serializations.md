@@ -217,6 +217,8 @@ subsequent sections divided by object.
 | Name service update transaction | 34 |
 | Name service revoke transaction | 35 |
 | Name service transfer transaction | 36 |
+| Name service subname | 38|
+| Name service subname transaction | 39 |
 | Contract | 40 |
 | Contract call | 41 |
 | Contract create transaction | 42 |
@@ -524,6 +526,17 @@ The content of the contract store depends on [the ABI and the VM version](/contr
 , <recipient> :: id()
 , <fee>       :: int()
 , <ttl>       :: int()
+]
+```
+
+#### Name service subname transaction
+```
+[ <account_id> :: id()
+, <nonce>      :: int()
+, <name>       :: binary()
+, <definition> :: [{binary(), [{binary(), binary()}]}]
+, <fee>        :: int()
+, <ttl>        :: int()
 ]
 ```
 

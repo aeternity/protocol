@@ -271,6 +271,7 @@ The gas of a transaction is the sum of:
 | Name update            | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(NameUpdateTx) * GasPerByte` |
 | Name transfer          | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(NameTransferTx) * GasPerByte` |
 | Name revoke            | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(NameRevokeTx) * GasPerByte` |
+| Subname                | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(SubnameTx) * GasPerByte` |
 | Channel create         | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelCreateTx) * GasPerByte` |
 | Channel deposit        | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelDepositTx) * GasPerByte` |
 | Channel withdraw       | `BaseGas`      | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelWithdrawTx) * GasPerByte` |

@@ -90,7 +90,7 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 ### AENS Entry
 
-This is the **top** name entry as it should be stored by a node.
+This is the name entry as it should be stored by a node.
 
 ```
   name         size (bytes)
@@ -125,9 +125,26 @@ This can have multiple entries, e.g. a payment address associated
 with the name and an oracle address associated with the name.
 
 
-Entry for **subname** (or, subdomain) uses all the fields from
-top name under which the subname belongs, except the **pointers**
-which are unique for every subname entry.
+A subname entry (or, subdomain), belongs to a name entry.
+
+The fields **owner**, **expires_by** and **client_ttl** of the
+name entry applies to all subname entries of the name entry.
+
+The lifecycle of subnames are driven by the lifecycle of the name
+they belong to.
+
+Issuing `revoke` or `transfer` transactions on name causes revoking or
+transfering of all of the name's subnames.
+
+When the name enters `unclaimed` state, all of the name's subnames
+are deleted.
+
+Issuing `claim`, `revoke`, `transfer` and `update` transaction where
+subname is provided instead of name causes failure, and such transaction
+is not propagated to other nodes.
+
+The only subname specific fields are **pointers** which can be
+unique for every subname entry.
 
 ```
   name         size (bytes)
@@ -363,9 +380,7 @@ the name enters the `revoked` state. After a fixed timeout of
 
 ```
  ------------ ----
-| name       |    |
- ------------ ----
-| expire_by  | 8  |
+| name       | 63 |
  ------------ ----
 | definition |    |
  ------------ ----
@@ -373,13 +388,16 @@ the name enters the `revoked` state. After a fixed timeout of
 
 The `subname` transaction MUST be signed by the owner of the `name` entry.
 
-The `expire_by` MUST NOT be more than 50000 blocks into the future.
-
-`subname` transaction may be used to define a subtree of names below top `name` entry
+`subname` transaction is used to define a tree of subnames below `name` entry
 along with the pointers for each subname.
 
-A `definition` field is a dictionary, a mapping of `subname` to `pointers`,
-where the `pointers` for subname SHOULD NOT contain multiple entries with the same key.
+A `definition` field is a mapping of `subname` to `pointers`, where the `pointers`
+for subname SHOULD NOT contain multiple entries with the same key.
+
+The execution of `subname` transaction first removes all subnames belonging to provided
+existing name, and then inserts all subnames into naming tree with their respective pointers.
+
+To just remove all subnames of a name, the `definition` should be empty.
 
 
 ## Storage
