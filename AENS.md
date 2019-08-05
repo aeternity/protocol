@@ -90,7 +90,7 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 ### AENS Entry
 
-This is the entry as it should be stored by a node.
+This is the **top** name entry as it should be stored by a node.
 
 ```
   name         size (bytes)
@@ -125,7 +125,19 @@ This can have multiple entries, e.g. a payment address associated
 with the name and an oracle address associated with the name.
 
 
-### Name
+Entry for **subname** (or, subdomain) uses all the fields from
+top name under which the subname belongs, except the **pointers**
+which are unique for every subname entry.
+
+```
+  name         size (bytes)
+ ------------ ----
+| pointers   |    |
+ ------------ ----
+```
+
+
+### Name and Subname
 
 Names MUST be normalized according to IDNA2008 before hashing, as
 described in [uts-46](https://unicode.org/reports/tr46) and SHOULD
@@ -347,6 +359,29 @@ the name enters the `revoked` state. After a fixed timeout of
 2016 blocks, the name will be available for claiming again.
 
 
+### Subname
+
+```
+ ------------ ----
+| name       |    |
+ ------------ ----
+| expire_by  | 8  |
+ ------------ ----
+| definition |    |
+ ------------ ----
+```
+
+The `subname` transaction MUST be signed by the owner of the `name` entry.
+
+The `expire_by` MUST NOT be more than 50000 blocks into the future.
+
+`subname` transaction may be used to define a subtree of names below top `name` entry
+along with the pointers for each subname.
+
+A `definition` field is a dictionary, a mapping of `subname` to `pointers`,
+where the `pointers` for subname SHOULD NOT contain multiple entries with the same key.
+
+
 ## Storage
 
 We are going to store the AENS entries in an ESMT and use the
@@ -448,6 +483,3 @@ be distributed to random accounts via a lottery.
 [1] Kalodner, Harry A., et al. "An Empirical Study of Namecoin and Lessons for Decentralized Namespace Design." WEIS. 2015.
 
 [2] Ali, Muneeb, et al. "Blockstack: A Global Naming and Storage System Secured by Blockchains." USENIX Annual Technical Conference. 2016.
-
-
-
