@@ -107,7 +107,7 @@ Note the amounts as we will revisit those with regard of Virtual State Channels
 
 The general assumption is if the protocol is clean and easy to use, this would
 provide incentive for participants to follow it. Cheating would be meaningless
-as it would yeld no benefit for the cheating party. That is a strong argument in
+as it would yield no benefit for the cheating party. That is a strong argument in
 favour of aeternity's State Channels as disputes are on a protocol level and
 they act in a predefined and predictable manner. You can read more about them
 [here](https://github.com/aeternity/protocol/blob/master/channels/ON-CHAIN.md#disputing-updates).
