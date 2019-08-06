@@ -338,7 +338,7 @@ It is worth noting that this closly resembles the on-chain State Channel
 protocol. Also it is important to stress that none of the off-chain updates
 reach Ingrid.
 
-#### Depositing more tokens to a Virtual State Channel/withdrawing from a
+#### Depositing more tokens to a Virtual State Channel/withdrawing from a Virtual State Channel
 Virtual State Channel
 
 Alice and Bob produce an off-chain update similar to `channel_deposit` or
