@@ -493,7 +493,151 @@ connected (press CTRL+C to quit)
 
 While the client is disconnected, the corresponding FSM will reject any protocol request that
 requires signing. An attempt to reconnect to an FSM that already has a client connected will
-be rejected.
+be rejected. Note, however, that if e.g. an update request already includes the signature of
+the disconnected client, the operation is allowed, and the responding FSM proceeds as if it
+had issued a signing request and received a successful reply.
+
+#### Example
+
+Assuming that the channel has been set up, and the `initiator` and `responder` both have
+received corresponding `channels.update` messages:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.update",
+  "params": {
+    "channel_id": "ch_2qHR2iopmhCpRq1NYKcqXkAM4ydhKrqCiwyNushZrH94L6TQ4r",
+    "data": {
+      "state": "tx_+QENCwH4hLhAqJaduFrTCqaxqF9uEDPVbd6nkl/cLzuNqQo4n7Unc9SZK8uWVyRTvbPL8AP4Zo/c9giz5ip9Au7qyGmoNRRhD7hAuur2dr0f4rmoiYQaJn51XGm26ksdM6UdCTGJcJSoPXNT9qaWKdiT/1uDXhUuv6L92JlkWPoqNdxAgoZgGozdDriD+IEyAaEBczX34JBR7Jaa9oTSdI0jePPWlUuTx7E0OO/D32FaT2CGP6olImAAoQECgVxNp3bgfaAQOCDBXtlM1JpBTJJK4MgaN+bFPvE9VoYkYTnKgAACCgCGEAZ510gAwKB7Hn2psAENZRcUm0kl3cMq7J6YaBSioPNTsxFw3H8aFAHEJFnz"
+    }
+  },
+  "version": 1
+}
+```
+
+If the `initiator` client now disconnects, its FSM will keep running.
+
+If the `responder` now initiates an update request, the `initiator` FSM
+will respond with a `conflict` error.
+
+```
+#### responder ---> node
+{
+  "jsonrpc": "2.0",
+  "method": "channels.update.new",
+  "params": {
+    "amount": 1,
+    "from": "ak_26zhrAPuCdcFD5f68BgRrHza8LS1wUrKKLHco21mjcBqcfwdU",
+    "to": "ak_sjuXT1xcbLNFvbMcYBerZuRF8QckyiHY7nBVjVTC1ZXauwGYY"
+  }
+}
+
+#### responder <--- node
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.update",
+  "params": {
+    "channel_id": "ch_2qHR2iopmhCpRq1NYKcqXkAM4ydhKrqCiwyNushZrH94L6TQ4r",
+    "data": {
+      "signed_tx": "tx_+E0LAcC4SPhGOQKhBvFUHNvTaJmM0h7WZRyILi7R5xEube4cPidh39qA4rZ3AqA1OxWEaCmQrMsRAz/aOqULrCfnjvXy3CsSqurneRAweq1oQ2o=",
+      "updates": [
+        {
+          "amount": 1,
+          "from": "ak_26zhrAPuCdcFD5f68BgRrHza8LS1wUrKKLHco21mjcBqcfwdU",
+          "op": "OffChainTransfer",
+          "to": "ak_sjuXT1xcbLNFvbMcYBerZuRF8QckyiHY7nBVjVTC1ZXauwGYY"
+        }
+      ]
+    }
+  },
+  "version": 1
+}
+
+#### responder ---> node
+{
+  "jsonrpc": "2.0",
+  "method": "channels.update",
+  "params": {
+    "signed_tx": "tx_+JALAfhCuEC9qolUALwHM2t73ZWgLujcu2EPv3IWOBll9bmMb0WIJcCqHnz/ZBf3VHxlPWb/VWCY9wp/Z4MOoqqtiLwpApEGuEj4RjkCoQbxVBzb02iZjNIe1mUciC4u0ecRLm3uHD4nYd/agOK2dwKgNTsVhGgpkKzLEQM/2jqlC6wn54718twrEqrq53kQMHpotH/U"
+  }
+}
+
+#### responder <--- node
+{
+  "jsonrpc": "2.0",
+  "method": "channels.conflict",
+  "params": {
+    "channel_id": "ch_2qHR2iopmhCpRq1NYKcqXkAM4ydhKrqCiwyNushZrH94L6TQ4r",
+    "data": {
+      "channel_id": "ch_2qHR2iopmhCpRq1NYKcqXkAM4ydhKrqCiwyNushZrH94L6TQ4r",
+      "round": 1
+    }
+  },
+  "version": 1
+}
+```
+
+If, on the other hand, the `responder` FSM manages to get `initiator` to co-sign
+the initial request (e.g. optically by exchanging QR codes), the `initiator` FSM
+will detect the existence of its client's signature, and will acknowledge the request.
+
+```
+#### responder ---> node
+{
+  "jsonrpc": "2.0",
+  "method": "channels.update.new",
+  "params": {
+    "amount": 1,
+    "from": "ak_26zhrAPuCdcFD5f68BgRrHza8LS1wUrKKLHco21mjcBqcfwdU",
+    "to": "ak_sjuXT1xcbLNFvbMcYBerZuRF8QckyiHY7nBVjVTC1ZXauwGYY"
+  }
+}
+
+#### responder <--- node
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.update",
+  "params": {
+    "channel_id": "ch_2qHR2iopmhCpRq1NYKcqXkAM4ydhKrqCiwyNushZrH94L6TQ4r",
+    "data": {
+      "signed_tx": "tx_+E0LAcC4SPhGOQKhBvFUHNvTaJmM0h7WZRyILi7R5xEube4cPidh39qA4rZ3AqA1OxWEaCmQrMsRAz/aOqULrCfnjvXy3CsSqurneRAweq1oQ2o=",
+      "updates": [
+        {
+          "amount": 1,
+          "from": "ak_26zhrAPuCdcFD5f68BgRrHza8LS1wUrKKLHco21mjcBqcfwdU",
+          "op": "OffChainTransfer",
+          "to": "ak_sjuXT1xcbLNFvbMcYBerZuRF8QckyiHY7nBVjVTC1ZXauwGYY"
+        }
+      ]
+    }
+  },
+  "version": 1
+}
+
+#### responder ---> node
+{
+  "jsonrpc": "2.0",
+  "method": "channels.update",
+  "params": {
+    "signed_tx": "tx_+NILAfiEuEB2kYkTBh9xELqllJZzHMFcj9oysyo4t6sBbxWI1tm2LZmkh9liZbwHyzNADWjj9FywzWpVceUfiVWhXfwHXFIFuEC9qolUALwHM2t73ZWgLujcu2EPv3IWOBll9bmMb0WIJcCqHnz/ZBf3VHxlPWb/VWCY9wp/Z4MOoqqtiLwpApEGuEj4RjkCoQbxVBzb02iZjNIe1mUciC4u0ecRLm3uHD4nYd/agOK2dwKgNTsVhGgpkKzLEQM/2jqlC6wn54718twrEqrq53kQMHqW0FMw"
+  }
+}
+
+#### responder <--- node
+{
+  "jsonrpc": "2.0",
+  "method": "channels.update",
+  "params": {
+    "channel_id": "ch_2qHR2iopmhCpRq1NYKcqXkAM4ydhKrqCiwyNushZrH94L6TQ4r",
+    "data": {
+      "state": "tx_+NILAfiEuEB2kYkTBh9xELqllJZzHMFcj9oysyo4t6sBbxWI1tm2LZmkh9liZbwHyzNADWjj9FywzWpVceUfiVWhXfwHXFIFuEC9qolUALwHM2t73ZWgLujcu2EPv3IWOBll9bmMb0WIJcCqHnz/ZBf3VHxlPWb/VWCY9wp/Z4MOoqqtiLwpApEGuEj4RjkCoQbxVBzb02iZjNIe1mUciC4u0ecRLm3uHD4nYd/agOK2dwKgNTsVhGgpkKzLEQM/2jqlC6wn54718twrEqrq53kQMHqW0FMw"
+    }
+  },
+  "version": 1
+}
+```
+
 
 ## Channel off-chain update
 After the channel has been opened and before it has been closed there is a
