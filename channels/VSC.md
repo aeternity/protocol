@@ -310,7 +310,7 @@ respectively. The channel object looks like this:
 }
 ```
 
-We could have an implicit logic that in the context of this particulat State
+We could have an implicit logic that in the context of this particular State
 Channel, the `initiator` role is being played by the `requester` and the
 `responder` role is being played by `intermediary`. That would mean that any
 tokens dedicated for the VSC channel by the `initiator`, in the SC are dedicated
