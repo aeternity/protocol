@@ -412,19 +412,63 @@ closing sequence in their on-chain channel with the intermediary. It results in
 modifying the channel object there with an appropriate on-chain height to be
 reached in order for the channel to be solo-closed. Meanwhile the intermediary
 does a corresponding operation with the other party, giving it time to provide a
-newer off-chain state, using a on-chain forced progress if necessary.
+newer off-chain state, using a on-chain virtual forced progress if necessary.
 
 It is not possible to reduce the amount of the other party in the VSC object
 during a unilateral update, i.e. the 'requester' cannot reduce the
 `intermediary_amount` and the 'intermediary' cannot reduce the
 `requester_amount`. This is ultimately checked on-chain, if needed.
 
+##### Virtual State Channel Force Progress
+
+In order to improve privacy and not to provide the whole SC state, we define a
+new transaction type for Virtual State Channel Force Progressing. Instead of
+providing the whole SC state tree, only a Proof of Inclusion containing the
+relevant object is provided. Depending on the specific progress would include
+the channel object and optionally accounts to which tokens can be withdrawn
+to.
+
+The transaction is called `channel_vsc_force_progress` and it consists of:
+* `payload` that defines the `round` and the `state_hash` the progress is base
+  on. This could be:
+    * the latest on-chain persisted one: in this case the on-chain stored
+      `round` and `state_hash` are used. The `payload` is empty
+    * off-chain transaction with a greater `round` to the one currently
+      persisted on-chain for this SC. The `payload` is a serializated
+      off-chain transaction and its `round` and `state_hash` are used for
+      defining the SC state that the progress is being based upon.
+* `poi` is a Proof of Inclusion that provides enough information for the
+  forced progress to be applied. This would include the VSC object but
+  possibly accounts to which tockens are withdrawn to might be needed as well.
+* `update` is a VSC force progress update. This could be:
+  * a co-authenticated VSC withdraw
+  * a co-authenticated VSC snapshot
+  * a co-authenticated VSC settle
+  * a co-authenticated VSC mutual close
+  * unilaterally authenticated dispute. Those also provide a context of the
+    execution: a `payload` that is either empty or a co-authenticated VSC
+    off-chain state, VSC poi or trees, next VSC `state_hash` and next VSC
+    `round`. Update types for disputes supported are:
+    * solo close
+    * slash
+    * force progress
+    * virtual force progress
+* `state_hash` - the root of the SC state tree after the `update` had been
+  applied on top of the `poi`
+* `round`: SC's next round
+
+Note that this allows force progressing of both contracts in VSC and force
+progressing a VSC inside a VSC.
+
+From now on we will use force progress in the context of VSC meaning a Virtual
+State Channel Force progress transaction - `channel_vsc_force_progress`.
+
 ##### Example
 
 Alice wants to close her Virtual State Channel with Bob, but Bob refuses. Alice
 produces a solo update in her on-chain State Channel with Ingrid initiating a
 solo-closing sequence of the Virtual State Channel. If Ingrid refuses this,
-Alice can force it on-chain.
+Alice can force it on-chain using `channel_vsc_force_progress.
 
 Ingrid takes this update provided by Alice and applies it to her on-chain State
 Channel with Bob. If Bob refuses, this can be force-progressed as well.
@@ -443,30 +487,30 @@ manner.
 #### Bob is not responding or missing
 
 If there is a dispute between Alice and Bob or for the sake of the example Bob
-refuses to co-authenticate the next state, Alice can produce an off-chain update
-similar to force progress and bring it to Ingrid. This will produce the next
-Alice-Bob VSC off-chain state in the Alice-Ingrid channel. This instantly makes
-Alice safe. In order for Ingrid to be safe, she can propose to Bob to execute
-the same update Alice had already provided her, this time in Ingrid-Bob's State
-Channel. If Bob still refuses, Ingrid can produce an actual
-`channel_force_progress` transaction that she posts on-chain in order for her to
-enforce the contract execution in the Virtual State Channel, thus producing the
-new Alice-Bob Virtual State Channel on-chain and at the same time producing the
-next Ingrid-Bob off-chain state. The newly produced Ingrid-Bob state has in its
-state the VSC's.
+refuses to co-authenticate the next state, Alice can produce an off-chain
+`channel_vsc_force_progress` which is similar to force progress and bring it
+to Ingrid. This will produce the next Alice-Bob VSC off-chain state in the
+Alice-Ingrid channel. This instantly makes Alice safe. In order for Ingrid to
+be safe, she can propose to Bob to execute the same update Alice had already
+provided her, this time in Ingrid-Bob's State Channel. If Bob still refuses,
+Ingrid can produce an actual `channel_vsc_force_progress` transaction that she
+posts on-chain in order for her to enforce the contract execution in the
+Virtual State Channel, thus producing the new Alice-Bob Virtual State Channel
+on-chain and at the same time producing the next Ingrid-Bob off-chain state.
+The newly produced Ingrid-Bob state has in its state the VSC's.
 
 #### Ingrid is not responding or missing
 
 If there is a new valid off-chain update that Ingrid refuses to accept, both
-Alice and Bob can bring this on-chain via a `channel_force_progress` in a
+Alice and Bob can bring this on-chain via a `channel_vsc_force_progress` in a
 similar mannner as [above](#Bob-is-not-responding-or-missing).
 
-#### Actions that can be forced progressed
+#### Actions that can be forced progressed in a VSC
 
 Not all actions can be forced progressed on-chain. The ones that are allowed:
 * withdrawing tokens from a VCS - if the balance is co-authenticated by the two
   VSC parties. This limits the intermediary's exposure of locked tokens.
-* execution of a contract in the VSC in a forced progress
+* execution of a contract in the VSC in a virtual forced progress
 * posting a co-signed off-chain state of the VCS in the on-chain SC (similar to
   `channel_snapshot` on-chain)
 * mutual closing
@@ -474,7 +518,7 @@ Not all actions can be forced progressed on-chain. The ones that are allowed:
 * slash
 * setttle
 
-#### Actions that can not be forced progressed
+#### Actions that can not be forced progressed in a VSC
 
 Not all actions can be forced progressed on-chain. The ones that are not
 allowed:
