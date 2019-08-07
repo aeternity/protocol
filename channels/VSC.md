@@ -717,7 +717,7 @@ progress.
 
 ##### Alice produces a force progress based on an old state
 
-Ingrid receives a forced progress that seemsreasonable because the state it is
+Ingrid receives a forced progress that seems reasonable because the state it is
 based on a is the latest she had seen so far. Ingrid accepts it as valid and
 updates her Virtual State Channnel object in her channel with Alice. She then
 proposes this in her channel with Bob. This puts Bob at risk so Bob must defend
