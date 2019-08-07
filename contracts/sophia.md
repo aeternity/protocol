@@ -1,6 +1,7 @@
 [back](./contracts.md)
 ## The Sophia Language
 An Æternity BlockChain Language
+
 The Sophia is a language in the ML family. It is strongly typed and has
 restricted mutable state.
 
@@ -1039,6 +1040,7 @@ type     int_shape = shape(int)
 Type ::= Domain '=>' Type             // Function type
        | Type '(' Sep(Type, ',') ')'  // Type application
        | '(' Type ')'                 // Parens
+       | 'unit' | Sep(Type, '*')      // Tuples
        | Id | QId | TVar
 
 Domain ::= Type                       // Single argument
