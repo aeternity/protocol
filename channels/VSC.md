@@ -438,7 +438,7 @@ The transaction is called `channel_vsc_force_progress` and it consists of:
       defining the SC state that the progress is being based upon.
 * `poi` is a Proof of Inclusion that provides enough information for the
   forced progress to be applied. This would include the VSC object but
-  possibly accounts to which tockens are withdrawn to might be needed as well.
+  possibly accounts to which tokens are withdrawn might be needed as well.
 * `update` is a VSC force progress update. This could be:
   * a co-authenticated VSC withdraw
   * a co-authenticated VSC snapshot
