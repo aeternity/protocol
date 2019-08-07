@@ -155,5 +155,14 @@ the old and new consensus protocols at heights at which the new consensus
 protocol should have been applied. This is because the node should be aware of
 multiple chain forks and peers.
 
+Any implementation needs to be resilient to node restarts with
+accidental distinct miner signalling parameters in the configuration.
+For example, a user may write an unintended miner signalling
+configuration, start the node, realize that the node is running with
+an incorrect configuration, stop the node, fix the configuration, then
+- with the same persisted storage - start (again) the node: the node
+needs not to consider any potential key block "signal" identified
+under the previous incorrect configuration.
+
 The reference implementation of the node is meant to implement this
 specification. **TODO Not implemented yet.**
