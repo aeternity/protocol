@@ -530,11 +530,12 @@ The content of the contract store depends on [the ABI and the VM version](/contr
 ```
 
 #### Name service subname transaction
+From Lima release.
 ```
 [ <account_id> :: id()
 , <nonce>      :: int()
 , <name>       :: binary()
-, <definition> :: [{binary(), [{binary(), binary()}]}]
+, <definition> :: [{binary(), [{binary(), id()}]}]
 , <fee>        :: int()
 , <ttl>        :: int()
 ]

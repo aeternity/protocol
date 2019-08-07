@@ -399,6 +399,7 @@ existing name, and then inserts all subnames into naming tree with their respect
 
 To just remove all subnames of a name, the `definition` should be empty.
 
+NOTE: The size and complexity of the configuration of subnames is implicitly capped by the block gas limit.
 
 ## Storage
 
