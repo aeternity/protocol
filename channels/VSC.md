@@ -444,7 +444,7 @@ The transaction is called `channel_vsc_force_progress` and it consists of:
   * a co-authenticated VSC snapshot
   * a co-authenticated VSC settle
   * a co-authenticated VSC mutual close
-  * unilaterally authenticated dispute. Those also provide a context of the
+  * a unilaterally authenticated dispute. Those also provide a context for the
     execution: a `payload` that is either empty or a co-authenticated VSC
     off-chain state, VSC poi or trees, next VSC `state_hash` and next VSC
     `round`. Update types for disputes supported are:
@@ -456,18 +456,18 @@ The transaction is called `channel_vsc_force_progress` and it consists of:
   applied on top of the `poi`
 * `round`: SC's next round
 
-Note that this allows force progressing of both contracts in VSC and force
+Note that this allows force-progressing of both contracts in VSC and force
 progressing a VSC inside a VSC.
 
 From now on we will use force progress in the context of VSC meaning a Virtual
-State Channel Force progress transaction - `channel_vsc_force_progress`.
+State Channel Force Progress transaction - `channel_vsc_force_progress`.
 
 ##### Example
 
 Alice wants to close her Virtual State Channel with Bob, but Bob refuses. Alice
 produces a solo update in her on-chain State Channel with Ingrid initiating a
 solo-closing sequence of the Virtual State Channel. If Ingrid refuses this,
-Alice can force it on-chain using `channel_vsc_force_progress.
+Alice can force it on-chain using `channel_vsc_force_progress`.
 
 Ingrid takes this update provided by Alice and applies it to her on-chain State
 Channel with Bob. If Bob refuses, this can be force-progressed as well.
@@ -487,7 +487,7 @@ manner.
 
 If there is a dispute between Alice and Bob or for the sake of the example Bob
 refuses to co-authenticate the next state, Alice can produce an off-chain
-`channel_vsc_force_progress` which is similar to force progress and bring it
+`channel_vsc_force_progress`, which is similar to force progress, and bring it
 to Ingrid. This will produce the next Alice-Bob VSC off-chain state in the
 Alice-Ingrid channel. This instantly makes Alice safe. In order for Ingrid to
 be safe, she can propose to Bob to execute the same update Alice had already
