@@ -27,12 +27,12 @@ the determined height at which the new consensus protocol may become
 active. This is in order to prevent the node from having to aggregate the
 results of the "signalling" block interval in a too short time interval.
 
-The value in the key block header field `info`:
+The value in the field `info` in the key block headers in the
+"signalling" block interval:
 - Uses the whole field `info` i.e. is not a bitmask.
 - Is meant to be a pseudorandom number, so to limit the risk of the same value
   being used by simultaneous competing consensus protocol proposals.
-- Is part of the validation rules of the new consensus protocol on the
-  "signalling" block interval.
+- Is part of the validation rules of the new consensus protocol.
 
 ### Parameters
 
