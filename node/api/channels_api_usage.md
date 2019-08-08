@@ -157,6 +157,7 @@ will describe these in groups which indicate their relation to each other.
   | port | integer | the port of the `responder`s node| Yes if `role=initiator` | No | No | No |
   | role | string | the role of the client - either `initiator` or `responder` | Yes | Yes | No |
   | minimum_depth | integer | the minimum amount of blocks to be mined | No | No | No |
+  | state_password | string | The password used to protect the state trees | Yes after lima fork | Yes after lima fork | No |
 
   `responder`'s port and host pair must be reachable from `initiator` network
   so unless participants are part of a LAN, they should be exposed to the
@@ -164,7 +165,10 @@ will describe these in groups which indicate their relation to each other.
   same port number for different responder pubkeys and multiple simultaneous
   responders. If the `responder` sets `initiator_id` to `"any"`, the responder will
   accept a connection request from any initiator, and fetch the proper `initiator_id`
-  from the `channel_open` message.
+  from the `channel_open` message. The `state_password` is required after the lima fork - not 
+  providing the password will result in an error. Not providing a password before the lima fork will result
+  in the node using a default password - `correct horse battery staple`. In case a channel was created before the
+  lima fork the password used for reestablishing the channel is the default one.
   
   Once established, the channel follows a [predefined set of state
   transitions](/channels/README.md#overview). The implementation protects the
@@ -205,6 +209,8 @@ will describe these in groups which indicate their relation to each other.
   | responder_amount | 40000000000000 |
   | channel_reserve | 2 |
   | ttl | 1000 |
+  | `state_password` for responder | example1 |
+  | `state_password` for initiator | example2 |
 
   The `initiator` will be connecting to the `responder` on localhost:12340
   We will be using the tool [wscat](https://github.com/websockets/wscat)
@@ -244,7 +250,7 @@ will describe these in groups which indicate their relation to each other.
 ### Responder WebSocket open
 Using the set of prenegotiated parameters the responder connects
 ```
-$ wscat --connect 'localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&initiator_id=ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm&lock_period=10&port=12340&protocol=json-rpc&push_amount=1&responder_amount=40000000000000&responder_id=ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC&role=responder'
+$ wscat --connect 'localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&initiator_id=ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm&lock_period=10&port=12340&protocol=json-rpc&push_amount=1&responder_amount=40000000000000&responder_id=ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC&role=responder&state_password=example1'
 
 connected (press CTRL+C to quit)
 ```
@@ -261,7 +267,7 @@ connection on the specified port - `12340`.
 ### Initiator WebSocket open
 Using the set of prenegotiated parameters the initiator connects
 ```
-$ wscat --connect 'localhost:3014/channel?channel_reserve=2&host=localhost&initiator_amount=70000000000000&initiator_id=ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm&lock_period=10&port=12340&protocol=json-rpc&push_amount=1&responder_amount=40000000000000&responder_id=ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC&role=initiator'
+$ wscat --connect 'localhost:3014/channel?channel_reserve=2&host=localhost&initiator_amount=70000000000000&initiator_id=ak_2MGLPW2CHTDXJhqFJezqSwYSNwbZokSKkG7wSbGtVmeyjGfHtm&lock_period=10&port=12340&protocol=json-rpc&push_amount=1&responder_amount=40000000000000&responder_id=ak_nQpnNuBPQwibGpSJmjAah6r3ktAB7pG9JHuaGWHgLKxaKqEvC&role=initiator&state_password=example2'
 
 connected (press CTRL+C to quit)
 ```
@@ -1372,11 +1378,12 @@ The fsm responds with the following type of report:
 Open the channel in the same way as in the
 [Initiator WebSocket open](#initiator-websocket-open) example,
 adding the parameters `existing_channel_id` and `offchain_tx` with values
-matching the ones provided in the `leave` report above. Some parameters (related to open transaction) are not required and ignored. See [Channel parameters](#channel-parameters):
+matching the ones provided in the `leave` report above. The current state password must be provided in order to decrypt the state trees.
+Providing an invalid password will result in an error. Some parameters (related to open transaction) are not required and ignored. See [Channel parameters](#channel-parameters):
 
 ```
 $ wscat --connect
-localhost:3014/channel?existing_channel_id=ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR&host=localhost&offchain_tx=tx_%2BQENCwH4h...&port=12341&protocol=json-rpc&role=initiator
+localhost:3014/channel?existing_channel_id=ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR&host=localhost&offchain_tx=tx_%2BQENCwH4h...&port=12341&protocol=json-rpc&role=initiator&state_password=example2
 ```
 
 The channel fsm responds with the following event reports if all goes well:
@@ -1821,6 +1828,58 @@ the message received is:
 Examples for this would be either opening amount being below the threshold
 defined by `channel_reserve`, or any of `channel_reserve`, `push_amount` or
 `lock_period` being a negative number.
+
+#### Invalid password
+
+If a user tries to use a `state_password` which is shorter than 6 characters then the client will receive an error.
+The same error will also be sent if the password used for reestablishing does not match the password used for encrypting
+the state trees.
+```javascript
+{
+   "channel_id":null,
+   "error":{
+      "code":3,
+      "data":[
+         {
+            "code":1012,
+            "message":"Invalid password"
+         }
+      ],
+      "message":"Rejected",
+      "request":{
+      }
+   },
+   "id":null,
+   "jsonrpc":"2.0",
+   "version":1
+}
+```
+
+In case the user tries to open/reestablish a state channel after the lima fork
+without explicitly providing the `state_password` the operation will fail with the following error:
+```javascript
+{
+   "channel_id":null,
+   "error":{
+      "code":3,
+      "data":[
+         {
+            "code":1012,
+            "message":"Invalid password"
+         },
+         {  "code":1013,
+            "message":"Required since lima fork"
+         }
+      ],
+      "message":"Rejected",
+      "request":{
+      }
+   },
+   "id":null,
+   "jsonrpc":"2.0",
+   "version":1
+}
+```
 
 #### Timeout error
 
@@ -2818,3 +2877,35 @@ with the following message:
 ```
 Where `channel_id` has the correct value of the channel's ID.
 
+#### Changing the state password
+The user may at any moment after the channel has been opened decide to change the `state_password`. To do so a client calls
+the `channels.change_state_password` method: 
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.change_state_password",
+  "params": {
+    "state_password": "new_secure_password",
+    }
+}
+```
+
+If the operations was successful the client receives the following response:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.password_changed.reply",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "action": "password_changed"
+    }
+  },
+  "version": 1
+}
+```
+
+The operation may fail with the errors described [here](#Invalid-password). After a password change was successful
+the new password must be used for reestablishing the channel. Keep in mind that the node does not keep your password, 
+the password is used only to derive a secret encryption key and then thrown away - protect your password as without it
+(and without a backup of the state trees) reestablishing a channel is impossible.
