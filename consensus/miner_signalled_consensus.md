@@ -32,7 +32,19 @@ The value in the field `info` in the key block headers in the
 - Uses the whole field `info` i.e. is not a bitmask.
 - Is meant to be a pseudorandom number, so to limit the risk of the same value
   being used by simultaneous competing consensus protocol proposals.
-- Is part of the validation rules of the new consensus protocol.
+- Is not necessarily part of the validation rules of the new consensus
+  protocol.
+  For the sake of clarity: the miner signalling is orthogonal to the
+  validation rules of the new consensus protocol.
+  This means that, if the network resonably settles - via miner
+  signalling - on activating the new consensus protocol and a user
+  starts a node configuring the new consensus protocol as
+  unconditionally effective at the same height as the (past)
+  miner-signalled consensus upgrade height, the node may - depending
+  on the chain forks observed on the network - follow as best valid
+  chain a chain fork that upgraded to the new consensus protocol at
+  the configured height even if without a majority of "signals" in the
+  "signalling" block interval.
 
 ### Parameters
 
@@ -101,6 +113,8 @@ of 3360) if (HE - HS) is 3360.
 
 ## Rationale
 
+### New consensus protocol activation per chain fork
+
 The node keeps the decision to activate the new consensus protocol local to the
 chain fork as taking that decision globally does not enhance the user experience
 and rather worsens it.
@@ -113,6 +127,14 @@ and rather worsens it.
 
 *NOTE: This design choice may be lifted if problematic during the implementation
  phase.*
+
+### Value of the info field not necessarily part of new consensus protocol
+
+The miner signalling is orthogonal to the validation rules of the new
+consensus protocol for the sake of simplicity of the implementations.
+
+This is not detrimental as the new consensus protocol may include
+arbitrary constraints.
 
 ## Backwards Compatibility
 
