@@ -15,7 +15,9 @@ not upgraded their nodes to a version able to follow the new consensus protocol.
 
 ### Overview
 
-In a chain fork, the new consensus protocol becomes active at a determined
+On a node configured for a miner-signalled consensus upgrade,
+per chain fork,
+the new consensus protocol becomes active at a determined
 height if at least a determined majority of the key blocks in a determined
 "signalling" block interval in such chain fork contains a determined value in
 the header field `info`.
