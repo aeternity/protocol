@@ -138,10 +138,8 @@ interpreting such `info` field as a bitmask rather than a value.
 ### Soft-forking consensus proposals
 
 This proposal may be extended to soft-forking consensus proposals - as opposed
-to only hard-forking ones - by: relaxing the strict monotonicity of consensus
-versions; and excluding the value in the key block header field `info` in the
-"signalling" block interval from the validation rules of the new consensus
-protocol.
+to only hard-forking ones - by relaxing the strict monotonicity of consensus
+versions.
 
 Such extension should preferably be accompanied by a working implementation.
 
