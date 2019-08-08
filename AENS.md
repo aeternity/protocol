@@ -177,6 +177,11 @@ interoperability with DNS.
 
 ***Note:*** For this first draft names MUST `.test` as a suffix, i.e. `mywallet.test`.
 
+Subnames are subject to the same restriction applied to names, with one
+additional requirement that they MUST contain more than one `.` character
+in their literal presentation.
+
+***Example:*** `subname.topname.test` or `nested-subname.subname.topname.test`.
 
 ### Namespaces/Labels
 
@@ -394,8 +399,9 @@ along with the pointers for each subname.
 A `definition` field is a mapping of `subname` to `pointers`, where the `pointers`
 for subname SHOULD NOT contain multiple entries with the same key.
 
-The execution of `subname` transaction first removes all subnames belonging to provided
-existing name, and then inserts all subnames into naming tree with their respective pointers.
+The execution of `subname` transaction is semantically equivalent to:
+- removal of all subnames belonging to provided `existing` name
+- inserting of all subnames into naming tree with their respective pointers
 
 To just remove all subnames of a name, the `definition` should be empty.
 
