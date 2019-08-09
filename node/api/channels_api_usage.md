@@ -97,18 +97,19 @@ and another for optional timeouts.
 
   | Name | Type | Description | Required for open | Required/Used in reestablish | Part of the `channel_create_tx` |
   | ---- | ---- | ----------- | ----------------- | ---------------------------- | ------------------------------- |
-  | initiator_id | string | initiator's public key | Yes | No | Yes |
-  | responder_id | string | responder's public key | Yes | No | Yes |
-  | lock_period | integer | amount of blocks for disputing a solo close | Yes | No | Yes |
-  | push_amount | integer | initial deposit in favour of the responder by the initiator | Yes | No | No |
-  | initiator_amount | integer | amount of tokens the initiator has committed to the channel | Yes | No | Yes |
-  | responder_amount | integer | amount of tokens the responder has committed to the channel | Yes | No | Yes |
-  | channel_reserve | integer | the minimum amount both peers need to maintain | Yes | No | Yes |
-  | ttl | integer | maximum height of a block to include the `channel_create_tx` | No | No | Yes |
-  | host | string | host of the `responder`'s node| Yes if `role=initiator` | No | No | No |
-  | port | integer | the port of the `responder`s node| Yes if `role=initiator` | No | No | No |
-  | role | string | the role of the client - either `initiator` or `responder` | Yes | Yes | No |
-  | minimum_depth | integer | the minimum amount of blocks to be mined | No | No | No |
+  | initiator_id         | string  | initiator's public key                                       | Yes | No | Yes |
+  | responder_id         | string  | responder's public key                                       | Yes | No | Yes |
+  | lock_period          | integer | amount of blocks for disputing a solo close                  | Yes | No | Yes |
+  | push_amount          | integer | initial deposit in favour of the responder by the initiator  | Yes | No | No  |
+  | initiator_amount     | integer | amount of tokens the initiator has committed to the channel  | Yes | No | Yes |
+  | responder_amount     | integer | amount of tokens the responder has committed to the channel  | Yes | No | Yes |
+  | channel_reserve      | integer | the minimum amount both peers need to maintain               | Yes | No | Yes |
+  | ttl                  | integer | maximum height of a block to include the `channel_create_tx` | No  | No | Yes |
+  | host                 | string  | host of the `responder`'s node                               | Yes if `role=initiator` | No | No |
+  | port                 | integer | the port of the `responder`s node                            | Yes if `role=initiator` | No | No |
+  | role                 | string  | the role of the client - either `initiator` or `responder`   | Yes | Yes | No |
+  | minimum_depth        | integer | base value for the minimum depth calculation                 | No  | No  | No |
+  | minimum_depth_factor | float   | factor by which to adjust the minimum_depth                  | No  | No  | No |
 
   `responder`'s port and host pair must be reachable from `initiator` network
   so unless participants are part of a LAN, they should be exposed to the
@@ -389,10 +390,14 @@ a `channel_changed` event in an `on_chain_tx` report:
 }
 ```
 
-### Mininum-depth confirmation
-A block height timer is started and it ends after `minimum_depth + 1` confirmations. Default value for
-it is 4, so 5 blocks need to be mined. As a result, each party will receive
-two kinds of confirmation.
+### Mininum depth confirmation
+A block height timer is started and it ends after the calculated minimum depth plus 1 confirmations.
+
+Default `minimum_depth` value is `4`.
+Default `minimum_depth_factor` value is `0`.
+
+If `minimum_depth_factor` is equal or less than `0` the calculated minimum depth equals the `minimum_depth` value.
+Otherwise the minimum depth is `minimum_depth * minimum_depth_factor * transaction_fee_coefficient`.
 
 An update from one's own node that the block height needed is reached:
 ```javascript
