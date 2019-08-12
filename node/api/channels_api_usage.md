@@ -491,11 +491,12 @@ $ wscat --connect 'localhost:3014/channel?protocol=json-rpc&reconnect_tx=tx_%2BJ
 connected (press CTRL+C to quit)
 ```
 
-While the client is disconnected, the corresponding FSM will reject any protocol request that
-requires signing. An attempt to reconnect to an FSM that already has a client connected will
-be rejected. Note, however, that if e.g. an update request already includes the signature of
-the disconnected client, the operation is allowed, and the responding FSM proceeds as if it
-had issued a signing request and received a successful reply.
+While the client is disconnected, the corresponding FSM will reject any
+protocol request that requires signing. An attempt to reconnect to an FSM that
+already has a client connected will be rejected. Note, however, that if e.g.
+an update request already includes the authentication of the disconnected
+client, the operation is allowed, and the responding FSM proceeds as if it had
+issued an authentication request and received a successful reply.
 
 #### Example
 
@@ -578,9 +579,10 @@ will respond with a `conflict` error.
 }
 ```
 
-If, on the other hand, the `responder` FSM manages to get `initiator` to co-sign
-the initial request (e.g. optically by exchanging QR codes), the `initiator` FSM
-will detect the existence of its client's signature, and will acknowledge the request.
+If, on the other hand, the `responder` FSM manages to get `initiator` to
+co-authenticate the initial request (e.g. optically by exchanging QR codes),
+the `initiator` FSM will detect the existence of its client's authentication,
+and will acknowledge the request.
 
 ```
 #### responder ---> node
