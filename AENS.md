@@ -396,8 +396,15 @@ The `subname` transaction MUST be signed by the owner of the `name` entry.
 `subname` transaction is used to define a tree of subnames below `name` entry
 along with the pointers for each subname.
 
-A `definition` field is a mapping of `subname` to `pointers`, where the `pointers`
+A `definition` field is a mapping of `subname prefix` to `pointers`, where the `pointers`
 for subname SHOULD NOT contain multiple entries with the same key.
+
+A `subname prefix` in the position of key in the map stored in `definition` field,
+when concatenated with '.' character and value of `name` of the domain for which we
+are defining the subnames for, should form a full `subname` value.
+
+For example, Subname prefix `example` for name `topname.aet` forms
+full subname value `example.topname.aet`.
 
 The execution of `subname` transaction is semantically equivalent to:
 - removal of all subnames belonging to provided `existing` name

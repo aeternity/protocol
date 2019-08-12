@@ -48,6 +48,7 @@ The total gas of the operation is a sum of the base gas and the op gas.
 |  203 | Name update         | (Unused.)      | TODO | TODO | TODO | TODO |
 |  204 | Name transfer       | (Unused.)      | `From : address, To : address, Hash : hash, Sign : signature` | `()` | 12000 | 0 |
 |  205 | Name revoke         | (Unused.)      | `Addr : address, Hash : hash, Sign : signature` | `()` | 12000 | 0 |
+|  206 | Subname             | (Unused.)      | `Account : address, Name : string, Definition: List` | `()` | 12000 | Proportional to the byte size of the transaction representing this operation, specifically: `byte_size(NameClaimTx) * GasPerByte` |
 
 `GasPerByte` is 20.
 
