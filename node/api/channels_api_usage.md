@@ -396,7 +396,7 @@ A block height timer is started and it ends after the calculated minimum depth p
 Default `minimum_depth` value is `4`.
 Default `minimum_depth_factor` value is `0`.
 
-If `minimum_depth_factor` is equal or less than `0` the calculated minimum depth equals the `minimum_depth` value.
+If `minimum_depth_factor` is equal to or less than `0` the calculated minimum depth equals the `minimum_depth` value.
 Otherwise the minimum depth is `minimum_depth * minimum_depth_factor * transaction_fee_coefficient`.
 
 An update from one's own node that the block height needed is reached:
