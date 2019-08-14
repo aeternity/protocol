@@ -6,7 +6,7 @@ for:
 
 * Hashing (e.g., block hash)
 * Insertion in the Merkle Patricia Tree (e.g., state trees, transaction trees).
-* Signing transactions (i.e., the serialized form is signed).
+* Signing transactions (i.e., the (hash of the) serialized form is signed).
 
 Other formats may be used for communication between nodes or for the
 user API.
