@@ -441,9 +441,9 @@ pattern 00 11 00 00.
 | 0x68 | 'LOG2' | Arg0 Arg1 Arg2 Arg3 | Create a log message with two topics in the call object. |
 | 0x69 | 'LOG3' | Arg0 Arg1 Arg2 Arg3 Arg4 | Create a log message with three topics in the call object. |
 | 0x6a | 'LOG4' | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 | Create a log message with four topics in the call object. |
-| 0x6b | 'DEACTIVATE' |  | Mark the current contract for deactication. |
+| 0x6b | 'DEACTIVATE' |  | Mark the current contract for deactivation. |
 | 0x6c | 'SPEND' | Arg0 Arg1 | Transfer Arg0 tokens to account Arg1. (If the contract account has at least that many tokens. |
-| 0x6d | 'ORACLE_REGISTER' | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 | Mark the current contract for deactication. |
+| 0x6d | 'ORACLE_REGISTER' | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 |  |
 | 0x6e | 'ORACLE_QUERY' |  |  |
 | 0x6f | 'ORACLE_RESPOND' |  |  |
 | 0x70 | 'ORACLE_EXTEND' |  |  |
