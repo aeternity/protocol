@@ -96,7 +96,7 @@ languages and support local state and inheritance. More specifically:
 ```javascript
 // An abstract contract
 contract VotingType =
-  stateful entrypoint vote : string => ()
+  stateful entrypoint vote : string => unit
 ```
 
 - A contract instance is an entity living on the block chain (or in a state channel). Each
@@ -168,16 +168,16 @@ Sophia does not have arbitrary mutable state, but only a limited form of
 state associated with each contract instance.
 
 - Each contract defines a type `state` encapsulating its mutable state.
-  The type `state` defaults to the tuple with zero elements i.e. `()`.
+  The type `state` defaults to the `unit`.
 - The initial state of a contract is computed by the contract's `init`
   function. The `init` function is *pure* and returns the initial state as its
   return value.
-  If the type `state` is `()`, the `init` function defaults to returning the value `()`.
+  If the type `state` is `unit`, the `init` function defaults to returning the value `()`.
   At contract creation time, the `init` function is executed and
   its result is stored as the contract state.
 - The value of the state is accessible from inside the contract
   through an implicitly bound variable `state`.
-- State updates are performed by calling a function `put : state => ()`.
+- State updates are performed by calling a function `put : state => unit`.
 - Aside from the `put` function (and similar functions for transactions
   and events), the language is purely functional.
 - Functions modifying the state need to be annotated with the `stateful` keyword (see below).
@@ -414,7 +414,7 @@ type. The type of lists with elements of type `'e` is written
 
 ```
 [1, 33, 2, 666]                                                   : list(int)
-[(1, "aaa"), (10, "jjj"), (666, "the beast")]                     : list((int, string))
+[(1, "aaa"), (10, "jjj"), (666, "the beast")]                     : list(int * string)
 [{[1] = "aaa", [10] = "jjj"}, {[5] = "eee", [666] = "the beast"}] : list(map(int, string))
 ```
 
@@ -504,8 +504,8 @@ The following builtin functions are defined on maps:
   Map.member(k : 'k, m : map('k, 'v)) : bool
   Map.delete(k : 'k, m : map('k, 'v)) : map('k, 'v)
   Map.size(m : map('k, 'v)) : int
-  Map.to_list(m : map('k, 'v)) : list(('k, 'v))
-  Map.from_list(m : list(('k, 'v))) : map('k, 'v)
+  Map.to_list(m : map('k, 'v)) : list('k * 'v)
+  Map.from_list(m : list('k * 'v)) : map('k, 'v)
 ```
 
 #### Map implementation
@@ -536,7 +536,7 @@ The following builtin functions are defined on strings:
 
 The hash functions hashes the string represented as byte array.
 
-#### Builtin functions on byte arrays
+### Byte arrays
 
 The following builtin functions are defined on byte arrays:
 ```
@@ -555,7 +555,7 @@ hexadecimal representation of the byte array. For instance
   Bytes.to_str(#10ff) == "10FF"
 ```
 
-#### Builtin functions on integers
+### Builtin functions on integers
 
 The following builtin functions are defined on integers:
 
@@ -681,7 +681,7 @@ To extend the TTL of an oracle, call `Oracle.extend`:
 Oracle.extend(o          : oracle('a, 'b),
               <signature : signature>,     // Signed oracle address + contract address
                                            // named argument (and thus optional)
-              ttl        : Chain.ttl) : ()
+              ttl        : Chain.ttl) : unit
 ```
 
 The `ttl` is must be a relative TTL, relative to the current oracle expiry
@@ -765,12 +765,12 @@ contract Oracles =
     Oracle.query(o, q, qfee, qttl, RelativeTTL(rttl))
 
   stateful entrypoint extendOracle(o   : oracle(string, int),
-                                 ttl : Chain.ttl) : () =
+                                   ttl : Chain.ttl) : unit =
     Oracle.extend(o, ttl)
 
   stateful entrypoint signExtendOracle(o    : oracle(string, int),
                                      sign : signature,   // Signed oracle address + contract address
-                                     ttl  : Chain.ttl) : () =
+                                     ttl  : Chain.ttl) : unit =
     Oracle.extend(o, signature = sign, ttl)
 
   stateful entrypoint respond(o    : oracle(string, int),
@@ -827,10 +827,10 @@ Naming System (AENS):
   type checked against this type at run time.
 - AENS transactions
   ```
-  AENS.preclaim(owner : address, commitment_hash : hash, <signature : signature>) : ()
-  AENS.claim   (owner : address, name : string, salt : int, <signature : signature>) : ()
-  AENS.transfer(owner : address, new_owner : address, name_hash : hash, <signature : signature>) : ()
-  AENS.revoke  (owner : address, name_hash : hash, <signature : signature>) : ()
+  AENS.preclaim(owner : address, commitment_hash : hash, <signature : signature>) : unit
+  AENS.claim   (owner : address, name : string, salt : int, <signature : signature>) : unit
+  AENS.transfer(owner : address, new_owner : address, name_hash : hash, <signature : signature>) : unit
+  AENS.revoke  (owner : address, name_hash : hash, <signature : signature>) : unit
   ```
   If `owner` is equal to `Contract.address` the signature `signature` is
   ignored, and can be left out since it is a named argument. Otherwise we need
@@ -853,7 +853,7 @@ logged using the `Chain.event` function:
       Event1(int, int, string)
     | Event2(string, address)
 
-  Chain.event(e : event) : ()
+  Chain.event(e : event) : unit
 ```
 
 The event can have 0-3 *indexed* fields, and an optional *payload* field. A
@@ -1051,7 +1051,7 @@ The function type arrow associates to the right.
 
 Example,
 ```
-'a => list('a) => (int, list('a))
+'a => list('a) => (int * list('a))
 ```
 
 ### Statements
