@@ -994,8 +994,8 @@ Decl ::= 'contract' Con '=' Block(Decl)
        | 'type'     Id ['(' TVar* ')'] ['=' TypeAlias]
        | 'record'   Id ['(' TVar* ')'] '=' RecordType
        | 'datatype' Id ['(' TVar* ')'] '=' DataType
-       | [stateful] 'entrypoint' Id ':' Type
-       | [stateful] 'entrypoint' Id Args [':' Type] '=' Block(Stmt)
+       | ['stateful'] 'entrypoint' Id ':' Type
+       | ['stateful'] 'entrypoint' Id Args [':' Type] '=' Block(Stmt)
        | Modifier* 'function' Id Args [':' Type] '=' Block(Stmt)
 
 Modifier ::= 'stateful' | 'private'
