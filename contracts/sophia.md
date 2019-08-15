@@ -633,12 +633,24 @@ string`, `String.sha3(s)` and `Crypto.sha3(s)` gives different results.
 There are also functions for signature verification:
 
 ```
-  Crypto.ecverify(msg : hash, pubkey : address, sig : signature) : bool
-  Crypto.ecverify_secp256k1(msg : hash, pubkey : bytes(64), sig : bytes(64)) : bool
+  Crypto.verify_sig(msg : hash, pubkey : address, sig : signature) : bool
+  Crypto.verify_sig_secp256k1(msg : hash, pubkey : bytes(64), sig : bytes(64)) : bool
 ```
 
 The signature verification returns true if `sig` is the signature of `msg`
 using the private key corresponding to `pubkey`.
+
+The function `ecrecover_secp256k1` allows one to recover the
+Ethereum style address from a msg hash and respective signature, and
+`ecverify_secp256k1` will verify a signature for a msg hash against
+an Ethereum style address:
+
+```
+  Crypto.ecverify_secp256k1(msg : hash, addr : bytes(20), sig : bytes(65)) : bool
+  Crypto.ecrecover_secp256k1(msg : hash, sig : bytes(65)) : option(bytes(20))
+```
+
+*Note*: Before Sophia version 4, `verify_sig` was (incorrectly) named `ecverify`.
 
 #### Authorization interface
 
