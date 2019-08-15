@@ -603,6 +603,13 @@ There are also functions for signature verification:
 The signature verification returns true if `sig` is the signature of `msg`
 using the private key corresponding to `pubkey`.
 
+The function `ecrecover_secp256k1` allows one to recover the
+Ethereum address from a msg hash and respective signature:
+
+```
+  Crypto.ecrecover_secp256k1(msg : hash, sig : bytes(65)) : bytes(32)
+```
+
 #### Authorization interface
 
 When a Generalized account is authorized, the authorization function needs
