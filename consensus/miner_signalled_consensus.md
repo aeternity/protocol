@@ -24,8 +24,12 @@ the header field `info`.
 
 The "signalling" block interval has a determined number of confirmations before
 the determined height at which the new consensus protocol may become
-active. This is in order to prevent the node from having to aggregate the
-results of the "signalling" block interval in a too short time interval.
+active. This is in order to:
+- Prevent the node from having to aggregate the results of the
+  "signalling" block interval in a too short time interval.
+- Prevent a user from restarting the node configuring unconditionally
+  the new consensus protocol when the signalling outcome is not
+  confirmed with reasonably high probability.
 
 The value in the field `info` in the key block headers in the
 "signalling" block interval:
