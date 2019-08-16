@@ -194,6 +194,3 @@ under the previous incorrect configuration.
 Any implementation of channels needs to ensure that the network
 reasonably settles on whether to activate the new consensus protocol
 before accepting or producing off-chain transaction payloads.
-
-The reference implementation of the node is meant to implement this
-specification. **TODO Not implemented yet.**
