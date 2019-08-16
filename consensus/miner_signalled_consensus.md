@@ -119,18 +119,18 @@ of 3360) if (HE - HS) is 3360.
 
 ### New consensus protocol activation per chain fork
 
-The node keeps the decision to activate the new consensus protocol local to the
-chain fork as taking that decision globally does not enhance the user experience
-and rather worsens it.
+The decision is local to the chain fork, based on its height, rather
+than global in the node because if it were done globally it could not
+be guaranteed that the best valid chain were the longest.  So such
+global decision would be ineffective in preventing chain forks with
+distinct consensus protocol versions from being stored locally for the
+same height.  As a result, the user experience would be worse:
 - By taking the decision globally, on bootstrap a node may initially follow a
   (valid) chain fork distinct from the best valid one hence take the wrong
   decision.
 - As the best valid chain is not necessarily the longest one, by taking the
   decision globally the node may anyway taint the storage with blocks with
   eventually wrong consensus protocol.
-
-*NOTE: This design choice may be lifted if problematic during the implementation
- phase.*
 
 ### Value of the info field not necessarily part of new consensus protocol
 
