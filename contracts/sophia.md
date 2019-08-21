@@ -606,7 +606,7 @@ The following builtin functions are defined on addresses:
   Address.to_str(a : address) : string    // Base58 encoded string
   Address.is_contract(a : address) : bool // Is the address a contract
   Address.is_oracle(a : address) : bool   // Is the address a registered oracle
-  Address.is_payablew(a : address) : bool // Can the address be spent to
+  Address.is_payable(a : address) : bool // Can the address be spent to
 ```
 
 ### Builtins
