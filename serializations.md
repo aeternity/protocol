@@ -273,6 +273,15 @@ subsequent sections divided by object.
 , <ga_auth_fun> :: binary()
 ]
 ```
+
+#### Accounts (version 3, Normal accounts with flags, from Lima release)
+```
+[ <flags>       :: int()
+, <nonce>       :: int()
+, <balance>     :: int()
+]
+```
+
 ### Signed transaction
 ```
 [ <signatures>  :: [binary()]
@@ -936,6 +945,16 @@ The binary is a serialized Merkle Patricia Tree.
 , <type info>        :: [{<fun_hash> :: binary(), <fun_name> :: binary(), <arg_type> :: binary(), <out_type> :: binary()}]
 , <byte code>        :: binary()
 , <compiler version> :: binary()
+]
+```
+
+#### Sophia byte code (version 3, Lima release)
+```
+[ <source code hash> :: binary()
+, <type info>        :: [{<fun_hash> :: binary(), <fun_name> :: binary(), <payable> :: bool(), <arg_type> :: binary(), <out_type> :: binary()}]
+, <byte code>        :: binary()
+, <compiler version> :: binary()
+, <payable>          :: bool()
 ]
 ```
 
