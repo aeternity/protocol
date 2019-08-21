@@ -252,7 +252,7 @@ payable stateful entrypoint buy(to : address) =
 ```
 
 Note: In the Aeternity VM (AEVM) contracts and entrypoints were by default
-payabley until the Lima release.
+payable until the Lima release.
 
 ### Namespaces
 
