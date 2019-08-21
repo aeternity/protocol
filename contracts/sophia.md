@@ -15,6 +15,7 @@ some blockchain specific primitives, constructions and types have been added.
     - [Contracts](#contracts)
         -  [Calling other contracts](#calling-other-contracts)
     -  [Mutable state](#mutable-state)
+    -  [Payable](#payable)
     -  [Namespaces](#namespaces)
     -  [Splitting code over multiple files](#splitting-code-over-multiple-files)
     -  [Types](#types)
@@ -218,6 +219,41 @@ A `stateful` annotation *is not* required to
 * Read the contract state.
 * Issue an event using the `event` function.
 * Call another contract with `value = 0`, even if the called function is stateful.
+
+### Payable
+
+#### Payable contracts
+
+A concrete contract is by default *not* payable. Any attempt at spending to such
+a contract (either a `Chain.spend` or a normal spend transaction) will fail. If a
+contract shall be able to receive funds in this way it has to be declared `payable`:
+
+```javascript
+// A payable contract
+payable contract ExampleContract =
+  stateful entrypoint do_stuff() = ...
+```
+
+If in doubt, it is possible to check if an address is payable using
+`Address.is_payable(addr)`.
+
+#### Payable entrypoints
+
+A contract entrypoint is by default *not* payable. Any call to such a function
+(either a [Remote call](#calling-other-contracts) or a contract call transaction)
+that has a non-zero `value` will fail. Contract entrypoints that should be called
+with a non-zero value should be declared `payable`.
+
+```javascript
+payable stateful entrypoint buy(to : address) =
+  if(Call.value > 42)
+    transfer_item(to)
+  else
+    abort("Value too low")
+```
+
+Note: In the Aeternity VM (AEVM) contracts and entrypoints were by default
+payable until the Lima release.
 
 ### Namespaces
 
@@ -571,6 +607,7 @@ The following builtin functions are defined on addresses:
   Address.to_str(a : address) : string    // Base58 encoded string
   Address.is_contract(a : address) : bool // Is the address a contract
   Address.is_oracle(a : address) : bool   // Is the address a registered oracle
+  Address.is_payable(a : address) : bool // Can the address be spent to
 ```
 
 ### Builtins
@@ -748,20 +785,20 @@ Example for an oracle answering questions of type `string` with answers of type 
 contract Oracles =
 
   stateful entrypoint registerOracle(acct : address,
-                                   sign : signature,   // Signed oracle address + contract address
-                                   qfee : int,
-                                   ttl  : Chain.ttl) : oracle(string, int) =
+                                     sign : signature,   // Signed oracle address + contract address
+                                     qfee : int,
+                                     ttl  : Chain.ttl) : oracle(string, int) =
      Oracle.register(acct, signature = sign, qfee, ttl)
 
   entrypoint queryFee(o : oracle(string, int)) : int =
     Oracle.query_fee(o)
 
-  // Do not use in production!
-  stateful entrypoint unsafeCreateQuery(o    : oracle(string, int),
-                                      q    : string,
-                                      qfee : int,
-                                      qttl : Chain.ttl,
-                                      rttl : int) : oracle_query(string, int) =
+  payable stateful entrypoint createQuery(o    : oracle_query(string, int),
+                                          q    : string,
+                                          qfee : int,
+                                          qttl : Chain.ttl,
+                                          rttl : int) : oracle_query(string, int) =
+    require(qfee =< Call.value, "insufficient value for qfee")
     Oracle.query(o, q, qfee, qttl, RelativeTTL(rttl))
 
   stateful entrypoint extendOracle(o   : oracle(string, int),
@@ -774,23 +811,23 @@ contract Oracles =
     Oracle.extend(o, signature = sign, ttl)
 
   stateful entrypoint respond(o    : oracle(string, int),
-                            q    : oracle_query(string, int),
-                            sign : signature,        // Signed oracle query id + contract address
-                            r    : int) =
+                              q    : oracle_query(string, int),
+                              sign : signature,        // Signed oracle query id + contract address
+                              r    : int) =
     Oracle.respond(o, q, signature = sign, r)
 
   entrypoint getQuestion(o : oracle(string, int),
-                       q : oracle_query(string, int)) : string =
+                         q : oracle_query(string, int)) : string =
     Oracle.get_question(o, q)
 
   entrypoint hasAnswer(o : oracle(string, int),
-                     q : oracle_query(string, int)) =
+                       q : oracle_query(string, int)) =
     switch(Oracle.get_answer(o, q))
       None    => false
       Some(_) => true
 
   entrypoint getAnswer(o : oracle(string, int),
-                     q : oracle_query(string, int)) : option(int) =
+                       q : oracle_query(string, int)) : option(int) =
     Oracle.get_answer(o, q)
 ```
 
@@ -925,7 +962,7 @@ and `*/` and can be nested.
 
 ```
 contract elif else entrypoint false function if import include let mod namespace
-private stateful switch true type record datatype
+private payable stateful switch true type record datatype
 ```
 
 #### Tokens
@@ -989,17 +1026,18 @@ A Sophia file consists of a sequence of *declarations* in a layout block.
 
 ```c
 File ::= Block(Decl)
-Decl ::= 'contract' Con '=' Block(Decl)
+Decl ::= ['payable'] 'contract' Con '=' Block(Decl)
        | 'namespace' Con '=' Block(Decl)
        | 'include' String
        | 'type'     Id ['(' TVar* ')'] ['=' TypeAlias]
        | 'record'   Id ['(' TVar* ')'] '=' RecordType
        | 'datatype' Id ['(' TVar* ')'] '=' DataType
-       | [stateful] 'entrypoint' Id ':' Type
-       | [stateful] 'entrypoint' Id Args [':' Type] '=' Block(Stmt)
-       | Modifier* 'function' Id Args [':' Type] '=' Block(Stmt)
+       | EModifier* 'entrypoint' Id ':' Type
+       | EModifier* 'entrypoint' Id Args [':' Type] '=' Block(Stmt)
+       | FModifier* 'function' Id Args [':' Type] '=' Block(Stmt)
 
-Modifier ::= 'stateful' | 'private'
+EModifier ::= 'payable' | 'stateful'
+FModifier ::= 'stateful' | 'private'
 
 Args ::= '(' Sep(Arg, ',') ')'
 Arg  ::= Id [':' Type]
