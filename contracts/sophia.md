@@ -248,7 +248,7 @@ payable stateful entrypoint buy(to : address) =
   if(Call.value > 42)
     transfer_item(to)
   else
-    abort("Too little value")
+    abort("Value too low")
 ```
 
 Note: In the Aeternity VM (AEVM) contracts and entrypoints were by default
