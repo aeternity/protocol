@@ -1182,7 +1182,7 @@ Expr ::= '(' Args ')' '=>' Block(Stmt)      // Anonymous function    (x) => x + 
        | Expr '[' Expr ']'                  // Map lookup            map[key]
        | Expr '{' Sep(FieldUpdate, ',') '}' // Record or map update  r{ fld[key].x = y }
        | '[' Sep(Expr, ',') ']'             // List                  [1, 2, 3]
-       | '[' Sep((Id '<-' Expr | 'if' '(' Expr ')' | LetDef), ',') ']'
+       | '[' Expr '|' Sep((Id '<-' Expr | 'if' '(' Expr ')' | LetDef), ',') ']'
                                             // List comprehension    [k | x <- [1], if (f(x)), let k = x+1]
        | '{' Sep(FieldUpdate, ',') '}'      // Record or map value   {x = 0, y = 1}, {[key] = val}
        | '(' Expr ')'                       // Parens                (1 + 2) * 3
