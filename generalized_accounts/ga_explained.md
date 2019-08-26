@@ -19,7 +19,7 @@ transactions originating from the account, and (2) a transaction can only be
 included once - i.e. it is not possible to include the same SpendTx twice to
 get double payment. (1) is achieved by [crypotographic
 signing](https://en.wikipedia.org/wiki/Digital_signature), Aeternity uses
-[EdDSA](https://en.wikipedia.org/wiki/EdDSA) signatures
+[EdDSA](https://en.wikipedia.org/wiki/EdDSA) signatures with
 ([Curve25519](https://en.wikipedia.org/wiki/Curve25519)). (2) is normally
 achieved by adding a (sequential) *nonce* to the transaction, and then the
 consensus algorithm only allows an account to "use" a nonce once.
@@ -27,8 +27,9 @@ consensus algorithm only allows an account to "use" a nonce once.
 In the Aeternity blockchain when a transaction is prepared for inclusion a
 suitable nonce is selected and included in the transaction, then the
 transaction (`TX`) is serialized (`SerTX`) and hashed. The resulting hash is
-then signed (`SigTX`), then the serialized transaction and the signature
-(`{SerTX, SigTX}`) is posted to the transaction mempool for inclusion.
+then signed yielding a signature (`SigTX`); finally the serialized transaction
+and the signature (`{SerTX, SigTX}`) is posted to the transaction mempool for
+inclusion on chain.
 
 ## GA authentication
 
@@ -62,11 +63,11 @@ same nonce handling as for POA, i.e. nonces have to be sequential.
 
 ```
 contract EdDSAAuth =
-  record state = { nonce : int, owner : bytes(64) }
+  record state = { nonce : int, owner : bytes(20) }
 
-  function init(owner' : bytes(64)) = { nonce = 1, owner = owner' }
+  function init(owner' : bytes(20)) = { nonce = 1, owner = owner' }
 
-  stateful function authorize(n : int, s : signature) : bool =
+  stateful function authorize(n : int, s : bytes(65)) : bool =
     require(n >= state.nonce, "Nonce too low")
     require(n =< state.nonce, "Nonce too high")
     put(state{ nonce = n + 1 })
@@ -76,9 +77,6 @@ contract EdDSAAuth =
 
   function to_sign(h : hash, n : int) : hash =
     Crypto.blake2b((h, n))
-
-  private function require(b : bool, err : string) =
-    if(!b) abort(err)
 ```
 
 ### Contract state/initialization
@@ -89,7 +87,7 @@ contract creation) and `nonce` is initialized to `1`.
 
 ### Authorization
 
-The authorization function takes two parameters, the signature and the nonce.
+The authorization function takes two parameters, the nonce and the signature.
 The authorization function checks that the nonce is correct, and then proceeds
 to fetch the TX hash from the contract environment using `Auth.tx_hash`. In
 this example the signature is for the value `blake2b(tx_hash, nonce)` (i.e.
