@@ -32,6 +32,7 @@ Roles:
   | from | string | Participant's account to take tokens from | Yes |
   | to | string | Participant's account to add tokens to | Yes |
   | amount | integer | Amount of tokens to transfer | Yes |
+  | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
 
 #### Example
 ```javascript
@@ -238,6 +239,7 @@ Roles:
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | amount | integer | Amount of tokens to deposit in the channel | Yes |
+  | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
 
 #### Example
 ```javascript
@@ -376,6 +378,7 @@ Roles:
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | amount | integer | Amount of tokens to withdraw form the channel | Yes |
+  | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
 
 #### Example
 ```javascript
@@ -516,6 +519,7 @@ Roles:
   | vm\_version | integer | contract virtual machine version (vm for which code was compiled) | Yes |
   | abi\_version | integer | contract virtual machine abi version | Yes |
   | deposit | integer | contract creation deposit | Yes |
+  | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
 
 #### Example
 
@@ -544,6 +548,7 @@ Roles:
   | call\_data | call data | call data | Yes |
   | abi\_version | integer | call abi version | Yes |
   | amount | integer | amount of tokens to transfer to contract | Yes |
+  | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
 
 #### Example
 
@@ -637,6 +642,11 @@ Roles:
 
 ### Closer initiate mutual close
  * **method:** `channels.shutdown`
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
 
 #### Example
 ```javascript
