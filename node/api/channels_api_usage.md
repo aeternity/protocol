@@ -215,11 +215,12 @@ and another for optional timeouts.
 
   A client can specify what is considered by them to be a valid block hash.
   Those are defined as deltas according to the latest chain top as seen from
-  the participant's node. A delta of `0` is the latest top, a delta of `1` is the
-  previous generation, etc. Setting the deltas would result in block hashes
-  provided that are newer than the specified value for maturity to be
-  considered unsafe. The same stands true for block hashes considered to be
-  too old. Updates based on unsafe block hashes are rejected as invalid.
+  the participant's node. A delta of `0` is the latest top, a delta of `1` is
+  the previous generation, etc. Each participant can set a delta which defines
+  a range of accepted heights according to the current top. If the other
+  participant makes an off-chain update based on a hash which refers to a
+  block belonging to a generation outside of this range - it will be rejected
+  as it would be considered unsafe.
 
   | Name | Description | Default value |
   | ---- | ----------- | ------------- |
