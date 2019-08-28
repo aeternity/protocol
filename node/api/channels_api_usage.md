@@ -72,7 +72,7 @@ but are not necessarily part of the channel's life cycle.
 
 Only steps 1 and 4 require chain interactions, step 2 and 3 are off-chain.
 
-### On-chain requests requests
+### On-chain requests
 There are two types of requests:
 * Total amount-modifying ones - [deposit](#deposit-transaction) and [withdrawal](#withdraw-transaction)
 * [Channel-closing ones](#solo-closing-sequence) - [solo close](#solo-close-on-chain-transaction), [slash](#slash-on-chain-transaction) and [settle](#settle-on-chain-transaction)
@@ -89,13 +89,13 @@ channels both trustless and egalitarian.
 
 This trustless model is based upon both participants executing off-chain
 updates locally and reaching the same results. This is how consensus is
-reached betweenn them. Since off-chain smart contracts can read on-chain
+reached between them. Since off-chain smart contracts can read on-chain
 objects like accounts, names, contracts and oracles requests and responses,
 the results of their execution rely heavily on the chain they had been based
 on.
 
 Participants are expected to use their own nodes to support their channels.
-At the moment using a service hosted by a third party is trustfull and thus
+At the moment using a service hosted by a third party is trustful, thus
 discouraged. This leads to both participants' nodes being peers in a system
 with an eventual consistency - due to network constraints and forks both
 participants can have a different view of the chain.
@@ -111,14 +111,14 @@ to be ran at. This is how it communicates to the other party what one
 considers to be a block hash that is safe enough to base an off-chain update
 upon. The other party might decide if the block hash is too old or too new
 depending on their local view of the chain. If the specified pinned
-environment does not meet the expectations, the whole update is reject as an
-invalid one.
+environment does not meet the expectations, the whole update is rejected as
+invalid.
 
 An update might not be pinned to any environment. In that case a placeholder
 value for the blockhash is provided:
 `"kh_11111111111111111111111111111111273Yts"` or
 `"mh_11111111111111111111111111111111273Yts"`. In this case both participants
-use the whatever they see to be the latest top block.
+use whatever they see to be the latest top block.
 
 The `block_hash` is an optional argument to all mutual transactions. If it is
 not explicitly provided by the requester, a suitable value is picked for the
@@ -213,10 +213,10 @@ and another for optional timeouts.
 
 #### Channel block hash delta values
 
-  A client can specify what are considered by them to be a valid block hash.
+  A client can specify what is considered by them to be a valid block hash.
   Those are defined as deltas according to the latest chain top as seen from
-  the participant's node. Delta of 0 is the latest top, delta of 1 is the
-  previous generation and etc. Setting the deltas would result in block hashes
+  the participant's node. A delta of `0` is the latest top, a delta of `1` is the
+  previous generation, etc. Setting the deltas would result in block hashes
   provided that are newer than the specified value for maturity to be
   considered unsafe. The same stands true for block hashes considered to be
   too old. Updates based on unsafe block hashes are rejected as invalid.
