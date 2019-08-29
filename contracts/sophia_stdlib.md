@@ -272,6 +272,12 @@ Common operations on `option` types and lists of `option`s.
 Returns true iff `o == None`
 
 
+### is_some
+`is_some(o : option('a)) : bool`
+
+Returns true iff `o` is not `None`.
+
+
 ### match
 `match(n : 'b, s : 'a => 'b, o : option('a)) : 'b`
 
