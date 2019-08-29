@@ -11,8 +11,6 @@ Sophia language offers standard library that consists of following namespaces:
 
 Each of them can be imported using `include` directive.
 
-## Namespaces
-
 ## List
 
 This module contains common operations on lists like constructing, querying, traversing etc.
