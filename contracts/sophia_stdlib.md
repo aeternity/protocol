@@ -229,7 +229,7 @@ will yield `[2,4]`
 #### zip
 `zip(l1 : list('a), l2 : list('b)) : list('a * 'b)`
 
-Special case of [zip_with](####zip_with) where the zipping function is `(a, b) => (a, b)`.
+Special case of [zip_with](#zip_with) where the zipping function is `(a, b) => (a, b)`.
 
 #### unzip
 `unzip(l : list('a * 'b)) : list('a) * list('b)`
@@ -256,7 +256,7 @@ will yield `[1, 0, 2, 0, 3, 0, 4]`
 #### enumerate
 `enumerate(l : list('a)) : list(int * 'a)`
 
-Equivalent to [zip](####zip) with `[0..length(l)]`, but slightly faster.
+Equivalent to [zip](#zip) with `[0..length(l)]`, but slightly faster.
 
 
 ### ListInternal
@@ -315,7 +315,7 @@ will yield `None`.
 #### map3
 `map3( f : ('a, 'b, 'c) => 'd, o1 : option('a), o2 : option('b), o3 : option('c)) : option('d)`
 
-Same as [map2](####map2) but with arity 3 function.
+Same as [map2](#map2) but with arity 3 function.
 
 
 #### app_over
@@ -385,7 +385,7 @@ Out of two `option`s choose the one that is `Some`, or `None` if neither of them
 #### choose_first
 `choose_first(l : list(option('a))) : option('a)`
 
-Same as [choose](####choose), but chooses from a list insted of two.
+Same as [choose](#choose), but chooses from a list insted of two.
 
 
 ### Func
@@ -473,19 +473,19 @@ Turns a function that takes two arguments into a curried function that takes one
 #### curry3
 `curry3(f : ('a, 'b, 'c) => 'd) : 'a => ('b => ('c => 'd))`
 
-Equivalent to [curry2](####curry2), but for 3 arguments.
+Equivalent to [curry2](#curry2), but for 3 arguments.
 
 
 #### uncurry2
 `uncurry2(f : 'a => ('b => 'c)) : ('a, 'b) => 'c`
 
-Opposite to [curry2](####curry2).
+Opposite to [curry2](#curry2).
 
 
 #### uncurry3
 `uncurry3(f : 'a => ('b => ('c => 'd))) : ('a, 'b, 'c) => 'd`
 
-Opposite to [curry3](####curry3).
+Opposite to [curry3](#curry3).
 
 
 #### tuplify2
@@ -497,19 +497,19 @@ Turns a function that takes two arguments into a function that takes a pair.
 #### tuplify3
 `tuplify3(f : ('a, 'b, 'c) => 'd) : 'a * 'b * 'c => 'd`
 
-Equivalent to [tuplify2](####tuplify2), but for 3 arguments.
+Equivalent to [tuplify2](#tuplify2), but for 3 arguments.
 
 
 #### untuplify2
 `untuplify2(f : 'a * 'b => 'c) : ('a, 'b) => 'c`
 
-Opposite to [untuplify2](####untuplify2).
+Opposite to [untuplify2](#untuplify2).
 
 
 #### untuplify3
 `untuplify3(f : 'a * 'b * 'c => 'd) : ('a, 'b, 'c) => 'd`
 
-Opposite to [untuplify3](####untuplify3).
+Opposite to [untuplify3](#untuplify3).
 
 
 ### Pair
