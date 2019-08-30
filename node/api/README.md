@@ -208,8 +208,8 @@ The `'data'` element may contain more detailed information inside `'data'`:
  | 1009   | Broken encoding: contract bytecode |  3          |  [3]   |
  | 1010   | Broken encoding: transaction       |  3          |  [3]   |
  | 1011   | Participant not found              |  3          |  [3]   |
- | 1012   | Invalid password                   |  3          |  [3]   |
- | 1013   | Required since lima fork           |  3          |  [3]   |
+ | 1016   | Invalid password                   |  3          |  [3]   |
+ | 2000   | Missing field: state_password      |  3          |  [3]   |
 
 #### Example, error object
  ```javascript

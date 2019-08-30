@@ -157,7 +157,7 @@ will describe these in groups which indicate their relation to each other.
   | port | integer | the port of the `responder`s node| Yes if `role=initiator` | No | No | No |
   | role | string | the role of the client - either `initiator` or `responder` | Yes | Yes | No |
   | minimum_depth | integer | the minimum amount of blocks to be mined | No | No | No |
-  | state_password | string | The password used to protect the state trees | Yes after lima fork | Yes after lima fork | No |
+  | state_password | string | The password used to protect the persisted state trees | Yes after lima fork | Yes after lima fork | No |
 
   `responder`'s port and host pair must be reachable from `initiator` network
   so unless participants are part of a LAN, they should be exposed to the
@@ -167,8 +167,8 @@ will describe these in groups which indicate their relation to each other.
   accept a connection request from any initiator, and fetch the proper `initiator_id`
   from the `channel_open` message. The `state_password` is required after the lima fork - not 
   providing the password will result in an error. Not providing a password before the lima fork will result
-  in the node using a default password - `correct horse battery staple`. In case a channel was created before the
-  lima fork the password used for reestablishing the channel is the default one.
+  in the node using a default - `correct horse battery staple`. After the lima fork in order to reestablish a channel which was opened before the
+  fork without a custom password, the default password MUST be provided for the reestablish operation, otherwise the node will return an error to the client.
   
   Once established, the channel follows a [predefined set of state
   transitions](/channels/README.md#overview). The implementation protects the
@@ -1841,7 +1841,7 @@ the state trees.
       "code":3,
       "data":[
          {
-            "code":1012,
+            "code":1015,
             "message":"Invalid password"
          }
       ],
@@ -1863,12 +1863,8 @@ without explicitly providing the `state_password` the operation will fail with t
    "error":{
       "code":3,
       "data":[
-         {
-            "code":1012,
-            "message":"Invalid password"
-         },
-         {  "code":1013,
-            "message":"Required since lima fork"
+         {  "code":1016,
+            "message":"Missing field: state_password"
          }
       ],
       "message":"Rejected",

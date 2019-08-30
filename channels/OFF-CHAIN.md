@@ -394,18 +394,17 @@ to client failure or by the participants mutually agreeing to leave.
 The payload (`data`) must be the latest mutually authenticated offchain state,
 and the clients must verify that they have the corresponding state trees to
 match the state (otherwise, it will not be possible to use the channel later
-on.)
+on).
 
 In the Aeternity node implementation, the state trees are cached inside the node.
-Note that if the node restarts, cached data is not likely to survive (it is
-not persisted on each update for performance reasons.) The Aeternity node channel
-fsm automatically recovers the state trees and verifies that the provided
+Note that if the node crashes unexpectedly, cached data is not likely to survive (it is
+not persisted on each update for performance reasons - the state is persisted only when a participant leaves the channel or the channel fsm crashes). 
+The Aeternity node channel fsm automatically recovers the state trees and verifies that the provided
 state is in fact the last mutually authenticated state. In case the FSM dies 
 or an participant leaves the channel the state trees are persisted on disk and protected with
 an user provided passwords. For security reasons the password must be at least 6 unicode characters
-long. After the lima hard fork providing a state password will become mandatory - before the lima fork
-a default password is used - `correct horse battery staple`.  
-
+long. After the lima fork providing a state password is mandatory - before the fork a default
+is used - `correct horse battery staple`.
 
 #### Requirements
 
