@@ -157,7 +157,7 @@ Roles:
   | data | object | description of the last mutually authenticated state | Yes |
 
  * **data:**
- 
+
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | channel_id | string | channel id| Yes |
@@ -190,7 +190,7 @@ Roles:
   | request | json | the failed request | Yes |
 
  * **data:**
- 
+
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | message | string | JSON-RPC error message | Yes |
@@ -532,31 +532,6 @@ Roles:
 }
 ```
 
-### Contract create from on-chain contract
-
- * **method:** `channels.update.new_contract_from_onchain`
- * **params:**
-
-  | Name | Type | Description | Required |
-  | ---- | ---- | ----------- | -------- |
-  | contract_id | contract id | on-chain contract id | Yes |
-  | call\_data | call data | call data for contract creation | Yes |
-  | deposit | integer | contract creation deposit | Yes |
-
-#### Example
-
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.update.new_contract_from_onchain",
-  "params": {
-    "call_data": "cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACC5yVbyizFJqfWYeqUF89obIgnMVzkjQAYrtsG9n5+Z6gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAnHQYrA==",
-    "contract_id": "ct_26WLX27MDif5WcqBXX8ndnQ2TQQvLgZ4TfL299BmteioZsJYER",
-    "deposit": 10
-  }
-}
-```
-
 ### Contract call
 
  * **method:** `channels.update.call_contract`
@@ -852,14 +827,14 @@ Roles:
 ### Closer receives solo close
  * **method:** `channels.sign.close_solo_sign`
  * **params:**
- 
+
  | Name  | Type | Description | Required |
  | ----- | ---- | ----------- | -------- |
  | channel_id | string | channel ID | Yes |
  | data  | object | closing data | Yes |
- 
+
  * **data:**
- 
+
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
  | signed_tx | string | `channel_close_solo` transaction wrapped in a `signed_tx` with no authentication | Yes |
@@ -884,7 +859,7 @@ Roles:
 ### Closer returns an authenticated solo close
  * **method:** `channels.close_solo_sign`
  * **params:**
- 
+
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
  | signed_tx | string | solo-authenticated `channel_close_solo` transaction | Yes |
@@ -918,14 +893,14 @@ Roles:
 ### Settler receives settle
  * **method:** `channels.sign.settle_sign`
  * **params:**
- 
+
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
  | channel_id | string | channel ID | Yes |
  | data | object | settle data | Yes |
 
  * **data:**
- 
+
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
  | signed_tx | string | `channel_settle` transaction wrapped in a `signed_tx` with no authentication | Yes |
@@ -949,7 +924,7 @@ Roles:
 ### Settler returns an authenticated settle
  * **method:** `channels.settle_sign`
  * **params:**
- 
+
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
  | signed_tx | string | solo-authenticated `channel_settle` transaction | Yes |
