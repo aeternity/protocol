@@ -222,14 +222,22 @@ and another for optional timeouts.
   block belonging to a generation outside of this range - it will be rejected
   as it would be considered unsafe.
 
+  Additionally to the delta range check for incoming updates, the FSM also can
+  pick a correct block hash for the client. This happens when the client
+  starts a new update round and a block hash is not specified by the client.
+  Then the FSM checks what is the newest allowed block hash according to the
+  range. An additional pick offset can be provided for even greater fork
+  safety.
+
   | Name | Description | Default value |
   | ---- | ----------- | ------------- |
   | bh_delta_not_newer_than | height delta to be allowed as the newest possible according local top | 0 |
   | bh_delta_not_older_than | height delta to be allowed as the oldest possible according local top | 10 |
+  | bh_delta_pick | the offset according to `bh_delta_not_newer_than` to use when picking a block hash for the client | 0 |
 
   Restrictions on them are that:
   * `bh_delta_not_newer_than >= 0`
-  * `bh_delta_not_newer_than >= bh_delta_not_older_than`
+  * `bh_delta_not_newer_than + bh_delta_pick >= bh_delta_not_older_than`
   * if one is set, the other one must also be set
 
   If any of the checks fails, the defaults are used instead.
