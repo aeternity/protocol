@@ -96,7 +96,7 @@ on.
 
 Participants are expected to use their own nodes to support their channels.
 At the moment using a service hosted by a third party is trustful, thus
-discouraged. This leads to both participants' nodes being peers in a system
+discouraged. This leads to both participant's nodes being peers in a system
 with an eventual consistency - due to network constraints and forks both
 participants can have a different view of the chain.
 
@@ -107,7 +107,7 @@ this there is an optional functionality of setting `block_hash` that defines
 the on-chain environment that the update is to be executed at. We call this
 shared view of the chain _a pinnned environment_. When a participant wants to
 start a new round of updates, one can optionally specify a pinned environment
-to be ran at. This is how it communicates to the other party what one
+to be ran at. This is how the participant communicates to the other party what one
 considers to be a block hash that is safe enough to base an off-chain update
 upon. The other party might decide if the block hash is too old or too new
 depending on their local view of the chain. If the specified pinned
@@ -120,7 +120,7 @@ value for the blockhash is provided:
 `"mh_11111111111111111111111111111111273Yts"`. In this case both participants
 use whatever they see to be the latest top block.
 
-The `block_hash` is an optional argument to all mutual transactions. If it is
+The `block_hash` is an optional argument to all mutual offchain transactions. If it is
 not explicitly provided by the requester, a suitable value is picked for the
 client by their FSM.
 
