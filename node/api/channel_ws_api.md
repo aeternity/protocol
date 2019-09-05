@@ -16,6 +16,7 @@ The WebSocket API provides the following actions:
  * [On-chain transactions](#on-chain-transactions)
  * [Info messages](#info-messages)
  * [System messages](#system-messages)
+ * [Signing error replies](#signing-error-replies)
 
 ## Update
 Roles:
@@ -1200,3 +1201,40 @@ Roles:
 }
 ```
 
+## Signing Error Replies
+ * **method:** `channels.initiator_sign | channels.responder_sign | channels.deposit_tx | channels.deposit_ack
+            | channels.withdraw_tx | channels.withdraw_ack | channels.responder_sign
+            | channels.snapshot_solo_tx | channels.snapshot_solo_sign
+            | channels.shutdown_sign | channels.shutdown_sign_ack | channels.update | channels.update_ack
+            | channels.close_solo_tx | channels.close_solo_sign | channels.slash_tx | channels.slash_sign
+            | channels.settle_tx | channels.settle_sign`
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | error | integer | error code | Yes |
+
+It is possible to return an error object in a signing reply. This will abort the ongoing sequence, and the FSM will
+fall back to the latest mutually-signed state. Currently defined error codes are:
+
+* 1: validation error
+* 2: conflict (typically, race condition)
+* 3: timeout
+* 4: abort
+* 128...65535: user-defined
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.update",
+  "params": {
+    "error": 4
+  }
+}
+```
+
+The FSM will inform its client of each error, using a `conflict` report.
+
+#### Example
+```javascript
