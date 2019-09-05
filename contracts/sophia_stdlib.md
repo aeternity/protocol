@@ -69,6 +69,17 @@ Gets `n`th element of `l` forcefully, throwing and error if `l` is shorter than 
 Returns length of a list.
 
 
+### from_to
+`from_to(a : int, b : int) : list(int)`
+
+Creates an ascending sequence of all integer numbers between `a` and `b` (including `a` and `b`).
+
+
+### from_to_step(a : int, b : int, step : int) : list(int)`
+
+Creates an ascending sequence of integer numbers betweeen `a` and `b` jumping by given `step`. Includes `a` and takes `b` only if `(b - a) mod step == 0`. `step` should be bigger than 0.
+
+
 ### replace_at
 `replace_at(n : int, e : 'a, l : list('a)) : list('a)`
 
@@ -88,7 +99,7 @@ will yield `[1,2,9,3,4]`.
 ### insert_by
 `insert_by(cmp : (('a, 'a) => bool), x : 'a, l : list('a)) : list('a)`
 
-Assuming that cmp represents `>` comparison, inserts `x` before the first element in the list `l` which is greater than it. For instance,
+Assuming that cmp represents `<` comparison, inserts `x` before the first element in the list `l` which is greater than it. For instance,
 ```
 insert_by((a, b) => a < b, 4, [1,2,3,5,6,7])
 ```
@@ -109,7 +120,7 @@ Left fold of a list. Assuming `l = [x, y, z]` will return `f(f(f(acc, x), y), z)
 Tail recursive.
 
 ### foreach
-`foreach(f : 'a => unit, l : list('a)) : unit`
+`foreach(l : list('a), f : 'a => unit) : unit`
 
 Evaluates `f` on each element of a list.
 
@@ -184,8 +195,8 @@ partition((x) => x > 0, [-1, 1, -2, 0, 1, 2, -3])
 will yield `([1, 1, 2], [-1, -2, 0, -3])`
 
 
-### concats
-`concats(ll : list(list('a))) : list('a)`
+### flatten
+`flatten(ll : list(list('a))) : list('a)`
 
 Flattens a list of lists into a one list.
 
@@ -297,7 +308,7 @@ Forcefully escapes `option` wrapping assuming it is `Some`. Throws error on `Non
 
 
 ### on_elem
-`on_elem(f : 'a => unit, o : option('a)) : unit`
+`on_elem(o : option('a), f : 'a => unit) : unit`
 
 Evaluates `f` on element under `Some`. Does nothing on `None`.
 
