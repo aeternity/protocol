@@ -1226,10 +1226,11 @@ fall back to the latest mutually-signed state. Currently defined error codes are
 #### Example
 ```javascript
 {
+  "id": -576460752303423252,
   "jsonrpc": "2.0",
   "method": "channels.update",
   "params": {
-    "error": 4
+    "error": 147
   }
 }
 ```
@@ -1238,3 +1239,18 @@ The FSM will inform its client of each error, using a `conflict` report.
 
 #### Example
 ```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.conflict",
+  "params": {
+    "channel_id": "ch_Bx4x8rvNpeHe2LtnDNqyqCvguqX5jEeotUDk5cRXH3mEXzy77",
+    "data": {
+      "channel_id": "ch_Bx4x8rvNpeHe2LtnDNqyqCvguqX5jEeotUDk5cRXH3mEXzy77",
+      "error_code": 147,
+      "error_msg": "user-defined",
+      "round": 5
+    }
+  },
+  "version": 1
+}
+```
