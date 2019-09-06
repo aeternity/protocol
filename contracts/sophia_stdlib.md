@@ -613,7 +613,7 @@ Applies function over third element.
 
 
 ### trimap
-trimap( f : 'a => 'x, h : 'c => 'z, t : ('a * 'b * 'c)) : ('x * 'y * 'z)
+`trimap(f : 'a => 'x, g : 'b => 'y, h : 'c => 'z, t : ('a * 'b * 'c)) : ('x * 'y * 'z)
 
 Applies functions over respective elements.
 
