@@ -361,7 +361,7 @@ arithmetic operations:
 - remainder (`x mod y`), satisfying `y * (x / y) + x mod y == x` for non-zero `y`
 - exponentiation (`x ^ y`)
 
-All operations are *safe*, in the sense that they behave as the corresponding
+All operations are *safe* with respect to overflow and underflow. They behave as the corresponding
 operations on arbitrary-size integers and fail with `arithmetic_error` if the
 result cannot be represented by a 256-bit signed word. For example, `2 ^ 255`
 fails rather than wrapping around to -2²⁵⁵.
