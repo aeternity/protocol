@@ -75,7 +75,8 @@ Returns length of a list.
 Creates an ascending sequence of all integer numbers between `a` and `b` (including `a` and `b`).
 
 
-### from_to_step(a : int, b : int, step : int) : list(int)`
+### from_to_step
+`from_to_step(a : int, b : int, step : int) : list(int)`
 
 Creates an ascending sequence of integer numbers betweeen `a` and `b` jumping by given `step`. Includes `a` and takes `b` only if `(b - a) mod step == 0`. `step` should be bigger than 0.
 
@@ -612,7 +613,7 @@ Applies function over third element.
 
 
 ### trimap
-trimap( f : 'a => 'x, h : 'c => 'z, t : ('a * 'b * 'c)) : ('x * 'y * 'z)
+`trimap(f : 'a => 'x, g : 'b => 'y, h : 'c => 'z, t : ('a * 'b * 'c)) : ('x * 'y * 'z)
 
 Applies functions over respective elements.
 
