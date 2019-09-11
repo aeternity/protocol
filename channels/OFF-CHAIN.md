@@ -401,8 +401,8 @@ Note that if the node crashes unexpectedly, cached data is not likely to survive
 not persisted on each update for performance reasons - the state is persisted only when a participant leaves the channel or the channel fsm crashes). 
 The Aeternity node channel fsm automatically recovers the state trees and verifies that the provided
 state is in fact the last mutually authenticated state. In case the FSM dies 
-or an participant leaves the channel the state trees are persisted on disk and protected with
-an user provided passwords. For security reasons the password must be at least 6 unicode characters
+or a participant leaves the channel, the state trees are persisted on disk and protected with
+user-provided passwords. For security reasons the password must be at least 6 unicode characters
 long. After the lima fork providing a state password is mandatory - before the fork a default
 is used - `correct horse battery staple`.
 
