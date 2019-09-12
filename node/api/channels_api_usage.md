@@ -81,7 +81,7 @@ There are two types of requests:
 
 While on-chain consensus is reached between miners, in off-chain world we
 don't have those. State channels are two-party systems that are closer to
-proof of stake solutions with the remark that both participants have equal
+proof-of-stake solutions where both participants have equal
 stake in the channel, no matter their balances. The channel can make another
 step forward only if both parties agree upon the new state or it is forced
 progressed on-chain based upon a previous mutually agreed state. This makes
@@ -91,7 +91,7 @@ This trustless model is based upon both participants executing off-chain
 updates locally and reaching the same results. This is how consensus is
 reached between them. Since off-chain smart contracts can read on-chain
 objects like accounts, names, contracts and oracles requests and responses,
-the results of their execution rely heavily on the chain they had been based
+the results of their execution rely heavily on the chain environment they are based
 on.
 
 Participants are expected to use their own nodes to support their channels.
@@ -104,10 +104,10 @@ The combination of participants having different views on the chain and the
 off-chain consensus being dependent on it could lead to a fragile system with
 a lot of mismatching state hashes of off-chain updates. In order to improve
 this there is an optional functionality of setting `block_hash` that defines
-the on-chain environment that the update is to be executed at. We call this
+the on-chain environment that the update is to be executed in. We call this
 shared view of the chain _a pinnned environment_. When a participant wants to
 start a new round of updates, one can optionally specify a pinned environment
-to be ran at. This is how the participant communicates to the other party what one
+to execute in. This is how the participant communicates to the other party what one
 considers to be a block hash that is safe enough to base an off-chain update
 upon. The other party might decide if the block hash is too old or too new
 depending on their local view of the chain. If the specified pinned
@@ -230,8 +230,8 @@ will describe these in groups which indicate their relation to each other.
 
   | Name | Description | Default value |
   | ---- | ----------- | ------------- |
-  | bh_delta_not_newer_than | height delta to be allowed as the newest possible according local top | 0 |
-  | bh_delta_not_older_than | height delta to be allowed as the oldest possible according local top | 10 |
+  | bh_delta_not_newer_than | height delta to be allowed as the newest possible relative to local top | 0 |
+  | bh_delta_not_older_than | height delta to be allowed as the oldest possible relative to local top | 10 |
   | bh_delta_pick | the offset according to `bh_delta_not_newer_than` to use when picking a block hash for the client | 0 |
 
   Restrictions on them are that:
