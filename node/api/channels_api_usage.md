@@ -139,7 +139,7 @@ Detailed message transcripts from test suites can also be found [here](./example
 Each channel has a set of parameters that is required for opening a
 connection. Most of those are part of the `channel_create_tx` which is included
 in the chain, and the others are metadata used for the connection itself. We
-will describe them in two separate groups: one for the channel establishing
+will describe these in groups which indicate their relation to each other.
 and another for optional timeouts.
 
 #### Channel establishing parameters
