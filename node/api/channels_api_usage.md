@@ -72,10 +72,57 @@ but are not necessarily part of the channel's life cycle.
 
 Only steps 1 and 4 require chain interactions, step 2 and 3 are off-chain.
 
-### HTTP requests
-There are two types of HTTP requests:
+### On-chain requests
+There are two types of requests:
 * Total amount-modifying ones - [deposit](#deposit-transaction) and [withdrawal](#withdraw-transaction)
 * [Channel-closing ones](#solo-closing-sequence) - [solo close](#solo-close-on-chain-transaction), [slash](#slash-on-chain-transaction) and [settle](#settle-on-chain-transaction)
+
+### Pinned environment
+
+While on-chain consensus is reached between miners, in off-chain world we
+don't have those. State channels are two-party systems that are closer to
+proof-of-stake solutions where both participants have equal
+stake in the channel, no matter their balances. The channel can make another
+step forward only if both parties agree upon the new state or it is produced
+via a force progress transaction on-chain that had been based upon a previous
+mutually agreed state. This makes channels both trustless and egalitarian.
+
+This trustless model is based upon both participants executing off-chain
+updates locally and reaching the same results. This is how consensus is
+reached between them. Since off-chain smart contracts can read on-chain
+objects like accounts, names, contracts and oracles requests and responses,
+the results of their execution rely heavily on the chain environment they are
+based on.
+
+Participants are expected to use their own nodes to support their channels.
+At the moment using a service hosted by a third party is trustful, thus
+potentially undesirable. This leads to both participant's nodes being peers in
+a system with an eventual consistency - due to network constraints and forks
+both participants can have a different view of the chain.
+
+The combination of participants having different views on the chain and the
+off-chain consensus being dependent on it could lead to a fragile system with
+a lot of mismatching state hashes of off-chain updates. In order to improve
+this there is an optional functionality of setting `block_hash` that defines
+the on-chain environment that the update is to be executed in. We call this
+shared view of the chain _a pinnned environment_. When a participant wants to
+start a new round of updates, one can optionally specify a pinned environment
+to execute in. This is how the participant communicates to the other party
+what one considers to be a block hash that is safe enough to base an off-chain
+update upon. The other party might decide if the block hash is too old or too
+new depending on their local view of the chain. If the specified pinned
+environment does not meet the expectations, the whole update is rejected as
+invalid.
+
+An update might not be pinned to any environment. In that case a placeholder
+value for the blockhash is provided:
+`"kh_11111111111111111111111111111111273Yts"` or
+`"mh_11111111111111111111111111111111273Yts"`. In this case both participants
+use whatever they see to be the latest top block.
+
+The `block_hash` is an optional argument to all mutual offchain transactions. If it is
+not explicitly provided by the requester, a suitable value is picked for the
+client by their FSM.
 
 ## Channel open
 In order to use a channel, it must be opened. Both parties negotiate parameters for the channel - for example the amounts to participate. Some of those are relevant to the chain and end up in a`channel_create_tx` that is posted on the chain. Once a certain amount of blocks have been mined on top of the one that included it, the channel is considered to be opened.
@@ -92,8 +139,9 @@ Detailed message transcripts from test suites can also be found [here](./example
 Each channel has a set of parameters that is required for opening a
 connection. Most of those are part of the `channel_create_tx` which is included
 in the chain, and the others are metadata used for the connection itself. We
-will describe them in two separate groups: one for the channel establishing
-and another for optional timeouts.
+will describe these in groups which indicate their relation to each other.
+
+#### Channel establishing parameters
 
   | Name | Type | Description | Required for open | Required/Used in reestablish | Part of the `channel_create_tx` |
   | ---- | ---- | ----------- | ----------------- | ---------------------------- | ------------------------------- |
@@ -129,6 +177,8 @@ and another for optional timeouts.
   participants can have different timeout settings and still doing updates, as
   long as no timer fires.
 
+#### Channel timeout values
+
   All timeout values are integers and represent the waiting time in
   milliseconds.
 
@@ -159,6 +209,37 @@ and another for optional timeouts.
   The `initiator` will be connecting to the `responder` on localhost:12340
   We will be using the tool [wscat](https://github.com/websockets/wscat)
   We assume the channel's WebSocket listener is set on port 3014 (default one)
+
+#### Channel block hash delta values
+
+  A client can specify what is considered by them to be a valid block hash.
+  Those are defined as deltas according to the latest chain top as seen from
+  the participant's node. A delta of `0` is the latest top, a delta of `1` is
+  the previous generation, etc. Each participant can set a delta which defines
+  a range of accepted heights according to the current top. If the other
+  participant makes an off-chain update based on a hash which refers to a
+  block belonging to a generation outside of this range - it will be rejected
+  as it would be considered unsafe.
+
+  Additionally to the delta range check for incoming updates, the FSM also can
+  pick a correct block hash for the client. This happens when the client
+  starts a new update round and a block hash is not specified by the client.
+  Then the FSM checks what is the newest allowed block hash according to the
+  range. An additional pick offset can be provided for even greater fork
+  safety.
+
+  | Name | Description | Default value |
+  | ---- | ----------- | ------------- |
+  | bh_delta_not_newer_than | height delta to be allowed as the newest possible relative to local top | 0 |
+  | bh_delta_not_older_than | height delta to be allowed as the oldest possible relative to local top | 10 |
+  | bh_delta_pick | the offset according to `bh_delta_not_newer_than` to use when picking a block hash for the client | 0 |
+
+  Restrictions on them are that:
+  * `bh_delta_not_newer_than >= 0`
+  * `bh_delta_not_newer_than + bh_delta_pick >= bh_delta_not_older_than`
+  * if one is set, the other one must also be set
+
+  If any of the checks fails, the defaults are used instead.
 
 ### Responder WebSocket open
 Using the set of prenegotiated parameters the responder connects
