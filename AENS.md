@@ -42,7 +42,8 @@ or `привет.test` are part of the same `.test` namespace.
 
 ## Governance
 
-Lima hard fork is introducing final `.aet` registration namespace. It also retires and purges `.test` namespace.
+Lima hard fork is introducing final `.aet` registration namespace.
+It also retires `.test` namespace.
 We will also not include mechanisms similar to the `sunrise` and `landrush`
 periods, which are common for DNS, where registration is restricted to small
 select groups and trademark holders in order to avoid name squatting, before
@@ -55,17 +56,17 @@ It is unclear what a good mechanism for a naming system would look
 like. If we imagine two actors both being interested in the same name,
 what would a »fair« solution be to resolve this?
 
-Fees are the main mechanism to discourage spam and squatting. This
-initial version will lock the governance fee in an account without
-private key access, in order to enable us
-to change this behaviour in the future. If we start out by giving this
-fee to miners, they will be very hesitant to accept any changes, which
-will impact their income negatively. Thus starting out with [locking](consensus/locking.md)
-could allow us an easier path for future update to the fee structures.
+Fees are the main mechanism to discourage spam and squatting.
+We lock the governance fee in an account without private key access.
+Starting out with [locking](consensus/locking.md) could allow us an easier
+path for future update to the fee structures, as it doesn't involve miners.
 
 Every entry in the `.test` namespace pays the same amount of fees.
+After Lima `.test` namespace is no longer available to claim.
+Entries in `.aet` namespace are differentiated regarding fees by their length.
 
 The new mechanism planted in Lima hard fork introduces auctions.
+We make auctions parameters depend on name length.
 
 The claim action becomes claim attempt. For short names claim transaction
 doesn't set ownership of the name. It can be followed by another
@@ -77,6 +78,9 @@ This time is expressed in height delta computed from function of length of the n
 
 The function will return higher value for shorter names. In practice it means
 that the shorter the name, the longer another claim transaction is valid.
+We are starting with extremely long time that makes claim for short name final.
+It will protect attractive names until this functionality is exposed to larger audience.
+
 Claim transaction becomes a bid in an auction.
 
 Furthermore, the initial fee for name is also a value of the function of
@@ -98,14 +102,11 @@ it could be claimed again.
 
 To prevent the entry from expiring a user can, at any point before reaching
 the expiration date, update the entry, which pushes the expiration date
-into the future by at most the maximum rent time e.g. if a user posts an update
-one week after claiming their name, the expiration date gets pushed for a full
-term from the previous expiration date. Follow up updates will have no effect,
-until we enter the new rent period. We also introduce rent payment for each update.
-The rent is locked in lock account and the rent fee is computed based on name
-length by function defined in governance. The main motivation of this expiration
-date is to prevent lack of use for very descriptive names that have no use for
-the previous owner.
+into the future by the time delta of the registration time and the update time,
+e.g. if a user posts an update one week after claiming their name, the expiration
+date gets pushed one week further into the future. The main motivation of this
+expiration date is to prevent situations where the private keys, which control
+the name, are lost making the name unusable as well.
 
 
 ## Specification
@@ -198,7 +199,8 @@ and under what circumstances they are allowed to do so.
 The only available registrars up to Lima version will be hard-coded
 ones, which own the `.` and `.test` namespaces.
 
-From Lima we will support `.aet` and purge `.test` namespace.
+From Lima we will support `.aet` and limit `.test` namespace.
+Lima disallows write APIs to `.test` namespace.
 
 The `.` namespace registrar is restricted and MUST NOT allow anyone to
 claim any names in its namespace.
@@ -215,7 +217,7 @@ to commit to a name and after the commitment has been accepted into the
 chain, reveal the name to finish the process.
 
 A commitment should be binding, i.e. the claimant cannot change
-the value they commited to withouth changing the actual commitment
+the value they commited to without changing the actual commitment
 and hiding, so that a malicious miner learns nothing about the value
 the claimant has commited until they chose to reveal that value. This
 prevents malicious miners from front running, i.e. upon seeing a
@@ -310,9 +312,24 @@ Flow for a user:
 
 1. (optional) wait `n` blocks, s.t. that the block including the `pre-claim` cannot be reversed whp
 2. send `claim` transaction to reveal name and pay the associated fee
+3. (Lima) send follow up `claim` transaction as overbid to initial `claim`
 
 The `claim` transaction MUST be signed by the same private key as a
 `pre-claim` transaction containing a commitment to the name and nonce.
+
+If the time delta of `pre-claim` and `claim` is bigger than 300 blocks,
+then the `claim` MUST be rejected.
+
+If the time delta of subsequent `claim` is bigger than governance defined values
+then this `claim` MUST be rejected.
+
+If the `name_fee` doesn't meet governance requirements it MUST be rejected.
+
+From Lima hardfork, the subsequent `claim` that takes part in auction MUST have `name_salt`
+equal to `0`
+
+From Lima hardfork only the first `claim` transaction MUST be signed by
+the same private key as a `pre-claim` transaction containing a commitment to the name and nonce.
 
 A `claim` transaction MUST NOT be in included in the same block as its
 `pre-claim`.
@@ -394,7 +411,7 @@ This also includes giving users the proper tools, i.e. a GUI,
 in order to level the playing field as to who is able to actually
 register names.
 
-Since we don't have an auction protocol just yet, we could hold
+Since we don't have an auction protocol at launch, we could hold
 auctions on Ethereum to establish an initial allocation of names,
 just like our ERC-20 token.
 
