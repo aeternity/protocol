@@ -322,6 +322,8 @@ initiating party.
  ---------------------- ----
 | minimum_depth        | 4  |
  ---------------------- ----
+| minimum_depth_factor | 4  |
+ ---------------------- ----
 | initiator_amount     | 8  |
  ---------------------- ----
 | responder_amount     | 8  |
@@ -336,10 +338,12 @@ initiating party.
 
 - `chain_hash`: transaction hash of the chain you want to use
 - `temporary_channel_id`: randomly chosen id unique between the involved parties,
-- `minimum_depth`: number of blocks until an opening transaction should be
-  considered final. The `minimum_depth` is set by the responding party, since
+- `minimum_depth`: base value for the minimum depth calculation which determines when an
+  opening transaction should be considered final.
+  The minimum depth is set by the responding party, since
   they will typically be the one providing a service. Note that a `minimum_depth` of 0
   (zero) will result in a microblock confirmation (see below).
+- `minimum_depth_factor`: factor by which to adjust the `minimum_depth`
 - `initiator_amount`: amount the initiator is willing to commit
 - `responder_amount`: amount the initiator wants the responder to commit
 - `channel_reserve`: the minimum amount both parties need to maintain. This makes
@@ -553,7 +557,8 @@ All subsequent messages must use the included `channel_id` instead of the
 #### Requirements
 
 - A node MUST NOT send the `funding_locked` message unless the `channel_create`
-transaction has `minimum_depth` confirmations.
+transaction has the number of confirmations as defined by the calculated minimum
+depth.
 
 ## State update
 
@@ -695,7 +700,7 @@ This is an acknowledgement of a preceding `deposit_created` message (see
 above). Upon receipt of a mutually authenticated state, the receiver verifies
 that it is indeed the state resulting from the proposed deposit operation. The
 `channel_deposit_tx` is then pushed to the chain, and the requisit number of
-confirmations (`minimum_depth`) are awaited. Once confirmation has been
+confirmations (minimum depth) are awaited. Once confirmation has been
 received, a `deposit_locked` message is sent, with the hash of the
 `channel_deposit_tx` transaction.
 The `block_hash` defines at which block deposit had been mutually
@@ -719,7 +724,7 @@ on-chain persisted account and not the on-chain persisted channel object.
 
 Message code: 13
 
-This message is sent upon receipt of a `minimum_depth` confirmation for a
+This message is sent upon receipt of a minimum depth confirmation for a
 `channel_deposit_tx` transaction. The payload is the hash of the
 `channel_deposit_tx` transaction object. Once the message has been sent,
 the channel returns to the `open` state and the new off-chain state is
@@ -797,7 +802,7 @@ This is an acknowledgement of a preceding `withdraw_created` message (see
 above). Upon receipt of a mutually authenticated state, the receiver verifies
 that it is indeed the state resulting from the proposed withdrawal operation.
 The `channel_withdraw_tx` is then pushed to the chain, and the requisit number
-of confirmations (`minimum_depth`) are awaited. Once confirmation has been
+of confirmations (minimum depth) are awaited. Once confirmation has been
 received, a `withdraw_locked` message is sent, with the hash of the
 `channel_withdraw_tx` transaction.
 The `block_hash` defines on which block the withdrawal had been mutually
@@ -822,7 +827,7 @@ latest on-chain persisted account and not the on-chain persisted channel object.
 
 Message code: 17
 
-This message is sent upon receipt of a `minimum_depth` confirmation for a
+This message is sent upon receipt of a minimum depth confirmation for a
 `channel_withdraw_tx` transaction. The payload is the hash of the
 `channel_withdraw_tx` transaction object. Once the message has been sent,
 the channel returns to the `open` state and the new off-chain state is
