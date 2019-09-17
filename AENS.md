@@ -314,7 +314,9 @@ Flow for a user:
 2. send `claim` transaction to reveal name and pay the associated fee
 3. (Lima) send follow up `claim` transaction as overbid to initial `claim`
 
-The `claim` transaction MUST be signed by the same private key as a
+From Lima transaction version is `2`
+
+The first `claim` after `pre-claim` transaction MUST be signed by the same private key as a
 `pre-claim` transaction containing a commitment to the name and nonce.
 
 If the time delta of `pre-claim` and `claim` is bigger than 300 blocks,
