@@ -70,3 +70,30 @@ call this contract and the transaction only goes through if the result of the
 corresponfing contract call returns true. Any other transaction using
 the token (such as contract call) would only be ececuted if a call to spend
 returns true.
+
+## Tokens state tree
+
+The tokens state tree contain token type objects.
+Tokens are stored in the account state tree as a list of tuples of
+token id:s and balances.
+
+### Token state tree objects
+
+- The token state tree contains
+  - Token type objects
+
+#### The token type object
+
+- Created by an token create transaction.
+
+```
+{ creator         :: id()
+, <meta_data>     :: binary()
+, <contract>      :: id()
+, <total_amount>  :: int()
+, <parent>        :: id()
+, <final>         :: bool()
+
+}
+```
+
