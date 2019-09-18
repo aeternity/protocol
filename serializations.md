@@ -253,7 +253,7 @@ subsequent sections divided by object.
 | Sophia byte code | 70 |
 | Generalized accounts attach transaction | 80 |
 | Generalized accounts meta transaction | 81 |
-| Tokens | 90 |
+| Token | 90 |
 | Key block | 100 |
 | Micro block | 101 |
 | Light micro block | 102 |
@@ -1043,5 +1043,23 @@ NOTE:
 [ <header1>  :: binary()
 , <header2>  :: binary()
 , <pubkey>   :: binary()
+]
+```
+
+
+#### Token create transaction
+```
+[ <creator>       :: id()
+, <meta_data>     :: binary()
+, <contract>      :: id()
+, <amount>        :: int()
+, <recipient>     :: id()
+, <parent>        :: id()
+, <final>         :: bool()
+, <ttl>           :: int()
+, <fee>           :: int()
+, <delegate_ids>  :: [id()]
+, <state_hash>    :: binary()
+, <nonce>         :: int()
 ]
 ```
