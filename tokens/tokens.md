@@ -34,14 +34,14 @@ Other transactions that takes a balance can also take a native token balance.
 
 The token create transaction takes the following argument
 - Meta data : string
-and the followin optional arguments
+and the following optional arguments
 - Contract
 - Amount
 - Recipient
 - Parent
 - Final
 
-The `meta data` is an uniterpreted string but token minters are encouraged to
+The `meta data` is an uninterpreted string but token minters are encouraged to
 use the following json object:
 {
   "type" : "object",
