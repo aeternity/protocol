@@ -51,7 +51,7 @@ use the following json object:
 }
 
 The `contract` has to provide the following ACI:
- spend(recipient : address, payload : Type) : booleano
+ spend(recipient : address, payload : Type) : boolean
  trade([(from : address, to: address, Optional(token : address))], payload : Type)
  mint(amount: integer)
  burn(amount : integer) : boolean
@@ -65,3 +65,8 @@ The `parent` is a pointer to a parent token for hierarchical tokens.
 
 The `final` argument sets the final flag which would block future minting.
 
+If a contract is provided then any transaction (spend, trade, mint, burn) would
+call this contract and the transaction only goes through if the result of the
+corresponfing contract call returns true. Any other transaction using
+the token (such as contract call) would only be ececuted if a call to spend
+returns true.
