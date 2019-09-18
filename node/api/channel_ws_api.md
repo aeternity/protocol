@@ -17,6 +17,7 @@ The WebSocket API provides the following actions:
  * [Info messages](#info-messages)
  * [System messages](#system-messages)
  * [Signing error replies](#signing-error-replies)
+ * [Changing the state password]
 
 ## Update
 Roles:
@@ -1234,6 +1235,49 @@ The FSM will inform its client of each error, using a `conflict` report.
       "error_code": 147,
       "error_msg": "user-defined",
       "round": 5
+    }
+  },
+  "version": 1
+}
+```
+
+## Changing the state password
+ * **method:** `channels.change_state_password`
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | state_password | string | The new state password | Yes |
+
+### Response
+ * **method:** `channels.password_changed`
+ * **params.data:**
+
+ | Field name | Value |
+ | ---- | ---- |
+ | `action` | `password_changed` |
+
+### Example
+
+#### Request
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.change_state_password",
+  "params": {
+    "state_password": "new_secure_password",
+    }
+}
+```
+#### Response
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.password_changed.reply",
+  "params": {
+    "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+    "data": {
+      "action": "password_changed"
     }
   },
   "version": 1

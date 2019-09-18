@@ -570,7 +570,7 @@ Information about serialization can be found [here](../../serializations.md#chan
 
 After signing the reconnect transaction, the client connects using the parameters `protocol`
 and `reconnect_tx` as illustrated below. Note that the `reconnect_tx` parameter uses a
-serialized transaction.
+serialized transaction. The operation does not require providing the current state password for the channel.
 
 ```
 $ wscat --connect 'localhost:3014/channel?protocol=json-rpc&reconnect_tx=tx_%2BJ0LAfhCuECD0kyElzq1A4bRqUUlIvwqo3UpNLZr07K6f6ZzCMjOY6nVLowEyewiEfDOGu0yy%2BrS2pSOWZzumSKLpNAOwQsBuFX4U4ICPwGhBiPYP7m2R8Z36J9C1yWyKO6C0GoclMWjkh8mGyYcwiNkAYlpbml0aWF0b3KhARZ7k%2B1MUXursizzqkphuO8bCDRo8DrnsRvekHG5Ry3bV0P6XA%3D%3D'
@@ -1841,7 +1841,7 @@ the state trees.
       "code":3,
       "data":[
          {
-            "code":1015,
+            "code":1016,
             "message":"Invalid password"
          }
       ],
@@ -1863,7 +1863,7 @@ without explicitly providing the `state_password` the operation will fail with t
    "error":{
       "code":3,
       "data":[
-         {  "code":1016,
+         {  "code":2000,
             "message":"Missing field: state_password"
          }
       ],
