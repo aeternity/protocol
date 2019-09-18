@@ -141,6 +141,7 @@ ambiguity.
 | 4      | oracle          |
 | 5      | contract        |
 | 6      | channel         |
+| 7      | token           |
 
 In Erlang notation, the `id()` type pattern is:
 ```
@@ -252,6 +253,7 @@ subsequent sections divided by object.
 | Sophia byte code | 70 |
 | Generalized accounts attach transaction | 80 |
 | Generalized accounts meta transaction | 81 |
+| Tokens | 90 |
 | Key block | 100 |
 | Micro block | 101 |
 | Light micro block | 102 |
@@ -280,6 +282,14 @@ subsequent sections divided by object.
 , <nonce>       :: int()
 , <balance>     :: int()
 ]
+```
+
+#### Accounts (version 4, Normal accounts with flags and tokens, from XXX release)
+```
+[ <flags>       :: int()
+, <nonce>       :: int()
+, <balance>     :: int()
+, <tokens>      :: [{id(),int()}]
 ```
 
 ### Signed transaction
