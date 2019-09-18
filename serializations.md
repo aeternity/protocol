@@ -254,6 +254,11 @@ subsequent sections divided by object.
 | Generalized accounts attach transaction | 80 |
 | Generalized accounts meta transaction | 81 |
 | Token | 90 |
+| Token create transaction | 91 |
+| Token mint transaction | 92 |
+| Token trade transaction | 93 |
+| Token burn transaction | 94 |
+| Token finalize transaction | 95 |
 | Key block | 100 |
 | Micro block | 101 |
 | Light micro block | 102 |
@@ -321,7 +326,7 @@ The recipient must be one of the following:
   If multiple pointer entries are present for such key, then the first of such entries is used.
 `
 
-### Spend token transaction
+### Spend token transaction From the XXX release
 ```
 [ <sender>    :: id()
 , <recipient> :: id()
@@ -1058,8 +1063,43 @@ NOTE:
 , <final>         :: bool()
 , <ttl>           :: int()
 , <fee>           :: int()
-, <delegate_ids>  :: [id()]
-, <state_hash>    :: binary()
+, <nonce>         :: int()
+]
+```
+
+#### Token mint transaction
+```
+[ <amount>        :: int()
+, <recipient>     :: id()
+, <final>         :: bool()
+, <ttl>           :: int()
+, <fee>           :: int()
+, <nonce>         :: int()
+]
+```
+
+#### Token trade transaction
+```
+[ <trades>        :: [{id(), id(), int(), id()}]
+, <ttl>           :: int()
+, <fee>           :: int()
+, <nonce>         :: int()
+]
+```
+
+#### Token burn transaction
+```
+[ <amount>        :: int()
+, <ttl>           :: int()
+, <fee>           :: int()
+, <nonce>         :: int()
+]
+```
+
+#### Token finalize transaction
+```
+[ <ttl>           :: int()
+, <fee>           :: int()
 , <nonce>         :: int()
 ]
 ```
