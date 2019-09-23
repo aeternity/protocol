@@ -263,7 +263,7 @@ Examples:
 
 Maps are monomorphic key value stores, that is the key is always the
 same type for all elements in a map and the value has the same type in
-all mappings in a map.  The key kan have any type except a map.  The
+all mappings in a map.  The key can have any type except a map.  The
 value kan have any type including a map.
 
 Examples:
