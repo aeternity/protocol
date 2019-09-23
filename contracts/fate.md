@@ -636,7 +636,7 @@ integer      : 01101111 | RLP encoded (integer - 64) when size >= 64 and integer
 false        : 01111111
              : 10001111 : FREE (Possibly for bytecode in the future.)
 address      : 10011111 | [32 bytes]
-varaint      : 10101111 | RLP encoded variant size field | encoded tag | encoded values
+variant      : 10101111 | RLP encoded variant size field | encoded tag | encoded values
 list         : 10111111 : when length == 0
 bits         : 11001111 | RLP encoded integer : when bits are in infinite
 map          : 11011111 : when size == 0
