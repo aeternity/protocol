@@ -225,7 +225,7 @@ Examples:
 
 ### Strings
 
-Strings are byte arrays od UTF-8 encoded unicode characters. (These
+Strings are byte arrays of UTF-8 encoded unicode characters. (These
 can be used as non-indexable arrays of bytes.)
 
 Examples:
