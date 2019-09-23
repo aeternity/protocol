@@ -13,7 +13,7 @@ Version 20190307
 
 WARNING: Work in progress, major parts are missing and nothing is settled yet.
 
-## Idea
+## Design 
 
 The high level machine (or the Fast æternity Transaction Engine) has
 aeternity transactions as its basic operations and it operates
@@ -47,6 +47,24 @@ FATE does have the ability to write the value of an operation back to the
 same register or stack position as one of the arguments, in effect updating
 the memory. Still, any other references to the structure before the operation
 will have the same structure as before the operation.
+
+### Objectives
+
+#### Type safety
+
+FATE solves a fundamental problem programmers run into when coding for Ethereum: integer overflow, weak type checking and poore data flow. FATE checks all aritmetic operations to keep the right meanining of it. Also you can't implicitly cast types (eg integers to booleans). 
+
+In EVM contracts are not typed. When calling a function, EVM will try to find which function you wanted to use by looking at the data that you send into the code. In FATE, you have actual functions and the functions have types - function call has to match the function type.
+
+FATE ultimately makes a safer coding platform for smart contracts.
+
+#### Rich data types
+
+FATE has more built in data types: like maps, lists.
+
+#### Faster transactions, smaller code size
+
+Having a higher level instructions makes the code deployed smaller and it reduces the blockchain size. Smaller code and smaller hashes also keeps a blockchain network from clogging up.
 
 ## Components
 
