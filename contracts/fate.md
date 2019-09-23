@@ -656,7 +656,7 @@ the least significant bit.
 
 Example the number 1 in a byte would be written in binary as:
 ```
-0000001
+00000001
 ```
 And we would say that bit 0 is set to 1. All other bits 1 to 7 are set to 0.
 
