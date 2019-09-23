@@ -281,7 +281,7 @@ Type: Map(Integer, String)
 The variant type is a type consisting of a size and a tag (index)
 where each tag represents a series of values of specified types. For
 example you could have the Option type which could be None or
-Some(Integer). The size of the variant is 2 (there are two varaints),
+Some(Integer). The size of the variant is 2 (there are two variants),
 The value None would be indicated by tag 0. The value
 Some(42) would be represented by tag 1 followed by the integer.
 
