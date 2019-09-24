@@ -271,6 +271,98 @@ Note that `expire` is not an explicit message that is part
 of the protocol.
 
 
+### Protocol fees and protection times
+
+Here is the function of initial bidding price depending on name length for Lima hardfork.
+
+```
+ ------------- -------------
+| name length | initial fee |
+ ------------- -------------
+| 31          | 3           |
+ ------------- -------------
+| 30          | 5           |
+ ------------- -------------
+| 29          | 8           |
+ ------------- -------------
+| 28          | 13          |
+ ------------- -------------
+| 27          | 21          |
+ ------------- -------------
+| 26          | 34          |
+ ------------- -------------
+| 25          | 55          |
+ ------------- -------------
+| 24          | 89          |
+ ------------- -------------
+| 23          | 144         |
+ ------------- -------------
+| 22          | 233         |
+ ------------- -------------
+| 21          | 377         |
+ ------------- -------------
+| 20          | 610         |
+ ------------- -------------
+| 19          | 987         |
+ ------------- -------------
+| 18          | 1597        |
+ ------------- -------------
+| 17          | 2584        |
+ ------------- -------------
+| 16          | 4181        |
+ ------------- -------------
+| 15          | 6765        |
+ ------------- -------------
+| 14          | 10946       |
+ ------------- -------------
+| 13          | 17711       |
+ ------------- -------------
+| 12          | 28657       |
+ ------------- -------------
+| 11          | 46368       |
+ ------------- -------------
+| 10          | 75025       |
+ ------------- -------------
+| 9           | 121393      |
+ ------------- -------------
+| 8           | 196418      |
+ ------------- -------------
+| 7           | 317811      |
+ ------------- -------------
+| 6           | 514229      |
+ ------------- -------------
+| 5           | 832040      |
+ ------------- -------------
+| 4           | 1346269     |
+ ------------- -------------
+| 3           | 2178309     |
+ ------------- -------------
+| 2           | 3524578     |
+ ------------- -------------
+| 1           | 5702887     |
+ ------------- -------------
+```
+
+Here is the function of timeout required to close the auction.
+It depends on name length. Timeout is expressed in blocks.
+Non zero value means that there must be no follow up claim for
+the number of blocks defined here.
+
+```
+ ------------- -------------
+| name length | time out    |
+ ------------- -------------
+| 13+         | 0           |
+ ------------- -------------
+| 9-12        | 480         |
+ ------------- -------------
+| 5-8         | 14880       |
+ ------------- -------------
+| 1-4         | 29760       |
+ ------------- -------------
+```
+
+
 #### Pre-claim
 
 Send a `pre-claim` transaction containing a hash commitment.
@@ -314,13 +406,10 @@ Flow for a user:
 2. send `claim` transaction to reveal name and pay the associated fee
 3. (Lima) send follow up `claim` transaction as overbid to initial `claim`
 
-From Lima transaction version is `2`
+From Lima transaction version is `2`.
 
 The first `claim` after `pre-claim` transaction MUST be signed by the same private key as a
 `pre-claim` transaction containing a commitment to the name and nonce.
-
-If the time delta of `pre-claim` and `claim` is bigger than 300 blocks,
-then the `claim` MUST be rejected.
 
 If the time delta of subsequent `claim` is bigger than governance defined values
 then this `claim` MUST be rejected.
