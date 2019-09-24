@@ -360,9 +360,9 @@ The payload (`data`) must be the latest mutually signed offchain state, and
 the clients must verify that they have the corresponding state trees to match
 the state (otherwise, it will not be possible to use the channel later on.)
 
-In the `epoch` implementation, the state trees are cached inside the node.
+In the Aeternity node implementation, the state trees are cached inside the node.
 Note that if the node restarts, cached data is not likely to survive (it is
-not persisted on each update for performance reasons.) The `epoch` channel
+not persisted on each update for performance reasons.) The Aeternity node channel
 fsm automatically recovers the state trees and verifies that the provided
 state is in fact the last mutually signed state.
 
@@ -568,7 +568,7 @@ message.
 Message code: 10
 
 Since both sides may initiate an `update` request, it is possible that both
-may do so at roughly the same time. In particular, in the `epoch` system,
+may do so at roughly the same time. In particular, in the Aeternity node system,
 if an `update` request arrives while the fsm is waiting for its client to
 sign a new state update, it reverts both its own update attempt and the
 other participant's update request by sending an `update_error` message.
@@ -662,7 +662,7 @@ useable.
 Message code: 14
 
 Since both sides may initiate a `deposit_created` request, it is possible
-that both may do so at roughly the same time. In particular, in the `epoch`
+that both may do so at roughly the same time. In particular, in the Aeternity node
 system, if a `deposit_created` request arrives while the fsm is waiting for
 its client to sign a new state update, it reverts both its own update attempt
 and the other participant's update request by sending a `deposit_error` message.
@@ -755,7 +755,7 @@ useable.
 Message code: 18
 
 Since both sides may initiate a `withdraw_created` request, it is possible
-that both may do so at roughly the same time. In particular, in the `epoch`
+that both may do so at roughly the same time. In particular, in the Aeternity node
 system, if a `withdraw_created` request arrives while the fsm is waiting for
 its client to sign a new state update, it reverts both its own update attempt
 and the other participant's withdraw request by sending a `withdraw_error`

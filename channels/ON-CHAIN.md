@@ -34,7 +34,7 @@ the same `state_hash`.
 - [Closing a channel](#closing-a-channel)
 	+ [`channel_close_mutual`](#channel_close_mutual)
 	+ [`channel_close_solo`](#channel_close_solo)
-	+ [`channel_settle`](#channel_settlement)
+	+ [`channel_settle`](#channel_settle)
 - [Disputing updates](#disputing-updates)
 	+ [`channel_slash`](#channel_slash)
 - [Forcing progress](#forcing-progress)

@@ -15,7 +15,7 @@ The contract state tree contains objects:
 - Active flag (Boolean)
 - List of referring contracts (Note this will be changed to a list of referred contracts and a refcount.)
 - Deposit (amount)
-- vm_version
+- Contract version (VM version + ABI version)
 
 See [Contract Serialization](../serializations.md#contract) for the serialization specification.
 
@@ -47,7 +47,7 @@ The contract's state tree is updated:
 - When another contract that refers to the contract is deleted the refcount is decreased.
 - When the contract executes the deactivate instruction the active field is set to false.
 
-The fields owner, vm_version, code, and deposit are static throughout a contract's life time.
+The fields owner, ct_version, code, and deposit are static throughout a contract's life time.
 
 ### Pruning of contracts
 

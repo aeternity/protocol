@@ -1,4 +1,5 @@
 [back](./contracts.md)
+[back](./contracts.md)
 ## The Sophia Language
 An Æternity BlockChain Language
 The Sophia is a language in the ML family. It is strongly typed and has
@@ -9,6 +10,73 @@ to a blockchain (the Æternity BlockChain). Thus some features of conventional
 languages, such as floating point arithmetic, are not present in Sophia, and
 some blockchain specific primitives, constructions and types have been added.
 
+## Table of Contents
+- [Language Features](#language-features)
+    - [Contracts](#contracts)
+        -  [Calling other contracts](#calling-other-contracts)
+    -  [Mutable state](#mutable-state)
+    -  [Namespaces](#namespaces)
+    -  [Splitting code over multiple files](#splitting-code-over-multiple-files)
+    -  [Types](#types) 
+    -  [Arithmetic](#arithmetic)
+    -  [Bit fields](#bit-fields)
+    -  [Type aliases](#type-aliases)
+    -  [Algebraic data types](#algebraic-data-types)
+    -  [Lists](#lists)
+    -  [Maps and records](#maps-and-records)
+        - [Constructing maps and records](#constructing-maps-and-records)
+        - [Accessing values](#accessing-values)
+        - [Updating a value](#updating-a-value)
+        - [Builtin functions on maps](#builtin-functions-on-maps)
+        - [Map implementation](#map-implementation)
+    - [Strings](#strings)
+        - [Builtin functions on strings](#builtin-functions-on-strings)
+        - [Builtin functions on integers](#builtin-functions-on-integers)
+        - [Builtin functions on addresses](#builtin-functions-on-addresses)
+    - [Builtins](#builtins)
+        - [Cryptographic primitives](#cryptographic-primitives)
+        - [Account interface](#account-interface)
+        - [Oracle interface](#oracle-interface)
+            - [Oracle register](#oracle-register)
+            - [Oracle extend](#oracle-extend)
+            - [Orcacle get_question](#oracle-get_question)
+            - [Oracle respond](#oracle-respond)
+            - [Oracle query](#oracle-query)
+            - [Oracle query_fee](#oracle-query_fee)
+            - [Oracle get_answer](#oracle-get_answer)
+            - [Example](#example)
+        - [AENS interface](#aens-interface)
+        - [Events](#events)
+        - [Contract primitives](#contract-primitives)
+    - [Exceptions](#exceptions)
+- [Syntax](#syntax)
+    - [Lexical syntax](#lexical-syntax)
+        - [Comments](#comments)
+        - [Keywords](#keywords)
+        - [Tokens](#tokens)
+    - [Layout blocks](#layout-blocks)
+    - [Notation](#notation)
+    - [Declarations](#declarations)
+    - [Types](#types)
+    - [Statements](#statements)
+    - [Expressions](#expressions)
+    - [Operators types](#operators-types)
+    - [Operator precendences](#operator-precendences)
+- [Examples](#examples)
+- [The lifetime of a contract](#the-lifetime-of-a-contract)
+    - [Killing a contract](#killing-a-contract)
+- [The Sophia_01 ABI](#the-sophia_01-abi)
+    - [Byte code](#byte-code)
+        - [Meta data](#meta-data)
+        - [Type information](#type-information)
+    - [Memory layout](#memory-layout)
+    - [Encoding Sophia values as binaries](#encoding-sophia-values-as-binaries)
+        - [Binary encoding of Sophia maps](#binary-encoding-of-sophia-maps)
+    - [Initialization](#initialization)
+    - [Return](#return)
+    - [Storing the contract state](#storing-the-contract-state)
+    - [Remote contract calls](#remote-contract-calls)
+    
 ## Language Features
 ### Contracts
 
@@ -114,24 +182,68 @@ state associated with each contract instance.
 - Functions modifying the state need to be annotated with the `stateful` keyword.
 
 To make it convenient to update parts of a deeply nested state Sophia
-provides special syntax for map/record updates.  Open
-question: we likely want to make it possible to have immutable state
-(parameters). Keep separate from mutable state or annotate certain
-fields as immutable?
+provides special syntax for map/record updates.
+
+### Namespaces
+
+Code can be split into libraries using the `namespace` construct. Namespaces
+can appear at the top-level and can contain type and function definitions.
+Outside the namespace you can refer to the (public) names by qualifying them
+with the namespace (`Namespace.name`).
+For example,
+
+```
+namespace Library =
+  type number = int
+  function inc(x : number) : number = x + 1
+
+contract MyContract =
+  function plus2(x) : Library.number =
+    Library.inc(Library.inc(x))
+```
+
+Functions in namespaces have access to the same environment (including the
+`Chain`, `Call`, and `Contract`, builtin namespaces) as function in a contract,
+with the exception of `state`, `put` and `Chain.event` since these are
+dependent on the specific state and event types of the contract.
+
+### Splitting code over multiple files
+
+Code from another file can be included in a contract using an `include`
+statement. These must appear at the top-level (outside the main contract). The
+included file can contain one or more namespaces and abstract contracts. For
+example, if the file `library.aes` contains
+
+```
+namespace Library =
+  function inc(x) = x + 1
+```
+
+you can use it from another file using an `include`:
+
+```
+include "library.aes"
+contract MyContract =
+  function plus2(x) = Library.inc(Library.inc(x))
+```
+
+This behaves as if the contents of `library.aes` was textually inserted into
+the file, except that error messages will refer to the original source
+locations.
 
 ### Types
 Sophia has the following types:
 
 | Type       | Description                     | Example
 | ---------- | ------------------------------- | -------:
-| uint       | A 256 bit integer               | ```42```
 | int        | A 256 bit 2-complement integer  | ```-1```
 | address    | A 256 bit number given as a hex | ```ff00```
 | bool       | A Boolean                       | ```true```
+| bits       | A bit field (with 256 bits)     | ```Bits.none```
 | string     | An array of bytes               | ```"Foo"```
 | list       | A homogeneous immutable singly linked list. | ```[1, 2, 3]```
 | tuple      | An ordered heterogeneous array   | ```(42, "Foo", true)```
-| record     | An immutable key value store with fixed key names and typed values | ``` record balance = { owner: address, value: uint } ```
+| record     | An immutable key value store with fixed key names and typed values | ``` record balance = { owner: address, value: int } ```
 | map        | An immutable key value store with dynamic mapping of keys of one type to values of one type | ```type accounts = map(string, address)```
 | option('a) | An optional value either None or Some('a) | ```Some(42)```
 | state        | A record of blockstate key, value pairs  |
@@ -141,6 +253,62 @@ Sophia has the following types:
 | Chain.ttl    | Time-to-live (fixed height or relative to current block) | ```FixedTTL(1050)``` ```RelativeTTL(50)```
 | oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, qfee, ttl)```
 | oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, qfee, qttl, rttl)```
+
+### Arithmetic
+
+Sophia integers (`int`) are represented by 256-bit signed words and supports the following
+arithmetic operations:
+- addition (`x + y`)
+- subtraction (`x - y`)
+- multiplication (`x * y`)
+- division (`x / y`), truncated towards zero
+- remainder (`x mod y`), satisfying `y * (x / y) + x mod y == x` for non-zero `y`
+- exponentiation (`x ^ y`)
+
+All operations are *safe*, in the sense that they behave as the corresponding
+operations on arbitrary-size integers and fail with `arithmetic_error` if the
+result cannot be represented by a 256-bit signed word. For example, `2 ^ 255`
+fails rather than wrapping around to -2²⁵⁵.
+
+The division and remained operations also throw an arithmetic error if the
+second argument is zero.
+
+### Bit fields
+
+Sophia integers do not support bit arithmetic. Instead there is a separate
+type `bits` of bit fields that support similar operations:
+
+```javascript
+// A bit field with all bits cleared
+Bits.none : bits
+
+// A bit field with all bits set
+Bits.all : bits
+
+// Set bit i
+Bits.set(b : bits, i : int) : bits
+
+// Clear bit i
+Bits.clear(b : bits, i : int) : bits
+
+// Check if bit i is set
+Bits.test(b : bits, i : int) : bool
+
+// Count the number of set bits
+Bits.sum(b : bits) : int
+
+// Bits.test(Bits.union(a, b), i) == (Bits.test(a, i) || Bits.test(b, i))
+Bits.union(a : bits, b : bits) : bits
+
+// Bits.test(Bits.intersection(a, b), i) == (Bits.test(a, i) && Bits.test(b, i))
+Bits.intersection(a : bits, b : bits) : bits
+
+// Bits.test(Bits.difference(a, b), i) == (Bits.test(a, i) && !Bits.test(b, i))
+Bits.difference(a : bits, b : bits) : bits
+```
+
+A bit field is represented by a 256-bit word and reading or writing a bit
+outside the 0..255 range fails with an `arithmetic_error`.
 
 ### Type aliases
 
@@ -291,7 +459,8 @@ it.
 
 There is a builtin type `string`, which can be seen as an array of bytes.
 Strings can be compared for equality (`==`, `!=`), used as keys in maps and
-records, and used in builtin functions `String.length` and `String.concat`.
+records, and used in builtin functions `String.length`, `String.concat` and
+the hash functions described below.
 
 #### Builtin functions on strings
 
@@ -300,9 +469,58 @@ The following builtin functions are defined on strings:
 ```
   String.length(s : string) : int
   String.concat(s1 : string, s2 : string) : string
+  String.sha3(s : string) : hash
+  String.sha256(s : string) : hash
+  String.blake2b(s : string) : hash
+```
+
+The hash functions hashes the string represented as byte array.
+
+#### Builtin functions on integers
+
+The following builtin functions are defined on integers:
+
+```
+  Int.to_str(i : int) : string
+```
+
+#### Builtin functions on addresses
+
+The following builtin functions are defined on addresses:
+
+```
+  Address.to_str(a : address) : string  // Base58 encoded string
 ```
 
 ### Builtins
+
+#### Cryptographic primitives
+
+The following hash functions are supported:
+
+```
+  Crypto.sha3(x : 'a) : hash
+  Crypto.sha256(x : 'a) : hash
+  Crypto.blake2b(x : 'a) : hash
+  String.sha3(s : string) : hash
+  String.sha256(s : string) : hash
+  String.blake2b(s : string) : hash
+```
+
+The hash functions in `String` hashes a string interpreted as a byte array, and
+the `Crypto` hash functions accept an element of any (first-order) type. The
+result is the hash of the binary encoding of the argument as [described
+below](#encoding-sophia-values-as-binaries). Note that this means that for `s :
+string`, `String.sha3(s)` and `Crypto.sha3(s)` gives different results.
+
+There is also a function for signature verification `Crypto.ecverify`:
+
+```
+  Crypto.ecverify(msg : hash, pubkey : address, sig : signature) : bool
+```
+
+The signature verification returns true if `sig` is the signature of `msg`
+using the private key corresponding to `pubkey`.
 
 #### Account interface
 
@@ -509,14 +727,27 @@ Naming System (AENS):
 #### Events
 
 Sophia contracts log structured messages to an event log in the resulting
-blockchain transaction. To use events a contract must declare a type `event`,
-and events are then logged using the `event` function:
+blockchain transaction. The event log is quite similar to [Events in
+Solidity](https://solidity.readthedocs.io/en/v0.4.24/contracts.html#events). To
+use events a contract must declare a datatype `event`, and events are then
+logged using the `Chain.event` function:
 
 ```
-event(e : event) : ()
+  datatype event =
+      Event1(indexed int, indexed int, string)
+    | Event2(string, indexed address)
+
+  Chain.event(e : event) : ()
 ```
 
-*NOTE: Events are not yet implemented*
+The event can have 0-3 `indexed` fields, they should have a type that is
+equivalent to a 32-byte word (i.e. `bool`, `int`, or `address`, or an alias for
+such a type). To index a `string` you can use the hash function
+`String.sha3(s)`. The event also has (optional) payload (not indexed), that is
+of type `string`.
+
+*NOTE:* Indexing is not part of the core aeternity node, but the `indexed` tag
+should serve as a hint to any software analysing the contract call transactions.
 
 #### Contract primitives
 
@@ -567,8 +798,8 @@ and `*/` and can be nested.
 #### Keywords
 
 ```
-and band bnot bor bsl bsr bxor contract elif else false function if import
-internal let mod private public rec stateful switch true type record datatype
+and contract elif else false function if import include internal let mod namespace
+private public rec stateful switch true type record datatype
 ```
 
 #### Tokens
@@ -626,6 +857,8 @@ A Sophia file consists of a sequence of *declarations* in a layout block.
 ```c
 File ::= Block(Decl)
 Decl ::= 'contract' Con '=' Block(Decl)
+       | 'namespace' Con '=' Block(Decl)
+       | 'include' String
        | 'type'     Id ['(' TVar* ')'] ['=' TypeAlias]
        | 'record'   Id ['(' TVar* ')'] '=' RecordType
        | 'datatype' Id ['(' TVar* ')'] '=' DataType
@@ -725,7 +958,7 @@ switch(f(x))
 ```c
 Expr ::= '(' Args ')' '=>' Block(Stmt)      // Anonymous function    (x) => x + 1
        | 'if' '(' Expr ')' Expr 'else' Expr // If expression         if(x < y) y else x
-       | Expr ':' Type                      // Type annotation       5 : uint
+       | Expr ':' Type                      // Type annotation       5 : int
        | Expr BinOp Expr                    // Binary operator       x + y
        | UnOp Expr                          // Unary operator        ! b
        | Expr '(' Sep(Expr, ',') ')'        // Application           f(x, y)
@@ -745,17 +978,15 @@ Path ::= Id                 // Record field
        | Path '[' Expr ']'  // Nested map key
 
 BinOp ::= '||' | '&&' | '<' | '>' | '=<' | '>=' | '==' | '!='
-        | '::' | '++' | '+' | '-' | '*' | '/' | 'mod'
-        | 'bor' | 'bxor' | 'band' | 'bsr' | bsl'
-UnOp  ::= '-' | '!' | 'bnot'
+        | '::' | '++' | '+' | '-' | '*' | '/' | 'mod' | '^'
+UnOp  ::= '-' | '!'
 ```
 
 ### Operators types
 
 | Operators | Type
 | --- | ---
-| `-` `+` `*` `/` `mod` | arithmetic operators
-| `bnot` `band` `bor` `bxor` `bsl` `bsr` | bitwise operators
+| `-` `+` `*` `/` `mod` `^` | arithmetic operators
 | `!` `&&` `\|\|` | logical operators
 | `==` `!=` `<` `>` `=<` `>=` | comparison operators
 | `::` `++` | list operators
@@ -766,10 +997,11 @@ In order of highest to lowest precedence.
 
 | Operators | Associativity
 | --- | ---
-| `!` `bnot` | right
-| `*` `/` `mod` `band` | left
+| `!` | right
+| `^` | left
+| `*` `/` `mod` | left
 | `-` (unary) | right
-| `+` `-` `bor` `bxor` `bsl` `bsr` | left
+| `+` `-` | left
 | `::` `++` | right
 | `<` `>` `=<` `>=` `==` `!=` | none
 | `&&` | right
@@ -908,7 +1140,7 @@ The type information contains:
 
 ### Memory layout
 
-Sophia values are 256-bit words. In case of unboxed types (`int`, `uint`,
+Sophia values are 256-bit words. In case of unboxed types (`int`,
 `address`, and `bool`) this is simply the value. For boxed types
 such as tuples and (non-empty) lists, the word is a pointer into the heap
 (memory).
@@ -1098,4 +1330,3 @@ stack, and potential heap objects for the return value written to the top of
 the heap. The return type from the contracts meta data is used when writing it
  to the heap. Since maps are handled outside the heap, the caller explicitly
 pays gas for handling maps in the return value.
-

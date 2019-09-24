@@ -150,8 +150,8 @@ nonce:
 #### Key Blocks
 
 ```
-PROTOCOL_VERSION: 1
-GENESIS_VERSION: 1
+PROTOCOL_VERSION: 1 (Roma release)
+GENESIS_VERSION: 1 (Roma release)
 ```
 
 - the timestamp of a key block MUST be smaller than `now() + 9m`
@@ -163,6 +163,15 @@ GENESIS_VERSION: 1
 - MUST have `0 <= nonce <= MAX_NONCE`
 - txs_hash MUST be correct root hash of the merkle tree of all transactions.
 - ***TODO***: fill in missing rules
+
+```
+PROTOCOL_VERSION: 2 (Minerva release)
+GENESIS_VERSION: 1 (Roma release)
+```
+- an optional info field is added to the key header
+- the presense of the info field MUST be marked by setting the info field flag to 1
+- the absense of the info field MUST be marked by setting the info field flag to 0
+- the info field, if present, is uninterpreted, but included in the block hash (i,e., it is under consensus).
 
 Header [serialization format](../serializations.md#key-blockheader)
 
@@ -211,7 +220,9 @@ MUST have valid signature from private key belonging to `sender`.
 
 Each (on-chain) transaction has the following fields:
 * Fee. It MUST be at least the gas for the transaction multiplied by the
-  minimal gas price, which is `1` (*10^-18) aeons.
+  minimal gas price, which (after MINERVA hard fork height) is
+  `1000000` (*10^-18) aeons. (Before MINERVA hard fork height it was
+  `1` (*10^-18) aeons.)
 * Time to live (TTL).
 
 #### Spend
@@ -303,8 +314,8 @@ EDGEBITS: 29
 
 
 ```
-header = version || height || prev_hash || state_hash || miner || beneficiary || target || evidence || nonce || time
-           64         64         256          256         256         256          64       42*32       64       64
+header = version || flags || height || prev_hash || prev_key_hash || state_hash || miner || beneficiary || target || evidence || nonce || time
+           32         32       64         256            256            256         256         256          32       42*32       64       64
 ```
 
 For the purpose of computing a proof of work puzzle solution, the evidence and

@@ -2,18 +2,7 @@
 The Fast æternity Transaction Engine
 ISA
 
-Version 20190307
-
-* 20181209 Initial Draft
-* 20181210 Second Draft - New execution model.
-* 20181211 Third Draft - Fleshing out description.
-* 20181212 4th Draft - Data serialization schema.
-* 20190306 5th Draft - Instructions.
-* 20190307 6th Draft - New data serialization schema.
-
-WARNING: Work in progress, major parts are missing and nothing is settled yet.
-
-## Idea
+## Design
 
 The high level machine (or the Fast æternity Transaction Engine) has
 aeternity transactions as its basic operations and it operates
@@ -47,6 +36,24 @@ FATE does have the ability to write the value of an operation back to the
 same register or stack position as one of the arguments, in effect updating
 the memory. Still, any other references to the structure before the operation
 will have the same structure as before the operation.
+
+### Objectives
+
+#### Type safety
+
+FATE solves a fundamental problem programmers run into when coding for Ethereum: integer overflow, weak type checking and poore data flow. FATE checks all aritmetic operations to keep the right meanining of it. Also you can't implicitly cast types (eg integers to booleans). 
+
+In EVM contracts are not typed. When calling a function, EVM will try to find which function you wanted to use by looking at the data that you send into the code. In FATE, you have actual functions and the functions have types - function call has to match the function type.
+
+FATE ultimately makes a safer coding platform for smart contracts.
+
+#### Rich data types
+
+FATE has more built in data types: like maps, lists.
+
+#### Faster transactions, smaller code size
+
+Having a higher level instructions makes the code deployed smaller and it reduces the blockchain size. Smaller code and smaller hashes also keeps a blockchain network from clogging up.
 
 ## Components
 
@@ -207,7 +214,7 @@ Examples:
 
 ### Strings
 
-Strings are byte arrays od UTF-8 encoded unicode characters. (These
+Strings are byte arrays of UTF-8 encoded unicode characters. (These
 can be used as non-indexable arrays of bytes.)
 
 Examples:
@@ -245,8 +252,8 @@ Examples:
 
 Maps are monomorphic key value stores, that is the key is always the
 same type for all elements in a map and the value has the same type in
-all mappings in a map.  The key kan have any type except a map.  The
-value kan have any type including a map.
+all mappings in a map.  The key can have any type except a map.  The
+value can have any type including a map.
 
 Examples:
 ```
@@ -263,7 +270,7 @@ Type: Map(Integer, String)
 The variant type is a type consisting of a size and a tag (index)
 where each tag represents a series of values of specified types. For
 example you could have the Option type which could be None or
-Some(Integer). The size of the variant is 2 (there are two varaints),
+Some(Integer). The size of the variant is 2 (there are two variants),
 The value None would be indicated by tag 0. The value
 Some(42) would be represented by tag 1 followed by the integer.
 
@@ -349,125 +356,281 @@ pattern 00 11 00 00.
 
 ### Operations
 
+### Operations
 
-| OpCode | Name | Args | Description |
-| ---    | ---  | ---  |        ---  |
-| 0x0 | 'RETURN' |  | Return from function call pop stack to arg0. The type of the retun value has to match the return type of the function. |
-| 0x1 | 'RETURNR' | Arg0 | Return from function call copy Arg0 to arg0. The type of the retun value has to match the return type of the function. |
-| 0x2 | 'CALL' | Identifier | Call given function with args on stack. The types of the arguments has to match the argument typs of the function. |
-| 0x3 | 'CALL_R' | Arg0 Identifier | Remote call to given contract and function.  The types of the arguments has to match the argument typs of the function. |
-| 0x4 | 'CALL_T' | Identifier | Tail call to given function. The types of the arguments has to match the argument typs of the function. And the return type of the called function has to match the type of the current function. |
-| 0x5 | 'CALL_TR' | Arg0 Identifier | Remote tail call to given contract and function. The types of the arguments has to match the argument typs of the function. And the return type of the called function has to match the type of the current function. |
-| 0x6 | 'JUMP' | Integer | Jump to a basic block. The basic block has to exist in the current function. |
-| 0x7 | 'JUMPIF' | Arg0 Integer | Conditional jump to a basic block. If Arg0 then jump to Arg1. |
-| 0x8 | 'SWITCH_V2' | Arg0 Integer Integer | Conditional jump to a basic block on variant tag. |
-| 0x9 | 'SWITCH_V3' | Arg0 Integer Integer Integer | Conditional jump to a basic block on variant tag. |
-| 0xa | 'SWITCH_VN' | Arg0 [Integers] | Conditional jump to a basic block on variant tag. |
-| 0xb | 'PUSH' | Arg0 | Push argument to stack. |
-| 0xc | 'DUPA' |  | push copy of accumulator on stack. |
-| 0xd | 'DUP' | Arg0 | push Arg0 stack pos on top of stack. |
-| 0xe | 'POP' | Arg0 | Arg0 := top of stack. |
-| 0xf | 'STORE' | Arg0 Arg1 | Arg0 := Arg1. |
-| 0x10 | 'INCA' |  | Increment accumulator. |
-| 0x11 | 'INC' | Arg0 | Increment argument. |
-| 0x12 | 'DECA' |  | Decrement accumulator. |
-| 0x13 | 'DEC' | Arg0 | Decrement argument. |
-| 0x14 | 'ADD' | Arg0 Arg1 Arg2 | Arg0 := Arg1 + Arg2. |
-| 0x15 | 'SUB' | Arg0 Arg1 Arg2 | Arg0 := Arg1 - Arg2. |
-| 0x16 | 'MUL' | Arg0 Arg1 Arg2 | Arg0 := Arg1 * Arg2. |
-| 0x17 | 'DIV' | Arg0 Arg1 Arg2 | Arg0 := Arg1 / Arg2. |
-| 0x18 | 'MOD' | Arg0 Arg1 Arg2 | Arg0 := Arg1 mod Arg2. |
-| 0x19 | 'POW' | Arg0 Arg1 Arg2 | Arg0 := Arg1  ^ Arg2. |
-| 0x20 | 'LT' | Arg0 Arg1 Arg2 | Arg0 := Arg1  < Arg2. |
-| 0x21 | 'GT' | Arg0 Arg1 Arg2 | Arg0 := Arg1  > Arg2. |
-| 0x22 | 'EQ' | Arg0 Arg1 Arg2 | Arg0 := Arg1  = Arg2. |
-| 0x23 | 'ELT' | Arg0 Arg1 Arg2 | Arg0 := Arg1 =< Arg2. |
-| 0x24 | 'EGT' | Arg0 Arg1 Arg2 | Arg0 := Arg1 >= Arg2. |
-| 0x25 | 'NEQ' | Arg0 Arg1 Arg2 | Arg0 := Arg1 /= Arg2. |
-| 0x26 | 'AND' | Arg0 Arg1 Arg2 | Arg0 := Arg1 and Arg2. |
-| 0x27 | 'OR' | Arg0 Arg1 Arg2 | Arg0 := Arg1  or Arg2. |
-| 0x28 | 'NOT' | Arg0 Arg1 | Arg0 := not Arg1. |
-| 0x29 | 'TUPLE' | Integer | Create a tuple of size = Arg0. Elements on stack. |
-| 0x2a | 'ELEMENT' | Type Arg1 Arg2 Arg3 | Arg1 := element(Arg2, Arg3). The element should be of type Arg1 |
-| 0x2b | 'MAP_EMPTY' | Arg0 | Arg0 := #{}. |
-| 0x2c | 'MAP_LOOKUP' | Arg0 Arg1 Arg2 | Arg0 := lookup key Arg2 in map Arg1. |
-| 0x2d | 'MAP_LOOKUPD' | Arg0 Arg1 Arg2 Arg3 | Arg0 := lookup key Arg2 in map Arg1 if key exists in map otherwise Arg0 := Arg3. |
-| 0x2e | 'MAP_UPDATE' | Arg0 Arg1 Arg2 Arg3 | Arg0 := update key Arg2 in map Arg1 with value Arg3. |
-| 0x2f | 'MAP_DELETE' | Arg0 Arg1 Arg2 | Arg0 := delete key Arg2 from map Arg1. |
-| 0x30 | 'MAP_MEMBER' | Arg0 Arg1 Arg2 | Arg0 := true if key Arg2 is in map Arg1. |
-| 0x31 | 'MAP_FROM_LIST' | Arg0 Arg1 | Arg0 := make a map from (key, value) list in Arg1. |
-| 0x32 | 'NIL' | Arg0 | Arg0 := []. |
-| 0x33 | 'IS_NIL' | Arg0 Arg1 | Arg0 := true if Arg1 == []. |
-| 0x34 | 'CONS' | Arg0 Arg1 Arg2 | Arg0 := [Arg1|Arg2]. |
-| 0x35 | 'HD' | Arg0 Arg1 | Arg0 := head of list Arg1. |
-| 0x36 | 'TL' | Arg0 Arg1 | Arg0 := tail of list Arg1. |
-| 0x37 | 'LENGTH' | Arg0 Arg1 | Arg0 := length of list Arg1. |
-| 0x38 | 'STR_EQ' | Arg0 Arg1 Arg2 | Arg0 := true iff the strings Arg1 and Arg2 are the same. |
-| 0x39 | 'STR_JOIN' | Arg0 Arg1 Arg2 | Arg0 := string Arg1 followed by string Arg2. |
-| 0x40 | 'INT_TO_STR' | Arg0 Arg1 | Arg0 := turn integer Arg1 into a string. |
-| 0x41 | 'ADDR_TO_STR' | Arg0 Arg1 | Arg0 := turn address Arg1 into a string. |
-| 0x42 | 'STR_REVERSE' | Arg0 Arg1 | Arg0 := the reverse of string Arg1. |
-| 0x43 | 'INT_TO_ADDR' | Arg0 Arg1 | Arg0 := turn integer Arg1 into an address. |
-| 0x44 | 'VARIANT' | Arg0 Arg1 Arg2 Arg3 | Arg0 := create a variant of size Arg1 with the tag Arg2 (Arg2 < Arg1) and take Arg3 elements from the stack. |
-| 0x45 | 'VARIANT_TEST' | Arg0 Arg1 Arg2 | Arg0 := true if variant Arg1 has the tag Arg2. |
-| 0x46 | 'VARIANT_ELEMENT' | Arg0 Arg1 Arg2 | Arg0 := element number Arg2 from variant Arg1. |
-| 0x47 | 'BITS_NONEA' |  | accumulator := empty bitmap. |
-| 0x48 | 'BITS_NONE' | Arg0 | Arg0 := empty bitmap. |
-| 0x49 | 'BITS_ALLA' |  | accumulator := full bitmap. |
-| 0x50 | 'BITS_ALL' | Arg0 | Arg0 := full bitmap. |
-| 0x51 | 'BITS_ALL_N' | Arg0 Arg1 | Arg0 := bitmap with Arg1 bits set. |
-| 0x52 | 'BITS_SET' | Arg0 Arg1 Arg2 | Arg0 := set bit Arg2 of bitmap Arg1. |
-| 0x53 | 'BITS_CLEAR' | Arg0 Arg1 Arg2 | Arg0 := clear bit Arg2 of bitmap Arg1. |
-| 0x54 | 'BITS_TEST' | Arg0 Arg1 Arg2 | Arg0 := true if bit Arg2 of bitmap Arg1 is set. |
-| 0x55 | 'BITS_SUM' | Arg0 Arg1 | Arg0 := sum of set bits in bitmap Arg1. Exception if infinit bitmap. |
-| 0x56 | 'BITS_OR' | Arg0 Arg1 Arg2 | Arg0 := Arg1 v Arg2. |
-| 0x57 | 'BITS_AND' | Arg0 Arg1 Arg2 | Arg0 := Arg1 ^ Arg2. |
-| 0x58 | 'BITS_DIFF' | Arg0 Arg1 Arg2 | Arg0 := Arg1 - Arg2. |
-| 0x59 | 'ADDRESS' | Arg0 | Arg0 := The current contract address. |
-| 0x5a | 'BALANCE' | Arg0 | Arg0 := The current contract address. |
-| 0x5b | 'ORIGIN' | Arg0 | Arg0 := Address of contract called by the call transaction. |
-| 0x5c | 'CALLER' | Arg0 | Arg0 := The address that signed the call transaction. |
-| 0x5d | 'GASPRICE' | Arg0 | Arg0 := The current gas price. |
-| 0x5e | 'BLOCKHASH' | Arg0 | Arg0 := The current blockhash. |
-| 0x5f | 'BENEFICIARY' | Arg0 | Arg0 := The address of the current beneficiary. |
-| 0x60 | 'TIMESTAMP' | Arg0 | Arg0 := The current timestamp. Unrelaiable, don't use for anything. |
-| 0x61 | 'GENERATION' | Arg0 | Arg0 := The block height of the cureent generation. |
-| 0x62 | 'MICROBLOCK' | Arg0 | Arg0 := The current micro block number. |
-| 0x63 | 'DIFFICULTY' | Arg0 | Arg0 := The current difficulty. |
-| 0x64 | 'GASLIMIT' | Arg0 | Arg0 := The current gaslimit. |
-| 0x65 | 'GAS' | Arg0 | Arg0 := The amount of gas left. |
-| 0x66 | 'LOG0' | Arg0 Arg1 | Create a log message in the call object. |
-| 0x67 | 'LOG1' | Arg0 Arg1 Arg2 | Create a log message with one topic in the call object. |
-| 0x68 | 'LOG2' | Arg0 Arg1 Arg2 Arg3 | Create a log message with two topics in the call object. |
-| 0x69 | 'LOG3' | Arg0 Arg1 Arg2 Arg3 Arg4 | Create a log message with three topics in the call object. |
-| 0x6a | 'LOG4' | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 | Create a log message with four topics in the call object. |
-| 0x6b | 'DEACTIVATE' |  | Mark the current contract for deactication. |
-| 0x6c | 'SPEND' | Arg0 Arg1 | Transfer Arg0 tokens to account Arg1. (If the contract account has at least that many tokens. |
-| 0x6d | 'ORACLE_REGISTER' | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 | Mark the current contract for deactication. |
-| 0x6e | 'ORACLE_QUERY' |  |  |
-| 0x6f | 'ORACLE_RESPOND' |  |  |
-| 0x70 | 'ORACLE_EXTEND' |  |  |
-| 0x71 | 'ORACLE_GET_ANSWER' |  |  |
-| 0x72 | 'ORACLE_GET_QUESTION' |  |  |
-| 0x73 | 'ORACLE_QUERY_FEE' |  |  |
-| 0x74 | 'AENS_RESOLVE' |  |  |
-| 0x75 | 'AENS_PRECLAIM' |  |  |
-| 0x76 | 'AENS_CLAIM' |  |  |
-| 0x77 | 'AENS_UPDATE' |  |  |
-| 0x78 | 'AENS_TRANSFER' |  |  |
-| 0x79 | 'AENS_REVOKE' |  |  |
-| 0x7a | 'ECVERIFY' |  |  |
-| 0x7b | 'SHA3' |  |  |
-| 0x7c | 'SHA256' |  |  |
-| 0x7d | 'BLAKE2B' |  |  |
-| 0xf9 | 'DUMMY7ARG' | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 Arg6 | Temporary dummy instruction to test 7 args. |
-| 0xfa | 'DUMMY8ARG' | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 Arg6 Arg7 | Temporary dummy instruction to test 8 args. |
-| 0xfb | 'ABORT' | Arg0 | Abort execution (dont use all gas) with error message in Arg0. |
-| 0xfc | 'EXIT' | Arg0 | Abort execution (use upp all gas) with error message in Arg0. |
-| 0xfd | 'NOP' |  | The no op. does nothing. |
+#### Description of operations
 
+|                      Name | Args | Description | Arg Types | Res Type |
+|                      ---  | ---  |        ---  |       --- |      --- |
+|                  'RETURN' |  | Return from function call, top of stack is return value . The type of the retun value has to match the return type of the function. | {} | any |
+|                 'RETURNR' | Arg0 | Push Arg0 and return from function. The type of the retun value has to match the return type of the function. | {any} | any |
+|                    'CALL' | Arg0 | Call the function Arg0 with args on stack. The types of the arguments has to match the argument typs of the function. | {string} | any |
+|                  'CALL_R' | Arg0 Identifier Arg2 Arg3 Arg4 | Remote call to contract Arg0 and function Arg1 of type Arg2 => Arg3 with value Arg4. The types of the arguments has to match the argument types of the function. | {contract,string,typerep,typerep,integer} | any |
+|                  'CALL_T' | Arg0 | Tail call to function Arg0. The types of the arguments has to match the argument typs of the function. And the return type of the called function has to match the type of the current function. | {string} | any |
+|                 'CALL_GR' | Arg0 Identifier Arg2 Arg3 Arg4 Arg5 | Remote call with gas cap in Arg4. Otherwise as CALL_R. | {contract,string,typerep,typerep,integer,integer} | any |
+|                    'JUMP' | Integer | Jump to a basic block. The basic block has to exist in the current function. | {integer} | none |
+|                  'JUMPIF' | Arg0 Integer | Conditional jump to a basic block. If Arg0 then jump to Arg1. | {boolean,integer} | none |
+|               'SWITCH_V2' | Arg0 Integer Integer | Conditional jump to a basic block on variant tag. | {variant,integer,ingeger} | none |
+|               'SWITCH_V3' | Arg0 Integer Integer Integer | Conditional jump to a basic block on variant tag. | {variant,integer,integer,ingeger} | none |
+|               'SWITCH_VN' | Arg0 [Integers] | Conditional jump to a basic block on variant tag. | {variant,{list,integer}} | none |
+|              'CALL_VALUE' | Arg0 | The value sent in the current remote call. | {} | integer |
+|                    'PUSH' | Arg0 | Push argument to stack. | {any} | any |
+|                    'DUPA' |  | Duplicate top of stack. | {any} | any |
+|                     'DUP' | Arg0 | push Arg0 stack pos on top of stack. | {any} | any |
+|                     'POP' | Arg0 | Arg0 := top of stack. | {integer} | integer |
+|                    'INCA' |  | Increment accumulator. | {integer} | integer |
+|                     'INC' | Arg0 | Increment argument. | {integer} | integer |
+|                    'DECA' |  | Decrement accumulator. | {integer} | integer |
+|                     'DEC' | Arg0 | Decrement argument. | {integer} | integer |
+|                     'ADD' | Arg0 Arg1 Arg2 | Arg0 := Arg1 + Arg2. | {integer,integer} | integer |
+|                     'SUB' | Arg0 Arg1 Arg2 | Arg0 := Arg1 - Arg2. | {integer,integer} | integer |
+|                     'MUL' | Arg0 Arg1 Arg2 | Arg0 := Arg1 * Arg2. | {integer,integer} | integer |
+|                     'DIV' | Arg0 Arg1 Arg2 | Arg0 := Arg1 / Arg2. | {integer,integer} | integer |
+|                     'MOD' | Arg0 Arg1 Arg2 | Arg0 := Arg1 mod Arg2. | {integer,integer} | integer |
+|                     'POW' | Arg0 Arg1 Arg2 | Arg0 := Arg1  ^ Arg2. | {integer,integer} | integer |
+|                   'STORE' | Arg0 Arg1 | Arg0 := Arg1. | {any} | any |
+|                    'SHA3' | Arg0 Arg1 | Arg0 := sha3(Arg1). | {any} | hash |
+|                  'SHA256' | Arg0 Arg1 | Arg0 := sha256(Arg1). | {any} | hash |
+|                 'BLAKE2B' | Arg0 Arg1 | Arg0 := blake2b(Arg1). | {any} | hash |
+|                      'LT' | Arg0 Arg1 Arg2 | Arg0 := Arg1  < Arg2. | {integer,integer} | boolean |
+|                      'GT' | Arg0 Arg1 Arg2 | Arg0 := Arg1  > Arg2. | {integer,integer} | boolean |
+|                      'EQ' | Arg0 Arg1 Arg2 | Arg0 := Arg1  = Arg2. | {integer,integer} | boolean |
+|                     'ELT' | Arg0 Arg1 Arg2 | Arg0 := Arg1 =< Arg2. | {integer,integer} | boolean |
+|                     'EGT' | Arg0 Arg1 Arg2 | Arg0 := Arg1 >= Arg2. | {integer,integer} | boolean |
+|                     'NEQ' | Arg0 Arg1 Arg2 | Arg0 := Arg1 /= Arg2. | {integer,integer} | boolean |
+|                     'AND' | Arg0 Arg1 Arg2 | Arg0 := Arg1 and Arg2. | {boolean,boolean} | boolean |
+|                      'OR' | Arg0 Arg1 Arg2 | Arg0 := Arg1  or Arg2. | {boolean,boolean} | boolean |
+|                     'NOT' | Arg0 Arg1 | Arg0 := not Arg1. | {boolean} | boolean |
+|                   'TUPLE' | Arg0 Integer | Arg0 := tuple of size = Arg1. Elements on stack. | {integer} | tuple |
+|                 'ELEMENT' | Arg0 Arg1 Arg2 | Arg1 := element(Arg2, Arg3). | {integer,tuple} | any |
+|              'SETELEMENT' | Arg0 Arg1 Arg2 Arg3 | Arg0 := a new tuple similar to Arg2, but with element number Arg1 replaced by Arg3. | {integer,tuple,any} | tuple |
+|               'MAP_EMPTY' | Arg0 | Arg0 := #{}. | {} | map |
+|              'MAP_LOOKUP' | Arg0 Arg1 Arg2 | Arg0 := lookup key Arg2 in map Arg1. | {map,any} | any |
+|             'MAP_LOOKUPD' | Arg0 Arg1 Arg2 Arg3 | Arg0 := lookup key Arg2 in map Arg1 if key exists in map otherwise Arg0 := Arg3. | {map,any,any} | any |
+|              'MAP_UPDATE' | Arg0 Arg1 Arg2 Arg3 | Arg0 := update key Arg2 in map Arg1 with value Arg3. | {map,any,any} | map |
+|              'MAP_DELETE' | Arg0 Arg1 Arg2 | Arg0 := delete key Arg2 from map Arg1. | {map,any} | map |
+|              'MAP_MEMBER' | Arg0 Arg1 Arg2 | Arg0 := true if key Arg2 is in map Arg1. | {map,any} | boolean |
+|           'MAP_FROM_LIST' | Arg0 Arg1 | Arg0 := make a map from (key, value) list in Arg1. | {{list,{tuple,[any,any]}}} | map |
+|                'MAP_SIZE' | Arg0 Arg1 | Arg0 := The size of the map Arg1. | {map} | integer |
+|             'MAP_TO_LIST' | Arg0 Arg1 | Arg0 := The tuple list representation of the map Arg1. | {map} | list |
+|                  'IS_NIL' | Arg0 Arg1 | Arg0 := true if Arg1 == []. | {list} | boolean |
+|                    'CONS' | Arg0 Arg1 Arg2 | Arg0 := [Arg1|Arg2]. | {any,list} | list |
+|                      'HD' | Arg0 Arg1 | Arg0 := head of list Arg1. | {list} | any |
+|                      'TL' | Arg0 Arg1 | Arg0 := tail of list Arg1. | {list} | list |
+|                  'LENGTH' | Arg0 Arg1 | Arg0 := length of list Arg1. | {list} | integer |
+|                     'NIL' | Arg0 | Arg0 := []. | {} | list |
+|                  'APPEND' | Arg0 Arg1 Arg2 | Arg0 := Arg1 ++ Arg2. | {list,list} | list |
+|                'STR_JOIN' | Arg0 Arg1 Arg2 | Arg0 := string Arg1 followed by string Arg2. | {string,string} | string |
+|              'INT_TO_STR' | Arg0 Arg1 | Arg0 := turn integer Arg1 into a string. | {integer} | string |
+|             'ADDR_TO_STR' | Arg0 Arg1 | Arg0 := turn address Arg1 into a string. | {address} | string |
+|             'STR_REVERSE' | Arg0 Arg1 | Arg0 := the reverse of string Arg1. | {string} | string |
+|              'STR_LENGTH' | Arg0 Arg1 | Arg0 := The length of the string Arg1. | {string} | integer |
+|            'BYTES_TO_INT' | Arg0 Arg1 | Arg0 := bytes_to_int(Arg1) | {bytes} | integer |
+|            'BYTES_TO_STR' | Arg0 Arg1 | Arg0 := bytes_to_str(Arg1) | {bytes} | string |
+|            'BYTES_CONCAT' | Arg0 Arg1 Arg2 | Arg0 := bytes_concat(Arg1, Arg2) | {bytes,bytes} | bytes |
+|             'BYTES_SPLIT' | Arg0 Arg1 Arg2 | Arg0 := bytes_split(Arg2, Arg1), where Arg2 is the length of the first chunk. | {bytes,integer} | bytes |
+|             'INT_TO_ADDR' | Arg0 Arg1 | Arg0 := turn integer Arg1 into an address. | {integer} | address |
+|                 'VARIANT' | Arg0 Arg1 Arg2 Arg3 | Arg0 := create a variant of size Arg1 with the tag Arg2 (Arg2 < Arg1) and take Arg3 elements from the stack. | {integer,integer,integer} | variant |
+|            'VARIANT_TEST' | Arg0 Arg1 Arg2 | Arg0 := true if variant Arg1 has the tag Arg2. | {variant,integer} | boolean |
+|         'VARIANT_ELEMENT' | Arg0 Arg1 Arg2 | Arg0 := element number Arg2 from variant Arg1. | {variant,integer} | any |
+|              'BITS_NONEA' |  | push an empty bitmap on the stack. | {} | bits |
+|               'BITS_NONE' | Arg0 | Arg0 := empty bitmap. | {} | bits |
+|               'BITS_ALLA' |  | push a full bitmap on the stack. | {} | bits |
+|                'BITS_ALL' | Arg0 | Arg0 := full bitmap. | {} | bits |
+|              'BITS_ALL_N' | Arg0 Arg1 | Arg0 := bitmap with Arg1 bits set. | {integer} | bits |
+|                'BITS_SET' | Arg0 Arg1 Arg2 | Arg0 := set bit Arg2 of bitmap Arg1. | {bits,integer} | bits |
+|              'BITS_CLEAR' | Arg0 Arg1 Arg2 | Arg0 := clear bit Arg2 of bitmap Arg1. | {bits,integer} | bits |
+|               'BITS_TEST' | Arg0 Arg1 Arg2 | Arg0 := true if bit Arg2 of bitmap Arg1 is set. | {bits,integer} | boolean |
+|                'BITS_SUM' | Arg0 Arg1 | Arg0 := sum of set bits in bitmap Arg1. Exception if infinit bitmap. | {bits} | integer |
+|                 'BITS_OR' | Arg0 Arg1 Arg2 | Arg0 := Arg1 v Arg2. | {bits,bits} | bits |
+|                'BITS_AND' | Arg0 Arg1 Arg2 | Arg0 := Arg1 ^ Arg2. | {bits,bits} | bits |
+|               'BITS_DIFF' | Arg0 Arg1 Arg2 | Arg0 := Arg1 - Arg2. | {bits,bits} | bits |
+|                 'BALANCE' | Arg0 | Arg0 := The current contract balance. | {} | integer |
+|                  'ORIGIN' | Arg0 | Arg0 := Address of contract called by the call transaction. | {} | address |
+|                  'CALLER' | Arg0 | Arg0 := The address that signed the call transaction. | {} | address |
+|               'BLOCKHASH' | Arg0 Arg1 | Arg0 := The blockhash at height. | {integer} | hash |
+|             'BENEFICIARY' | Arg0 | Arg0 := The address of the current beneficiary. | {} | address |
+|               'TIMESTAMP' | Arg0 | Arg0 := The current timestamp. Unrelaiable, don't use for anything. | {} | integer |
+|              'GENERATION' | Arg0 | Arg0 := The block height of the cureent generation. | {} | integer |
+|              'MICROBLOCK' | Arg0 | Arg0 := The current micro block number. | {} | integer |
+|              'DIFFICULTY' | Arg0 | Arg0 := The current difficulty. | {} | integer |
+|                'GASLIMIT' | Arg0 | Arg0 := The current gaslimit. | {} | integer |
+|                     'GAS' | Arg0 | Arg0 := The amount of gas left. | {} | integer |
+|                 'ADDRESS' | Arg0 | Arg0 := The current contract address. | {} | address |
+|                'GASPRICE' | Arg0 | Arg0 := The current gas price. | {} | integer |
+|                    'LOG0' | Arg0 | Create a log message in the call object. | {string} | none |
+|                    'LOG1' | Arg0 Arg1 | Create a log message with one topic in the call object. | {integer,string} | none |
+|                    'LOG2' | Arg0 Arg1 Arg2 | Create a log message with two topics in the call object. | {integer,integer,string} | none |
+|                    'LOG3' | Arg0 Arg1 Arg2 Arg3 | Create a log message with three topics in the call object. | {integer,integer,integer,string} | none |
+|                    'LOG4' | Arg0 Arg1 Arg2 Arg3 Arg4 | Create a log message with four topics in the call object. | {integer,integer,integer,integer,string} | none |
+|                   'SPEND' | Arg0 Arg1 | Transfer Arg1 tokens to account Arg0. (If the contract account has at least that many tokens. | {address,integer} | none |
+|         'ORACLE_REGISTER' | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 Arg6 | Arg0 := New oracle with address Arg2, query fee Arg3, TTL Arg4, query type Arg5 and response type Arg6. Arg0 contains delegation signature. | {signature,address,integer,variant,typerep,typerep} | oracle |
+|            'ORACLE_QUERY' | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 Arg6 Arg7 | Arg0 := New oracle query for oracle Arg1, question in Arg2, query fee in Arg3, query TTL in Arg4, response TTL in Arg5. Typereps for checking oracle type is in Arg6 and Arg7. | {oracle,any,integer,variant,variant,typerep,typerep} | oracle_query |
+|          'ORACLE_RESPOND' | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 | Respond as oracle Arg1 to query in Arg2 with response Arg3. Arg0 contains delegation signature. Typereps for checking oracle type is in Arg4 and Arg5. | {signature,oracle,oracle_query,any,typerep,typerep} | none |
+|           'ORACLE_EXTEND' | Arg0 Arg1 Arg2 | Extend oracle in Arg1 with TTL in Arg2. Arg0 contains delegation signature. | {signature,oracle,variant} | none |
+|       'ORACLE_GET_ANSWER' | Arg0 Arg1 Arg2 Arg3 Arg4 | Arg0 := option variant with answer (if any) from oracle query in Arg1 given by oracle Arg0. Typereps for checking oracle type is in Arg3 and Arg4. | {oracle,oracle_query,typerep,typerep} | any |
+|     'ORACLE_GET_QUESTION' | Arg0 Arg1 Arg2 Arg3 Arg4 | Arg0 := question in oracle query Arg2 given to oracle Arg1. Typereps for checking oracle type is in Arg3 and Arg4. | {oracle,oracle_query,typerep,typerep} | any |
+|        'ORACLE_QUERY_FEE' | Arg0 Arg1 | Arg0 := query fee for oracle Arg1 | {oracle} | integer |
+|            'AENS_RESOLVE' | Arg0 Arg1 Arg2 Arg3 | Resolve name in Arg0 with tag Arg1. Arg2 describes the type parameter of the resolved name. | {string,string,typerep} | variant |
+|           'AENS_PRECLAIM' | Arg0 Arg1 Arg2 | Preclaim the hash in Arg2 for address in Arg1. Arg0 contains delegation signature. | {signature,address,hash} | none |
+|              'AENS_CLAIM' | Arg0 Arg1 Arg2 Arg3 Arg4 | Attempt to claim the name in Arg2 for address in Arg1 at a price in Arg4. Arg3 contains the salt used to hash the preclaim. Arg0 contains delegation signature. | {signature,address,string,integer,integer} | none |
+|             'AENS_UPDATE' |  | NYI | {} | none |
+|           'AENS_TRANSFER' | Arg0 Arg1 Arg2 Arg3 | Transfer ownership of name Arg3 from account Arg1 to Arg2. Arg0 contains delegation signature. | {signature,address,address,string} | none |
+|             'AENS_REVOKE' | Arg0 Arg1 Arg2 | Revoke the name in Arg2 from owner Arg1. Arg0 contains delegation signature. | {signature,address,string} | none |
+|           'BALANCE_OTHER' | Arg0 Arg1 | Arg0 := The balance of address Arg1. | {address} | integer |
+|              'VERIFY_SIG' | Arg0 Arg1 Arg2 Arg3 | Arg0 := verify_sig(Hash, PubKey, Signature) | {bytes,address,bytes} | boolean |
+|    'VERIFY_SIG_SECP256K1' | Arg0 Arg1 Arg2 Arg3 | Arg0 := verify_sig_secp256k1(Hash, PubKey, Signature) | {bytes,bytes,bytes} | boolean |
+|     'CONTRACT_TO_ADDRESS' | Arg0 Arg1 | Arg0 := Arg1 - A no-op type conversion | {contract} | address |
+|            'AUTH_TX_HASH' | Arg0 | If in GA authentication context return Some(TxHash) otherwise None. | {} | variant |
+|            'ORACLE_CHECK' | Arg0 Arg1 Arg2 Arg3 | Arg0 := is Arg1 an oracle with the given query (Arg2) and response (Arg3) types | {oracle,typerep,typerep} | bool |
+|      'ORACLE_CHECK_QUERY' | Arg0 Arg1 Arg2 Arg3 Arg4 | Arg0 := is Arg2 a query for the oracle Arg1 with the given types (Arg3, Arg4) | {oracle,oracle_query,typerep,typerep} | bool |
+|               'IS_ORACLE' | Arg0 Arg1 | Arg0 := is Arg1 an oracle | {address} | bool |
+|             'IS_CONTRACT' | Arg0 Arg1 | Arg0 := is Arg1 a contract | {address} | bool |
+|              'IS_PAYABLE' | Arg0 Arg1 | Arg0 := is Arg1 a payable address | {address} | bool |
+|                 'CREATOR' | Arg0 | Arg0 := contract creator | {} | address |
+|      'ECVERIFY_SECP256K1' | Arg0 Arg1 Arg2 Arg3 | Arg0 := ecverify_secp256k1(Hash, Addr, Signature) | {bytes,bytes,bytes} | bytes |
+|     'ECRECOVER_SECP256K1' | Arg0 Arg1 Arg2 | Arg0 := ecrecover_secp256k1(Hash, Signature) | {bytes,bytes} | bytes |
+|              'DEACTIVATE' |  | Mark the current contract for deactivation. | {} | none |
+|                   'ABORT' | Arg0 | Abort execution (dont use all gas) with error message in Arg0. | {string} | none |
+|                    'EXIT' | Arg0 | Abort execution (use upp all gas) with error message in Arg0. | {string} | none |
+|                     'NOP' |  | The no op. does nothing. | {} | none |
 
+#### Opcodes, Flags and Gas
 
+|  Op  |                      Name | Ends BB | In Auth | Offchain | Base Gas |
+| ---  |                      ---  |     --- |     --- |      --- |      --- |
+| 0x00 |                  'RETURN' |    true |    true |     true |       10 |
+| 0x01 |                 'RETURNR' |    true |    true |     true |       10 |
+| 0x02 |                    'CALL' |    true |    true |     true |       10 |
+| 0x03 |                  'CALL_R' |    true |   false |     true |      100 |
+| 0x04 |                  'CALL_T' |    true |    true |     true |       10 |
+| 0x05 |                 'CALL_GR' |    true |   false |     true |      100 |
+| 0x06 |                    'JUMP' |    true |    true |     true |       10 |
+| 0x07 |                  'JUMPIF' |    true |    true |     true |       10 |
+| 0x08 |               'SWITCH_V2' |    true |    true |     true |       10 |
+| 0x09 |               'SWITCH_V3' |    true |    true |     true |       10 |
+| 0x0a |               'SWITCH_VN' |    true |    true |     true |       10 |
+| 0x0b |              'CALL_VALUE' |   false |    true |     true |       10 |
+| 0x0c |                    'PUSH' |   false |    true |     true |       10 |
+| 0x0d |                    'DUPA' |   false |    true |     true |       10 |
+| 0x0e |                     'DUP' |   false |    true |     true |       10 |
+| 0x0f |                     'POP' |   false |    true |     true |       10 |
+| 0x10 |                    'INCA' |   false |    true |     true |       10 |
+| 0x11 |                     'INC' |   false |    true |     true |       10 |
+| 0x12 |                    'DECA' |   false |    true |     true |       10 |
+| 0x13 |                     'DEC' |   false |    true |     true |       10 |
+| 0x14 |                     'ADD' |   false |    true |     true |       10 |
+| 0x15 |                     'SUB' |   false |    true |     true |       10 |
+| 0x16 |                     'MUL' |   false |    true |     true |       10 |
+| 0x17 |                     'DIV' |   false |    true |     true |       10 |
+| 0x18 |                     'MOD' |   false |    true |     true |       10 |
+| 0x19 |                     'POW' |   false |    true |     true |       10 |
+| 0x1a |                   'STORE' |   false |    true |     true |       10 |
+| 0x1b |                    'SHA3' |   false |    true |     true |       40 |
+| 0x1c |                  'SHA256' |   false |    true |     true |       40 |
+| 0x1d |                 'BLAKE2B' |   false |    true |     true |       40 |
+| 0x1e |                      'LT' |   false |    true |     true |       10 |
+| 0x1f |                      'GT' |   false |    true |     true |       10 |
+| 0x20 |                      'EQ' |   false |    true |     true |       10 |
+| 0x21 |                     'ELT' |   false |    true |     true |       10 |
+| 0x22 |                     'EGT' |   false |    true |     true |       10 |
+| 0x23 |                     'NEQ' |   false |    true |     true |       10 |
+| 0x24 |                     'AND' |   false |    true |     true |       10 |
+| 0x25 |                      'OR' |   false |    true |     true |       10 |
+| 0x26 |                     'NOT' |   false |    true |     true |       10 |
+| 0x27 |                   'TUPLE' |   false |    true |     true |       10 |
+| 0x28 |                 'ELEMENT' |   false |    true |     true |       10 |
+| 0x29 |              'SETELEMENT' |   false |    true |     true |       10 |
+| 0x2a |               'MAP_EMPTY' |   false |    true |     true |       10 |
+| 0x2b |              'MAP_LOOKUP' |   false |    true |     true |       10 |
+| 0x2c |             'MAP_LOOKUPD' |   false |    true |     true |       10 |
+| 0x2d |              'MAP_UPDATE' |   false |    true |     true |       10 |
+| 0x2e |              'MAP_DELETE' |   false |    true |     true |       10 |
+| 0x2f |              'MAP_MEMBER' |   false |    true |     true |       10 |
+| 0x30 |           'MAP_FROM_LIST' |   false |    true |     true |       10 |
+| 0x31 |                'MAP_SIZE' |   false |    true |     true |       10 |
+| 0x32 |             'MAP_TO_LIST' |   false |    true |     true |       10 |
+| 0x33 |                  'IS_NIL' |   false |    true |     true |       10 |
+| 0x34 |                    'CONS' |   false |    true |     true |       10 |
+| 0x35 |                      'HD' |   false |    true |     true |       10 |
+| 0x36 |                      'TL' |   false |    true |     true |       10 |
+| 0x37 |                  'LENGTH' |   false |    true |     true |       10 |
+| 0x38 |                     'NIL' |   false |    true |     true |       10 |
+| 0x39 |                  'APPEND' |   false |    true |     true |       10 |
+| 0x3a |                'STR_JOIN' |   false |    true |     true |       10 |
+| 0x3b |              'INT_TO_STR' |   false |    true |     true |       10 |
+| 0x3c |             'ADDR_TO_STR' |   false |    true |     true |       10 |
+| 0x3d |             'STR_REVERSE' |   false |    true |     true |       10 |
+| 0x3e |              'STR_LENGTH' |   false |    true |     true |       10 |
+| 0x3f |            'BYTES_TO_INT' |   false |    true |     true |       10 |
+| 0x40 |            'BYTES_TO_STR' |   false |    true |     true |       10 |
+| 0x41 |            'BYTES_CONCAT' |   false |    true |     true |       10 |
+| 0x42 |             'BYTES_SPLIT' |   false |    true |     true |       10 |
+| 0x43 |             'INT_TO_ADDR' |   false |    true |     true |       10 |
+| 0x44 |                 'VARIANT' |   false |    true |     true |       10 |
+| 0x45 |            'VARIANT_TEST' |   false |    true |     true |       10 |
+| 0x46 |         'VARIANT_ELEMENT' |   false |    true |     true |       10 |
+| 0x47 |              'BITS_NONEA' |   false |    true |     true |       10 |
+| 0x48 |               'BITS_NONE' |   false |    true |     true |       10 |
+| 0x49 |               'BITS_ALLA' |   false |    true |     true |       10 |
+| 0x4a |                'BITS_ALL' |   false |    true |     true |       10 |
+| 0x4b |              'BITS_ALL_N' |   false |    true |     true |       10 |
+| 0x4c |                'BITS_SET' |   false |    true |     true |       10 |
+| 0x4d |              'BITS_CLEAR' |   false |    true |     true |       10 |
+| 0x4e |               'BITS_TEST' |   false |    true |     true |       10 |
+| 0x4f |                'BITS_SUM' |   false |    true |     true |       10 |
+| 0x50 |                 'BITS_OR' |   false |    true |     true |       10 |
+| 0x51 |                'BITS_AND' |   false |    true |     true |       10 |
+| 0x52 |               'BITS_DIFF' |   false |    true |     true |       10 |
+| 0x53 |                 'BALANCE' |   false |    true |     true |       10 |
+| 0x54 |                  'ORIGIN' |   false |    true |     true |       10 |
+| 0x55 |                  'CALLER' |   false |    true |     true |       10 |
+| 0x56 |               'BLOCKHASH' |   false |    true |     true |       10 |
+| 0x57 |             'BENEFICIARY' |   false |    true |     true |       10 |
+| 0x58 |               'TIMESTAMP' |   false |    true |     true |       10 |
+| 0x59 |              'GENERATION' |   false |    true |     true |       10 |
+| 0x5a |              'MICROBLOCK' |   false |    true |     true |       10 |
+| 0x5b |              'DIFFICULTY' |   false |    true |     true |       10 |
+| 0x5c |                'GASLIMIT' |   false |    true |     true |       10 |
+| 0x5d |                     'GAS' |   false |    true |     true |       10 |
+| 0x5e |                 'ADDRESS' |   false |    true |     true |       10 |
+| 0x5f |                'GASPRICE' |   false |    true |     true |       10 |
+| 0x60 |                    'LOG0' |   false |    true |     true |     1000 |
+| 0x61 |                    'LOG1' |   false |    true |     true |     1100 |
+| 0x62 |                    'LOG2' |   false |    true |     true |     1200 |
+| 0x63 |                    'LOG3' |   false |    true |     true |     1300 |
+| 0x64 |                    'LOG4' |   false |    true |     true |     1400 |
+| 0x65 |                   'SPEND' |   false |   false |     true |      100 |
+| 0x66 |         'ORACLE_REGISTER' |   false |   false |    false |      100 |
+| 0x67 |            'ORACLE_QUERY' |   false |   false |    false |      100 |
+| 0x68 |          'ORACLE_RESPOND' |   false |   false |    false |      100 |
+| 0x69 |           'ORACLE_EXTEND' |   false |   false |    false |      100 |
+| 0x6a |       'ORACLE_GET_ANSWER' |   false |   false |     true |      100 |
+| 0x6b |     'ORACLE_GET_QUESTION' |   false |   false |     true |      100 |
+| 0x6c |        'ORACLE_QUERY_FEE' |   false |   false |     true |      100 |
+| 0x6d |            'AENS_RESOLVE' |   false |   false |     true |      100 |
+| 0x6e |           'AENS_PRECLAIM' |   false |   false |    false |      100 |
+| 0x6f |              'AENS_CLAIM' |   false |   false |    false |      100 |
+| 0x70 |             'AENS_UPDATE' |   false |   false |    false |      100 |
+| 0x71 |           'AENS_TRANSFER' |   false |   false |    false |      100 |
+| 0x72 |             'AENS_REVOKE' |   false |   false |    false |      100 |
+| 0x73 |           'BALANCE_OTHER' |   false |    true |     true |       50 |
+| 0x74 |              'VERIFY_SIG' |   false |    true |     true |     1300 |
+| 0x75 |    'VERIFY_SIG_SECP256K1' |   false |    true |     true |     1300 |
+| 0x76 |     'CONTRACT_TO_ADDRESS' |   false |    true |     true |       10 |
+| 0x77 |            'AUTH_TX_HASH' |   false |    true |     true |       10 |
+| 0x78 |            'ORACLE_CHECK' |   false |   false |     true |      100 |
+| 0x79 |      'ORACLE_CHECK_QUERY' |   false |   false |     true |      100 |
+| 0x7a |               'IS_ORACLE' |   false |   false |     true |      100 |
+| 0x7b |             'IS_CONTRACT' |   false |   false |     true |      100 |
+| 0x7c |              'IS_PAYABLE' |   false |   false |     true |      100 |
+| 0x7d |                 'CREATOR' |   false |    true |     true |       10 |
+| 0x7e |      'ECVERIFY_SECP256K1' |   false |    true |     true |     1300 |
+| 0x7f |     'ECRECOVER_SECP256K1' |   false |    true |     true |     1300 |
+| 0xfa |              'DEACTIVATE' |   false |    true |     true |       10 |
+| 0xfb |                   'ABORT' |    true |    true |     true |       10 |
+| 0xfc |                    'EXIT' |    true |    true |     true |       10 |
+| 0xfd |                     'NOP' |   false |    true |     true |        1 |
 
 ## Gas
 ## Exceptions
@@ -618,7 +781,7 @@ integer      : 01101111 | RLP encoded (integer - 64) when size >= 64 and integer
 false        : 01111111
              : 10001111 : FREE (Possibly for bytecode in the future.)
 address      : 10011111 | [32 bytes]
-varaint      : 10101111 | RLP encoded variant size field | encoded tag | encoded values
+variant      : 10101111 | RLP encoded variant size field | encoded tag | encoded values
 list         : 10111111 : when length == 0
 bits         : 11001111 | RLP encoded integer : when bits are in infinite
 map          : 11011111 : when size == 0
@@ -638,7 +801,7 @@ the least significant bit.
 
 Example the number 1 in a byte would be written in binary as:
 ```
-0000001
+00000001
 ```
 And we would say that bit 0 is set to 1. All other bits 1 to 7 are set to 0.
 

@@ -24,14 +24,14 @@ implemented or considered for implementation.
 
 ## [Serialization formats](./serializations.md)
 
-## Epoch
+## Aeternity node
 
-Epoch is the reference implementation of the Aeternity protocol. Since we don't
-want to fragment relevant information too much, documentation specific to Epoch,
+The Aeternity node is the reference implementation of the Aeternity protocol. Since we don't
+want to fragment relevant information too much, documentation specific to the Aeternity node,
 such as API descriptions, will be kept in this repository until we decide for a
 better solution.
 
-- [API](./epoch/api/README.md)
+- [API](./node/api/README.md)
 
 ## Security
 

@@ -27,7 +27,7 @@ The transaction contains:
 - The address of the contract owner (the one signing and paying for the transaction)
 - Nonce of the owner/creator account.
 - The byte code of the contract
-- The VM/ABI to use
+- The VM and ABI to use
 - A transaction fee
 - A deposit (an even number, 0 is accepted).
 - An amount (aeons to transfer to the account, 0 is accepted).
@@ -35,7 +35,10 @@ The transaction contains:
 - Gas price for the call.
 - Call data for the initial call (usually including a function name and args, interpreted by the contract).
 
-See [Contract Create Transaction Serialization](../serializations.md#contract-create-transaction) for the serialization specification.
+See [Contract Create Transaction
+Serialization](../serializations.md#contract-create-transaction) for the
+serialization specification. Note that VM and ABI version is serialized as one
+packed integer.
 
 Call data is encoded depending on the ABI of the language of the contract.
 
@@ -61,9 +64,9 @@ The fee will be added to the miner account.
 
 The deposit will be "held by the contract" until it is deactivated.
 
-The vm_version defines both the virtual machine used for the byte code of the contract
-and the binary interface/calling convention used by the contract. The version codes are
-listed in the VM description.
+The VM version defines the virtual machine used for the byte code of the
+contract and the ABI version defines the binary interface/calling convention
+used by the contract. The version codes are listed in the VM description.
 
 If the initial call fails (runs out of gas) the contract is not
 created.  The owner loses the fee and the gas (to the miner) but the
@@ -85,7 +88,8 @@ all other fields are as in create contract.
 { owner           :: public_key()
 , nonce           :: pos_integer()
 , code            :: bytes()
-, vm_version      :: byte()
+, vm_version      :: integer()
+, abi_version     :: integer()
 , fee             :: amount()
 , deposit         :: amount()
 , amount          :: amount()
@@ -113,6 +117,7 @@ The transaction contains:
 - Optional amount to transfer to the account before execution (refunded if the execution fails).
 - The amount of gas to use
 - The calldata
+- The ABI version
 - A transaction fee
 
 See [Contract Call Transaction Serialization](../serializations.md#contract-call-transaction) for the serialization specification.
