@@ -411,6 +411,9 @@ From Lima transaction version is `2`.
 The first `claim` after `pre-claim` transaction MUST be signed by the same private key as a
 `pre-claim` transaction containing a commitment to the name and nonce.
 
+If the time delta of `pre-claim` and `claim` is bigger than 300 blocks,
+then the `claim` MUST be rejected.
+
 If the time delta of subsequent `claim` is bigger than governance defined values
 then this `claim` MUST be rejected.
 
