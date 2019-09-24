@@ -41,9 +41,15 @@ will have the same structure as before the operation.
 
 #### Type safety
 
-FATE solves a fundamental problem programmers run into when coding for Ethereum: integer overflow, weak type checking and poore data flow. FATE checks all aritmetic operations to keep the right meanining of it. Also you can't implicitly cast types (eg integers to booleans). 
+FATE solves a fundamental problem programmers run into when coding for
+Ethereum: integer overflow, weak type checking and poore data
+flow. FATE checks all aritmetic operations to keep the right meanining
+of it. Also you can't implicitly cast types (eg integers to booleans).
 
-In EVM contracts are not typed. When calling a function, EVM will try to find which function you wanted to use by looking at the data that you send into the code. In FATE, you have actual functions and the functions have types - function call has to match the function type.
+In EVM contracts are not typed. When calling a function, EVM will try
+to find which function you wanted to use by looking at the data that
+you send into the code. In FATE, you have actual functions and the
+functions have types - function call has to match the function type.
 
 FATE ultimately makes a safer coding platform for smart contracts.
 
@@ -53,7 +59,9 @@ FATE has more built in data types: like maps, lists.
 
 #### Faster transactions, smaller code size
 
-Having a higher level instructions makes the code deployed smaller and it reduces the blockchain size. Smaller code and smaller hashes also keeps a blockchain network from clogging up.
+Having a higher level instructions makes the code deployed smaller and
+it reduces the blockchain size. Smaller code and smaller hashes also
+keeps a blockchain network from clogging up.
 
 ## Components
 
@@ -648,81 +656,8 @@ F entry   {Hash, Code} or {Hash, Type, Flags, Code}
 Base blocks are lists of lists of instructions.
 
 
-### Notes
-This is not part of the specification... just some work in progress.
 
-#### Version management
-
-Adding features to VM or changing VM will result in hard fork, because
-people that did not update their software cannot handle new
-contracts. Therefore, the only thing we can add in “roma” release are
-additions to Sophia that are compiled to existing byte code
-format. For example some string library. Later this string library can
-work with build-in primops, such that compilation becomes easier and
-byte code shorter.
-
-#### Testing
-
-We need test infrastructure that can compile contracts with different
-compilers and check that hashes do not change accidentaly for
-contracts compiled with old version, but new code. We also need
-infrastructure for interoperability: calling old contract from new.
-
-#### Backend for Development kit
-
-Compiler and VM must offer support for a fancy web interface SDK. Such
-         as debugger, good error messages, etc. Distribution as NPM packet.
-
-#### MetaData
-
-There is a request for more meta data in compiled code such that
-contract API can be retrieved and such that one can send source code
-to a server that can validate it and offer tab completion.
-
-
-#### TOdos
-
-* Contact aeps team to find responsible contact  (TA)
-* Trace / debug
-* Side effects (Tx : contract)
-* Non spendables (fun and contract)
-* Events in Sophia (Roma)    (Hans)
-* Test compatible versions
-* Stateful, Pure recognized by Sophia compiler
-* Recursive types in Sophia
-* Sophia inheritance (compile time code organization)
-* Polymorphism
-* Standard Lib
-* FATE spec (Erik)
-** ABI
-** Instruction set
-** State
-* Primops spec  (Tobias)
-* VM
-* Sophia backend -> FATE  (Ulf)
-* Refactor Tx -> Primop
-* Gas pricing
-* State tree (cache / handling) + side effect checking
-* Implement instruction set
-* De-serialization
-* New instruction hash (Blake)
-* Hash on arbitrary VM objects
-** String hash
-** Phash
-
-
-Done:
-
-* Sophia stand alone (Robert)
-* AEVM opcodes  -> repo  (Robert)
-* AEVM /Sophia ABI code in separate library/cleanup
-* Sophia server http interface (separate repo)
-* Sophia contract interface (also called “ABI”) 45 min
-* Hard fork support
-* VM version handling
-
-
-# Appendix 1: Fate instruction set and serialization
+# Appendix 1: FATE serialization
 
 Most instructions are encoded as one byte opcode (7-bits), one byte
 operand specifiers and 0 to 3 variable size arguments.
