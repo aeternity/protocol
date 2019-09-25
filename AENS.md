@@ -71,7 +71,7 @@ We make auctions parameters depend on name length.
 The claim action becomes claim attempt. For short names claim transaction
 doesn't set ownership of the name. It can be followed by another
 claim from an account different than one set in preclaim for given name.
-Names below 32 characters are considered short.
+Names below 13 characters are considered short.
 
 There is finite amount of time when the follow up claim is allowed.
 This time is expressed in height delta computed from function of length of the name.
