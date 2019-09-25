@@ -364,8 +364,6 @@ pattern 00 11 00 00.
 
 ### Operations
 
-### Operations
-
 #### Description of operations
 
 |                      Name | Args | Description | Arg Types | Res Type |
@@ -658,6 +656,32 @@ Base blocks are lists of lists of instructions.
 
 
 # Appendix 1: FATE serialization
+A more formal description of the serialization can be found in
+the general [serialization document](../serialisations.md).
+Here we will try to describe the serialization more with words.
+
+FATE code is serialized in three chunks:
+1. Code: The code itself.
+2. Symbols: An optional symbol table.
+3. Annotations: Optional additional information.
+
+Each chunk is an RLP encoding of a byte array that is
+the serialization of the chunk. They all have to be there
+in the serialization but they can be empty.
+An empty code chunk is just the RPL encoding of the empty byte array,
+i.e the byte 128.
+Symbols and Annotations can be empty but they have to be there as
+the RLP encoding of the RLP encoding of the empty map i.e. the bytes 130, 47, 0.
+
+An empty FATE contract is encoded as the byte sequence 128, 130, 47, 0, 130, 47, 0.
+
+## The Fate Code chunk
+
+## The Fate Symbols chunk
+
+## The Fate Annotation chunk
+
+## Notes
 
 Most instructions are encoded as one byte opcode (7-bits), one byte
 operand specifiers and 0 to 3 variable size arguments.

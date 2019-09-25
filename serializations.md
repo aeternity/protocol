@@ -885,3 +885,361 @@ NOTE:
 , <pubkey>   :: binary()
 ]
 ```
+
+## Serialization of FATE contracts
+
+FATE contracts uses a recursive BNF like definition.
+There are serialisations (RLP, FATE), sequences of serializations (`< ... >`),
+sequences of bytes (`<< .... >>`) and sequences of bits (`<<< ... >>>`).
+
+Fate Code uses both RLP enodings and pure byte arrays (or binary) encodings.
+In the description here we write `RLP(X)` for the RLP encoding of `X`, where
+X is a name of an encoding described above or below in the description of
+the FATE encoding. We write `<X, Y>` for a byte array made of the sequence of
+the byte encodings of `X` and `Y`. We write `X(Y)` to denote the encoding
+of the type `Y` using the encoding `X`.
+
+We write `< >` for the empty sequence and use `|` for alternatives. We
+use hexadecimal numbers to represent specific bytes used to indicate
+what is encoded, e.g. `0xfe` for a function. We use `_` to denote any
+byte in a byte sequence `<< _ >>` or any encoding in a encoding
+sequence `< _ >`.
+
+We use `<<< X, Y >>>` to denote the bitpattern of the bits `X` followed
+by the bits `Y` where the bits on the left (`X`) are the most significant bits.
+A bitpattern should produce a number of bits devisable by 8, if not the pattern
+should be padded with zeroes on the left (in the high order) until it is devisable by 8.
+We use ```<<< xy >>>``` as a shorthand for ```<<< x, y >>>``` when `x` and `y` are
+just 0 or 1 and not a recursive definition.
+
+
+We use `; Text` to denote a comment that is not part of the encoding but
+used to make the meaning of the encoding clear.
+
+### FATE top level
+A fate contract is serialized as follows
+```
+Contract ::=
+  <
+    RLP(Code),
+    RLP(Symbols),
+    RLP(Annotations)
+  >
+```
+
+### Code
+Functions are sorted on their name (a name in this setting is the 4 first bytes of the blake2b
+hash of the program level readable name). Only one function of each name is allowed.
+```
+Code ::=
+  < >
+| < Function , Code >
+
+
+```
+
+### Function
+```
+Function ::=
+  < 0xfe,
+    Id,
+    Attributes,
+    Signature,
+    Instructions
+  >
+```
+
+### Id
+The Id is four bytes. The convention used by the reference compiler and
+other tools is that this name is the first 4 bytes of the blake2b hash of
+the function name. This is also true for the special `init` function.
+that is called by the `contract_creacte` transaction. This function
+must have the following Id: `<<0x44, 0xd6, 0x44, 0x1f>>`.
+
+But on a protocol level all other name could be any 4 bytes,
+just as long as all functions in the same contract have different Ids.
+```
+Id ::=
+  << _, _, _, _>>
+
+```
+
+### Attributes
+Attributes are encoded as the data encoding of the integer encoding
+the bit pattern where each bit indicates one attribute as follows:
+* bit 0: private
+* bit 1: payable
+
+```
+Attributes :==
+  < Integer(A) >
+
+A :==
+  0 ;; No attribute
+  1 ;; private
+  2 ;; payable
+  3 ;; private and payable
+
+```
+
+### Signature
+The signature of a function defines the type of the function.
+Types are given in FATE's type language.
+Given a list of the types of the arguments (Args) and the
+return type (RetType) the signature is encoded as follows.
+
+```
+Signature ::=
+  < Type({tuple, Args}),
+    Type(RetType)
+  >
+
+```
+
+### Instructions
+The code itself is encoded as a series of instructions that
+can be broken up into basic blocks.
+```
+Instructions ::=
+  < >
+| < Instruction, Instructions >
+```
+
+### Instruction
+Each instruction is encoded by its opcode and for opcodes taking
+an argument the addressing mode it uses followed by the argument.
+Depending on the number of arguments to an instruction the
+addressing mode can take up one or two bytes.
+
+```
+Instruction ::=
+  < Opcode,
+    AddressingMode,
+    Arguments
+   >
+```
+
+### Opcode
+
+```
+Opcode :==
+  < 0x00 ; 'RETURN'
+  | 0x01 ; 'RETURNR'
+  | 0x02 ; 'CALL'
+  | 0x03 ; 'CALL_R'
+  | 0x04 ; 'CALL_T'
+  | 0x05 ; 'CALL_GR'
+  | 0x06 ; 'JUMP'
+  | 0x07 ; 'JUMPIF'
+  | 0x08 ; 'SWITCH_V2'
+  | 0x09 ; 'SWITCH_V3'
+  | 0x0a ; 'SWITCH_VN'
+  | 0x0b ; 'CALL_VALUE'
+  | 0x0c ; 'PUSH'
+  | 0x0d ; 'DUPA'
+  | 0x0e ; 'DUP'
+  | 0x0f ; 'POP'
+  | 0x10 ; 'INCA'
+  | 0x11 ; 'INC'
+  | 0x12 ; 'DECA'
+  | 0x13 ; 'DEC'
+  | 0x14 ; 'ADD'
+  | 0x15 ; 'SUB'
+  | 0x16 ; 'MUL'
+  | 0x17 ; 'DIV'
+  | 0x18 ; 'MOD'
+  | 0x19 ; 'POW'
+  | 0x1a ; 'STORE'
+  | 0x1b ; 'SHA3'
+  | 0x1c ; 'SHA256'
+  | 0x1d ; 'BLAKE2B'
+  | 0x1e ; 'LT'
+  | 0x1f ; 'GT'
+  | 0x20 ; 'EQ'
+  | 0x21 ; 'ELT'
+  | 0x22 ; 'EGT'
+  | 0x23 ; 'NEQ'
+  | 0x24 ; 'AND'
+  | 0x25 ; 'OR'
+  | 0x26 ; 'NOT'
+  | 0x27 ; 'TUPLE'
+  | 0x28 ; 'ELEMENT'
+  | 0x29 ; 'SETELEMENT'
+  | 0x2a ; 'MAP_EMPTY'
+  | 0x2b ; 'MAP_LOOKUP'
+  | 0x2c ; 'MAP_LOOKUPD'
+  | 0x2d ; 'MAP_UPDATE'
+  | 0x2e ; 'MAP_DELETE'
+  | 0x2f ; 'MAP_MEMBER'
+  | 0x30 ; 'MAP_FROM_LIST'
+  | 0x31 ; 'MAP_SIZE'
+  | 0x32 ; 'MAP_TO_LIST'
+  | 0x33 ; 'IS_NIL'
+  | 0x34 ; 'CONS'
+  | 0x35 ; 'HD'
+  | 0x36 ; 'TL'
+  | 0x37 ; 'LENGTH'
+  | 0x38 ; 'NIL'
+  | 0x39 ; 'APPEND'
+  | 0x3a ; 'STR_JOIN'
+  | 0x3b ; 'INT_TO_STR'
+  | 0x3c ; 'ADDR_TO_STR'
+  | 0x3d ; 'STR_REVERSE'
+  | 0x3e ; 'STR_LENGTH'
+  | 0x3f ; 'BYTES_TO_INT'
+  | 0x40 ; 'BYTES_TO_STR'
+  | 0x41 ; 'BYTES_CONCAT'
+  | 0x42 ; 'BYTES_SPLIT'
+  | 0x43 ; 'INT_TO_ADDR'
+  | 0x44 ; 'VARIANT'
+  | 0x45 ; 'VARIANT_TEST'
+  | 0x46 ; 'VARIANT_ELEMENT'
+  | 0x47 ; 'BITS_NONEA'
+  | 0x48 ; 'BITS_NONE'
+  | 0x49 ; 'BITS_ALLA'
+  | 0x4a ; 'BITS_ALL'
+  | 0x4b ; 'BITS_ALL_N'
+  | 0x4c ; 'BITS_SET'
+  | 0x4d ; 'BITS_CLEAR'
+  | 0x4e ; 'BITS_TEST'
+  | 0x4f ; 'BITS_SUM'
+  | 0x50 ; 'BITS_OR'
+  | 0x51 ; 'BITS_AND'
+  | 0x52 ; 'BITS_DIFF'
+  | 0x53 ; 'BALANCE'
+  | 0x54 ; 'ORIGIN'
+  | 0x55 ; 'CALLER'
+  | 0x56 ; 'BLOCKHASH'
+  | 0x57 ; 'BENEFICIARY'
+  | 0x58 ; 'TIMESTAMP'
+  | 0x59 ; 'GENERATION'
+  | 0x5a ; 'MICROBLOCK'
+  | 0x5b ; 'DIFFICULTY'
+  | 0x5c ; 'GASLIMIT'
+  | 0x5d ; 'GAS'
+  | 0x5e ; 'ADDRESS'
+  | 0x5f ; 'GASPRICE'
+  | 0x60 ; 'LOG0'
+  | 0x61 ; 'LOG1'
+  | 0x62 ; 'LOG2'
+  | 0x63 ; 'LOG3'
+  | 0x64 ; 'LOG4'
+  | 0x65 ; 'SPEND'
+  | 0x66 ; 'ORACLE_REGISTER'
+  | 0x67 ; 'ORACLE_QUERY'
+  | 0x68 ; 'ORACLE_RESPOND'
+  | 0x69 ; 'ORACLE_EXTEND'
+  | 0x6a ; 'ORACLE_GET_ANSWER'
+  | 0x6b ; 'ORACLE_GET_QUESTION'
+  | 0x6c ; 'ORACLE_QUERY_FEE'
+  | 0x6d ; 'AENS_RESOLVE'
+  | 0x6e ; 'AENS_PRECLAIM'
+  | 0x6f ; 'AENS_CLAIM'
+  | 0x70 ; 'AENS_UPDATE'
+  | 0x71 ; 'AENS_TRANSFER'
+  | 0x72 ; 'AENS_REVOKE'
+  | 0x73 ; 'BALANCE_OTHER'
+  | 0x74 ; 'VERIFY_SIG'
+  | 0x75 ; 'VERIFY_SIG_SECP256K1'
+  | 0x76 ; 'CONTRACT_TO_ADDRESS'
+  | 0x77 ; 'AUTH_TX_HASH'
+  | 0x78 ; 'ORACLE_CHECK'
+  | 0x79 ; 'ORACLE_CHECK_QUERY'
+  | 0x7a ; 'IS_ORACLE'
+  | 0x7b ; 'IS_CONTRACT'
+  | 0x7c ; 'IS_PAYABLE'
+  | 0x7d ; 'CREATOR'
+  | 0x7e ; 'ECVERIFY_SECP256K1'
+  | 0x7f ; 'ECRECOVER_SECP256K1'
+  | 0xfa ; 'DEACTIVATE'
+  | 0xfb ; 'ABORT'
+  | 0xfc ; 'EXIT'
+  | 0xfd ; 'NOP'
+  >
+
+```
+
+
+### AddressingMode
+
+```
+AddressingMode ::=
+  < >
+| < LowAddressingMode >
+| < HighAddressingMode | LowAddressingMode >
+
+LowAddressingMode ::=
+  <<< Mode, Mode, Mode, Mode >>> ; Arg3 Arg2 Arg1 Arg0
+
+HighAddressingMode ::=
+  <<< Mode, Mode, Mode, Mode >>> ; Arg7 Arg6 Arg5 Arg4
+
+Mode ::=
+  <<< 00 >>> ; top of stack (or unused if arity < this pos) Arguments empty
+| <<< 01 >>> ; function argument N, N given by Arguments
+| <<< 10 >>> ; variable N or store -N if N is negative, N given by Arguments
+| <<< 11 >>> ; immediate, value given by arguments
+
+```
+
+
+### Arguments
+
+```
+Arguments ::=
+  < >
+| < Argument, Arguments >
+
+Argument ::=
+  < Integer(N) > ; For function argument, variable or store.
+  < Data(D) >    ; For immediates
+```
+
+
+### Data
+
+```
+Data ::=
+  < Boolean >
+| < Integer >
+| < String >
+| < Bytes >
+| < Address >
+| < ContractAddress >
+| < Oracle >
+| < OracleQuery >
+| < Channel >
+| < Tuple >
+| < List >
+| < Map >
+| < StoreMap >
+| < Variant >
+| < Type >
+```
+
+#### Boolean
+```
+Boolean ::=
+  <<<11111111>>> ; True
+| <<<01111111>>> ; False
+```
+
+#### Integer
+```
+Integer(I) ::=
+  <<< 0,  I, 0 >>> ; When abs(I) < 64, I >= 0
+| <<< 1, -I, 0 >>> ; When abs(I) < 64, I < 0
+| <  <<< 01101111 >>>, LargeInt(I - 64) >  ; When abs(I) >= 64, I >= 0
+| <  <<< 11101111 >>>, LargeInt(-I - 64) > ; When abs(I) >= 64, I < 0
+
+LargeInt(I) ::=
+  RLP(Unsigned(I))
+
+;; Encode an unsigned int
+Unsigned(I) ::=
+  << 0 >> ;; When I = 0
+| < Unsigned(I >> 8), (I && 0xff) >
+
+```
+
+
