@@ -657,7 +657,7 @@ Base blocks are lists of lists of instructions.
 
 # Appendix 1: FATE serialization
 A more formal description of the serialization can be found in
-the general [serialization document](../serialisations.md).
+the general [serialization document](../serializations.md).
 Here we will try to describe the serialization more with words.
 
 FATE code is serialized in three chunks:
