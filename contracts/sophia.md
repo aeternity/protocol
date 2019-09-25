@@ -967,9 +967,7 @@ The block-chain environment available to a contract is defined in three name spa
 
 ### Standard library
 
-Sophia provides standard library which is defined in terms of the language. It is included automatically
-to all contracts. This behavior can be blocked out by adding `no_implicit_stdlib` flag to the compiler, but
-note that you still may include it manually. 
+Sophia provides standard library which is defined in terms of the language. Modules may be included manually just like all other files.
 
 Currently defined library consist of
  - `List.aes` – operations on lists
@@ -978,7 +976,7 @@ Currently defined library consist of
  - `Pair.aes` – operations on 2-tuples
  - `Triple.aes` – operations on 3-tuples
 
-TODO: detailed docs for these
+The detailed docs may be found [here](./sophia_stdlib.md)
 
 ### Exceptions
 
