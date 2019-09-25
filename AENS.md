@@ -200,7 +200,8 @@ The only available registrars up to Lima version will be hard-coded
 ones, which own the `.` and `.test` namespaces.
 
 From Lima we will support `.aet` and limit `.test` namespace.
-Lima disallows write APIs to `.test` namespace.
+`.test` names will expire without an option of updating TTL.
+We will use expiration mechanism to purge `.test` names.
 
 The `.` namespace registrar is restricted and MUST NOT allow anyone to
 claim any names in its namespace.
