@@ -57,6 +57,7 @@ some blockchain specific primitives, constructions and types have been added.
         - [AENS interface](#aens-interface)
         - [Events](#events)
         - [Contract primitives](#contract-primitives)
+    - [Standard library](#standard-library)
     - [Exceptions](#exceptions)
 - [Syntax](#syntax)
     - [Lexical syntax](#lexical-syntax)
@@ -474,8 +475,6 @@ Example syntax:
 [x + y | x <- [1,2,3,4,5], let k = x*x, if (k > 5), y <- [k, k+1, k+2]]
 // yields [12,13,14,20,21,22,30,31,32]
 ```
-This sugar uses `List.flatMap` underneath, so `List` library has to be in the current scope
-(it is included implicitly by default).
 
 ### Maps and records
 
