@@ -24,6 +24,8 @@ implemented or considered for implementation.
 
 ## [Serialization formats](./serializations.md)
 
+## [Native tokens](./tokens/tokens.md)
+
 ## Aeternity node
 
 The Aeternity node is the reference implementation of the Aeternity protocol. Since we don't
