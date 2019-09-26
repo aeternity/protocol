@@ -1022,7 +1022,7 @@ Instruction ::=
 ### Opcode
 
 ```
-Opcode :==
+Opcode ::=
   < 0x00 ; 'RETURN'
   | 0x01 ; 'RETURNR'
   | 0x02 ; 'CALL'
