@@ -1192,7 +1192,7 @@ Arguments ::=
 
 Argument ::=
   < Integer(N) > ; For function argument, variable or store.
-  < Data(D) >    ; For immediates
+| < Data(D) >    ; For immediates
 ```
 
 
