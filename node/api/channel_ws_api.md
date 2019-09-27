@@ -15,6 +15,7 @@ The WebSocket API provides the following actions:
  * [Leave](#leave)
  * [On-chain transactions](#on-chain-transactions)
  * [Info messages](#info-messages)
+ * [Cancel update](#cancel-update)
  * [System messages](#system-messages)
  * [Signing error replies](#signing-error-replies)
 
@@ -1139,6 +1140,108 @@ Roles:
   "version": 1
 }
 ```
+
+## Cancel update
+
+ * **method:** `channels.cancel`
+ * **params:** none
+
+#### Positive response
+
+ * **method:** `channels.info`
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | channel_id | string | channel ID | Yes |
+  | data | object | info data | Yes |
+
+ * **data:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | event | string | `canceled_update` | Yes |
+
+#### Negative response
+
+ * **method:** `channels.info`
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | channel_id | string | channel ID | Yes |
+  | error | object | error data object | Yes |
+
+ * **error:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | message | string | `Rejected` | Yes |
+  | code | integer | `3` | Yes |
+  | data | json | error description | Yes |
+  | request | json | the failed request | Yes |
+
+ * **data:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | message | string | `Not allowed at current channel state` | Yes |
+  | code | integer | `1017` | Yes |
+
+#### Examples
+
+##### Request
+```javascript
+{
+   "jsonrpc":"2.0",
+   "method":"channels.cancel",
+   "params":{
+
+   }
+}
+```
+
+##### Positive response
+```javascript
+{ 
+   "jsonrpc":"2.0",
+   "method":"channels.info",
+   "params":{ 
+      "channel_id":"ch_95YaTDZAysRu3GkmW2yKkCK1H4fGtcttoj2qwFDfUSduTpCPf",
+      "data":{ 
+         "event":"canceled_update"
+      }
+   },
+   "version":1
+}
+```
+
+##### Negative response
+```javascript
+{
+   "channel_id":"ch_95YaTDZAysRu3GkmW2yKkCK1H4fGtcttoj2qwFDfUSduTpCPf",
+   "error":{
+      "code":3,
+      "data":[
+         {
+            "code":1017,
+            "message":"Not allowed at current channel state"
+         }
+      ],
+      "message":"Rejected",
+      "request":{
+         "jsonrpc":"2.0",
+         "method":"channels.cancel",
+         "params":{
+         }
+      }
+   },
+   "id":null,
+   "jsonrpc":"2.0",
+   "version":1
+}
+```
+
 ## System messages
 
 ### ping
