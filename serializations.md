@@ -1022,7 +1022,7 @@ Instruction ::=
 ### Opcode
 
 ```
-Opcode :==
+Opcode ::=
   < 0x00 ; 'RETURN'
   | 0x01 ; 'RETURNR'
   | 0x02 ; 'CALL'
@@ -1192,7 +1192,7 @@ Arguments ::=
 
 Argument ::=
   < Integer(N) > ; For function argument, variable or store.
-  < Data(D) >    ; For immediates
+| < Data(D) >    ; For immediates
 ```
 
 
