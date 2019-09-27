@@ -57,6 +57,8 @@ but are not necessarily part of the channel's life cycle.
 
 * [Update conflict](#update-conflict)
 
+* [Cancel update](#cancel-update)
+
 * [Generic messages](#generic-messages)
 
 * [Deposit](#deposit-events)
@@ -1943,6 +1945,122 @@ message containing a reference to the correct state.
     }
   },
   "version": 1
+}
+```
+
+#### Cancel update
+
+The update flow relies on participants reaching agreement according to
+updates. The process of getting there is not changing the channel state and
+thus is not part of the off-chain protocol. If needed, clients are expected to
+use [generic messages](#generic_messages) to build conensus around what the
+next update shall be.
+
+Even if a proper protocol is in place for reaching an agreement, there might
+be a need of the ability to cancel update. This is only possible while the FSM
+is waiting for an authentication by this particular client. Once an update is
+authenticated by the client, it can not be canceled by this client.
+
+The FSM produces two types of transactions according to how many
+authentications are required for them:
+* solo authenticated transactions:
+  * `channel_close_solo_tx`
+  * `channel_slash_tx`
+  * `channel_settle_tx`
+  * `channel_snapshot_tx`
+* mutually authenticated transactions - all the rest
+
+When a client is prompted to authenticate an update, one is expected to either
+agree to it with an authentication or to send a cancel it. If it is a solo
+authenticated transaction or if it is a mutually authentication one but the
+client started the update - the other FSM is not aware of the pending update
+yet. In this case no message is sent to the other FSM.
+If the other party has started the update and has already authenticated it,
+our client can still cancel it. If that happens the FSM will inform the other
+party that the update had been rejected, sending an abort conflict message.
+
+If the update had been canceled, FSM returns to the last co-authenticated
+state and enters an `open` state, waiting for a new update to be initiated.
+Since there is no previous stable state before the channel initial
+transaction, the `channel_create_tx` can not be canceled. It is the initiator
+that produces it so if the responder had different expectations for it, one is
+expected to close the connection instead. Then it can be reopened with
+a different set of opening arguments.
+
+The request for cancling an update is the same, no matter if the canceled
+update is triggered by the other party or not.
+
+```javascript
+{
+   "jsonrpc":"2.0",
+   "method":"channels.cancel",
+   "params":{
+
+   }
+}
+```
+
+The response the client receives in that case is:
+
+```javascript
+{ 
+   "jsonrpc":"2.0",
+   "method":"channels.info",
+   "params":{ 
+      "channel_id":"ch_95Ya...",
+      "data":{ 
+         "event":"canceled_update"
+      }
+   },
+   "version":1
+}
+```
+
+If the client tries sending a cancel message when it is not applicable, it
+will receive an error response instead:
+
+```javascript
+{
+   "channel_id":"ch_95Ya...",
+   "error":{
+      "code":3,
+      "data":[
+         {
+            "code":1017,
+            "message":"Not allowed at current channel state"
+         }
+      ],
+      "message":"Rejected",
+      "request":{
+         "jsonrpc":"2.0",
+         "method":"channels.cancel",
+         "params":{
+         }
+      }
+   },
+   "id":null,
+   "jsonrpc":"2.0",
+   "version":1
+}
+```
+
+If the other party had triggered the canceled update, it is informed with
+receiving the following message:
+
+```javascript
+{
+   "jsonrpc":"2.0",
+   "method":"channels.conflict",
+   "params":{
+      "channel_id":"ch_95Ya...",
+      "data":{
+         "channel_id":"ch_95Ya...",
+         "error_code":4,
+         "error_msg":"abort",
+         "round":1
+      }
+   },
+   "version":1
 }
 ```
 
