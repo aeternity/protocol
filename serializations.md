@@ -1204,6 +1204,7 @@ Data ::=
 | < Integer >
 | < String >
 | < Bytes >
+| < Bits >
 | < Address >
 | < ContractAddress >
 | < Oracle >
@@ -1236,10 +1237,80 @@ LargeInt(I) ::=
   RLP(Unsigned(I))
 
 ;; Encode an unsigned int
+;; where 'shr' is bitwise shift right, and 'band' is bitwise and.
 Unsigned(I) ::=
   << 0 >> ;; When I = 0
-| < Unsigned(I >> 8), (I && 0xff) >
+| < Unsigned(I shr 8), (I band 0xff) >
+
+```
+
+#### String
+A FATE string is just a byte array. The function size(S) gives the
+number of bytes in the byte array.
+
+```
+String(S) ::=
+    <<< 01011111 >>>                          ; when size(S)  =  0 , S is empty ("")
+| < <<< size(S), 01 >>>, < S > >              ; when size(S) <  64
+| < <<< 00000001 >>>, Integer(size(S) - 64) > ; when size(S) >= 64
+```
+#### Bits
+A FATE bitmap is represented as an integer, a negative integer
+is used for a bitmap with infinitely many 1 bits on the left.
+```
+Bits(B) ::=
+  < <<< 01001111 >>> LargeInt( B) > ; when B >= 0
+  < <<< 11001111 >>> LargeInt(-B) > ; when B <  0
+```
+#### Bytes
+
+```
+Bytes(B) ::=
+  < <<<10011111>>>, <<<00000001>>>, String(B) >
+```
+
+#### Address
+
+```
+Address(A) ::=
+  < <<<10011111>>>, <<<00000000>>>, RLP(A) >
+```
+
+#### ContractAddress
+
+```
+ContractAddress(C) ::=
+  < <<<10011111>>>, <<<00000010>>>, RLP(C) >
+```
+
+#### Oracle
+
+```
+Oracle(O) ::=
+  < <<<10011111>>>, <<<00000011>>>, RLP(O) >
+```
+
+#### OracleQuery
+
+```
+OracleQuery(Q) ::=
+  < <<<10011111>>>, <<<00000100>>>, RLP(Q) >
+```
+
+#### Channel
+
+```
+Channel(C) ::=
+  < <<<10011111>>>, <<<00000101>>>, RLP(C) >
+```
 
 ```
 
 
+| < Tuple >
+| < List >
+| < Map >
+| < StoreMap >
+| < Variant >
+| < Type >
+```
