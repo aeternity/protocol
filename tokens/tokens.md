@@ -74,7 +74,7 @@ The ANT contains the fields:
 - `creator` - The account id of the creator
 - `meta_data` - A byte array field uninterpreted under consensus
 - `contract` - A contract id if there is a governing contract, or the empty binary otherwise
-- `total_amount` - A counter of the currently available amount of the token
+- `total_supply` - A counter of the currently available amount of the token
 - `parent` - The id of the parent ANT (TODO: Hierarchical tokens?)
 - `final` - Boolean that indicated whether new tokens can be minted. Can flip to false, but never back to true again.
 
@@ -91,20 +91,109 @@ denominator, a display name, etc).
 }
 ```
 
-# REWORKED UP TO HERE.
+A contract governing the usage of tokens must have a non-empty subset
+of the following ACI:
 
+```
+ spend(recipient : address, payload : Type) : boolean
+ trade([(from : address, to: address, Option(token : address))], payload : Type) : boolean
+ mint(amount: integer) : boolean
+ burn(amount : integer) : boolean
+```
+
+The contract may contain other endpoints as well, but at least one of
+the entrypoints above must be implemented. The contract can only be
+attached at create time.
+
+If a contract is provided, any transaction (spend, trade, mint, burn)
+would call this contract and the transaction only goes through if the
+result of the corresponding contract call returns true. Any other
+transaction using the token (such as contract call) would only be
+executed if a call to spend returns true. (TODO: Decide how this plays
+with contract calls that tries to pass tokens as value, etc).
 
 ## ANT transactions
-An ANT can be:
-- *created* through the `ant_create_tx`
-- *finalized* through the `ant_finalize_tx`, preventing more minting.
+
+### ANT create transaction (`ant_create_tx`)
+
+The ANT create transaction takes the argument:
+- Meta data : string
+- Amount
+- Recipient
+- Final
+- Contract
+- Parent  (TODO: Hierarchical tokens?)
+
+The `amount` is the number of tokens to mint at create time. Set to
+`0` if none should be minted. This can for example be combined with
+setting the `final` argument to false, thereby immediately minting all
+tokens that will ever exist.
+
+The `recipient` is the recipient of the minted tokens in `amount`. If
+not provided, the tokens are given to the creator's account.
+
+The `parent` is a pointer to a parent token for hierarchical
+tokens. (TODO: hierarchical tokens?)
+
+### ANT finalize transaction (`ant_finalize_tx`)
+
+The ANT finalize transaction takes the arguments:
+- owner
+- ANT
+
+The finalize transaction can only be submitted by the actual owner,
+and only if the ANT is not already finalized.
+
+### ANT mint transaction (`ant_mint_tx`)
+The ANT mint transaction takes the argument:
+- owner
+- ANT
+- amount
+- recipient
+- final
+
+Only the `owner` can mint new tokens, but it can pass the minted
+tokens to a recipient. If `final` is set to true, the ANT will be
+finalized after the new tokens are minted.
+
+### ANT destroy transaction
+TODO: Should we be able to destroy an ANT that has a `total_supply` of 0?
+
 
 ## Token transactions
 
-Tokens can be:
-- *minted* through the `ant_mint_tx`.
-- *destroyed* through the `ant_burn_tx`.
-- *traded* atomically through the `ant_trade_tx`.
+### Token trade transaction
+The token trade transaction takes the argument:
+- trades
+
+The `trades` field contans a non-empty list of token transfers. A
+single token transfer consists of the fields:
+
+- Sender
+- Receiver
+- Amount
+- An ANT id
+
+This construct makes it possible to atomically perform complicated
+trade operations involving more than one ANT and also aeons (TODO: How
+to signal that a trade concerns aeons) between multiple parties.
+
+The transaction must be signed by all senders. (TODO: Should we use
+some alternative multisig format here?).
+
+
+### Token burn transaction
+
+The token burn transaction contains the fields
+- Account (owner of the tokens, not necessarily of the ANT)
+- Amount
+- ANT
+
+Destroy an `Amount` of `ANT` tokens currently owned by the
+`account`. The burned amount is also counted from the `total_supply`
+in the ANT object.
+
+### Other transactions on tokens
 
 Tokens can also be transfered from one account to another through any
 other transaction that can pass an amount. You can:
@@ -112,52 +201,3 @@ other transaction that can pass an amount. You can:
 - pass tokens as value in a `contract_call_tx` or `contract_create_tx`
 - pass tokens as value in contract calls in a smart contract.
 - spend tokens as query fees in `oracle_query_tx` (TODO: Might be a future extension).
-
-### ANT create transaction (`ant_create_tx`)
-
-The ANT create transaction takes the mandatory argument:
-- Meta data : string
-
-The ANT create transaction takes the optional arguments:
-- Contract
-- Amount
-- Recipient
-- Parent  (TODO: Decide what impact this have. Possibly delay having hierarchical tokens)
-- Final
-
-
-The `contract` has to provide the following ACI:
-```
- spend(recipient : address, payload : Type) : boolean
- trade([(from : address, to: address, Optional(token : address))], payload : Type) : boolean
- mint(amount: integer) : boolean
- burn(amount : integer) : boolean
-```
-
-The `amount` is the number of tokens to create.
-
-The `recipient` an account to dump the tokens created, if not given the tokens are
-spent to the creators account.
-
-The `parent` is a pointer to a parent token for hierarchical tokens.
-
-The `final` argument sets the final flag which would block future minting.
-
-If a contract is provided then any transaction (spend, trade, mint, burn) would
-call this contract and the transaction only goes through if the result of the
-corresponding contract call returns true. Any other transaction using
-the token (such as contract call) would only be executed if a call to spend
-returns true.
-
-## Create transaction
-
-```
-{ creator         :: id()
-, <meta_data>     :: binary()
-, <contract>      :: id()
-, <total_amount>  :: int()
-, <parent>        :: id()
-, <final>         :: bool()
-
-}
-```

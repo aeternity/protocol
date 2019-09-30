@@ -1056,7 +1056,7 @@ NOTE:
 { creator       :: id()
 , meta_data     :: binary()
 , contract      :: id()
-, total_amount  :: int()
+, total_supply  :: int()
 , parent        :: id()   TODO: Decide if we should have hierarchical tokens
 , final         :: bool()
 }
