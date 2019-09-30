@@ -1396,22 +1396,14 @@ Type(T) ::=
 | MapType(T)
 | StringTypr
 | VariantType(T)
-| BytesType(T)
+| BytesType(bytes_types_size(T))
 | AnyType
 | VarType(var_type_id(T))
 
-IntegerType   ::=  <<< 00000111 >>>
-
-BooleanType   ::=  <<< 00010111 >>>
-
-ListType(T)   ::= <<< 00100111 >>>, Type(T)
-
-TupleType(Ts) ::= <<< 00110111 >>>, length(Ts), TupleElementTypes(Ts)
-
-TupleElementTypes(T) ::=
-  < >
-| Type, TupleElementTypes
-
+IntegerType      ::=  <<< 00000111 >>>
+BooleanType      ::=  <<< 00010111 >>>
+ListType(ET)      ::= <<< 00100111 >>>, Type(ET)
+TupleType(ETs)    ::= <<< 00110111 >>>, length(ETs), TupleElementTypes(ETs)
 AddressType      ::= <<< 01000111 >>>, <<< 00000000 >>>
 ContractType     ::= <<< 01000111 >>>, <<< 00000010 >>>
 OracleType       ::= <<< 01000111 >>>, <<< 00000011 >>>
@@ -1421,11 +1413,12 @@ BitsType         ::= <<< 01010111 >>>
 MapType(T)       ::= <<< 01100111 >>>, Type(key_type(T)), Type(value_type(T))
 StringTypr       ::= <<< 01110111 >>>
 VariantType(T)   ::= <<< 10000111 >>>, << size(type_arities(T)) >>, VariantTypes(variant_type_elements(T))
-
-VariantTypes(T)  ::= < > | Type, VariantTypes
-
-BytesType(T)     ::= <<< 10010111 >>>, Integer(size(T))
+BytesType(N)     ::= <<< 10010111 >>>, Integer(N)
 AnyType          ::= <<< 11110111 >>>
 VarType(N)       ::= <<< 11100111 >>>, << N >>
+
+TupleElementTypes(T) ::= < > | Type, TupleElementTypes
+
+VariantTypes(T)      ::= < > | Type, VariantTypes
 
 ```
