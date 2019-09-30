@@ -1194,7 +1194,7 @@ Argument ::=
 ### Data
 
 ```
-Data ::=
+Data(D) ::=
   Boolean
 | Integer
 | String
@@ -1300,7 +1300,20 @@ Channel(C) ::=
 ```
 
 
+#### Tuple
+The function tuple_size gives the number of elements of the tuple.
+The elements are serialized in order from left to right.
 
+```
+Tuple(T) ::=
+  <<< 00111111 >>>                                        ; for the empty tuple (Unit)
+  <<< tuple_size(T), 1011 >>>, Elements                   ; when tuple_size(T) < 16
+  <<< 00001011 >>>, Integer(tuple_size(T) - 16), Elements ; Otherwise
+
+Elements ::=
+  Data
+| Data, Elements
+```
 
 
 ```
