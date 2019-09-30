@@ -76,7 +76,7 @@ The ANT contains the fields:
 - `contract` - A contract id if there is a governing contract, or the empty binary otherwise
 - `total_supply` - A counter of the currently available amount of the token
 - `parent` - The id of the parent ANT (TODO: Hierarchical tokens?)
-- `final` - Boolean that indicated whether new tokens can be minted. Can flip to true, but never back to false again.
+- `final` - If the ANT is final, new tokens cannot be minted. Can flip to true, but never back to false again.
 
 The `meta data` is an uninterpreted string but token minters are
 encouraged to use the following json object: (TODO: Extend).  The
