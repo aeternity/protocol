@@ -236,6 +236,7 @@ Examples:
 Tuples have an arity indicating the number of elements in the
 tuple. Each element in the tuple has a type. The 0-tuple is also
 sometimes called unit.
+The maximum number of elements in the tuple is 255 (included). 
 
 Examples:
 ```
