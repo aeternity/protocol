@@ -1400,10 +1400,10 @@ Type(T) ::=
 | AnyType
 | VarType(var_type_id(T))
 
-IntegerType      ::=  <<< 00000111 >>>
-BooleanType      ::=  <<< 00010111 >>>
-ListType(ET)      ::= <<< 00100111 >>>, Type(ET)
-TupleType(ETs)    ::= <<< 00110111 >>>, length(ETs), TupleElementTypes(ETs)
+IntegerType      ::= <<< 00000111 >>>
+BooleanType      ::= <<< 00010111 >>>
+ListType(ET)     ::= <<< 00100111 >>>, Type(ET)
+TupleType(ETs)   ::= <<< 00110111 >>>, length(ETs), TupleElementTypes(ETs)
 AddressType      ::= <<< 01000111 >>>, <<< 00000000 >>>
 ContractType     ::= <<< 01000111 >>>, <<< 00000010 >>>
 OracleType       ::= <<< 01000111 >>>, <<< 00000011 >>>
