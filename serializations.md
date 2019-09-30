@@ -1315,14 +1315,117 @@ Elements ::=
 | Data, Elements
 ```
 
+####  List
+The function length gives the number of elements in the list.
+The elements of the list are serialized in order from left to right.
+
+```
+List(L) ::=
+  <<< length(L),  0011 >>>, ListElements(L) ; when length(L) < 16
+  <<<00011111, RLP(length(L) - 16), ListElements(L)
+
+ListElements ::=
+  Data
+  Data, ListElements
+
+```
+
+#### Map
+The function map_size gives the number of key value pairs in the map.
+The key value pairs are serialized in key order with the smallest
+key in the order given by the FATE data order. Each pair is
+serialized toghether, first the key and then the value.
+
+There must not be any duplicate keys in the map.
+
+```
+Map(M) ::=
+  <<< 00101111 >>>, RLP(map_size(M)), MapElements
+
+MapElements ::=
+  Data, Data
+  Data, Data, MapElements
 
 ```
 
 
-| < Tuple >
-| < List >
-| < Map >
-| < StoreMap >
-| < Variant >
-| < Type >
+#### StoreMap
+A store map is just the ID (an integer) of the map in the contract store.
+See the description of FATE for a longer explanation of Store Maps.
+
+```
+StoreMap(ID) ::=
+  <<< 10111111 >>>, Integer(ID)
+```
+
+#### Variant
+See the description of FATE for a longer explanation of variant types.
+A Variant have a number of different "variants" each with an arity.
+There can at most be 255 variants and there has to be at least 1 arity.
+The arity describes how many different elements each variant has.
+Each arity can be in the range of 0 to 255.
+The function arities gives a list of the arities of each variant of the variant.
+The specific variant is defined by the "tag" which is the ordinal of the
+arity in the list of arities, given byt the function tag.
+The value of the variant is serialized as an tuple of the elements
+of the variant given by the variant_elements function.
+
+```
+Variant(V) ::=
+  <<<10101111>>>,
+  RLP(arities(V)),
+  << tag(V) >>,
+  Tuple(variant_elements(V))
+```
+
+#### Type
+
+
+```
+Type(T) ::=
+  IntegerType
+| BooleanType
+| ListType(list_element_type(T))
+| TupleType(tuple_element_types(T))
+| AddressType
+| ContractType
+| OracleType
+| OracleQueryType
+| ChannelType
+| BitsType
+| MapType(T)
+| StringTypr
+| VariantType(T)
+| BytesType(T)
+| AnyType
+| VarType(var_type_id(T))
+
+IntegerType   ::=  <<< 00000111 >>>
+
+BooleanType   ::=  <<< 00010111 >>>
+
+ListType(T)   ::= <<< 00100111 >>>, Type(T)
+
+TupleType(Ts) ::= <<< 00110111 >>>, length(Ts), TupleElementTypes(Ts)
+
+TupleElementTypes(T) ::=
+  < >
+| Type, TupleElementTypes
+
+AddressType      ::= <<< 01000111 >>>, <<< 00000000 >>>
+ContractType     ::= <<< 01000111 >>>, <<< 00000010 >>>
+OracleType       ::= <<< 01000111 >>>, <<< 00000011 >>>
+OracleQueryType  ::= <<< 01000111 >>>, <<< 00000100 >>>
+ChannelType      ::= <<< 01000111 >>>, <<< 00000101 >>>
+BitsType         ::= <<< 01010111 >>>
+MapType(T)       ::= <<< 01100111 >>>, Type(key_type(T)), Type(value_type(T))
+StringTypr       ::= <<< 01110111 >>>
+VariantType(T)   ::= <<< 10000111 >>>, << size(type_arities(T)) >>, VariantTypes(variant_type_elements(T))
+
+VariantTypes(T)  ::= < > | Type, VariantTypes
+
+BytesType(T)     ::= <<< 10010111 >>>, Integer(size(T))
+AnyType          ::= <<< 11110111 >>>
+VarType(N)       ::= <<< 11100111 >>>, << N >>
+
 ```
