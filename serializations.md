@@ -1322,7 +1322,7 @@ The elements of the list are serialized in order from left to right.
 ```
 List(L) ::=
   <<< length(L),  0011 >>>, ListElements(L) ; when length(L) < 16
-  <<<00011111, RLP(length(L) - 16), ListElements(L)
+  <<< 00011111 >>>, RLP(length(L) - 16), ListElements(L)
 
 ListElements ::=
   Data
