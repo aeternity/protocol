@@ -43,6 +43,7 @@ tag.
 | kh      | base58   | Key block hash |
 | mh      | base58   | Micro block hash |
 | nm      | base58   | Name |
+| nt      | base58   | Aeternity Native Token (ANT) |
 | ok      | base58   | Oracle pubkey |
 | oq      | base58   | Oracle query id |
 | or      | base64   | Oracle response |

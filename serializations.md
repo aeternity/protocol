@@ -253,12 +253,12 @@ subsequent sections divided by object.
 | Sophia byte code | 70 |
 | Generalized accounts attach transaction | 80 |
 | Generalized accounts meta transaction | 81 |
-| Token | 90 |
-| Token create transaction | 91 |
-| Token mint transaction | 92 |
-| Token trade transaction | 93 |
-| Token burn transaction | 94 |
-| Token finalize transaction | 95 |
+| Aeternity Native Token (ANT) | 90 |
+| ANT create transaction | 91 |
+| ANT mint transaction | 92 |
+| ANT finalize transaction | 93 |
+| Token trade transaction | 94 |
+| Token burn transaction | 95 |
 | Key block | 100 |
 | Micro block | 101 |
 | Light micro block | 102 |
@@ -1051,15 +1051,26 @@ NOTE:
 ]
 ```
 
+#### Aeternity Native Token (ANT)
+```
+{ creator       :: id()
+, meta_data     :: binary()
+, contract      :: id()
+, total_amount  :: int()
+, parent        :: id()   TODO: Decide if we should have hierarchical tokens
+, final         :: bool()
+}
+```
 
-#### Token create transaction
+
+#### ANT create transaction
 ```
 [ <creator>       :: id()
 , <meta_data>     :: binary()
 , <contract>      :: id()
 , <amount>        :: int()
 , <recipient>     :: id()
-, <parent>        :: id()
+, <parent>        :: id()    TODO: Decide on hierarchical tokens
 , <final>         :: bool()
 , <ttl>           :: int()
 , <fee>           :: int()
@@ -1067,11 +1078,23 @@ NOTE:
 ]
 ```
 
-#### Token mint transaction
+#### ANT mint transaction
 ```
-[ <amount>        :: int()
+[ <owner>         :: id()
+, <ANT>           :: id()
+, <amount>        :: int()
 , <recipient>     :: id()
 , <final>         :: bool()
+, <ttl>           :: int()
+, <fee>           :: int()
+, <nonce>         :: int()
+]
+```
+
+#### ANT finalize transaction
+```
+[ <owner>         :: id()
+, <ANT>           :: id()
 , <ttl>           :: int()
 , <fee>           :: int()
 , <nonce>         :: int()
@@ -1079,8 +1102,9 @@ NOTE:
 ```
 
 #### Token trade transaction
+
 ```
-[ <trades>        :: [{id(), id(), int(), id()}]
+[ <trades>        :: [{<sender> :: id(), <receiver> :: id(), <amount> :: int(), <ANT> :: id()}]
 , <ttl>           :: int()
 , <fee>           :: int()
 , <nonce>         :: int()
@@ -1089,16 +1113,10 @@ NOTE:
 
 #### Token burn transaction
 ```
-[ <amount>        :: int()
+[ <account>       :: id()
+, <ANT>           :: int()
+, <amount>        :: int()
 , <ttl>           :: int()
-, <fee>           :: int()
-, <nonce>         :: int()
-]
-```
-
-#### Token finalize transaction
-```
-[ <ttl>           :: int()
 , <fee>           :: int()
 , <nonce>         :: int()
 ]

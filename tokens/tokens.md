@@ -15,22 +15,25 @@ Owners of the tokens can spend them to other accounts, or trade them
 (atomically) for other assets with other accounts. If tokens are no
 longer wanted you can burn them.
 
-Only the owner of the ANT can mint new tokens, and is the owner
-decides that enough is enough, the ANT can be finalized, preventing
-more minting. An ANT can also be created with a final supply already
-minted and given to the owner of the ANT.
+Only the owner of the ANT can mint new tokens. Only the owner can
+finalize the ANT, preventing more minting. An ANT can also be
+created with a final supply already minted.
 
 An ANT can only be destroyed (TODO: design decision) if the total
 token supply of the ANT is zero (i.e., all tokens are burnt).
 
-Fees cannot be payed by native tokens, but only by aeons, but other
-services can be payed for with them. (TODO: Oracle query fees, etc?)
+Aeons are not part of the ANT system. There are no consensus
+controlled exchange rate between tokens and aeons. Fees cannot be
+payed by native tokens, but only by aeons. Other services could be
+payed for with tokens (e.g., contracts accepting tokens as
+payment). (TODO: Design decision: Should oracles be allowed to set
+fees in tokens?)
 
-If you need to govern the behavior of the tokens, a contract can be
-connected to the ANT. The contract has functions that will be called
-for example when tokens of the type is traded. The result of the call
-decides if the trade can happen or not.
-
+The owner of a token can decide to govern the behavior of the tokens
+by connecting a contract when an ANT is created. The contract must
+provide entrypoints according to a specified ACI where one or many of
+the primitive operation (spend, trade, mint, etc) is called to decide
+if the operation is allowed or not.
 
 ## Definitions
 
@@ -51,6 +54,45 @@ A native token:
 - is *mintable* (`mint`)
 - is *transferable* (`spend`, `trade`)
 - is *destroyable* (`burn`)
+
+## Tokens state tree
+
+The tokens state tree contains ANT objects. Tokens are stored in the
+accounts state tree in the owner's account.
+
+### ANT object
+
+The token id is determined by the creator's account and nonce.
+```
+  id := Blake2b(<CreatorPubkey><CreateTxNonce>)
+```
+where `Blake2b` is the 256 bit hash. The [API
+serialization](../node/api/api_encoding.md) of an ANT id is tagged by
+`nt_`
+
+The ANT contains the fields:
+- `creator` - The account id of the creator
+- `meta_data` - A byte array field uninterpreted under consensus
+- `contract` - A contract id if there is a governing contract, or the empty binary otherwise
+- `total_amount` - A counter of the currently available amount of the token
+- `parent` - The id of the parent ANT (TODO: Hierarchical tokens?)
+- `final` - Boolean that indicated whether new tokens can be minted. Can flip to false, but never back to true again.
+
+The `meta data` is an uninterpreted string but token minters are
+encouraged to use the following json object: (TODO: Extend).  The
+intention of the meta data is to have a consensus controlled way of
+providing information usable by tools (e.g., displaying an intended
+denominator, a display name, etc).
+```
+{
+  "type" : "object",
+  "properties": { "name": {"type" : "string"},
+                }
+}
+```
+
+# REWORKED UP TO HERE.
+
 
 ## ANT transactions
 An ANT can be:
@@ -83,15 +125,6 @@ The ANT create transaction takes the optional arguments:
 - Parent  (TODO: Decide what impact this have. Possibly delay having hierarchical tokens)
 - Final
 
-The `meta data` is an uninterpreted string but token minters are encouraged to
-use the following json object:
-```
-{
-  "type" : "object",
-  "properties": { "name": {"type" : "string"},
-                }
-}
-```
 
 The `contract` has to provide the following ACI:
 ```
@@ -112,24 +145,11 @@ The `final` argument sets the final flag which would block future minting.
 
 If a contract is provided then any transaction (spend, trade, mint, burn) would
 call this contract and the transaction only goes through if the result of the
-corresponfing contract call returns true. Any other transaction using
+corresponding contract call returns true. Any other transaction using
 the token (such as contract call) would only be executed if a call to spend
 returns true.
 
-## Tokens state tree
-
-The tokens state tree contain token type objects.
-Tokens are stored in the account state tree as a list of tuples of
-token id:s and balances.
-
-### Token state tree objects
-
-- The token state tree contains
-  - Token type objects
-
-#### The token type object
-
-- Created by an token create transaction.
+## Create transaction
 
 ```
 { creator         :: id()
@@ -141,4 +161,3 @@ token id:s and balances.
 
 }
 ```
-
