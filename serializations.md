@@ -953,7 +953,7 @@ Function ::=
 The Id is four bytes. The convention used by the reference compiler and
 other tools is that this name is the first 4 bytes of the blake2b hash of
 the function name. This is also true for the special `init` function.
-that is called by the `contract_creacte` transaction. This function
+that is called by the `contract_create` transaction. This function
 must have the following Id: `<<0x44, 0xd6, 0x44, 0x1f>>`.
 
 But on a protocol level all other name could be any 4 bytes,
