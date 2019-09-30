@@ -257,7 +257,7 @@ subsequent sections divided by object.
 ]
 ```
 
-Signatures are sorted.
+Type signatures are sorted.
 
 ### Spend transaction
 ```
@@ -889,7 +889,7 @@ NOTE:
 ## Serialization of FATE contracts
 
 FATE contracts uses a recursive BNF like definition.
-There are serialisations (RLP, FATE), sequences of serializations (`< ... >`),
+There are serialisations (RLP, FATE), sequences of serializations (`S1, S2, ...`),
 sequences of bytes (`<< .... >>`) and sequences of bits (`<<< ... >>>`).
 
 Fate Code uses both RLP enodings and pure byte arrays (or binary) encodings.
@@ -903,7 +903,7 @@ We write `< >` for the empty sequence and use `|` for alternatives. We
 use hexadecimal numbers to represent specific bytes used to indicate
 what is encoded, e.g. `0xfe` for a function. We use `_` to denote any
 byte in a byte sequence `<< _ >>` or any encoding in a encoding
-sequence `< _ >`.
+sequence ` _, `.
 
 We use `<<< X, Y >>>` to denote the bitpattern of the bits `X` followed
 by the bits `Y` where the bits on the left (`X`) are the most significant bits.
@@ -920,11 +920,9 @@ used to make the meaning of the encoding clear.
 A fate contract is serialized as follows
 ```
 Contract ::=
-  <
-    RLP(Code),
-    RLP(Symbols),
-    RLP(Annotations)
-  >
+  RLP(Code),
+  RLP(Symbols),
+  RLP(Annotations)
 ```
 
 ### Code
@@ -933,7 +931,7 @@ hash of the program level readable name). Only one function of each name is allo
 ```
 Code ::=
   < >
-| < Function , Code >
+| Function , Code
 
 
 ```
@@ -941,12 +939,11 @@ Code ::=
 ### Function
 ```
 Function ::=
-  < 0xfe,
-    Id,
-    Attributes,
-    Signature,
-    Instructions
-  >
+  0xfe,
+  Id,
+  Attributes,
+  Type Signature,
+  Instructions
 ```
 
 ### Id
@@ -972,7 +969,7 @@ the bit pattern where each bit indicates one attribute as follows:
 
 ```
 Attributes :==
-  < Integer(A) >
+  Integer(A)
 
 A :==
   0 ;; No attribute
@@ -982,18 +979,16 @@ A :==
 
 ```
 
-### Signature
-The signature of a function defines the type of the function.
+### Type Signature
+The type signature of a function defines the type of the function.
 Types are given in FATE's type language.
 Given a list of the types of the arguments (Args) and the
-return type (RetType) the signature is encoded as follows.
+return type (RetType) the type signature is encoded as follows.
 
 ```
-Signature ::=
-  < Type({tuple, Args}),
-    Type(RetType)
-  >
-
+Type Signature ::=
+  Type({tuple, Args}),
+  Type(RetType)
 ```
 
 ### Instructions
@@ -1001,8 +996,8 @@ The code itself is encoded as a series of instructions that
 can be broken up into basic blocks.
 ```
 Instructions ::=
-  < >
-| < Instruction, Instructions >
+  Instruction
+| Instruction, Instructions
 ```
 
 ### Instruction
@@ -1013,149 +1008,149 @@ addressing mode can take up one or two bytes.
 
 ```
 Instruction ::=
-  < Opcode,
-    AddressingMode,
-    Arguments
-   >
+  Opcode,
+  AddressingMode,
+  Arguments
 ```
 
 ### Opcode
 
 ```
 Opcode ::=
-  < 0x00 ; 'RETURN'
-  | 0x01 ; 'RETURNR'
-  | 0x02 ; 'CALL'
-  | 0x03 ; 'CALL_R'
-  | 0x04 ; 'CALL_T'
-  | 0x05 ; 'CALL_GR'
-  | 0x06 ; 'JUMP'
-  | 0x07 ; 'JUMPIF'
-  | 0x08 ; 'SWITCH_V2'
-  | 0x09 ; 'SWITCH_V3'
-  | 0x0a ; 'SWITCH_VN'
-  | 0x0b ; 'CALL_VALUE'
-  | 0x0c ; 'PUSH'
-  | 0x0d ; 'DUPA'
-  | 0x0e ; 'DUP'
-  | 0x0f ; 'POP'
-  | 0x10 ; 'INCA'
-  | 0x11 ; 'INC'
-  | 0x12 ; 'DECA'
-  | 0x13 ; 'DEC'
-  | 0x14 ; 'ADD'
-  | 0x15 ; 'SUB'
-  | 0x16 ; 'MUL'
-  | 0x17 ; 'DIV'
-  | 0x18 ; 'MOD'
-  | 0x19 ; 'POW'
-  | 0x1a ; 'STORE'
-  | 0x1b ; 'SHA3'
-  | 0x1c ; 'SHA256'
-  | 0x1d ; 'BLAKE2B'
-  | 0x1e ; 'LT'
-  | 0x1f ; 'GT'
-  | 0x20 ; 'EQ'
-  | 0x21 ; 'ELT'
-  | 0x22 ; 'EGT'
-  | 0x23 ; 'NEQ'
-  | 0x24 ; 'AND'
-  | 0x25 ; 'OR'
-  | 0x26 ; 'NOT'
-  | 0x27 ; 'TUPLE'
-  | 0x28 ; 'ELEMENT'
-  | 0x29 ; 'SETELEMENT'
-  | 0x2a ; 'MAP_EMPTY'
-  | 0x2b ; 'MAP_LOOKUP'
-  | 0x2c ; 'MAP_LOOKUPD'
-  | 0x2d ; 'MAP_UPDATE'
-  | 0x2e ; 'MAP_DELETE'
-  | 0x2f ; 'MAP_MEMBER'
-  | 0x30 ; 'MAP_FROM_LIST'
-  | 0x31 ; 'MAP_SIZE'
-  | 0x32 ; 'MAP_TO_LIST'
-  | 0x33 ; 'IS_NIL'
-  | 0x34 ; 'CONS'
-  | 0x35 ; 'HD'
-  | 0x36 ; 'TL'
-  | 0x37 ; 'LENGTH'
-  | 0x38 ; 'NIL'
-  | 0x39 ; 'APPEND'
-  | 0x3a ; 'STR_JOIN'
-  | 0x3b ; 'INT_TO_STR'
-  | 0x3c ; 'ADDR_TO_STR'
-  | 0x3d ; 'STR_REVERSE'
-  | 0x3e ; 'STR_LENGTH'
-  | 0x3f ; 'BYTES_TO_INT'
-  | 0x40 ; 'BYTES_TO_STR'
-  | 0x41 ; 'BYTES_CONCAT'
-  | 0x42 ; 'BYTES_SPLIT'
-  | 0x43 ; 'INT_TO_ADDR'
-  | 0x44 ; 'VARIANT'
-  | 0x45 ; 'VARIANT_TEST'
-  | 0x46 ; 'VARIANT_ELEMENT'
-  | 0x47 ; 'BITS_NONEA'
-  | 0x48 ; 'BITS_NONE'
-  | 0x49 ; 'BITS_ALLA'
-  | 0x4a ; 'BITS_ALL'
-  | 0x4b ; 'BITS_ALL_N'
-  | 0x4c ; 'BITS_SET'
-  | 0x4d ; 'BITS_CLEAR'
-  | 0x4e ; 'BITS_TEST'
-  | 0x4f ; 'BITS_SUM'
-  | 0x50 ; 'BITS_OR'
-  | 0x51 ; 'BITS_AND'
-  | 0x52 ; 'BITS_DIFF'
-  | 0x53 ; 'BALANCE'
-  | 0x54 ; 'ORIGIN'
-  | 0x55 ; 'CALLER'
-  | 0x56 ; 'BLOCKHASH'
-  | 0x57 ; 'BENEFICIARY'
-  | 0x58 ; 'TIMESTAMP'
-  | 0x59 ; 'GENERATION'
-  | 0x5a ; 'MICROBLOCK'
-  | 0x5b ; 'DIFFICULTY'
-  | 0x5c ; 'GASLIMIT'
-  | 0x5d ; 'GAS'
-  | 0x5e ; 'ADDRESS'
-  | 0x5f ; 'GASPRICE'
-  | 0x60 ; 'LOG0'
-  | 0x61 ; 'LOG1'
-  | 0x62 ; 'LOG2'
-  | 0x63 ; 'LOG3'
-  | 0x64 ; 'LOG4'
-  | 0x65 ; 'SPEND'
-  | 0x66 ; 'ORACLE_REGISTER'
-  | 0x67 ; 'ORACLE_QUERY'
-  | 0x68 ; 'ORACLE_RESPOND'
-  | 0x69 ; 'ORACLE_EXTEND'
-  | 0x6a ; 'ORACLE_GET_ANSWER'
-  | 0x6b ; 'ORACLE_GET_QUESTION'
-  | 0x6c ; 'ORACLE_QUERY_FEE'
-  | 0x6d ; 'AENS_RESOLVE'
-  | 0x6e ; 'AENS_PRECLAIM'
-  | 0x6f ; 'AENS_CLAIM'
-  | 0x70 ; 'AENS_UPDATE'
-  | 0x71 ; 'AENS_TRANSFER'
-  | 0x72 ; 'AENS_REVOKE'
-  | 0x73 ; 'BALANCE_OTHER'
-  | 0x74 ; 'VERIFY_SIG'
-  | 0x75 ; 'VERIFY_SIG_SECP256K1'
-  | 0x76 ; 'CONTRACT_TO_ADDRESS'
-  | 0x77 ; 'AUTH_TX_HASH'
-  | 0x78 ; 'ORACLE_CHECK'
-  | 0x79 ; 'ORACLE_CHECK_QUERY'
-  | 0x7a ; 'IS_ORACLE'
-  | 0x7b ; 'IS_CONTRACT'
-  | 0x7c ; 'IS_PAYABLE'
-  | 0x7d ; 'CREATOR'
-  | 0x7e ; 'ECVERIFY_SECP256K1'
-  | 0x7f ; 'ECRECOVER_SECP256K1'
-  | 0xfa ; 'DEACTIVATE'
-  | 0xfb ; 'ABORT'
-  | 0xfc ; 'EXIT'
-  | 0xfd ; 'NOP'
-  >
+  0x00 ; 'RETURN'
+| 0x01 ; 'RETURNR'
+| 0x02 ; 'CALL'
+| 0x03 ; 'CALL_R'
+| 0x04 ; 'CALL_T'
+| 0x05 ; 'CALL_GR'
+| 0x06 ; 'JUMP'
+| 0x07 ; 'JUMPIF'
+| 0x08 ; 'SWITCH_V2'
+| 0x09 ; 'SWITCH_V3'
+| 0x0a ; 'SWITCH_VN'
+| 0x0b ; 'CALL_VALUE'
+| 0x0c ; 'PUSH'
+| 0x0d ; 'DUPA'
+| 0x0e ; 'DUP'
+| 0x0f ; 'POP'
+| 0x10 ; 'INCA'
+| 0x11 ; 'INC'
+| 0x12 ; 'DECA'
+| 0x13 ; 'DEC'
+| 0x14 ; 'ADD'
+| 0x15 ; 'SUB'
+| 0x16 ; 'MUL'
+| 0x17 ; 'DIV'
+| 0x18 ; 'MOD'
+| 0x19 ; 'POW'
+| 0x1a ; 'STORE'
+| 0x1b ; 'SHA3'
+| 0x1c ; 'SHA256'
+| 0x1d ; 'BLAKE2B'
+| 0x1e ; 'LT'
+| 0x1f ; 'GT'
+| 0x20 ; 'EQ'
+| 0x21 ; 'ELT'
+| 0x22 ; 'EGT'
+| 0x23 ; 'NEQ'
+| 0x24 ; 'AND'
+| 0x25 ; 'OR'
+| 0x26 ; 'NOT'
+| 0x27 ; 'TUPLE'
+| 0x28 ; 'ELEMENT'
+| 0x29 ; 'SETELEMENT'
+| 0x2a ; 'MAP_EMPTY'
+| 0x2b ; 'MAP_LOOKUP'
+| 0x2c ; 'MAP_LOOKUPD'
+| 0x2d ; 'MAP_UPDATE'
+| 0x2e ; 'MAP_DELETE'
+| 0x2f ; 'MAP_MEMBER'
+| 0x30 ; 'MAP_FROM_LIST'
+| 0x31 ; 'MAP_SIZE'
+| 0x32 ; 'MAP_TO_LIST'
+| 0x33 ; 'IS_NIL'
+| 0x34 ; 'CONS'
+| 0x35 ; 'HD'
+| 0x36 ; 'TL'
+| 0x37 ; 'LENGTH'
+| 0x38 ; 'NIL'
+| 0x39 ; 'APPEND'
+| 0x3a ; 'STR_JOIN'
+| 0x3b ; 'INT_TO_STR'
+| 0x3c ; 'ADDR_TO_STR'
+| 0x3d ; 'STR_REVERSE'
+| 0x3e ; 'STR_LENGTH'
+| 0x3f ; 'BYTES_TO_INT'
+| 0x40 ; 'BYTES_TO_STR'
+| 0x41 ; 'BYTES_CONCAT'
+| 0x42 ; 'BYTES_SPLIT'
+| 0x43 ; 'INT_TO_ADDR'
+| 0x44 ; 'VARIANT'
+| 0x45 ; 'VARIANT_TEST'
+| 0x46 ; 'VARIANT_ELEMENT'
+| 0x47 ; 'BITS_NONEA'
+| 0x48 ; 'BITS_NONE'
+| 0x49 ; 'BITS_ALLA'
+| 0x4a ; 'BITS_ALL'
+| 0x4b ; 'BITS_ALL_N'
+| 0x4c ; 'BITS_SET'
+| 0x4d ; 'BITS_CLEAR'
+| 0x4e ; 'BITS_TEST'
+| 0x4f ; 'BITS_SUM'
+| 0x50 ; 'BITS_OR'
+| 0x51 ; 'BITS_AND'
+| 0x52 ; 'BITS_DIFF'
+| 0x53 ; 'BALANCE'
+| 0x54 ; 'ORIGIN'
+| 0x55 ; 'CALLER'
+| 0x56 ; 'BLOCKHASH'
+| 0x57 ; 'BENEFICIARY'
+| 0x58 ; 'TIMESTAMP'
+| 0x59 ; 'GENERATION'
+| 0x5a ; 'MICROBLOCK'
+| 0x5b ; 'DIFFICULTY'
+| 0x5c ; 'GASLIMIT'
+| 0x5d ; 'GAS'
+| 0x5e ; 'ADDRESS'
+| 0x5f ; 'GASPRICE'
+| 0x60 ; 'LOG0'
+| 0x61 ; 'LOG1'
+| 0x62 ; 'LOG2'
+| 0x63 ; 'LOG3'
+| 0x64 ; 'LOG4'
+| 0x65 ; 'SPEND'
+| 0x66 ; 'ORACLE_REGISTER'
+| 0x67 ; 'ORACLE_QUERY'
+| 0x68 ; 'ORACLE_RESPOND'
+| 0x69 ; 'ORACLE_EXTEND'
+| 0x6a ; 'ORACLE_GET_ANSWER'
+| 0x6b ; 'ORACLE_GET_QUESTION'
+| 0x6c ; 'ORACLE_QUERY_FEE'
+| 0x6d ; 'AENS_RESOLVE'
+| 0x6e ; 'AENS_PRECLAIM'
+| 0x6f ; 'AENS_CLAIM'
+| 0x70 ; 'AENS_UPDATE'
+| 0x71 ; 'AENS_TRANSFER'
+| 0x72 ; 'AENS_REVOKE'
+| 0x73 ; 'BALANCE_OTHER'
+| 0x74 ; 'VERIFY_SIG'
+| 0x75 ; 'VERIFY_SIG_SECP256K1'
+| 0x76 ; 'CONTRACT_TO_ADDRESS'
+| 0x77 ; 'AUTH_TX_HASH'
+| 0x78 ; 'ORACLE_CHECK'
+| 0x79 ; 'ORACLE_CHECK_QUERY'
+| 0x7a ; 'IS_ORACLE'
+| 0x7b ; 'IS_CONTRACT'
+| 0x7c ; 'IS_PAYABLE'
+| 0x7d ; 'CREATOR'
+| 0x7e ; 'ECVERIFY_SECP256K1'
+| 0x7f ; 'ECRECOVER_SECP256K1'
+| 0xfa ; 'DEACTIVATE'
+| 0xfb ; 'ABORT'
+| 0xfc ; 'EXIT'
+| 0xfd ; 'NOP'
+| 0xfe ; 'FUNCTION' only used outside of BBs
+| 0xff ; 'EXTREND' reserved for extending instruction set to two bytes, not used yet.
 
 ```
 
@@ -1165,8 +1160,8 @@ Opcode ::=
 ```
 AddressingMode ::=
   < >
-| < LowAddressingMode >
-| < HighAddressingMode | LowAddressingMode >
+| LowAddressingMode
+| HighAddressingMode | LowAddressingMode
 
 LowAddressingMode ::=
   <<< Mode, Mode, Mode, Mode >>> ; Arg3 Arg2 Arg1 Arg0
@@ -1188,11 +1183,11 @@ Mode ::=
 ```
 Arguments ::=
   < >
-| < Argument, Arguments >
+| Argument, Arguments
 
 Argument ::=
-  < Integer(N) > ; For function argument, variable or store.
-| < Data(D) >    ; For immediates
+  Integer(N) ; For function argument, variable or store.
+| Data(D)    ; For immediates
 ```
 
 
@@ -1200,22 +1195,22 @@ Argument ::=
 
 ```
 Data ::=
-  < Boolean >
-| < Integer >
-| < String >
-| < Bytes >
-| < Bits >
-| < Address >
-| < ContractAddress >
-| < Oracle >
-| < OracleQuery >
-| < Channel >
-| < Tuple >
-| < List >
-| < Map >
-| < StoreMap >
-| < Variant >
-| < Type >
+  Boolean
+| Integer
+| String
+| Bytes
+| Bits
+| Address
+| ContractAddress
+| Oracle
+| OracleQuery
+| Channel
+| Tuple
+| List
+| Map
+| StoreMap
+| Variant
+| Type
 ```
 
 #### Boolean
@@ -1228,10 +1223,10 @@ Boolean ::=
 #### Integer
 ```
 Integer(I) ::=
-  <<< 0,  I, 0 >>> ; When abs(I) < 64, I >= 0
-| <<< 1, -I, 0 >>> ; When abs(I) < 64, I < 0
-| <  <<< 01101111 >>>, LargeInt(I - 64) >  ; When abs(I) >= 64, I >= 0
-| <  <<< 11101111 >>>, LargeInt(-I - 64) > ; When abs(I) >= 64, I < 0
+  <<< 0,  I, 0 >>>                     ; When abs(I) <  64, I >= 0
+| <<< 1, -I, 0 >>>                     ; When abs(I) <  64, I <  0
+| <<< 01101111 >>>, LargeInt(I - 64)   ; When abs(I) >= 64, I >= 0
+| <<< 11101111 >>>, LargeInt(-I - 64)  ; When abs(I) >= 64, I <  0
 
 LargeInt(I) ::=
   RLP(Unsigned(I))
@@ -1240,7 +1235,7 @@ LargeInt(I) ::=
 ;; where 'shr' is bitwise shift right, and 'band' is bitwise and.
 Unsigned(I) ::=
   << 0 >> ;; When I = 0
-| < Unsigned(I shr 8), (I band 0xff) >
+| Unsigned(I shr 8), (I band 0xff)
 
 ```
 
@@ -1250,59 +1245,63 @@ number of bytes in the byte array.
 
 ```
 String(S) ::=
-    <<< 01011111 >>>                          ; when size(S)  =  0 , S is empty ("")
-| < <<< size(S), 01 >>>, < S > >              ; when size(S) <  64
-| < <<< 00000001 >>>, Integer(size(S) - 64) > ; when size(S) >= 64
+  <<< 01011111 >>>                        ; when size(S)  =  0 , S is empty ("")
+| <<< size(S), 01 >>>, S                  ; when size(S) <  64
+| <<< 00000001 >>>, Integer(size(S) - 64) ; when size(S) >= 64
 ```
 #### Bits
 A FATE bitmap is represented as an integer, a negative integer
 is used for a bitmap with infinitely many 1 bits on the left.
 ```
 Bits(B) ::=
-  < <<< 01001111 >>> LargeInt( B) > ; when B >= 0
-  < <<< 11001111 >>> LargeInt(-B) > ; when B <  0
+  <<< 01001111 >>> LargeInt( B) ; when B >= 0
+  <<< 11001111 >>> LargeInt(-B) ; when B <  0
 ```
 #### Bytes
 
 ```
 Bytes(B) ::=
-  < <<<10011111>>>, <<<00000001>>>, String(B) >
+  <<<10011111>>>, <<<00000001>>>, String(B)
 ```
 
 #### Address
 
 ```
 Address(A) ::=
-  < <<<10011111>>>, <<<00000000>>>, RLP(A) >
+  <<<10011111>>>, <<<00000000>>>, RLP(A)
 ```
 
 #### ContractAddress
 
 ```
 ContractAddress(C) ::=
-  < <<<10011111>>>, <<<00000010>>>, RLP(C) >
+  <<<10011111>>>, <<<00000010>>>, RLP(C)
 ```
 
 #### Oracle
 
 ```
 Oracle(O) ::=
-  < <<<10011111>>>, <<<00000011>>>, RLP(O) >
+  <<<10011111>>>, <<<00000011>>>, RLP(O)
 ```
 
 #### OracleQuery
 
 ```
 OracleQuery(Q) ::=
-  < <<<10011111>>>, <<<00000100>>>, RLP(Q) >
+  <<<10011111>>>, <<<00000100>>>, RLP(Q)
 ```
 
 #### Channel
 
 ```
 Channel(C) ::=
-  < <<<10011111>>>, <<<00000101>>>, RLP(C) >
+  <<<10011111>>>, <<<00000101>>>, RLP(C)
 ```
+
+
+
+
 
 ```
 
