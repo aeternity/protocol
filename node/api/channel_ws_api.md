@@ -1186,7 +1186,7 @@ Roles:
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | message | string | `Not allowed at current channel state` | Yes |
-  | code | integer | `1017` | Yes |
+  | code | integer | `1018` | Yes |
 
 #### Examples
 
@@ -1224,7 +1224,7 @@ Roles:
       "code":3,
       "data":[
          {
-            "code":1017,
+            "code":1018,
             "message":"Not allowed at current channel state"
          }
       ],

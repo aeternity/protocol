@@ -2018,7 +2018,7 @@ will receive an error response instead:
       "code":3,
       "data":[
          {
-            "code":1017,
+            "code":1018,
             "message":"Not allowed at current channel state"
          }
       ],
