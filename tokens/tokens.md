@@ -112,6 +112,10 @@ transaction using the token (such as contract call) would only be
 executed if a call to spend returns true. (TODO: Decide how this plays
 with contract calls that tries to pass tokens as value, etc).
 
+Note that the `final` field in the ANT takes precedence over the
+governing contract. If the ANT is final, no minting can occur.  (TODO:
+Perhaps the contract should have a `finalize` endpoint as well?)
+
 ## ANT transactions
 
 ### ANT create transaction (`ant_create_tx`)
