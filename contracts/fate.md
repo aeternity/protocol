@@ -1,6 +1,5 @@
 # FATE
 The Fast æternity Transaction Engine
-ISA
 
 ## Design
 
@@ -139,15 +138,9 @@ instructions.
 
 #### The local storage
 
-The local storage is a stack of key value storages. That is, a list of
-maps. When reading a key, the machine first looks in the first map of
-the list. If a key is found and the type is correct the value is
-returned. If the type is incorrect an exception is thrown. If no value
-is found in the first map, the machine will look in the next map in
-the list and so on. If the key does not exist in any of the maps an
-exception is thrown.
-
-The key is a an integer (32 bit).
+The local storage is a key value store.
+The key is a an integer. The value can be of any FATE type.
+The local store is local to a function call.
 
 #### The accumulator stack
 
@@ -167,16 +160,22 @@ A contract can emit events similar to the EVM.
 ## Types
 
 The machine supports the following types:
-* Integer (signed arbitrary precision integers) [I]
-* Boolean (true | false) [B]
-* Addresses (A pointer into the state tree) [A]
-* Strings (utf8 encoded byte arrays) [S]
-* Tuples (), ('a), ('a, 'b, ...) [T]
-* Lists: Cons cells (‘a) | Nil (Ʇ)  [L],[C],[Ʇ]
-* Maps (‘a, ‘b),  (Key: ‘a -> Value: ‘b)  ‘a not a map [M]
-* Variant Types, (| Size | Tag | Elements  |)  [V]
-* Bits <Bits> or !<Bits>
-* TypeRep [R]
+* Integer (signed arbitrary precision integers)
+* Boolean (true | false)
+* Strings (arbitrary size byte arrays)
+* Bytes (fixed size byte arrays)
+* Bits (An arbitrary size bitmap)
+* Address (A pointer into the state tree)
+* Contract Address (A pointer to a contract)
+* Oracle (A pointer to an oracle)
+* Oracle Query (A pointer to an oracle query)
+* Channel (A pointer to a channel)
+* Tuples (a typed series of values)
+* Lists (a list of values of a specific type)
+* Maps (a key value store)
+* Store Map (a key value store mapped to the contract state)
+* Variant Types (a set of taged and typed values)
+* Type (a representation of a FATE type)
 
 These types can be used as argument and return types of functions and
 also as the type of the elements in the contract store.
@@ -210,9 +209,9 @@ Operations on booleans include:
 *   and, or, not
 *   conditional jumps
 
-### Addresses
+### Addresses, Contract Addresses, Oracles, Oracle Querries, Channels
 
-Values of the type Address are 32-bytes (256-bits) pointers to
+Values of any address type are 32-bytes (256-bits) pointers to
 entities on the chain (Accounts, Oracles, Contracts, etc)
 
 Examples:
@@ -222,8 +221,10 @@ Examples:
 
 ### Strings
 
-Strings are byte arrays of UTF-8 encoded unicode characters. (These
-can be used as non-indexable arrays of bytes.)
+Strings are byte arrays.
+These can be assumed (by debugging tools) to be UTF-8 encoded unicode characters,
+but there are no instructions that depend upon them being UTF-8 encoded strings,
+they can be used as arbitrary non-indexable arrays of bytes.
 
 Examples:
 ```
@@ -236,7 +237,7 @@ Examples:
 Tuples have an arity indicating the number of elements in the
 tuple. Each element in the tuple has a type. The 0-tuple is also
 sometimes called unit.
-The maximum number of elements in the tuple is 255 (included). 
+The maximum number of elements in the tuple is 255 (included).
 
 Examples:
 ```
@@ -276,17 +277,17 @@ Type: Map(Integer, String)
 
 ### Variant Types
 
-The variant type is a type consisting of a size and a tag (index)
+The variant type is a type consisting of a list oif sizes and a tag (index)
 where each tag represents a series of values of specified types. For
 example you could have the Option type which could be None or
-Some(Integer). The size of the variant is 2 (there are two variants),
+Some(Integer). The sizes of the variant is [0,1] (there are two variants),
 The value None would be indicated by tag 0. The value
-Some(42) would be represented by tag 1 followed by the integer.
+Some(42) would be represented by tag 1 followed by the integer 42.
 
 Examples:
 ```
-  (| 2 | 0 | [] |)      ;; None
-  (| 2 | 1 | (42) |)    ;; Some(42)
+  (| [0,1] | 0 | () |)      ;; None
+  (| [0,1] | 1 | (42) |)    ;; Some(42)
 
   (| 4 | 3 | (42, “foo”, true) |) ;; Three(42, "foo", true)
 ```
@@ -300,17 +301,23 @@ A TypeRep is the representation of a type as a value.
 A typerep is one of
 * integer
 * boolean
+* any
 * {list, T}
 * {tuple, Ts}
 * address
+* contract
+* oracle
+* oracle_query
+* channel
 * bits
 * {map, K, V}
 * string
 * {variant, ListOfVariants}
+* {tvar, N}
 
 where T, K and V are TypeReps, Ts is a list of typereps ([T1, T2, ... ]),
 and ListOfVariants is a list ([]) of tuples of typereps
-([{tuple, [Ts1]}, {tuple, [Ts2]} ... ]).
+([{tuple, [Ts1]}, {tuple, [Ts2]} ... ]). N is a byte (0...255).
 
 ## Operations
 
@@ -325,16 +332,14 @@ Operand specifiers are
 *  immediate
 *  arg
 *  var
-*  stack
-
 *  a (accumulator == stack 0)
 
 
 The specifiers are encoded as
 
-
+|      what |bits|
+| --------- | -- |
 | immediate | 11 |
-| --------- | --- |
 |       var | 10 |
 |       arg | 01 |
 |     stack | 00 |
@@ -362,6 +367,9 @@ Unused arguments should be set to 0.
 
 E.g. an a :=  immediate + a would have the bit
 pattern 00 11 00 00.
+
+Each use of the accumulator pops an argument from the stack.
+Writing to the accumulator pushes a value to the stack.
 
 ### Operations
 
@@ -640,20 +648,11 @@ pattern 00 11 00 00.
 | 0xfd |                     'NOP' |   false |    true |     true |        1 |
 
 ## Gas
-## Exceptions
+Each instruction uses the base gas as described in the table above.
+In addition the instructions uses gas in relation to the number of memory
+cells needed to store the produced value of the instruction.
 
-There could be a use for exception handling in remote calls, but
-decided that this is rather easy to add in a later stage and can be
-postponed.
-
-
-
-## Execution model
-
-F entry   {Hash, Code} or {Hash, Type, Flags, Code}
-
-Base blocks are lists of lists of instructions.
-
+TODO: describe these instrunction and their gas usage.
 
 
 # Appendix 1: FATE serialization
@@ -676,78 +675,6 @@ the RLP encoding of the RLP encoding of the empty map i.e. the bytes 130, 47, 0.
 
 An empty FATE contract is encoded as the byte sequence 128, 130, 47, 0, 130, 47, 0.
 
-## The Fate Code chunk
-
-## The Fate Symbols chunk
-
-## The Fate Annotation chunk
-
-## Notes
-
-Most instructions are encoded as one byte opcode (7-bits), one byte
-operand specifiers and 0 to 3 variable size arguments.
-
-The 7th bit (counting from 0) is used for future extensions beyond 127 instructions.
-
-Encoding of types
-Immediates in code (constants) are encoded by the instruction type and then depending on the type of the immediate as follows:
-Integer:  Encoded with RLP where the first type bit is reused as a sign bit.
-Boolean: One byte, false: 0, true: 1.
-Addresses: 32 bytes
-Byte arrays: RLP encoded.
-Tuples: 1 byte length, [encoded types], [encoded elements]
-Lists: encoded type, RLP encoded size, [encoded elements] (Size can be 0)
-Maps: encoded key type, encoded value type, 1 byte size, [encoded key, encoded value]
-           Note: immediate maps are limited in size to 255 for larger map constants the compiler must create two or more maps and merge them.
-
-Byte encoded type descriptors:
-Integer: 0
-Boolean: 1
-List: 2 + type
-Tuple: 3, size,  [types]
-Address: 4
-Bits: 5
-Map: 6 + type + type
-String: 7
-Variant: 8 + size + [3, size, type]
-
-
-# Appendix 2: Fate ABI
-
-The Fate ABI describes how Fate data are serialized to byte representations.
-
-## ABI Serializations
-
-In the ABI (arguments to remote calls, remote return values, in the
-store and in oracles) data is serialized to bytes by a staged tag
-scheme describing the types of data.  When we say "RLP encoded
-integer" below we mean an integer encoded as the smalles big endian byte array
-then this byte array is RLP encoded.
-
-```
-integer      : sxxxxxx0 : 6 bit integer with sign bit when integer < 64
-string       : xxxxxx01 | size | [bytes] : when 0 < size < 64
-string       : 00000001 | RLP encoded byte array : when size >= 64
-list         : 00000011 | RLP encoded (length - 16) | [encoded elements] : when length >= 16
-list         : xxxx0011 | [encoded elements] : when 0 < length < 16, xxxx = length
-             : xxxx0111 : FREE (For typedefs in future)
-tuple        : 00001011 | RLP encoded (size - 16) | [encoded elements] : when size >= 16
-tuple        : xxxx1011 | [encoded elements] : when 0 < size(tuple) < 16
-map          : 00101111 | RLP encoded size | [encoded key, encoded value]
-tuple        : 00111111 : when size(tuple) == 0
-bits         : 01001111 | RLP encoded integer when bits are finate
-string       : 01011111 : when size == 0
-integer      : 01101111 | RLP encoded (integer - 64) when size >= 64 and integer >= 0
-false        : 01111111
-             : 10001111 : FREE (Possibly for bytecode in the future.)
-address      : 10011111 | [32 bytes]
-variant      : 10101111 | RLP encoded variant size field | encoded tag | encoded values
-list         : 10111111 : when length == 0
-bits         : 11001111 | RLP encoded integer : when bits are in infinite
-map          : 11011111 : when size == 0
-integer      : 11101111 | RLP encoded ((- integer) - 64)
-true         : 11111111
-```
 
 # Notation
 
