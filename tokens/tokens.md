@@ -72,7 +72,7 @@ serialization](../node/api/api_encoding.md) of an ANT id is tagged by
 
 The ANT contains the fields:
 - `creator` - The account id of the creator
-- `meta_data` - A byte array field uninterpreted under consensus
+- `meta_data` - A byte array field, uninterpreted, but under consensus
 - `contract` - A contract id if there is a governing contract, or the empty binary otherwise
 - `total_supply` - A counter of the currently available amount of the token
 - `parent` - The id of the parent ANT (TODO: Hierarchical tokens?)
@@ -126,7 +126,7 @@ The ANT create transaction takes the argument:
 
 The `amount` is the number of tokens to mint at create time. Set to
 `0` if none should be minted. This can for example be combined with
-setting the `final` argument to false, thereby immediately minting all
+setting the `final` argument to true, thereby immediately minting all
 tokens that will ever exist.
 
 The `recipient` is the recipient of the minted tokens in `amount`. If

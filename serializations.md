@@ -297,6 +297,16 @@ subsequent sections divided by object.
 , <tokens>      :: [{id(),int()}]
 ```
 
+#### Accounts (version 5, Generalized accounts with tokens, from XXX release)
+```
+[ <flags>       :: int()
+, <nonce>       :: int()
+, <balance>     :: int()
+, <ga_contract> :: id()
+, <ga_auth_fun> :: binary()
+, <tokens>      :: [{id(),int()}]
+```
+
 ### Signed transaction
 ```
 [ <signatures>  :: [binary()]
