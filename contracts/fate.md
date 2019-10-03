@@ -652,7 +652,117 @@ Each instruction uses the base gas as described in the table above.
 In addition the instructions uses gas in relation to the number of memory
 cells needed to store the produced value of the instruction.
 
-TODO: describe these instrunction and their gas usage.
+In addition to the instruction base cost some instructions also
+cost gas in relation to the memory they use. The base cost for
+memory is one gas per "cell" used. A cell is the memory word of
+an underlying machine which is defined to be a 64-bit word.
+
+Each use of a a cell is counted and for each 1024 cells used
+the price is increased by 1. If a contract uses 1024 cells it
+will cost 1024 gas, if it uses 1025 cells it will cost 1026 gas.
+Using 2049 cells costs 3072 gas and so on.
+
+When calculating the cell cost the total number of cells
+used after the instruction is used to determine the price for all
+new cells used by the instruction. So if you have used 1020 cells
+and then one instruction uses 5 new cells, then the gas cost
+for that instruction is 10 and not 6.
+
+Each use of a stack slot (a psuh) costs gas in the same way and
+is also counted towards the number of used cells. Each pop of
+a stack slot does not cost gas and does not decrease the gas cost
+either but it reduced the count of number of cells in use.
+
+The instructions uses cells in the following way.
+
+### ADD, SUB, MUL, DIV, MOD
+After the operation is done the size of the absolute value of the
+result is calculated, and one cell is used per 64 bits that has a 1 set.
+Integers -18446744073709551615 to 18446744073709551615 uses 1 cell,
+and integers -340282366920938463463374607431768211456 to -18446744073709551616
+and 18446744073709551616 to 340282366920938463463374607431768211456
+uses 2 cells, and so on.
+
+### POW
+The result of the pow instruction is computed recursively
+and for each step in the recursion the words used are
+calculated and the operation is aborted if all gas is used up.
+Given the function words which calculates the number of cells in
+an integer as described above (1 per 64 bits used).
+The number of cells are calculated as follows.
+
+```
+pow(a, b)    := pow(a, b, 1)
+
+pow(a, b, r) := r  when b = 0
+pow(a, b, r) := cells += words(a) * 2, pow(a*a, b/2, r) when b rem 2 = 0
+pow(a, b, r) := cells += words(r) + words(a) * 3, pow(a*a, b/2, r*a)
+```
+
+### TUPLE
+For creating a tuple you have already paied gas for the elements when
+you pushed them on the stack with other operations, then the new tuple
+increases the cell count by the size of the tuple plus 2.
+
+Note that creating the tuple pops the elements from the stack so the
+cell count only increases by 2 by the make_tuple instruction, but
+the gas cost is the cost for size+2 cells.
+
+Note also that when calculating cell cost the total number of cells
+used after the instruction is used to determine the price for all
+new cells used by the instruction.
+
+### SETELEMENT
+The number of cells used is the tuple size + 2.
+
+### MAP_EMPTY
+The cell cost is 2.
+
+### MAP_UPDATE
+The cell cost is 2.
+
+### MAP_FROM_LIST
+The cell cost is 2 + length of the list.
+
+### MAP_TO_LIST
+The cell cost is 2 * length of the list.
+
+### CONS
+The cell cost is 2.
+
+### APPEND
+The cell cost is 2 * length of the first list.
+
+### STR_JOIN
+The cell cost is 1 cell per 8 bytes in the joined string + 1 cell.
+
+### INT_TO_STR
+The cell cost is 1 cell per 8 bytes in the produced string + 1 cell.
+
+### ADDR_TO_STR
+The cell cost is 1 cell per 8 bytes in the produced string + 1 cell.
+
+### STR_REVERSE
+The cell cost is 1 cell per 8 bytes in the produced string + 1 cell.
+
+### INT_TO_ADDR
+The cell cost is 1 cell per 8 bytes in the produced address + 1 cell.
+
+### BITS_NONE, BITS_NONEA, BITS_ALL, BITS_ALLA
+The cell cost is 1 cell.
+
+### BITS_ALL_N
+The sell cost is 1 for every 64 bits used.
+
+### BITS_SET, BITS_CLEAR
+The sell cost is 1 for every 64 bits used by the resulting bit field.
+
+### BYTES_CONCAT
+The cell cost is 1 cell per 8 bytes in the produced byte array.
+
+### VARIANT
+The cell cost is two times the length of the list of arities plus one for
+each element in the variant plus four.
 
 
 # Appendix 1: FATE serialization
