@@ -174,7 +174,7 @@ The machine supports the following types:
 * Lists (a list of values of a specific type)
 * Maps (a key value store)
 * Store Map (a key value store mapped to the contract state)
-* Variant Types (a set of taged and typed values)
+* Variant Types (a set of tagged and typed values)
 * Type (a representation of a FATE type)
 
 These types can be used as argument and return types of functions and
