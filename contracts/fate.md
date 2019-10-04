@@ -702,7 +702,7 @@ pow(a, b, r) := cells += words(r) + words(a) * 3, pow(a*a, b/2, r*a)
 ### TUPLE
 For creating a tuple you have already paied gas for the elements when
 you pushed them on the stack with other operations, then the new tuple
-increases the cell count by the size of the tuple plus 2.
+increase the cell count by the size of the tuple plus 2.
 
 Note that creating the tuple pops the elements from the stack so the
 cell count only increases by 2 by the make_tuple instruction, but
