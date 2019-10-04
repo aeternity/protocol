@@ -17,7 +17,7 @@ some blockchain specific primitives, constructions and types have been added.
     -  [Mutable state](#mutable-state)
     -  [Namespaces](#namespaces)
     -  [Splitting code over multiple files](#splitting-code-over-multiple-files)
-    -  [Types](#types) 
+    -  [Types](#types)
     -  [Arithmetic](#arithmetic)
     -  [Bit fields](#bit-fields)
     -  [Type aliases](#type-aliases)
@@ -65,7 +65,7 @@ some blockchain specific primitives, constructions and types have been added.
 - [Examples](#examples)
 - [The lifetime of a contract](#the-lifetime-of-a-contract)
     - [Killing a contract](#killing-a-contract)
-- [The Sophia_01 ABI](#the-sophia_01-abi)
+- [The Sophia\_AEVM\_01 ABI](#the-sophia_aevm_01-abi)
     - [Byte code](#byte-code)
         - [Meta data](#meta-data)
         - [Type information](#type-information)
@@ -76,7 +76,7 @@ some blockchain specific primitives, constructions and types have been added.
     - [Return](#return)
     - [Storing the contract state](#storing-the-contract-state)
     - [Remote contract calls](#remote-contract-calls)
-    
+
 ## Language Features
 ### Contracts
 
@@ -1108,7 +1108,7 @@ free but the miner and the creator get half of the deposit fee each at
 contract disable thus encouraging creators to disable their contracts
 and miners to pick disable transactions.
 
-## The Sophia\_01 ABI
+## The Sophia\_AEVM\_01 ABI
 
 ### Byte code
 
