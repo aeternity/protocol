@@ -16,7 +16,7 @@ an exception and reverts all state changes. In version 1.0 there will
 be no catch instruction.
 
 In addition to normal machine instructions, such as ADD, the machine
-also has support for constructing all the transactions available on
+also has support for constructing most of the transactions available on
 the æternity chain from native low level chain transaction
 instructions.
 
