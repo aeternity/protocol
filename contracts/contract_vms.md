@@ -41,7 +41,7 @@ Which VM versions are accepted are different based on consensus protocol version
 | Protocol version | Operation            | Accepted VM values | Accepted ABI values |
 | ---------------- | ---------            | ------------------ | ------------------- |
 | Roma             | contract call/create | `0x1`              | `0x1`
-|                  | oracle register      | `0x1`              | `0x0`, `0x1`
+|                  | oracle register      | (Not applicable.)  | `0x0`, `0x1`
 | Minerva          | contract call        | `0x1`, `0x3`       | `0x1`
 |                  | contract create      | `0x3`              | `0x1`
 |                  | oracle register      | (Not applicable.)  | `0x0`, `0x1`

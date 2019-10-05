@@ -1,7 +1,7 @@
 [back](./contracts.md)
-[back](./contracts.md)
 ## The Sophia Language
 An Æternity BlockChain Language
+
 The Sophia is a language in the ML family. It is strongly typed and has
 restricted mutable state.
 
@@ -13,17 +13,22 @@ some blockchain specific primitives, constructions and types have been added.
 ## Table of Contents
 - [Language Features](#language-features)
     - [Contracts](#contracts)
-        -  [Calling other contracts](#calling-other-contracts)
-    -  [Mutable state](#mutable-state)
-    -  [Namespaces](#namespaces)
-    -  [Splitting code over multiple files](#splitting-code-over-multiple-files)
-    -  [Types](#types)
-    -  [Arithmetic](#arithmetic)
-    -  [Bit fields](#bit-fields)
-    -  [Type aliases](#type-aliases)
-    -  [Algebraic data types](#algebraic-data-types)
-    -  [Lists](#lists)
-    -  [Maps and records](#maps-and-records)
+        - [Calling other contracts](#calling-other-contracts)
+    - [Mutable state](#mutable-state)
+        - [Stateful functions](#stateful-functions)
+    - [Payable](#payable)
+        - [Payable contracts](#payable-contracts)
+        - [Payable entrypoints](#payable-entrypoints)
+    - [Namespaces](#namespaces)
+    - [Splitting code over multiple files](#splitting-code-over-multiple-files)
+    - [Types](#types)
+    - [Literals](#literals)
+    - [Arithmetic](#arithmetic)
+    - [Bit fields](#bit-fields)
+    - [Type aliases](#type-aliases)
+    - [Algebraic data types](#algebraic-data-types)
+    - [Lists](#lists)
+    - [Maps and records](#maps-and-records)
         - [Constructing maps and records](#constructing-maps-and-records)
         - [Accessing values](#accessing-values)
         - [Updating a value](#updating-a-value)
@@ -31,20 +36,24 @@ some blockchain specific primitives, constructions and types have been added.
         - [Map implementation](#map-implementation)
     - [Strings](#strings)
         - [Builtin functions on strings](#builtin-functions-on-strings)
-        - [Builtin functions on integers](#builtin-functions-on-integers)
+    - [Byte arrays](#byte-arrays)
+    - [Builtin functions on integers](#builtin-functions-on-integers)
         - [Builtin functions on addresses](#builtin-functions-on-addresses)
     - [Builtins](#builtins)
         - [Cryptographic primitives](#cryptographic-primitives)
+        - [Authorization interface](#authorization-interface)
         - [Account interface](#account-interface)
         - [Oracle interface](#oracle-interface)
             - [Oracle register](#oracle-register)
             - [Oracle extend](#oracle-extend)
-            - [Orcacle get_question](#oracle-get_question)
+            - [Oracle get_question](#oracle-get_question)
             - [Oracle respond](#oracle-respond)
             - [Oracle query](#oracle-query)
             - [Oracle query_fee](#oracle-query_fee)
             - [Oracle get_answer](#oracle-get_answer)
             - [Example](#example)
+            - [Oracle check](#oracle-check)
+            - [Oracle check_query](#oracle-check_query)
         - [AENS interface](#aens-interface)
         - [Events](#events)
         - [Contract primitives](#contract-primitives)
@@ -85,17 +94,17 @@ contracts. Contracts are similar to classes in object oriented
 languages and support local state and inheritance. More specifically:
 
 - A contract implementation, or simply a contract, is the code for a
-  smart contract and consists of a list of types and functions that
-  may or may not have a definition. A contract where all types and
-  functions are defined is called a concrete contract. Only concrete
+  smart contract and consists of a list of types, entrypoints (that
+  may or may not have a definition) and local functions. A contract where all
+  entrypoints are defined is called a concrete contract. Only concrete
   contracts can be instantiated. (Used in a create contract transaction.)
 
-- A contract can be abstract where no types or functions have definitions. Example:
+- A contract can be abstract where no entrypoints have definitions. Example:
 
 ```javascript
 // An abstract contract
 contract VotingType =
-  public stateful function vote : string => ()
+  stateful entrypoint vote : string => unit
 ```
 
 - A contract instance is an entity living on the block chain (or in a state channel). Each
@@ -105,25 +114,22 @@ how to store and check API information on the chain is still to be
 worked out).
 - A contract may define a type state encapsulating its local
   state. The state must be initialised when instantiating a
-  contract. This is done by the init function which can take arbitrary
+  contract. This is done by the init entrypoint which can take arbitrary
   arguments and is called on contract instance creation.
-- Contracts have a public API, comprising the functions and types
-  annotated with the public keyword. These can be used from outside
-  the contract. Functions and types with no annotation (or internal)
-  are part of the internal API and can be used by contracts inheriting
-  (see below) the given contract. Functions and types annotated with
-  private can only be used locally.
+- Contracts have a public API, comprising the entrypoints and types
+  defined in the contract. These can be used from outside
+  the contract. Functions with no annotation are part of the internal API and
+  can be used by contracts inheriting (see below) the given contract. Functions
+  annotated with `private` can only be used locally.
 - Contracts can inherit one (or more?) other contract(s). In this case
-  the public functions (and types) of the inherited contract are
+  the entrypoints (and types) of the inherited contract are
   included in the public API and internal functions are included in
   the internal API of the current contract. The state of the contract
   contains the states of all inherited contracts as well as the local
   state. However, the state of an inherited contract cannot be
   accessed other than through internal functions defined by that
   contract.
-- Open question: should we allow overriding defined functions? I would
-  suggest no, but there might be compelling use cases that I'm
-  missing.
+- Tail calls to functions inside the same contract are optimized.
 
 *NOTE: Contract inheritance is not yet implemented.*
 
@@ -135,7 +141,7 @@ instance, given the `VotingType` contract above we can define a contract
 
 ```javascript
 contract VoteTwice =
-  public function voteTwice(v : VotingType, alt : string) =
+  entrypoint voteTwice(v : VotingType, alt : string) =
     v.vote(alt)
     v.vote(alt)
 ```
@@ -145,7 +151,7 @@ that lets you set a gas limit and provide tokens to a contract call. If omitted
 the defaults are no gas limit and no tokens. Suppose there is a fee for voting:
 
 ```javascript
-  function voteTwice(v : VotingType, fee : int, alt : string) =
+  entrypoint voteTwice(v : VotingType, fee : int, alt : string) =
     v.vote(value = fee, alt)
     v.vote(value = fee, alt)
 ```
@@ -157,7 +163,7 @@ To recover the underlying address of a contract instance there is a field
 without calling it you can write
 
 ```javascript
-  function pay(v : VotingType, amount : int) =
+  entrypoint pay(v : VotingType, amount : int) =
     Chain.spend(v.address, amount)
 ```
 
@@ -170,26 +176,98 @@ Sophia does not have arbitrary mutable state, but only a limited form of
 state associated with each contract instance.
 
 - Each contract defines a type `state` encapsulating its mutable state.
+  The type `state` defaults to the `unit`.
 - The initial state of a contract is computed by the contract's `init`
   function. The `init` function is *pure* and returns the initial state as its
-  return value. At contract creation time, the `init` function is executed and
+  return value.
+  If the type `state` is `unit`, the `init` function defaults to returning the value `()`.
+  At contract creation time, the `init` function is executed and
   its result is stored as the contract state.
 - The value of the state is accessible from inside the contract
   through an implicitly bound variable `state`.
-- State updates are performed by calling a function `put : state => ()`.
+- State updates are performed by calling a function `put : state => unit`.
 - Aside from the `put` function (and similar functions for transactions
   and events), the language is purely functional.
-- Functions modifying the state need to be annotated with the `stateful` keyword.
+- Functions modifying the state need to be annotated with the `stateful` keyword (see below).
 
 To make it convenient to update parts of a deeply nested state Sophia
 provides special syntax for map/record updates.
 
+#### Stateful functions
+
+Top-level functions and entrypoints must be annotated with the
+`stateful` keyword to be allowed to affect the state of the running contract.
+For instance,
+
+```javascript
+  stateful entrypoint set_state(s : state) =
+    put(s)
+```
+
+Without the `stateful` annotation the compiler does not allow the call to
+`put`. A `stateful` annotation is required to
+
+* Use a stateful primitive function. These are
+  - `put`
+  - `Chain.spend`
+  - `Oracle.register`
+  - `Oracle.query`
+  - `Oracle.respond`
+  - `Oracle.extend`
+  - `AENS.preclaim`
+  - `AENS.claim`
+  - `AENS.transfer`
+  - `AENS.revoke`
+* Call a `stateful` function in the current contract
+* Call another contract with a non-zero `value` argument.
+
+A `stateful` annotation *is not* required to
+
+* Read the contract state.
+* Issue an event using the `event` function.
+* Call another contract with `value = 0`, even if the called function is stateful.
+
+### Payable
+
+#### Payable contracts
+
+A concrete contract is by default *not* payable. Any attempt at spending to such
+a contract (either a `Chain.spend` or a normal spend transaction) will fail. If a
+contract shall be able to receive funds in this way it has to be declared `payable`:
+
+```javascript
+// A payable contract
+payable contract ExampleContract =
+  stateful entrypoint do_stuff() = ...
+```
+
+If in doubt, it is possible to check if an address is payable using
+`Address.is_payable(addr)`.
+
+#### Payable entrypoints
+
+A contract entrypoint is by default *not* payable. Any call to such a function
+(either a [Remote call](#calling-other-contracts) or a contract call transaction)
+that has a non-zero `value` will fail. Contract entrypoints that should be called
+with a non-zero value should be declared `payable`.
+
+```javascript
+payable stateful entrypoint buy(to : address) =
+  if(Call.value > 42)
+    transfer_item(to)
+  else
+    abort("Value too low")
+```
+
+Note: In the Aeternity VM (AEVM) contracts and entrypoints were by default
+payable until the Lima release.
+
 ### Namespaces
 
 Code can be split into libraries using the `namespace` construct. Namespaces
-can appear at the top-level and can contain type and function definitions.
-Outside the namespace you can refer to the (public) names by qualifying them
-with the namespace (`Namespace.name`).
+can appear at the top-level and can contain type and function definitions, but
+not entrypoints. Outside the namespace you can refer to the (non-private) names
+by qualifying them with the namespace (`Namespace.name`).
 For example,
 
 ```
@@ -198,7 +276,7 @@ namespace Library =
   function inc(x : number) : number = x + 1
 
 contract MyContract =
-  function plus2(x) : Library.number =
+  entrypoint plus2(x) : Library.number =
     Library.inc(Library.inc(x))
 ```
 
@@ -224,7 +302,7 @@ you can use it from another file using an `include`:
 ```
 include "library.aes"
 contract MyContract =
-  function plus2(x) = Library.inc(Library.inc(x))
+  entrypoint plus2(x) = Library.inc(Library.inc(x))
 ```
 
 This behaves as if the contents of `library.aes` was textually inserted into
@@ -237,22 +315,47 @@ Sophia has the following types:
 | Type       | Description                     | Example
 | ---------- | ------------------------------- | -------:
 | int        | A 256 bit 2-complement integer  | ```-1```
-| address    | A 256 bit number given as a hex | ```ff00```
+| address    | Aeternity address, 32 bytes     | ```Call.origin```
 | bool       | A Boolean                       | ```true```
 | bits       | A bit field (with 256 bits)     | ```Bits.none```
+| bytes(n)   | A byte array with `n` bytes     | ```#fedcba9876543210```
 | string     | An array of bytes               | ```"Foo"```
 | list       | A homogeneous immutable singly linked list. | ```[1, 2, 3]```
 | tuple      | An ordered heterogeneous array   | ```(42, "Foo", true)```
 | record     | An immutable key value store with fixed key names and typed values | ``` record balance = { owner: address, value: int } ```
 | map        | An immutable key value store with dynamic mapping of keys of one type to values of one type | ```type accounts = map(string, address)```
 | option('a) | An optional value either None or Some('a) | ```Some(42)```
-| state        | A record of blockstate key, value pairs  |
-| transactions | An append only list of blockchain transactions |
-| events       | An append only list of blockchain events (or log entries) |
-| signature    | A signature - 64 bytes |
-| Chain.ttl    | Time-to-live (fixed height or relative to current block) | ```FixedTTL(1050)``` ```RelativeTTL(50)```
+| state      | A user defined type holding the contract state | ```record state = { owner: address, magic_key: bytes(4) }```
+| event      | An append only list of blockchain events (or log entries) | ```datatype event = EventX(indexed int, string)```
+| hash       | A 32-byte hash - equivalent to `bytes(32)` |
+| signature  | A signature - equivalent to `bytes(64)` |
+| Chain.ttl  | Time-to-live (fixed height or relative to current block) | ```FixedTTL(1050)``` ```RelativeTTL(50)```
 | oracle('a, 'b)       | And oracle answering questions of type 'a with answers of type 'b |  ```Oracle.register(acct, qfee, ttl)```
 | oracle_query('a, 'b) | A specific oracle query |  ```Oracle.query(o, q, qfee, qttl, rttl)```
+| contract   | A user defined, typed, contract address | ```function call_remote(r : RemoteContract) = r.fun()```
+
+### Literals
+| Type       | Constant/Literal example(s)
+| ---------- | -------------------------------
+| int        | `-1`, `2425`, `4598275923475723498573485768`
+| address    | `ak_2gx9MEFxKvY9vMG5YnqnXWv1hCsX7rgnfvBLJS4aQurustR1rt`
+| bool       | `true`, `false`
+| bits       | `Bits.none`, `Bits.all`
+| bytes(n)   | `#fedcba9876543210`
+| string     | `"This is a string"`
+| list       | `[1, 2, 3]`, `[(true, 24), (false, 19), (false, -42)]`
+| tuple      | `(42, "Foo", true)`
+| record     | `balance{ owner = Call.origin, value = 100000000 }`
+| map        | `{["foo"] = 19, ["bar"] = 42}`, `{}`
+| option('a) | `Some(42)`, `None`
+| state      | `state{ owner = Call.origin, magic_key = #a298105f }`
+| event      | `EventX(0, "Hello")`
+| hash       | `#000102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f`
+| signature  | `#000102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f`
+| Chain.ttl  |  `FixedTTL(1050)`, `RelativeTTL(50)`
+| oracle('a, 'b)       | `ok_2YNyxd6TRJPNrTcEDCe9ra59SVUdp9FR9qWC5msKZWYD9bP9z5`
+| oracle_query('a, 'b) | `oq_2oRvyowJuJnEkxy58Ckkw77XfWJrmRgmGaLzhdqb67SKEL1gPY`
+| contract   | `ct_Ez6MyeTMm17YnTnDdHTSrzMEBKmy7Uz2sXu347bTDPgVH2ifJ`
 
 ### Arithmetic
 
@@ -265,7 +368,7 @@ arithmetic operations:
 - remainder (`x mod y`), satisfying `y * (x / y) + x mod y == x` for non-zero `y`
 - exponentiation (`x ^ y`)
 
-All operations are *safe*, in the sense that they behave as the corresponding
+All operations are *safe* with respect to overflow and underflow. They behave as the corresponding
 operations on arbitrary-size integers and fail with `arithmetic_error` if the
 result cannot be represented by a 256-bit signed word. For example, `2 ^ 255`
 fails rather than wrapping around to -2²⁵⁵.
@@ -354,7 +457,7 @@ type. The type of lists with elements of type `'e` is written
 
 ```
 [1, 33, 2, 666]                                                   : list(int)
-[(1, "aaa"), (10, "jjj"), (666, "the beast")]                     : list((int, string))
+[(1, "aaa"), (10, "jjj"), (666, "the beast")]                     : list(int * string)
 [{[1] = "aaa", [10] = "jjj"}, {[5] = "eee", [666] = "the beast"}] : list(map(int, string))
 ```
 
@@ -444,8 +547,8 @@ The following builtin functions are defined on maps:
   Map.member(k : 'k, m : map('k, 'v)) : bool
   Map.delete(k : 'k, m : map('k, 'v)) : map('k, 'v)
   Map.size(m : map('k, 'v)) : int
-  Map.to_list(m : map('k, 'v)) : list(('k, 'v))
-  Map.from_list(m : list(('k, 'v))) : map('k, 'v)
+  Map.to_list(m : map('k, 'v)) : list('k * 'v)
+  Map.from_list(m : list('k * 'v)) : map('k, 'v)
 ```
 
 #### Map implementation
@@ -476,7 +579,26 @@ The following builtin functions are defined on strings:
 
 The hash functions hashes the string represented as byte array.
 
-#### Builtin functions on integers
+### Byte arrays
+
+The following builtin functions are defined on byte arrays:
+```
+  Bytes.to_int(b : bytes(_)) : int
+  Bytes.to_str(b : bytes(_)) : string
+```
+These convert arbitrary byte arrays to integers and strings respectively. Note
+that the type `bytes(_)` cannot be given by the user and is only valid for
+these builtin functions.
+
+`Bytes.to_int` interprets the byte array as a big endian integer. In the AEVM
+backend it is truncated to fit in a 256-bit word. `Bytes.to_str` returns the
+hexadecimal representation of the byte array. For instance
+```
+  Bytes.to_int(#01ff) == 511
+  Bytes.to_str(#10ff) == "10FF"
+```
+
+### Builtin functions on integers
 
 The following builtin functions are defined on integers:
 
@@ -489,7 +611,10 @@ The following builtin functions are defined on integers:
 The following builtin functions are defined on addresses:
 
 ```
-  Address.to_str(a : address) : string  // Base58 encoded string
+  Address.to_str(a : address) : string    // Base58 encoded string
+  Address.is_contract(a : address) : bool // Is the address a contract
+  Address.is_oracle(a : address) : bool   // Is the address a registered oracle
+  Address.is_payable(a : address) : bool // Can the address be spent to
 ```
 
 ### Builtins
@@ -513,14 +638,39 @@ result is the hash of the binary encoding of the argument as [described
 below](#encoding-sophia-values-as-binaries). Note that this means that for `s :
 string`, `String.sha3(s)` and `Crypto.sha3(s)` gives different results.
 
-There is also a function for signature verification `Crypto.ecverify`:
+There are also functions for signature verification:
 
 ```
-  Crypto.ecverify(msg : hash, pubkey : address, sig : signature) : bool
+  Crypto.verify_sig(msg : hash, pubkey : address, sig : signature) : bool
+  Crypto.verify_sig_secp256k1(msg : hash, pubkey : bytes(64), sig : bytes(64)) : bool
 ```
 
 The signature verification returns true if `sig` is the signature of `msg`
 using the private key corresponding to `pubkey`.
+
+The function `ecrecover_secp256k1` allows one to recover the
+Ethereum style address from a msg hash and respective signature, and
+`ecverify_secp256k1` will verify a signature for a msg hash against
+an Ethereum style address:
+
+```
+  Crypto.ecverify_secp256k1(msg : hash, addr : bytes(20), sig : bytes(65)) : bool
+  Crypto.ecrecover_secp256k1(msg : hash, sig : bytes(65)) : option(bytes(20))
+```
+
+*Note*: Before Sophia version 4, `verify_sig` was (incorrectly) named `ecverify`.
+
+#### Authorization interface
+
+When a Generalized account is authorized, the authorization function needs
+access to the transaction hash for the wrapped transaction. (A `GAMetaTx`
+wrapping a transaction.) The transaction hash is available in the primitive
+`Auth.tx_hash`, it is *only* available during authentication if invoked by a
+normal contract call it returns `none`.
+
+```
+Auth.tx_hash : option(hash)
+```
 
 #### Account interface
 
@@ -546,6 +696,10 @@ An Oracle user will use the functions:
 * `Oracle.query_fee`
 * `Oracle.query`
 * `Oracle.get_answer`
+
+Additional safety checks can use the functions:
+* `Oracle.check`
+* `Oracle.check_query`
 
 ##### Oracle register
 
@@ -583,7 +737,7 @@ To extend the TTL of an oracle, call `Oracle.extend`:
 Oracle.extend(o          : oracle('a, 'b),
               <signature : signature>,     // Signed oracle address + contract address
                                            // named argument (and thus optional)
-              ttl        : Chain.ttl) : ()
+              ttl        : Chain.ttl) : unit
 ```
 
 The `ttl` is must be a relative TTL, relative to the current oracle expiry
@@ -649,51 +803,69 @@ Example for an oracle answering questions of type `string` with answers of type 
 ```
 contract Oracles =
 
-  function registerOracle(acct : address,
-                          sign : signature,   // Signed oracle address + contract address
-                          qfee : int,
-                          ttl  : Chain.ttl) : oracle(string, int) =
+  stateful entrypoint registerOracle(acct : address,
+                                     sign : signature,   // Signed oracle address + contract address
+                                     qfee : int,
+                                     ttl  : Chain.ttl) : oracle(string, int) =
      Oracle.register(acct, signature = sign, qfee, ttl)
 
-  function queryFee(o : oracle(string, int)) : int =
+  entrypoint queryFee(o : oracle(string, int)) : int =
     Oracle.query_fee(o)
 
-  // Do not use in production!
-  function unsafeCreateQuery(o    : oracle(string, int),
-                       q    : string,
-                       qfee  : int,
-                       qttl : Chain.ttl,
-                       rttl : int) : oracle_query(string, int) =
+  payable stateful entrypoint createQuery(o    : oracle_query(string, int),
+                                          q    : string,
+                                          qfee : int,
+                                          qttl : Chain.ttl,
+                                          rttl : int) : oracle_query(string, int) =
+    require(qfee =< Call.value, "insufficient value for qfee")
     Oracle.query(o, q, qfee, qttl, RelativeTTL(rttl))
 
-  function extendOracle(o    : oracle(string, int),
-                        ttl  : Chain.ttl) : () =
+  stateful entrypoint extendOracle(o   : oracle(string, int),
+                                   ttl : Chain.ttl) : unit =
     Oracle.extend(o, ttl)
 
-  function signExtendOracle(o    : oracle(string, int),
-                            sign : signature,   // Signed oracle address + contract address
-                            ttl  : Chain.ttl) : () =
+  stateful entrypoint signExtendOracle(o    : oracle(string, int),
+                                     sign : signature,   // Signed oracle address + contract address
+                                     ttl  : Chain.ttl) : unit =
     Oracle.extend(o, signature = sign, ttl)
 
-  function respond(o    : oracle(string, int),
-                   q    : oracle_query(string, int),
-                   sign : signature,        // Signed oracle query id + contract address
-                   r    : int) =
+  stateful entrypoint respond(o    : oracle(string, int),
+                              q    : oracle_query(string, int),
+                              sign : signature,        // Signed oracle query id + contract address
+                              r    : int) =
     Oracle.respond(o, q, signature = sign, r)
 
-  function getQuestion(o : oracle(string, int),
-                       q : oracle_query(string, int)) : string =
+  entrypoint getQuestion(o : oracle(string, int),
+                         q : oracle_query(string, int)) : string =
     Oracle.get_question(o, q)
 
-  function hasAnswer(o : oracle(string, int),
-                     q : oracle_query(string, int)) =
+  entrypoint hasAnswer(o : oracle(string, int),
+                       q : oracle_query(string, int)) =
     switch(Oracle.get_answer(o, q))
       None    => false
       Some(_) => true
 
-  function getAnswer(o : oracle(string, int),
-                     q : oracle_query(string, int)) : option(int) =
+  entrypoint getAnswer(o : oracle(string, int),
+                       q : oracle_query(string, int)) : option(int) =
     Oracle.get_answer(o, q)
+```
+
+##### Oracle check
+No deep check is performed when an Oracle literal is passed to a contract, for
+extra safety a check function `Oracle.check` is provided. It returns true if
+the oracle exist and has the expected type.
+```
+Oracle.check(o : oracle('a, 'b)) : bool
+```
+
+##### Oracle check_query
+
+No deep check is performed when an Oracle query literal is passed to a
+contract, for extra safety a check function `Oracle.check_query` is provided.
+It returns true if the oracle query exist and has the expected type.
+
+```
+Oracle.check_query(o : oracle('a, 'b), q : oracle_query('a, 'b)) : bool
 ```
 
 #### AENS interface
@@ -711,10 +883,10 @@ Naming System (AENS):
   type checked against this type at run time.
 - AENS transactions
   ```
-  AENS.preclaim(owner : address, commitment_hash : hash, <signature : signature>) : ()
-  AENS.claim   (owner : address, name : string, salt : int, <signature : signature>) : ()
-  AENS.transfer(owner : address, new_owner : address, name_hash : hash, <signature : signature>) : ()
-  AENS.revoke  (owner : address, name_hash : hash, <signature : signature>) : ()
+  AENS.preclaim(owner : address, commitment_hash : hash, <signature : signature>) : unit
+  AENS.claim   (owner : address, name : string, salt : int, <signature : signature>) : unit
+  AENS.transfer(owner : address, new_owner : address, name_hash : hash, <signature : signature>) : unit
+  AENS.revoke  (owner : address, name_hash : hash, <signature : signature>) : unit
   ```
   If `owner` is equal to `Contract.address` the signature `signature` is
   ignored, and can be left out since it is a named argument. Otherwise we need
@@ -734,20 +906,30 @@ logged using the `Chain.event` function:
 
 ```
   datatype event =
-      Event1(indexed int, indexed int, string)
-    | Event2(string, indexed address)
+      Event1(int, int, string)
+    | Event2(string, address)
 
-  Chain.event(e : event) : ()
+  Chain.event(e : event) : unit
 ```
 
-The event can have 0-3 `indexed` fields, they should have a type that is
-equivalent to a 32-byte word (i.e. `bool`, `int`, or `address`, or an alias for
-such a type). To index a `string` you can use the hash function
-`String.sha3(s)`. The event also has (optional) payload (not indexed), that is
-of type `string`.
+The event can have 0-3 *indexed* fields, and an optional *payload* field. A
+field is indexed if it fits in a 32-byte word, i.e.
+- `bool`
+- `int`
+- `bits`
+- `address`
+- `oracle(_, _)`
+- `oracle_query(_, _)`
+- contract types
+- `bytes(n)` for `n` ≤ 32, in particular `hash`
 
-*NOTE:* Indexing is not part of the core aeternity node, but the `indexed` tag
-should serve as a hint to any software analysing the contract call transactions.
+The payload field must be either a string or a byte array of more than 32 bytes.
+The fields can appear in any order.
+
+*NOTE:* Indexing is not part of the core aeternity node.
+
+Events are further discussed in [Sophia explained -
+Events](./sophia_explained.md#events).
 
 #### Contract primitives
 
@@ -755,7 +937,7 @@ The block-chain environment available to a contract is defined in three name spa
 `Contract`, `Call`, and `Chain`:
 
 - `Contract.creator` is the address of the entity that signed the contract creation
-  transaction.
+  transaction. (Available from Fortuna release.)
 - `Contract.address` is the address of the contract account.
 - `Contract.balance` is the amount of coins currently in the contract account.
   Equivalent to `Chain.balance(Contract.address)`.
@@ -798,8 +980,8 @@ and `*/` and can be nested.
 #### Keywords
 
 ```
-and contract elif else false function if import include internal let mod namespace
-private public rec stateful switch true type record datatype
+contract elif else entrypoint false function if import include let mod namespace
+private payable stateful switch true type record datatype
 ```
 
 #### Tokens
@@ -810,9 +992,16 @@ private public rec stateful switch true type record datatype
 - `QCon = (Con\.)+Con` qualified constructor
 - `TVar = 'Id` type variable (e.g `'a`, `'b`)
 - `Int = [0-9]+|0x[0-9A-Fa-f]+` integer literal
-- `Hash = #[0-9A-Fa-f]+` hash literal
+- `Bytes = #[0-9A-Fa-f]+` byte array literal
 - `String` string literal enclosed in `"` with escape character `\`
 - `Char` character literal enclosed in `'` with escape character `\`
+- `AccountAddress` base58-encoded 32 byte account pubkey with `ak_` prefix
+- `ContractAddress` base58-encoded 32 byte contract address with `ct_` prefix
+- `OracleAddress` base58-encoded 32 byte oracle address with `ok_` prefix
+- `OracleQueryId` base58-encoded 32 byte oracle query id with `oq_` prefix
+
+See the [identifier encoding scheme](/node/api/api_encoding.md) for the
+details on the base58 literals.
 
 ### Layout blocks
 
@@ -856,16 +1045,18 @@ A Sophia file consists of a sequence of *declarations* in a layout block.
 
 ```c
 File ::= Block(Decl)
-Decl ::= 'contract' Con '=' Block(Decl)
+Decl ::= ['payable'] 'contract' Con '=' Block(Decl)
        | 'namespace' Con '=' Block(Decl)
        | 'include' String
        | 'type'     Id ['(' TVar* ')'] ['=' TypeAlias]
        | 'record'   Id ['(' TVar* ')'] '=' RecordType
        | 'datatype' Id ['(' TVar* ')'] '=' DataType
-       | Modifier* 'function' Id ':' Type
-       | Modifier* 'function' Id Args [':' Type] '=' Block(Stmt)
+       | EModifier* 'entrypoint' Id ':' Type
+       | EModifier* 'entrypoint' Id Args [':' Type] '=' Block(Stmt)
+       | FModifier* 'function' Id Args [':' Type] '=' Block(Stmt)
 
-Modifier ::= 'stateful' | 'public' | 'private' | 'internal'
+EModifier ::= 'payable' | 'stateful'
+FModifier ::= 'stateful' | 'private'
 
 Args ::= '(' Sep(Arg, ',') ')'
 Arg  ::= Id [':' Type]
@@ -877,7 +1068,7 @@ For example,
 ```
 contract Test =
   type t = int
-  public function add (x : t, y : t) = x + y
+  entrypoint add (x : t, y : t) = x + y
 ```
 
 There are three forms of type declarations: type aliases (declared with the
@@ -906,6 +1097,7 @@ type     int_shape = shape(int)
 Type ::= Domain '=>' Type             // Function type
        | Type '(' Sep(Type, ',') ')'  // Type application
        | '(' Type ')'                 // Parens
+       | 'unit' | Sep(Type, '*')      // Tuples
        | Id | QId | TVar
 
 Domain ::= Type                       // Single argument
@@ -916,7 +1108,7 @@ The function type arrow associates to the right.
 
 Example,
 ```
-'a => list('a) => (int, list('a))
+'a => list('a) => (int * list('a))
 ```
 
 ### Statements
@@ -929,7 +1121,6 @@ Stmt ::= 'switch' '(' Expr ')' Block(Case)
        | 'elif' '(' Expr ')' Block(Stmt)
        | 'else' Block(Stmt)
        | 'let' LetDef
-       | 'let' 'rec' Sep1(LetDef, 'and')  // (Mutually) recursive binding
        | Expr
 
 LetDef ::= Id [Args] [':' Type] '=' Block(Stmt)
@@ -969,7 +1160,9 @@ Expr ::= '(' Args ')' '=>' Block(Stmt)      // Anonymous function    (x) => x + 
        | '{' Sep(FieldUpdate, ',') '}'      // Record or map value   {x = 0, y = 1}, {[key] = val}
        | '(' Expr ')'                       // Parens                (1 + 2) * 3
        | Id | Con | QId | QCon              // Identifiers           x, None, Map.member, AELib.Token
-       | Int | Hash | String | Char         // Literals              123, 0xff, #00abc123, "foo", '%'
+       | Int | Bytes | String | Char        // Literals              123, 0xff, #00abc123, "foo", '%'
+       | AccountAddress | ContractAddress   // Chain identifiers
+       | OracleAddress | OracleQueryId      // Chain identifiers
 
 FieldUpdate ::= Path '=' Expr
 Path ::= Id                 // Record field
@@ -1024,23 +1217,23 @@ contract FundMe =
                    deadline      : int,
                    goal          : int }
 
-  private function require(b : bool, err : string) =
+  function require(b : bool, err : string) =
     if(!b) abort(err)
 
-  private function spend(args : spend_args) =
+  function spend(args : spend_args) =
     raw_spend(args.recipient, args.amount)
 
-  public function init(beneficiary, deadline, goal) : state =
+  entrypoint init(beneficiary, deadline, goal) : state =
     { contributions = {},
       beneficiary   = beneficiary,
       deadline      = deadline,
       total         = 0,
       goal          = goal }
 
-  private function is_contributor(addr) =
+  function is_contributor(addr) =
     Map.member(addr, state.contributions)
 
-  public stateful function contribute() =
+  stateful entrypoint contribute() =
     if(Chain.block_height >= state.deadline)
       spend({ recipient = Call.caller, amount = Call.value }) // Refund money
       false
@@ -1053,7 +1246,7 @@ contract FundMe =
                  total @ tot = tot + Call.value })
       true
 
-  public stateful function withdraw() =
+  stateful entrypoint withdraw() =
     if(Chain.block_height < state.deadline)
       abort("Cannot withdraw before deadline")
     if(Call.caller == state.beneficiary)
@@ -1063,13 +1256,13 @@ contract FundMe =
     else
       abort("Not a contributor or beneficiary")
 
-  private stateful function withdraw_beneficiary() =
+  stateful function withdraw_beneficiary() =
     require(state.total >= state.goal, "Project was not funded")
     spend({recipient = state.beneficiary,
            amount    = Contract.balance })
     put(state{ beneficiary = #0 })
 
-  private stateful function withdraw_contributor() =
+  stateful function withdraw_contributor() =
     if(state.total >= state.goal)
       abort("Project was funded")
     let to = Call.caller
@@ -1117,7 +1310,7 @@ code.
 
 #### Meta data
 The byte code contains meta data for the contract.
-- source_code_hash - a sha256 hash of the source code string of the contract
+- source_code_hash - a Blake2b hash of the source code string of the contract
 - type_info - see Type information below
 - byte_code - the actual byte code
 
@@ -1133,7 +1326,7 @@ In this way, the function prototype in the calling function gets some level of
 type verification.
 
 The type information contains:
-- fun_hash - A sha256 hash of the function name and the function types
+- fun_hash - A Blake2b hash of the function name and the function types
 - fun_name - The function name as a string
 - arg_type - The vm encoded typerep of the argument (as a tuple) of the function
 - out_type - The vm encoded typerep of the return type of the function

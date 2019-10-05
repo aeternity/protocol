@@ -6,7 +6,7 @@ for:
 
 * Hashing (e.g., block hash)
 * Insertion in the Merkle Patricia Tree (e.g., state trees, transaction trees).
-* Signing transactions (i.e., the serialized form is signed).
+* Signing transactions (i.e., the (hash of the) serialized form is signed).
 
 Other formats may be used for communication between nodes or for the
 user API.
@@ -147,6 +147,15 @@ In Erlang notation, the `id()` type pattern is:
 <<Tag:1/unsigned-integer-unit:8, Hash:32/binary-unit:8>>
 ```
 
+### The call_return_type() type
+
+The special type `call_return_type()` is an `int()` denoting the outcome of a contract call.
+
+| Value | Return type |
+| ---   | ---         |
+| 0     | ok          |
+| 1     | error       |
+| 2     | revert      |
 
 ### RLP Encoding
 
@@ -226,6 +235,7 @@ subsequent sections divided by object.
 | Channel off-chain update withdrawal | 572 |
 | Channel off-chain update create contract | 573 |
 | Channel off-chain update call contract | 574 |
+| Channel client reconnect transaction | 575 |
 | Channel | 58 |
 | Channel snapshot transaction | 59 |
 | POI | 60 |
@@ -240,16 +250,38 @@ subsequent sections divided by object.
 | Oracles' Merkle Patricia tree's value | 625 |
 | Accounts' Merkle Patricia tree's value | 626 |
 | Sophia byte code | 70 |
+| Generalized accounts attach transaction | 80 |
+| Generalized accounts meta transaction | 81 |
 | Key block | 100 |
 | Micro block | 101 |
 | Light micro block | 102 |
+| Proof of Fraud | 200 |
 
-#### Accounts
+#### Accounts (version 1, Basic accounts))
 ```
 [ <nonce>   :: int()
 , <balance> :: int()
 ]
 ```
+
+#### Accounts (version 2, Generalized accounts, from Fortuna release)
+```
+[ <flags>       :: int()
+, <nonce>       :: int()
+, <balance>     :: int()
+, <ga_contract> :: id()
+, <ga_auth_fun> :: binary()
+]
+```
+
+#### Accounts (version 3, Normal accounts with flags, from Lima release)
+```
+[ <flags>       :: int()
+, <nonce>       :: int()
+, <balance>     :: int()
+]
+```
+
 ### Signed transaction
 ```
 [ <signatures>  :: [binary()]
@@ -372,6 +404,8 @@ For a contract with address `<contractpubkey>`, the fields of the contract objec
 ]
 ```
 
+The log field is always the empty binary.
+
 The balance of the account is stored in the account state tree.
 
 The contract storage (or state) which is a key value map from (key::binary() to value::binary())
@@ -395,7 +429,7 @@ The content of the contract store depends on [the ABI and the VM version](/contr
 , <gas_price>        :: int()
 , <gas_used>         :: int()
 , <return_value>     :: binary()
-, <return_type>      :: int()
+, <return_type>      :: call_return_type()
 , <log>              :: [ { <address> :: id, [ <topics> :: binary() ], <data> :: binary() } ]
 ]
 ```
@@ -729,6 +763,7 @@ The channel off-chain transaction is not included directly in the transaction tr
 * The channel snapshot solo transaction.
 * The channel force progress transaction.
 
+version 1, until Fortuna release
 ```
 [ <channel_id>       :: id()
 , <round>            :: int()
@@ -737,7 +772,34 @@ The channel off-chain transaction is not included directly in the transaction tr
 ]
 ```
 
-#### Channel
+version 2, from Fortuna release
+```
+[ <channel_id>       :: id()
+, <round>            :: int()
+, <state_hash>       :: binary()
+]
+```
+
+#### Channel client reconnect transaction
+
+The channel client reconnect transaction is used only when a Websocket client
+wants to reconnect to an already running FSM. It cannot be introduced into the
+mempool. The elements of the transaction are:
+* The channel id of the channel that the client wants to connect to
+* A round (integer), which must be higher than at the last attempt
+* The role (`initiator` or `responder`) of the FSM instance in question
+* The public key of the client; must correspond to the private key used for
+  signing the transaction.
+
+```
+[ <channel_id>    :: id()
+, <round>         :: int()
+, <role>          :: binary()
+, <pub_key>       :: id()
+]
+```
+
+#### Channel (version 1, until Fortuna release)
 ```
 [ <initiator>           :: id()
 , <responder>           :: id()
@@ -751,6 +813,25 @@ The channel off-chain transaction is not included directly in the transaction tr
 , <solo_round>          :: int()
 , <lock_period>         :: int()
 , <locked_until>        :: int()
+]
+```
+
+#### Channel (version 2, from Fortuna release)
+```
+[ <initiator>           :: id()
+, <responder>           :: id()
+, <channel_amount>      :: int()
+, <initiator_amount>    :: int()
+, <responder_amount>    :: int()
+, <channel_reserve>     :: int()
+, <delegate_ids>        :: [id()]
+, <state_hash>          :: binary()
+, <round>               :: int()
+, <solo_round>          :: int()
+, <lock_period>         :: int()
+, <locked_until>        :: int()
+, <initiator_auth>      :: binary()
+, <responder_auth>      :: binary()
 ]
 ```
 
@@ -866,6 +947,53 @@ The binary is a serialized Merkle Patricia Tree.
 , <compiler version> :: binary()
 ]
 ```
+
+#### Sophia byte code (version 3, Lima release)
+```
+[ <source code hash> :: binary()
+, <type info>        :: [{<fun_hash> :: binary(), <fun_name> :: binary(), <payable> :: bool(), <arg_type> :: binary(), <out_type> :: binary()}]
+, <byte code>        :: binary()
+, <compiler version> :: binary()
+, <payable>          :: bool()
+]
+```
+
+### Generalized accounts
+Generalized accounts are available from version 3, Fortuna release. A
+generalized account is interchangeable with a basic (non-generalized) account
+everywhere, the only difference is that it is not able to directly sign a
+transaction. Instead the transaction has to be wrapped in a [meta
+transaction](#generalized-accounts-meta-transaction) with the correct
+authorization data.
+
+#### Generalized accounts attach transaction
+```
+[ <owner_id>   :: id()
+, <nonce>      :: int()
+, <code>       :: binary()
+, <auth_fun>   :: binary()
+, <ct_version> :: int()
+, <fee>        :: int()
+, <ttl>        :: int()
+, <gas>        :: int()
+, <gas_price>  :: int()
+, <call_data>  :: binary()
+]
+```
+
+#### Generalized accounts meta transaction
+```
+[ <ga_id>       :: id()
+, <auth_data>   :: binary()
+, <abi_version> :: int()
+, <fee>         :: int()
+, <gas>         :: int()
+, <gas_price>   :: int()
+, <ttl>         :: int()
+, <tx>          :: binary()
+]
+```
+
 
 #### Micro Body
 ```

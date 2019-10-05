@@ -174,18 +174,19 @@ incur a higher forwarding fee.
 
 In the hub and spoke model, we would have a number of big hubs, which would be
 involved in most routes through the network. These hubs would be tightly
-connected and offer highly available and short paths for most users. In turn, this would lead to a loss of privacy and making the network more fragile, since
+connected and offer highly available and short paths for most users. In turn,
+this would lead to a loss of privacy and making the network more fragile, since
 the disappearance of one of these hubs would have a big impact on its overall
 connectedness.
 
 
 ## Incentives
 
-Operating a channel takes at least two on-chain operations and therefore has a base amount of fees is required and this fact could be abused by a malicious
-peer.
-Since closing a channel incurs a fee, they could open a channel with someone and
-subsequently refuse to cooperate, locking up coins and making the other party
-pay the fees required to close the channel again.
+Operating a channel takes at least two on-chain operations and therefore has a
+base amount of fees is required and this fact could be abused by a malicious
+peer. Since closing a channel incurs a fee, they could open a channel with
+someone and subsequently refuse to cooperate, locking up coins and making the
+other party pay the fees required to close the channel again.
 
 Once a channel has been opened, all operations happening within need to be
 signed off by all participants. This creates a free option for whoever is
@@ -227,10 +228,12 @@ account might end up without enough coins and thus possibly end up with
 insufficient funds to close the channel. This could potentially be worse since
 the channel might hold significant funds.
 
-Under these circumstances it seems deducting fees directly from the channel balance as part of its closing seems like the most sensible approach.
+Under these circumstances it seems deducting fees directly from the channel
+balance as part of its closing seems like the most sensible approach.
 
-To avoid this situation, a peer should consider halting any interactions if on-chain fees reach a point, where the fees required to close a channel in a timely
-manner approach the balance of the channel.
+To avoid this situation, a peer should consider halting any interactions if
+on-chain fees reach a point, where the fees required to close a channel in a
+timely manner approach the balance of the channel.
 
 
 ## Protocol
@@ -245,13 +248,15 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 Communication between participants of a channel is peer to peer and SHOULD
 happen via a reliable and ordered protocol, e.g. TCP. Peers should expect to be
 running their own node, in order to be able to catch transactions relevant to
-the channels they are involved in, although outsourcing that job to a third party, while still being trustless, might be possible in the future.
+the channels they are involved in, although outsourcing that job to a third
+party, while still being trustless, might be possible in the future.
 
 Participating in a state channel requires two nodes to be able to communicate
 with each other. Throughout this document we are going to assume that this
-happens via TCP/IP.
-The process of discovering the `IP_ADDR:PORT` pair of a remote node is not
-covered in this document and assumed to happen out of band, unless both of them are already part of a state channel network, where nodes can announce their identities `(IP_ADDR, PORT, ID)`.
+happens via TCP/IP. The process of discovering the `IP_ADDR:PORT` pair of a
+remote node is not covered in this document and assumed to happen out of band,
+unless both of them are already part of a state channel network, where nodes
+can announce their identities `(IP_ADDR, PORT, ID)`.
 
 Messages will be sent both on- and off-chain.
 

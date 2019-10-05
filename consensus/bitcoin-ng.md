@@ -1,7 +1,7 @@
 Bitcoin-NG for Aeternity
 ==========
 
-Bitcoin-NG is an evolution of the Bitcoin protocol [1]. It still uses Nakamoto consensus but separates leader election and block production. This separation is done by introducing two kinds of blocks, key and micro. Key blocks are used for leader election. They don't contain any transactions but do require a solution to a Proof of Work puzzle. Once a leader has been found, they can produce multiple micro blocks. Micro blocks include transactions but do not require solutions to Proof of Work puzzles. Instead they need to be cryptographically signed be the current leader to be considered valid.
+Bitcoin-NG is an evolution of the Bitcoin protocol [1]. It still uses Nakamoto consensus but separates leader election and block production. This separation is done by introducing two kinds of blocks, key and micro. Key blocks are used for leader election. They don't contain any transactions but do require a solution to a Proof of Work puzzle. Once a leader has been found, he can produce multiple micro blocks. Micro blocks include transactions but do not require solutions to Proof of Work puzzles. Instead they need to be cryptographically signed be the current leader to be considered valid.
 
 Splitting up leader election and block production allows a leader to produce micro blocks in rapid succession, increasing the transaction throughput significantly.
 
@@ -36,7 +36,7 @@ On average in Bitcoin blocks are broadcasted every 10 minutes - it is driven by 
 
 Rewards
 ==
-There is major challenge in providing liveness and integrity of the chain in the scheme proposed by Bitcoin-NG. It is solved by crypto-economic incentives. To guarantee that the next leader follows as much as possible of Micro Blocks the next leader receives fixed award on the top of 60% of fees from the previous generation of Micro Blocks. The previous leader receives 40% of the fees included in transactions he confirmed.
+There is major challenge in providing liveness and integrity of the chain in the scheme proposed by Bitcoin-NG. It is solved by crypto-economic incentives. To guarantee that the next leader follows as much as possible of Micro Blocks the next leader receives 60% of fees from the previous generation of Micro Blocks - on top of a fixed award. The previous leader receives 40% of the fees included in transactions he confirmed.
 
      ┌────────┐                        ┌────────┐
      │        │   ┌─────┐   ┌─────┐    │        │  ┌─────┐
@@ -133,13 +133,20 @@ existence in the block.
 If a miner is reported as fraudulent in this manner, its beneficiary
 will not get any mining reward for that key block (i.e., no coinbase
 and no fees for either generation). The reporter of the fraud will get
-a reward controlled by governance. In order not to skew the inflation the
+a reward controlled by governance (i.e. a portion of coinbase), unless reported as fraudulent too. In order not to skew the inflation the
 coins not attributed to the fraudulent miner are [locked](locking.md) instead.
 
 The serialization format of the Proof-of-Fraud object can be found
 [here](../serializations.md#proof-of-fraud), and the inclusion of
 the Proof-Of-Fraud object in micro blocks is defined
 [here](../serializations.md#micro-block)
+
+Reward Split
+==
+
+From the Fortuna release, a governance-controlled portion of the rewards - i.e. the key block coinbase, any transaction fees and any reward for having reported a fraud - is dedicated to protocol protected address `ak_2KAcA2Pp1nrR8Wkt3FtCkReGzAi8vJ9Snxa4PcmrthVx8AhPe8`.
+
+The weighted average of the BRI voting of 1% to 20% (yes) votes is 10.89869526640124746202%, 109 of 1000 shares will be the protocol reward split.
 
 ---
 #### References

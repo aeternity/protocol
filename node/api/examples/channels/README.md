@@ -6,9 +6,10 @@ integration tests and represent real interaction with the node.
 
 ### Different APIs
 
-Currently there are 2 different APIs that are supported:
+Currently there is 1 API protocol that is supported:
 * JSON-RPC
-* legacy
+
+Legacy protocol was removed.
 
 You can find API specific examples in the corresponding directories.
 
