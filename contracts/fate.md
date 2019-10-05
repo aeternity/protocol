@@ -41,7 +41,7 @@ will have the same structure as before the operation.
 #### Type safety
 
 FATE solves a fundamental problem programmers run into when coding for
-Ethereum: integer overflow, weak type checking and poore data
+Ethereum: integer overflow, weak type checking and poor data
 flow. FATE checks all aritmetic operations to keep the right meanining
 of it. Also you can't implicitly cast types (eg integers to booleans).
 
