@@ -668,7 +668,7 @@ new cells used by the instruction. So if you have used 1020 cells
 and then one instruction uses 5 new cells, then the gas cost
 for that instruction is 10 and not 6.
 
-Each use of a stack slot (a psuh) costs gas in the same way and
+Each use of a stack slot (a push) costs gas in the same way and
 is also counted towards the number of used cells. Each pop of
 a stack slot does not cost gas and does not decrease the gas cost
 either but it reduced the count of number of cells in use.
