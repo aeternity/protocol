@@ -57,6 +57,7 @@ some blockchain specific primitives, constructions and types have been added.
         - [AENS interface](#aens-interface)
         - [Events](#events)
         - [Contract primitives](#contract-primitives)
+    - [Standard library](#standard-library)
     - [Exceptions](#exceptions)
 - [Syntax](#syntax)
     - [Lexical syntax](#lexical-syntax)
@@ -467,6 +468,13 @@ operator. So `42 :: [1, 2, 3]` returns the list `[42, 1, 2, 3]`. The
 concatenation operator `++` appends its second argument to its first
 and returns the resulting list. So concatenating two lists
 `[1, 22, 33] ++ [10, 18, 55]` returns the list `[1, 22, 33, 10, 18, 55]`.
+
+Sophia supports list comprehensions known from languages like Python, Haskell or Erlang. 
+Example syntax:
+```
+[x + y | x <- [1,2,3,4,5], let k = x*x, if (k > 5), y <- [k, k+1, k+2]]
+// yields [12,13,14,20,21,22,30,31,32]
+```
 
 ### Maps and records
 
@@ -956,6 +964,19 @@ The block-chain environment available to a contract is defined in three name spa
 - `Chain.difficulty` is the difficulty of the current block.
 - `Chain.gas_limit` is the gas limit of the current block.
 
+### Standard library
+
+Sophia provides standard library which is defined in terms of the language. Modules may be included manually just like all other files.
+
+Currently defined library consist of
+ - `List.aes` – operations on lists
+ - `Func.aes` – collection of function combinators
+ - `Option.aes` – operations on `option`-like types. It forces `List.aes` to be included
+ - `Pair.aes` – operations on 2-tuples
+ - `Triple.aes` – operations on 3-tuples
+
+The detailed docs may be found [here](./sophia_stdlib.md)
+
 ### Exceptions
 
 Contracts can fail with an (uncatchable) exception using the built-in function
@@ -1158,6 +1179,8 @@ Expr ::= '(' Args ')' '=>' Block(Stmt)      // Anonymous function    (x) => x + 
        | Expr '[' Expr ']'                  // Map lookup            map[key]
        | Expr '{' Sep(FieldUpdate, ',') '}' // Record or map update  r{ fld[key].x = y }
        | '[' Sep(Expr, ',') ']'             // List                  [1, 2, 3]
+       | '[' Expr '|' Sep((Id '<-' Expr | 'if' '(' Expr ')' | LetDef), ',') ']'
+                                            // List comprehension    [k | x <- [1], if (f(x)), let k = x+1]
        | '{' Sep(FieldUpdate, ',') '}'      // Record or map value   {x = 0, y = 1}, {[key] = val}
        | '(' Expr ')'                       // Parens                (1 + 2) * 3
        | Id | Con | QId | QCon              // Identifiers           x, None, Map.member, AELib.Token
