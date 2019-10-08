@@ -91,55 +91,32 @@ some blockchain specific primitives, constructions and types have been added.
 ## Language Features
 ### Contracts
 
-Sophia does not have modules. Instead sophia has static
-contracts. Contracts are similar to classes in object oriented
-languages and support local state and inheritance. More specifically:
+The main unit of code in Sophia is the *contract*.
 
 - A contract implementation, or simply a contract, is the code for a
-  smart contract and consists of a list of types, entrypoints (that
-  may or may not have a definition) and local functions. A contract where all
-  entrypoints are defined is called a concrete contract. Only concrete
-  contracts can be instantiated. (Used in a create contract transaction.)
-
-- A contract can be abstract where no entrypoints have definitions. Example:
-
-```javascript
-// An abstract contract
-contract VotingType =
-  stateful entrypoint vote : string => unit
-```
-
-- A contract instance is an entity living on the block chain (or in a state channel). Each
-instance is associated with a particular contract implementation (at
-least from the view of high-level language; the low-level details of
-how to store and check API information on the chain is still to be
-worked out).
+  smart contract and consists of a list of types, entrypoints and local
+  functions. Only the entrypoints can be called from outside the contract.
+- A contract instance is an entity living on the block chain (or in a state
+  channel). Each instance has an address that can be used to call its
+  entrypoints, either from another contract or in a call transaction.
 - A contract may define a type state encapsulating its local
-  state. The state must be initialised when instantiating a
-  contract. This is done by the init entrypoint which can take arbitrary
-  arguments and is called on contract instance creation.
-- Contracts have a public API, comprising the entrypoints and types
-  defined in the contract. These can be used from outside
-  the contract. Functions with no annotation are part of the internal API and
-  can be used by contracts inheriting (see below) the given contract. Functions
-  annotated with `private` can only be used locally.
-- Contracts can inherit one (or more?) other contract(s). In this case
-  the entrypoints (and types) of the inherited contract are
-  included in the public API and internal functions are included in
-  the internal API of the current contract. The state of the contract
-  contains the states of all inherited contracts as well as the local
-  state. However, the state of an inherited contract cannot be
-  accessed other than through internal functions defined by that
-  contract.
-- Tail calls to functions inside the same contract are optimized.
-
-*NOTE: Contract inheritance is not yet implemented.*
+  state. When creating a new contract the `init` entrypoint is executed and the
+  state is initialized to its return value.
 
 #### Calling other contracts
 
 To call a function in another contract you need the address to an instance of
-the contract. The type of the address is a (possibly abstract) contract. For
-instance, given the `VotingType` contract above we can define a contract
+the contract. The type of the address must be a contract type, which consists
+of a number of type definitions and entrypoint declarations. For instance,
+
+```javascript
+// A contract type
+contract VotingType =
+  entrypoint vote : string => unit
+```
+
+Now given contract address of type `VotingType` you can call the `vote`
+entrypoint of that contract:
 
 ```javascript
 contract VoteTwice =
@@ -160,17 +137,24 @@ the defaults are no gas limit and no tokens. Suppose there is a fee for voting:
 
 Named arguments can be given in any order.
 
-To recover the underlying address of a contract instance there is a field
-`address : address`. For instance, to send tokens to the voting contract
+Note that reentrant calls are not permitted. In other words, when calling
+another contract it cannot call you back (directly or indirectly).
+
+To construct a value of a contract type you can give a contract address literal
+(for instance `ct_2gPXZnZdKU716QBUFKaT4VdBZituK93KLvHJB3n4EnbrHHw4Ay`), or
+convert an account address to a contract address using `Address.to_contract`.
+Note that if the contract does not exist, or it doesn't have the entrypoint, or
+the type of the entrypoint does not match the stated contract type, the call
+fails.
+
+To recover the underlying `address` of a contract instance there is a field
+`address : address`. For instance, to send tokens to the voting contract (given that it is payable)
 without calling it you can write
 
 ```javascript
   entrypoint pay(v : VotingType, amount : int) =
     Chain.spend(v.address, amount)
 ```
-
-Note that reentrant calls are not permitted. In other words, when calling
-another contract it cannot call you back.
 
 ### Mutable state
 
@@ -319,7 +303,7 @@ Sophia has the following types:
 | int        | A 256 bit 2-complement integer  | ```-1```
 | address    | Aeternity address, 32 bytes     | ```Call.origin```
 | bool       | A Boolean                       | ```true```
-| bits       | A bit field (with 256 bits)     | ```Bits.none```
+| bits       | A bit field                     | ```Bits.none```
 | bytes(n)   | A byte array with `n` bytes     | ```#fedcba9876543210```
 | string     | An array of bytes               | ```"Foo"```
 | list       | A homogeneous immutable singly linked list. | ```[1, 2, 3]```
@@ -343,13 +327,13 @@ Sophia has the following types:
 | address    | `ak_2gx9MEFxKvY9vMG5YnqnXWv1hCsX7rgnfvBLJS4aQurustR1rt`
 | bool       | `true`, `false`
 | bits       | `Bits.none`, `Bits.all`
-| bytes(n)   | `#fedcba9876543210`
+| bytes(8)   | `#fedcba9876543210`
 | string     | `"This is a string"`
 | list       | `[1, 2, 3]`, `[(true, 24), (false, 19), (false, -42)]`
 | tuple      | `(42, "Foo", true)`
-| record     | `balance{ owner = Call.origin, value = 100000000 }`
+| record     | `{ owner = Call.origin, value = 100000000 }`
 | map        | `{["foo"] = 19, ["bar"] = 42}`, `{}`
-| option('a) | `Some(42)`, `None`
+| option(int)| `Some(42)`, `None`
 | state      | `state{ owner = Call.origin, magic_key = #a298105f }`
 | event      | `EventX(0, "Hello")`
 | hash       | `#000102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f`
@@ -412,8 +396,10 @@ Bits.intersection(a : bits, b : bits) : bits
 Bits.difference(a : bits, b : bits) : bits
 ```
 
-A bit field is represented by a 256-bit word and reading or writing a bit
-outside the 0..255 range fails with an `arithmetic_error`.
+On the AEVM a bit field is represented by a 256-bit word and reading or writing
+a bit outside the 0..255 range fails with an `arithmetic_error`. On FATE a bit
+field can be of arbitrary size (but it is still represented by the
+corresponding integer, so setting very high bits can be expensive).
 
 ### Type aliases
 
@@ -430,24 +416,24 @@ A type alias and its definition can be used interchangeably.
 ### Algebraic data types
 
 Sophia supports algebraic data types (variant types) and pattern matching. Data
-types can be recursive and are declared by giving a list of constructors with
-their respective arguments. For instance, the following defines a type of
-binary trees parameterised over the element type:
+types are declared by giving a list of constructors with
+their respective arguments. For instance,
 
 ```
-datatype tree('a) = Tip | Bin(tree('a), 'a, tree('a))
+datatype one_or_both('a, 'b) = Left('a) | Right('b) | Both('a, 'b)
 ```
 
 Elements of data types can be pattern matched against, using the `switch` construct:
 
 ```
-function root(t : tree('a)) : option('a) =
-  switch(t)
-    Tip => None
-    Bin(_, v, _) => Some(v)
+function get_left(x : one_or_both('a, 'b)) : option('a) =
+  switch(x)
+    Left(x)    => Some(x)
+    Right(_)   => None
+    Both(x, _) => Some(x)
 ```
 
-*NOTE: Recursive data types are not yet implemented*
+*NOTE: Data types cannot currently be recursive.*
 
 ### Lists
 
@@ -469,7 +455,7 @@ concatenation operator `++` appends its second argument to its first
 and returns the resulting list. So concatenating two lists
 `[1, 22, 33] ++ [10, 18, 55]` returns the list `[1, 22, 33, 10, 18, 55]`.
 
-Sophia supports list comprehensions known from languages like Python, Haskell or Erlang. 
+Sophia supports list comprehensions known from languages like Python, Haskell or Erlang.
 Example syntax:
 ```
 [x + y | x <- [1,2,3,4,5], let k = x*x, if (k > 5), y <- [k, k+1, k+2]]
@@ -592,19 +578,25 @@ The hash functions hashes the string represented as byte array.
 
 The following builtin functions are defined on byte arrays:
 ```
-  Bytes.to_int(b : bytes(_)) : int
-  Bytes.to_str(b : bytes(_)) : string
+  Bytes.to_int(b : bytes(n)) : int
+  Bytes.to_str(b : bytes(n)) : string
+  Bytes.concat(a : bytes(m), b : bytes(n)) : bytes(m + n)
+  Bytes.split(a : bytes(m + n)) : bytes(m) * bytes(n)
 ```
-These convert arbitrary byte arrays to integers and strings respectively. Note
-that the type `bytes(_)` cannot be given by the user and is only valid for
-these builtin functions.
+for any concrete values of `m` and `n`. In other words, for each call to one of
+these functions the values of `m` and `n` must be known.
 
 `Bytes.to_int` interprets the byte array as a big endian integer. In the AEVM
 backend it is truncated to fit in a 256-bit word. `Bytes.to_str` returns the
-hexadecimal representation of the byte array. For instance
+hexadecimal representation of the byte array. `Bytes.concat` concatenates two
+byte arrays and `Bytes.split` splits a byte array in two. Note that the splitting point
+is determined by the types and not given as an argument. Examples:
 ```
   Bytes.to_int(#01ff) == 511
   Bytes.to_str(#10ff) == "10FF"
+  Bytes.concat(#abcd, #ef) == #abcdef
+  Bytes.split(#abcdef) == (#ab, #cdef)
+  Bytes.split(#abcdef) == (#abcd, #ef)
 ```
 
 ### Builtin functions on integers
@@ -623,7 +615,8 @@ The following builtin functions are defined on addresses:
   Address.to_str(a : address) : string    // Base58 encoded string
   Address.is_contract(a : address) : bool // Is the address a contract
   Address.is_oracle(a : address) : bool   // Is the address a registered oracle
-  Address.is_payable(a : address) : bool // Can the address be spent to
+  Address.is_payable(a : address) : bool  // Can the address be spent to
+  Address.to_contract(a : address) : C    // Cast address to contract type C
 ```
 
 ### Builtins
@@ -1013,14 +1006,28 @@ private payable stateful switch true type record datatype
 - `QId = (Con\.)+Id` qualified identifiers (e.g. `Map.member`)
 - `QCon = (Con\.)+Con` qualified constructor
 - `TVar = 'Id` type variable (e.g `'a`, `'b`)
-- `Int = [0-9]+|0x[0-9A-Fa-f]+` integer literal
-- `Bytes = #[0-9A-Fa-f]+` byte array literal
+- `Int = [0-9]+(_[0-9]+)*|0x[0-9A-Fa-f]+(_[0-9A-Fa-f]+)*` integer literal with optional `_` separators
+- `Bytes = #[0-9A-Fa-f]+(_[0-9A-Fa-f]+)*` byte array literal with optional `_` separators
 - `String` string literal enclosed in `"` with escape character `\`
 - `Char` character literal enclosed in `'` with escape character `\`
 - `AccountAddress` base58-encoded 32 byte account pubkey with `ak_` prefix
 - `ContractAddress` base58-encoded 32 byte contract address with `ct_` prefix
 - `OracleAddress` base58-encoded 32 byte oracle address with `ok_` prefix
 - `OracleQueryId` base58-encoded 32 byte oracle query id with `oq_` prefix
+
+Valid string escape codes are
+
+| Escape  | ASCII
+|---------|--------:
+| `\b`    | 8
+| `\t`    | 9
+| `\n`    | 10
+| `\v`    | 11
+| `\f`    | 12
+| `\r`    | 13
+| `\e`    | 27
+| `\xHexDigits` | *HexDigits*
+-------------------
 
 See the [identifier encoding scheme](/node/api/api_encoding.md) for the
 details on the base58 literals.
