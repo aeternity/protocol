@@ -333,7 +333,7 @@ Sophia has the following types:
 | tuple      | `(42, "Foo", true)`
 | record     | `{ owner = Call.origin, value = 100000000 }`
 | map        | `{["foo"] = 19, ["bar"] = 42}`, `{}`
-| option(int) | `Some(42)`, `None`
+| option(int)| `Some(42)`, `None`
 | state      | `state{ owner = Call.origin, magic_key = #a298105f }`
 | event      | `EventX(0, "Hello")`
 | hash       | `#000102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f`
