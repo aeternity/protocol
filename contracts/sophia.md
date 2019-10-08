@@ -57,6 +57,7 @@ some blockchain specific primitives, constructions and types have been added.
         - [AENS interface](#aens-interface)
         - [Events](#events)
         - [Contract primitives](#contract-primitives)
+    - [Compiler pragmas](#compiler-pragmas)
     - [Standard library](#standard-library)
     - [Exceptions](#exceptions)
 - [Syntax](#syntax)
@@ -957,6 +958,23 @@ The block-chain environment available to a contract is defined in three name spa
 - `Chain.difficulty` is the difficulty of the current block.
 - `Chain.gas_limit` is the gas limit of the current block.
 
+### Compiler pragmas
+
+To enforce that a contract is only compiled with specific versions of the
+Sophia compiler, you can give one or more `@compiler` pragmas at the
+top-level (typically at the beginning) of a file. For instance, to enforce that
+a contract is compiled with version 4.3 of the compiler you write
+
+```
+@compiler >= 4.3
+@compiler <  4.4
+```
+
+Valid operators in compiler pragmas are `<`, `=<`, `==`, `>=`, and `>`. Version
+numbers are given as a sequence of non-negative integers separated by dots.
+Trailing zeros are ignored, so `4.0.0 == 4`. If a constraint is violated an
+error is reported and compilation fails.
+
 ### Standard library
 
 Sophia provides standard library which is defined in terms of the language. Modules may be included manually just like all other files.
@@ -1076,6 +1094,7 @@ A Sophia file consists of a sequence of *declarations* in a layout block.
 File ::= Block(Decl)
 Decl ::= ['payable'] 'contract' Con '=' Block(Decl)
        | 'namespace' Con '=' Block(Decl)
+       | '@compiler' PragmaOp Version
        | 'include' String
        | 'type'     Id ['(' TVar* ')'] ['=' TypeAlias]
        | 'record'   Id ['(' TVar* ')'] '=' RecordType
@@ -1083,6 +1102,9 @@ Decl ::= ['payable'] 'contract' Con '=' Block(Decl)
        | EModifier* 'entrypoint' Id ':' Type
        | EModifier* 'entrypoint' Id Args [':' Type] '=' Block(Stmt)
        | FModifier* 'function' Id Args [':' Type] '=' Block(Stmt)
+
+PragmaOp ::= '<' | '=<' | '==' | '>=' | '>'
+Version  ::= Sep1(Int, '.')
 
 EModifier ::= 'payable' | 'stateful'
 FModifier ::= 'stateful' | 'private'
