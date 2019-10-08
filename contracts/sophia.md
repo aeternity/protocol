@@ -148,7 +148,7 @@ the type of the entrypoint does not match the stated contract type, the call
 fails.
 
 To recover the underlying `address` of a contract instance there is a field
-`address : address`. For instance, to send tokens to the voting contract
+`address : address`. For instance, to send tokens to the voting contract (given that it is payable)
 without calling it you can write
 
 ```javascript
