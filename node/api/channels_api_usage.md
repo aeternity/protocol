@@ -26,7 +26,7 @@ parties_.
 There are two basic types of interaction: persisted connection events and HTTP
 API calls.
 
-Although all off-chain transactions do not consume gas and do not require
+Although no off-chain transactions consume gas nor require
 fees, all on-chain transactions come with a fee. The value of the fee can be
 set by the client that initiates the action, ex. a deposit. If not provided,
 the FSM will calculate it for the client: it will multiply the minimum gas
@@ -1453,7 +1453,7 @@ chain and has the following structure:
   | fee | integer | fee to be paid to the miner |
   | nonce | integer | initiator's nonce |
 
-Since any of the participants can initiate a closing, we will use starter`
+Since any of the participants can initiate a closing, we will use `starter`
 for the peer that triggers the process and `acknowledger` for the other one.
 
 ### Initiate mutual close
