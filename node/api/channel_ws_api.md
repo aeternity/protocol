@@ -241,6 +241,7 @@ Roles:
   | ---- | ---- | ----------- | -------- |
   | amount | integer | Amount of tokens to deposit in the channel | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
+  | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
 
 #### Example
 ```javascript
@@ -380,6 +381,7 @@ Roles:
   | ---- | ---- | ----------- | -------- |
   | amount | integer | Amount of tokens to withdraw form the channel | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
+  | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
 
 #### Example
 ```javascript
@@ -648,6 +650,7 @@ Roles:
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
+  | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
 
 #### Example
 ```javascript
@@ -826,6 +829,11 @@ Roles:
 
 ### Closer initiated solo close
  * **method:** `channels.close_solo`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
 
 #### Example
 ```javascript
@@ -893,6 +901,11 @@ Roles:
 
 ### Settler initiates settle
  * **method:** `channels.settle`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
 
 #### Example
 ```javascript

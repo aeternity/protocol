@@ -17,12 +17,22 @@ You interact with an Aeternity node both through HTTP requests and WebSocket
 connections.
 To learn more about channels and their life cycle see [the doc](/channels/README.md).
 
-In each channel there are two WebSocket client parties. For each channel, a new WebSocket connection is opened. Once the channel is opened - participants are
-equal in every regard. They have different roles while opening and we have
+In each channel there are two WebSocket client parties. For each channel, a
+new WebSocket connection is opened. Once the channel is opened - participants
+are equal in every regard. They have different roles while opening and we have
 names for them - `initiator` and `responder`. For short we will call them _the
 parties_.
 
-There are two basic types of interaction: persisted connection events and HTTP API calls.
+There are two basic types of interaction: persisted connection events and HTTP
+API calls.
+
+Although no off-chain transactions consume gas nor require
+fees, all on-chain transactions come with a fee. The value of the fee can be
+set by the client that initiates the action, ex. a deposit. If not provided,
+the FSM will calculate it for the client: it will multiply the minimum gas
+required for the transaction by the node's setting for `min_miner_gas_price`.
+Note that using the `min_miner_gas_price` could be too low or too high
+according to dynamically changing miner expectations for gas price.
 
 ### WebSocket life cycle
 These are used for the scenario when all parties behave correctly and as
@@ -159,6 +169,7 @@ will describe these in groups which indicate their relation to each other.
   | port | integer | the port of the `responder`s node| Yes if `role=initiator` | No | No | No |
   | role | string | the role of the client - either `initiator` or `responder` | Yes | Yes | No |
   | minimum_depth | integer | the minimum amount of blocks to be mined | No | No | No |
+  | fee | integer | the fee to be used for the channel open transaction | No | No | Yes |
 
   `responder`'s port and host pair must be reachable from `initiator` network
   so unless participants are part of a LAN, they should be exposed to the
