@@ -1683,7 +1683,7 @@ receive another information message:
 ```
 
 ## Channel settle
-Once a 'dispute' process has been initiated with a `channel_close_tx`, and
+Once a 'dispute' process has been initiated with a `channel_close_solo_tx`, and
 once the lock period has expired, it is possible to finally close the channel
 with a `channel_settle_tx` transaction. The channel fsm can assist if asked
 with the following WebSocket request:
