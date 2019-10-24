@@ -3,9 +3,6 @@
 
 ## Important
 
-AE State Channels are missing key parts of their integration with Generalized
-Accounts.
-
 With introduction of GAs, all on-chain state channel transactions
 are to be signed using the on-chain account's authentication method and
 off-chain transactions are to be signed using the accounts' authentication
