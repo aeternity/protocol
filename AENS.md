@@ -42,7 +42,7 @@ or `привет.test` are part of the same `.test` namespace.
 
 ## Governance
 
-Lima hard fork is introducing final `.aet` registration namespace.
+Lima hard fork is introducing final `.chain` registration namespace.
 It also retires `.test` namespace.
 We will also not include mechanisms similar to the `sunrise` and `landrush`
 periods, which are common for DNS, where registration is restricted to small
@@ -63,7 +63,7 @@ path for future update to the fee structures, as it doesn't involve miners.
 
 Every entry in the `.test` namespace pays the same amount of fees.
 After Lima `.test` namespace is no longer available to claim.
-Entries in `.aet` namespace are differentiated regarding fees by their length.
+Entries in `.chain` namespace are differentiated regarding fees by their length.
 
 The new mechanism planted in Lima hard fork introduces auctions.
 We make auction parameters depend on name length.
@@ -88,9 +88,9 @@ It will protect attractive names until this functionality is exposed to larger a
 
 Claim transaction becomes a bid in an auction.
 
-Furthermore, the initial fee for name is also a value of the function of
-a name length. The function is decreasing function: for shorter names the initial
-fee will be higher.
+Furthermore, the initial fee for name is a value of the function of
+the name's length. It is decreasing function: for shorter names have higher initial
+fee.
 
 Also bidding by claim transaction is constrained by price progression.
 Each next bid has to be higher by `X` tokens, determined by percent of the price
@@ -186,9 +186,9 @@ interoperability with DNS.
 
 A name is split up into labels by the `FULL STOP (U+002E .)` character.
 These labels will also be referred to as namespaces, e.g. `mywallet.test`
-can be understood as the `mywallet` namespace in the `aet` namespace.
+can be understood as the `mywallet` namespace in the `chain` namespace.
 
-Any label that is not at the top level, e.g. `aet`, MUST be longer than
+Any label that is not at the top level, e.g. `chain`, MUST be longer than
 three characters.
 
 Labels SHOULD be at most 63 characters long and the full path
@@ -204,7 +204,7 @@ and under what circumstances they are allowed to do so.
 The only available registrars up to Lima version will be hard-coded
 ones, which own the `.` and `.test` namespaces.
 
-From Lima we will support `.aet` and limit `.test` namespace.
+From Lima we will support `.chain` and limit `.test` namespace.
 `.test` names will expire without an option of updating TTL.
 We will use expiration mechanism to purge `.test` names.
 
@@ -565,8 +565,8 @@ recorded on chain could also facilitate better price discovery.
 ### Governance
 
 Allowing users to register their own namespaces and become
-registrars themselves, i.e. if I own `mywallet.aet`, I can
-then allow others to register `name.mywallet.aet`.
+registrars themselves, i.e. if I own `mywallet.chain`, I can
+then allow others to register `name.mywallet.chain`.
 
 Consider a voting mechanism to introduce new TLDs.
 
@@ -587,7 +587,7 @@ mechanism for this, which is currently not possible.
 
 ### Fee lottery
 
-It was suggested that the fees for the `.aet` namespace could
+It was suggested that the fees for the `.chain` namespace could
 be distributed to random accounts via a lottery.
 
 
