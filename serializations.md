@@ -488,6 +488,7 @@ The content of the contract store depends on [the ABI and the VM version](/contr
 , <nonce>     :: int()
 , <name>      :: binary() %% The actual name, not the hash
 , <name_salt> :: int()
+, <name_fee>  :: int()
 , <fee>       :: int()
 , <ttl>       :: int()
 ]
