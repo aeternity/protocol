@@ -66,7 +66,7 @@ After Lima `.test` namespace is no longer available to claim.
 Entries in `.aet` namespace are differentiated regarding fees by their length.
 
 The new mechanism planted in Lima hard fork introduces auctions.
-We make auctions parameters depend on name length.
+We make auction parameters depend on name length.
 
 The claim action becomes claim attempt. For short names claim transaction
 doesn't set ownership of the name. It can be followed by another
