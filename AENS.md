@@ -42,8 +42,8 @@ or `привет.test` are part of the same `.test` namespace.
 
 ## Governance
 
-This first draft of the AENS is not going to have any governance mechanism but
-will only allow registrations under a single namespace: `.test`.
+Lima hard fork is introducing final `.chain` registration namespace.
+It also retires `.test` namespace.
 We will also not include mechanisms similar to the `sunrise` and `landrush`
 periods, which are common for DNS, where registration is restricted to small
 select groups and trademark holders in order to avoid name squatting, before
@@ -56,15 +56,49 @@ It is unclear what a good mechanism for a naming system would look
 like. If we imagine two actors both being interested in the same name,
 what would a »fair« solution be to resolve this?
 
-Fees are the main mechanism to discourage spam and squatting. This
-initial version will lock the governance fee in an account without
-private key access, in order to enable us
-to change this behaviour in the future. If we start out by giving this
-fee to miners, they will be very hesitant to accept any changes, which
-will impact their income negatively. Thus starting out with [locking](consensus/locking.md)
-could allow us an easier path for future update to the fee structures.
+Fees are the main mechanism to discourage spam and squatting.
+We lock the governance fee in an account without private key access.
+Starting out with [locking](consensus/locking.md) could allow us an easier
+path for future update to the fee structures, as it doesn't involve miners.
 
 Every entry in the `.test` namespace pays the same amount of fees.
+After Lima `.test` namespace is no longer available to claim.
+Entries in `.chain` namespace are differentiated regarding fees by their length.
+
+The new mechanism planted in Lima hard fork introduces auctions.
+We make auction parameters depend on name length.
+
+An auction starts when a valid claim transaction following preclaim transaction
+has auction triggering parameter. Currently auction starts when revealed name
+is 12 characters or shorter.
+
+For the names subject to auction, a claim transaction is an attempt of a name claim.
+It can be followed by another claim from an account different than one set in
+preclaim for given name.
+
+For names longer than 12 characters, a claim transaction sets ownership of a name.
+
+There is finite amount of time when the follow up claim in an auction is allowed.
+This time is expressed in height delta computed from function of length of the name.
+
+The function will return higher value for shorter names. In practice it means
+that the shorter the name, the longer another claim transaction is valid.
+We are starting with extremely long time that makes claim for short name final.
+It will protect attractive names until this functionality is exposed to larger audience.
+
+Claim transaction becomes a bid in an auction.
+
+Furthermore, the initial fee for name is a value of the function of
+the name's length. It is decreasing function: for shorter names have higher initial
+fee.
+
+Also bidding by claim transaction is constrained by price progression.
+Each next bid has to be higher by `X` tokens, determined by percent of the price
+defined in governance.
+
+All, functions, base fee, free length value and price progression may be subject
+to changes with governance mechanism. Non-bidding path of the name claim is purposed
+for development or testing.
 
 Each entry has a fixed expiration date on claim after which the entry should
 transition into the `revoked` state. Once it reaches this state, the name
@@ -73,12 +107,11 @@ it could be claimed again.
 
 To prevent the entry from expiring a user can, at any point before reaching
 the expiration date, update the entry, which pushes the expiration date
-into the future by the time delta of the registration time and the update
-time, e.g. if a user posts an update one week after claiming their name,
-the expiration date gets pushed one week further into the future.
-The main motivation of this expiration date is to prevent situations where
-the private keys, which control the name, are lost making the name unusable
-as well.
+into the future by the time delta of the registration time and the update time,
+e.g. if a user posts an update one week after claiming their name, the expiration
+date gets pushed one week further into the future. The main motivation of this
+expiration date is to prevent situations where the private keys, which control
+the name, are lost, making the name unusable as well.
 
 
 ## Specification
@@ -153,9 +186,9 @@ interoperability with DNS.
 
 A name is split up into labels by the `FULL STOP (U+002E .)` character.
 These labels will also be referred to as namespaces, e.g. `mywallet.test`
-can be understood as the `mywallet` namespace in the `aet` namespace.
+can be understood as the `mywallet` namespace in the `chain` namespace.
 
-Any label that is not at the top level, e.g. `aet`, MUST be longer than
+Any label that is not at the top level, e.g. `chain`, MUST be longer than
 three characters.
 
 Labels SHOULD be at most 63 characters long and the full path
@@ -168,8 +201,12 @@ long, in order to enable interoperability with DNS.
 A registrar controls who is allowed to claim names in their namespace
 and under what circumstances they are allowed to do so.
 
-The only available registrars for this AENS version will be hard-coded
+The only available registrars up to Lima version will be hard-coded
 ones, which own the `.` and `.test` namespaces.
+
+From Lima we will support `.chain` and limit `.test` namespace.
+`.test` names will expire without an option of updating TTL.
+We will use expiration mechanism to purge `.test` names.
 
 The `.` namespace registrar is restricted and MUST NOT allow anyone to
 claim any names in its namespace.
@@ -186,12 +223,15 @@ to commit to a name and after the commitment has been accepted into the
 chain, reveal the name to finish the process.
 
 A commitment should be binding, i.e. the claimant cannot change
-the value they commited to withouth changing the actual commitment
+the value they commited to without changing the actual commitment
 and hiding, so that a malicious miner learns nothing about the value
 the claimant has commited until they chose to reveal that value. This
 prevents malicious miners from front running, i.e. upon seeing a
 claim transaction, including their own claim request for the same
 name instead of the original claimant's one.
+
+After the claim transaction the aens protocol is carried in clear text,
+in order to support auctions.
 
 
 ### Hashing
@@ -223,11 +263,11 @@ Names are generally only referred to in hashed form.
 pre-claim | |              ||  _
           | |       revoke || | | transfer
           v |              || | v
-     pre-claimed -------> claimed
-                  claim    | ^
-                           | |
-                            -
-                          update
+pre-claimed|auction ---> claimed
+         | ^    <timeout>  | ^
+         | |               | |
+          -                 -
+        claim            update
 ```
 
 The pointers field in the name entry:
@@ -236,6 +276,98 @@ The pointers field in the name entry:
 
 Note that `expire` is not an explicit message that is part
 of the protocol.
+
+
+### Protocol fees and protection times
+
+Here is the function of initial bidding price depending on name length for Lima hardfork.
+
+```
+ ------------- -------------
+| name length | initial fee (unit 10^14) |
+ ------------- -------------
+| 31          | 3           |
+ ------------- -------------
+| 30          | 5           |
+ ------------- -------------
+| 29          | 8           |
+ ------------- -------------
+| 28          | 13          |
+ ------------- -------------
+| 27          | 21          |
+ ------------- -------------
+| 26          | 34          |
+ ------------- -------------
+| 25          | 55          |
+ ------------- -------------
+| 24          | 89          |
+ ------------- -------------
+| 23          | 144         |
+ ------------- -------------
+| 22          | 233         |
+ ------------- -------------
+| 21          | 377         |
+ ------------- -------------
+| 20          | 610         |
+ ------------- -------------
+| 19          | 987         |
+ ------------- -------------
+| 18          | 1597        |
+ ------------- -------------
+| 17          | 2584        |
+ ------------- -------------
+| 16          | 4181        |
+ ------------- -------------
+| 15          | 6765        |
+ ------------- -------------
+| 14          | 10946       |
+ ------------- -------------
+| 13          | 17711       |
+ ------------- -------------
+| 12          | 28657       |
+ ------------- -------------
+| 11          | 46368       |
+ ------------- -------------
+| 10          | 75025       |
+ ------------- -------------
+| 9           | 121393      |
+ ------------- -------------
+| 8           | 196418      |
+ ------------- -------------
+| 7           | 317811      |
+ ------------- -------------
+| 6           | 514229      |
+ ------------- -------------
+| 5           | 832040      |
+ ------------- -------------
+| 4           | 1346269     |
+ ------------- -------------
+| 3           | 2178309     |
+ ------------- -------------
+| 2           | 3524578     |
+ ------------- -------------
+| 1           | 5702887     |
+ ------------- -------------
+```
+
+Here is the function of timeout required to close the auction.
+It depends on name length. Timeout is expressed in blocks.
+Non zero value means that there must be no follow up claim for
+the number of blocks defined here.
+
+```
+ ------------- -------------
+| name length | time out    |
+ ------------- -------------
+| 13+         | 0           |
+ ------------- -------------
+| 9-12        | 480         |
+ ------------- -------------
+| 5-8         | 14880       |
+ ------------- -------------
+| 1-4         | 29760       |
+ ------------- -------------
+```
 
 
 #### Pre-claim
@@ -270,6 +402,8 @@ commitment := Hash(NameHash(name) + name_salt)
 | name           | 63 |
  ---------------- ----
 | name_salt      | 32 |
+ ---------------- ----|
+| name_fee       | 32 |
  ---------------- ----
 ```
 
@@ -277,9 +411,26 @@ Flow for a user:
 
 1. (optional) wait `n` blocks, s.t. that the block including the `pre-claim` cannot be reversed whp
 2. send `claim` transaction to reveal name and pay the associated fee
+3. (Lima) send follow up `claim` transaction as overbid to initial `claim`
 
-The `claim` transaction MUST be signed by the same private key as a
+From Lima transaction version is `2`.
+
+The first `claim` after `pre-claim` transaction MUST be signed by the same private key as a
 `pre-claim` transaction containing a commitment to the name and nonce.
+
+If the time delta of `pre-claim` and `claim` is bigger than 300 blocks,
+then the `claim` MUST be rejected.
+
+If the time delta of subsequent `claim` is bigger than governance defined values
+then this `claim` MUST be rejected.
+
+If the `name_fee` doesn't meet governance requirements it MUST be rejected.
+
+From Lima hardfork, the subsequent `claim` that takes part in auction MUST have `name_salt`
+equal to `0`
+
+From Lima hardfork only the first `claim` transaction MUST be signed by
+the same private key as a `pre-claim` transaction containing a commitment to the name and nonce.
 
 A `claim` transaction MUST NOT be in included in the same block as its
 `pre-claim`.
@@ -361,7 +512,7 @@ This also includes giving users the proper tools, i.e. a GUI,
 in order to level the playing field as to who is able to actually
 register names.
 
-Since we don't have an auction protocol just yet, we could hold
+Since we don't have an auction protocol at launch, we could hold
 auctions on Ethereum to establish an initial allocation of names,
 just like our ERC-20 token.
 
@@ -414,8 +565,8 @@ recorded on chain could also facilitate better price discovery.
 ### Governance
 
 Allowing users to register their own namespaces and become
-registrars themselves, i.e. if I own `mywallet.aet`, I can
-then allow others to register `name.mywallet.aet`.
+registrars themselves, i.e. if I own `mywallet.chain`, I can
+then allow others to register `name.mywallet.chain`.
 
 Consider a voting mechanism to introduce new TLDs.
 
@@ -436,7 +587,7 @@ mechanism for this, which is currently not possible.
 
 ### Fee lottery
 
-It was suggested that the fees for the `.aet` namespace could
+It was suggested that the fees for the `.chain` namespace could
 be distributed to random accounts via a lottery.
 
 
@@ -445,6 +596,3 @@ be distributed to random accounts via a lottery.
 [1] Kalodner, Harry A., et al. "An Empirical Study of Namecoin and Lessons for Decentralized Namespace Design." WEIS. 2015.
 
 [2] Ali, Muneeb, et al. "Blockstack: A Global Naming and Storage System Secured by Blockchains." USENIX Annual Technical Conference. 2016.
-
-
-
