@@ -388,6 +388,17 @@ information for the contract's execution. The result of a successful force
 progress is a new channel off-chain state. This way we keep contracts in
 channels trustless.
 
+## Node configuration
+
+Aeternity nodes are prepared to service state channels via a JSON-RPC API over WebSocket.
+
+The following configuration values control the support for state channels:
+
+* `websocket.port` - The listen port for the state channels API. No default, meaning that the WebSocket API is unavailable by default.
+* `websocket.listen_address` - The listen address for the WebSocket API. Default: `127.0.0.1`, meaning that only local connections are allowed.
+* `websocket.acceptors` - The number of concurrent socket acceptors (default: `10`). This is mainly an optimization, since the node can service requests at good speed even with one acceptor.
+* `channels.max_count` - The maximum number of concurrently active state channel clients served by the node (default: `1000`). The limit checking will currently not be applied to channels being reestablished, as the node has already agreed to service them.
+
 ## Light node requirements
 
 
