@@ -68,12 +68,17 @@ Entries in `.aet` namespace are differentiated regarding fees by their length.
 The new mechanism planted in Lima hard fork introduces auctions.
 We make auction parameters depend on name length.
 
-The claim action becomes claim attempt. For short names claim transaction
-doesn't set ownership of the name. It can be followed by another
-claim from an account different than one set in preclaim for given name.
-Names below 13 characters are considered short.
+An auction starts when a valid claim transaction following preclaim transaction
+has auction triggering parameter. Currently auction starts when revealed name
+is 12 characters or shorter.
 
-There is finite amount of time when the follow up claim is allowed.
+For the names subject to auction, a claim transaction is an attempt of a name claim.
+It can be followed by another claim from an account different than one set in
+preclaim for given name.
+
+For names longer than 12 characters, a claim transaction sets ownership of a name.
+
+There is finite amount of time when the follow up claim in an auction is allowed.
 This time is expressed in height delta computed from function of length of the name.
 
 The function will return higher value for shorter names. In practice it means
@@ -106,7 +111,7 @@ into the future by the time delta of the registration time and the update time,
 e.g. if a user posts an update one week after claiming their name, the expiration
 date gets pushed one week further into the future. The main motivation of this
 expiration date is to prevent situations where the private keys, which control
-the name, are lost making the name unusable as well.
+the name, are lost, making the name unusable as well.
 
 
 ## Specification
@@ -225,7 +230,8 @@ prevents malicious miners from front running, i.e. upon seeing a
 claim transaction, including their own claim request for the same
 name instead of the original claimant's one.
 
-After the claim transaction auctioning the name is conducted in clear
+After the claim transaction the aens protocol is carried in clear text,
+in order to support auctions.
 
 
 ### Hashing
@@ -257,7 +263,7 @@ Names are generally only referred to in hashed form.
 pre-claim | |              ||  _
           | |       revoke || | | transfer
           v |              || | v
-     pre-claimed -------> claimed
+pre-claimed|auction ---> claimed
          | ^    <timeout>  | ^
          | |               | |
           -                 -
@@ -278,7 +284,7 @@ Here is the function of initial bidding price depending on name length for Lima 
 
 ```
  ------------- -------------
-| name length | initial fee |
+| name length | initial fee (unit 10^14) |
  ------------- -------------
 | 31          | 3           |
  ------------- -------------
