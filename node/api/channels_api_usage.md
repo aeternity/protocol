@@ -57,7 +57,7 @@ but are not necessarily part of the channel's life cycle.
 
 * [Update conflict](#update-conflict)
 
-* [Cancel update](#cancel-update)
+* [Abort update](#abort-update)
 
 * [Generic messages](#generic-messages)
 
@@ -1948,7 +1948,7 @@ message containing a reference to the correct state.
 }
 ```
 
-#### Cancel update
+#### Abort update
 
 The update flow relies on participants reaching agreement according to
 updates. The process of getting there is not changing the channel state and
@@ -1990,12 +1990,17 @@ a different set of opening arguments.
 The request for cancling an update is the same, no matter if the canceled
 update is triggered by the other party or not.
 
+When there is a pending udpate, waiting for the client to approve, one can
+also abort it using the same method one would use for providing the
+authenticated transaction. The difference is that one provides an error code
+instead.
+
 ```javascript
 {
    "jsonrpc":"2.0",
-   "method":"channels.cancel",
+   "method":<signing method>,
    "params":{
-
+      "error":147
    }
 }
 ```
@@ -2033,9 +2038,10 @@ will receive an error response instead:
       "message":"Rejected",
       "request":{
          "jsonrpc":"2.0",
-         "method":"channels.cancel",
-         "params":{
-         }
+         "method":"channels.update",
+            "params":{
+                "error":147
+            }
       }
    },
    "id":null,
@@ -2049,18 +2055,18 @@ receiving the following message:
 
 ```javascript
 {
-   "jsonrpc":"2.0",
-   "method":"channels.conflict",
-   "params":{
+  "jsonrpc": "2.0",
+  "method": "channels.conflict",
+  "params": {
+    "channel_id":"ch_95Ya...",
+    "data": {
       "channel_id":"ch_95Ya...",
-      "data":{
-         "channel_id":"ch_95Ya...",
-         "error_code":4,
-         "error_msg":"abort",
-         "round":1
-      }
-   },
-   "version":1
+      "error_code": 147,
+      "error_msg": "user-defined",
+      "round": 5
+    }
+  },
+  "version": 1
 }
 ```
 
