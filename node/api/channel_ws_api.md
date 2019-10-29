@@ -1253,7 +1253,7 @@ message for it:
 }
 ```
 
-If the other participant had initiated the update that out client had aborted,
+If the other participant had initiated the update that our client had aborted,
 the other participant's FSM will inform its client of each error, using a
 `conflict` report.
 

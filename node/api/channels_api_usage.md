@@ -1959,7 +1959,7 @@ next update shall be.
 Even if a proper protocol is in place for reaching an agreement, there might
 be a need of the ability to cancel update. This is only possible while the FSM
 is waiting for an authentication by this particular client. Once an update is
-authenticated by the client, it can not be canceled by this client.
+authenticated by a client, that client can no longer cancel it.
 
 The FSM produces two types of transactions according to how many
 authentications are required for them:
@@ -1987,7 +1987,7 @@ that produces it so if the responder had different expectations for it, one is
 expected to close the connection instead. Then it can be reopened with
 a different set of opening arguments.
 
-The request for cancling an update is the same, no matter if the canceled
+The request for cancelling an update is the same, no matter if the canceled
 update is triggered by the other party or not.
 
 When there is a pending udpate, waiting for the client to approve, one can
