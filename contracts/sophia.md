@@ -438,6 +438,19 @@ function get_left(x : one_or_both('a, 'b)) : option('a) =
 
 ### Lists
 
+##### This description seems strange to me:
+* How can a singly-linked list NOT be dynamically sized (unless it is not a list but a dynamic array)
+* Is the list itself immutable (in which case - how can it be dynamically sized?), or are the list elements immutable
+* If it is not the list itself that is immutable, is it then the elements or the pointers to the elements that are immutable? (big difference)
+* The word 'homogeneous' I assume mean that list elements must have the same type? (Pretty standard, so that word seems superfluous)
+
+I suggest, based on my assumptions:
+"A Sophia list is a dynamically sized, homogenous, immutable, singly linked list."
+=>
+"A Sophia list is a singly linked list, which adheres to the principle of immutability from the traditional functional programming paradigm. List elements cannot be altered, and any operations which change the list in any way must be bound to a new value."
+
+(or something similar :)
+
 A Sophia list is a dynamically sized, homogenous, immutable, singly
 linked list. A list is constructed with the syntax `[1, 2, 3]`. The
 elements of a list can be any of datatype but they must have the same
