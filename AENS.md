@@ -236,6 +236,9 @@ in order to support auctions.
 
 ### Hashing
 
+Names are generally only referred to in hashed form.
+
+#### Until Lima hardfork
 We are going to adopt the `NameHash` as defined by the ENS in
 [EIP-137](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md#namehash-algorithm)
 using Blake2b (256 bits digest) instead.
@@ -249,7 +252,10 @@ def namehash(name):
     return Blake2b(namehash(remainder) + Blake2b(label))
 ```
 
-Names are generally only referred to in hashed form.
+#### From Lima hardfork
+
+From Lima we don't use `NameHash` anymore. Instead, it is a 32 byte Blake2b hash
+of the UTF8 name that is IDNA encoded.
 
 
 ### Protocol
