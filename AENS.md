@@ -255,7 +255,7 @@ def namehash(name):
 #### From Lima hardfork
 
 From Lima we don't use `NameHash` anymore. Instead, it is a 32 byte Blake2b hash
-of the UTF8 name that is IDNA encoded.
+of the IDNA encoded UTF-8 name.
 
 
 ### Protocol
