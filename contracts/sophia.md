@@ -301,7 +301,7 @@ Sophia has the following types:
 
 | Type       | Description                     | Example
 | ---------- | ------------------------------- | -------:
-| int        | A 256 bit 2-complement integer  | ```-1```
+| int        | An arbitrary length 2-complement integer  | ```-1```
 | address    | Aeternity address, 32 bytes     | ```Call.origin```
 | bool       | A Boolean                       | ```true```
 | bits       | A bit field                     | ```Bits.none```
