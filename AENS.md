@@ -470,6 +470,8 @@ the future.
 We do not require an additional fee for extending the lease.
 
 The `pointers` field SHOULD NOT contain multiple entries with the same key.
+The `pointers` can point to one of: account address, oracle id,
+channel id or contract id.
 
 #### Transfer
 
