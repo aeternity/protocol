@@ -256,7 +256,8 @@ Each (on-chain) transaction has the following fields:
   minimal gas price, which (after MINERVA hard fork height) is
   `1000000` (*10^-18) aeons. (Before MINERVA hard fork height it was
   `1` (*10^-18) aeons.)
-* Time to live (TTL).
+* Time to live (TTL). The last generation where the transaction is valid.
+  0 means it is valid forever (and is the default value in many places).
 
 *Note*: There is also a node configurable minimum gas price - this is the
 minimum gas price a node accepts and is not under consensus. This value is
