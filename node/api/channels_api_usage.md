@@ -1957,9 +1957,9 @@ use [generic messages](#generic_messages) to reach consensus around what the
 next update shall be.
 
 Even if a proper protocol is in place for reaching an agreement, there might
-be a need for cancelling an update explicitly. This is only possible while the FSM
-is waiting for an authentication by this particular client. Once an update is
-authenticated by a client, that client can no longer cancel it.
+be a need for aborting an update explicitly. This is only possible while the
+FSM is waiting for an authentication by this particular client. Once an update
+is authenticated by a client, that client can no longer abort it.
 
 The FSM produces two types of transactions according to how many
 authentications are required for them:
@@ -1971,24 +1971,24 @@ authentications are required for them:
 * mutually authenticated transactions - all the rest
 
 When a client is prompted to authenticate an update, one is expected to either
-agree to it with an authentication or to cancel it. If it is a solo
-authenticated transaction or if it is a mutually authentication one but the
-client started the update - the other FSM is not aware of the pending update
-yet. In this case no message is sent to the other FSM.
-If the other party has started the update and has already authenticated it,
-our client can still cancel it. If that happens the FSM will inform the other
+agree to it with an authentication or to abort it. Depending on the source of
+the update - the other FSM might receive a message or not. If it was this
+client that triggered the pending update - the other FSM is not aware of it
+yet.  In this case no message is sent to the other FSM.  If the other party
+has started the update and has already authenticated it, our client can still
+either authenticate or abort it. If aborted - the FSM will inform the other
 party that the update had been rejected, sending an abort conflict message.
 
-If the update has been cancelled, the FSM returns to the last co-authenticated
+If the update has been aborted, the FSM returns to the last co-authenticated
 state and enters an `open` state, waiting for a new update to be initiated.
 Since there is no previous stable state before the channel initial
-transaction, the `channel_create_tx` can not be cancelled. It is the initiator
+transaction, the `channel_create_tx` can not be aborted. It is the initiator
 that produces it so if the responder had different expectations for it, one is
 expected to close the connection instead. Then it can be reopened with
 a different set of opening arguments.
 
-The request for cancelling an update is the same, no matter if the cancelled
-update is triggered by the other party or not.
+The request for aborting an update is the same, no matter if the pending
+update had been triggered by the other party or not.
 
 When there is a pending udpate, waiting for the client to approve, one can
 also abort it using the same method one would use for providing the
@@ -2014,14 +2014,14 @@ The response the client receives in that case is:
    "params":{ 
       "channel_id":"ch_95Ya...",
       "data":{ 
-         "event":"canceled_update"
+         "event":"aborted_update"
       }
    },
    "version":1
 }
 ```
 
-If the client tries sending a cancel message when it is not applicable, it
+If the client tries sending a abort message when it is not applicable, it
 will receive an error response instead:
 
 ```javascript
@@ -2050,7 +2050,7 @@ will receive an error response instead:
 }
 ```
 
-If the other party had triggered the cancelled update, it is informed with
+If the other party had triggered the aborted update, it is informed with
 receiving the following message:
 
 ```javascript

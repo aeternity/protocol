@@ -1234,7 +1234,29 @@ fall back to the latest mutually-signed state. Currently defined error codes are
 }
 ```
 
-#### Positive response
+#### Successful operation response
+
+ * **method:** `channels.info`
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | channel_id | string | channel ID | Yes |
+  | data | object | message data | Yes |
+
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | event | string | `canceled_update` | Yes |
+
+ * **data:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | message | string | `Not allowed at current channel state` | Yes |
+  | code | integer | `1018` | Yes |
+
 
 If the abort of the update is successful, the client that aborted receives a
 message for it:
@@ -1246,7 +1268,7 @@ message for it:
    "params":{ 
       "channel_id":"ch_95YaTDZAysRu3GkmW2yKkCK1H4fGtcttoj2qwFDfUSduTpCPf",
       "data":{ 
-         "event":"canceled_update"
+         "event":"aborted_update"
       }
    },
    "version":1
@@ -1275,7 +1297,7 @@ the other participant's FSM will inform its client of each error, using a
 }
 ```
 
-#### Negative response
+#### Unsuccessful operation response
 
  * **method:** the request method
  * **params:**
@@ -1300,8 +1322,6 @@ the other participant's FSM will inform its client of each error, using a
   | ---- | ---- | ----------- | -------- |
   | message | string | `Not allowed at current channel state` | Yes |
   | code | integer | `1018` | Yes |
-
-##### Negative response
 
 If the specified update abort can not be performed now, the request receives
 the following error:
