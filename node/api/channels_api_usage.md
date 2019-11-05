@@ -1970,25 +1970,25 @@ authentications are required for them:
   * `channel_snapshot_tx`
 * mutually authenticated transactions - all the rest
 
-When a client is prompted to authenticate an update, one is expected to either
+When a client is prompted to authenticate an update, it is expected to either
 agree to it with an authentication or to abort it. Depending on the source of
-the update - the other FSM might receive a message or not. If it was this
+the update, the other FSM might receive a message or not. If it was this
 client that triggered the pending update - the other FSM is not aware of it
 yet.  In this case no message is sent to the other FSM.  If the other party
-has started the update and has already authenticated it, our client can still
+started the update and has already authenticated it, our client can still
 either authenticate or abort it. If aborted - the FSM will inform the other
-party that the update had been rejected, sending an abort conflict message.
+party that the update was rejected, sending an abort conflict message.
 
-If the update has been aborted, the FSM returns to the last co-authenticated
+If the update is aborted, the FSM returns to the last co-authenticated
 state and enters an `open` state, waiting for a new update to be initiated.
 Since there is no previous stable state before the channel initial
 transaction, the `channel_create_tx` can not be aborted. It is the initiator
-that produces it so if the responder had different expectations for it, one is
-expected to close the connection instead. Then it can be reopened with
+that produces it so if the responder had different expectations for it, it is
+better to close the connection instead. Then it can be reopened with
 a different set of opening arguments.
 
-The request for aborting an update is the same, no matter if the pending
-update had been triggered by the other party or not.
+The request for aborting an update is the same, no matter whether or not the pending
+update was triggered by the other party.
 
 When there is a pending udpate, waiting for the client to approve, one can
 also abort it using the same method one would use for providing the
