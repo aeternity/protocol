@@ -1248,7 +1248,7 @@ fall back to the latest mutually-signed state. Currently defined error codes are
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | event | string | `canceled_update` | Yes |
+  | event | string | `aborted_update` | Yes |
 
  * **data:**
 
