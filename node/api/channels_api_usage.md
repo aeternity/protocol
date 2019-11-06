@@ -57,6 +57,8 @@ but are not necessarily part of the channel's life cycle.
 
 * [Update conflict](#update-conflict)
 
+* [Abort update](#abort-update)
+
 * [Generic messages](#generic-messages)
 
 * [Deposit](#deposit-events)
@@ -1939,6 +1941,128 @@ message containing a reference to the correct state.
     "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
     "data": {
       "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
+      "round": 5
+    }
+  },
+  "version": 1
+}
+```
+
+#### Abort update
+
+The update flow relies on participants reaching agreement according to
+updates. The process of getting there is not changing the channel state and
+thus is not part of the off-chain protocol. If needed, clients are expected to
+use [generic messages](#generic_messages) to reach consensus around what the
+next update shall be.
+
+Even if a proper protocol is in place for reaching an agreement, there might
+be a need for aborting an update explicitly. This is only possible while the
+FSM is waiting for an authentication by this particular client. Once an update
+is authenticated by a client, that client can no longer abort it.
+
+The FSM produces two types of transactions according to how many
+authentications are required for them:
+* solo authenticated transactions:
+  * `channel_close_solo_tx`
+  * `channel_slash_tx`
+  * `channel_settle_tx`
+  * `channel_snapshot_tx`
+* mutually authenticated transactions - all the rest
+
+When a client is prompted to authenticate an update, it is expected to either
+agree to it with an authentication or to abort it. Depending on the source of
+the update, the other FSM might receive a message or not. If it was this
+client that triggered the pending update - the other FSM is not aware of it
+yet.  In this case no message is sent to the other FSM.  If the other party
+started the update and has already authenticated it, our client can still
+either authenticate or abort it. If aborted - the FSM will inform the other
+party that the update was rejected, sending an abort conflict message.
+
+If the update is aborted, the FSM returns to the last co-authenticated
+state and enters an `open` state, waiting for a new update to be initiated.
+Since there is no previous stable state before the channel initial
+transaction, the `channel_create_tx` can not be aborted. It is the initiator
+that produces it so if the responder had different expectations for it, it is
+better to close the connection instead. Then it can be reopened with
+a different set of opening arguments.
+
+The request for aborting an update is the same, no matter whether or not the pending
+update was triggered by the other party.
+
+When there is a pending udpate, waiting for the client to approve, one can
+also abort it using the same method one would use for providing the
+authenticated transaction. The difference is that one provides an error code
+instead.
+
+```javascript
+{
+   "jsonrpc":"2.0",
+   "method":<signing method>,
+   "params":{
+      "error":147
+   }
+}
+```
+
+The response the client receives in that case is:
+
+```javascript
+{ 
+   "jsonrpc":"2.0",
+   "method":"channels.info",
+   "params":{ 
+      "channel_id":"ch_95Ya...",
+      "data":{ 
+         "event":"aborted_update"
+      }
+   },
+   "version":1
+}
+```
+
+If the client tries sending a abort message when it is not applicable, it
+will receive an error response instead:
+
+```javascript
+{
+   "channel_id":"ch_95Ya...",
+   "error":{
+      "code":3,
+      "data":[
+         {
+            "code":1018,
+            "message":"Not allowed at current channel state"
+         }
+      ],
+      "message":"Rejected",
+      "request":{
+         "jsonrpc":"2.0",
+         "method":"channels.update",
+            "params":{
+                "error":147
+            }
+      }
+   },
+   "id":null,
+   "jsonrpc":"2.0",
+   "version":1
+}
+```
+
+If the other party had triggered the aborted update, it is informed with
+receiving the following message:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.conflict",
+  "params": {
+    "channel_id":"ch_95Ya...",
+    "data": {
+      "channel_id":"ch_95Ya...",
+      "error_code": 147,
+      "error_msg": "user-defined",
       "round": 5
     }
   },

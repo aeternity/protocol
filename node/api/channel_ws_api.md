@@ -1152,6 +1152,7 @@ Roles:
   "version": 1
 }
 ```
+
 ## System messages
 
 ### ping
@@ -1233,9 +1234,52 @@ fall back to the latest mutually-signed state. Currently defined error codes are
 }
 ```
 
-The FSM will inform its client of each error, using a `conflict` report.
+#### Successful operation response
 
-#### Example
+ * **method:** `channels.info`
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | channel_id | string | channel ID | Yes |
+  | data | object | message data | Yes |
+
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | event | string | `aborted_update` | Yes |
+
+ * **data:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | message | string | `Not allowed at current channel state` | Yes |
+  | code | integer | `1018` | Yes |
+
+
+If the abort of the update is successful, the client that aborted receives a
+message for it:
+
+```javascript
+{ 
+   "jsonrpc":"2.0",
+   "method":"channels.info",
+   "params":{ 
+      "channel_id":"ch_95YaTDZAysRu3GkmW2yKkCK1H4fGtcttoj2qwFDfUSduTpCPf",
+      "data":{ 
+         "event":"aborted_update"
+      }
+   },
+   "version":1
+}
+```
+
+If the other participant had initiated the update that our client had aborted,
+the other participant's FSM will inform its client of each error, using a
+`conflict` report.
+
+##### Example
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1252,3 +1296,59 @@ The FSM will inform its client of each error, using a `conflict` report.
   "version": 1
 }
 ```
+
+#### Unsuccessful operation response
+
+ * **method:** the request method
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | channel_id | string | channel ID | Yes |
+  | error | object | error data object | Yes |
+
+ * **error:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | message | string | `Rejected` | Yes |
+  | code | integer | the error code provided | Yes |
+  | data | json | error description | Yes |
+  | request | json | the failed request | Yes |
+
+ * **data:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | message | string | `Not allowed at current channel state` | Yes |
+  | code | integer | `1018` | Yes |
+
+If the specified update abort can not be performed now, the request receives
+the following error:
+
+```javascript
+{
+   "channel_id":"ch_95YaTDZAysRu3GkmW2yKkCK1H4fGtcttoj2qwFDfUSduTpCPf",
+   "error":{
+      "code":3,
+      "data":[
+         {
+            "code":1018,
+            "message":"Not allowed at current channel state"
+         }
+      ],
+      "message":"Rejected",
+      "request":{
+         "jsonrpc":"2.0",
+         "method":"channels.update",
+         "params":{
+           "error":147
+         }
+      }
+   },
+   "id":null,
+   "jsonrpc":"2.0",
+   "version":1
+}
+```
+
