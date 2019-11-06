@@ -681,7 +681,7 @@ providing an authenticated by both payload with `round := 24` or higher but her
 dispute would bump the lock by `lock_period` too.
 
 
-### `channel_slash`
+### Channel slash
 
 If a malicious party sent a `channel_close_solo` or `channel_force_progress_tx`
 with an outdated state, the honest party has the opportunity to issue a
@@ -709,35 +709,24 @@ pushed in subsequent transactions. It is up to participants to decide if they
 want to post them at all. Thus the accumulative balances of the accounts in the
 slash transaction can be lower than the channel balance persisted on-chain.
 
-The payload can be either empty or an authenticated by both off-chain state
-transaction.
-
-
-#### Empty payload
-
-If the payload is empty, the last on-chain persisted state and `solo_round` are
-used. In this case the proof of inclusion root hash MUST be equal to the one
-persisted for the channel on-chain. If that state was produced unilaterally,
-i.e. via a `channel_force_progress_tx`, making
-`Channel(channel_id).round != Channel(channel_id).solo_round`, the slash is
-based on the `solo_round` and thus can still be disputed.
-
-- `Channel(channel_id).locked_until := Block.height + Channel(channel_id).lock_period`
-
+The payload must be an authenticated by both off-chain state transaction.
 
 #### Off-chain transaction payload
 
-If the payload is a transaction it MUST be a `channel_offchain_tx`. It MUST be
-authenticated by both peers.
+The payload is a transaction and it MUST be a `channel_offchain_tx` one. It
+MUST be authenticated by both peers.
 
 Payload is a valid transaction that has:
 
 * `state_hash` equal to the proof of inclusion's root hash. This is a proof
   that the PoI is correct
 * `channel_id` being the same as the transaction `channel_id`
-* `round` greater than `Channel(channel_id).round`. If
-  `Channel(channel_id).solo_round > Channel(channel_id).round`, then
-  this slash will invalidate progress produced on-chain
+* `round` greater than the last on-chain provided co-authenticated channel
+  state. If the latest on-chain rounds were produced by a
+  `channel_force_progress_tx` transactions that were based on an older channel
+  state - the whole chain of forced progressed channel states are invalidated
+  and replaced by the state provided by the slash. Co-authenticated channel
+  transactions replace unilateral ones with the same round.
 
 If true, the following changes will be made:
 
@@ -745,7 +734,6 @@ If true, the following changes will be made:
 - `Channel(channel_id).solo_round := payload.round`
 - `Channel(channel_id).state_hash := payload.state_hash`
 - `Channel(channel_id).locked_until := Block.height + Channel(channel_id).lock_period`
-
 
 #### Requirements
 
