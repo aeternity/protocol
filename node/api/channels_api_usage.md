@@ -766,6 +766,31 @@ Since one of them starts the update and the other acknowledges is below we are
 going to use `starter` and `acknowledger`. Both the initiator and the
 responder can take either of the roles.
 
+### Meta-information
+Update requests that modify the off-chain state can be optionally annotated with
+`meta` information objects. The parameter `"meta": [ string() ]` may be added, and each
+meta information object can be an arbitrary string. Operations that support this are
+transfer (`update.new`), `deposit`, `withdrawal`, `new_contract` and `call_contract`.
+Meta information does not get included in on-chain transactions, nor does it affect the
+state hash. It can be used to convey useful application-level information to the other
+party in the channel.
+
+Example:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.update.new",
+  "params": {
+    "amount": "1",
+    "from": "ak_txXinM233n3S1TiLArz5NmGTQtxZoYnia29HU4dPjVS2bthQe",
+    "meta": [
+      "meta 1"
+    ],
+    "to": "ak_K3boWaT4GXP2hENENPnVnCmJSHjeHbHaszkJQsNGuTWyD4PMq"
+  }
+}
+```
+
 ### Transfer
 The transfer update is moving tokens from one channel account to another. The update is a change to be applied on top of the latest state. It has the
 following structure:

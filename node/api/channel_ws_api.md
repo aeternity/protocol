@@ -33,6 +33,7 @@ Roles:
   | to | string | Participant's account to add tokens to | Yes |
   | amount | integer | Amount of tokens to transfer | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
+  | meta | array of strings | Meta information about the update | No |
 
 #### Example
 ```javascript
@@ -241,6 +242,7 @@ Roles:
   | amount | integer | Amount of tokens to deposit in the channel | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
   | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+  | meta | array of strings | Meta information about the update | No |
 
 #### Example
 ```javascript
@@ -381,6 +383,7 @@ Roles:
   | amount | integer | Amount of tokens to withdraw form the channel | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
   | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+  | meta | array of strings | Meta information about the update | No |
 
 #### Example
 ```javascript
@@ -522,6 +525,7 @@ Roles:
   | abi\_version | integer | contract virtual machine abi version | Yes |
   | deposit | integer | contract creation deposit | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
+  | meta | array of strings | Meta information about the update | No |
 
 #### Example
 
@@ -551,6 +555,7 @@ Roles:
   | abi\_version | integer | call abi version | Yes |
   | amount | integer | amount of tokens to transfer to contract | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
+  | meta | array of strings | Meta information about the update | No |
 
 #### Example
 
