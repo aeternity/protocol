@@ -2511,8 +2511,8 @@ the response is an error.
 
 #### Dry-run a contract
 In order to get the result of a potential contract call, one might need to
-dry-run a contract call. It takes the exact same arguments as a call would and
-returns the `call` object.
+dry-run a contract call. It takes the exact same arguments as a call would (including
+optional `meta` objects) and returns the `call` object.
 
 ```javascript
 {
