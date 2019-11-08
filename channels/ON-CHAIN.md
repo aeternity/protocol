@@ -709,8 +709,6 @@ pushed in subsequent transactions. It is up to participants to decide if they
 want to post them at all. Thus the accumulative balances of the accounts in the
 slash transaction can be lower than the channel balance persisted on-chain.
 
-The payload must be an authenticated by both off-chain state transaction.
-
 #### Off-chain transaction payload
 
 The payload is a transaction and it MUST be a `channel_offchain_tx`. It
