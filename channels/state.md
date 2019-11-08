@@ -33,9 +33,9 @@ off-chain state consists of subtrees. Those are:
 * contracts - where the contracts and their states are stored
 
 * calls - where the contract call from the last update are stored. This tree
-  is being purged at every round so the state of the channel is not increased
-  by calls. This is useful especially in long running channels with a lot of
-  calls. This is really important for forced progress transaction as if the
+  is being purged at every round so the state of the channel is not enlarged
+  by calls. This is important especially for long running channels with many
+  calls. This has implications for forced progress transactions as if the
   old calls had not been purged, the `calls` tree would have a different root
   hash and this would lead to a different `state_hash` of the channel state
 

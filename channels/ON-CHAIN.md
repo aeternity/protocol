@@ -713,7 +713,7 @@ The payload must be an authenticated by both off-chain state transaction.
 
 #### Off-chain transaction payload
 
-The payload is a transaction and it MUST be a `channel_offchain_tx` one. It
+The payload is a transaction and it MUST be a `channel_offchain_tx`. It
 MUST be authenticated by both peers.
 
 Payload is a valid transaction that has:
@@ -722,8 +722,8 @@ Payload is a valid transaction that has:
   that the PoI is correct
 * `channel_id` being the same as the transaction `channel_id`
 * `round` greater than the last on-chain provided co-authenticated channel
-  state. If the latest on-chain rounds were produced by a
-  `channel_force_progress_tx` transactions that were based on an older channel
+  state. If the latest on-chain round(s) were produced by
+  `channel_force_progress_tx` transaction(s) that were based on an older channel
   state - the whole chain of forced progressed channel states are invalidated
   and replaced by the state provided by the slash. Co-authenticated channel
   transactions replace unilateral ones with the same round.
