@@ -274,9 +274,9 @@ both the `Fee` and the `GasPrice`.
  -------------- -----
 | recipient    | 32  |
  -------------- -----
-| amount       | 8   |
+| amount       | var |
  -------------- -----
-| fee          | 8   |
+| fee          | var |
  -------------- -----
 | nonce        | 8   |
  -------------- -----
