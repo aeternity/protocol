@@ -998,7 +998,7 @@ authorization data.
 
 ### PayingFor
 The `PayingFor` transaction is available from version 5, Iris release. By using
-it an account `P` can pay for the transaction (transaction fee + gas) of another
+it,  an account `P` can pay for the transaction (transaction fee + gas) of another
 account `A`.
 
 #### PayingFor transaction
