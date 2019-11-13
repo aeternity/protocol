@@ -13,7 +13,7 @@ ws://localhost:3014/channel?channel_reserve=2&host=localhost&initiator_amount=70
     "channel_id": null,
     "data": {
       "event": "fsm_up",
-      "fsm_id": "ba_vCF3sVK0kmbBJ+3iBdKFnS6+2fPlzOsmuE2CkP6U6Onp3nN/"
+      "fsm_id": "ba_MShI5xsbV3B5/QdhZDScP7Zo0FLjFRFQL35nBwDXNqkZxC+h"
     }
   },
   "version": 1
@@ -37,7 +37,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
     "channel_id": null,
     "data": {
       "event": "fsm_up",
-      "fsm_id": "ba_hHi2vYPg+e1vPsiCvaFVNAQq3d70utT+Lq35zUEtkZG418uK"
+      "fsm_id": "ba_Oa289vb2cNGzEMZ8EjvhP7JbOShOuAI027ySbfKiMAh+ug1r"
     }
   },
   "version": 1
@@ -91,7 +91,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "params": {
     "channel_id": null,
     "data": {
-      "signed_tx": "tx_+IgLAcC4g/iBMgGhAZxDM9BiTzFpS5hy+lom7XXexvNUoE4C7mSKujTfKLPLhj+qJSJgAKEBS/jO5UGWg32L0vdFXoVxcYcJUTd0aWCtT79BCq7KqZqGJGE5yoAAAgoAhhAGeddIAMCgGLhuErzxBZ2xsoxOkYB+IYb24CHBcl28KSToXkG/rEsBGVGlIQ==",
+      "signed_tx": "tx_+IgLAcC4g/iBMgGhAZxDM9BiTzFpS5hy+lom7XXexvNUoE4C7mSKujTfKLPLhj+qJSJgAKEBS/jO5UGWg32L0vdFXoVxcYcJUTd0aWCtT79BCq7KqZqGJGE5yoAAAgoAhhAGeddIAMCgGLhuErzxBZ2xsoxOkYB+IYb24CHBcl28KSToXkG/rEsEJSlZ5g==",
       "updates": []
     }
   },
@@ -102,11 +102,11 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 #### initiator ---> node
 ```javascript
 {
-  "id": -576460752303423007,
+  "id": -576460752303422997,
   "jsonrpc": "2.0",
   "method": "channels.initiator_sign",
   "params": {
-    "signed_tx": "tx_+MsLAfhCuEDtZcNPo4swUJo9StT3dvjYW4f3en3siJlh+Er0zTt9h5UviOlQyytCE88m15Y9aAc9uM48G3nBshFcQ1wtsxgEuIP4gTIBoQGcQzPQYk8xaUuYcvpaJu113sbzVKBOAu5kiro03yizy4Y/qiUiYAChAUv4zuVBloN9i9L3RV6FcXGHCVE3dGlgrU+/QQquyqmahiRhOcqAAAIKAIYQBnnXSADAoBi4bhK88QWdsbKMTpGAfiGG9uAhwXJdvCkk6F5Bv6xLAW7I1RY="
+    "signed_tx": "tx_+MsLAfhCuEAuu0CkraMGoVH2Y8sF+fv6KCNgLkXWo/m9GrtXf0PCh3X3ysSxRkFVqPnsJPswyWdJ3mc4NSqnCE/N2lVK4SQPuIP4gTIBoQGcQzPQYk8xaUuYcvpaJu113sbzVKBOAu5kiro03yizy4Y/qiUiYAChAUv4zuVBloN9i9L3RV6FcXGHCVE3dGlgrU+/QQquyqmahiRhOcqAAAIKAIYQBnnXSADAoBi4bhK88QWdsbKMTpGAfiGG9uAhwXJdvCkk6F5Bv6xLBBRQF7Q="
   }
 }
 ```
@@ -115,7 +115,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 ```javascript
 {
   "channel_id": null,
-  "id": -576460752303423007,
+  "id": -576460752303422997,
   "jsonrpc": "2.0",
   "result": "ok",
   "version": 1
@@ -145,7 +145,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "params": {
     "channel_id": null,
     "data": {
-      "signed_tx": "tx_+MsLAfhCuEDtZcNPo4swUJo9StT3dvjYW4f3en3siJlh+Er0zTt9h5UviOlQyytCE88m15Y9aAc9uM48G3nBshFcQ1wtsxgEuIP4gTIBoQGcQzPQYk8xaUuYcvpaJu113sbzVKBOAu5kiro03yizy4Y/qiUiYAChAUv4zuVBloN9i9L3RV6FcXGHCVE3dGlgrU+/QQquyqmahiRhOcqAAAIKAIYQBnnXSADAoBi4bhK88QWdsbKMTpGAfiGG9uAhwXJdvCkk6F5Bv6xLAW7I1RY=",
+      "signed_tx": "tx_+MsLAfhCuEAuu0CkraMGoVH2Y8sF+fv6KCNgLkXWo/m9GrtXf0PCh3X3ysSxRkFVqPnsJPswyWdJ3mc4NSqnCE/N2lVK4SQPuIP4gTIBoQGcQzPQYk8xaUuYcvpaJu113sbzVKBOAu5kiro03yizy4Y/qiUiYAChAUv4zuVBloN9i9L3RV6FcXGHCVE3dGlgrU+/QQquyqmahiRhOcqAAAIKAIYQBnnXSADAoBi4bhK88QWdsbKMTpGAfiGG9uAhwXJdvCkk6F5Bv6xLBBRQF7Q=",
       "updates": []
     }
   },
@@ -156,11 +156,11 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 #### responder ---> node
 ```javascript
 {
-  "id": -576460752303423006,
+  "id": -576460752303422996,
   "jsonrpc": "2.0",
   "method": "channels.responder_sign",
   "params": {
-    "signed_tx": "tx_+QENCwH4hLhA7WXDT6OLMFCaPUrU93b42FuH93p97IiZYfhK9M07fYeVL4jpUMsrQhPPJteWPWgHPbjOPBt5wbIRXENcLbMYBLhA8M8uauC4yYcD2Gk13y/9tvvNrg5aQjJC3HUwls4mJW+8tLLtUPOjyUeUgWeJAXEa+yDWSqoMWtJQFm5vXmU3DriD+IEyAaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGP6olImAAoQFL+M7lQZaDfYvS90VehXFxhwlRN3RpYK1Pv0EKrsqpmoYkYTnKgAACCgCGEAZ510gAwKAYuG4SvPEFnbGyjE6RgH4hhvbgIcFyXbwpJOheQb+sSwFPLjVK"
+    "signed_tx": "tx_+QENCwH4hLhALrtApK2jBqFR9mPLBfn7+igjYC5F1qP5vRq7V39Dwod198rEsUZBVaj57CT7MMlnSd5nODUqpwhPzdpVSuEkD7hA74BMrFZ3IMFdHmL7rIFDYsjUnayIOzYaz4uL0Xri3Ec4MyxBaheyEZIfS/5SZFd3qoylS7AQyLQ2c56e2U+3BLiD+IEyAaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGP6olImAAoQFL+M7lQZaDfYvS90VehXFxhwlRN3RpYK1Pv0EKrsqpmoYkYTnKgAACCgCGEAZ510gAwKAYuG4SvPEFnbGyjE6RgH4hhvbgIcFyXbwpJOheQb+sSwQNOr3f"
   }
 }
 ```
@@ -169,7 +169,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 ```javascript
 {
   "channel_id": null,
-  "id": -576460752303423006,
+  "id": -576460752303422996,
   "jsonrpc": "2.0",
   "result": "ok",
   "version": 1
@@ -182,10 +182,10 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.on_chain_tx",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "info": "funding_created",
-      "tx": "tx_+QENCwH4hLhA7WXDT6OLMFCaPUrU93b42FuH93p97IiZYfhK9M07fYeVL4jpUMsrQhPPJteWPWgHPbjOPBt5wbIRXENcLbMYBLhA8M8uauC4yYcD2Gk13y/9tvvNrg5aQjJC3HUwls4mJW+8tLLtUPOjyUeUgWeJAXEa+yDWSqoMWtJQFm5vXmU3DriD+IEyAaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGP6olImAAoQFL+M7lQZaDfYvS90VehXFxhwlRN3RpYK1Pv0EKrsqpmoYkYTnKgAACCgCGEAZ510gAwKAYuG4SvPEFnbGyjE6RgH4hhvbgIcFyXbwpJOheQb+sSwFPLjVK",
+      "tx": "tx_+QENCwH4hLhALrtApK2jBqFR9mPLBfn7+igjYC5F1qP5vRq7V39Dwod198rEsUZBVaj57CT7MMlnSd5nODUqpwhPzdpVSuEkD7hA74BMrFZ3IMFdHmL7rIFDYsjUnayIOzYaz4uL0Xri3Ec4MyxBaheyEZIfS/5SZFd3qoylS7AQyLQ2c56e2U+3BLiD+IEyAaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGP6olImAAoQFL+M7lQZaDfYvS90VehXFxhwlRN3RpYK1Pv0EKrsqpmoYkYTnKgAACCgCGEAZ510gAwKAYuG4SvPEFnbGyjE6RgH4hhvbgIcFyXbwpJOheQb+sSwQNOr3f",
       "type": "channel_create_tx"
     }
   },
@@ -214,27 +214,10 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.on_chain_tx",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "info": "funding_signed",
-      "tx": "tx_+QENCwH4hLhA7WXDT6OLMFCaPUrU93b42FuH93p97IiZYfhK9M07fYeVL4jpUMsrQhPPJteWPWgHPbjOPBt5wbIRXENcLbMYBLhA8M8uauC4yYcD2Gk13y/9tvvNrg5aQjJC3HUwls4mJW+8tLLtUPOjyUeUgWeJAXEa+yDWSqoMWtJQFm5vXmU3DriD+IEyAaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGP6olImAAoQFL+M7lQZaDfYvS90VehXFxhwlRN3RpYK1Pv0EKrsqpmoYkYTnKgAACCgCGEAZ510gAwKAYuG4SvPEFnbGyjE6RgH4hhvbgIcFyXbwpJOheQb+sSwFPLjVK",
-      "type": "channel_create_tx"
-    }
-  },
-  "version": 1
-}
-```
-
-#### initiator <--- node
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.on_chain_tx",
-  "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
-    "data": {
-      "info": "channel_changed",
-      "tx": "tx_+QENCwH4hLhA7WXDT6OLMFCaPUrU93b42FuH93p97IiZYfhK9M07fYeVL4jpUMsrQhPPJteWPWgHPbjOPBt5wbIRXENcLbMYBLhA8M8uauC4yYcD2Gk13y/9tvvNrg5aQjJC3HUwls4mJW+8tLLtUPOjyUeUgWeJAXEa+yDWSqoMWtJQFm5vXmU3DriD+IEyAaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGP6olImAAoQFL+M7lQZaDfYvS90VehXFxhwlRN3RpYK1Pv0EKrsqpmoYkYTnKgAACCgCGEAZ510gAwKAYuG4SvPEFnbGyjE6RgH4hhvbgIcFyXbwpJOheQb+sSwFPLjVK",
+      "tx": "tx_+QENCwH4hLhALrtApK2jBqFR9mPLBfn7+igjYC5F1qP5vRq7V39Dwod198rEsUZBVaj57CT7MMlnSd5nODUqpwhPzdpVSuEkD7hA74BMrFZ3IMFdHmL7rIFDYsjUnayIOzYaz4uL0Xri3Ec4MyxBaheyEZIfS/5SZFd3qoylS7AQyLQ2c56e2U+3BLiD+IEyAaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGP6olImAAoQFL+M7lQZaDfYvS90VehXFxhwlRN3RpYK1Pv0EKrsqpmoYkYTnKgAACCgCGEAZ510gAwKAYuG4SvPEFnbGyjE6RgH4hhvbgIcFyXbwpJOheQb+sSwQNOr3f",
       "type": "channel_create_tx"
     }
   },
@@ -248,10 +231,27 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.on_chain_tx",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "info": "channel_changed",
-      "tx": "tx_+QENCwH4hLhA7WXDT6OLMFCaPUrU93b42FuH93p97IiZYfhK9M07fYeVL4jpUMsrQhPPJteWPWgHPbjOPBt5wbIRXENcLbMYBLhA8M8uauC4yYcD2Gk13y/9tvvNrg5aQjJC3HUwls4mJW+8tLLtUPOjyUeUgWeJAXEa+yDWSqoMWtJQFm5vXmU3DriD+IEyAaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGP6olImAAoQFL+M7lQZaDfYvS90VehXFxhwlRN3RpYK1Pv0EKrsqpmoYkYTnKgAACCgCGEAZ510gAwKAYuG4SvPEFnbGyjE6RgH4hhvbgIcFyXbwpJOheQb+sSwFPLjVK",
+      "tx": "tx_+QENCwH4hLhALrtApK2jBqFR9mPLBfn7+igjYC5F1qP5vRq7V39Dwod198rEsUZBVaj57CT7MMlnSd5nODUqpwhPzdpVSuEkD7hA74BMrFZ3IMFdHmL7rIFDYsjUnayIOzYaz4uL0Xri3Ec4MyxBaheyEZIfS/5SZFd3qoylS7AQyLQ2c56e2U+3BLiD+IEyAaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGP6olImAAoQFL+M7lQZaDfYvS90VehXFxhwlRN3RpYK1Pv0EKrsqpmoYkYTnKgAACCgCGEAZ510gAwKAYuG4SvPEFnbGyjE6RgH4hhvbgIcFyXbwpJOheQb+sSwQNOr3f",
+      "type": "channel_create_tx"
+    }
+  },
+  "version": 1
+}
+```
+
+#### initiator <--- node
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
+    "data": {
+      "info": "channel_changed",
+      "tx": "tx_+QENCwH4hLhALrtApK2jBqFR9mPLBfn7+igjYC5F1qP5vRq7V39Dwod198rEsUZBVaj57CT7MMlnSd5nODUqpwhPzdpVSuEkD7hA74BMrFZ3IMFdHmL7rIFDYsjUnayIOzYaz4uL0Xri3Ec4MyxBaheyEZIfS/5SZFd3qoylS7AQyLQ2c56e2U+3BLiD+IEyAaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGP6olImAAoQFL+M7lQZaDfYvS90VehXFxhwlRN3RpYK1Pv0EKrsqpmoYkYTnKgAACCgCGEAZ510gAwKAYuG4SvPEFnbGyjE6RgH4hhvbgIcFyXbwpJOheQb+sSwQNOr3f",
       "type": "channel_create_tx"
     }
   },
@@ -277,10 +277,10 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.message",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "message": {
-        "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+        "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
         "from": "ak_2BpWw5VjvKXCqn2JVaUcxm8oWHKBn3PUupzxpKXHSrECrzRWNR",
         "info": "Hello",
         "to": "ak_aTbpjyMhsjMQTBXkUTVUkEQQavxRi1nJsKfyKt51a55wLQJcH"
@@ -309,10 +309,10 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.message",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "message": {
-        "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+        "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
         "from": "ak_aTbpjyMhsjMQTBXkUTVUkEQQavxRi1nJsKfyKt51a55wLQJcH",
         "info": "Hello back",
         "to": "ak_2BpWw5VjvKXCqn2JVaUcxm8oWHKBn3PUupzxpKXHSrECrzRWNR"
@@ -326,7 +326,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 #### initiator ---> node
 ```javascript
 {
-  "id": -576460752303423005,
+  "id": -576460752303422995,
   "jsonrpc": "2.0",
   "method": "channels.get.balances",
   "params": {
@@ -341,8 +341,8 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 #### initiator <--- node
 ```javascript
 {
-  "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
-  "id": -576460752303423005,
+  "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
+  "id": -576460752303422995,
   "jsonrpc": "2.0",
   "result": [
     {
@@ -364,7 +364,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "event": "own_funding_locked"
     }
@@ -382,7 +382,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "event": "own_funding_locked"
     }
@@ -400,7 +400,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "event": "funding_locked"
     }
@@ -412,46 +412,13 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 #### initiator info
 > Funding has been confirmed on-chain by other party
 
-#### initiator <--- node
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.info",
-  "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
-    "data": {
-      "event": "open"
-    }
-  },
-  "version": 1
-}
-```
-
-#### initiator info
-> Channel is `open` and ready to use
-
-#### initiator <--- node
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.update",
-  "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
-    "data": {
-      "state": "tx_+QENCwH4hLhA7WXDT6OLMFCaPUrU93b42FuH93p97IiZYfhK9M07fYeVL4jpUMsrQhPPJteWPWgHPbjOPBt5wbIRXENcLbMYBLhA8M8uauC4yYcD2Gk13y/9tvvNrg5aQjJC3HUwls4mJW+8tLLtUPOjyUeUgWeJAXEa+yDWSqoMWtJQFm5vXmU3DriD+IEyAaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGP6olImAAoQFL+M7lQZaDfYvS90VehXFxhwlRN3RpYK1Pv0EKrsqpmoYkYTnKgAACCgCGEAZ510gAwKAYuG4SvPEFnbGyjE6RgH4hhvbgIcFyXbwpJOheQb+sSwFPLjVK"
-    }
-  },
-  "version": 1
-}
-```
-
 #### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "event": "funding_locked"
     }
@@ -463,13 +430,31 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 #### responder info
 > Funding has been confirmed on-chain by other party
 
+#### initiator <--- node
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
+    "data": {
+      "event": "open"
+    }
+  },
+  "version": 1
+}
+```
+
+#### initiator info
+> Channel is `open` and ready to use
+
 #### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "event": "open"
     }
@@ -487,9 +472,24 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.update",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
-      "state": "tx_+QENCwH4hLhA7WXDT6OLMFCaPUrU93b42FuH93p97IiZYfhK9M07fYeVL4jpUMsrQhPPJteWPWgHPbjOPBt5wbIRXENcLbMYBLhA8M8uauC4yYcD2Gk13y/9tvvNrg5aQjJC3HUwls4mJW+8tLLtUPOjyUeUgWeJAXEa+yDWSqoMWtJQFm5vXmU3DriD+IEyAaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGP6olImAAoQFL+M7lQZaDfYvS90VehXFxhwlRN3RpYK1Pv0EKrsqpmoYkYTnKgAACCgCGEAZ510gAwKAYuG4SvPEFnbGyjE6RgH4hhvbgIcFyXbwpJOheQb+sSwFPLjVK"
+      "state": "tx_+QENCwH4hLhALrtApK2jBqFR9mPLBfn7+igjYC5F1qP5vRq7V39Dwod198rEsUZBVaj57CT7MMlnSd5nODUqpwhPzdpVSuEkD7hA74BMrFZ3IMFdHmL7rIFDYsjUnayIOzYaz4uL0Xri3Ec4MyxBaheyEZIfS/5SZFd3qoylS7AQyLQ2c56e2U+3BLiD+IEyAaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGP6olImAAoQFL+M7lQZaDfYvS90VehXFxhwlRN3RpYK1Pv0EKrsqpmoYkYTnKgAACCgCGEAZ510gAwKAYuG4SvPEFnbGyjE6RgH4hhvbgIcFyXbwpJOheQb+sSwQNOr3f"
+    }
+  },
+  "version": 1
+}
+```
+
+#### initiator <--- node
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.update",
+  "params": {
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
+    "data": {
+      "state": "tx_+QENCwH4hLhALrtApK2jBqFR9mPLBfn7+igjYC5F1qP5vRq7V39Dwod198rEsUZBVaj57CT7MMlnSd5nODUqpwhPzdpVSuEkD7hA74BMrFZ3IMFdHmL7rIFDYsjUnayIOzYaz4uL0Xri3Ec4MyxBaheyEZIfS/5SZFd3qoylS7AQyLQ2c56e2U+3BLiD+IEyAaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGP6olImAAoQFL+M7lQZaDfYvS90VehXFxhwlRN3RpYK1Pv0EKrsqpmoYkYTnKgAACCgCGEAZ510gAwKAYuG4SvPEFnbGyjE6RgH4hhvbgIcFyXbwpJOheQb+sSwQNOr3f"
     }
   },
   "version": 1
@@ -520,9 +520,9 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.sign.update",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
-      "signed_tx": "tx_+E0LAcC4SPhGOQKhBvdv+fyKGi2R1QH3VdjouDXDvEyirPVUbwXxmLUvEqu6AqD9zzYUR6Hz6z6ha9fe3/DVyfSWU54QCc//PaXpwEIJf/VhFtE=",
+      "signed_tx": "tx_+E0LAcC4SPhGOQKhBpc7xV2jC/0yamDfE+jj7O9nYGJmdvOCGbK768YGFCaBAqD9zzYUR6Hz6z6ha9fe3/DVyfSWU54QCc//PaXpwEIJf++04GE=",
       "updates": [
         {
           "amount": 1,
@@ -543,7 +543,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.update",
   "params": {
-    "signed_tx": "tx_+JALAfhCuEBbLnqc1t5fxvVfHWKyoe+kkZsK4ZRpzsDvvJSebZf+kEaDI3gISi2sM5+djNfmCz0/ahvOEKbK3gsk1jxdLyMCuEj4RjkCoQb3b/n8ihotkdUB91XY6Lg1w7xMoqz1VG8F8Zi1LxKrugKg/c82FEeh8+s+oWvX3t/w1cn0llOeEAnP/z2l6cBCCX95MxKN"
+    "signed_tx": "tx_+JALAfhCuEBwYokLNEulidrRNxcj3LzFgAg4X35UNenDEmPJv0ZXUZ4EDKxbAOKQeWH9PohPF69Ifc+kJkbaaQZmsvCJLyIFuEj4RjkCoQaXO8Vdowv9Mmpg3xPo4+zvZ2BiZnbzghmyu+vGBhQmgQKg/c82FEeh8+s+oWvX3t/w1cn0llOeEAnP/z2l6cBCCX+37/dJ"
   }
 }
 ```
@@ -554,9 +554,9 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.conflict",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
-      "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+      "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
       "error_code": 2,
       "error_msg": "conflict",
       "round": 1
@@ -585,9 +585,9 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.sign.update",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
-      "signed_tx": "tx_+E0LAcC4SPhGOQKhBvdv+fyKGi2R1QH3VdjouDXDvEyirPVUbwXxmLUvEqu6AqD9zzYUR6Hz6z6ha9fe3/DVyfSWU54QCc//PaXpwEIJf/VhFtE=",
+      "signed_tx": "tx_+E0LAcC4SPhGOQKhBpc7xV2jC/0yamDfE+jj7O9nYGJmdvOCGbK768YGFCaBAqD9zzYUR6Hz6z6ha9fe3/DVyfSWU54QCc//PaXpwEIJf++04GE=",
       "updates": [
         {
           "amount": 1,
@@ -608,7 +608,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.update",
   "params": {
-    "signed_tx": "tx_+NILAfiEuEAEJLGSeAp5tabuZKf9hUuYzPVwXva3lTCDYL0IWfFi18GRezWrLdlfcLP923dTnuovG+QdrfSLgx9ougvzwIwJuEBbLnqc1t5fxvVfHWKyoe+kkZsK4ZRpzsDvvJSebZf+kEaDI3gISi2sM5+djNfmCz0/ahvOEKbK3gsk1jxdLyMCuEj4RjkCoQb3b/n8ihotkdUB91XY6Lg1w7xMoqz1VG8F8Zi1LxKrugKg/c82FEeh8+s+oWvX3t/w1cn0llOeEAnP/z2l6cBCCX+0swEt"
+    "signed_tx": "tx_+NILAfiEuEBky8hF61oNboNS18CaA/zX1ZtglwhnsZJRDonHQeG3SARzkeiATfTbTbabXhYj7cdDUkOevCRrcW9c2tj4HuMJuEBwYokLNEulidrRNxcj3LzFgAg4X35UNenDEmPJv0ZXUZ4EDKxbAOKQeWH9PohPF69Ifc+kJkbaaQZmsvCJLyIFuEj4RjkCoQaXO8Vdowv9Mmpg3xPo4+zvZ2BiZnbzghmyu+vGBhQmgQKg/c82FEeh8+s+oWvX3t/w1cn0llOeEAnP/z2l6cBCCX/qyy6Y"
   }
 }
 ```
@@ -619,9 +619,9 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "jsonrpc": "2.0",
   "method": "channels.update",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
-      "state": "tx_+NILAfiEuEAEJLGSeAp5tabuZKf9hUuYzPVwXva3lTCDYL0IWfFi18GRezWrLdlfcLP923dTnuovG+QdrfSLgx9ougvzwIwJuEBbLnqc1t5fxvVfHWKyoe+kkZsK4ZRpzsDvvJSebZf+kEaDI3gISi2sM5+djNfmCz0/ahvOEKbK3gsk1jxdLyMCuEj4RjkCoQb3b/n8ihotkdUB91XY6Lg1w7xMoqz1VG8F8Zi1LxKrugKg/c82FEeh8+s+oWvX3t/w1cn0llOeEAnP/z2l6cBCCX+0swEt"
+      "state": "tx_+NILAfiEuEBky8hF61oNboNS18CaA/zX1ZtglwhnsZJRDonHQeG3SARzkeiATfTbTbabXhYj7cdDUkOevCRrcW9c2tj4HuMJuEBwYokLNEulidrRNxcj3LzFgAg4X35UNenDEmPJv0ZXUZ4EDKxbAOKQeWH9PohPF69Ifc+kJkbaaQZmsvCJLyIFuEj4RjkCoQaXO8Vdowv9Mmpg3xPo4+zvZ2BiZnbzghmyu+vGBhQmgQKg/c82FEeh8+s+oWvX3t/w1cn0llOeEAnP/z2l6cBCCX/qyy6Y"
     }
   },
   "version": 1
@@ -630,7 +630,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
 
 #### initiator opens a WebSocket connection
 ```
-ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp&host=localhost&offchain_tx=tx_%2BNILAfiEuEAEJLGSeAp5tabuZKf9hUuYzPVwXva3lTCDYL0IWfFi18GRezWrLdlfcLP923dTnuovG%2BQdrfSLgx9ougvzwIwJuEBbLnqc1t5fxvVfHWKyoe%2BkkZsK4ZRpzsDvvJSebZf%2BkEaDI3gISi2sM5%2BdjNfmCz0%2FahvOEKbK3gsk1jxdLyMCuEj4RjkCoQb3b%2Fn8ihotkdUB91XY6Lg1w7xMoqz1VG8F8Zi1LxKrugKg%2Fc82FEeh8%2Bs%2BoWvX3t%2Fw1cn0llOeEAnP%2Fz2l6cBCCX%2B0swEt&port=14035&protocol=json-rpc&role=initiator
+ws://localhost:3014/channel?existing_channel_id=ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2&host=localhost&offchain_tx=tx_%2BNILAfiEuEBky8hF61oNboNS18CaA%2FzX1ZtglwhnsZJRDonHQeG3SARzkeiATfTbTbabXhYj7cdDUkOevCRrcW9c2tj4HuMJuEBwYokLNEulidrRNxcj3LzFgAg4X35UNenDEmPJv0ZXUZ4EDKxbAOKQeWH9PohPF69Ifc%2BkJkbaaQZmsvCJLyIFuEj4RjkCoQaXO8Vdowv9Mmpg3xPo4%2BzvZ2BiZnbzghmyu%2BvGBhQmgQKg%2Fc82FEeh8%2Bs%2BoWvX3t%2Fw1cn0llOeEAnP%2Fz2l6cBCCX%2Fqyy6Y&port=14035&protocol=json-rpc&role=initiator
 ```
 
 #### initiator <--- node
@@ -661,7 +661,7 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
 
 #### initiator opens a WebSocket connection
 ```
-ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp&existing_fsm_id=Invalid&host=localhost&offchain_tx=tx_%2BNILAfiEuEAEJLGSeAp5tabuZKf9hUuYzPVwXva3lTCDYL0IWfFi18GRezWrLdlfcLP923dTnuovG%2BQdrfSLgx9ougvzwIwJuEBbLnqc1t5fxvVfHWKyoe%2BkkZsK4ZRpzsDvvJSebZf%2BkEaDI3gISi2sM5%2BdjNfmCz0%2FahvOEKbK3gsk1jxdLyMCuEj4RjkCoQb3b%2Fn8ihotkdUB91XY6Lg1w7xMoqz1VG8F8Zi1LxKrugKg%2Fc82FEeh8%2Bs%2BoWvX3t%2Fw1cn0llOeEAnP%2Fz2l6cBCCX%2B0swEt&port=14035&protocol=json-rpc&role=initiator
+ws://localhost:3014/channel?existing_channel_id=ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2&existing_fsm_id=Invalid&host=localhost&offchain_tx=tx_%2BNILAfiEuEBky8hF61oNboNS18CaA%2FzX1ZtglwhnsZJRDonHQeG3SARzkeiATfTbTbabXhYj7cdDUkOevCRrcW9c2tj4HuMJuEBwYokLNEulidrRNxcj3LzFgAg4X35UNenDEmPJv0ZXUZ4EDKxbAOKQeWH9PohPF69Ifc%2BkJkbaaQZmsvCJLyIFuEj4RjkCoQaXO8Vdowv9Mmpg3xPo4%2BzvZ2BiZnbzghmyu%2BvGBhQmgQKg%2Fc82FEeh8%2Bs%2BoWvX3t%2Fw1cn0llOeEAnP%2Fz2l6cBCCX%2Fqyy6Y&port=14035&protocol=json-rpc&role=initiator
 ```
 
 #### initiator <--- node
@@ -692,7 +692,7 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
 
 #### initiator opens a WebSocket connection
 ```
-ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp&existing_fsm_id=ba_YDJ7Ezhn4T2PyFDY&host=localhost&offchain_tx=tx_%2BNILAfiEuEAEJLGSeAp5tabuZKf9hUuYzPVwXva3lTCDYL0IWfFi18GRezWrLdlfcLP923dTnuovG%2BQdrfSLgx9ougvzwIwJuEBbLnqc1t5fxvVfHWKyoe%2BkkZsK4ZRpzsDvvJSebZf%2BkEaDI3gISi2sM5%2BdjNfmCz0%2FahvOEKbK3gsk1jxdLyMCuEj4RjkCoQb3b%2Fn8ihotkdUB91XY6Lg1w7xMoqz1VG8F8Zi1LxKrugKg%2Fc82FEeh8%2Bs%2BoWvX3t%2Fw1cn0llOeEAnP%2Fz2l6cBCCX%2B0swEt&port=14035&protocol=json-rpc&role=initiator
+ws://localhost:3014/channel?existing_channel_id=ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2&existing_fsm_id=ba_6QeHE7BAb1fL8tx4&host=localhost&offchain_tx=tx_%2BNILAfiEuEBky8hF61oNboNS18CaA%2FzX1ZtglwhnsZJRDonHQeG3SARzkeiATfTbTbabXhYj7cdDUkOevCRrcW9c2tj4HuMJuEBwYokLNEulidrRNxcj3LzFgAg4X35UNenDEmPJv0ZXUZ4EDKxbAOKQeWH9PohPF69Ifc%2BkJkbaaQZmsvCJLyIFuEj4RjkCoQaXO8Vdowv9Mmpg3xPo4%2BzvZ2BiZnbzghmyu%2BvGBhQmgQKg%2Fc82FEeh8%2Bs%2BoWvX3t%2Fw1cn0llOeEAnP%2Fz2l6cBCCX%2Fqyy6Y&port=14035&protocol=json-rpc&role=initiator
 ```
 
 #### initiator <--- node
@@ -723,7 +723,7 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
 
 #### initiator opens a WebSocket connection
 ```
-ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp&existing_fsm_id=ba_tixz0VIGYRYuvSTAr1n3FNwDwFtQrxNhRgwn6qq%2FVPNjyLpu&host=localhost&offchain_tx=tx_%2BNILAfiEuEAEJLGSeAp5tabuZKf9hUuYzPVwXva3lTCDYL0IWfFi18GRezWrLdlfcLP923dTnuovG%2BQdrfSLgx9ougvzwIwJuEBbLnqc1t5fxvVfHWKyoe%2BkkZsK4ZRpzsDvvJSebZf%2BkEaDI3gISi2sM5%2BdjNfmCz0%2FahvOEKbK3gsk1jxdLyMCuEj4RjkCoQb3b%2Fn8ihotkdUB91XY6Lg1w7xMoqz1VG8F8Zi1LxKrugKg%2Fc82FEeh8%2Bs%2BoWvX3t%2Fw1cn0llOeEAnP%2Fz2l6cBCCX%2B0swEt&port=14035&protocol=json-rpc&role=initiator
+ws://localhost:3014/channel?existing_channel_id=ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2&existing_fsm_id=ba_Qqp%2BoQafP00MWxWqDzNeGOUPLcjRzB3%2BSWCGXkVPwNqmROIO&host=localhost&offchain_tx=tx_%2BNILAfiEuEBky8hF61oNboNS18CaA%2FzX1ZtglwhnsZJRDonHQeG3SARzkeiATfTbTbabXhYj7cdDUkOevCRrcW9c2tj4HuMJuEBwYokLNEulidrRNxcj3LzFgAg4X35UNenDEmPJv0ZXUZ4EDKxbAOKQeWH9PohPF69Ifc%2BkJkbaaQZmsvCJLyIFuEj4RjkCoQaXO8Vdowv9Mmpg3xPo4%2BzvZ2BiZnbzghmyu%2BvGBhQmgQKg%2Fc82FEeh8%2Bs%2BoWvX3t%2Fw1cn0llOeEAnP%2Fz2l6cBCCX%2Fqyy6Y&port=14035&protocol=json-rpc&role=initiator
 ```
 
 #### initiator <--- node
@@ -754,7 +754,7 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
 
 #### initiator opens a WebSocket connection
 ```
-ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp&existing_fsm_id=ba_vCF3sVK0kmbBJ%2B3iBdKFnS6%2B2fPlzOsmuE2CkP6U6Onp3nN%2F&host=localhost&offchain_tx=tx_%2BNILAfiEuEAEJLGSeAp5tabuZKf9hUuYzPVwXva3lTCDYL0IWfFi18GRezWrLdlfcLP923dTnuovG%2BQdrfSLgx9ougvzwIwJuEBbLnqc1t5fxvVfHWKyoe%2BkkZsK4ZRpzsDvvJSebZf%2BkEaDI3gISi2sM5%2BdjNfmCz0%2FahvOEKbK3gsk1jxdLyMCuEj4RjkCoQb3b%2Fn8ihotkdUB91XY6Lg1w7xMoqz1VG8F8Zi1LxKrugKg%2Fc82FEeh8%2Bs%2BoWvX3t%2Fw1cn0llOeEAnP%2Fz2l6cBCCX%2B0swEt&port=14035&protocol=json-rpc&role=initiator
+ws://localhost:3014/channel?existing_channel_id=ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2&existing_fsm_id=ba_MShI5xsbV3B5%2FQdhZDScP7Zo0FLjFRFQL35nBwDXNqkZxC%2Bh&host=localhost&offchain_tx=tx_%2BNILAfiEuEBky8hF61oNboNS18CaA%2FzX1ZtglwhnsZJRDonHQeG3SARzkeiATfTbTbabXhYj7cdDUkOevCRrcW9c2tj4HuMJuEBwYokLNEulidrRNxcj3LzFgAg4X35UNenDEmPJv0ZXUZ4EDKxbAOKQeWH9PohPF69Ifc%2BkJkbaaQZmsvCJLyIFuEj4RjkCoQaXO8Vdowv9Mmpg3xPo4%2BzvZ2BiZnbzghmyu%2BvGBhQmgQKg%2Fc82FEeh8%2Bs%2BoWvX3t%2Fw1cn0llOeEAnP%2Fz2l6cBCCX%2Fqyy6Y&port=14035&protocol=json-rpc&role=initiator
 ```
 
 #### initiator <--- node
@@ -763,10 +763,10 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "event": "fsm_up",
-      "fsm_id": "ba_vCF3sVK0kmbBJ+3iBdKFnS6+2fPlzOsmuE2CkP6U6Onp3nN/"
+      "fsm_id": "ba_MShI5xsbV3B5/QdhZDScP7Zo0FLjFRFQL35nBwDXNqkZxC+h"
     }
   },
   "version": 1
@@ -791,9 +791,9 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
   "jsonrpc": "2.0",
   "method": "channels.sign.shutdown_sign",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
-      "signed_tx": "tx_+GQLAcC4X/hdNQGhBvdv+fyKGi2R1QH3VdjouDXDvEyirPVUbwXxmLUvEqu6oQGcQzPQYk8xaUuYcvpaJu113sbzVKBOAu5kiro03yizy4Y2kdavwACGG0jrV+AAAIYSMJzlQAACEpthGQ==",
+      "signed_tx": "tx_+GQLAcC4X/hdNQGhBpc7xV2jC/0yamDfE+jj7O9nYGJmdvOCGbK768YGFCaBoQGcQzPQYk8xaUuYcvpaJu113sbzVKBOAu5kiro03yizy4Y2kdavwACGG0jrV+AAAIYSMJzlQAAFrO8Pig==",
       "updates": []
     }
   },
@@ -804,11 +804,11 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
 #### initiator ---> node
 ```javascript
 {
-  "id": -576460752303423004,
+  "id": -576460752303422994,
   "jsonrpc": "2.0",
   "method": "channels.shutdown_sign",
   "params": {
-    "signed_tx": "tx_+KcLAfhCuEApSOtNifrPewGK26Sg6cdkaGPEey/Ga2JXXtJJOWxYXOzCqM/cfocbbYIQULNDB3qJWE+G5aoPBntieI7GpkwMuF/4XTUBoQb3b/n8ihotkdUB91XY6Lg1w7xMoqz1VG8F8Zi1LxKruqEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGNpHWr8AAhhtI61fgAACGEjCc5UAAArgO1+o="
+    "signed_tx": "tx_+KcLAfhCuEBo+o7rHk8S1+iunDu5okz5OqiO72xPa0CQfPx9f9xVILXq0P47KQmBJ+Rf4tzZb2RE6r/bGLzUhoFatv6C7CIOuF/4XTUBoQaXO8Vdowv9Mmpg3xPo4+zvZ2BiZnbzghmyu+vGBhQmgaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGNpHWr8AAhhtI61fgAACGEjCc5UAABY25Lzw="
   }
 }
 ```
@@ -816,8 +816,8 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
 #### initiator <--- node
 ```javascript
 {
-  "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
-  "id": -576460752303423004,
+  "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
+  "id": -576460752303422994,
   "jsonrpc": "2.0",
   "result": "ok",
   "version": 1
@@ -830,7 +830,7 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "event": "shutdown"
     }
@@ -845,9 +845,9 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
   "jsonrpc": "2.0",
   "method": "channels.sign.shutdown_sign_ack",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
-      "signed_tx": "tx_+KcLAfhCuEApSOtNifrPewGK26Sg6cdkaGPEey/Ga2JXXtJJOWxYXOzCqM/cfocbbYIQULNDB3qJWE+G5aoPBntieI7GpkwMuF/4XTUBoQb3b/n8ihotkdUB91XY6Lg1w7xMoqz1VG8F8Zi1LxKruqEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGNpHWr8AAhhtI61fgAACGEjCc5UAAArgO1+o=",
+      "signed_tx": "tx_+KcLAfhCuEBo+o7rHk8S1+iunDu5okz5OqiO72xPa0CQfPx9f9xVILXq0P47KQmBJ+Rf4tzZb2RE6r/bGLzUhoFatv6C7CIOuF/4XTUBoQaXO8Vdowv9Mmpg3xPo4+zvZ2BiZnbzghmyu+vGBhQmgaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGNpHWr8AAhhtI61fgAACGEjCc5UAABY25Lzw=",
       "updates": []
     }
   },
@@ -858,11 +858,11 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
 #### responder ---> node
 ```javascript
 {
-  "id": -576460752303423003,
+  "id": -576460752303422993,
   "jsonrpc": "2.0",
   "method": "channels.shutdown_sign_ack",
   "params": {
-    "signed_tx": "tx_+OkLAfiEuEApSOtNifrPewGK26Sg6cdkaGPEey/Ga2JXXtJJOWxYXOzCqM/cfocbbYIQULNDB3qJWE+G5aoPBntieI7GpkwMuEBORnoBUgsL+ji0LXFsiyWe57lNxctO2vLrHhTs8JMBCDdYkV27YRdZp2fPfCWhcABozpq1abYgY5ivST/Kz/QAuF/4XTUBoQb3b/n8ihotkdUB91XY6Lg1w7xMoqz1VG8F8Zi1LxKruqEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGNpHWr8AAhhtI61fgAACGEjCc5UAAAot+GNM="
+    "signed_tx": "tx_+OkLAfiEuEBo+o7rHk8S1+iunDu5okz5OqiO72xPa0CQfPx9f9xVILXq0P47KQmBJ+Rf4tzZb2RE6r/bGLzUhoFatv6C7CIOuEDwePBEMShsLZmbsIDUZ3rLKc7Rtkk3d/fAe+ij5hpF+5qtorM0gy/l30B0bKHaNLIv+ImzqyNCfJs1vSw9gEUCuF/4XTUBoQaXO8Vdowv9Mmpg3xPo4+zvZ2BiZnbzghmyu+vGBhQmgaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGNpHWr8AAhhtI61fgAACGEjCc5UAABSuWPyE="
   }
 }
 ```
@@ -870,8 +870,8 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
 #### responder <--- node
 ```javascript
 {
-  "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
-  "id": -576460752303423003,
+  "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
+  "id": -576460752303422993,
   "jsonrpc": "2.0",
   "result": "ok",
   "version": 1
@@ -884,10 +884,10 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
   "jsonrpc": "2.0",
   "method": "channels.on_chain_tx",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "info": "close_mutual",
-      "tx": "tx_+OkLAfiEuEApSOtNifrPewGK26Sg6cdkaGPEey/Ga2JXXtJJOWxYXOzCqM/cfocbbYIQULNDB3qJWE+G5aoPBntieI7GpkwMuEBORnoBUgsL+ji0LXFsiyWe57lNxctO2vLrHhTs8JMBCDdYkV27YRdZp2fPfCWhcABozpq1abYgY5ivST/Kz/QAuF/4XTUBoQb3b/n8ihotkdUB91XY6Lg1w7xMoqz1VG8F8Zi1LxKruqEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGNpHWr8AAhhtI61fgAACGEjCc5UAAAot+GNM=",
+      "tx": "tx_+OkLAfiEuEBo+o7rHk8S1+iunDu5okz5OqiO72xPa0CQfPx9f9xVILXq0P47KQmBJ+Rf4tzZb2RE6r/bGLzUhoFatv6C7CIOuEDwePBEMShsLZmbsIDUZ3rLKc7Rtkk3d/fAe+ij5hpF+5qtorM0gy/l30B0bKHaNLIv+ImzqyNCfJs1vSw9gEUCuF/4XTUBoQaXO8Vdowv9Mmpg3xPo4+zvZ2BiZnbzghmyu+vGBhQmgaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGNpHWr8AAhhtI61fgAACGEjCc5UAABSuWPyE=",
       "type": "channel_close_mutual_tx"
     }
   },
@@ -901,7 +901,7 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "event": "closing"
     }
@@ -916,10 +916,10 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
   "jsonrpc": "2.0",
   "method": "channels.on_chain_tx",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "info": "close_mutual",
-      "tx": "tx_+OkLAfiEuEApSOtNifrPewGK26Sg6cdkaGPEey/Ga2JXXtJJOWxYXOzCqM/cfocbbYIQULNDB3qJWE+G5aoPBntieI7GpkwMuEBORnoBUgsL+ji0LXFsiyWe57lNxctO2vLrHhTs8JMBCDdYkV27YRdZp2fPfCWhcABozpq1abYgY5ivST/Kz/QAuF/4XTUBoQb3b/n8ihotkdUB91XY6Lg1w7xMoqz1VG8F8Zi1LxKruqEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGNpHWr8AAhhtI61fgAACGEjCc5UAAAot+GNM=",
+      "tx": "tx_+OkLAfiEuEBo+o7rHk8S1+iunDu5okz5OqiO72xPa0CQfPx9f9xVILXq0P47KQmBJ+Rf4tzZb2RE6r/bGLzUhoFatv6C7CIOuEDwePBEMShsLZmbsIDUZ3rLKc7Rtkk3d/fAe+ij5hpF+5qtorM0gy/l30B0bKHaNLIv+ImzqyNCfJs1vSw9gEUCuF/4XTUBoQaXO8Vdowv9Mmpg3xPo4+zvZ2BiZnbzghmyu+vGBhQmgaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGNpHWr8AAhhtI61fgAACGEjCc5UAABSuWPyE=",
       "type": "channel_close_mutual_tx"
     }
   },
@@ -933,7 +933,7 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "event": "closing"
     }
@@ -942,16 +942,33 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
 }
 ```
 
+#### initiator <--- node
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
+    "data": {
+      "info": "channel_closed",
+      "tx": "tx_+OkLAfiEuEBo+o7rHk8S1+iunDu5okz5OqiO72xPa0CQfPx9f9xVILXq0P47KQmBJ+Rf4tzZb2RE6r/bGLzUhoFatv6C7CIOuEDwePBEMShsLZmbsIDUZ3rLKc7Rtkk3d/fAe+ij5hpF+5qtorM0gy/l30B0bKHaNLIv+ImzqyNCfJs1vSw9gEUCuF/4XTUBoQaXO8Vdowv9Mmpg3xPo4+zvZ2BiZnbzghmyu+vGBhQmgaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGNpHWr8AAhhtI61fgAACGEjCc5UAABSuWPyE=",
+      "type": "channel_close_mutual_tx"
+    }
+  },
+  "version": 1
+}
+```
+
 #### responder <--- node
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.on_chain_tx",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "info": "channel_closed",
-      "tx": "tx_+OkLAfiEuEApSOtNifrPewGK26Sg6cdkaGPEey/Ga2JXXtJJOWxYXOzCqM/cfocbbYIQULNDB3qJWE+G5aoPBntieI7GpkwMuEBORnoBUgsL+ji0LXFsiyWe57lNxctO2vLrHhTs8JMBCDdYkV27YRdZp2fPfCWhcABozpq1abYgY5ivST/Kz/QAuF/4XTUBoQb3b/n8ihotkdUB91XY6Lg1w7xMoqz1VG8F8Zi1LxKruqEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGNpHWr8AAhhtI61fgAACGEjCc5UAAAot+GNM=",
+      "tx": "tx_+OkLAfiEuEBo+o7rHk8S1+iunDu5okz5OqiO72xPa0CQfPx9f9xVILXq0P47KQmBJ+Rf4tzZb2RE6r/bGLzUhoFatv6C7CIOuEDwePBEMShsLZmbsIDUZ3rLKc7Rtkk3d/fAe+ij5hpF+5qtorM0gy/l30B0bKHaNLIv+ImzqyNCfJs1vSw9gEUCuF/4XTUBoQaXO8Vdowv9Mmpg3xPo4+zvZ2BiZnbzghmyu+vGBhQmgaEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGNpHWr8AAhhtI61fgAACGEjCc5UAABSuWPyE=",
       "type": "channel_close_mutual_tx"
     }
   },
@@ -963,26 +980,9 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
 ```javascript
 {
   "jsonrpc": "2.0",
-  "method": "channels.on_chain_tx",
-  "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
-    "data": {
-      "info": "channel_closed",
-      "tx": "tx_+OkLAfiEuEApSOtNifrPewGK26Sg6cdkaGPEey/Ga2JXXtJJOWxYXOzCqM/cfocbbYIQULNDB3qJWE+G5aoPBntieI7GpkwMuEBORnoBUgsL+ji0LXFsiyWe57lNxctO2vLrHhTs8JMBCDdYkV27YRdZp2fPfCWhcABozpq1abYgY5ivST/Kz/QAuF/4XTUBoQb3b/n8ihotkdUB91XY6Lg1w7xMoqz1VG8F8Zi1LxKruqEBnEMz0GJPMWlLmHL6Wibtdd7G81SgTgLuZIq6NN8os8uGNpHWr8AAhhtI61fgAACGEjCc5UAAAot+GNM=",
-      "type": "channel_close_mutual_tx"
-    }
-  },
-  "version": 1
-}
-```
-
-#### responder <--- node
-```javascript
-{
-  "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "event": "closed_confirmed"
     }
@@ -997,22 +997,7 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
-    "data": {
-      "event": "died"
-    }
-  },
-  "version": 1
-}
-```
-
-#### initiator <--- node
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.info",
-  "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "event": "closed_confirmed"
     }
@@ -1027,7 +1012,7 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2syTUf7tvZR9iLfUXiCWekUCevGn2jXMLMwjT7sc6cPBwz5yNp",
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
     "data": {
       "event": "died"
     }
@@ -1036,12 +1021,27 @@ ws://localhost:3014/channel?existing_channel_id=ch_2syTUf7tvZR9iLfUXiCWekUCevGn2
 }
 ```
 
-#### responder closes WebSocket connection
-```
-
+#### responder <--- node
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_29c4GKUN826tHZWhDVHNei5agHK8fP4DHsvXtjTWEqV2dkjaJ2",
+    "data": {
+      "event": "died"
+    }
+  },
+  "version": 1
+}
 ```
 
 #### initiator closes WebSocket connection
+```
+
+```
+
+#### responder closes WebSocket connection
 ```
 
 ```

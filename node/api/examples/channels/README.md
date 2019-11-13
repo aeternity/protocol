@@ -55,7 +55,7 @@ that the `responder` provides.
                                |
                                | noise
                                |
-                               v
+                               |
 +-----------+               +--+---+
 |           |    WebSocket  |      |
 | responder +---------------+ node |
