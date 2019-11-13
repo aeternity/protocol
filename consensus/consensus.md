@@ -335,7 +335,8 @@ The gas of a transaction is the sum of:
 | Channel force progress | `BaseGas` before Fortuna and `30 * BaseGas` from Fortuna on | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelForceProgressTx) * GasPerByte`. It may also include gas for contract execution. |
 | Channel offchain       |            0   |     0 |
 | Contract create        | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCreateTx) * GasPerByte`. It also includes gas for contract execution. |
-| Contract call          | `30 * BaseGas` | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCallTx) * GasPerByte`. It also includes gas for contract execution. |
+| Contract call (FATE)   | `12 * BaseGas` | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCallTx) * GasPerByte`. It also includes gas for contract execution. |
+| Contract call (AEVM)   | `30 * BaseGas` | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCallTx) * GasPerByte`. It also includes gas for contract execution. |
 | GA Attach              | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(GAAttachTx) * GasPerByte`. It also includes gas for execution of the init function. |
 | GA Meta                | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(GAMetaTx) * GasPerByte`. It also includes gas for execution of the authentication function + recursively gas corresponding to the wrapped transaction(s) (excluding the byte size portion - in order not to account for the size of wrapped transactions multiple times). |
 
