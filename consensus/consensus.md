@@ -282,6 +282,23 @@ both the `Fee` and the `GasPrice`.
  -------------- -----
 ```
 
+#### PayingFor transaction
+Available from protocol version 5, Iris release. The `tx` field size
+depends on the size of the inner transaction.
+```
+ Fieldname       Size (bytes)
+ -------------- -----
+| payer        | 32  |
+ -------------- -----
+| fee          | var |
+ -------------- -----
+| nonce        | 8   |
+ -------------- -----
+| tx           | var |
+ -------------- -----
+```
+
+
 #### Contract transactions
 
 Please refer to the [dedicated document](/contracts/contract_transactions.md).
@@ -339,7 +356,9 @@ The gas of a transaction is the sum of:
 | Contract call (FATE)   | `12 * BaseGas` | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCallTx) * GasPerByte`. It also includes gas for contract execution. |
 | Contract call (AEVM)   | `30 * BaseGas` | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCallTx) * GasPerByte`. It also includes gas for contract execution. |
 | GA Attach              | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(GAAttachTx) * GasPerByte`. It also includes gas for execution of the init function. |
-| GA Meta                | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(GAMetaTx) * GasPerByte`. It also includes gas for execution of the authentication function + recursively gas corresponding to the wrapped transaction(s) (excluding the byte size portion - in order not to account for the size of wrapped transactions multiple times). |
+| GA Meta                | `5 * BaseGas`  | Fortuna and Lima : Proportional to the byte size of the transaction, specifically: `byte_size(GAMetaTx) * GasPerByte`. It also includes gas for execution of the authentication function + recursively gas corresponding to the wrapped transaction(s) (excluding the byte size portion - in order not to account for the size of wrapped transactions multiple times). |
+|                        | `5 * BaseGas`  | From Iris        : Proportional to the byte size of GAMeta part of transaction, specifically: `(byte_size(GAMetaTx) - byte_size(InnerTx)) * GasPerByte`. It also includes gas for execution of the authentication function + recursively gas corresponding to the wrapped transaction(s) |
+| PayingFor              | `BaseGas / 5`  | Proportional to the byte size of the PayingFor part of the transaction, specifically: `(byte_size(PayingForTx) - byte_size(InnerTx)) * GasPerByte`. |
 
 `BaseGas` is 15 000.
 
