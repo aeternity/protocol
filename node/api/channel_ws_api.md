@@ -17,7 +17,7 @@ The WebSocket API provides the following actions:
  * [Info messages](#info-messages)
  * [System messages](#system-messages)
  * [Signing error replies](#signing-error-replies)
-
+ 
 ## Update
 Roles:
  * Sender
@@ -80,7 +80,7 @@ Roles:
 }
 ```
 
-### Sender authenticates off-chain state responsse
+### Sender authenticates off-chain state response
  * **method:** `channels.update`
  * **params:**
 
@@ -131,7 +131,7 @@ Roles:
 }
 ```
 
-### Acknowledger authenticated off-chain state responsse
+### Acknowledger authenticated off-chain state response
  * **method:** `channels.update_ack`
  * **params:**
 
@@ -350,7 +350,7 @@ Roles:
 }
 ```
 
-### Acknowledger authenticates deposit responsse
+### Acknowledger authenticates deposit response
  * **method:** `channels.deposit_ack`
  * **params:**
 
@@ -1356,4 +1356,3 @@ the following error:
    "version":1
 }
 ```
-

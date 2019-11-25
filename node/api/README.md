@@ -51,7 +51,7 @@ Channels require persisted connections to Aeternity nodes. Each participant in
 a channel uses one's own trusted node. For persistence of this connection, WebSockets
 are used.
 Channels have on-chain state that persists who the participants are and the
-total amout of tokens put into the channel.
+total amount of tokens put into the channel.
 Each channel also has an off-chain state representing the latest distribution of the balance of the
 channel. It can be updated - each new state is co-signed by both parties and only then it becomes the latest valid state of the
 channel. At any point in time channel can be closed either unilaterally or
@@ -160,7 +160,8 @@ element of `'params'`.)
 If an error occurs, a JSON-RPC error object is returned. It has the following form:
 
 ```javascript
-{'jsonrpc': '2.0',
+{
+ 'jsonrpc': '2.0',
  'id': null,
  'error' : {
    'code': <ErrorCode>,
@@ -187,27 +188,35 @@ The codes and error messages include those specified in the [JSON-RPC 2.0
 
 The `'data'` element may contain more detailed information inside `'data'`:
 
- | Code   | Message                            | Parent Code | Origin |
- | ------ | ---------------------------------- | ----------- | ------ |
- | 100    | X doesn't exist                    |  3          |  [2]   |
- | 101    | Requires coin                      |  3          |  [2]   |
- | 102    | Gas too low                        |  3          |  [2]   |
- | 103    | Gas limit exceeded                 |  3          |  [2]   |
- | 104    | Rejected                           |  3          |  [2]   |
- | 105    | Value too low                      |  3          |  [2]   |
- | 106    | Timeout                            |  3          |  [2]   |
- | 107    | Conflict                           |  3          |  [2]   |
- | 1001   | Insufficient balance               |  3          |  [3]   |
- | 1002   | Negative amount                    |  3          |  [3]   |
- | 1003   | Invalid pubkeys                    |  3          |  [3]   |
- | 1004   | Call not found                     |  3          |  [3]   |
- | 1005   | Broken encoding: account pubkey    |  3          |  [3]   |
- | 1006   | Broken encoding: contract pubkey   |  3          |  [3]   |
- | 1007   | Contract init failed               |  3          |  [3]   |
- | 1008   | Not a number                       |  3          |  [3]   |
- | 1009   | Broken encoding: contract bytecode |  3          |  [3]   |
- | 1010   | Broken encoding: transaction       |  3          |  [3]   |
- | 1011   | Participant not found              |  3          |  [3]   |
+ | Code   | Message                               | Parent Code | Origin |
+ | ------ | ------------------------------------- | ----------- | ------ |
+ | 100    | X doesn't exist                       |  3          |  [2]   |
+ | 101    | Requires coin                         |  3          |  [2]   |
+ | 102    | Gas too low                           |  3          |  [2]   |
+ | 103    | Gas limit exceeded                    |  3          |  [2]   |
+ | 104    | Rejected                              |  3          |  [2]   |
+ | 105    | Value too low                         |  3          |  [2]   |
+ | 106    | Timeout                               |  3          |  [2]   |
+ | 107    | Conflict                              |  3          |  [2]   |
+ | 1001   | Insufficient balance                  |  3          |  [3]   |
+ | 1002   | Negative amount                       |  3          |  [3]   |
+ | 1003   | Invalid pubkeys                       |  3          |  [3]   |
+ | 1004   | Call not found                        |  3          |  [3]   |
+ | 1005   | Broken encoding: account pubkey       |  3          |  [3]   |
+ | 1006   | Broken encoding: contract pubkey      |  3          |  [3]   |
+ | 1007   | Contract init failed                  |  3          |  [3]   |
+ | 1008   | Not a number                          |  3          |  [3]   |
+ | 1009   | Broken encoding: contract bytecode    |  3          |  [3]   |
+ | 1010   | Broken encoding: transaction          |  3          |  [3]   |
+ | 1011   | Participant not found                 |  3          |  [3]   |
+ | 1012   | Offchain tx expected                  |  3          |  [3]   |
+ | 1013   | Tx already on-chain                   |  3          |  [3]   |
+ | 1014   | Invalid meta object                   |  3          |  [3]   |
+ | 1015   | Invalid error code (expect 1...65535) |  3          |  [3]   |
+ | 1016   | Invalid fsm id                        |  3          |  [3]   |
+ | 1017   | Bad signature                         |  3          |  [3]   |
+ | 1018   | Not allowed at current channel state  |  3          |  [3]   |
+ | 2000   | Missing field: existing_fsm_id        |  3          |  [3]   |
 
 #### Example, error object
  ```javascript

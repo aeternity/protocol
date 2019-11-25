@@ -13,7 +13,7 @@ different implications this has on channels.
 We express consent in a provable and a cryptographically safe manner. From now
 on we will call it authentication. In the context of channels we can have
 both unilateral and mutual authentication, depending if just one or the two
-parties had expressed their consent. Assumption is if both parties agreeed
+parties had expressed their consent. Assumption is if both parties agreed
 upon a transaction, it had been valid at least at some point of time.
 
 ### Basic and generalized methods
@@ -48,7 +48,7 @@ using the private key.
 
 #### Participant upgrades their account after channel creation
 
-If a participant upgades their account after the `channel_create_tx` is being
+If a participant upgrades their account after the `channel_create_tx` is being
 included, one MUST use the new authentication method for all on-chain
 transactions. Off-chain on the other hand are signed as if the account is
 being `basic`, as it was at channel creation time.
@@ -87,5 +87,3 @@ depending on whether the transaction is meant to be processed on-chain or not:
 * for off-chain transactions (namely `channel_offchain`) the `parallel`
   behaviour is used and all meta transactions authenticate the innermost
   transaction.
-
-

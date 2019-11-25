@@ -36,6 +36,7 @@ These are used for the scenario when all parties behave correctly and as
 expected. The flow is the following:
 
 1. [Channel open](#channel-open)
+  * [FSM Up](#fsm-up)
   * [Client reconnect](#client-reconnect)
 2. [Channel off-chain update](#channel-off-chain-update)
   * [Transfer](#transfer)
@@ -268,6 +269,25 @@ the initiator starts connecting as it will fail.
 At this point the `responder` is listening on address `0.0.0.0` for the `initiator`'s
 connection on the specified port - `12340`.
 
+### Responder FSM is up
+The responder's node checks whether the provided set of parameters looks correct. If the node thinks that a channel 
+opening might succeed then a new fsm is spawned. The node then sends to the responder a token uniquely identifying the spawned fsm.
+```
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": null,
+    "data": {
+      "event": "fsm_up",
+      "fsm_id": "ba_C17wWJz5fj3mJgtV1fECgocnz2I4rh80myApq/Ca0lX+0QpQ"
+    }
+  },
+  "version": 1
+}
+```
+The responder persists the received fsm_id as it will be necessary for reestablishing or reconnecting to the channel. 
+
 ### Initiator WebSocket open
 Using the set of prenegotiated parameters the initiator connects
 ```
@@ -278,6 +298,25 @@ connected (press CTRL+C to quit)
 
 Note the `role=initiator` as it is specific. Note also the `host` and `port`
 values being provided by the `responder`.
+
+### Initiator FSM is up
+The initiator's node checks whether the provided set of parameters looks correct. If the node thinks that a channel 
+opening might succeed then a new fsm is spawned. The node then sends to the initiator a token uniquely identifying the spawned fsm.
+```
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": null,
+    "data": {
+      "event": "fsm_up",
+      "fsm_id": "ba_uWXZtuRj+d4DGIwMBZ6Mim78HEs6jaQDcpkMrFOTLz9uoSL6"
+    }
+  },
+  "version": 1
+}
+```
+The initiator persists the received fsm_id as it will be necessary for reestablishing or reconnecting to the channel.
 
 ### Connection opened messages
 Parties' WebSocket clients receive messages for the opening of the TCP
@@ -559,28 +598,10 @@ present the initial off-chain state:
 
 ### Client reconnect
 Once the `channel_create_tx` has been signed, the client Websocket connection may close
-without causing the FSM to terminate. The client may reconnect by signing a special
-`channel_client_reconnect_tx` transaction, partly to identify the right FSM instance
-to connect to, and partly to prove identity. The transaction has the following structure:
-
- | Name | Type | Description |
- | ---- | ---- | ----------- |
- | channel id | string | ID of the channel |
- | round | integer | Must be higher than at the last reconnect |
- | role | string | Role of the instance (initiator or responder) |
- | pub key | string | Public key of the client |
-
-Information about serialization can be found [here](../../serializations.md#channel-client-reconnect-transaction).
-
-After signing the reconnect transaction, the client connects using the parameters `protocol`
-and `reconnect_tx` as illustrated below. Note that the `reconnect_tx` parameter uses a
-serialized transaction.
-
-```
-$ wscat --connect 'localhost:3014/channel?protocol=json-rpc&reconnect_tx=tx_%2BJ0LAfhCuECD0kyElzq1A4bRqUUlIvwqo3UpNLZr07K6f6ZzCMjOY6nVLowEyewiEfDOGu0yy%2BrS2pSOWZzumSKLpNAOwQsBuFX4U4ICPwGhBiPYP7m2R8Z36J9C1yWyKO6C0GoclMWjkh8mGyYcwiNkAYlpbml0aWF0b3KhARZ7k%2B1MUXursizzqkphuO8bCDRo8DrnsRvekHG5Ry3bV0P6XA%3D%3D'
-
-connected (press CTRL+C to quit)
-```
+without causing the FSM to terminate. The client may reconnect by reestablishing the channel and 
+providing the `fsm_id` received during opening. If the node finds an already running FSM instance for the client
+then a reconnection will occur - the client will receive the same fsm id as before. The `fsm_id` is unique for the client
+so it is sufficient for authenticating the user.
 
 While the client is disconnected, the corresponding FSM will reject any
 protocol request that requires signing. An attempt to reconnect to an FSM that
@@ -588,6 +609,8 @@ already has a client connected will be rejected. Note, however, that if e.g.
 an update request already includes the authentication of the disconnected
 client, the operation is allowed, and the responding FSM proceeds as if it had
 issued an authentication request and received a successful reply.
+
+If an existing client is already connected to the FSM then the old connection is killed if the provided `fsm_id` is correct.
 
 #### Example
 
@@ -745,7 +768,7 @@ the greatest round. At any time the latest state can be used for unilaterally cl
 
 ### Channel state
 There are a couple of different types that could define the channel state.
-Those are deposit, withdrawal and off-chain transactions. They all containt at
+Those are deposit, withdrawal and off-chain transactions. They all contain at
 least the following data:
 
   | Name | Type | Description |
@@ -1407,13 +1430,31 @@ The fsm responds with the following type of report:
 Open the channel in the same way as in the
 [Initiator WebSocket open](#initiator-websocket-open) example,
 adding the parameters `existing_channel_id` and `offchain_tx` with values
-matching the ones provided in the `leave` report above. Some parameters (related to open transaction) are not required and ignored. See [Channel parameters](#channel-parameters):
+matching the ones provided in the `leave` report above, additionally add the parameter `existing_fsm_id`
+containing the `fsm_id` received in the [FSM Up](#fsm-up) event. Some parameters (related to open transaction) 
+are not required and ignored. See [Channel parameters](#channel-parameters):
 
 ```
 $ wscat --connect
-localhost:3014/channel?existing_channel_id=ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR&host=localhost&offchain_tx=tx_%2BQENCwH4h...&port=12341&protocol=json-rpc&role=initiator
+localhost:3014/channel?existing_channel_id=ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR&host=localhost&offchain_tx=tx_%2BQENCwH4h...&port=12341&protocol=json-rpc&exising_fsm_id=ba_C17wWJz5fj3mJgtV1fECgocnz2I4rh80myApq/Ca0lX+0QpQ&role=initiator
 ```
-
+If the parameters look correct then the channel fsm responds with a new fsm id for the channel:
+```
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": null,
+    "data": {
+      "event": "fsm_up",
+      "fsm_id": "ba_AAAAAAz5fj3mJgtV1fECgocnz2I4rh80myApq/Ca0lX+0QpQ"
+    }
+  },
+  "version": 1
+}
+```
+In case the received `fsm_id` is the same as before then a reconnection occurred and the channel is now open.
+Otherwise the node will try to reestablish the channel. The new `fsm_id` MUST be used for new reestablish/reconnection requests.
 The channel fsm responds with the following event reports if all goes well:
 ```javascript
 {
