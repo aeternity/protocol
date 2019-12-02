@@ -36,7 +36,7 @@ These are used for the scenario when all parties behave correctly and as
 expected. The flow is the following:
 
 1. [Channel open](#channel-open)
-  * [FSM Up](#fsm-up)
+  * [FSM Up](#responder-fsm-is-up)
   * [Client reconnect](#client-reconnect)
 2. [Channel off-chain update](#channel-off-chain-update)
   * [Transfer](#transfer)
@@ -1431,7 +1431,7 @@ Open the channel in the same way as in the
 [Initiator WebSocket open](#initiator-websocket-open) example,
 adding the parameters `existing_channel_id` and `offchain_tx` with values
 matching the ones provided in the `leave` report above, additionally add the parameter `existing_fsm_id`
-containing the `fsm_id` received in the [FSM Up](#fsm-up) event. Some parameters (related to open transaction) 
+containing the `fsm_id` received in the [FSM Up](#responder-fsm-is-up) event. Some parameters (related to open transaction) 
 are not required and ignored. See [Channel parameters](#channel-parameters):
 
 ```
