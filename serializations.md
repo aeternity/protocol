@@ -141,6 +141,7 @@ ambiguity.
 | 4      | oracle          |
 | 5      | contract        |
 | 6      | channel         |
+| 7      | token           |
 
 In Erlang notation, the `id()` type pattern is:
 ```
@@ -252,6 +253,12 @@ subsequent sections divided by object.
 | Sophia byte code | 70 |
 | Generalized accounts attach transaction | 80 |
 | Generalized accounts meta transaction | 81 |
+| Aeternity Native Token (ANT) | 90 |
+| ANT create transaction | 91 |
+| ANT mint transaction | 92 |
+| ANT finalize transaction | 93 |
+| Token trade transaction | 94 |
+| Token burn transaction | 95 |
 | Key block | 100 |
 | Micro block | 101 |
 | Light micro block | 102 |
@@ -282,6 +289,24 @@ subsequent sections divided by object.
 ]
 ```
 
+#### Accounts (version 4, Normal accounts with flags and tokens, from XXX release)
+```
+[ <flags>       :: int()
+, <nonce>       :: int()
+, <balance>     :: int()
+, <tokens>      :: [{id(),int()}]
+```
+
+#### Accounts (version 5, Generalized accounts with tokens, from XXX release)
+```
+[ <flags>       :: int()
+, <nonce>       :: int()
+, <balance>     :: int()
+, <ga_contract> :: id()
+, <ga_auth_fun> :: binary()
+, <tokens>      :: [{id(),int()}]
+```
+
 ### Signed transaction
 ```
 [ <signatures>  :: [binary()]
@@ -309,6 +334,28 @@ The recipient must be one of the following:
 * A contract identifier.
 * A name identifier, whose related name entry has an identifier as value of pointer with key `account_pubkey`.
   If multiple pointer entries are present for such key, then the first of such entries is used.
+`
+
+### Spend token transaction From the XXX release
+```
+[ <sender>    :: id()
+, <recipient> :: id()
+, <token>     :: id()
+, <amount>    :: int()
+, <fee>       :: int()
+, <ttl>       :: int()
+, <nonce>     :: int()
+, <payload>   :: binary()
+]
+```
+
+The recipient must be one of the following:
+* An account identifier.
+* An oracle identifier.
+* A contract identifier.
+* A name identifier, whose related name entry has an identifier as value of pointer with key `account_pubkey`.
+  If multiple pointer entries are present for such key, then the first of such entries is used.
+`
 
 #### Oracles
 ```
@@ -1012,5 +1059,76 @@ NOTE:
 [ <header1>  :: binary()
 , <header2>  :: binary()
 , <pubkey>   :: binary()
+]
+```
+
+#### Aeternity Native Token (ANT)
+```
+{ creator       :: id()
+, meta_data     :: binary()
+, contract      :: id()
+, total_supply  :: int()
+, parent        :: id()   TODO: Decide if we should have hierarchical tokens
+, final         :: bool()
+}
+```
+
+
+#### ANT create transaction
+```
+[ <creator>       :: id()
+, <meta_data>     :: binary()
+, <contract>      :: id()
+, <amount>        :: int()
+, <recipient>     :: id()
+, <parent>        :: id()    TODO: Decide on hierarchical tokens
+, <final>         :: bool()
+, <ttl>           :: int()
+, <fee>           :: int()
+, <nonce>         :: int()
+]
+```
+
+#### ANT mint transaction
+```
+[ <owner>         :: id()
+, <ANT>           :: id()
+, <amount>        :: int()
+, <recipient>     :: id()
+, <final>         :: bool()
+, <ttl>           :: int()
+, <fee>           :: int()
+, <nonce>         :: int()
+]
+```
+
+#### ANT finalize transaction
+```
+[ <owner>         :: id()
+, <ANT>           :: id()
+, <ttl>           :: int()
+, <fee>           :: int()
+, <nonce>         :: int()
+]
+```
+
+#### Token trade transaction
+
+```
+[ <trades>        :: [{<sender> :: id(), <receiver> :: id(), <amount> :: int(), <ANT> :: id()}]
+, <ttl>           :: int()
+, <fee>           :: int()
+, <nonce>         :: int()
+]
+```
+
+#### Token burn transaction
+```
+[ <account>       :: id()
+, <ANT>           :: int()
+, <amount>        :: int()
+, <ttl>           :: int()
+, <fee>           :: int()
+, <nonce>         :: int()
 ]
 ```
