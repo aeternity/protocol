@@ -1003,6 +1003,13 @@ containing the `reason` string. Only the gas used up to and including the abort
 call is charged. This is different from termination due to a crash which
 consumes all available gas.
 
+For convenience the following function is also built-in:
+
+```
+function require(b : bool, err : string) =
+    if(!b) abort(err)
+```
+
 ## Syntax
 
 ### Lexical syntax
@@ -1271,9 +1278,6 @@ contract FundMe =
                    beneficiary   : address,
                    deadline      : int,
                    goal          : int }
-
-  function require(b : bool, err : string) =
-    if(!b) abort(err)
 
   function spend(args : spend_args) =
     raw_spend(args.recipient, args.amount)
