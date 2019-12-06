@@ -718,7 +718,8 @@ Oracle.register(acct       : address,
 
 * The `acct` is the address of the oracle to register (can be the same as the contract).
 * `signature` is a signature proving that the contract is allowed to register the account -
-  the account address + the contract address (concatenated as byte arrays) is signed with the
+  the account address + the contract address (concatenated as byte arrays) is
+  [signed](#delegation-signature) with the
   private key of the account, proving you have the private key of the oracle to be. If the
   address is the same as the contract `sign` is ignored and can be left out entirely.
 * The `qfee` is the minimum query fee to be paid by a user when asking a question of the oracle.
@@ -767,7 +768,7 @@ Oracle.respond(oracle     : oracle('a, 'b),
 
 Unless the contract address is the same as the oracle address the `signature`
 needs to be provided. Proving that we have the private key of the oracle by
-signing the oracle query id + contract address.
+[signing](#delegation-signature) the oracle query id + contract address.
 
 ##### Oracle query
 
@@ -894,10 +895,11 @@ Naming System (AENS):
   If `owner` is equal to `Contract.address` the signature `signature` is
   ignored, and can be left out since it is a named argument. Otherwise we need
   a signature to prove that we are allowed to do AENS operations on behalf of
-  `owner`. For `AENS.preclaim` the signature should be over owner address +
-  Contract.address (concatenated as byte arrays), for the other three
-  operations the signature should be over owner address + `name_hash` +
-  Contract.address using the private key of the `owner` account for signing.
+  `owner`. For `AENS.preclaim` the [signature](#delegation-signature)
+  should be over `owner address` +
+  `Contract.address` (concatenated as byte arrays), for the other three
+  operations the [signature](#delegation-signature) should be over `owner address` + `name_hash` +
+  `Contract.address` using the private key of the `owner` account for signing.
 
 #### Events
 
@@ -1576,3 +1578,10 @@ stack, and potential heap objects for the return value written to the top of
 the heap. The return type from the contracts meta data is used when writing it
  to the heap. Since maps are handled outside the heap, the caller explicitly
 pays gas for handling maps in the return value.
+
+### Delegation signature
+Some chain operations (`Oracle.<operation>` and `AENS.<operation>`) has an optional
+delegation signature. This is typically used when a user/accounts would like to
+allow a contract to act on it's behalf. The exact data to be signed varies for the
+different operations, but in *all* cases you should prepend the signature data with
+the `network_id` (`ae_mainnet` for the Aeternity mainnet, etc.).
