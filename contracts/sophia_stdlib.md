@@ -8,6 +8,7 @@ Sophia language offers standard library that consists of following namespaces:
 - [Func.aes](#Func)
 - [Pair.aes](#Pair)
 - [Triple.aes](#Triple)
+- [BLS12_381](#BLS12_381)
 
 Each of them can be imported using `include` directive.
 
@@ -42,7 +43,7 @@ Returns `Some` of the last element of a list or `None` if the list is empty.
 ### find
 `find(p : 'a => bool, l : list('a)) : option('a)`
 
-Finds first element of `l` fulfilling predicate `p` as `Some` or `None` if no such element exists. 
+Finds first element of `l` fulfilling predicate `p` as `Some` or `None` if no such element exists.
 
 
 ### find_indices
@@ -466,12 +467,12 @@ Example (factorial with custom step):
 
 ```
 // tuplified version
-let factorial_t(n, step) = 
+let factorial_t(n, step) =
   let fac(rec, args) =
     let (n, step) = args
     if(n < 2) 1 else n * rec((n - step, step))
   recur(fac)((n, step))
-  
+
 // curried version
 let factorial_c(n, step) =
   let fac(rec, n) = (step) =>
@@ -634,3 +635,148 @@ Cyclic rotation of the elements to the right.
 `rotl(t : ('a * 'b * 'c)) : ('b * 'c * 'a)`
 
 Cyclic rotation of the elements to the left.
+
+## BLS12\_381
+
+### Types
+- `fp // Built-in (Montgomery) integer representation 32 bytes`
+- `fr // Built-in (Montgomery) integer representation 48 bytes`
+- `record fp2 = { x1 : fp, x2 : fp }`
+- `record g1  = { x : fp, y : fp, z : fp }`
+- `record g2  = { x : fp2, y : fp2, z : fp2 }`
+- `record gt  = { x1 : fp, x2 : fp, x3 : fp, x4 : fp, x5 : fp, x6 : fp, x7 : fp, x8 : fp, x9 : fp, x10 : fp, x11 : fp, x12 : fp }`
+
+### pairing\_check
+`pairing_check(xs : list(g1), ys : list(g2)) : bool`
+
+Pairing check of a list of points, `xs` and `ys` should be of equal length.
+
+### int_to_fr
+`int_to_fr(x : int) : fr`
+
+Convert an integer to an `fr` - a 32 bytes internal (Montgomery) integer representation.
+
+### int_to_fp
+`int_to_fp(x : int) : fp`
+
+Convert an integer to an `fp` - a 48 bytes internal (Montgomery) integer representation.
+
+### fr_to_int
+`fr_to_int(x : fr)  : int`
+
+Convert a `fr` value into an integer.
+
+### fp_to_int
+`fp_to_int(x : fp)  : int`
+
+Convert a `fp` value into an integer.
+
+### mk_g1
+`mk_g1(x : int, y : int, z : int) : g1`
+
+Construct a `g1` point from three integers.
+
+### mk_g2
+`mk_g2(x1 : int, x2 : int, y1 : int, y2 : int, z1 : int, z2 : int) : g2`
+
+Construct a `g2` point from six integers.
+
+### g1_neg
+`g1_neg(p : g1) : g1`
+
+Negate a `g1` value.
+
+### g1_norm
+`g1_norm(p : g1) : g1`
+
+Normalize a `g1` value.
+
+### g1_valid
+`g1_valid(p : g1) : bool`
+
+Check that a `g1` value is a group member.
+
+### g1_is_zero
+`g1_is_zero(p : g1) : bool`
+
+Check if a `g1` value corresponds to the zero value of the group.
+
+### g1_add
+`g1_add(p : g1, q : g1) : g1`
+
+Add two `g1` values.
+
+### g1_mul
+`g1_mul(k : fr, p : g1) : g1`
+
+Scalar multiplication for `g1`.
+
+### g2_neg
+`g2_neg(p : g2) : g2`
+
+Negate a `g2` value.
+
+### g2_norm
+`g2_norm(p : g2) : g2`
+
+Normalize a `g2` value.
+
+### g2_valid
+`g2_valid(p : g2) : bool`
+
+Check that a `g2` value is a group member.
+
+### g2_is_zero
+`g2_is_zero(p : g2) : bool`
+
+Check if a `g2` value corresponds to the zero value of the group.
+
+### g2_add
+`g2_add(p : g2, q : g2) : g2`
+
+Add two `g2` values.
+
+### g2_mul
+`g2_mul(k : fr, p : g2) : g2`
+
+Scalar multiplication for `g2`.
+
+### gt_inv
+`gt_inv(p : gt) : gt`
+
+Invert a `gt` value.
+
+### gt_add
+`gt_add(p : gt, q : gt) : gt`
+
+Add two `gt` values.
+
+### gt_mul
+`gt_mul(p : gt, q : gt) : gt`
+
+Multiply two `gt` values.
+
+### gt_pow
+`gt_pow(p : gt, k : fr) : gt`
+
+Calculate exponentiation `p ^ k`.
+
+### gt_is_one
+`gt_is_one(p : gt) : bool`
+
+Compare a `gt` value to the unit value of the Gt group.
+
+### pairing
+`pairing(p : g1, q : g2) : gt`
+
+Compute the pairing of a `g1` value and a `g2` value.
+
+### miller_loop
+`miller_loop(p : g1, q : g2) : gt`
+
+Do the Miller loop stage of pairing for `g1` and `g2`.
+
+### final_exp
+`final_exp(p : gt) : gt`
+
+Perform the final exponentiation step of pairing for a `gt` value.
