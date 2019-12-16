@@ -301,7 +301,7 @@ Sophia has the following types:
 
 | Type       | Description                     | Example
 | ---------- | ------------------------------- | -------:
-| int        | A 256 bit 2-complement integer  | ```-1```
+| int        | A 2-complement integer          | ```-1```
 | address    | Aeternity address, 32 bytes     | ```Call.origin```
 | bool       | A Boolean                       | ```true```
 | bits       | A bit field                     | ```Bits.none```
@@ -346,7 +346,7 @@ Sophia has the following types:
 
 ### Arithmetic
 
-Sophia integers (`int`) are represented by 256-bit signed words and supports the following
+Sophia integers (`int`) are represented by 256-bit (AEVM) or arbitrary-sized (FATE) signed words and supports the following
 arithmetic operations:
 - addition (`x + y`)
 - subtraction (`x - y`)
@@ -355,12 +355,12 @@ arithmetic operations:
 - remainder (`x mod y`), satisfying `y * (x / y) + x mod y == x` for non-zero `y`
 - exponentiation (`x ^ y`)
 
-All operations are *safe* with respect to overflow and underflow. They behave as the corresponding
+All operations are *safe* with respect to overflow and underflow. On AEVM they behave as the corresponding
 operations on arbitrary-size integers and fail with `arithmetic_error` if the
 result cannot be represented by a 256-bit signed word. For example, `2 ^ 255`
 fails rather than wrapping around to -2²⁵⁵.
 
-The division and remained operations also throw an arithmetic error if the
+The division and modulo operations also throw an arithmetic error if the
 second argument is zero.
 
 ### Bit fields
