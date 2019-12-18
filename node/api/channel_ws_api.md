@@ -242,6 +242,7 @@ Roles:
   | amount | integer | Amount of tokens to deposit in the channel | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
   | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+  | gas_price | integer | the gas_price to be used for the fee computation | No |
   | meta | array of strings | Meta information about the update | No |
 
 #### Example
@@ -383,6 +384,7 @@ Roles:
   | amount | integer | Amount of tokens to withdraw form the channel | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
   | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+  | gas_price | integer | the gas_price to be used for the fee computation | No |
   | meta | array of strings | Meta information about the update | No |
 
 #### Example
@@ -655,6 +657,7 @@ Roles:
   | ---- | ---- | ----------- | -------- |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
   | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+  | gas_price | integer | the gas_price to be used for the fee computation | No |
 
 #### Example
 ```javascript
@@ -838,6 +841,7 @@ Roles:
  | Name  | Type | Description | Required |
  | ----- | ---- | ----------- | -------- |
  | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+  | gas_price | integer | the gas_price to be used for the fee computation | No |
 
 #### Example
 ```javascript
@@ -910,6 +914,7 @@ Roles:
  | Name  | Type | Description | Required |
  | ----- | ---- | ----------- | -------- |
  | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+  | gas_price | integer | the gas_price to be used for the fee computation | No |
 
 #### Example
 ```javascript
