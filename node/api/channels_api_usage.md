@@ -23,13 +23,19 @@ parties_.
 There are two basic types of interaction: persisted connection events and HTTP
 API calls.
 
-Although no off-chain transactions consume gas nor require
-fees, all on-chain transactions come with a fee. The value of the fee can be
-set by the client that initiates the action, ex. a deposit. If not provided,
-the FSM will calculate it for the client: it will multiply the minimum gas
-required for the transaction by the node's setting for `min_miner_gas_price`.
-Note that using the `min_miner_gas_price` could be too low or too high
-according to dynamically changing miner expectations for gas price.
+Although no off-chain transactions consume gas nor they require any fees, all
+on-chain transactions come with a fee. The value of the fee can be set by the
+client that initiates the action, ex. a deposit. The FSM could also calculate
+it for the client: it will multiply the minimum gas required for the
+transaction by the gas price. The gas price could optionally be specified by
+the client. If not - the node's setting for `min_miner_gas_price` instead.
+Note that relying on the `min_miner_gas_price` could result in fee being
+either too low or too high according to dynamically changing miner
+expectations for the gas price.  If both a `fee` and a `gas_price` are
+provided, then the FSM computes the fee for the client according to the gas
+requirements and `gas_price`. The actual fee being used for the transaction is
+the larger value between the computed fee using provided `gas_price`and the
+provided `fee`.
 
 ### WebSocket life cycle
 These are used for the scenario when all parties behave correctly and as
@@ -169,6 +175,7 @@ will describe these in groups which indicate their relation to each other.
   | role | string | the role of the client - either `initiator` or `responder` | Yes | Yes | No |
   | minimum_depth | integer | the minimum amount of blocks to be mined | No | No | No |
   | fee | integer | the fee to be used for the channel open transaction | No | No | Yes |
+  | gas_price | integer | the gas_price to be used for the fee computation of the channel open transaction | No | No | Yes |
 
   `responder`'s port and host pair must be reachable from `initiator` network
   so unless participants are part of a LAN, they should be exposed to the
@@ -1477,6 +1484,7 @@ chain and has the following structure:
   | responder_amount_final | integer | final amount of tokens to be awarded by the responder |
   | ttl | integer | maximum block height to include the transaction |
   | fee | integer | fee to be paid to the miner |
+  | gas_price | integer | the gas_price to be used for the fee computation |
   | nonce | integer | initiator's nonce |
 
 Since any of the participants can initiate a closing, we will use `starter`
@@ -2320,6 +2328,7 @@ posted on-chain and is included in a block. It has the following structure:
   | amount | integer | the amount committed to the channel |
   | ttl | integer | minimum block height to include the transaction |
   | fee | integer | fee to be paid to the miner |
+  | gas_price | integer | the gas_price to be used for the fee computation |
   | state_hash | string | the root of the internal channel state hash after the deposit |
   | round | integer | the next channel round |
   | nonce | integer | depositor's nonce |
@@ -2514,6 +2523,7 @@ posted on-chain and is included in a block. It has the following structure:
   | amount | integer | the amount taken out from the channel |
   | ttl | integer | minimum block height to include the transaction |
   | fee | integer | fee to be paid to the miner |
+  | gas_price | integer | the gas_price to be used for the fee computation |
   | state_hash | string | the root of the internal channel state hash after the withdraw |
   | round | integer | the next channel round |
   | nonce | integer | withdrawer's nonce |
@@ -2998,6 +3008,7 @@ The transaction has the following structure:
   | poi | binary | closing proof of inclusion |
   | ttl | integer | maximum block height to include the transaction |
   | fee | integer | fee to be paid to the miner |
+  | gas_price | integer | the gas_price to be used for the fee computation |
   | nonce | integer | solo closer's nonce |
 
 `payload` and `poi` are validated as [described above](#payload-and-proof-of-inclusion)
@@ -3024,6 +3035,7 @@ The transaction has the following structure:
   | poi | binary | slashing proof of inclusion |
   | ttl | integer | maximum block height to include the transaction |
   | fee | integer | fee to be paid to the miner |
+  | gas_price | integer | the gas_price to be used for the fee computation |
   | nonce | integer | slasher's nonce |
 
 `payload` and `poi` are validated as [described above](#payload-and-proof-of-inclusion)
@@ -3070,6 +3082,7 @@ The transaction has the following structure:
   | responder_amount_final | integer | responder final amount |
   | ttl | integer | maximum block height to include the transaction |
   | fee | integer | fee to be paid to the miner |
+  | gas_price | integer | the gas_price to be used for the fee computation |
   | nonce | integer | settler's nonce |
 
 The amounts are the exact amounts stored in the channel object on-chain.
