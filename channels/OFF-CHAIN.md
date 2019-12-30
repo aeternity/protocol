@@ -1,15 +1,22 @@
 # Off-chain
 
-Each party keeps a state tree specific for the channel. It consists of all the
-channel data: accounts, contracts and etc. and has the same structure as the
-on-chain state tree. Off-chain transactions update this channel auxiliary tree.
-It is a responsibility of the parties to keep this locally. Solo closing
-transactions provide a proof of inclusion for it instead of
-posting the whole tree.
-Each off-chain update consists of updates being applied on top of channel state
-tree and an integer value `round` representing when it happened. Since `round`
-must always be bumped, provided two off-chain transactions we can reason which
-was performed earlier than the other.
+Each party keeps a state tree specific for the channel. It represents the
+channel state at a certain point of time. It consists of all the channel data:
+accounts and contracts. Since it has the same structure as the on-chain state
+tree, names and oracles are empty as those are not allowed off-chain. The
+channels' subtree is empty as well, as it is reserved for future use.
+Off-chain transactions update this channel auxiliary tree.
+
+It is a responsibility of the parties to keep this locally. This is the safety
+guarantee in a case of a dispute: solo closing path requires a proof of
+inclusion for subtree instead of posting the whole tree. Being able to provide
+this proof of inclusion allows the participant to dispute a malicious close by
+the other party or for basing a forced progress.
+
+Each off-chain update consists of updates being applied on top of channel
+state tree as well with an integer value `round` representing when it
+happened. Since `round` must always be bumped, provided two off-chain
+transactions we can reason which was performed earlier than the other.
 
 
 ## Messages
@@ -55,21 +62,21 @@ was performed earlier than the other.
 
 ## Overview
 
-The protocol parties use to run smart contracts is a two phase commit protocol,
-where one party proposes a change, gets it authenticated by the other and then
-commits the update locally. These checks are necessary to avoid parties getting
-confused if updates are being proposed simultaneously.
-On a higher level, to keep off-chain and on-chain state in sync, parties should
-refuse to authenticate updates for either without also getting an authentication
-for the updates state_hash, e.g. don't authenticate an on chain `channel_deposit`
-transaction without also updating the state trees in channel as well.
-Authentication methods differences depending on if the transaction is on-chain
-or off-chain one can be found [here](./authentication.md).
+The protocol parties use to run smart contracts is a two phase commit
+protocol, where one party proposes a change, gets it authenticated by the
+other and then commits the update locally. These checks are necessary to avoid
+parties getting confused if updates are being proposed simultaneously.  On a
+higher level, to keep off-chain and on-chain state in sync, parties should
+refuse to authenticate updates for either without also getting an
+authentication for the updates state_hash, e.g. don't authenticate an on-chain
+`channel_deposit` transaction without also updating the state trees in channel
+as well.  Authentication methods differences depending on if the transaction
+is on-chain or off-chain one can be found [here](./authentication.md).
 
 With the consistency of state updates being secured between parties, it is
-essential that parties make absolutely sure to not lose their local state, since
-it could potentially lead to them not being able to slash outdated states
-published on-chain.
+essential that parties make absolutely sure to not lose their local state,
+since it could potentially lead to them not being able to slash outdated
+states published on-chain.
 
 
 ## Control messages
@@ -199,11 +206,11 @@ transaction.
 
 Message code: 1
 
-This message initiates the opening of a channel and communicates the initiators'
-intent to a potential future party.
+This message initiates the opening of a channel and communicates the
+initiators' intent to a potential future party.
 
-The `channel_open` message should provide the accepting party all the information
-it needs to assess whether or not it should accept the channel.
+The `channel_open` message should provide the accepting party all the
+information it needs to assess whether or not it should accept the channel.
 
 
 ```
@@ -229,16 +236,17 @@ it needs to assess whether or not it should accept the channel.
  ---------------------- ----
 ```
 
-- `chain_hash`: transaction hash of the chain you want to use, e.g. hash of the
-  genesis
-- `temporary_channel_id`: randomly chosen id unique between the involved parties
-- `lock_period`: time in blocks until a channel closing is to be accepted if not
-  mutual or in general for parties to wait for new messages.
+- `chain_hash`: transaction hash of the chain you want to use, e.g. hash of
+  the genesis
+- `temporary_channel_id`: randomly chosen id unique between the involved
+  parties
+- `lock_period`: time in blocks until a channel closing is to be accepted if
+  not mutual or in general for parties to wait for new messages.
 - `push_amount`: initial deposit in favour of the responder by the initiator
 - `initiator_amount`: amount the initiator is willing to commit
 - `responder_amount`: amount the initiator wants the responder to commit
-- `channel_reserve`: the minimum amount both parties need to maintain, amount of
-  coins a party is to lose in case of acting maliciously
+- `channel_reserve`: the minimum amount both parties need to maintain, amount
+  of coins a party is to lose in case of acting maliciously
 - `initiator_pubkey`: the account that the initiator wants to use to open the
   channel
 - `responder_pubkey`: the account that the initiator expects as a responder on
@@ -335,21 +343,19 @@ initiating party.
 ```
 
 - `chain_hash`: transaction hash of the chain you want to use
-- `temporary_channel_id`: randomly chosen id unique between the involved parties,
+- `temporary_channel_id`: randomly chosen id unique between the involved
+  parties,
 - `minimum_depth`: number of blocks until an opening transaction should be
   considered final. The `minimum_depth` is set by the responding party, since
-  they will typically be the one providing a service. Note that a `minimum_depth` of 0
-  (zero) will result in a microblock confirmation (see below).
+  they will typically be the one providing a service. Note that a
+  `minimum_depth` of 0 (zero) will result in a microblock confirmation (see
+  below).
 - `initiator_amount`: amount the initiator is willing to commit
 - `responder_amount`: amount the initiator wants the responder to commit
-- `channel_reserve`: the minimum amount both parties need to maintain. This makes
-  sure that both have to lose something in case they act maliciously
+- `channel_reserve`: the minimum amount both parties need to maintain. This
+  makes sure that both have to lose something in case they act maliciously
 - `initiator_pubkey`: the account that the initiator used to open the channel
-- `responder_pubkey`: the account that the responder used to open the
-  channel
-
-(***TODO***: This could be interactive, i.e. if the responding party sends
-different amounts, then that might communicate that it wants these instead.)
+- `responder_pubkey`: the account that the responder used to open the channel
 
 #### Requirements
 
@@ -363,13 +369,18 @@ different amounts, then that might communicate that it wants these instead.)
 
 #### Microblock confirmation
 
-As outlined in [this Bitcoin-NG blog post](http://hackingdistributed.com/2015/11/09/bitcoin-ng-followup/), _an NG microblock offers strictly stronger guarantees than a 0-confirmation in Bitcoin_. In Aeternity, when the minimum-depth confirmation is set to zero, the system
-will still wait until the transaction is seen inside a microblock. This will mean that 
-the transaction has been gossiped, picked up from the mempool and accepted by a miner.
+As outlined in [this Bitcoin-NG blog
+post](http://hackingdistributed.com/2015/11/09/bitcoin-ng-followup/), _an NG
+microblock offers strictly stronger guarantees than a 0-confirmation in
+Bitcoin_. In Aeternity, when the minimum-depth confirmation is set to zero,
+the system will still wait until the transaction is seen inside a microblock.
+This will mean that the transaction has been gossiped, picked up from the
+mempool and accepted by a miner.
 
-Note that high-value transactions should wait for a number of keyblocks in order to
-guard against forks reorganizing the chain, but a microblock confirmation offers at least
-a receipt of that the transaction was initially accepted.
+Note that high-value transactions should wait for a number of keyblocks in
+order to guard against forks reorganizing the chain, but a microblock
+confirmation offers at least a receipt of that the transaction was initially
+accepted.
 
 ### `channel_reestablish`
 
@@ -396,11 +407,11 @@ and the clients must verify that they have the corresponding state trees to
 match the state (otherwise, it will not be possible to use the channel later
 on.)
 
-In the Aeternity node implementation, the state trees are cached inside the node.
-Note that if the node restarts, cached data is not likely to survive (it is
-not persisted on each update for performance reasons.) The Aeternity node channel
-fsm automatically recovers the state trees and verifies that the provided
-state is in fact the last mutually authenticated state.
+In the Aeternity node implementation, the state trees are cached inside the
+node.  Note that if the node restarts, cached data is not likely to survive
+(it is not persisted on each update for performance reasons.) The Aeternity
+node channel FSM automatically recovers the state trees and verifies that the
+provided state is in fact the last mutually authenticated state.
 
 #### Requirements
 
@@ -578,17 +589,17 @@ Once `funding_locked` messages have been exchanged, the channel enters the
 `update` message. It consists of a single-authenticated off-chain transaction
 and a list of updates list containing the operations to be performed on the
 previous state. The `state_hash` of the off-chain transaction is the
-aggregated root hash of the resulting state trees. The receiver must verify
-that the state is the correct outcome, then return it, mutually authenticated,
-in an `update_ack` message.
+aggregated root hash of the resulting state trees after the updates had been
+applied. The receiver must verify that the state is the correct outcome, then
+return it, mutually authenticated, in an `update_ack` message.
 
 The `block_hash` is the hash of which on-chain environment was used for
-computing the state and either this blcok or any more recent one could be used
+computing the state and either this block or any more recent one could be used
 to validate the state. Signatures or Generic Account's meta transactions are
 checked according to the latest channel object persisted on-chain. If there are
 updates that are contact executions using on-chain data: the block of
-`block_hash` is being used for building a consistent state on both participant's
-side.
+`block_hash` is being used for building a consistent state on both
+participant's side.
 
 ```
   name                  size (bytes)
@@ -609,13 +620,14 @@ side.
 
 Message code: 9
 
-In response to an `update` message, the receiving side verifies that the
-operations listed in the updates list, applied to the most recent mutually
-authenticated state, results in a state tree corresponding to `state_hash`. If
-so, the state object is mutually authenticated, then returned as payload in an
-`update_ack` message. The `block_hash` is the environment the authentication
-had been done. The authentication method described in the latest channel
-on-chain persisted object must be used.
+In response to an `update` message, the receiving side validates the received
+updates that they are indeed desired. Then one verifies that the operations
+listed in the updates list, applied to the most recent mutually authenticated
+state, results in a state tree corresponding to the `state_hash` in the
+transaction. If so, the state object is mutually authenticated, then returned
+as payload in an `update_ack` message. The `block_hash` is the environment the
+authentication had been done. The authentication method described in the
+latest channel on-chain persisted object must be used.
 
 ```
   name                  size (bytes)
@@ -636,7 +648,7 @@ Message code: 10
 
 Since both sides may initiate an `update` request, it is possible that both
 may do so at roughly the same time. In particular, in the Aeternity node system,
-if an `update` request arrives while the fsm is waiting for its client to
+if an `update` request arrives while the FSM is waiting for its client to
 authenticate a new state update, it reverts both its own update attempt and the
 other participant's update request by sending an `update_error` message.
 The `round` element signifies the round of the fallback state, which must
@@ -740,7 +752,7 @@ Message code: 14
 
 Since both sides may initiate a `deposit_created` request, it is possible
 that both may do so at roughly the same time. In particular, in the Aeternity node
-system, if a `deposit_created` request arrives while the fsm is waiting for
+system, if a `deposit_created` request arrives while the FSM is waiting for
 its client to authenticate a new state update, it reverts both its own update
 attempt and the other participant's update request by sending a `deposit_error`
 message. The `round` element signifies the round of the fallback state, which
@@ -843,7 +855,7 @@ Message code: 18
 
 Since both sides may initiate a `withdraw_created` request, it is possible
 that both may do so at roughly the same time. In particular, in the Aeternity node
-system, if a `withdraw_created` request arrives while the fsm is waiting for
+system, if a `withdraw_created` request arrives while the FSM is waiting for
 its client to authentication a new state update, it reverts both its own update
 attempt and the other participant's withdraw request by sending a
 `withdraw_error` message. The `round` element signifies the round of the
@@ -866,7 +878,7 @@ receiver does not reply.
 Message code: 96
 
 Inband messages are arbitrary messages sent between the channel participants.
-The payload must be limited to 65,535 bytes. The fsm must deliver an inband
+The payload must be limited to 65,535 bytes. The FSM must deliver an inband
 message immediately, and the receiver must process it (e.g. conveying it to
 the client) immediately, preserving the message ordering.
 

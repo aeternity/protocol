@@ -11,8 +11,10 @@ The WebSocket API provides the following actions:
  * [Generic message](#generic-message)
  * [Close mutual](#close-mutual)
  * [Close solo](#close-solo)
+ * [Slash](#slash)
  * [Settle](#settle)
  * [Leave](#leave)
+ * [Snapshot](#snapshot)
  * [On-chain transactions](#on-chain-transactions)
  * [Info messages](#info-messages)
  * [System messages](#system-messages)
@@ -767,6 +769,79 @@ Roles:
 }
 ```
 
+## Snapshot
+Roles:
+ * Snapshotter
+
+### Snapshotter initiated solo snapshot
+ * **method:** `channels.snapshot_solo`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.snapshot_solo",
+  "params": {}
+}
+```
+
+### Snapshotter receives solo snapshot
+ * **method:** `channels.sign.snapshot_solo_tx`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | channel_id | string | channel ID | Yes |
+ | data  | object | closing data | Yes |
+
+ * **data:**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | signed_tx | string | `channel_snapshot_solo_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
+ | updates | list | empty list | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.snapshot_solo_tx",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "signed_tx": "tx_+QGfNgGhBn...",
+      "updates": []
+    }
+  },
+  "version": 1
+}
+```
+
+### Snapshotter returns an authenticated solo snapshot
+ * **method:** `channels.snapshot_solo_sign`
+ * **params:**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | signed_tx | string | solo-authenticated `channel_snapshot_solo_tx` transaction | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.snapshot_solo_sign",
+  "params": {
+    "signed_tx": "tx_+QHrCwH4Q..."
+  }
+}
+```
+
+
 ## On-chain transactions
  * **method:** `channels.on_chain_tx`
  * **params:**
@@ -893,6 +968,100 @@ Roles:
 {
   "jsonrpc": "2.0",
   "method": "channels.close_solo_sign",
+  "params": {
+    "signed_tx": "tx_+QHrCwH4Q..."
+  }
+}
+```
+
+## Slash
+Roles:
+ * Slasher
+
+### Slasher is prompted to slash
+ * **method:** `channels.on_chain_tx`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | info | string | "can_slash" | Yes |
+ | tx | string | the last on-chain transaction that could be slashed | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_rb...",
+    "data": {
+      "info": "can_slash",
+      "tx": "tx_+NIL...",
+      "type": "channel_offchain_tx"
+    }
+  },
+  "version": 1
+}
+```
+
+
+### Slasher initiates slash
+ * **method:** `channels.slash`
+
+#### Example
+```javascript
+{
+  "id": -576460752303423374,
+  "jsonrpc": "2.0",
+  "method": "channels.slash"
+}
+```
+
+### Slasher receives slash
+ * **method:** `channels.sign.slash`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | channel_id | string | channel ID | Yes |
+ | data  | object | slashing data | Yes |
+
+ * **data:**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | signed_tx | string | `channel_slash` transaction wrapped in a `signed_tx` with no authentication | Yes |
+ | updates | list | empty list of updates updates | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.slash",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "signed_tx": "tx_+QGfNgGhBn...",
+      "updates": []
+    }
+  },
+  "version": 1
+}
+```
+
+### Slasher returns an authenticated slash
+ * **method:** `channels.slash_sign`
+ * **params:**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | signed_tx | string | solo-authenticated `channel_slash` transaction | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.slash_sign",
   "params": {
     "signed_tx": "tx_+QHrCwH4Q..."
   }
