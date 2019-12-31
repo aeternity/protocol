@@ -15,6 +15,7 @@ The WebSocket API provides the following actions:
  * [Settle](#settle)
  * [Leave](#leave)
  * [Snapshot](#snapshot)
+ * [Contract dry run](#contract-dry-run)
  * [On-chain transactions](#on-chain-transactions)
  * [Info messages](#info-messages)
  * [System messages](#system-messages)
@@ -841,6 +842,34 @@ Roles:
 }
 ```
 
+### Contract dry run
+
+ * **method:** `channels.dry_run.call_contract`
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | contract_id | contract id | contract to call | Yes |
+  | call\_data | call data | call data | Yes |
+  | abi\_version | integer | call abi version | Yes |
+  | amount | integer | amount of tokens to transfer to contract | Yes |
+  | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
+  | meta | array of strings | Meta information about the update | No |
+
+#### Example
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.dry_run.call_contract",
+  "params": {
+    "abi_version": 1,
+    "amount": 0,
+    "call_data": "cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACBo8mdjOP9QiDmrpHdJ7/qL6H7yhPIH+z2ZmHAc1TiHxQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACo7dbVl",
+    "contract_id": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5"
+  }
+}
+```
 
 ## On-chain transactions
  * **method:** `channels.on_chain_tx`
