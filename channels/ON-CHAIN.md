@@ -206,7 +206,7 @@ Serialization defined [here](../serializations.md#channel-withdraw-transaction)
 - `nonce`: `to`'s account nonce
 
 The `to` account MUST be a participant in the target channel. The `amount`
-MUST be less or equal than the sum of the channel balance with regard of the
+MUST be less than or equal to the sum of the channel balance with regard to the
 `channel_reserve` ammounts, i.e. channels cannot create coins out of thin air
 but also a minimum of `channel_reserve` must remain locked in the channel. The
 fee is paid by the `to` account and that account should hold enough coins to
