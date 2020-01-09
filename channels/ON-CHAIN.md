@@ -167,7 +167,7 @@ Serialization defined [here](../serializations.md#channel-deposit-transaction)
 - `channel_id`: channel id as recorded on-chain
 - `from_id`: sender of the deposit
 - `amount`: amount of coins deposited
-- `state_hash`: the root hash of the channel state tree after the deposit had
+- `state_hash`: the root hash of the channel state tree after the deposit has
   been applied to it; This is not validated on-chain, just kept in the
   channel's object
 - `round`: the channel's internal round that applies the deposit
