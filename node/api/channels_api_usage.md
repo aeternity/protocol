@@ -28,7 +28,7 @@ on-chain transactions come with a fee. The value of the fee can be set by the
 client that initiates the action, ex. a deposit. The FSM could also calculate
 it for the client: it will multiply the minimum gas required for the
 transaction by the gas price. The gas price could optionally be specified by
-the client. If not - the node's setting for `min_miner_gas_price` instead.
+the client. If not - the node's setting for `min_miner_gas_price` is used instead.
 Note that relying on the `min_miner_gas_price` could result in fee being
 either too low or too high according to dynamically changing miner
 expectations for the gas price.  If both a `fee` and a `gas_price` are
