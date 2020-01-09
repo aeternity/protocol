@@ -272,7 +272,7 @@ close the channel, closing is just a matter of issuing one on-chain
 transaction, authenticated by everyone involved.
 
 In the case of a solo closing, operations are subject to the `lock_period`,
-during which closing state can be disputed via a `channel_slash` or even
+during which the closing state can be disputed via a `channel_slash` or even
 progressed further on-chain via `channel_force_progress_tx` transactions.
 
 
