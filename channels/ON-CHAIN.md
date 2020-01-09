@@ -151,7 +151,7 @@ channel_id = Blake2b(initiator || channel_create_tx_nonce || responder)
 
 Depositing funds into a channel after its creation provides the means for a
 participant to move coins from the participant's balance to the channel's one.
-This should allow channels to be more long lived due to the increased ease of
+This should allow channels to be more long-lived due to the increased ease of
 balancing them out. The amount of coins sent along with this transaction will
 get locked up just like the initial deposit.
 
