@@ -23,7 +23,7 @@ parties_.
 There are two basic types of interaction: persisted connection events and HTTP
 API calls.
 
-Although no off-chain transactions consume gas nor they require any fees, all
+Although no off-chain transactions consume gas or require any fees, all
 on-chain transactions come with a fee. The value of the fee can be set by the
 client that initiates the action, ex. a deposit. The FSM could also calculate
 it for the client: it will multiply the minimum gas required for the
@@ -3220,3 +3220,4 @@ not cheating but if the other participant considers this to imply any risk to
 them, one could send a `channel_snapshot_solo_tx` as well. The one with the higher
 `round` will replace the other and all force-progressed states that had been
 based on the older state.
+

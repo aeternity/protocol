@@ -784,7 +784,7 @@ Roles:
  | Name  | Type | Description | Required |
  | ----- | ---- | ----------- | -------- |
  | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
-  | gas_price | integer | the gas_price to be used for the fee computation | No |
+ | gas_price | integer | the gas_price to be used for the fee computation | No |
 
 #### Example
 ```javascript
@@ -946,7 +946,7 @@ Roles:
  | Name  | Type | Description | Required |
  | ----- | ---- | ----------- | -------- |
  | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
-  | gas_price | integer | the gas_price to be used for the fee computation | No |
+ | gas_price | integer | the gas_price to be used for the fee computation | No |
 
 #### Example
 ```javascript
@@ -1113,6 +1113,7 @@ Roles:
  | Name  | Type | Description | Required |
  | ----- | ---- | ----------- | -------- |
  | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+ | gas_price | integer | the gas_price to be used for the fee computation | No |
 
 #### Example
 ```javascript
