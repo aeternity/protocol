@@ -495,7 +495,7 @@ contract call fails a new `state_hash` is produced.
 
 If this transaction is sent while the channel is in the `closing` state, it will
 transition the channel into the `locked` state for the next `lock_period` blocks.
-Although while this lasts, the channel can not be settled, new forced
+Although while this lasts, the channel can not be settled, new force-
 progressed transactions can still be accepted before the timer expires. Those
 MUST be based on the previous on-chain produced states but each next one
 resets the dispute timer.
