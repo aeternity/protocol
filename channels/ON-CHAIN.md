@@ -541,7 +541,7 @@ The `state_hash` will be the root hash of the updated channel's state trees.
 After applying the contract call to the provided `offchain_trees` and updating
 accounts accordingly, a new channel's state tree is produced. It MUST have the
 same value of root hash as the state hash. If those do not match the force
-progress fails but since this can only be determined after the call had been
+progress fails but since this can only be determined after the call has been
 executed, a call object is added on-chain and gas is consumed.
 
 If the contract call succeeded, the channel state will be updated:
