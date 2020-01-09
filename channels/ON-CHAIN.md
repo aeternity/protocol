@@ -474,7 +474,7 @@ Serialization defined [here](../serializations.md#channel-solo-force-progress-tr
 - `channel_id`: channel id as recorded on-chain
 - `from_id`: participant of the channel that posts the force progress transaction
 - `payload`: empty or an off-chain state transaction proving that the state trees
-  represent the channel state
+  represent a mutually agreed-upon channel state
 - `round`: channel's next round
 - `update`: channel off-chain update that contains the contract call with gas
   limit and gas prices to be consumed for the on-chain execution of the
