@@ -431,7 +431,7 @@ account behind `from_id`.
 The amounts must correspond to the ones on-chain, provided by the last
 `channel_close_solo`, `channel_slash` or a `channel_force_progress_tx`. The sum
 of those final amounts form the total closing amount of the channel. If this
-total closing amount is lower than the total amount coins already dedicated to
+total closing amount is lower than the total amount of coins already dedicated to
 the channel, the excess of coins is [locked](../consensus/locking.md).
 
 ## Forcing progress
