@@ -26,7 +26,7 @@ for future conflict resolution: `round` and `state_hash`. The state hash is
 the root hash of the channel's state tree after the on-chain has been applied
 to the local state tree. The `round` is the state channel's internal round.
 Since the `round` is incrementing on every off-chain state change, the channel
-transaction represents both the off-chain state of the channel and defines the
+transaction both represents the off-chain state of the channel and defines the
 point of time when it was valid. This allows us to make educated decisions if
 we want to update the on-chain persisted channel object or not. This way we
 can solo close a channel according to the last provided on-chain state. All we
@@ -801,4 +801,3 @@ The `locked_until` is initialised with `0` and will stay `0` until the channel
 enters the `closing` state.
 
 Serialization defined [here](../serializations.md#channel)
-
