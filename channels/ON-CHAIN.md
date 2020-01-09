@@ -114,7 +114,7 @@ account](../generalized_accounts/generalized_accounts.md) the channel create
 will also create an extra entry in the contract state tree, containing a frozen
 authentication state that will be used for off-chain authentication and
 verification in off-chain updates (potentially eventually enforced on-chain)
-of this particulat channel.  A more detailed explaination can be found
+of this particular channel.  A more detailed explaination can be found
 [here](./authentication.md)
 
 #### Requirements
