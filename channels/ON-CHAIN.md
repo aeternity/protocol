@@ -451,7 +451,7 @@ closing amounts for each participant (according to the contract's execution).
 The force progress is based on what is considered to be the latest off-chain
 channel state. We have no way of proving that this state is actually the last
 one so any progress on chain can always be invalidated by providing an
-authenticated by both participants off-chain channel state with a higher round
+off-chain channel state, authenticated by both participants, with a higher round
 number than the round number that the to be disputed
 `channel_force_progress_tx` transaction used.
 
