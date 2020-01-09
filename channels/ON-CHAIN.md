@@ -11,7 +11,7 @@ In the ideal case, all on-chain transactions get authenticated by both
 participants, implying that there are no disagreements. These operations can
 be committed immediately. There are also some unilateral transactions that
 need to be authenticated just by one of the participants. Those might have a
-bloch heigh timer attached to them for the other party to dispute. The mutually
+block height timer attached to them for the other party to dispute. The mutually
 agreed ones will override all conflicting unilateral actions.
 
 Transactions not authenticated by everyone can be disputed via
@@ -801,5 +801,4 @@ The `locked_until` is initialised with `0` and will stay `0` until the channel
 enters the `closing` state.
 
 Serialization defined [here](../serializations.md#channel)
-
 
