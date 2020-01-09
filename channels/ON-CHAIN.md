@@ -28,7 +28,7 @@ to the local state tree. The `round` is the state channel's internal round.
 Since the `round` is incrementing on every off-chain state change, the channel
 transaction both represents the off-chain state of the channel and defines the
 point of time when it was valid. This allows us to make educated decisions if
-we want to update the on-chain persisted channel object or not. This way we
+whether or not to update the on-chain persisted channel object. This way we
 can solo close a channel according to the last provided on-chain state. All we
 have to do is to provide a proof of inclusion having the same `state_hash`.
 
