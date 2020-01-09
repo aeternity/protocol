@@ -267,7 +267,7 @@ If this transaction is valid then it sets:
 
 We expect channels to be long running but they could be closed. This shall
 happen when participants have completed their interaction but this includes also the
-cases of non-cooperation or malicious behaviour. If all parties decide to
+cases of non-cooperation or malicious behaviour. If both parties decide to
 close the channel, closing is just a matter of issuing one on-chain
 transaction, authenticated by everyone involved.
 
