@@ -266,7 +266,7 @@ If this transaction is valid then it sets:
 ## Closing a channel
 
 We expect channels to be long running but they could be closed. This shall
-happen when participants are done making business but this includes also the
+happen when participants have completed their interaction but this includes also the
 cases of non-cooperation or malicious behaviour. If all parties decide to
 close the channel, closing is just a matter of issuing one on-chain
 transaction, authenticated by everyone involved.
