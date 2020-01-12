@@ -1621,11 +1621,11 @@ if the `block_hash` is `none` - then the transaction is still in the mempool.
 ## Channel solo close
 It is possible to close the channel unilaterally, e.g. if the other party has
 disconnected and is expected never to return. The channel fsm can be asked
-to generate a `channel_close_solo` transaction and post it on-chain. The
+to generate a `channel_close_solo_tx` transaction and post it on-chain. The
 resulting transaction will include the latest mutually signed offchain state,
 or the empty string, indicating that the latest state is what's on the chain.
 
-The `channel_close_solo` transaction only needs a single authentication, and
+The `channel_close_solo_tx` transaction only needs a single authentication, and
 is described in more detail in [this section](#channel-solo-close).
 
 The channel fsm does not support picking an earlier state to close with, as
@@ -1827,7 +1827,7 @@ present on-chain, the message received is:
 }
 ```
 
-Note that since it is the `initiator` that pays the `channel_create`
+Note that since it is the `initiator` that pays the `channel_create_tx`
 transaction fee, it is a must that the `initiator` is present on-chain.
 Although this is not the case with the `responder`, having too litle coins in
 their on-chain balance is a risk both parties must clearly understand: this
@@ -2782,9 +2782,9 @@ used when the other party is trying to cheat or is not responding for a while.
 This is called a dispute and it is taken to the chain to resolve it. Dispute
 resolution has the following steps:
 
-1. single `channel_solo_close` transaction
-2. zero or a couple of `channel_slash` transactions
-3. single `channel_settle` transaction
+1. single `channel_solo_close_tx` transaction
+2. zero or a couple of `channel_slash_tx` transactions
+3. single `channel_settle_tx` transaction
 
 The second step is not required and a `channel_solo_close` could be followed
 either by zero, one or more `channel_slash` transactions, each subsequent one
@@ -2793,66 +2793,66 @@ a `channel_settle` transaction that finally closes the channel. Let's discuss
 those in detail.
 
 #### Payload and proof of inclusion
-The idea behind `channel_solo_close` and `channel_settle` is for parties to
-provide, on-chain, the latest channel internal state so that the channel can be closed.
-First comes the `channel_solo_close` that provides some off-chain state. Then a
-`channel_slash` can be posted but it is checked that it has a newer state than the
-`channel_solo_close` one. Then parties can post more `channel_slash` transactions
-but those are always checked to be containing a newer channel state than the last
-received on-chain. If one party tries to cheat by posting some old state - the other
-party can present to the chain a newer channel state and this overwrites the previous
-posted one. Thus the comparison on channel states is important. This is done
-by comparing rounds.
+The idea behind `channel_solo_close_tx` `channel_slash_tx` and
+`channel_settle` is for parties to provide, on-chain, the latest channel
+internal state so that the channel can be closed.
+First comes the `channel_solo_close_tx` that provides some off-chain state.
+Then a `channel_slash_tx` can be posted, but it is checked that it has a newer
+state than the `channel_solo_close_tx` one. Then parties can post more
+`channel_slash_tx` transactions, but those are always checked to be containing
+a newer channel state than the last received on-chain. If one party tries to
+cheat by posting some old state - the other party can present to the chain a
+newer channel state and this overwrites the previous posted one. Thus the
+comparison on channel states is important. This is done by comparing rounds.
 
-Both `channel_solo_close` and `channel_slash` contain a `payload` field. This
-is either a binary containing a `channel_offchain` transaction or an empty
-binary.
+Both `channel_solo_close_tx` and `channel_slash_tx` contain a `payload`
+field. This is either a binary containing a `channel_offchain` transaction or an
+empty binary.
 
-If it is a `channel_offchain` transaction - it must be mutually authenticated.
+If it is a `channel_offchain_tx` transaction, it must be mutually authenticated.
 It also contains a `channel_id`, `round` and `state_hash`.
-The `channel_id` in combination with the correct singatures verifies that
-this off-chain transaction indeed is part of the channel off-chain state. The
-`round` represents the height of the channel's state at the time the
-transaction was mutually authenticated. The higher the round, the newer the
-transaction is. This `round` must be greater than the last on-chain one for that channel.
-The `state_hash` is the internal channel state tree root hash
-at that `round` height.
+The `channel_id` in combination with the correct singatures verifies that this
+off-chain transaction indeed is part of the channel off-chain state. The `round`
+represents the height of the channel's state at the time when the transaction was
+mutually authenticated. The higher the round, the newer the transaction is. This
+`round` must be greater than the last on-chain one for that channel.
+The `state_hash` is the internal channel state tree root hash at that `round`
+height.
 
 If the transaction's `payload` is empty - then the latest on-chain state for
-this channel is used. Both `channel_deposit` and `channel_withdraw`
+this channel is used. Both `channel_deposit_tx` and `channel_withdraw_tx`
 transactions contain a `round` and a `state_hash` and the latest received one
 overwrites the previous one. If there had been none of those, then the
 `channel_create` transaction is used: it has a `state_hash` and an implicit
 `round = 1`.
 
 Either by having a value in the `payload` or not having one, the
-`channel_solo_close` and `channel_slash` provide a channel's `round` and a `state_hash`.
-In order to determine the order of the channel's states received - we compare
-the `rounds` and keep the state with the greatest `round`, considered to be
-the _newest_ and _latest_ state. They also provide the `state_hash` the
-channel's state tree had at this `round`.
+`channel_solo_close` and `channel_slash` provide a channel's `round` and a
+`state_hash`. In order to determine the order of the channel's states received,
+we compare the `rounds` and keep the state with the greatest `round`, considered
+to be the _newest_ and _latest_ state. They also provide the `state_hash` that
+the channel's state tree had at this `round`.
 
-Both `channel_solo_close` and `channel_slash` contain a `poi` field. This is
-the proof of inclusion for participants' balances in the channel state: all
-the insignificant data in the channel's MPT (Matricia Perkel Tree) is replaced
+Both `channel_solo_close_tx` and `channel_slash_tx` contain a `poi` field.
+This is the proof of inclusion for participants' balances in the channel state:
+all the insignificant data in the channel's MPT (Merkle Patricia Tree) is replaced
 by corresponding hashes.
 The root hash of the PoI must be equal to the `state_hash` provided by the `payload`.
 This guarantees that the PoI indeed is a proof of inclusion for tree at this height.
 
 #### Solo close on-chain transaction
-The `channel_close_solo` transaction is the one that triggers the solo closing
-sequence. After it is included on-chain channel enters a _closing_ state and
-any subsequent withdrawal or deposits are considered invalid. Preconditions for
-the `channel_close_solo` to be valid are:
+The `channel_close_solo_tx` transaction is the one that triggers the solo
+closing sequence. After it is included on-chain channel enters a _closing_ state
+and any subsequent withdrawal or deposits are considered invalid. Preconditions
+for the `channel_close_solo_tx` to be valid are:
 
 * channel is opened on-chain
-* channel is not in a _closing_ state but not yet closed - no `channel_close_solo` has been
-  included in a block yet
+* channel is not in a _closing_ state but not yet closed - no
+  `channel_close_solo_tx` has been included in a block yet
 
-Any participant in the channel can post a `channel_close_solo` transaction. In
-the scope of this description we will call the one that posts the transaction
-_solo closer_.
-The transaction has the following structure:
+Any participant in the channel can post a `channel_close_solo_tx` transaction.
+In the scope of this description we will call the one that posts the transaction
+_solo closer_. The transaction has the following structure:
 
   | Name | Type | Description |
   | ---- | ---- | ----------- |
@@ -2869,14 +2869,14 @@ The transaction has the following structure:
 
 #### Slash on-chain transaction
 After the channel is already in a _closing_ state, both participants can provide
-a newer state via the `channel_slash` transaction. Preconditions for
-the `channel_slash` to be valid are:
+a newer state via the `channel_slash_tx` transaction. Preconditions for
+the `channel_slash_tx` to be valid are:
 
 * channel is opened on-chain
-* channel is still in a _closing_ state - no `channel_settle` has been
+* channel is still in a _closing_ state - no `channel_settle_tx` has been
   included in a block yet
 
-Any participant in the channel can post a `channel_slash` transaction. In
+Any participant in the channel can post a `channel_slash_tx` transaction. In
 the scope of this description we will call the one that posts the transaction
 _slasher_.
 The transaction has the following structure:
@@ -2895,35 +2895,36 @@ The transaction has the following structure:
 `payload` and `poi` are validated as [described above](#payload-and-proof-of-inclusion)
 
 #### Settle on-chain transaction
-After the `channel_close_solo` and all the `channel_slash` transactions,
+After the `channel_close_solo_tx` and all the `channel_slash_tx` transactions,
 it is time to finally close the channel. One of the participants posts a
-`channel_settle` transaction that enforces closing of the channel. This
+`channel_settle_tx` transaction that enforces closing of the channel. This
 happens according to the latest channel state that was sent on-chain. The
-`channel_settle` just finalizes the channel closing with the last received
+`channel_settle_tx` just finalizes the channel closing with the last received
 state, redistributes tokens to participants and closes the channel. No further
 disputes are possible after that.
 
 
 In order to give parties time to slash a closing channel and update its state
-with a newer one, there is a timeframe only after which the `channel_settle`
+with a newer one, there is a timeframe only after which the `channel_settle_tx`
 can be posted. This is measured in blocks mined on top of the last received
-transaction for that channel (either `channel_close_solo` or `channel_slash`).
-The amount itself is prenegotiated before opening the channel and is part of
-the `channel_create` transaction - it is the value of `lock_period`. Under no
-condition a `channel_settle` can be included in a block before passing the
-`lock_period` amount of blocks on top of the last `channel_close_solo` or
-`channel_slash` transaction. Every next included `channel_slash` restarts the
-timer. It is worth noting that since those transactions must include a `payload`
-newer than the prevous on-chain one - this timer can not be postponed
-indefinitely. Preconditions for the `channel_settle` to be valid are:
+transaction for that channel (either `channel_close_solo_tx` or
+`channel_slash_tx`). The amount itself is prenegotiated before opening the
+channel and is part of the `channel_create_tx` transaction - it is the value of
+`lock_period`. Under no condition can a `channel_settle_tx` be included in a
+block before passing the `lock_period` amount of blocks on top of the last
+`channel_close_solo_tx` or `channel_slash_tx` transaction. Every next included
+`channel_slash_tx` restarts the timer. It is worth noting that since those
+transactions must include a `payload` newer than the prevous on-chain one - this
+timer can not be postponed indefinitely. Preconditions for the
+`channel_settle_tx` to be valid are:
 
 * channel is opened on-chain
-* channel is still in a _closing_ state - no other `channel_settle` has been
+* channel is still in a _closing_ state - no other `channel_settle_tx` has been
   included in a block yet
 * at least `lock_period` blocks has been mined on top of the last
-  `channel_close_solo` or `channel_slash`
+  `channel_close_solo_tx` or `channel_slash_tx`
 
-Any participant in the channel can post a `channel_settle` transaction. In
+Any participant in the channel can post a `channel_settle_tx` transaction. In
 the scope of this description we will call the one that posts the transaction
 _settler_.
 The transaction has the following structure:

@@ -11,6 +11,7 @@ The WebSocket API provides the following actions:
  * [Generic message](#generic-message)
  * [Close mutual](#close-mutual)
  * [Close solo](#close-solo)
+ * [Slash](#slash)
  * [Settle](#settle)
  * [Leave](#leave)
  * [On-chain transactions](#on-chain-transactions)
@@ -54,7 +55,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | `channel_offchain` transaction wrapped in a `signed_tx` with no authentication | Yes |
+  | signed_tx | string | `channel_offchain_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -86,7 +87,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | solo-authenticated `channel_offchain` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_offchain_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -105,7 +106,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | solo-authenticated `channel_offchain` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_offchain_tx` transaction | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -137,7 +138,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | co-authenticated `channel_offchain` transaction | Yes |
+  | signed_tx | string | co-authenticated `channel_offchain_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -269,7 +270,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | `channel_deposit` transaction wrapped in a `signed_tx` with no authentication | Yes |
+  | signed_tx | string | `channel_deposit_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -300,7 +301,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | solo-authenticated `channel_deposit` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_deposit_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -326,7 +327,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | solo-authenticated `channel_deposit` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_deposit_tx` transaction | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -357,7 +358,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | co-authenticated `channel_deposit` transaction | Yes |
+  | signed_tx | string | co-authenticated `channel_deposit_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -411,7 +412,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | `channel_withdraw` transaction wrapped in a `signed_tx` with no authentication | Yes |
+  | signed_tx | string | `channel_withdraw_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -442,7 +443,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | co-authenticated `channel_withdraw` transaction | Yes |
+  | signed_tx | string | co-authenticated `channel_withdraw_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -468,7 +469,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | solo-authenticated `channel_withdraw` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_withdraw_tx` transaction | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -499,7 +500,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | co-authenticated `channel_withdraw` transaction | Yes |
+  | signed_tx | string | co-authenticated `channel_withdraw_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -681,7 +682,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | `channel_close_mutual` transaction wrapped in a `signed_tx` with no authentication | Yes |
+  | signed_tx | string | `channel_close_mutual_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -706,7 +707,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | solo-authenticated `channel_close_mutual` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_close_mutual_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -732,7 +733,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | solo-authenticated `channel_close_mutual` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_close_mutual_tx` transaction | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -757,7 +758,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | co-authenticated `channel_close_mutual` transaction | Yes |
+  | signed_tx | string | co-authenticated `channel_close_mutual_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -865,7 +866,7 @@ Roles:
 
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
- | signed_tx | string | `channel_close_solo` transaction wrapped in a `signed_tx` with no authentication | Yes |
+ | signed_tx | string | `channel_close_solo_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
  | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -890,7 +891,7 @@ Roles:
 
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
- | signed_tx | string | solo-authenticated `channel_close_solo` transaction | Yes |
+ | signed_tx | string | solo-authenticated `channel_close_solo_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -899,6 +900,78 @@ Roles:
   "method": "channels.close_solo_sign",
   "params": {
     "signed_tx": "tx_+QHrCwH4Q..."
+  }
+}
+```
+## Slash
+Roles:
+ * Slasher
+
+### Slasher initiated slash
+ * **method:** `channels.slash
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+  | gas_price | integer | the gas_price to be used for the fee computation | No |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.slash",
+  "params": {}
+}
+```
+
+### Slasher receives slash
+ * **method:** `channels.sign.slash_tx`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | channel_id | string | channel ID | Yes |
+ | data  | object | closing data | Yes |
+
+ * **data:**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | signed_tx | string | `channel_slash_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
+ | updates | list | off-chain updates | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.slash_tx",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "signed_tx": "tx_+QLDCwHAuQ...",
+      "updates": []
+    }
+  },
+  "version": 1
+}
+```
+
+### Slasher returns an authenticated slash
+ * **method:** `channels.slash_sign
+ * **params:**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | signed_tx | string | solo-authenticated `channel_slash_tx` transaction | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.slash_sign",
+  "params": {
+    "signed_tx": "tx_+QMGCwH4Qr..."
   }
 }
 ```
@@ -937,7 +1010,7 @@ Roles:
 
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
- | signed_tx | string | `channel_settle` transaction wrapped in a `signed_tx` with no authentication | Yes |
+ | signed_tx | string | `channel_settle_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
  | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -961,7 +1034,7 @@ Roles:
 
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
- | signed_tx | string | solo-authenticated `channel_settle` transaction | Yes |
+ | signed_tx | string | solo-authenticated `channel_settle_tx` transaction | Yes |
 
 #### Example
 ```javascript
