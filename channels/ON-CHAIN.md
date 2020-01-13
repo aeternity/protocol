@@ -326,7 +326,7 @@ After the `channel_close_solo` is posted and included in the chain a
 `lock_period` block height timer is started.
 This lock period is required to give the other party an opportunity to dispute
 the final state, that the closing sequence is based on. This can be done via
-the `channel_slash` and `channel_force_progress_tx` transactions.
+the `channel_slash_tx` and `channel_force_progress_tx` transactions.
 
 With the inclusion of this transaction on-chain, the channel enters the `locked`
 state, during which the `channel_close_solo` can be disputed.
@@ -398,9 +398,9 @@ only required if the parties involved did not manage to cooperate when trying
 to close the channel. It has to be issued after all possible disputes are
 resolved to then redistribute the locked coins.
 
-The `channel_settle` CAN only be included in a block if:
+The `channel_settle_tx` CAN only be included in a block if:
 
-- a `channel_close_solo` transaction was published and the `lock_period` has
+- a `channel_close_solo_tx` transaction was published and the `lock_period` has
   expired, i.e.  `blockheight(top) - blockheight(channel_close_solo_tx) >=
   lock_period`
 - there are no open disputes, which means that the channel is not currently
@@ -429,7 +429,7 @@ The transaction MUST be authenticated using the method corresponding to the
 account behind `from_id`.
 
 The amounts must correspond to the ones on-chain, provided by the last
-`channel_close_solo`, `channel_slash` or a `channel_force_progress_tx`. The sum
+`channel_close_solo_tx`, `channel_slash_tx` or a `channel_force_progress_tx`. The sum
 of those final amounts form the total closing amount of the channel. If this
 total closing amount is lower than the total amount of coins already dedicated to
 the channel, the excess of coins is [locked](../consensus/locking.md).
@@ -633,7 +633,7 @@ tries to unilaterally publish an outdated state while:
 - slashing
 - snapshoting
 
-and can be disputed via `channel_slash`, `channel_force_progress_tx`,
+and can be disputed via `channel_slash_tx`, `channel_force_progress_tx`,
 `channel_snapshot_solo` transactions.
 
 Since disputes can themselves be challenged, we could end up in situations,
