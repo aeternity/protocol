@@ -1,13 +1,13 @@
-Virtual State Channels
+# Virtual State Channels
 
-# Abstract
+## Abstract
 
 The Aeternity blockchain provides various means for scaling the transaction
 throughput so it can accommodate billions of people. One of those is State
 Channels. This document describes how State Channels protocol can be further
 improved in order to build Virtual State Channels.
 
-# Introduction
+## Introduction
 
 Aeternity blockchain already has two-party State Channels built on a protocol
 level. They allow producing off-chain transactions. They allow not just
@@ -38,7 +38,7 @@ participant can bring a potential dispute on-chain and have it resolved there.
 That way we keep Virtual State Channels as trustless as State Channels
 themselves.
 
-# Channels within channels
+## Channels within channels
 
 On-chain State Channels have a state. It is represented as a MPTree and has
 the same structure as the on-chain state tree. A notable difference between
@@ -72,7 +72,7 @@ on-chain State Channel. As a result of this is the intermediary
 locks tokens in both on-chain State Channels and has an exposure as the total
 amount of tokens locked in the Virtual State Channel.
 
-#### Example
+##### Example
 
 ```
                           +-------------+
@@ -115,20 +115,24 @@ same incentive applies that if Bob is to cheat Alice, he has to cheat Ingrid
 as well and she has the incentive to protect Alice. Ingrid's exposure of
 locked tokens is `2 + 3 = 5`.
 
-## Virtual State Channel object
+### Virtual State Channel object
 
 Channel on-chain object holds various channel related data, including
 participants, total balances dedicated to the channel and etc. It has all the
 required information to safely close the channel, even in cases of a dispute.
 
-### Object structure
+#### Object structure
 
 In cases of Virtual State Channels we produce a regular State Channel object
 and wrap it around with some additional information. It consists of who the
 intermediary is and the initial token amounts dedicated by the participant and
-the intermediary.
+the intermediary. An important detail is that the initial token amounts for
+the participants are not according to the amounts they've dedicatrs: it is the
+intermediary that has all of the tokens and the Virtual State Channel
+participant has none. This plays an important role and it is described later
+on.
 
-#### Example
+##### Example
 
 For this example we will be using some pseudo-structures. Those do not
 necessarily represent real serialization and play mostly a visualization role.
@@ -153,8 +157,8 @@ would be:
 ```javascript=
 {
    "intermediary_id": "ak_...", // Ingrid's address
-   "intermediary_amount": 2, // part of the total contributed by Ingrid
-   "requester_amount": 3, // part of the total contributed by Alice
+   "intermediary_amount": 5, // initial distribution of total tokens, dedicated to Ingrid
+   "requester_amount": 0, // initial distribution of total tokens, dedicated to Alice
    "channel" :
       {  
          "id": "ch_...", // the Alice-Bob channel ID
@@ -167,7 +171,7 @@ would be:
 }
 ```
 
-### Object updates
+#### Object updates
 
 The Virtual State Channel object is persisted in the state of the
 corresponding on-chain State Channels and can be updated by providing
@@ -195,7 +199,7 @@ one as a violation of the protocol and to bring it on-chain as a dispute.
 Proposing the update to the non-cooperating party could impose a risk for the
 intermediary so it is discouraged.
 
-## Opening
+### Opening
 
 Matching of participants and intermediaries is part of State Channel network
 resolution process and its corresponding protocol. It is not part of this
@@ -224,7 +228,7 @@ of the off-chain protocol and reject the first participant's Virtual Channel
 creation attempt. Not allowing disputing Virtual Channel creation on-chain
 prevents from all types of replay attacks.
 
-## Closing
+### Closing
 
 Contrary to on-chain context where State Channels are long lived because of
 fees and confirmation times needed for opening, Virtual State Channels do not
@@ -240,7 +244,7 @@ We distinguish two different cases in which channel according to if the
 Virtual State Channel participants had reached an agreement regarding channel
 closure of not.
 
-### Closing with a mutual agreement
+#### Closing with a mutual agreement
 
 If both Virtual State Channel participants agree on a final distribution of
 tokens, they produce and co-authenticate an off-chain transaction that is
@@ -260,7 +264,7 @@ instant: Virtual State Channel tokens are redistributed according to the
 transaction and the Virtual State Channel object is being deleted from the
 on-chain State Channel's state.
 
-### Closing without an agreement
+#### Closing without an agreement
 
 In on-chain State Channels is expected that one of the participants could stop
 being cooperative: one could be refusing valid updates, one could be
@@ -315,7 +319,7 @@ State Channel and it couldn't be disputed anymore. In that case the risk lies
 in the intermediary and this puts an incentive on her side to behave according
 to the protocol.
 
-### Close without a state
+#### Close without a state
 
 An edge scenario is when the Virtual State Channel had been opened and the
 intermediary wants to close it but participants refuse to do so. Since the
@@ -338,7 +342,7 @@ distribution but also provide the intermediary with a state one could use in
 the other on-chain State Channel with the other participant, if one is to
 provide there an older Virtual State Channel state.
 
-## Deposit, withdrawal and snapshot
+### Deposit, withdrawal and snapshot
 
 It is expected that participants could desire depositing more tokens in a
 Virtual State Channel or withdrawing some out of it. Providing a non-closing
@@ -368,7 +372,7 @@ on-chain State Channel with the intermediary. The intermediary could provide
 this snapshot in the other on-chain State Channel and if the other party
 refuses to cooperate, this can be force-progressed on-chain.
 
-## Forcing progress
+### Forcing progress
 
 If at any point of time a Virtual State Channel participant stops cooperating,
 the other one can protect themselves using the intermediary was an arbiter.
@@ -384,7 +388,7 @@ there is a risk of branching the Virtual State Channel's state: the
 non-cooperative participant could provide a different forced progress on-chain
 to invalidate the virtual one.
 
-## Disputes
+### Disputes
 
 A general assumption is that clean dispute procedures and properly designed
 smart contracts will incentivise people to follow the protocol. Cheating would
@@ -437,26 +441,26 @@ Channel. It also allows forcing state in a nested Virtual State Channel,
 essentially allowing Virtual State Channels inside Virtual State Channels.
 
 
-# Expected improvements
+## Expected improvements
 
 Introduction of Virtual State Channels enriches the protocol further allowing
 different enhancements to it. Some notable ones would be:
 
-## Off-chain speed
+### Off-chain speed
 
 This will allow near-instant Virtual State Channel opening and closing. This
 is a great improvement over on-chain State Channels as it allows trustless
 transffer of value from anyone to anyone to be performed completely off-chain
 using existing State Channels.
 
-## Prices
+### Prices
 
 The intermediary plays a crucial role in this architecture and those are
 expected to be reimbursed for their work. Dispite this, it is expected that
 the cost of their service would be much less expensive than the fees and gas
 costs required by miners.
 
-## Multiple intermediaries
+### Multiple intermediaries
 
 The defined model allows Virtual State Channels to be established using
 multiple intermediaries. There are different approaches of implementing this:
@@ -466,7 +470,7 @@ multiple intermediaries. There are different approaches of implementing this:
 Both approaches have radically different contexts. Those are outside of the
 scope of this document.
 
-## New business modelds
+### New business modelds
 
 One obvious new actor on the blockchain stage would be the intermediary: they
 act as off-chain miners in the proof-of-state context of the State Channels.
@@ -487,7 +491,7 @@ intermediaries are possible, there will be issues with intermediary total
 amount of tokens throughput and congestion. There will be the need for proper
 pathfinding through the State Channel network.
 
-## Multi-participants channels
+### Multi-participants channels
 
 Introduction of Virtual State Channels allows developing new protocols on top
 of them, one of which is the Channel entity with many participants. This can
