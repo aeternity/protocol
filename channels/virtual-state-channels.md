@@ -315,7 +315,28 @@ State Channel and it couldn't be disputed anymore. In that case the risk lies
 in the intermediary and this puts an incentive on her side to behave according
 to the protocol.
 
-### TODO: close with initial state
+### Close without a state
+
+An edge scenario is when the Virtual State Channel had been opened and the
+intermediary wants to close it but participants refuse to do so. Since the
+Virtual State Channel internal state is known only to Virtual State Channel
+participants, the intermediary doesn't have enough information for closing the
+Virtual State Channel on-chain. Other State Channel solutions had reported
+this as an attack vector known as Griefing - when Virtual State Channel
+participants do not close their Virtual State Channel for a long period of
+time, thus forcing the intermediary to keep their their tokens locked. 
+
+In such case the protocol allows the intermediary to initiate the close of the
+Virtual State Channel as if the token distribution is that the intermediary
+gets all the tokens locked in the Virtual State Channel. The closing state is
+considered to be before the initial one, having a `round=0`. If either
+participant disagrees with this, they could provide a co-authenticated Virtual
+State Channel off-chain state in an off-chain slash transaction. Since the
+initial Virtual State Channel state has a `round=1`, any co-authenticated
+state would work. This will modify the Virtual State Channel token
+distribution but also provide the intermediary with a state one could use in
+the other on-chain State Channel with the other participant, if one is to
+provide there an older Virtual State Channel state.
 
 ## Deposit, withdrawal and snapshot
 
