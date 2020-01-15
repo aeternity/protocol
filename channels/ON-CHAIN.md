@@ -1,7 +1,7 @@
 # On-chain
 
 Operating a state channel requires, an initial on-chain setup via a
-`channel_create` transaction, that locks up a configurable amount of coins from
+`channel_create_tx` transaction, that locks up a configurable amount of coins from
 each involved party in the channel. This requires a consent, in the form of
 either signatures or generalized account authentication call data, from both
 participants. More information regarding authentication can be found
@@ -15,7 +15,7 @@ block height timer attached to them for the other party to dispute. The mutually
 agreed ones will override all conflicting unilateral actions.
 
 Transactions not authenticated by everyone can be disputed via
-`channel_slash`, `channel_snapshot_solo` and `channel_force_progress_tx`
+`channel_slash_tx`, `channel_snapshot_solo_tx` and `channel_force_progress_tx`
 transactions. During normal operation, these solo transactions can be disputed
 indefinitely. If the channel is in the closing state, disputes have to happen
 within the pre-negotiated `lock_period`, given that closure requires a bounded
@@ -53,12 +53,12 @@ have to do is to provide a proof of inclusion having the same `state_hash`.
 
 All of the on-chain operations could be submitted by any peer but we assume that
 the initiating peer pays for the setup of the channel. Therefore the `initiator`
-MUST pay the `channel_create` transaction fees.
+MUST pay the `channel_create_tx` transaction fees.
 
 
 ### `channel_create`
 
-The `channel_create` transaction is used to register a channel on-chain and its
+The `channel_create_tx` transaction is used to register a channel on-chain and its
 inclusion on-chain causes the specified amounts to be locked up as a guarantee
 that participants have a vested interest in the channel. Although it is not a
 strict requirement, it is strongly suggested to do so.
@@ -133,9 +133,9 @@ of this particular channel.  A more detailed explaination can be found
 An update to an open channel requires the authentication of all participants
 and a channel identification (`channel_id`).
 
-Both `channel_deposit` and `channel_withdraw` MUST be authenticated by all
-involved parties, since changing channel balances might change the dynamics
-of code running in a channel.
+Both `channel_deposit_tx` and `channel_withdraw_tx` MUST be authenticated by
+all involved parties, since changing channel balances might change the
+dynamics of code running in a channel.
 
 The `channel_id` is computed from the public key of the initiator, the nonce of
 the create transaction and the public key of the responder using Blake2b (256
@@ -234,7 +234,7 @@ is represented by a `round` and a `state_hash`. Those are proven to be correct
 at least at some point of time in the past by providing a co-authenticated
 off-chain update as a `payload`. Note that the `payload` can not be an
 on-chain transaction.
-After `channel_snapshot_solo` inclusion the channel can not be closed using an
+After `channel_snapshot_solo_tx` inclusion the channel can not be closed using an
 older state—as indicated by the `round`—than the one provided in the snapshot.
 
 Serialization defined [here](../serializations.md#channel-snapshot-solo-transaction)
@@ -272,7 +272,7 @@ close the channel, closing is just a matter of issuing one on-chain
 transaction, authenticated by everyone involved.
 
 In the case of a solo closing, operations are subject to the `lock_period`,
-during which the closing state can be disputed via a `channel_slash` or even
+during which the closing state can be disputed via a `channel_slash_tx` or even
 progressed further on-chain via `channel_force_progress_tx` transactions.
 
 
@@ -634,7 +634,7 @@ tries to unilaterally publish an outdated state while:
 - snapshoting
 
 and can be disputed via `channel_slash_tx`, `channel_force_progress_tx`,
-`channel_snapshot_solo` transactions.
+`channel_snapshot_solo_tx` transactions.
 
 Since disputes can themselves be challenged, we could end up in situations,
 where a malicious party progresses rounds rapidly via `channel_force_progress_tx`
@@ -659,13 +659,13 @@ Therefore we try to optimise for that case.
 If the channel is in the closing state, which only happens via a
 `channel_close_solo`, then each dispute triggers an extension of the channel
 lock by `lock_period` blocks. If a channel is locked, the same rules as above
-apply. That is, as many `channel_force_progress_tx` or `channel_slash`
+apply. That is, as many `channel_force_progress_tx` or `channel_slash_tx`
 transactions as desired can be submitted—each one extending the lock—but as long
 as the channel is locked, the entire chain can be invalidated if a state with a
 higher round number can be posted.
 
 Having the lock is necessary here because otherwise a malicious party might post
-a `channel_force_progress_tx` or `channel_slash` containing an outdated state
+a `channel_force_progress_tx` or `channel_slash_tx` containing an outdated state
 and then immediately try to have the channel be settled based on the result.
 
 
@@ -687,7 +687,7 @@ arrives at `solo_round := 31`. The `round` is still at 23.
 Now if Alice returns at `chain_height := 1110`, she can still dispute the
 *initial* update issued by Bob at `chain_height := 1000` by providing an
 authenticated by both payload with `round := 24` or higher via either a
-`channel_force_progress_tx` or a `channel_snapshot_solo`.
+`channel_force_progress_tx` or a `channel_snapshot_solo_tx`.
 
 
 ### Force progress dispute with closing channel example
@@ -717,7 +717,7 @@ dispute would bump the lock by `lock_period` too.
 
 If a malicious party sent a `channel_close_solo` or `channel_force_progress_tx`
 with an outdated state, the honest party has the opportunity to issue a
-`channel_slash` transaction. This transaction MUST include a state with a higher
+`channel_slash_tx` transaction. This transaction MUST include a state with a higher
 `round` number than the one being disputed, authenticated by all peers for a
 successful challenge.
 
@@ -794,8 +794,8 @@ channel.
 - `responder_auth`: (from Fortuna release) signing/authentication data for responder
 
 Keeping track of the `state_hash`, `round`, `locked_until`, and `lock_period` is
-necessary for nodes to be able to assess the validity of `channel_slash` and
-`channel_settle` transactions.
+necessary for nodes to be able to assess the validity of `channel_slash_tx` and
+`channel_settle_tx` transactions.
 
 The `locked_until` is initialised with `0` and will stay `0` until the channel
 enters the `closing` state.
