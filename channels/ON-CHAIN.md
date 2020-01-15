@@ -329,7 +329,7 @@ the final state, that the closing sequence is based on. This can be done via
 the `channel_slash_tx` and `channel_force_progress_tx` transactions.
 
 With the inclusion of this transaction on-chain, the channel enters the `locked`
-state, during which the `channel_close_solo` can be disputed.
+state, during which the `channel_close_solo_tx` can be disputed.
 
 Serialization defined [here](../serializations.md#channel-close-solo-transaction)
 
