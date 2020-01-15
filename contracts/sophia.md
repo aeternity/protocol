@@ -434,6 +434,15 @@ function get_left(x : one_or_both('a, 'b)) : option('a) =
     Both(x, _) => Some(x)
 ```
 
+or directly in the left-hand side:
+```
+function
+  get_left : one_or_both('a, 'b) => option('a)
+  get_left(Left(x))    = Some(x)
+  get_left(Right(_))   = None
+  get_left(Both(x, _)) = Some(x)
+```
+
 *NOTE: Data types cannot currently be recursive.*
 
 ### Lists
@@ -1099,9 +1108,10 @@ Decl ::= ['payable'] 'contract' Con '=' Block(Decl)
        | 'type'     Id ['(' TVar* ')'] ['=' TypeAlias]
        | 'record'   Id ['(' TVar* ')'] '=' RecordType
        | 'datatype' Id ['(' TVar* ')'] '=' DataType
-       | EModifier* 'entrypoint' Id ':' Type
-       | EModifier* 'entrypoint' Id Args [':' Type] '=' Block(Stmt)
-       | FModifier* 'function' Id Args [':' Type] '=' Block(Stmt)
+       | EModifier* ('entrypoint' | 'function') Block(FunDecl)
+
+FunDecl ::= Id ':' Type                             // Type signature
+          | Id Args [':' Type] '=' Block(Stmt)      // Definition
 
 PragmaOp ::= '<' | '=<' | '==' | '>=' | '>'
 Version  ::= Sep1(Int, '.')
@@ -1109,8 +1119,7 @@ Version  ::= Sep1(Int, '.')
 EModifier ::= 'payable' | 'stateful'
 FModifier ::= 'stateful' | 'private'
 
-Args ::= '(' Sep(Arg, ',') ')'
-Arg  ::= Id [':' Type]
+Args ::= '(' Sep(Pattern, ',') ')'
 ```
 
 Contract declarations must appear at the top-level.
@@ -1174,7 +1183,8 @@ Stmt ::= 'switch' '(' Expr ')' Block(Case)
        | 'let' LetDef
        | Expr
 
-LetDef ::= Id [Args] [':' Type] '=' Block(Stmt)
+LetDef ::= Id Args [':' Type] '=' Block(Stmt)   // Function definition
+         | Pattern '=' Block(Stmt)              // Value definition
 
 Case    ::= Pattern '=>' Block(Stmt)
 Pattern ::= Expr
@@ -1198,7 +1208,7 @@ switch(f(x))
 ### Expressions
 
 ```c
-Expr ::= '(' Args ')' '=>' Block(Stmt)      // Anonymous function    (x) => x + 1
+Expr ::= '(' LamArgs ')' '=>' Block(Stmt)   // Anonymous function    (x) => x + 1
        | 'if' '(' Expr ')' Expr 'else' Expr // If expression         if(x < y) y else x
        | Expr ':' Type                      // Type annotation       5 : int
        | Expr BinOp Expr                    // Binary operator       x + y
@@ -1208,7 +1218,7 @@ Expr ::= '(' Args ')' '=>' Block(Stmt)      // Anonymous function    (x) => x + 
        | Expr '[' Expr ']'                  // Map lookup            map[key]
        | Expr '{' Sep(FieldUpdate, ',') '}' // Record or map update  r{ fld[key].x = y }
        | '[' Sep(Expr, ',') ']'             // List                  [1, 2, 3]
-       | '[' Expr '|' Sep((Id '<-' Expr | 'if' '(' Expr ')' | LetDef), ',') ']'
+       | '[' Expr '|' Sep(Generator, ',') ']'
                                             // List comprehension    [k | x <- [1], if (f(x)), let k = x+1]
        | '{' Sep(FieldUpdate, ',') '}'      // Record or map value   {x = 0, y = 1}, {[key] = val}
        | '(' Expr ')'                       // Parens                (1 + 2) * 3
@@ -1216,6 +1226,13 @@ Expr ::= '(' Args ')' '=>' Block(Stmt)      // Anonymous function    (x) => x + 
        | Int | Bytes | String | Char        // Literals              123, 0xff, #00abc123, "foo", '%'
        | AccountAddress | ContractAddress   // Chain identifiers
        | OracleAddress | OracleQueryId      // Chain identifiers
+
+Generator ::= Pattern '<-' Expr   // Generator
+            | 'if' '(' Expr ')'   // Guard
+            | LetDef              // Definition
+
+LamArgs ::= '(' Sep(LamArg, ',') ')'
+LamArg  ::= Id [':' Type]
 
 FieldUpdate ::= Path '=' Expr
 Path ::= Id                 // Record field
