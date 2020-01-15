@@ -774,7 +774,7 @@ Roles:
 Roles:
  * Snapshotter
 
-### Snapshotter initiated solo snapshot
+### Snapshotter initiates solo snapshot
  * **method:** `channels.snapshot_solo`
  * **params:**
 
@@ -1554,4 +1554,3 @@ the following error:
    "version":1
 }
 ```
-

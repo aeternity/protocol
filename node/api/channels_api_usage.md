@@ -1711,12 +1711,12 @@ receive another information message:
 ## Channel slash
 
 If a `channel_close_solo_tx` passes on-chain checks, it is valid to the best
-of miner's knowledge. The channel is to be closed and the final balances
-participants receive from its closure are according to whaterver state had
+of the miner's knowledge. The channel is to be closed and the final balances
+participants receive from its closure are according to whatever state had
 been provided last on-chain.
 
-The solo closed provided one can be progressed using a channel force progress
-transaction. Each new `channel_force_progress` transaction will result in a
+The state given by the `channel_solo_close_tx` can be progressed using a channel force progress
+transaction. Each new `channel_force_progress_tx` transaction will result in a
 new channel state that is produced on-chain. It will have a new `state_hash`
 and an incremented `round`.
 
@@ -1724,30 +1724,31 @@ On the other hand the `channel_close_solo_tx` could have been both valid and
 malicious at the same time: it could have passed all on-chain checks but yet
 it might not have been the very last channel state. If any participant tries
 to close the channel unilaterally using a `channel_close_solo_tx` based upon
-on not the latest channel state, we would consider that a violation of the
+an earlier (i.e. not the latest) channel state, we would consider that a violation of the
 off-chain protocol. In that case the other participant can defend themselves
 from being cheated by simply providing a co-authenticated off-chain state with
-a higher round. This is done via the `channel_slash` transaction.
+a higher round. This is done via the `channel_slash_tx` transaction.
 
-Since a co-authenticated off-chain state has a higher priority over an
-unilaterally on-chain produced one via a `channel_force_progress` transaction, 
-a `channel_slash` transaction can invalidate a whole chain of
-`channel_force_progress` transactions if the first one of them had been based
-on a channel state that is older than the one provided by the `channel_slash`
+Since a co-authenticated off-chain state has a higher priority than an
+unilaterally on-chain produced one via a `channel_force_progress_tx` transaction, 
+a `channel_slash_tx` transaction can invalidate a whole chain of
+`channel_force_progress_tx` transactions if the first one of them had been based
+on a channel state that is older than the one provided by the `channel_slash_tx`
 transaction. This way if one party produces a long chain of force-progressed
 states based on a not-the-last state, the other can replace them all providing
-a single `channel_slash` transaction.
+a single `channel_slash_tx` transaction.
 
 For completeness it is worth mentioning that the second party can be malicious
-as well, not providing the very last state in their `channel_slash`
+as well, not providing the very last state in their `channel_slash_tx`
 transaction. In that case the closing party could protect themselves with yet
-another `channel_slash` transaction that slashes the slash that is now
+another `channel_slash_tx` transaction that slashes the slash that is now
 on-chain as well as all force-progressed states based upon it. Having this
 mechanics at place aims at incentivizing both parties to behave well as all
 cheating attempts will cost them on-chain fees.
 
 If the other party tries closing the channel with a `channel_close_solo_tx`
-that is not based on the latest off-chain state, our FSM informs is for it:
+that is not based on the latest off-chain state, our FSM informs us about it
+(note the `"info": "can_slash"` bit):
 
 ```javascript
 {
@@ -1766,7 +1767,7 @@ that is not based on the latest off-chain state, our FSM informs is for it:
 ```
 
 As well as this message, the client receives a message that informs them that
-the channel had now entered a closing state:
+the channel has now entered a closing state:
 
 ```javascript
 {
@@ -1784,8 +1785,8 @@ the channel had now entered a closing state:
 
 #### Slasher initiates slash
 
-The party that had been promted to slash is to inspect closing transaction and
-to decide if one wants to slash. There is the scenario when one would pay more
+The party that had been prompted to slash is to inspect the closing transaction and
+decide if it wants to slash. There is the scenario when one would pay more
 in on-chain fees compared to what is to be lost if one allows the channel
 being closed with some older state. If one decides to slash, one simply sends:
 
@@ -3125,7 +3126,7 @@ Where `channel_id` has the correct value of the channel's ID.
 Every once and a while a participant might feel the urge to post the latest
 channel off-chain state on-chain. That would protect them from malicious
 actions from the other party, namely unilaterally closing the channel with an
-older state. This can be prevented by posting a `channel_snapshot_tx`
+older state. This can be prevented by posting a `channel_snapshot_solo_tx`
 transaction on-chain containing the latest co-authenticated off-chain state -
 this guarantees that an older state can not make it on-chain.
 
@@ -3136,7 +3137,7 @@ on-chain, so it would fail to be included in the blockchain.
 #### Snapshotter inittiates a snapshot solo 
 
 If the channel is in an `open` state, any participant can initiate a solo
-action by:
+snapshot transaction by:
 
 ```javascript
 {
@@ -3147,7 +3148,7 @@ action by:
 ```
 #### Snapshotter authenticates the snapshot solo 
 
-After the `channel_snapshot_tx` had been requiested, the FSM prompts the
+After the `channel_snapshot_solo_tx` has been requested, the FSM prompts the
 client to sign it with:
 
 ```javascript
@@ -3203,7 +3204,6 @@ transaction changing the channel on-chain being included in a microblock.
 An interesting edge case would be one participant sending a snapshot with a
 round greater than the last seen on-chain but yet not the latest one. This is
 not cheating but if the other participant considers this to imply any risk to
-them, one could send a `channel_snapshot_tx` as well. The one with the higher
+them, one could send a `channel_snapshot_solo_tx` as well. The one with the higher
 `round` will replace the other and all force-progressed states that had been
 based on the older state.
-

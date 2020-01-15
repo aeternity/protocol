@@ -3,14 +3,14 @@
 Each party keeps a state tree specific for the channel. It represents the
 channel state at a certain point of time. It consists of all the channel data:
 accounts and contracts. Since it has the same structure as the on-chain state
-tree, names and oracles are empty as those are not allowed off-chain. The
-channels' subtree is empty as well, as it is reserved for future use.
+tree, the `names` and `oracles` subtrees are empty as those are not allowed off-chain. The
+`channels` subtree is empty as well, as it is reserved for future use.
 Off-chain transactions update this channel auxiliary tree.
 
-It is a responsibility of the parties to keep this locally. This is the safety
-guarantee in a case of a dispute: solo closing path requires a proof of
+It is the responsibility of the parties to keep this locally. This is the safety
+guarantee in a case of a dispute: the solo closing path requires a proof of
 inclusion for subtree instead of posting the whole tree. Being able to provide
-this proof of inclusion allows the participant to dispute a malicious close by
+this proof of inclusion allows a participant to dispute a malicious close by
 the other party or for basing a forced progress.
 
 Each off-chain update consists of updates being applied on top of channel
@@ -62,15 +62,15 @@ transactions we can reason which was performed earlier than the other.
 
 ## Overview
 
-The protocol parties use to run smart contracts is a two phase commit
+The protocol parties use to run smart contracts is a two-phase commit
 protocol, where one party proposes a change, gets it authenticated by the
 other and then commits the update locally. These checks are necessary to avoid
 parties getting confused if updates are being proposed simultaneously.  On a
 higher level, to keep off-chain and on-chain state in sync, parties should
 refuse to authenticate updates for either without also getting an
 authentication for the updates state_hash, e.g. don't authenticate an on-chain
-`channel_deposit` transaction without also updating the state trees in channel
-as well.  Authentication methods differences depending on if the transaction
+`channel_deposit` transaction without also updating the channel state trees
+as well.  Authentication method differences depending on whether the transaction
 is on-chain or off-chain one can be found [here](./authentication.md).
 
 With the consistency of state updates being secured between parties, it is
@@ -236,8 +236,7 @@ information it needs to assess whether or not it should accept the channel.
  ---------------------- ----
 ```
 
-- `chain_hash`: transaction hash of the chain you want to use, e.g. hash of
-  the genesis
+- `chain_hash`: genesis block hash of the chain you want to use
 - `temporary_channel_id`: randomly chosen id unique between the involved
   parties
 - `lock_period`: time in blocks until a channel closing is to be accepted if
@@ -342,7 +341,7 @@ initiating party.
  ---------------------- ----
 ```
 
-- `chain_hash`: transaction hash of the chain you want to use
+- `chain_hash`: genesis block hash of the chain you want to use
 - `temporary_channel_id`: randomly chosen id unique between the involved
   parties,
 - `minimum_depth`: number of blocks until an opening transaction should be
@@ -598,7 +597,7 @@ computing the state and either this block or any more recent one could be used
 to validate the state. Signatures or Generic Account's meta transactions are
 checked according to the latest channel object persisted on-chain. If there are
 updates that are contact executions using on-chain data: the block of
-`block_hash` is being used for building a consistent state on both
+`block_hash` is being used for building a consistent state on each
 participant's side.
 
 ```
@@ -620,8 +619,8 @@ participant's side.
 
 Message code: 9
 
-In response to an `update` message, the receiving side validates the received
-updates that they are indeed desired. Then one verifies that the operations
+In response to an `update` message, the receiving side validates that the received
+updates are indeed desired. Then one verifies that the operations
 listed in the updates list, applied to the most recent mutually authenticated
 state, results in a state tree corresponding to the `state_hash` in the
 transaction. If so, the state object is mutually authenticated, then returned
