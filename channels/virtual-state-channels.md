@@ -27,16 +27,15 @@ of State Channels that results in long waiting times whenever the participants
 need to modify the on-chain. This is to be improved with the introduction of
 Virtual State Channels.
 
-State Channels, also known as on-chain State Channels, use the on-chain
-blockchain both as a source of truth and as an arbiter in disputes. Virtual
-State Channels build on top of them allowing to use a third party - an
-intermediary - as a source of truth or as an arbiter. It is crucial that, as
-with regular State Channels, Virtual State Channel participants can protect
-themselves from malicious acts. Since third parties providing Virtual State
-Channel infrastructure can also act maliciously, at any point of time a
-participant can bring a potential dispute on-chain and have it resolved there.
-That way we keep Virtual State Channels as trustless as State Channels
-themselves.
+State Channels, also known as on-chain State Channels, use the blockchain both
+as a source of truth and as an arbiter in disputes. Virtual State Channels
+build on top of them allowing to use a third party - an intermediary - as a
+source of truth or as an arbiter. It is crucial that, as with regular State
+Channels, Virtual State Channel participants can protect themselves from
+malicious acts. Since third parties providing Virtual State Channel
+infrastructure can also act maliciously, at any point of time a participant
+can bring a potential dispute on-chain and have it resolved there.  That way
+we keep Virtual State Channels as trustless as State Channels themselves.
 
 ## Channels within channels
 
@@ -49,27 +48,28 @@ allows having channel objects stored in the off-chain state. This
 requires a corresponding dispute mechanism that protects all parties'
 interests and allows them to dispute the off-chain channel on-chain.
 
-The intention is that instead of opening a State Channel on-chain, participants use an
-intermediary. Both participants must have an already opened State
-Channel with the intermediary. They open a Virtual State Channel within their
-on-chain State Channel's context and continue using it as they would an
-on-chain State Channel. Once opened, all off-chain Virtual State Channel
-communication goes directly from one participant to the other. The
-intermediary receives Virtual State Channel updates only when required to
-take some action.
+The intention is that instead of opening a State Channel on-chain,
+participants use an intermediary. Both participants must have an already
+opened State Channel with the intermediary. This existing State Channel can be
+either on-chain or a virtual one - for clarity, we would refer to it as a
+parent State Channel. They open a Virtual State Channel within their parent
+State Channel's context and continue using it as they would an on-chain State
+Channel. Once opened, all off-chain Virtual State Channel communication goes
+directly from one participant to the other. The intermediary receives Virtual
+State Channel updates only when required to take some action.
 
 With on-chain State Channels participants lock tokens in the channel itself. A
 similar approach is taken with Virtual State Channels: since participants are
-to create Virtual State Channel objects in the states of their on-chain State
+to create Virtual State Channel objects in the states of their parent State
 Channels with the intermediary, they all need to lock tokens in the new
 Virtual State Channel. They must lock the same amount of tokens in both
-on-chain State Channel states. A participant is representing herself in the
+parent State Channel states. A participant is representing herself in the
 Virtual State Channel and she locks as many tokens as she would like to. In
-the scope of the on-chain State Channel, the intermediary protects the
+the scope of the parent State Channel, the intermediary protects the
 interests of the other Virtual State Channel's participant and locks the
 corresponding amount of tokens from their behalf. This happens in both
-on-chain State Channel. As a result of this is the intermediary
-locks tokens in both on-chain State Channels and has an exposure as the total
+parent State Channels. As a result of this is the intermediary
+locks tokens in both parent State Channels and has an exposure as the total
 amount of tokens locked in the Virtual State Channel.
 
 ##### Example
@@ -105,11 +105,11 @@ Alice and Bob don't have an on-chain State Channel between themselves and want
 to open a Virtual State Channel. They both have on-chain State Channels with
 Ingrid. Alice wants to deposit 3 tokens to the newly formed AliceBob Virtual
 State Channel, Bob wants to deposit 2 tokens there. In the AliceIngrid
-on-chain State Channel a new channel object is created having AliceBob
+parent State Channel a new channel object is created having AliceBob
 `channel_id`. Alice deposits 3 tokens in it and Ingrid deposits 2 from Bob's
 behalf. If at any moment Alice tries cheating Bob, it would mean cheating
 Ingrid and Ingrid has the incentive to protect Bob. Similarly, in BobIngrid
-on-chain State Channel a channel object is created with same `channel_id` and
+parent State Channel a channel object is created with same `channel_id` and
 balances, it is just Bob locks his 2 tokens and Ingrid locks 3 for Alice. The
 same incentive applies that if Bob is to cheat Alice, he has to cheat Ingrid
 as well and she has the incentive to protect Alice. Ingrid's exposure of
@@ -174,21 +174,21 @@ would be:
 #### Object updates
 
 The Virtual State Channel object is persisted in the state of the
-corresponding on-chain State Channels and can be updated by providing
-off-chain transactions that belong to the Virtual State Channel. Similar rules
-apply as with on-chain State Channels: newer state replaces old one. Off-chain
-updates contain a number `round` describing the point of time when the update
-had been made. Since it is ever-incrementing, two off-chain updates can be
-compared. If two share the same `round` and one is co-authenticated and the
-other had been produced by some unilateral action, the former takes precedence
-over the latter.
+corresponding parent State Channels and can be updated by providing off-chain
+transactions that belong to the Virtual State Channel. Similar rules apply as
+with on-chain State Channels: newer state replaces old one. Off-chain updates
+contain a number `round` describing the point of time when the update had been
+made. Since it is ever-incrementing, two off-chain updates can be compared. If
+two share the same `round` and one is co-authenticated and the other had been
+produced by some unilateral action, the former takes precedence over the
+latter.
 
 Virtual State Channel participants create and co-authenticate desired updates
-and provide them to the intermediary in the respective on-chain State
-Channels. In order for them to be applied there, the intermediary must also
-agree that those are valid updates. If the intermediary refuses to cooperate,
-most of those can be forcfully progressed on-chain. All of those will be
-explained in detail.
+and provide them to the intermediary in the respective parent State Channels.
+In order for them to be applied there, the intermediary must also agree that
+those are valid updates. If the intermediary refuses to cooperate, most of
+those can be forcfully progressed on-chain. All of those will be explained in
+detail.
 
 A special case arises when both Virtual State Channel participants agree on an
 off-chain update and one of them provides it to the intermediary while the
@@ -213,10 +213,10 @@ malicious intermediary could post it on-chain.
 
 Once both Virtual State Channel participants authenticate the initial
 off-chain transaction, independently of each other they both provide it to the
-intermediary in their own on-chain State Channels with her. Based on this
-off-chain transaction, the Virtual State Channel is created in both on-chain
-State Channel's states. This is enough for everyone to consider the Virtual
-State Channel to be opened.
+intermediary in their corresponding parent State Channels with her. Based on
+this off-chain transaction, the Virtual State Channel is created in both
+parent State Channel's states. This is enough for everyone to consider the
+Virtual State Channel to be opened.
 
 It is worth mentioning that the intermediary can reject opening the Virtual
 State Channel and participants can not dispute that on-chain. It is up to the
@@ -249,20 +249,20 @@ closure of not.
 If both Virtual State Channel participants agree on a final distribution of
 tokens, they produce and co-authenticate an off-chain transaction that is
 similar to the `channel_close_mutual` one. They both provide it to the
-intermediary and once accepted in the on-chain State Channels, the Virtual
-State Channel is considered as closed. What is more, once the intermediary
-accepts this in one of the on-chain State Channels, the corresponding
-participant does not have to wait for a confirmation that this is done in the
-other on-chain State Channel.
+intermediary and once accepted in the parent State Channels, the Virtual State
+Channel is considered as closed. What is more, once the intermediary accepts
+this in one of the parent State Channels, the corresponding participant does
+not have to wait for a confirmation that this is done in the other parent
+State Channel.
 
-If anyone refuses accepting the transaction in their on-chain State Channel,
+If anyone refuses accepting the transaction in their parent State Channel,
 this can be disputed on-chain.
 
-Once the channel had been mutually closed in the on-chain State Channel,
-either with on-chain participant's agreement or a dispute, the effects are
-instant: Virtual State Channel tokens are redistributed according to the
-transaction and the Virtual State Channel object is being deleted from the
-on-chain State Channel's state.
+Once the channel had been mutually closed in the parent State Channel, either
+with on-chain participant's agreement or a dispute, the effects are instant:
+Virtual State Channel tokens are redistributed according to the transaction
+and the Virtual State Channel object is being deleted from the parent State
+Channel's state.
 
 #### Closing without an agreement
 
@@ -286,7 +286,7 @@ the intermediary.
 If a participant wants to enter into a virtual solo closing sequence, one
 produces a corresponding off-chain message, similar to the on-chain
 `channel_close_solo_tx`. This is being solo authenticated and provided to the
-intermediary. The Virtual State Channel object in their on-chain State Channel
+intermediary. The Virtual State Channel object in their parent State Channel
 is updated accordingly: provided `round` and `state_hash` had been used and
 the Virtual State Channel enters in a `closing` state. This gives a
 `lock_period` of on-chain keyblocks for the other party to provide an
@@ -294,21 +294,21 @@ off-chain `channel_slash_tx` alternative or off-chain force progress
 transaction.
 
 If a participant provides any of those to the intermediary, the latter is
-expected to publish it in the other on-chain State Channel with the other
+expected to publish it in the other parent State Channel with the other
 Virtual State Channel participant. This modifies the Virtual State Channel
 object.
 
 Once the `lock_period` timer had expired, an off-chain transaction, similar to
-the `channel_settle_tx` is being posted in the on-chain State Channels that
+the `channel_settle_tx` is being posted in the parent State Channels that
 finalizes the channel closing and redistributes tokens.
 
 If anyone refuses accepting a valid off-chain closing/slashing/settling
 transaction, this could be disputed on-chain. This makes all parties safe from
 malicious refuses. One odd scenario would be an intermediary accepting a valid
 off-chain transaction from the virtual solo closing sequence in one of the
-on-chain State Channels while not publishing it to the other. This would allow
+parent State Channels while not publishing it to the other. This would allow
 one of the participants closing the Virtual State Channel in one of the
-on-chain State Channels, while the other participant is not even aware of it.
+parent State Channels, while the other participant is not even aware of it.
 Since newer channel state has the potential to overwrite an older one, that
 puts the intermediary in an unfavourable situation: if the channel had been
 closed with not-the-latest-state or if participants keep making off-chain
@@ -339,7 +339,7 @@ State Channel off-chain state in an off-chain slash transaction. Since the
 initial Virtual State Channel state has a `round=1`, any co-authenticated
 state would work. This will modify the Virtual State Channel token
 distribution but also provide the intermediary with a state one could use in
-the other on-chain State Channel with the other participant, if one is to
+the other parent State Channel with the other participant, if one is to
 provide there an older Virtual State Channel state.
 
 ### Deposit, withdrawal and snapshot
@@ -347,9 +347,9 @@ provide there an older Virtual State Channel state.
 It is expected that participants could desire depositing more tokens in a
 Virtual State Channel or withdrawing some out of it. Providing a non-closing
 temporary state is also useful. For all of those there would be unique
-off-chain updates provided to the on-chain State Channels in order to update
-the Virtual State Channel object accordingly. Those off-chain udpates mirror
-the State Channel on-chain transactions `channel_deposit_tx`,
+off-chain updates provided to the parent State Channels in order to update the
+Virtual State Channel object accordingly. Those off-chain udpates mirror the
+State Channel on-chain transactions `channel_deposit_tx`,
 `channel_withdraw_tx` and `channel_snapshot_solo_tx` and they all share a
 common flow but some might be disputed and others - not.
 
@@ -358,29 +358,28 @@ action to be implied on the Virtual State Channel. Since the withdrawal is
 simply unlocking tokens from the channel, there is no need of agreement from
 the intermediary and this action can be progressed on-chain if one refuses to.
 This is not the case with deposit: while one of the Virtual State Channel
-participants locks some of their tokens in their on-chain State Channel
-context, in the other on-chain State Channel the intermediary is expected to
-lock the same amount of tokens from their behalf. Since we can not force
-participants into locking tokens, there must be a general agreement with the
-intermediary as one could refuse to accept the off-chain transaction. That's
-why deposits can not be force-progressed.
+participants locks some of their tokens in their parent State Channel context,
+in the other parent State Channel the intermediary is expected to lock the
+same amount of tokens from their behalf. Since we can not force participants
+into locking tokens, there must be a general agreement with the intermediary
+as one could refuse to accept the off-chain transaction. That's why deposits
+can not be force-progressed.
 
 The situation with the snapshot is easier: anyone can produce a snapshot
 anytime, as long as it is based on a Virtual State Channel State that has a
 higher `round` than the one the Virtual State Channel object has in the
-on-chain State Channel with the intermediary. The intermediary could provide
-this snapshot in the other on-chain State Channel and if the other party
-refuses to cooperate, this can be force-progressed on-chain.
+parent State Channel with the intermediary. The intermediary could provide
+this snapshot in the other parent State Channel and if the other party refuses
+to cooperate, this can be force-progressed on-chain.
 
 ### Forcing progress
 
 If at any point of time a Virtual State Channel participant stops cooperating,
 the other one can protect themselves using the intermediary was an arbiter.
-This modifies the Virtual State Channel object in their on-chain State
-Chennel. Then the intermediary is to get this valid forced progressed
-transaction in their other on-chain State Channel. If the participant still
-refuses to cooperate, this could be brought to the on-chain and be resolved
-there.
+This modifies the Virtual State Channel object in their parent State Chennel.
+Then the intermediary is to get this valid forced progressed transaction in
+their other parent State Channel. If the participant still refuses to
+cooperate, this could be brought to the on-chain and be resolved there.
 
 It is worth mentioning that if the other participant refuses the forced
 progress, the intermediary probably should bring this on-chain. Otherwise
@@ -409,10 +408,10 @@ mechanics. It consists of:
     * the latest on-chain persisted one: in this case the on-chain stored
       `round` and `state_hash` are used. The `payload` is empty
     * off-chain transaction with a greater `round` to the one currently
-      persisted on-chain for this on-chain State Channel. The `payload` is a
-      serializated off-chain transaction that belongs to that on-chain State
+      persisted on-chain for this parent State Channel. The `payload` is a
+      serializated off-chain transaction that belongs to that parent State
       Channel and its `round` and `state_hash` are used for defining the
-      on-chain State Channels' state that the forced progress is being based
+      parent State Channels' state that the forced progress is being based
       upon.
 * `poi` is a Proof of Inclusion that provides enough information for the
   forced progress to be applied. This would include the Virtual State Channel
@@ -432,9 +431,9 @@ mechanics. It consists of:
     * slash
     * force progress
     * virtual force progress
-* `state_hash` - the root of the on-chain State Channel state tree after the
+* `state_hash` - the root of the parent State Channel state tree after the
   `update` had been applied on top of the `poi`
-* `round`: on-chain State Channel's next round
+* `round`: parent State Channel's next round
 
 Note that this allows force-progressing of contracts in a Virtual State
 Channel. It also allows forcing state in a nested Virtual State Channel,
