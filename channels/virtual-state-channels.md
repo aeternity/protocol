@@ -12,18 +12,18 @@ improved in order to build Virtual State Channels.
 Aeternity blockchain already has two-party State Channels built on a protocol
 level. They allow producing off-chain transactions. They allow not just
 exchanging tokens off-chain but also executing smart contracts. That results
-in them not consuming neither `gas`, nor `fee` for their exectution. Off-chain
+in them not consuming either `gas`, nor `fee` for their execution. Off-chain
 transactions also don't need on-chain confirmations so their speed is bound by
-participant's computing power and network bandwidth. This allows building
+the involved parties' computing power and network bandwidth. This allows building
 cheap near real-time protocols while keeping the same amount of trustlessness
 the blockchain already provides.
 
 While this is already a great improvement to traditional blockchain solutions,
-participants are still expected to interact with the on-chain for certain
+participants are still expected to interact with the chain for certain
 milestone events: opening a channel, depositing or withdrawing tokens and
 closing a channel. As with any on-chain transactions, the higher number of
 confirmations a transaction has, the better fork-safety it has. In the context
-of State Channels that results in big waiting times whenever the participants
+of State Channels that results in long waiting times whenever the participants
 need to modify the on-chain. This is to be improved with the introduction of
 Virtual State Channels.
 
@@ -31,7 +31,7 @@ State Channels, also known as on-chain State Channels, use the on-chain
 blockchain both as a source of truth and as an arbiter in disputes. Virtual
 State Channels build on top of them allowing to use a third party - an
 intermediary - as a source of truth or as an arbiter. It is crucial that, as
-with on-chain State Channels, a Virtual State Channel participant can protect
+with regular State Channels, Virtual State Channel participants can protect
 themselves from malicious acts. Since third parties providing Virtual State
 Channel infrastructure can also act maliciously, at any point of time a
 participant can bring a potential dispute on-chain and have it resolved there.
@@ -45,17 +45,17 @@ the same structure as the on-chain state tree. A notable difference between
 those would be that the off-chain state tree is limited just to accounts and
 contracts. It does not allow having names, oracles or channels and the
 corresponding trees are empty. The proposed Virtual State Channels solution
-consists of allowing channels to be present in the off-chain state. This
+allows having channel objects stored in the off-chain state. This
 requires a corresponding dispute mechanism that protects all parties'
 interests and allows them to dispute the off-chain channel on-chain.
 
-Intention is instead of opening a State Channel on-chain, participants use an
-intermediary. Both participants must have an already opened on-chain State
+The intention is that instead of opening a State Channel on-chain, participants use an
+intermediary. Both participants must have an already opened State
 Channel with the intermediary. They open a Virtual State Channel within their
 on-chain State Channel's context and continue using it as they would an
 on-chain State Channel. Once opened, all off-chain Virtual State Channel
 communication goes directly from one participant to the other. The
-intermediary receives only Virtual State Channel updates only when required to
+intermediary receives Virtual State Channel updates only when required to
 take some action.
 
 With on-chain State Channels participants lock tokens in the channel itself. A
@@ -497,4 +497,3 @@ Introduction of Virtual State Channels allows developing new protocols on top
 of them, one of which is the Channel entity with many participants. This can
 be achieved using different architectures, but what would be common is sharing
 some common state.
-
