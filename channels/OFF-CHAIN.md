@@ -239,8 +239,8 @@ information it needs to assess whether or not it should accept the channel.
 - `chain_hash`: genesis block hash of the chain you want to use
 - `temporary_channel_id`: randomly chosen id unique between the involved
   parties
-- `lock_period`: time in blocks until a channel closing is to be accepted if
-  not mutual or in general for parties to wait for new messages.
+- `lock_period`: time measured in key blocks in which unilateral channel
+  events can be disputed
 - `push_amount`: initial deposit in favour of the responder by the initiator
 - `initiator_amount`: amount the initiator is willing to commit
 - `responder_amount`: amount the initiator wants the responder to commit
@@ -624,9 +624,9 @@ updates are indeed desired. Then one verifies that the operations
 listed in the updates list, applied to the most recent mutually authenticated
 state, results in a state tree corresponding to the `state_hash` in the
 transaction. If so, the state object is mutually authenticated, then returned
-as payload in an `update_ack` message. The `block_hash` is the environment the
-authentication had been done. The authentication method described in the
-latest channel on-chain persisted object must be used.
+as payload in an `update_ack` message. The `block_hash` denotes the the
+on-chain environment in which the authentication was done. The authentication
+method described in the latest channel on-chain persisted object must be used.
 
 ```
   name                  size (bytes)
