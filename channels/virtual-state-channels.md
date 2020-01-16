@@ -4,8 +4,8 @@
 
 The Aeternity blockchain provides various means for scaling the transaction
 throughput so it can accommodate billions of people. One of those is State
-Channels. This document describes how the State Channels protocol can be further
-improved in order to build Virtual State Channels.
+Channels. This document describes how the State Channels protocol can be
+further improved in order to build Virtual State Channels.
 
 ## Introduction
 
@@ -14,9 +14,9 @@ level. They allow producing off-chain transactions. They allow not just
 exchanging tokens off-chain but also executing smart contracts. That results
 in them not consuming either `gas`, or `fee` for their execution. Off-chain
 transactions also don't need on-chain confirmations so their speed is bound by
-the involved parties' computing power and network bandwidth. This allows building
-cheap near real-time protocols while keeping the same amount of trustlessness
-the blockchain already provides.
+the involved parties' computing power and network bandwidth. This allows
+building cheap near real-time protocols while keeping the same amount of
+trustlessness the blockchain already provides.
 
 While this is already a great improvement to traditional blockchain solutions,
 participants are still expected to interact with the chain for certain
@@ -27,15 +27,16 @@ of State Channels that results in long waiting times whenever the participants
 need to modify the on-chain. This is to be improved with the introduction of
 Virtual State Channels.
 
-Regular State Channels, also here referred to as on-chain State Channels, use the blockchain both
-as a source of truth and as an arbiter in disputes. Virtual State Channels
-build on top of them allowing to use a third party - an intermediary - as a
-source of truth or as an arbiter. It is crucial that, as with regular State
-Channels, Virtual State Channel participants can protect themselves from
-malicious acts. Since third parties providing Virtual State Channel
-infrastructure can also act maliciously, at any point of time a participant
-can bring a potential dispute on-chain and have it resolved there.  That way
-we keep Virtual State Channels as trustless as State Channels themselves.
+Regular State Channels, also here referred to as on-chain State Channels, use
+the blockchain both as a source of truth and as an arbiter in disputes.
+Virtual State Channels build on top of them allowing to use a third party - an
+intermediary - as a source of truth or as an arbiter. It is crucial that, as
+with regular State Channels, Virtual State Channel participants can protect
+themselves from malicious acts. Since third parties providing Virtual State
+Channel infrastructure can also act maliciously, at any point of time a
+participant can bring a potential dispute on-chain and have it resolved there.
+That way we keep Virtual State Channels as trustless as State Channels
+themselves.
 
 ## Channels within channels
 
@@ -44,9 +45,9 @@ the same structure as the on-chain state tree. A notable difference between
 those would be that the off-chain state tree is limited just to accounts and
 contracts. It does not allow having names, oracles or channels and the
 corresponding trees are empty. The proposed Virtual State Channels solution
-allows having channel objects stored in the off-chain state. This
-requires a corresponding dispute mechanism that protects all parties'
-interests and allows them to dispute the off-chain channel on-chain.
+allows having channel objects stored in the off-chain state. This requires a
+corresponding dispute mechanism that protects all parties' interests and
+allows them to dispute the off-chain channel on-chain.
 
 The intention is that instead of opening a State Channel on-chain,
 participants use an intermediary. Both participants must have an already
@@ -62,15 +63,15 @@ With on-chain State Channels participants lock tokens in the channel itself. A
 similar approach is taken with Virtual State Channels: since participants are
 to create Virtual State Channel objects in the states of their parent State
 Channels with the intermediary, they all need to lock tokens in the new
-Virtual State Channel. They must lock the same amount of tokens in both
-parent State Channel states. A participant is representing herself in the
-Virtual State Channel and she locks as many tokens as she would like to. In
-the scope of the parent State Channel, the intermediary protects the
-interests of the other Virtual State Channel's participant and locks the
-corresponding amount of tokens from their behalf. This happens in both
-parent State Channels. As a result of this is the intermediary
-locks tokens in both parent State Channels and has an exposure as the total
-amount of tokens locked in the Virtual State Channel.
+Virtual State Channel. They must lock the same amount of tokens in both parent
+State Channel states. A participant is representing herself in the Virtual
+State Channel and she locks as many tokens as she would like to. In the scope
+of the parent State Channel, the intermediary protects the interests of the
+other Virtual State Channel's participant and locks the corresponding amount
+of tokens from their behalf. This happens in both parent State Channels. As a
+result of this is the intermediary locks tokens in both parent State Channels
+and has an exposure as the total amount of tokens locked in the Virtual State
+Channel.
 
 ##### Example
 
@@ -104,16 +105,16 @@ amount of tokens locked in the Virtual State Channel.
 Alice and Bob don't have an on-chain State Channel between themselves and want
 to open a Virtual State Channel. They both have on-chain State Channels with
 Ingrid. Alice wants to deposit 3 tokens to the newly formed AliceBob Virtual
-State Channel, Bob wants to deposit 2 tokens there. In the AliceIngrid
-parent State Channel a new channel object is created having AliceBob
-`channel_id`. Alice deposits 3 tokens in it and Ingrid deposits 2 from Bob's
-behalf. If at any moment Alice tries cheating Bob, it would mean cheating
-Ingrid and Ingrid has the incentive to protect Bob. Similarly, in BobIngrid
-parent State Channel a channel object is created with same `channel_id` and
-balances, it is just Bob locks his 2 tokens and Ingrid locks 3 for Alice. The
-same incentive applies that if Bob is to cheat Alice, he has to cheat Ingrid
-as well and she has the incentive to protect Alice. Ingrid's exposure of
-locked tokens is `2 + 3 = 5`.
+State Channel, Bob wants to deposit 2 tokens there. In the AliceIngrid parent
+State Channel a new channel object is created having AliceBob `channel_id`.
+Alice deposits 3 tokens in it and Ingrid deposits 2 from Bob's behalf. If at
+any moment Alice tries cheating Bob, it would mean cheating Ingrid and Ingrid
+has the incentive to protect Bob. Similarly, in BobIngrid parent State Channel
+a channel object is created with same `channel_id` and balances, it is just
+Bob locks his 2 tokens and Ingrid locks 3 for Alice. The same incentive
+applies that if Bob is to cheat Alice, he has to cheat Ingrid as well and she
+has the incentive to protect Alice. Ingrid's exposure of locked tokens is `2 +
+3 = 5`.
 
 ### Virtual State Channel object
 
@@ -124,13 +125,13 @@ required information to safely close the channel, even in cases of a dispute.
 #### Object structure
 
 In cases of Virtual State Channels we produce a regular State Channel object
-and wrap it in an object holding some additional information. It consists of who the
-intermediary is and the initial token amounts dedicated by the participant and
-the intermediary. An important detail is that the initial token amounts for
-the participants are not according to the amounts they've dedicatrs: it is the
-intermediary that has all of the tokens and the Virtual State Channel
-participant has none. This plays an important role and it is described later
-on.
+and wrap it in an object holding some additional information. It consists of
+who the intermediary is and the initial token amounts dedicated by the
+participant and the intermediary. An important detail is that the initial
+token amounts for the participants are not according to the amounts they've
+dedicated: it is the intermediary that has all of the tokens and the Virtual
+State Channel participant has none. This plays an important role and it is
+described later on.
 
 ##### Example
 
@@ -307,17 +308,17 @@ transaction, this could be disputed on-chain. This makes all parties safe from
 malicious refuses. One odd scenario would be an intermediary accepting a valid
 off-chain transaction from the virtual solo closing sequence in one of the
 parent State Channels while not publishing it to the other. This would allow
-one of the participants closing the Virtual State Channel in one of the
-parent State Channels, while the other participant is not even aware of it.
-Since newer channel state has the potential to overwrite an older one, that
-puts the intermediary in an unfavourable situation: if the channel had been
-closed with not-the-latest-state or if participants keep making off-chain
-transactions, the other participant could close the Virtual State Channel
-unilaterally with a newer state. The distribution of tokens could be different
-but the Virtual State Channel had been already closed in the other on-chain
-State Channel and it couldn't be disputed anymore. In that case the risk lies
-in the intermediary and this puts an incentive on her side to behave according
-to the protocol.
+one of the participants closing the Virtual State Channel in one of the parent
+State Channels, while the other participant is not even aware of it.  Since
+newer channel state has the potential to overwrite an older one, that puts the
+intermediary in an unfavourable situation: if the channel had been closed with
+not-the-latest-state or if participants keep making off-chain transactions,
+the other participant could close the Virtual State Channel unilaterally with
+a newer state. The distribution of tokens could be different but the Virtual
+State Channel had been already closed in the other on-chain State Channel and
+it couldn't be disputed anymore. In that case the risk lies in the
+intermediary and this puts an incentive on her side to behave according to the
+protocol.
 
 #### Close without a state
 
@@ -367,10 +368,10 @@ can not be force-progressed.
 
 The situation with the snapshot is easier: anyone can produce a snapshot
 anytime, as long as it is based on a Virtual State Channel State that has a
-higher `round` than the one the Virtual State Channel object has in the
-parent State Channel with the intermediary. The intermediary could provide
-this snapshot in the other parent State Channel and if the other party refuses
-to cooperate, this can be force-progressed on-chain.
+higher `round` than the one the Virtual State Channel object has in the parent
+State Channel with the intermediary. The intermediary could provide this
+snapshot in the other parent State Channel and if the other party refuses to
+cooperate, this can be force-progressed on-chain.
 
 ### Forcing progress
 
@@ -496,3 +497,4 @@ Introduction of Virtual State Channels allows developing new protocols on top
 of them, one of which is the Channel entity with many participants. This can
 be achieved using different architectures, but what would be common is sharing
 some common state.
+
