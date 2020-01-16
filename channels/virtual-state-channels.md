@@ -4,7 +4,7 @@
 
 The Aeternity blockchain provides various means for scaling the transaction
 throughput so it can accommodate billions of people. One of those is State
-Channels. This document describes how State Channels protocol can be further
+Channels. This document describes how the State Channels protocol can be further
 improved in order to build Virtual State Channels.
 
 ## Introduction
@@ -12,7 +12,7 @@ improved in order to build Virtual State Channels.
 Aeternity blockchain already has two-party State Channels built on a protocol
 level. They allow producing off-chain transactions. They allow not just
 exchanging tokens off-chain but also executing smart contracts. That results
-in them not consuming either `gas`, nor `fee` for their execution. Off-chain
+in them not consuming either `gas`, or `fee` for their execution. Off-chain
 transactions also don't need on-chain confirmations so their speed is bound by
 the involved parties' computing power and network bandwidth. This allows building
 cheap near real-time protocols while keeping the same amount of trustlessness
@@ -27,7 +27,7 @@ of State Channels that results in long waiting times whenever the participants
 need to modify the on-chain. This is to be improved with the introduction of
 Virtual State Channels.
 
-State Channels, also known as on-chain State Channels, use the blockchain both
+Regular State Channels, also here referred to as on-chain State Channels, use the blockchain both
 as a source of truth and as an arbiter in disputes. Virtual State Channels
 build on top of them allowing to use a third party - an intermediary - as a
 source of truth or as an arbiter. It is crucial that, as with regular State
@@ -117,14 +117,14 @@ locked tokens is `2 + 3 = 5`.
 
 ### Virtual State Channel object
 
-Channel on-chain object holds various channel related data, including
-participants, total balances dedicated to the channel and etc. It has all the
+The channel on-chain object holds various channel-related data, including
+participants, total balances dedicated to the channel etc. It has all the
 required information to safely close the channel, even in cases of a dispute.
 
 #### Object structure
 
 In cases of Virtual State Channels we produce a regular State Channel object
-and wrap it around with some additional information. It consists of who the
+and wrap it in an object holding some additional information. It consists of who the
 intermediary is and the initial token amounts dedicated by the participant and
 the intermediary. An important detail is that the initial token amounts for
 the participants are not according to the amounts they've dedicatrs: it is the
@@ -187,7 +187,7 @@ Virtual State Channel participants create and co-authenticate desired updates
 and provide them to the intermediary in the respective parent State Channels.
 In order for them to be applied there, the intermediary must also agree that
 those are valid updates. If the intermediary refuses to cooperate, most of
-those can be forcfully progressed on-chain. All of those will be explained in
+those can be forcibly progressed on-chain. All of those will be explained in
 detail.
 
 A special case arises when both Virtual State Channel participants agree on an
