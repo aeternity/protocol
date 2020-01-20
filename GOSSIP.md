@@ -38,8 +38,8 @@ case two connections are opened (see
 
 Whenever a ping message is exchanged between peers, either a ping request or
 ping response, the peers also attach a subset of neighboring peers they know of.
-The node that generates the message populates the neighbor list with 30 peers
-that are randomly selected from its pools (see
+The node that generates the message populates the neighbor list with 32 peers
+at most that are randomly selected from its verified peer pool (see
 [Peers Maintenance](#peers-maintenance)).
 
 When a ping request is received from another peer, that peer is first checked
@@ -127,7 +127,7 @@ There is a soft limit on the maximum of inbound connections (default to 100).
 When it is reached, the node will still accept inbound connections, but they will
 be closed right after responding to the first ping. This is a soft limit to allow
 nodes to join the cluster even if the trusted nodes inbound limit has been
-reached. In addition, this prevent a node, in particular a trusted node, to
+reached. In addition, this prevents a node, in particular a trusted node, to
 have so much inbound connections that it cannot reach its number of outbound
 connections; a guaranteed number of outbound connection is crucial for proper
 propagation of new blocks. For all nodes to reach their established number of
@@ -146,7 +146,8 @@ this allow the node to reach 5 outbound connection under `15` seconds and
 connect to the last peer when having received around `20` gossip messages.
 
 The node iteratively picks a random peer (not yet connected) from either
-the verified pool or the unverified pool (`0.5` probability by default),
+the verified pool or the unverified pool (`1.0` probability by default, so it
+always tries to pick a peer from the verified pool first)
 that is from a different group ([See Peer Groups](#peer-groups)) than
 any actual outbound connection. In case there are no more peers available in the
 selected pool the other one will be tried. If the connection succeeds, an
@@ -225,7 +226,7 @@ for a certain amount of time, then if the bucket is still full, by selecting a
 random peer with a bias favoring peers that were added the longest time ago.
 7. The eventually evicted peer is completely removed from the pool.
 
-Only the IP of the peers are used to select a subset of the pool because
+Only the IPs of the peers are used to select a subset of the pool because
 IP is an expensive resource while ports are comparatively cheap.
 
 See [Bucket Selection](#bucket-selection) for more details on how the buckets
