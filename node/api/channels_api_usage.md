@@ -44,7 +44,9 @@ expected. The flow is the following:
 3. [Optionally leave/reestablish](#leave-reestablish)
 4. [Channel mutual close](#channel-mutual-close)
   * [Channel solo close](#channel-solo-close)
+  * [Channel slash](#channel-slash)
   * [Channel settle](#channel-settle)
+5. [Optionally snapshot](#channel-snapshot)
 
 There are a some WebSocket events that can occur while the connection is open
 but are not necessarily part of the channel's life cycle.
@@ -462,7 +464,7 @@ $ curl 'http://localhost:3013/v2/transactions/th_hNyHzj4dSzyBqReAMR36GGz1mhuXxQF
 if the `block_hash` is `none` - then the transaction is still in the mempool.
 
 #### Transaction detected on-chain
-Once the transaction is picked up by a miner and included in a block, the fsms will detect it and report
+Once the transaction is picked up by a miner and included in a block, the FSMs will detect it and report
 a `channel_changed` event in an `on_chain_tx` report:
 ```javascript
 {
@@ -540,7 +542,7 @@ After both parties have mutually authenticated the state update both of them wil
 From this point on, the channel is considered to be opened.
 
 #### State changed
-Each time the fsm returns to the `open` state, it will check whether the channel off-chain state has
+Each time the FSM returns to the `open` state, it will check whether the channel off-chain state has
 changed. If so, it issues a `channels.update` report. When the channel is first opened, this report will
 present the initial off-chain state:
 ```javascript
@@ -824,7 +826,7 @@ To check the outcome of the following sequence, we can first check the balances 
 }
 ```
 
-The fsm responds:
+The FSM responds:
 
 ```javascript
 {
@@ -989,7 +991,7 @@ Since we checked balances before the update, we can do so again to verify the re
 }
 ```
 
-The fsm responds:
+The FSM responds:
 
 ```javascript
 {
@@ -1369,7 +1371,7 @@ expensive to be force progressed on-chain, so please use with caution.
 It is possible to leave a channel and then later reestablish the channel
 off-chain state and continue operation. Leaving the channel can either be
 done by simply disconnecting, or by sending a `'leave'` request. When receving
-a leave request, the channel fsm passes it on to the peer fsm, reports the
+a leave request, the channel FSM passes it on to the peer FSM, reports the
 current mutually authenticated state and then terminates. The `'reestablish'` request
 is very similar to a [Channel open](#channel-open) request, but also requires
 the channel id and the latest mutually authenticated state.
@@ -1388,7 +1390,7 @@ Example:
 }
 ```
 
-The fsm responds with the following type of report:
+The FSM responds with the following type of report:
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1414,7 +1416,7 @@ $ wscat --connect
 localhost:3014/channel?existing_channel_id=ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR&host=localhost&offchain_tx=tx_%2BQENCwH4h...&port=12341&protocol=json-rpc&role=initiator
 ```
 
-The channel fsm responds with the following event reports if all goes well:
+The channel FSM responds with the following event reports if all goes well:
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1612,7 +1614,7 @@ if the `block_hash` is `none` - then the transaction is still in the mempool.
 
 ## Channel solo close
 It is possible to close the channel unilaterally, e.g. if the other party has
-disconnected and is expected never to return. The channel fsm can be asked
+disconnected and is expected never to return. The channel FSM can be asked
 to generate a `channel_close_solo` transaction and post it on-chain. The
 resulting transaction will include the latest mutually signed offchain state,
 or the empty string, indicating that the latest state is what's on the chain.
@@ -1620,7 +1622,7 @@ or the empty string, indicating that the latest state is what's on the chain.
 The `channel_close_solo` transaction only needs a single authentication, and
 is described in more detail in [this section](#channel-solo-close).
 
-The channel fsm does not support picking an earlier state to close with, as
+The channel FSM does not support picking an earlier state to close with, as
 this is a form of cheating.
 
 Since any of the participants can initiate a solo-closing, we will use
@@ -1670,7 +1672,7 @@ and then post it back via a WebSocket message:
 }
 ```
 
-As the channel fsm receives the authenticated solo close transaction, verifies it
+As the channel FSM receives the authenticated solo close transaction, verifies it
 and posts it to the chain, it should eventually detect the transaction appearing
 on the chain, and inform its client with the following WebSocket message.
 The other peer will receive the same message if it is online:
@@ -1706,10 +1708,153 @@ receive another information message:
 }
 ```
 
+## Channel slash
+
+If a `channel_close_solo_tx` passes on-chain checks, it is valid to the best
+of the miner's knowledge. The channel is to be closed and the final balances
+participants receive from its closure are according to whatever state had
+been provided last on-chain.
+
+The state given by the `channel_solo_close_tx` can be progressed using a channel force progress
+transaction. Each new `channel_force_progress_tx` transaction will result in a
+new channel state that is produced on-chain. It will have a new `state_hash`
+and an incremented `round`.
+
+On the other hand the `channel_close_solo_tx` could have been both valid and
+malicious at the same time: it could have passed all on-chain checks but yet
+it might not have been the very last channel state. If any participant tries
+to close the channel unilaterally using a `channel_close_solo_tx` based upon
+an earlier (i.e. not the latest) channel state, we would consider that a violation of the
+off-chain protocol. In that case the other participant can defend themselves
+from being cheated by simply providing a co-authenticated off-chain state with
+a higher round. This is done via the `channel_slash_tx` transaction.
+
+Since a co-authenticated off-chain state has a higher priority than an
+unilaterally on-chain produced one via a `channel_force_progress_tx` transaction, 
+a `channel_slash_tx` transaction can invalidate a whole chain of
+`channel_force_progress_tx` transactions if the first one of them had been based
+on a channel state that is older than the one provided by the `channel_slash_tx`
+transaction. This way if one party produces a long chain of force-progressed
+states based on a not-the-last state, the other can replace them all providing
+a single `channel_slash_tx` transaction.
+
+For completeness it is worth mentioning that the second party can be malicious
+as well, not providing the very last state in their `channel_slash_tx`
+transaction. In that case the closing party could protect themselves with yet
+another `channel_slash_tx` transaction that slashes the slash that is now
+on-chain as well as all force-progressed states based upon it. Having this
+mechanics at place aims at incentivizing both parties to behave well as all
+cheating attempts will cost them on-chain fees.
+
+If the other party tries closing the channel with a `channel_close_solo_tx`
+that is not based on the latest off-chain state, our FSM informs us about it
+(note the `"info": "can_slash"` bit):
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_Et72swxcKCAJ8KzUDm17X1Ukuo6W7516WfYDPdUoTYpArCdfQ",
+    "data": {
+      "info": "can_slash",
+      "tx": "tx_+NILAfiEuEBCNNHFxu/R+ypbtOCh7BrA+oFrAYYHzhZTR8BmTOgO2yYKd7lXwU7+xlfvD3Mu9dEeVp1T1aVuH8UPk/7wU9UMuECR/+7ZaF0OqeiRuRVkjsd2aEynOBmBk+tFETlA5H/jNIVB2A1RbKDe8yHGBWpUbWZzLnPXK+pl1Wkml094WxUAuEj4RjkCoQYfhMxkEg4U4IPqO0HIxeove0RQjLQ6xewjm9BZLWhckwKgKhvZeiagtdVqx9aMKxKhw8+hK5cMrAWcpuiI9OVBfAcDKgN0",
+      "type": "channel_offchain_tx"
+    }
+  },
+  "version": 1
+}
+```
+
+As well as this message, the client receives a message that informs them that
+the channel has now entered a closing state:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_Et72swxcKCAJ8KzUDm17X1Ukuo6W7516WfYDPdUoTYpArCdfQ",
+    "data": 
+      "event": "closing"
+    }
+  },
+  "version": 1
+}
+```
+
+#### Slasher initiates slash
+
+The party that had been prompted to slash is to inspect the closing transaction and
+decide if it wants to slash. There is the scenario when one would pay more
+in on-chain fees compared to what is to be lost if one allows the channel
+being closed with some older state. If one decides to slash, one simply sends:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.slash",
+  "params": {}
+}
+```
+
+#### Slasher authenticating
+
+Then the slasher receives a `channel_slash_tx` to authenticate:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.slash_tx",
+  "params": {
+    "channel_id": "ch_Et72swxcKCAJ8KzUDm17X1Ukuo6W7516WfYDPdUoTYpArCdfQ",
+    "data": {
+      "signed_tx": "tx_+QJ9CwHAuQJ3+QJ0NwGhBh+EzGQSDhTgg+o7QcjF6i97RFCMtDrF7COb0FktaFyToQHFuOyHaFZbIrWNtYfyrvdxCqjuxxEHg9OIAavLpCy79LjU+NILAfiEuEBCNNHFxu/R+ypbtOCh7BrA+oFrAYYHzhZTR8BmTOgO2yYKd7lXwU7+xlfvD3Mu9dEeVp1T1aVuH8UPk/7wU9UMuECR/+7ZaF0OqeiRuRVkjsd2aEynOBmBk+tFETlA5H/jNIVB2A1RbKDe8yHGBWpUbWZzLnPXK+pl1Wkml094WxUAuEj4RjkCoQYfhMxkEg4U4IPqO0HIxeove0RQjLQ6xewjm9BZLWhckwKgKhvZeiagtdVqx9aMKxKhw8+hK5cMrAWcpuiI9OVBfAe5AUz5AUk8AfkBP/kBPKBr5sKqJEGy2c6K7OYj3B0QSM9YKqp12Cwu0FcoBE12iPkBGPhPoEqVXL/Gi63p37+99IW1AH7Eb//F/0G9uCVe9zFlBvdG7aAxNm8xdRGfaP8NRS1ZqdGmmsRo8FaC1wW2VWFid7ROEIvKCgEAhiRhOcqAAvh0oGvmwqokQbLZzors5iPcHRBIz1gqqnXYLC7QVygETXaI+FGAgICAgICAgICAgICgbYJjbN6iM9NklD1uSm6sox3iiItBMXXpvq1p2MXyRnGgSpVcv8aLrenfv730hbUAfsRv/8X/Qb24JV73MWUG90aAgID4T6BtgmNs3qIz02SUPW5KbqyjHeKIi0Exdem+rWnYxfJGce2gNbjsh2hWWyK1jbWH8q73cQqo7scRB4PTiAGry6Qsu/SLygoBAIY/qiUiX/7AwMDAwACGGR7ISegAEhFhZsM=",
+      "updates">> => []
+    }
+  },
+  "version": 1
+}
+```
+
+The slasher is to decode the transaction, inspect its contents, authenticate
+it, encode it and then post it back via a WebSocket message:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.slash_sign",
+  "params": {
+    "signed_tx": "tx_+QLACwH4QrhAsEn+SKhPLOh7mmKoHpj4+OQZaHnVatjP8PUnwci+Xn5RzA4mR36at5rK/5j5l1FZGieSga4SOTHX1SY4o9huAbkCd/kCdDcBoQYfhMxkEg4U4IPqO0HIxeove0RQjLQ6xewjm9BZLWhck6EBxbjsh2hWWyK1jbWH8q73cQqo7scRB4PTiAGry6Qsu/S41PjSCwH4hLhAQjTRxcbv0fsqW7TgoewawPqBawGGB84WU0fAZkzoDtsmCne5V8FO/sZX7w9zLvXRHladU9Wlbh/FD5P+8FPVDLhAkf/u2WhdDqnokbkVZI7HdmhMpzgZgZPrRRE5QOR/4zSFQdgNUWyg3vMhxgVqVG1mcy5z1yvqZdVpJpdPeFsVALhI+EY5AqEGH4TMZBIOFOCD6jtByMXqL3tEUIy0OsXsI5vQWS1oXJMCoCob2XomoLXVasfWjCsSocPPoSuXDKwFnKboiPTlQXwHuQFM+QFJPAH5AT/5ATyga+bCqiRBstnOiuzmI9wdEEjPWCqqddgsLtBXKARNdoj5ARj4T6BKlVy/xout6d+/vfSFtQB+xG//xf9BvbglXvcxZQb3Ru2gMTZvMXURn2j/DUUtWanRpprEaPBWgtcFtlVhYne0ThCLygoBAIYkYTnKgAL4dKBr5sKqJEGy2c6K7OYj3B0QSM9YKqp12Cwu0FcoBE12iPhRgICAgICAgICAgICAoG2CY2zeojPTZJQ9bkpurKMd4oiLQTF16b6tadjF8kZxoEqVXL/Gi63p37+99IW1AH7Eb//F/0G9uCVe9zFlBvdGgICA+E+gbYJjbN6iM9NklD1uSm6sox3iiItBMXXpvq1p2MXyRnHtoDW47IdoVlsitY21h/Ku93EKqO7HEQeD04gBq8ukLLv0i8oKAQCGP6olIl/+wMDAwMAAhhkeyEnoABJ3oirv\"
+  }
+}
+```
+
+The FSM is to check the contents and the authentication of the transaction and
+then post it on-chain from behalf of the slasher. Once the transaction is
+included on-chain, the participant will receive a message informing them:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_Et72swxcKCAJ8KzUDm17X1Ukuo6W7516WfYDPdUoTYpArCdfQ",
+    "data": {
+      "info": "solo_closing",
+      "tx": "tx_+QLACwH4QrhAsEn+SKhPLOh7mmKoHpj4+OQZaHnVatjP8PUnwci+Xn5RzA4mR36at5rK/5j5l1FZGieSga4SOTHX1SY4o9huAbkCd/kCdDcBoQYfhMxkEg4U4IPqO0HIxeove0RQjLQ6xewjm9BZLWhck6EBxbjsh2hWWyK1jbWH8q73cQqo7scRB4PTiAGry6Qsu/S41PjSCwH4hLhAQjTRxcbv0fsqW7TgoewawPqBawGGB84WU0fAZkzoDtsmCne5V8FO/sZX7w9zLvXRHladU9Wlbh/FD5P+8FPVDLhAkf/u2WhdDqnokbkVZI7HdmhMpzgZgZPrRRE5QOR/4zSFQdgNUWyg3vMhxgVqVG1mcy5z1yvqZdVpJpdPeFsVALhI+EY5AqEGH4TMZBIOFOCD6jtByMXqL3tEUIy0OsXsI5vQWS1oXJMCoCob2XomoLXVasfWjCsSocPPoSuXDKwFnKboiPTlQXwHuQFM+QFJPAH5AT/5ATyga+bCqiRBstnOiuzmI9wdEEjPWCqqddgsLtBXKARNdoj5ARj4T6BKlVy/xout6d+/vfSFtQB+xG//xf9BvbglXvcxZQb3Ru2gMTZvMXURn2j/DUUtWanRpprEaPBWgtcFtlVhYne0ThCLygoBAIYkYTnKgAL4dKBr5sKqJEGy2c6K7OYj3B0QSM9YKqp12Cwu0FcoBE12iPhRgICAgICAgICAgICAoG2CY2zeojPTZJQ9bkpurKMd4oiLQTF16b6tadjF8kZxoEqVXL/Gi63p37+99IW1AH7Eb//F/0G9uCVe9zFlBvdGgICA+E+gbYJjbN6iM9NklD1uSm6sox3iiItBMXXpvq1p2MXyRnHtoDW47IdoVlsitY21h/Ku93EKqO7HEQeD04gBq8ukLLv0i8oKAQCGP6olIl/+wMDAwMAAhhkeyEnoABJ3oirv",
+      "type": "channel_slash_tx"
+    }
+  },
+  "version": 1
+}
+```
+
 ## Channel settle
+
 Once a 'dispute' process has been initiated with a `channel_close_solo_tx`, and
 once the lock period has expired, it is possible to finally close the channel
-with a `channel_settle_tx` transaction. The channel fsm can assist if asked
+with a `channel_settle_tx` transaction. The channel FSM can assist if asked
 with the following WebSocket request:
 
 ```javascript
@@ -1719,9 +1864,10 @@ with the following WebSocket request:
   "params": {}
 }
 ```
-
 #### Requester authenticating
+
 Then the requester receives a `channel_settle_tx` to authenticate:
+
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1748,7 +1894,7 @@ encode it and then post it back via a WebSocket message:
   }
 }
 ```
-As the channel fsm receives the authenticated settle transaction, verifies it
+As the channel FSM receives the authenticated settle transaction, verifies it
 and posts it to the chain, it should eventually detect the transaction appearing
 on the chain, and inform its client with the following WebSocket message.
 The other peer will receive the same message if it is online:
@@ -1768,7 +1914,7 @@ The other peer will receive the same message if it is online:
 }
 ```
 
-Once the fsm has confirmed the transaction to be safely on-chain, the following
+Once the FSM has confirmed the transaction to be safely on-chain, the following
 information message is sent to the connected peers, signaling that the channel
 is finally closed, and the channel object removed:
 ```javascript
@@ -2975,3 +3121,89 @@ with the following message:
 ```
 Where `channel_id` has the correct value of the channel's ID.
 
+## Channel snapshot
+
+Every once and a while a participant might feel the urge to post the latest
+channel off-chain state on-chain. That would protect them from malicious
+actions from the other party, namely unilaterally closing the channel with an
+older state. This can be prevented by posting a `channel_snapshot_solo_tx`
+transaction on-chain containing the latest co-authenticated off-chain state -
+this guarantees that an older state can not make it on-chain.
+
+It is worth mentioning that if the latest off-chain state is already present
+on-chain, the snapshot transaction would not provide any new information
+on-chain, so it would fail to be included in the blockchain.
+
+#### Snapshotter inittiates a snapshot solo 
+
+If the channel is in an `open` state, any participant can initiate a solo
+snapshot transaction by:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.snapshot_solo",
+  "params": {}
+}
+```
+#### Snapshotter authenticates the snapshot solo 
+
+After the `channel_snapshot_solo_tx` has been requested, the FSM prompts the
+client to sign it with:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.snapshot_solo_tx",
+  "params": {
+    "channel_id": "ch_2eiGsAvtieLe2LUwRZLRVdYce9GyPESxJ9UMTBNyZ1gMvoJnnh",
+    "data": {
+      "signed_tx": "tx_+QEuCwHAuQEo+QElOwGhBtlTLk1APdmHaziEHEcIBoE7hPShdgfNfwXzK6QenjIOoQHRNm8xdRGfaP8NRS1ZqdGmmsRo8FaC1wW2VWFid7ROELjU+NILAfiEuEAgCeNiiWzLM/cnnqBUv7vRXbaq1oaWD8Ef51YSkRYbPItrwgWidg6w7Q8Ood5kz83sYM26CgwKz4I/AuHusZgKuEDr+hWc0jwrJfeW9ZIojnua4h/tuWLQsr4j2Le5i3spTHVXjba1IClTiqeIZS/3NpnReUsDv1/POzEj1oBZRaEFuEj4RjkCoQbZUy5NQD3Zh2s4hBxHCAaBO4T0oXYHzX8F8yukHp4yDgWgFk9HuJ93FJGde2FyW3hXYthviTWdftxygmDVi9qw3+4AhhMG0SswAAH0oWnV",
+      "updates": []
+    }
+  },
+  "version": 1
+}
+```
+
+The snapshotter is to decode the transaction, inspect its contents,
+authenticate it, encode it and then post it back via a WebSocket message:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.snapshot_solo_sign",
+  "params": {
+    "signed_tx": "tx_+QFxCwH4QrhAV/hWnb8Sh/IknFVUSLYJSQu8v9+SIqilR/Hd/jqKGxCq2OOostDw/DtGNBeqkqeftz2OT4g9EjTR1fyWINwEDLkBKPkBJTsBoQbZUy5NQD3Zh2s4hBxHCAaBO4T0oXYHzX8F8yukHp4yDqEB0TZvMXURn2j/DUUtWanRpprEaPBWgtcFtlVhYne0ThC41PjSCwH4hLhAIAnjYolsyzP3J56gVL+70V22qtaGlg/BH+dWEpEWGzyLa8IFonYOsO0PDqHeZM/N7GDNugoMCs+CPwLh7rGYCrhA6/oVnNI8KyX3lvWSKI57muIf7bli0LK+I9i3uYt7KUx1V422tSApU4qniGUv9zaZ0XlLA79fzzsxI9aAWUWhBbhI+EY5AqEG2VMuTUA92YdrOIQcRwgGgTuE9KF2B81/BfMrpB6eMg4FoBZPR7ifdxSRnXthclt4V2LYb4k1nX7ccoJg1YvasN/uAIYTBtErMAABqvLutg==\"
+  }
+}
+```
+
+The FSM is to check the transaction and its authentication and then post it
+from snapshotters's behalf on-chain. Once it detects it being included
+on-chain, it would report it:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_2eiGsAvtieLe2LUwRZLRVdYce9GyPESxJ9UMTBNyZ1gMvoJnnh",
+    "data": {
+      "info": "channel_changed",
+      "tx": "tx_+QFxCwH4QrhAV/hWnb8Sh/IknFVUSLYJSQu8v9+SIqilR/Hd/jqKGxCq2OOostDw/DtGNBeqkqeftz2OT4g9EjTR1fyWINwEDLkBKPkBJTsBoQbZUy5NQD3Zh2s4hBxHCAaBO4T0oXYHzX8F8yukHp4yDqEB0TZvMXURn2j/DUUtWanRpprEaPBWgtcFtlVhYne0ThC41PjSCwH4hLhAIAnjYolsyzP3J56gVL+70V22qtaGlg/BH+dWEpEWGzyLa8IFonYOsO0PDqHeZM/N7GDNugoMCs+CPwLh7rGYCrhA6/oVnNI8KyX3lvWSKI57muIf7bli0LK+I9i3uYt7KUx1V422tSApU4qniGUv9zaZ0XlLA79fzzsxI9aAWUWhBbhI+EY5AqEG2VMuTUA92YdrOIQcRwgGgTuE9KF2B81/BfMrpB6eMg4FoBZPR7ifdxSRnXthclt4V2LYb4k1nX7ccoJg1YvasN/uAIYTBtErMAABqvLutg==",
+      "type": "channel_snapshot_solo_tx"
+    }
+  },
+  "version": 1
+}
+```
+
+The other participant's FSM will also notify its client that it had seen a new
+transaction changing the channel on-chain being included in a microblock.
+
+An interesting edge case would be one participant sending a snapshot with a
+round greater than the last seen on-chain but yet not the latest one. This is
+not cheating but if the other participant considers this to imply any risk to
+them, one could send a `channel_snapshot_solo_tx` as well. The one with the higher
+`round` will replace the other and all force-progressed states that had been
+based on the older state.
