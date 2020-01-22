@@ -37,6 +37,20 @@ requirements and `gas_price`. The actual fee being used for the transaction is
 the larger value between the computed fee using provided `gas_price`and the
 provided `fee`.
 
+All on-chain transactions require a replay-attack protection. This could be
+either embedded in the transaction itself or implemented in a smart contract
+in the case of a Generalized Account. In the latter case the `nonce` in the
+transaction is always `0`. In the case of a basic account, though, there must
+be a valid `nonce` or the on-chain transaction will not be included in the
+blockchain. In all APIs that produce on-chain transaction, there is an
+optional parameter `nonce` for the client to specify the value to be used. If
+this is not provided, the FSM will do its best defining what that value should
+be. It checks all pending transactions for that account, takes the highest
+nonce from them and uses it to base the next nonce. If there are no pending
+transactions, the account's nonce is used instead. Note that relying on
+pending transactions could significantly slow down the channel transaction
+inclusion or even render it invalid.
+
 ### WebSocket life cycle
 These are used for the scenario when all parties behave correctly and as
 expected. The flow is the following:
