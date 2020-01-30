@@ -897,7 +897,7 @@ Naming System (AENS):
 - AENS transactions
   ```
   AENS.preclaim(owner : address, commitment_hash : hash, <signature : signature>) : unit
-  AENS.claim   (owner : address, name : string, salt : int, <signature : signature>) : unit
+  AENS.claim   (owner : address, name : string, salt : int, name_fee : int, <signature : signature>) : unit
   AENS.transfer(owner : address, new_owner : address, name_hash : hash, <signature : signature>) : unit
   AENS.revoke  (owner : address, name_hash : hash, <signature : signature>) : unit
   ```
