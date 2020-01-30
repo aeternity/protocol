@@ -996,6 +996,7 @@ Currently defined library consist of
  - `Option.aes` – operations on `option`-like types. It forces `List.aes` to be included
  - `Pair.aes` – operations on 2-tuples
  - `Triple.aes` – operations on 3-tuples
+ - `BLS12_381.aes` - paring crypto operations on the BLS12-381 elliptic curve
 
 The detailed docs may be found [here](./sophia_stdlib.md)
 
