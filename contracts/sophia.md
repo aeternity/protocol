@@ -897,7 +897,7 @@ Naming System (AENS):
 - AENS transactions
   ```
   AENS.preclaim(owner : address, commitment_hash : hash, <signature : signature>) : unit
-  AENS.claim   (owner : address, name : string, salt : int, <signature : signature>) : unit
+  AENS.claim   (owner : address, name : string, salt : int, name_fee : int, <signature : signature>) : unit
   AENS.transfer(owner : address, new_owner : address, name_hash : hash, <signature : signature>) : unit
   AENS.revoke  (owner : address, name_hash : hash, <signature : signature>) : unit
   ```
@@ -996,6 +996,7 @@ Currently defined library consist of
  - `Option.aes` – operations on `option`-like types. It forces `List.aes` to be included
  - `Pair.aes` – operations on 2-tuples
  - `Triple.aes` – operations on 3-tuples
+ - `BLS12_381.aes` - paring crypto operations on the BLS12-381 elliptic curve
 
 The detailed docs may be found [here](./sophia_stdlib.md)
 
