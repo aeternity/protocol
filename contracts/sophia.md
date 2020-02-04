@@ -803,6 +803,15 @@ To ask the oracle what the query fee is, use the `Oracle.query_fee` function:
 Oracle.query_fee(o : oracle('a, 'b)) : int
 ```
 
+##### Oracle expiry
+
+To ask the oracle when it expires, use the `Oracle.expire` function:
+```
+Oracle.expire(o : oracle('a, 'b)) : int
+```
+
+The result is the block height at which the oracle expires.
+
 ##### Oracle get_answer
 
 To ask the oracle what the optional query answer is, use the `Oracle.get_answer` function:
@@ -894,12 +903,36 @@ Naming System (AENS):
   associated with this name (for instance `"account_pubkey"`). The return type
   (`'a`) must be resolved at compile time to an atomic type and the value is
   type checked against this type at run time.
+
+- Name lookup
+  ```
+  AENS.lookup(name : string) : option(AENS.name)
+  ```
+  If `name` is an active name `AENS.lookup` returns a name object defined
+  like:
+  ```
+  namespace AENS =
+    datatype name = Name(address, Chain.ttl, map(string, AENS.pointee))
+
+    datatype pointee = AccountPt(address) | OraclePt(address)
+                     | ContractPt(address) | ChannelPt(address)
+  ```
+
+  The three arguments to `Name` are `owner`, `expiry` and a map of the
+  `pointees` for the name. Note: the expiry of the name is always a fixed TTL.
+  For example:
+  ```
+    let Some(Name(owner, FixedTTL(expiry), ptrs)) = AENS.lookup("example.chain")
+  ```
+
 - AENS transactions
   ```
   AENS.preclaim(owner : address, commitment_hash : hash, <signature : signature>) : unit
   AENS.claim   (owner : address, name : string, salt : int, name_fee : int, <signature : signature>) : unit
   AENS.transfer(owner : address, new_owner : address, name_hash : hash, <signature : signature>) : unit
   AENS.revoke  (owner : address, name_hash : hash, <signature : signature>) : unit
+  AENS.update  (owner : address, name : string, expiry : option(Chain.ttl), client_ttl : option(int),
+                new_ptrs : map(string, AENS.pointee), <signature : signature>) : unit
   ```
   If `owner` is equal to `Contract.address` the signature `signature` is
   ignored, and can be left out since it is a named argument. Otherwise we need
@@ -909,6 +942,10 @@ Naming System (AENS):
   `Contract.address` (concatenated as byte arrays), for the other three
   operations the [signature](#delegation-signature) should be over `owner address` + `name_hash` +
   `Contract.address` using the private key of the `owner` account for signing.
+
+  For `AENS.update` if the optional parameters are set to `None` that parameter
+  will not be updated, for example if `None` is passed as `expiry` the expiry
+  block of the name is not changed.
 
 #### Events
 

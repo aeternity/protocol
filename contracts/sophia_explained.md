@@ -8,6 +8,7 @@ collect such in-depth explanations on this page.
 
 ## Table of Contents
 - [Events](#events)
+- [AENS](#aens)
 
 ## Events
 
@@ -113,3 +114,40 @@ Finally it has to be pointed out that there is no *indexing* going on in the
 Aeternity node itself. One could imagine this being part of a middleware
 service, with a subscribe/notify interface or applications could be scraping
 the chain by other means.
+
+## AENS
+
+In this example we assume that the name `name` already exists, and is owned by
+an account with address `addr`. In order to allow a contract `ct` to handle
+`name` the account holder needs to create a
+[signature](./sophia.md#delegation-signature) `sig` of `addr | name.hash | ct.address`.
+
+Armed with this information we can for example write a function that extends
+the name if it expires within 1000 blocks:
+```
+  stateful entrypoint extend_if_necessary(addr : address, name : string, sig : signature) =
+    switch(AENS.lookup(name))
+      None => ()
+      Some(AENS.Name(_, FixedTTL(expiry), _)) =>
+        if(expiry + 1000 > Chain.block_height)
+          AENS.update(addr, name, Some(RelativeTTL(50000)), None, None, signature = sig)
+```
+
+And we can write functions that adds and removes keys from the pointers of the
+name:
+```
+  stateful entrypoint add_key(addr : address, name : string, key : string,
+                              pt : AENS.pointee, sig : signature) =
+    switch(AENS.lookup(name))
+      None => ()
+      Some(AENS.Name(_, _, ptrs)) =>
+        AENS.update(addr, name, None, None, Some(ptrs{[key] = pt}), signature = sig)
+
+  stateful entrypoint delete_key(addr : address, name : string,
+                                 key : string, sig : signature) =
+    switch(AENS.lookup(name))
+      None => ()
+      Some(AENS.Name(_, _, ptrs)) =>
+        let ptrs = Map.delete(key, ptrs)
+        AENS.update(addr, name, None, None, Some(ptrs), signature = sig)
+```
