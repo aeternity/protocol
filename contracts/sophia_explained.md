@@ -129,7 +129,7 @@ the name if it expires within 1000 blocks:
     switch(AENS.lookup(name))
       None => ()
       Some(AENS.Name(_, FixedTTL(expiry), _)) =>
-        if(expiry + 1000 > Chain.block_height)
+        if(Chain.block_height + 1000 > expiry)
           AENS.update(addr, name, Some(RelativeTTL(50000)), None, None, signature = sig)
 ```
 
