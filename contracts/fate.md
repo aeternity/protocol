@@ -26,7 +26,7 @@ destinations.
 
 There are instructions to operate on the chain state tree in a safe and formalized way.
 
-FATE is “functional” in the sense that “updates” of data structures,
+FATE is "functional" in the sense that "updates" of data structures,
 such as tuples, lists or maps does not change the old values of the
 structure, instead a new version is created. Unless specific
 operations to write to the contract store are used.
@@ -100,11 +100,11 @@ implementation can deserialize the serialized version of FATE code
 into instructions and basic blocks.
 
 The serialization format for FATE code is described in Appendix 1:
-Fate instruction set and serialization.
+[Fate instruction set and serialization](#appendix-1-fate-serialization).
 
 #### The chain
 
-The chain “memory” contains information about the current block and
+The chain "memory" contains information about the current block and
 the current iteration. These values are available through special
 instructions.
 
@@ -228,8 +228,8 @@ they can be used as arbitrary non-indexable arrays of bytes.
 
 Examples:
 ```
-“Hello world”
-  “eof”
+"Hello world"
+  "eof"
 ```
 
 ### Tuples
@@ -243,7 +243,7 @@ Examples:
 ```
  {}                Type: unit
  {1, 2}            Type: Tuple(Integer, Integer)
- {“foo”, 42, true} Type: Tuple(String, Integer, Boolean)
+ {"foo", 42, true} Type: Tuple(String, Integer, Boolean)
 ```
 
 ### Lists
@@ -267,20 +267,22 @@ value can have any type including a map.
 
 Examples:
 ```
-#{ (1, “foo”), (2, “bar”) }
+#{ (1, "foo"), (2, "bar") }
 ```
 Type: Map(Integer, String)
+
 ```
-#{ (“Fruit prices”, #{ (“banana”, 42), (“apple”, 12)}),
-   (“Stock prices”, #{(“Apple”, 142), (“Orange”, 112)}) }
+#{ ("Fruit prices", #{ ("banana", 42), ("apple", 12)}),
+   ("Stock prices", #{("Apple", 142), ("Orange", 112)}) }
 ```
+Type: Map(String, Map(String, Integer))
 
 ### Variant Types
 
 The variant type is a type consisting of a list oif sizes and a tag (index)
 where each tag represents a series of values of specified types. For
 example you could have the Option type which could be None or
-Some(Integer). The sizes of the variant is [0,1] (there are two variants),
+Some(Integer). The sizes of the variant are 0 and 1 (there are two variants),
 The value None would be indicated by tag 0. The value
 Some(42) would be represented by tag 1 followed by the integer 42.
 
@@ -289,7 +291,7 @@ Examples:
   (| [0,1] | 0 | () |)      ;; None
   (| [0,1] | 1 | (42) |)    ;; Some(42)
 
-  (| 4 | 3 | (42, “foo”, true) |) ;; Three(42, "foo", true)
+  (| 4 | 3 | (42, "foo", true) |) ;; Three(42, "foo", true)
 ```
 
 Note that the tuple syntax for the elements does not indicate a Fate
@@ -649,10 +651,7 @@ Writing to the accumulator pushes a value to the stack.
 
 ## Gas
 Each instruction uses the base gas as described in the table above.
-In addition the instructions uses gas in relation to the number of memory
-cells needed to store the produced value of the instruction.
-
-In addition to the instruction base cost some instructions also
+In addition to the instruction base cost (some) instructions also
 cost gas in relation to the memory they use. The base cost for
 memory is one gas per "cell" used. A cell is the memory word of
 an underlying machine which is defined to be a 64-bit word.
@@ -752,13 +751,23 @@ The cell cost is 1 cell per 8 bytes in the produced address + 1 cell.
 The cell cost is 1 cell.
 
 ### BITS_ALL_N
-The sell cost is 1 for every 64 bits used.
+The cell cost is 1 for every 64 bits used.
 
 ### BITS_SET, BITS_CLEAR
-The sell cost is 1 for every 64 bits used by the resulting bit field.
+The cell cost is 1 for every 64 bits used by the resulting bit field.
 
 ### BYTES_CONCAT
 The cell cost is 1 cell per 8 bytes in the produced byte array.
+
+### BYTES_TO_STR
+The cell cost is 1 cell per 8 bytes in resulting string + 1 cell.
+
+### BYTES_SPLIT
+The number of cells used is the tuple size which is 2 + 2.
+
+### AUTH_TX_HASH
+If in auth context the number of cells used is 2 + 2, otherwise
+the number of cells used is 1 + 2.
 
 ### VARIANT
 The cell cost is two times the length of the list of arities plus one for

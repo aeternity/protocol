@@ -1294,7 +1294,7 @@ Opcode ::=
 | 0xfc ; 'EXIT'
 | 0xfd ; 'NOP'
 | 0xfe ; 'FUNCTION' only used outside of BBs
-| 0xff ; 'EXTREND' reserved for extending instruction set to two bytes, not used yet.
+| 0xff ; 'EXTEND' reserved for extending instruction set to two bytes, not used yet.
 
 ```
 
@@ -1389,18 +1389,20 @@ number of bytes in the byte array.
 
 ```
 String(S) ::=
-  <<< 01011111 >>>                        ; when size(S)  =  0 , S is empty ("")
-| <<< size(S), 01 >>>, S                  ; when size(S) <  64
-| <<< 00000001 >>>, Integer(size(S) - 64) ; when size(S) >= 64
+  <<< 01011111 >>>                           ; when size(S)  =  0 , S is empty ("")
+| <<< size(S), 01 >>>, S                     ; when size(S) <  64
+| <<< 00000001 >>>, Integer(size(S) - 64), S ; when size(S) >= 64
 ```
+
 #### Bits
 A FATE bitmap is represented as an integer, a negative integer
 is used for a bitmap with infinitely many 1 bits on the left.
 ```
 Bits(B) ::=
   <<< 01001111 >>> LargeInt( B) ; when B >= 0
-  <<< 11001111 >>> LargeInt(-B) ; when B <  0
+| <<< 11001111 >>> LargeInt(-B) ; when B <  0
 ```
+
 #### Bytes
 
 ```
@@ -1451,8 +1453,8 @@ The elements are serialized in order from left to right.
 ```
 Tuple(T) ::=
   <<< 00111111 >>>                                        ; for the empty tuple (Unit)
-  <<< tuple_size(T), 1011 >>>, Elements                   ; when tuple_size(T) < 16
-  <<< 00001011 >>>, Integer(tuple_size(T) - 16), Elements ; Otherwise
+| <<< tuple_size(T), 1011 >>>, Elements                   ; when tuple_size(T) < 16
+| <<< 00001011 >>>, Integer(tuple_size(T) - 16), Elements ; Otherwise
 
 Elements ::=
   Data
@@ -1470,7 +1472,7 @@ List(L) ::=
 
 ListElements ::=
   Data
-  Data, ListElements
+| Data, ListElements
 
 ```
 
@@ -1487,8 +1489,8 @@ Map(M) ::=
   <<< 00101111 >>>, RLP(map_size(M)), MapElements
 
 MapElements ::=
-  Data, Data
-  Data, Data, MapElements
+  Key, Val
+| Key, Value, MapElements
 
 ```
 
@@ -1516,10 +1518,7 @@ of the variant given by the variant_elements function.
 
 ```
 Variant(V) ::=
-  <<<10101111>>>,
-  RLP(arities(V)),
-  << tag(V) >>,
-  Tuple(variant_elements(V))
+  <<<10101111>>>, RLP(arities(V)), << tag(V) >>, Tuple(variant_elements(V))
 ```
 
 #### Type
@@ -1538,7 +1537,7 @@ Type(T) ::=
 | ChannelType
 | BitsType
 | MapType(T)
-| StringTypr
+| StringType
 | VariantType(T)
 | BytesType(bytes_types_size(T))
 | AnyType
@@ -1555,7 +1554,7 @@ OracleQueryType  ::= <<< 01000111 >>>, <<< 00000100 >>>
 ChannelType      ::= <<< 01000111 >>>, <<< 00000101 >>>
 BitsType         ::= <<< 01010111 >>>
 MapType(T)       ::= <<< 01100111 >>>, Type(key_type(T)), Type(value_type(T))
-StringTypr       ::= <<< 01110111 >>>
+StringType       ::= <<< 01110111 >>>
 VariantType(T)   ::= <<< 10000111 >>>, << size(type_arities(T)) >>, VariantTypes(variant_type_elements(T))
 BytesType(N)     ::= <<< 10010111 >>>, Integer(N)
 AnyType          ::= <<< 11110111 >>>
