@@ -60,7 +60,8 @@ FATE has more built in data types: like maps, lists.
 
 Having a higher level instructions makes the code deployed smaller and
 it reduces the blockchain size. Smaller code and smaller hashes also
-keeps a blockchain network from clogging up.
+keeps a blockchain network from clogging up and results in cheaper
+transactions.
 
 ## Components
 
