@@ -507,6 +507,7 @@ Writing to the accumulator pushes a value to the stack.
 |                 'CREATOR' | Arg0 | Arg0 := contract creator | {} | address |
 |      'ECVERIFY_SECP256K1' | Arg0 Arg1 Arg2 Arg3 | Arg0 := ecverify_secp256k1(Hash, Addr, Signature) | {bytes,bytes,bytes} | bytes |
 |     'ECRECOVER_SECP256K1' | Arg0 Arg1 Arg2 | Arg0 := ecrecover_secp256k1(Hash, Signature) | {bytes,bytes} | bytes |
+|     'ADDRESS_TO_CONTRACT' | Arg0 Arg1 | Arg0 := Arg1 - A no-op type conversion | {address} | contract |
 |              'DEACTIVATE' |  | Mark the current contract for deactivation. | {} | none |
 |                   'ABORT' | Arg0 | Abort execution (dont use all gas) with error message in Arg0. | {string} | none |
 |                    'EXIT' | Arg0 | Abort execution (use upp all gas) with error message in Arg0. | {string} | none |
@@ -543,9 +544,9 @@ Writing to the accumulator pushes a value to the stack.
 | 0x18 |                     'MOD' |   false |    true |     true |       10 |
 | 0x19 |                     'POW' |   false |    true |     true |       10 |
 | 0x1a |                   'STORE' |   false |    true |     true |       10 |
-| 0x1b |                    'SHA3' |   false |    true |     true |       40 |
-| 0x1c |                  'SHA256' |   false |    true |     true |       40 |
-| 0x1d |                 'BLAKE2B' |   false |    true |     true |       40 |
+| 0x1b |                    'SHA3' |   false |    true |     true |      100 |
+| 0x1c |                  'SHA256' |   false |    true |     true |      100 |
+| 0x1d |                 'BLAKE2B' |   false |    true |     true |      100 |
 | 0x1e |                      'LT' |   false |    true |     true |       10 |
 | 0x1f |                      'GT' |   false |    true |     true |       10 |
 | 0x20 |                      'EQ' |   false |    true |     true |       10 |
@@ -575,12 +576,12 @@ Writing to the accumulator pushes a value to the stack.
 | 0x38 |                     'NIL' |   false |    true |     true |       10 |
 | 0x39 |                  'APPEND' |   false |    true |     true |       10 |
 | 0x3a |                'STR_JOIN' |   false |    true |     true |       10 |
-| 0x3b |              'INT_TO_STR' |   false |    true |     true |       10 |
-| 0x3c |             'ADDR_TO_STR' |   false |    true |     true |       10 |
-| 0x3d |             'STR_REVERSE' |   false |    true |     true |       10 |
+| 0x3b |              'INT_TO_STR' |   false |    true |     true |      100 |
+| 0x3c |             'ADDR_TO_STR' |   false |    true |     true |      100 |
+| 0x3d |             'STR_REVERSE' |   false |    true |     true |      100 |
 | 0x3e |              'STR_LENGTH' |   false |    true |     true |       10 |
 | 0x3f |            'BYTES_TO_INT' |   false |    true |     true |       10 |
-| 0x40 |            'BYTES_TO_STR' |   false |    true |     true |       10 |
+| 0x40 |            'BYTES_TO_STR' |   false |    true |     true |      100 |
 | 0x41 |            'BYTES_CONCAT' |   false |    true |     true |       10 |
 | 0x42 |             'BYTES_SPLIT' |   false |    true |     true |       10 |
 | 0x43 |             'INT_TO_ADDR' |   false |    true |     true |       10 |
@@ -644,6 +645,7 @@ Writing to the accumulator pushes a value to the stack.
 | 0x7d |                 'CREATOR' |   false |    true |     true |       10 |
 | 0x7e |      'ECVERIFY_SECP256K1' |   false |    true |     true |     1300 |
 | 0x7f |     'ECRECOVER_SECP256K1' |   false |    true |     true |     1300 |
+| 0x80 |     'ADDRESS_TO_CONTRACT' |   false |    true |     true |       10 |
 | 0xfa |              'DEACTIVATE' |   false |    true |     true |       10 |
 | 0xfb |                   'ABORT' |    true |    true |     true |       10 |
 | 0xfc |                    'EXIT' |    true |    true |     true |       10 |
