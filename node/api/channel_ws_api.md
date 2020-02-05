@@ -11,8 +11,11 @@ The WebSocket API provides the following actions:
  * [Generic message](#generic-message)
  * [Close mutual](#close-mutual)
  * [Close solo](#close-solo)
+ * [Slash](#slash)
  * [Settle](#settle)
  * [Leave](#leave)
+ * [Snapshot](#snapshot)
+ * [Contract dry run](#contract-dry-run)
  * [On-chain transactions](#on-chain-transactions)
  * [Info messages](#info-messages)
  * [System messages](#system-messages)
@@ -33,6 +36,7 @@ Roles:
   | to | string | Participant's account to add tokens to | Yes |
   | amount | integer | Amount of tokens to transfer | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
+  | meta | array of strings | Meta information about the update | No |
 
 #### Example
 ```javascript
@@ -53,7 +57,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | `channel_offchain` transaction wrapped in a `signed_tx` with no authentication | Yes |
+  | signed_tx | string | `channel_offchain_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -85,7 +89,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | solo-authenticated `channel_offchain` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_offchain_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -104,7 +108,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | solo-authenticated `channel_offchain` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_offchain_tx` transaction | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -136,7 +140,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | co-authenticated `channel_offchain` transaction | Yes |
+  | signed_tx | string | co-authenticated `channel_offchain_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -240,6 +244,10 @@ Roles:
   | ---- | ---- | ----------- | -------- |
   | amount | integer | Amount of tokens to deposit in the channel | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
+  | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+  | gas_price | integer | the gas_price to be used for the fee computation | No |
+  | nonce | integer | the nonce to be used in the transaction | No |
+  | meta | array of strings | Meta information about the update | No |
 
 #### Example
 ```javascript
@@ -265,7 +273,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | `channel_deposit` transaction wrapped in a `signed_tx` with no authentication | Yes |
+  | signed_tx | string | `channel_deposit_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -296,7 +304,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | solo-authenticated `channel_deposit` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_deposit_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -322,7 +330,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | solo-authenticated `channel_deposit` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_deposit_tx` transaction | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -353,7 +361,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | co-authenticated `channel_deposit` transaction | Yes |
+  | signed_tx | string | co-authenticated `channel_deposit_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -379,6 +387,10 @@ Roles:
   | ---- | ---- | ----------- | -------- |
   | amount | integer | Amount of tokens to withdraw form the channel | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
+  | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+  | gas_price | integer | the gas_price to be used for the fee computation | No |
+  | nonce | integer | the nonce to be used in the transaction | No |
+  | meta | array of strings | Meta information about the update | No |
 
 #### Example
 ```javascript
@@ -404,7 +416,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | `channel_withdraw` transaction wrapped in a `signed_tx` with no authentication | Yes |
+  | signed_tx | string | `channel_withdraw_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -435,7 +447,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | co-authenticated `channel_withdraw` transaction | Yes |
+  | signed_tx | string | co-authenticated `channel_withdraw_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -461,7 +473,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | solo-authenticated `channel_withdraw` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_withdraw_tx` transaction | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -492,7 +504,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | co-authenticated `channel_withdraw` transaction | Yes |
+  | signed_tx | string | co-authenticated `channel_withdraw_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -520,6 +532,7 @@ Roles:
   | abi\_version | integer | contract virtual machine abi version | Yes |
   | deposit | integer | contract creation deposit | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
+  | meta | array of strings | Meta information about the update | No |
 
 #### Example
 
@@ -549,6 +562,7 @@ Roles:
   | abi\_version | integer | call abi version | Yes |
   | amount | integer | amount of tokens to transfer to contract | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
+  | meta | array of strings | Meta information about the update | No |
 
 #### Example
 
@@ -647,6 +661,9 @@ Roles:
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
+  | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+  | gas_price | integer | the gas_price to be used for the fee computation | No |
+  | nonce | integer | the nonce to be used in the transaction | No |
 
 #### Example
 ```javascript
@@ -670,7 +687,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | `channel_close_mutual` transaction wrapped in a `signed_tx` with no authentication | Yes |
+  | signed_tx | string | `channel_close_mutual_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -695,7 +712,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | solo-authenticated `channel_close_mutual` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_close_mutual_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -721,7 +738,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | solo-authenticated `channel_close_mutual` transaction | Yes |
+  | signed_tx | string | solo-authenticated `channel_close_mutual_tx` transaction | Yes |
   | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -746,7 +763,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | signed_tx | string | co-authenticated `channel_close_mutual` transaction | Yes |
+  | signed_tx | string | co-authenticated `channel_close_mutual_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -755,6 +772,109 @@ Roles:
   "method": "channels.shutdown_sign_ack",
   "params": {
     "signed_tx": "tx_+KcLAf..."
+  }
+}
+```
+
+## Snapshot
+Roles:
+ * Snapshotter
+
+### Snapshotter initiates solo snapshot
+ * **method:** `channels.snapshot_solo`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+ | gas_price | integer | the gas_price to be used for the fee computation | No |
+ | nonce | integer | the nonce to be used in the transaction | No |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.snapshot_solo",
+  "params": {}
+}
+```
+
+### Snapshotter receives solo snapshot
+ * **method:** `channels.sign.snapshot_solo_tx`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | channel_id | string | channel ID | Yes |
+ | data  | object | closing data | Yes |
+
+ * **data:**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | signed_tx | string | `channel_snapshot_solo_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
+ | updates | list | empty list | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.snapshot_solo_tx",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "signed_tx": "tx_+QGfNgGhBn...",
+      "updates": []
+    }
+  },
+  "version": 1
+}
+```
+
+### Snapshotter returns an authenticated solo snapshot
+ * **method:** `channels.snapshot_solo_sign`
+ * **params:**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | signed_tx | string | solo-authenticated `channel_snapshot_solo_tx` transaction | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.snapshot_solo_sign",
+  "params": {
+    "signed_tx": "tx_+QHrCwH4Q..."
+  }
+}
+```
+
+### Contract dry run
+
+ * **method:** `channels.dry_run.call_contract`
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | contract_id | contract id | contract to call | Yes |
+  | call\_data | call data | call data | Yes |
+  | abi\_version | integer | call abi version | Yes |
+  | amount | integer | amount of tokens to transfer to contract | Yes |
+  | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
+  | meta | array of strings | Meta information about the update | No |
+
+#### Example
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.dry_run.call_contract",
+  "params": {
+    "abi_version": 1,
+    "amount": 0,
+    "call_data": "cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACBo8mdjOP9QiDmrpHdJ7/qL6H7yhPIH+z2ZmHAc1TiHxQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACo7dbVl",
+    "contract_id": "ct_2Yy7TpPUs7SCm9jkCz7vz3nkb18zs78vcuVQGbgjRaWQNTWpm5"
   }
 }
 ```
@@ -825,6 +945,13 @@ Roles:
 
 ### Closer initiated solo close
  * **method:** `channels.close_solo`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+ | gas_price | integer | the gas_price to be used for the fee computation | No |
+ | nonce | integer | the nonce to be used in the transaction | No |
 
 #### Example
 ```javascript
@@ -848,7 +975,7 @@ Roles:
 
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
- | signed_tx | string | `channel_close_solo` transaction wrapped in a `signed_tx` with no authentication | Yes |
+ | signed_tx | string | `channel_close_solo_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
  | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -873,13 +1000,180 @@ Roles:
 
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
- | signed_tx | string | solo-authenticated `channel_close_solo` transaction | Yes |
+ | signed_tx | string | solo-authenticated `channel_close_solo_tx` transaction | Yes |
 
 #### Example
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.close_solo_sign",
+  "params": {
+    "signed_tx": "tx_+QHrCwH4Q..."
+  }
+}
+```
+## Slash
+Roles:
+ * Slasher
+
+### Slasher initiated slash
+ * **method:** `channels.slash
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+ | gas_price | integer | the gas_price to be used for the fee computation | No |
+ | nonce | integer | the nonce to be used in the transaction | No |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.slash",
+  "params": {}
+}
+```
+
+### Slasher receives slash
+ * **method:** `channels.sign.slash_tx`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | channel_id | string | channel ID | Yes |
+ | data  | object | closing data | Yes |
+
+ * **data:**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | signed_tx | string | `channel_slash_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
+ | updates | list | off-chain updates | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.slash_tx",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "signed_tx": "tx_+QLDCwHAuQ...",
+      "updates": []
+    }
+  },
+  "version": 1
+}
+```
+
+### Slasher returns an authenticated slash
+ * **method:** `channels.slash_sign
+ * **params:**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | signed_tx | string | solo-authenticated `channel_slash_tx` transaction | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.slash_sign",
+  "params": {
+    "signed_tx": "tx_+QMGCwH4Qr..."
+  }
+}
+```
+
+## Slash
+Roles:
+ * Slasher
+
+### Slasher is prompted to slash
+ * **method:** `channels.on_chain_tx`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | info | string | "can_slash" | Yes |
+ | tx | string | the last on-chain transaction that could be slashed | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_rb...",
+    "data": {
+      "info": "can_slash",
+      "tx": "tx_+NIL...",
+      "type": "channel_offchain_tx"
+    }
+  },
+  "version": 1
+}
+```
+
+
+### Slasher initiates slash
+ * **method:** `channels.slash`
+
+#### Example
+```javascript
+{
+  "id": -576460752303423374,
+  "jsonrpc": "2.0",
+  "method": "channels.slash"
+}
+```
+
+### Slasher receives slash
+ * **method:** `channels.sign.slash`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | channel_id | string | channel ID | Yes |
+ | data  | object | slashing data | Yes |
+
+ * **data:**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | signed_tx | string | `channel_slash` transaction wrapped in a `signed_tx` with no authentication | Yes |
+ | updates | list | empty list of updates updates | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.sign.slash",
+  "params": {
+    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "data": {
+      "signed_tx": "tx_+QGfNgGhBn...",
+      "updates": []
+    }
+  },
+  "version": 1
+}
+```
+
+### Slasher returns an authenticated slash
+ * **method:** `channels.slash_sign`
+ * **params:**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | signed_tx | string | solo-authenticated `channel_slash` transaction | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.slash_sign",
   "params": {
     "signed_tx": "tx_+QHrCwH4Q..."
   }
@@ -892,6 +1186,13 @@ Roles:
 
 ### Settler initiates settle
  * **method:** `channels.settle`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
+ | gas_price | integer | the gas_price to be used for the fee computation | No |
+ | nonce | integer | the nonce to be used in the transaction | No |
 
 #### Example
 ```javascript
@@ -914,7 +1215,7 @@ Roles:
 
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
- | signed_tx | string | `channel_settle` transaction wrapped in a `signed_tx` with no authentication | Yes |
+ | signed_tx | string | `channel_settle_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
  | updates | list | off-chain updates | Yes |
 
 #### Example
@@ -938,7 +1239,7 @@ Roles:
 
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
- | signed_tx | string | solo-authenticated `channel_settle` transaction | Yes |
+ | signed_tx | string | solo-authenticated `channel_settle_tx` transaction | Yes |
 
 #### Example
 ```javascript
@@ -1139,6 +1440,7 @@ Roles:
   "version": 1
 }
 ```
+
 ## System messages
 
 ### ping
@@ -1220,9 +1522,52 @@ fall back to the latest mutually-signed state. Currently defined error codes are
 }
 ```
 
-The FSM will inform its client of each error, using a `conflict` report.
+#### Successful operation response
 
-#### Example
+ * **method:** `channels.info`
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | channel_id | string | channel ID | Yes |
+  | data | object | message data | Yes |
+
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | event | string | `aborted_update` | Yes |
+
+ * **data:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | message | string | `Not allowed at current channel state` | Yes |
+  | code | integer | `1018` | Yes |
+
+
+If the abort of the update is successful, the client that aborted receives a
+message for it:
+
+```javascript
+{ 
+   "jsonrpc":"2.0",
+   "method":"channels.info",
+   "params":{ 
+      "channel_id":"ch_95YaTDZAysRu3GkmW2yKkCK1H4fGtcttoj2qwFDfUSduTpCPf",
+      "data":{ 
+         "event":"aborted_update"
+      }
+   },
+   "version":1
+}
+```
+
+If the other participant had initiated the update that our client had aborted,
+the other participant's FSM will inform its client of each error, using a
+`conflict` report.
+
+##### Example
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -1237,5 +1582,60 @@ The FSM will inform its client of each error, using a `conflict` report.
     }
   },
   "version": 1
+}
+```
+
+#### Unsuccessful operation response
+
+ * **method:** the request method
+ * **params:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | channel_id | string | channel ID | Yes |
+  | error | object | error data object | Yes |
+
+ * **error:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | message | string | `Rejected` | Yes |
+  | code | integer | the error code provided | Yes |
+  | data | json | error description | Yes |
+  | request | json | the failed request | Yes |
+
+ * **data:**
+
+  | Name | Type | Description | Required |
+  | ---- | ---- | ----------- | -------- |
+  | message | string | `Not allowed at current channel state` | Yes |
+  | code | integer | `1018` | Yes |
+
+If the specified update abort can not be performed now, the request receives
+the following error:
+
+```javascript
+{
+   "channel_id":"ch_95YaTDZAysRu3GkmW2yKkCK1H4fGtcttoj2qwFDfUSduTpCPf",
+   "error":{
+      "code":3,
+      "data":[
+         {
+            "code":1018,
+            "message":"Not allowed at current channel state"
+         }
+      ],
+      "message":"Rejected",
+      "request":{
+         "jsonrpc":"2.0",
+         "method":"channels.update",
+         "params":{
+           "error":147
+         }
+      }
+   },
+   "id":null,
+   "jsonrpc":"2.0",
+   "version":1
 }
 ```

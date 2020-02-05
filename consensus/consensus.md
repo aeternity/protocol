@@ -256,7 +256,8 @@ Each (on-chain) transaction has the following fields:
   minimal gas price, which (after MINERVA hard fork height) is
   `1000000` (*10^-18) aeons. (Before MINERVA hard fork height it was
   `1` (*10^-18) aeons.)
-* Time to live (TTL).
+* Time to live (TTL). The last generation where the transaction is valid.
+  0 means it is valid forever (and is the default value in many places).
 
 *Note*: There is also a node configurable minimum gas price - this is the
 minimum gas price a node accepts and is not under consensus. This value is
@@ -273,13 +274,30 @@ both the `Fee` and the `GasPrice`.
  -------------- -----
 | recipient    | 32  |
  -------------- -----
-| amount       | 8   |
+| amount       | var |
  -------------- -----
-| fee          | 8   |
+| fee          | var |
  -------------- -----
 | nonce        | 8   |
  -------------- -----
 ```
+
+#### PayingFor transaction
+Available from protocol version 5, Iris release. The `tx` field size
+depends on the size of the inner transaction.
+```
+ Fieldname       Size (bytes)
+ -------------- -----
+| payer        | 32  |
+ -------------- -----
+| fee          | var |
+ -------------- -----
+| nonce        | 8   |
+ -------------- -----
+| tx           | var |
+ -------------- -----
+```
+
 
 #### Contract transactions
 
@@ -335,9 +353,12 @@ The gas of a transaction is the sum of:
 | Channel force progress | `BaseGas` before Fortuna and `30 * BaseGas` from Fortuna on | Proportional to the byte size of the transaction, specifically: `byte_size(ChannelForceProgressTx) * GasPerByte`. It may also include gas for contract execution. |
 | Channel offchain       |            0   |     0 |
 | Contract create        | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCreateTx) * GasPerByte`. It also includes gas for contract execution. |
-| Contract call          | `30 * BaseGas` | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCallTx) * GasPerByte`. It also includes gas for contract execution. |
+| Contract call (FATE)   | `12 * BaseGas` | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCallTx) * GasPerByte`. It also includes gas for contract execution. |
+| Contract call (AEVM)   | `30 * BaseGas` | Proportional to the byte size of the transaction, specifically: `byte_size(ContractCallTx) * GasPerByte`. It also includes gas for contract execution. |
 | GA Attach              | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(GAAttachTx) * GasPerByte`. It also includes gas for execution of the init function. |
-| GA Meta                | `5 * BaseGas`  | Proportional to the byte size of the transaction, specifically: `byte_size(GAMetaTx) * GasPerByte`. It also includes gas for execution of the authentication function + recursively gas corresponding to the wrapped transaction(s) (excluding the byte size portion - in order not to account for the size of wrapped transactions multiple times). |
+| GA Meta                | `5 * BaseGas`  | Fortuna and Lima : Proportional to the byte size of the transaction, specifically: `byte_size(GAMetaTx) * GasPerByte`. It also includes gas for execution of the authentication function + recursively gas corresponding to the wrapped transaction(s) (excluding the byte size portion - in order not to account for the size of wrapped transactions multiple times). |
+|                        | `5 * BaseGas`  | From Iris        : Proportional to the byte size of GAMeta part of transaction, specifically: `(byte_size(GAMetaTx) - byte_size(InnerTx)) * GasPerByte`. It also includes gas for execution of the authentication function + recursively gas corresponding to the wrapped transaction(s) |
+| PayingFor              | `BaseGas / 5`  | Proportional to the byte size of the PayingFor part of the transaction, specifically: `(byte_size(PayingForTx) - byte_size(InnerTx)) * GasPerByte`. |
 
 `BaseGas` is 15 000.
 

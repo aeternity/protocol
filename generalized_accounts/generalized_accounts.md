@@ -232,21 +232,21 @@ Afterwards the new `meta_tx` is used to interact with the GA.
  -------------- -----
 | owner_id     | 32  |
  -------------- -----
-| nonce        | 32  |
+| nonce        | 8   |
  -------------- -----
 | code         | var |
  -------------- -----
-| auth_fun     | var |
+| auth_fun     | 32  |
  -------------- -----
-| ct_version   | 32  |
+| ct_version   | 4   |
  -------------- -----
-| fee          | 32  |
+| fee          | var |
  -------------- -----
-| ttl          | 32  |
+| ttl          | 8   |
  -------------- -----
-| gas          | 32  |
+| gas          | var |
  -------------- -----
-| gas_price    | 32  |
+| gas_price    | var |
  -------------- -----
 | call_data    | var |
  -------------- -----
@@ -284,15 +284,15 @@ If valid, the transaction will set the `ga_contract` and `ga_auth_fun` of the
  -------------- -----
 | auth_data    | var |
  -------------- -----
-| abi_version  | 32  |
+| abi_version  | 2   |
  -------------- -----
-| fee          | 32  |
+| fee          | var |
  -------------- -----
-| gas          | 32  |
+| gas          | var |
  -------------- -----
-| gas_price    | 32  |
+| gas_price    | var |
  -------------- -----
-| ttl          | 32  |
+| ttl          | 8   |
  -------------- -----
 | tx           | var |
  -------------- -----

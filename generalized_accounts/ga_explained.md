@@ -62,12 +62,12 @@ insight. Here we use EcDSA (and `curve_secp256k1`) for signing, and we have the
 same nonce handling as for POA, i.e. nonces have to be sequential.
 
 ```
-contract EdDSAAuth =
+contract ECDSAAuth =
   record state = { nonce : int, owner : bytes(20) }
 
-  function init(owner' : bytes(20)) = { nonce = 1, owner = owner' }
+  entrypoint init(owner' : bytes(20)) = { nonce = 1, owner = owner' }
 
-  stateful function authorize(n : int, s : bytes(65)) : bool =
+  stateful entrypoint authorize(n : int, s : bytes(65)) : bool =
     require(n >= state.nonce, "Nonce too low")
     require(n =< state.nonce, "Nonce too high")
     put(state{ nonce = n + 1 })

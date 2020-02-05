@@ -252,6 +252,7 @@ subsequent sections divided by object.
 | Sophia byte code | 70 |
 | Generalized accounts attach transaction | 80 |
 | Generalized accounts meta transaction | 81 |
+| PayingFor transaction | 82 |
 | Key block | 100 |
 | Micro block | 101 |
 | Light micro block | 102 |
@@ -488,6 +489,7 @@ The content of the contract store depends on [the ABI and the VM version](/contr
 , <nonce>     :: int()
 , <name>      :: binary() %% The actual name, not the hash
 , <name_salt> :: int()
+, <name_fee>  :: int()
 , <fee>       :: int()
 , <ttl>       :: int()
 ]
@@ -991,6 +993,20 @@ authorization data.
 , <gas_price>   :: int()
 , <ttl>         :: int()
 , <tx>          :: binary()
+]
+```
+
+### PayingFor
+The `PayingFor` transaction is available from version 5, Iris release. By using
+it,  an account `P` can pay for the transaction (transaction fee + gas) of another
+account `A`.
+
+#### PayingFor transaction
+```
+[ <payer_id> :: id()
+, <nonce>    :: int()
+, <fee>      :: int()
+, <tx>       :: binary()
 ]
 ```
 
