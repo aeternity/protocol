@@ -280,7 +280,7 @@ Type: Map(String, Map(String, Integer))
 
 ### Variant Types
 
-The variant type is a type consisting of a list oif sizes and a tag (index)
+The variant type is a type consisting of a list of sizes and a tag (index)
 where each tag represents a series of values of specified types. For
 example you could have the Option type which could be None or
 Some(Integer). The sizes of the variant are 0 and 1 (there are two variants),
