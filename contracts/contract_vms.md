@@ -22,16 +22,19 @@ The current meaning of the VM field is:
 |   02        | [AEVM_01](aevm.md)  | For Solidity contracts on the AEVM
 |   03        | [AEVM_02](aevm.md)  | Improved AEVM for Sophia, Minerva release
 |   04        | [AEVM_03](aevm.md)  | Improved AEVM for Sophia, Fortuna release
-|   05-FFFF   |          | UNUSED
+|   05        | [FATE_01](fate.md)  | For Sophia contracts using FATE (Lima release)
+|   06        | [AEVM_04](aevm.md)  | Improved AEVM for Sophia, Lima release
+|   07-FFFF   |          | UNUSED
 
 The current meaning of the ABI field is:
 
 | Value (hex) | ABI         | Description
 | ----------- | ----------- | -----------
 |   00        | raw string  | No interpretation - used in oracles
-|   01        | [Sophia_01](sophia.md#the-sophia_01-abi)   | For Sophia contracts on the AEVM
+|   01        | [Sophia_AEVM_01](sophia.md#the-sophia_01-abi)   | For Sophia contracts on the AEVM
 |   02        | [Solidity_01](solidity.md#the-solidity_01-abi) | For Solidity contracts on the AEVM
-|   03-FFFF   |             | UNUSED
+|   03        | [Sophia_FATE_01](fate.md)   | For Sophia contracts using FATE
+|   04-FFFF   |             | UNUSED
 
 Which VM versions are accepted are different based on consensus protocol versions.
 
@@ -45,6 +48,9 @@ Which VM versions are accepted are different based on consensus protocol version
 | Fortuna          | contract call        | `0x1`, `0x3`, `0x4`| `0x1`
 |                  | contract create      | `0x3`, `0x4`       | `0x1`
 |                  | oracle register      | (Not applicable.)  | `0x0`, `0x1`
+| Lima             | contract call        | `0x1`, `0x3`, `0x4`, `0x5`, `0x6` | `0x1`, `0x3`
+|                  | contract create      | `0x5`, `0x6`       | `0x1`, `0x3`
+|                  | oracle register      | (Not applicable.)  | `0x0`, `0x1`, `0x3`
 
 The number after the machine name designates the version of the machine.
 In the future new versions of the machine can be implemented with new instructions,
@@ -72,3 +78,9 @@ See [The AEVM](./aevm.md).
 ### AEVM_02 -> AEVM_03
 * New primitive operations (`Auth.tx_hash`)
 * New crypto primitives
+
+### AEVM_03 -> AEVM_04
+* New crypto primitives
+* Memory gas adjustments
+* Updated arguments for AENS-functions
+* Support for `payable`
