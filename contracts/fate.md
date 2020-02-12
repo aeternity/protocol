@@ -27,22 +27,22 @@ destinations.
 There are instructions to operate on the chain state tree in a safe and formalized way.
 
 FATE is "functional" in the sense that "updates" of data structures,
-such as tuples, lists or maps does not change the old values of the
-structure, instead a new version is created. Unless specific
+such as tuples, lists or maps do not change the old values of the
+structure. Instead a new version is created, unless specific
 operations to write to the contract store are used.
 
 FATE does have the ability to write the value of an operation back to the
 same register or stack position as one of the arguments, in effect updating
-the memory. Still, any other references to the structure before the operation
+the memory. Thus, any other references to the structure before the operation
 will have the same structure as before the operation.
 
 ### Objectives
 
 #### Type safety
 
-FATE solves a fundamental problem programmers run into when coding for
+FATE solves some fundamental problems programmers run into when coding for
 Ethereum: integer overflow, weak type checking and poor data
-flow. FATE checks all aritmetic operations to keep the right meanining
+flow. FATE checks all arithmetic operations to keep the right meaning
 of it. Also you can't implicitly cast types (eg integers to booleans).
 
 In EVM contracts are not typed. When calling a function, EVM will try
@@ -207,12 +207,12 @@ Examples (all of them):
 ```
 
 Operations on booleans include:
-*   and, or, not
+*   `and`, `or`, `not`
 *   conditional jumps
 
 ### Addresses, Contract Addresses, Oracles, Oracle Querries, Channels
 
-Values of any address type are 32-bytes (256-bits) pointers to
+Values of any address type are 32-byte (256-bit) pointers to
 entities on the chain (Accounts, Oracles, Contracts, etc)
 
 Examples:
@@ -301,7 +301,7 @@ tuple but a series of values.
 ### TypeRep
 
 A TypeRep is the representation of a type as a value.
-A typerep is one of
+A TypeRep is one of
 * integer
 * boolean
 * any
@@ -318,8 +318,8 @@ A typerep is one of
 * {variant, ListOfVariants}
 * {tvar, N}
 
-where T, K and V are TypeReps, Ts is a list of typereps ([T1, T2, ... ]),
-and ListOfVariants is a list ([]) of tuples of typereps
+where T, K and V are TypeReps, Ts is a list of TypeReps ([T1, T2, ... ]),
+and ListOfVariants is a list ([]) of tuples of TypeReps
 ([{tuple, [Ts1]}, {tuple, [Ts2]} ... ]). N is a byte (0...255).
 
 ## Operations
