@@ -674,13 +674,37 @@ an Ethereum style address:
 #### Authorization interface
 
 When a Generalized account is authorized, the authorization function needs
-access to the transaction hash for the wrapped transaction. (A `GAMetaTx`
-wrapping a transaction.) The transaction hash is available in the primitive
-`Auth.tx_hash`, it is *only* available during authentication if invoked by a
-normal contract call it returns `none`.
+access to the transaction and the transaction hash for the wrapped transaction. (A `GAMetaTx`
+wrapping a transaction.) The transaction and the transaction hash is available in the primitive
+`Auth.tx` and `Auth.tx_hash` respectively, they are *only* available during authentication if invoked by a
+normal contract call they return `None`.
 
 ```
+Auth.tx : option(Chain.tx)
 Auth.tx_hash : option(hash)
+```
+
+Where `Chain.tx` is (built-in) defined like:
+```
+namespace Chain =
+  record tx = { paying_for : option(Chain.paying_for_tx)
+              , ga_metas : list(Chain.ga_meta_tx)
+              , actor : address
+              , fee   : int
+              , ttl   : int
+              , tx    : Chain.base_tx }
+
+  datatype ga_meta_tx    = GAMetaTx(address, int)
+  datatype paying_for_tx = PayingForTx(address, int)
+  datatype base_tx = SpendTx(address, int, string)
+                   | OracleRegisterTx | OracleQueryTx | OracleResponseTx | OracleExtendTx
+                   | NamePreclaimTx | NameClaimTx(hash) | NameUpdateTx(string)
+                   | NameRevokeTx(hash) | NameTransferTx(address, string)
+                   | ChannelCreateTx(address) | ChannelDepositTx(address, int) | ChannelWithdrawTx(address, int) |
+                   | ChannelForceProgressTx(address) | ChannelCloseMutualTx(address) | ChannelCloseSoloTx(address)
+                   | ChannelSlashTx(address) | ChannelSettleTx(address) | ChannelSnapshotSoloTx(address)
+                   | ContractCreateTx(int) | ContractCallTx(address, int)
+                   | GAAttachTx
 ```
 
 #### Account interface

@@ -10,6 +10,7 @@ provide further guidance when it comes to generalized accounts here.
 - [Transaction integrity](#transaction-integrity)
 - [GA authentication](#ga-authentication)
 - [ECDSA Example](#ecdsa-example)
+- [PayingFor Example](#payingfor-example)
 
 ## Transaction integrity
 
@@ -103,3 +104,36 @@ is the Sophia ABI encoded tuple of a hash and an integer that is hashed. It
 isn't impossible to figure this out, but there is an easier way... *Protip:*
 Using the `dry-run` functionality we can call the contract off-chain and use
 the `to_sign` function to produce exactly the right hash!
+
+## PayingFor Example
+One potential use-case for Generalized accounts is to be able to pay for
+transactions in a more decentralized way. Using `PayingForTx` it is easy for
+part A to get a transaction from part B, put it inside a `PayingForTx` and sign
+it. And hence part A pays for the transaction of part B. **But** it requires
+that A and B communicate directly, and that part A produces a signature. Imagine
+a case where part A would like to (blindly) pay for all calls to a particular
+contract given that they are made by a known account (perhaps a user of some
+kind or something similar).
+
+A very simplistic authentication contract that achieve this is listed here:
+```
+contract PayForExample =
+  type set('a) = map('a, unit)
+  record state = { the_contract : address, allowed_users : set(address) }
+
+  entrypoint init(c : address, us : set(address)) =
+    { the_contract = c, allowed_users = us }
+
+  entrypoint authenticate() =
+    switch(Auth.tx)
+      None => abort("Not in Auth context")
+      Some({tx = Chain.ContractCallTx(ct_addr, _),
+            actor = who, paying_for = Some(_)}) =>
+        require(ct_addr == state.the_contract, "Bad transaction - wrong contract")
+        require(Map.member(who, state.allowed_users), "Bad transaction - not allowed account")
+        true
+      _ => abort("Bad transaction")
+```
+
+Note: in a realistic use-case it is probably advisable to have an admin
+interface so that you can add (and remore) allowed users later on, etc.
