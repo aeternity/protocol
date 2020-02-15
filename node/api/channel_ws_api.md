@@ -15,6 +15,7 @@ The WebSocket API provides the following actions:
  * [Settle](#settle)
  * [Leave](#leave)
  * [Snapshot](#snapshot)
+ * [Force progress](#force-progress)
  * [Contract dry run](#contract-dry-run)
  * [On-chain transactions](#on-chain-transactions)
  * [Info messages](#info-messages)
@@ -846,6 +847,119 @@ Roles:
   "method": "channels.snapshot_solo_sign",
   "params": {
     "signed_tx": "tx_+QHrCwH4Q..."
+  }
+}
+```
+
+## Force progress
+Roles:
+ * Forcer
+
+### Forcer initiates a force progress
+ * **method:** `channels.force_progress`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | contract_id | contract id | contract to call | Yes |
+ | call\_data | call data | call data | Yes |
+ | abi\_version | integer | call abi version | Yes |
+ | amount | integer | amount of tokens to transfer to contract | Yes |
+ | gas_price | integer | the gas_price to be used for the fee computation and the update execution | Yes |
+ | gas | integer | gas limit, if not provided `1000000` is the default value | No |
+ | nonce | integer | the nonce to be used in the transaction | No |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.force_progress",
+  "params": { 
+    "abi_version":1,
+    "amount":10,
+    "call_data":"cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCzVg5SHSPanMS8lSeSX8SFfJMeAfEkyR6oKfQhD6XCTgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5gCcXw==",
+    "contract_id":"ct_5XjcY6aaohWVHf6WSKcZKuMKYL3CfwopJRCnwqSaEgJUGrpbP",
+    "gas_price":1000005554
+  }
+}
+```
+
+### Forcer receives a prepared force progress transaction to authenticate
+ * **method:** `channels.sign.force_progress_tx`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | channel_id | string | channel ID | Yes |
+ | data  | object | closing data | Yes |
+
+ * **data:**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | signed_tx | string | `channel_force_progress_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
+ | updates | list | a list of a single update | Yes |
+
+ * **update**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | amount | integer | the tokens amount given to the off-chain contract | Yes |
+ | abi_version | integer | abi version | Yes |
+ | call_data | integer | contract execution call data | Yes |
+ | call_stack | list | contract execution call stack | Yes |
+ | caller_id | string | ID of the caller | Yes |
+ | contract_id | string | contract ID to be executed | Yes |
+ | gas | integer | gas limit | Yes |
+ | gas_price | integer | gas price | Yes |
+ | op | string | "OffChainCallContract" | Yes |
+
+
+#### Example
+```javascript
+{ 
+   "jsonrpc":"2.0",
+   "method":"channels.sign.force_progress_tx",
+   "params":{ 
+      "channel_id":"ch_2FdiLKkRUdPw4oTRbB6i3M6pquogzWLABQjU373hizDbnD8gGC",
+      "data":{ 
+         "signed_tx":"tx_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",
+         "updates":[ 
+            { 
+               "abi_version":1,
+               "amount":10,
+               "call_data":"cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCzVg5SHSPanMS8lSeSX8SFfJMeAfEkyR6oKfQhD6XCTgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5gCcXw==",
+               "call_stack":[ 
+
+               ],
+               "caller_id":"ak_Vu1cGq2d3Dpo9gP7pVJc8KMubXr8PjuX51b4yyJmFDcXgTZxT",
+               "contract_id":"ct_55CN7nU2xnfkEUQbe9Aai4xwLEcRyTjYS2zmVpcHtFFqHLVX6",
+               "gas":1000000,
+               "gas_price":1000000000,
+               "op":"OffChainCallContract"
+            }
+         ]
+      }
+   },
+   "version":1
+}
+```
+
+### Forcer returns an authenticated force progress transaction
+ * **method:** `channels.force_progress_sign`
+ * **params:**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | signed_tx | string | solo-authenticated `channel_snapshot_solo_tx` transaction | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.force_progress_sign",
+  "params": {
+    "signed_tx": "tx_+QkACwH4Qrh..."
   }
 }
 ```
