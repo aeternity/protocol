@@ -3242,7 +3242,7 @@ based on the older state.
 
 The biggest strength of State Channels lies in having fast and cheap off-chain
 contract execution. This imposes a risk, though: if the other party suddenly
-becomes non-cooperative or simply missing - a new off-chain can not be
+becomes non-cooperative or simply missing - a new off-chain state can not be
 produced. This is where the `channel_force_progress_tx` transaction comes in.
 It allows any of the participant to unilaterally execute off-chain contract
 on-chain. This produces the next State Channel off-chain state on-chain.
@@ -3375,4 +3375,3 @@ based on a yet newer off-chain state than the one the chain of forced
 progressed transactions was based on, the latter are discared althogether.
 With unilaterally forced progress it is not the latest `round` that matters
 but rather the latest co-authenticated one they were all based upon.
-
