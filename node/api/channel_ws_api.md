@@ -865,7 +865,7 @@ Roles:
  | call\_data | call data | call data | Yes |
  | abi\_version | integer | call abi version | Yes |
  | amount | integer | amount of tokens to transfer to contract | Yes |
- | gas_price | integer | the gas_price to be used for the fee computation and the update execution | Yes |
+ | gas\_price | integer | the gas\_price to be used for the fee computation and the update execution | Yes |
  | gas | integer | gas limit, if not provided `1000000` is the default value | No |
  | nonce | integer | the nonce to be used in the transaction | No |
 
@@ -890,14 +890,14 @@ Roles:
 
  | Name  | Type | Description | Required |
  | ----- | ---- | ----------- | -------- |
- | channel_id | string | channel ID | Yes |
+ | channel\_id | string | channel ID | Yes |
  | data  | object | closing data | Yes |
 
  * **data:**
 
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
- | signed_tx | string | `channel_force_progress_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
+ | signed\_tx | string | `channel_force_progress_tx` transaction wrapped in a `signed_tx` with no authentication | Yes |
  | updates | list | a list of a single update | Yes |
 
  * **update**
@@ -905,13 +905,13 @@ Roles:
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
  | amount | integer | the tokens amount given to the off-chain contract | Yes |
- | abi_version | integer | abi version | Yes |
- | call_data | integer | contract execution call data | Yes |
- | call_stack | list | contract execution call stack | Yes |
- | caller_id | string | ID of the caller | Yes |
- | contract_id | string | contract ID to be executed | Yes |
+ | abi\_version | integer | abi version | Yes |
+ | call\_data | integer | contract execution call data | Yes |
+ | call\_stack | list | contract execution call stack | Yes |
+ | caller\_id | string | ID of the caller | Yes |
+ | contract\_id | string | contract ID to be executed | Yes |
  | gas | integer | gas limit | Yes |
- | gas_price | integer | gas price | Yes |
+ | gas\_price | integer | gas price | Yes |
  | op | string | "OffChainCallContract" | Yes |
 
 
@@ -951,7 +951,7 @@ Roles:
 
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
- | signed_tx | string | solo-authenticated `channel_snapshot_solo_tx` transaction | Yes |
+ | signed\_tx | string | solo-authenticated `channel_snapshot_solo_tx` transaction | Yes |
 
 #### Example
 ```javascript

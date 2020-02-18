@@ -3242,12 +3242,12 @@ based on the older state.
 
 The biggest strength of State Channels lies in having fast and cheap off-chain
 contract execution. This imposes a risk, though: if the other party suddenly
-becomes non-cooperative or simply missing - a new off-chain state can not be
+becomes non-cooperative or simply missing, a new off-chain state can not be
 produced. This is where the `channel_force_progress_tx` transaction comes in.
-It allows any of the participant to unilaterally execute off-chain contract
+It allows any of the participants to unilaterally execute an off-chain contract
 on-chain. This produces the next State Channel off-chain state on-chain.
 
-Channel force progress transaction is based on the latest co-authenticated
+A channel force progress transaction is based on the latest co-authenticated
 state. It provides off-chain state trees on-chain. They contain the contract
 to be executed and all the context needed for the execution itself. This
 breaks the assumption of off-chain privacy. If successful, the
@@ -3256,17 +3256,17 @@ state. That's why it also contains the next `round` and the next `state_hash`.
 The latter is the result of applying the off-chain contract call to the
 off-chain state trees.
 
-Force progress transaction can be used while the channel is being closed or
-while it is still open. Assumption is if one participant refuses to cooperate,
-if the other produces the next forced progress state on-chain - there is no
+A force progress transaction can be used while the channel is being closed or
+while it is still open. The assumption is that if one participant refuses to cooperate,
+if the other produces the next forced progress state on-chain, there is no
 going back. From then on they could continue either cooperating or they could
-close the channel. In both cases - they use the on-chain produced off-chain
+close the channel. In both cases, they use the on-chain produced off-chain
 state.
 
-The `channel_force_progress_tx` transaction could be a challange to get right.
+The `channel_force_progress_tx` transaction could be a challenge to get right.
 The FSM handles this for the client and from a client's perspective it looks
-like the off-chain contract call. Only difference is that with
-`channel_force_progress_tx` the `gas_price` is mandatorary. It is being used
+like the off-chain contract call. The only difference is that with
+`channel_force_progress_tx` the `gas_price` is mandatory. It is used
 both in the contract call execution and the transaction's `fee` computation.
 
 #### Forcer inittiates a forced progress
@@ -3286,8 +3286,8 @@ Any participant can initiate a forced progress by:
   }
 }
 ```
-Except of the `gas_price`, all other `params` are corresponding to those in a
-`call_contract` off-chain update. Reasoning is quite trivial: if the other
+Except of the `gas_price`, all other `params` correspond to those in a
+`call_contract` off-chain update. The reasoning is quite trivial: if the other
 participant refuses a valid off-chain contract call, the other participant can
 use the very same arguments, add an actual `gas_price` and produce the
 `channel_force_progress_tx`.
@@ -3343,8 +3343,8 @@ it, encode it and then post it back via a WebSocket message:
 ```
 
 The FSM is to check the transaction and its authentication and then post it
-from forcer's behalf on-chain. Once it detects it being included
-on-chain, it would report it:
+on the forcer's behalf on-chain. Once it detects it being included
+on-chain, it reports it:
 
 ```javascript
 {
@@ -3362,11 +3362,11 @@ on-chain, it would report it:
 }
 ```
 
-The other participant's FSM will also notify its client that it had seen a new
-transaction changing the channel on-chain being included in a microblock.
+The other participant's FSM will also notify its client that it has seen a new
+transaction in a microblock, changing the channel on-chain.
 
 An interesting edge case would be one participant producing a force progress based on
-a state that was valid at some point of time but not the latest one. This is
+a state that was valid at some point of time but is not the latest one. This is
 considered to be a cheating attempt. The cheating party can try outgrowing the
 off-chain state with a couple of `channel_force_progress_tx` transactions at
 the end producing on-chain a `round` that is greater than the last one
