@@ -67,6 +67,7 @@ expected. The flow is the following:
   * [Channel slash](#channel-slash)
   * [Channel settle](#channel-settle)
 5. [Optionally snapshot](#channel-snapshot)
+6. [Optionally force progress](#force-progress)
 
 There are a some WebSocket events that can occur while the connection is open
 but are not necessarily part of the channel's life cycle.
@@ -2161,6 +2162,7 @@ authentications are required for them:
   * `channel_slash_tx`
   * `channel_settle_tx`
   * `channel_snapshot_tx`
+  * `channel_force_progress_tx`
 * mutually authenticated transactions - all the rest
 
 When a client is prompted to authenticate an update, it is expected to either
@@ -3236,3 +3238,140 @@ them, one could send a `channel_snapshot_solo_tx` as well. The one with the high
 `round` will replace the other and all force-progressed states that had been
 based on the older state.
 
+## Force progress
+
+The biggest strength of State Channels lies in having fast and cheap off-chain
+contract execution. This imposes a risk, though: if the other party suddenly
+becomes non-cooperative or simply missing, a new off-chain state can not be
+produced. This is where the `channel_force_progress_tx` transaction comes in.
+It allows any of the participants to unilaterally execute an off-chain contract
+on-chain. This produces the next State Channel off-chain state on-chain.
+
+A channel force progress transaction is based on the latest co-authenticated
+state. It provides off-chain state trees on-chain. They contain the contract
+to be executed and all the context needed for the execution itself. This
+breaks the assumption of off-chain privacy. If successful, the
+`channel_force_progress_tx` transaction produces on-chain the next off-chain
+state. That's why it also contains the next `round` and the next `state_hash`.
+The latter is the result of applying the off-chain contract call to the
+off-chain state trees.
+
+A force progress transaction can be used while the channel is being closed or
+while it is still open. The assumption is that if one participant refuses to cooperate,
+if the other produces the next forced progress state on-chain, there is no
+going back. From then on they could continue either cooperating or they could
+close the channel. In both cases, they use the on-chain produced off-chain
+state.
+
+The `channel_force_progress_tx` transaction could be a challenge to get right.
+The FSM handles this for the client and from a client's perspective it looks
+like the off-chain contract call. The only difference is that with
+`channel_force_progress_tx` the `gas_price` is mandatory. It is used
+both in the contract call execution and the transaction's `fee` computation.
+
+#### Forcer inittiates a forced progress
+
+Any participant can initiate a forced progress by:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.force_progress",
+  "params": {
+    "abi_version":1,
+    "amount":10,
+    "call_data":"cb_AAAAA...",
+    "contract_id":"ct_5XjcY...",
+    "gas_price":1000000000
+  }
+}
+```
+Except of the `gas_price`, all other `params` correspond to those in a
+`call_contract` off-chain update. The reasoning is quite trivial: if the other
+participant refuses a valid off-chain contract call, the other participant can
+use the very same arguments, add an actual `gas_price` and produce the
+`channel_force_progress_tx`.
+
+#### Forcer authenticates the force progress transaction
+
+After the `channel_force_progress_tx` has been requested, the FSM prompts the
+client to sign it with:
+
+```javascript
+{ 
+   "jsonrpc":"2.0",
+   "method":"channels.sign.force_progress_tx",
+   "params":{ 
+      "channel_id":"ch_2FdiLKkRUdPw4oTRbB6i3M6pquogzWLABQjU373hizDbnD8gGC",
+      "data":{ 
+         "signed_tx":"tx_+Qi9CwHAuQ....",
+         "updates":[ 
+            { 
+               "abi_version":1,
+               "amount":10,
+               "call_data":"cb_AAAAAAA...",
+               "call_stack":[ 
+
+               ],
+               "caller_id":"ak_Vu1cG...",
+               "contract_id":"ct_55C...",
+               "gas":1000000,
+               "gas_price":1000000000,
+               "op":"OffChainCallContract"
+            }
+         ]
+      }
+   },
+   "version":1
+}
+```
+
+Note that the `updates` that comes with the `channel_force_progress_tx` is the
+same as it would be if it were an off-chain `call_contract`.
+
+The forcer is to decode the transaction, inspect its contents, authenticate
+it, encode it and then post it back via a WebSocket message:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.force_progress_sign",
+  "params": {
+    "signed_tx": "tx_+QFxCwH4QrhA..."
+  }
+}
+```
+
+The FSM is to check the transaction and its authentication and then post it
+on the forcer's behalf on-chain. Once it detects it being included
+on-chain, it reports it:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_2eiGsAvt...",
+    "data": {
+      "info": "channel_changed",
+      "tx": "tx_+QFxCwH4QrhA...",
+      "type": "channel_force_progress_tx"
+    }
+  },
+  "version": 1
+}
+```
+
+The other participant's FSM will also notify its client that it has seen a new
+transaction in a microblock, changing the channel on-chain.
+
+An interesting edge case would be one participant producing a force progress based on
+a state that was valid at some point of time but is not the latest one. This is
+considered to be a cheating attempt. The cheating party can try outgrowing the
+off-chain state with a couple of `channel_force_progress_tx` transactions at
+the end producing on-chain a `round` that is greater than the last one
+produced off-chain. If the other participant provides a transaction that was
+based on a yet newer off-chain state than the one the chain of forced
+progressed transactions was based on, the latter are discared althogether.
+With unilaterally forced progress it is not the latest `round` that matters
+but rather the latest co-authenticated one they were all based upon.
