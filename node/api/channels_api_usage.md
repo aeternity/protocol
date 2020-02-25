@@ -2074,9 +2074,11 @@ the WebSocket connection:
 
 #### Update error
 
-Updates are not always successful, for example one participant tries to spend
-more tokens that one currently has in the channel's balance. This diverges
-from the update flow [described above](#channel-off-chain-update).
+Newly requested updates are not always successful. For example one participant
+tries to spend more tokens that one currently has in the channel's balance.
+Another would be a participant initiating an update while the other
+participant had already proposed a different one. This diverges from the
+update flow [described above](#channel-off-chain-update).
 
 Example message for when the `from` does not have enough tokens to spend
 ```javascript
@@ -2118,6 +2120,23 @@ sent. Possible error reasons are:
 
 * `Invalid pubkeys` - at least one of the addresses in the `update` event is
   not present in the channel.
+
+* `Contract init failed` - when the update introduces a new contract to the
+  off-chain state trees and the init function fails
+
+* `Not a number` - when an argument that is expected to be a number is not a
+  number but rather some other data type, ex. a string
+
+* `Broken encoding: account pubkey` or `Broken encoding: contract pubkey` when
+  the update contains a broken encoding of an account or contract pubkey
+
+* `Broken encoding: contract bytearray` - when the provided bytearray has a
+  broken encoding
+
+* `Conflict` - when the other participant had already proposed a new update
+  and instead of authenticating it or rejecting it, our client initiates
+  another update. It fails with this error and then the [update
+  conflict](#update-conflict) messages are sent to both participants.
 
 #### Update conflict
 
