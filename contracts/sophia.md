@@ -615,6 +615,8 @@ The following builtin functions are defined on integers:
 ```
   Int.to_str(i : int) : string
 ```
+`to_str` uses decimal representation.
+
 
 #### Builtin functions on addresses
 
@@ -677,7 +679,7 @@ When a Generalized account is authorized, the authorization function needs
 access to the transaction hash for the wrapped transaction. (A `GAMetaTx`
 wrapping a transaction.) The transaction hash is available in the primitive
 `Auth.tx_hash`, it is *only* available during authentication if invoked by a
-normal contract call it returns `none`.
+normal contract call it returns `None`.
 
 ```
 Auth.tx_hash : option(hash)
@@ -793,7 +795,7 @@ Oracle.query(o    : oracle('a, 'b),
 * The `qttl` controls the last height at which the oracle can submit a response
   and can be either fixed or relative.
 * The `rttl` must be relative and controls how long an answer is kept on the chain.
-* The call fails if the oracle could expire before an answer.
+The call fails if the oracle could expire before an answer.
 
 ##### Oracle query_fee
 
