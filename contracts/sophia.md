@@ -795,6 +795,7 @@ Oracle.query(o    : oracle('a, 'b),
 * The `qttl` controls the last height at which the oracle can submit a response
   and can be either fixed or relative.
 * The `rttl` must be relative and controls how long an answer is kept on the chain.
+
 The call fails if the oracle could expire before an answer.
 
 ##### Oracle query_fee
