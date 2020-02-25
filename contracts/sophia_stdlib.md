@@ -358,7 +358,7 @@ Oracle.extend(<signature : bytes(64)>, o : oracle('a, 'b), ttl : Chain.ttl) : un
 ```
 
 Extends TTL of an oracle.
-* `singature` is a named argument and thus optional. Must be the same as for `Oracle.register`
+* `signature` is a named argument and thus optional. Must be the same as for `Oracle.register`
 * `o` is the oracle being extended
 * `ttl` must be `RelativeTTL`. The time to live of `o` will be extended by this value.
 
