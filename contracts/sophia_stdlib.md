@@ -202,7 +202,7 @@ Casts integer to string using decimal representation
 Address.to_str(a : address) : string
 ```
 
-Base58 encoded string
+Base58Check encoded string
 
 
 ### is_contract
