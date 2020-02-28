@@ -35,7 +35,7 @@ some blockchain specific primitives, constructions and types have been added.
         - [Builtin functions on maps](#builtin-functions-on-maps)
         - [Map implementation](#map-implementation)
     - [Strings](#strings)
-        - [Builtin functions on strings](#builtin-functions-on-strings)
+    - [Chars](#chars)
     - [Byte arrays](#byte-arrays)
     - [Builtin functions on integers](#builtin-functions-on-integers)
         - [Builtin functions on addresses](#builtin-functions-on-addresses)
@@ -566,22 +566,27 @@ it.
 
 There is a builtin type `string`, which can be seen as an array of bytes.
 Strings can be compared for equality (`==`, `!=`), used as keys in maps and
-records, and used in builtin functions `String.length`, `String.concat` and
-the hash functions described below.
+records. The functions that manipulate strings are collected in the
+standard library [module String.aes](./sophia_stdlib.md#string).
 
-#### Builtin functions on strings
+### Chars
 
-The following builtin functions are defined on strings:
+There is a builtin type `char` (the underlying representation being an integer),
+mainly used to manipulate strings via `String.to_list`/`String.from_list`.
+
+#### Builtin functions on Chars
+
+The following builtin functions are defined on chars:
 
 ```
-  String.length(s : string) : int
-  String.concat(s1 : string, s2 : string) : string
-  String.sha3(s : string) : hash
-  String.sha256(s : string) : hash
-  String.blake2b(s : string) : hash
+  Char.to_int(c : char) : int
+  Char.from_int(i : int) : option(char)
 ```
 
-The hash functions hashes the string represented as byte array.
+Where `from_int` returns `None` if the integer doesn't correspond to a single
+(normalized) codepoint.
+
+Characters can also be introduced as character literals (`'x', '+', ...).
 
 ### Byte arrays
 
@@ -1052,6 +1057,7 @@ Sophia provides standard library which is defined in terms of the language. Modu
 
 Currently defined library consist of
  - `List.aes` – operations on lists
+ - `String.aes` - operations on strings
  - `Func.aes` – collection of function combinators
  - `Option.aes` – operations on `option`-like types. It forces `List.aes` to be included
  - `Pair.aes` – operations on 2-tuples
