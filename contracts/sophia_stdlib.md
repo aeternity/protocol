@@ -4,6 +4,7 @@ Sophia language offers standard library that consists of following namespaces:
 
 - [List.aes](#List)
 - [ListInternal.aes](#ListInternal)
+- [String](#String)
 - [Option.aes](#Option)
 - [Func.aes](#Func)
 - [Pair.aes](#Pair)
@@ -274,6 +275,92 @@ Equivalent to [zip](#zip) with `[0..length(l)]`, but slightly faster.
 
 This module is used only to support syntactic sugars for lists. All its features are already included in the [List](#List) namespace. Therefore, it should not be included manually and used explicitly.
 
+## String
+
+Operations on the `string` type. A `string` is a UTF-8 encoded byte array.
+
+### length
+`length(s : string) : int`
+
+The length of a string.
+
+Note: not equivalent to byte size of the string, rather `List.length(String.to_list(s))`
+
+### concat
+`concat(s1 : string, s2 : string) : string`
+
+Concatenates `s1` and `s2`.
+
+### concats
+`concats(ss : list(string)) : string`
+
+Concatenates a list of strings.
+
+### to\_list
+`to_list(s : string) : list(char)`
+
+Converts a `string` to a list of `char` - the code points are normalized, but
+composite characters are possibly converted to multiple `char`s. For example the
+string "😜i̇" is converted to `[128540,105,775]` - where the smiley is the first
+code point and the strangely dotted `i` becomes `[105, 775]`.
+
+### from\_list
+`from_list(cs : list(char)) : string`
+
+Converts a list of characters into a normalized UTF-8 string.
+
+### to\_lower
+`to_lower(s : string) : string`
+
+Converts a string to lowercase.
+
+### to\_upper
+`to_upper(s : string) : string`
+
+Converts a string to uppercase.
+
+### at
+`at(ix : int, s : string) : option(char)`
+
+Returns the character/codepoint at (zero-based) index `ix`. Basically the equivalent to
+`List.nth(ix, String.to_list(s))`.
+
+### split
+`split(ix : int, s:string) : string * string`
+
+Splits a string at (zero-based) index `ix`.
+
+### contains
+`contains(str : string, pat : string) : option(int)`
+
+Searches for `pat` in `str`, returning `Some(ix)` if `pat` is a substring of
+`str` starting at position `ix`, otherwise returns `None`.
+
+### tokens
+`tokens(str : string, pat : string) : list(string)`
+
+Splits `str` into tokens, `pat` is the divider of tokens.
+
+### to\_int
+`to_int(s : string) : option(int)`
+
+Converts a decimal ("123", "-253") or a hexadecimal ("0xa2f", "-0xBBB") string into
+an integer. If the string doesn't contain a valid number `None` is returned.
+
+### sha3
+`sha3(s : string) : hash`
+
+Computes the SHA3/Keccak hash of the string.
+
+### sha256
+`sha256(s : string) : hash`
+
+Computes the SHA256 hash of the string.
+
+### blake2b
+`blake2b(s : string) : hash`
+
+Computes the Blake2B hash of the string.
 
 ## Option
 
