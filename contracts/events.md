@@ -1,51 +1,28 @@
 [back](./contracts.md)
-# Sophia explained
+# Events
 
-The [Sophia](./sophia.md) language is described in [The Sophia
-Language](./sophia.md). However, some concepts could need a more in depth
-description and some accompanying examples to be easier to grasp. We aim to
-collect such in-depth explanations on this page.
+The implementation of 
+[Events](https://github.com/aeternity/aesophia/blob/master/docs/sophia.md#events)
+is largely inspired by
+[events in Solidity/Ethereum](https://solidity.readthedocs.io/en/v0.4.24/contracts.html#events).
 
-## Table of Contents
-- [Events](#events)
+### Accessing events
 
-## Events
+The events are stored in the [contract call object](../serializations.md#contract-call)
+and can be accessed by looking up the transaction in which they were emitted. 
 
-The implementation of [Events](./sophia.md#events) is largely inspired by
-[events in
-Solidity/Ethereum](https://solidity.readthedocs.io/en/v0.4.24/contracts.html#events).
-But instead of defining multiple `event` structs in Sophia *one* instance of
-the `event` data type is defined - with one type constructor per event we want
-to emit. For example the following definition makes it possible to emit two
-different events `TheFirstEvent` and `AnotherEvent`.
-
+Let's consider the following Sophia example:
 ```
   datatype event =
       TheFirstEvent(indexed int)
     | AnotherEvent(indexed address, string)
-```
 
-An event may have 0-3 fixed width (32 bytes) fields (sometimes refered to as
-`indexed`), these fields should have a Sophia type that is represented as one
-32-byte word at the VM level (for example int, bool, short byte arrays, bits,
-and addresses). An event may also have an additional non-indexed field, this
-field should be of type `string`. (Note: the `indexed` keyword was previously
-mandatory, but is not anymore; since there are no non-indexed word arguments)
-Events are emitted by using the `Chain.event` function. The following function
-will emit one Event of each kind in the example.
-
-```
-  public function emit_events() : () =
+  entrypoint emit_events() : () =
     Chain.event(TheFirstEvent(42))
     Chain.event(AnotherEvent(Contract.address, "This is not indexed"))
 ```
 
-### Accessing events
-
-The events are stored in the [contract call
-object](../serializations.md#contract-call) and can be accessed by looking up
-the transaction in which they were emitted. If we assume that `emit_events`,
-from our example, was called in a transaction with transaction hash
+If we assume that `emit_events`, was called in a transaction with transaction hash
 `th_a5239bd8e3...` we can access it from the HTTP API
 `/v2/transactions/th_a5239bd8e3.../info`:
 
@@ -100,7 +77,6 @@ It is only possible to have one (1) `string` parameter in the event, but it can
 be placed in any position (and its value will end up in the `data` field), i.e.
 ```
 AnotherEvent(string, indexed address)
-
 ...
 
 Chain.event(AnotherEvent("This is not indexed", Contract.address))
