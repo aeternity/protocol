@@ -15,42 +15,42 @@ the serialization packs the version into one integer.)
 
 The current meaning of the VM field is:
 
-| Value (hex) | Machine  | Description
-| ----------- | -------- | -----------
-|   00        | none     | NO_VM ("Used" in oracles)
-|   01        | [AEVM_01](aevm.md)  | For Sophia contracts on the AEVM
-|   02        | [AEVM_01](aevm.md)  | For Solidity contracts on the AEVM
-|   03        | [AEVM_02](aevm.md)  | Improved AEVM for Sophia, Minerva release
-|   04        | [AEVM_03](aevm.md)  | Improved AEVM for Sophia, Fortuna release
-|   05        | [FATE_01](fate.md)  | For Sophia contracts using FATE (Lima release)
-|   06        | [AEVM_04](aevm.md)  | Improved AEVM for Sophia, Lima release
-|   07-FFFF   |          | UNUSED
+| Value (hex) | Machine            | Description                                    |
+|-------------|--------------------|------------------------------------------------|
+|          00 | none               | NO_VM ("Used" in oracles)                      |
+|          01 | [AEVM_01](aevm.md) | For Sophia contracts on the AEVM               |
+|          02 | [AEVM_01](aevm.md) | For Solidity contracts on the AEVM             |
+|          03 | [AEVM_02](aevm.md) | Improved AEVM for Sophia, Minerva release      |
+|          04 | [AEVM_03](aevm.md) | Improved AEVM for Sophia, Fortuna release      |
+|          05 | [FATE_01](fate.md) | For Sophia contracts using FATE (Lima release) |
+|          06 | [AEVM_04](aevm.md) | Improved AEVM for Sophia, Lima release         |
+|     07-FFFF |                    | UNUSED                                         |
 
 The current meaning of the ABI field is:
 
-| Value (hex) | ABI         | Description
-| ----------- | ----------- | -----------
-|   00        | raw string  | No interpretation - used in oracles
-|   01        | [Sophia_AEVM_01](sophia.md#the-sophia_01-abi)   | For Sophia contracts on the AEVM
-|   02        | [Solidity_01](solidity.md#the-solidity_01-abi) | For Solidity contracts on the AEVM
-|   03        | [Sophia_FATE_01](fate.md)   | For Sophia contracts using FATE
-|   04-FFFF   |             | UNUSED
+| Value (hex) | ABI                                            | Description                         |
+|-------------|------------------------------------------------|-------------------------------------|
+|          00 | raw string                                     | No interpretation - used in oracles |
+|          01 | [Sophia_AEVM_01](aevm.md#the-sophia_aevm_01-abi) | For Sophia contracts on the AEVM    |
+|          02 | [Solidity_01](solidity.md#the-solidity_01-abi) | For Solidity contracts on the AEVM  |
+|          03 | [Sophia_FATE_01](fate.md)                      | For Sophia contracts using FATE     |
+|     04-FFFF |                                                | UNUSED                              |
 
 Which VM versions are accepted are different based on consensus protocol versions.
 
-| Protocol version | Operation            | Accepted VM values | Accepted ABI values |
-| ---------------- | ---------            | ------------------ | ------------------- |
-| Roma             | contract call/create | `0x1`              | `0x1`
-|                  | oracle register      | (Not applicable.)  | `0x0`, `0x1`
-| Minerva          | contract call        | `0x1`, `0x3`       | `0x1`
-|                  | contract create      | `0x3`              | `0x1`
-|                  | oracle register      | (Not applicable.)  | `0x0`, `0x1`
-| Fortuna          | contract call        | `0x1`, `0x3`, `0x4`| `0x1`
-|                  | contract create      | `0x3`, `0x4`       | `0x1`
-|                  | oracle register      | (Not applicable.)  | `0x0`, `0x1`
-| Lima             | contract call        | `0x1`, `0x3`, `0x4`, `0x5`, `0x6` | `0x1`, `0x3`
-|                  | contract create      | `0x5`, `0x6`       | `0x1`, `0x3`
-|                  | oracle register      | (Not applicable.)  | `0x0`, `0x1`, `0x3`
+| Protocol version | Operation            | Accepted VM values                | Accepted ABI values |
+|------------------|----------------------|-----------------------------------|---------------------|
+| Roma             | contract call/create | `0x1`                             | `0x1`               |
+|                  | oracle register      | (Not applicable.)                 | `0x0`, `0x1`        |
+| Minerva          | contract call        | `0x1`, `0x3`                      | `0x1`               |
+|                  | contract create      | `0x3`                             | `0x1`               |
+|                  | oracle register      | (Not applicable.)                 | `0x0`, `0x1`        |
+| Fortuna          | contract call        | `0x1`, `0x3`, `0x4`               | `0x1`               |
+|                  | contract create      | `0x3`, `0x4`                      | `0x1`               |
+|                  | oracle register      | (Not applicable.)                 | `0x0`, `0x1`        |
+| Lima             | contract call        | `0x1`, `0x3`, `0x4`, `0x5`, `0x6` | `0x1`, `0x3`        |
+|                  | contract create      | `0x5`, `0x6`                      | `0x1`, `0x3`        |
+|                  | oracle register      | (Not applicable.)                 | `0x0`, `0x1`, `0x3` |
 
 The number after the machine name designates the version of the machine.
 In the future new versions of the machine can be implemented with new instructions,
@@ -62,7 +62,8 @@ uses the same ABI (Solidity_1). The languages can in the future be extended
 with new functionality and new ABIs reflected by the ABI version number.
 
 For a description of each ABI see the corresponding language description:
-[Sophia](sophia.md), [Solidity](solidity.md), [Varna](varna.md).
+[Sophia](https://github.com/aeternity/aesophia),
+[Solidity](solidity.md).
 
 ## The Æternity Ethereum Virtual Machine AEVM
 See [The AEVM](./aevm.md).

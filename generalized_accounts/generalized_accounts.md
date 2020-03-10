@@ -268,7 +268,8 @@ considered invalid.
 The transaction MUST include a signature created by the private key belonging to
 the `owner_id`.
 
-The `auth_fun` is a function hash as described in the [Sophia](../contracts/sophia.md)
+The `auth_fun` is a function hash as described in the 
+[Sophia](https://github.com/aeternity/aesophia/blob/master/docs/sophia.md)
 section.
 
 If valid, the transaction will set the `ga_contract` and `ga_auth_fun` of the
@@ -307,7 +308,7 @@ A `meta_tx` is always a call of the `auth_fun` on the contract located at
 
 The `auth_fun` call MUST return true for the `tx` to be considered valid.
 
-The `auth_fun` is a function hash as described in the [Sophia](../contracts/sophia.md)
+The `auth_fun` is a function hash as described in the [Sophia](https://github.com/aeternity/aesophia/blob/master/docs/sophia.md)
 section.
 
 The `tx`, or inner transaction, MUST be a well formed transaction with nonce set
