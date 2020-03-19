@@ -303,6 +303,30 @@ connected (press CTRL+C to quit)
 Note the `role=initiator` as it is specific. Note also the `host` and `port`
 values being provided by the `responder`.
 
+### Initial connection indication
+
+Each client receives an `fsm_up` event indicating that a connection has been
+established. Each fsm reveals a unique token which is needed for authentication
+if the client needs to reconnect later.
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": null,
+    "data": {
+      "event": "fsm_up",
+      "fsm_id": "ba_7ky3hNtIJ4KaBhvDbCKSYuARysjl4DAmpH+9uNFBy3agKuf9"
+    }
+  },
+  "version": 1
+}
+```
+
+Note that the channel ID has not yet been created.
+
+
 ### Connection opened messages
 Parties' WebSocket clients receive messages for the opening of the TCP
 connection.
@@ -345,14 +369,19 @@ The `channel_create_tx` is sent subsequently to both parties and they mutually
 authenticate it. Then it is posted to the chain.
 
 #### Initiator authenticates the tx
-The initiator receives a message containing the unauthenticated transaction
+The initiator receives a message containing the unauthenticated transaction.
+The `channel_id` and `fsm_id` are included as separate elements, since the
+will need them to reconnect, which is possible once the client has responded
+to the signing request.
+
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.sign.initiator_sign",
   "params": {
-    "channel_id": null,
+    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
     "data": {
+      "fsm_id": "ba_7ky3hNtIJ4KaBhvDbCKSYuARysjl4DAmpH+9uNFBy3agKuf9",
       "signed_tx": "tx_+IEyAaEB...",
       "updates": []
     }
@@ -374,13 +403,13 @@ it and then post it back via a WebSocket message:
 ```
 
 #### Responder is informed
-The responder receives the following message
+The responder receives the following message.
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": null,
+    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
     "data": {
       "event": "funding_created"
     }
@@ -390,15 +419,21 @@ The responder receives the following message
 ```
 
 #### Responder authenticates the tx
-After being informed for the initiator's authentication, the responder receives a message containing the solo-authenticated transaction to be co-authenticated by her as well
+After being informed for the initiator's authentication, the responder receives a
+message containing the solo-authenticated transaction to be co-authenticated by her
+as well. As for the initiator singning request, the `channel_id` and `fsm_id`
+are included, and the client can use them to reconnect, once it has responded to
+the signing request.
+
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.sign.responder_sign",
   "params": {
-    "channel_id": null,
+    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
     "data": {
-      "signed_tx": "tx_+MsLAfhCu...",
+     "fsm_id": "ba_M5Bn1bQXqMA2L1RMDJQopaN+3ys88wpn4Y0FELRjXGQ+RvBT",
+     "signed_tx": "tx_+MsLAfhCu...",
       "updates": []
     }
   },
@@ -428,7 +463,7 @@ The initiator receives the following message
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": null,
+    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
     "data": {
       "event": "funding_signed"
     }
@@ -447,7 +482,7 @@ initiator to push the co-authenticed transaction to the mempool:
   "jsonrpc": "2.0",
   "method": "channels.on_chain_tx",
   "params": {
-    "channel_id": null,
+    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
     "data": {
       "info": "funding_created",
       "tx": "tx_+MsLAfhCP4...",
@@ -466,7 +501,7 @@ The initiator FSM reports to its client that it received the co-authenticated
   "jsonrpc": "2.0",
   "method": "channels.on_chain_tx",
   "params": {
-    "channel_id": null,
+    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
     "data": {
       "info": "funding_signed",
       "tx": "tx_+MsLAfhCP4...",
@@ -493,7 +528,7 @@ a `channel_changed` event in an `on_chain_tx` report:
   "jsonrpc": "2.0",
   "method": "channels.on_chain_tx",
   "params": {
-    "channel_id": null,
+    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
     "data": {
       "info": "channel_changed",
       "tx": "tx_+QENCwH4hLhAKOlyL6Y5R1OgoyQ8+8QdDya72IT479ncEFi7BnPO3zMyE4N/E54E2heF3g8aCYirv/ajwxB5DIDn2cdEF6h6ALhA2ILrieAe4Y8a+0lfSwmN+ddIv6gPX0xfMyX4RpQ7BRZoINayCRQNOxGci9v2J7to+CSYNJQEYzBXcSTclpoXCbiD+IEyAaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGP6olImAAoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhIYkYTnKgAACCgCGG0jrV+AAwKCjPk7CXWjSHTO8V2Y9WTad6D/5sB8yCR8WumWh0WxWvwMXN1eS",
@@ -583,28 +618,37 @@ present the initial off-chain state:
 
 ### Client reconnect
 Once the `channel_create_tx` has been signed, the client Websocket connection may close
-without causing the FSM to terminate. The client may reconnect by signing a special
-`channel_client_reconnect_tx` transaction, partly to identify the right FSM instance
-to connect to, and partly to prove identity. The transaction has the following structure:
+without causing the FSM to terminate. The client can reconnect using the
+[`reestablish`](#reestablish) method described below.
 
- | Name | Type | Description |
- | ---- | ---- | ----------- |
- | channel id | string | ID of the channel |
- | round | integer | Must be higher than at the last reconnect |
- | role | string | Role of the instance (initiator or responder) |
- | pub key | string | Public key of the client |
-
-Information about serialization can be found [here](../../serializations.md#channel-client-reconnect-transaction).
-
-After signing the reconnect transaction, the client connects using the parameters `protocol`
-and `reconnect_tx` as illustrated below. Note that the `reconnect_tx` parameter uses a
-serialized transaction.
+The node will try to locate the FSM using these parameters and reconnect.
+The FSM will check the `fsm_id` token for authentication. If the FSM is not
+running, a full reestablish is attempted.
 
 ```
-$ wscat --connect 'localhost:3014/channel?protocol=json-rpc&reconnect_tx=tx_%2BJ0LAfhCuECD0kyElzq1A4bRqUUlIvwqo3UpNLZr07K6f6ZzCMjOY6nVLowEyewiEfDOGu0yy%2BrS2pSOWZzumSKLpNAOwQsBuFX4U4ICPwGhBiPYP7m2R8Z36J9C1yWyKO6C0GoclMWjkh8mGyYcwiNkAYlpbml0aWF0b3KhARZ7k%2B1MUXursizzqkphuO8bCDRo8DrnsRvekHG5Ry3bV0P6XA%3D%3D'
+$ wscat --connect 'localhost:3014/channel?existing_channel_id=ch_rphrrGiq1damJWDPuzrVJf3tWyd7HiVoZG636YisH98WaaLSH&existing_fsm_id=ba_h2NTyK%2FL2OAXhJnl%2FsodLTWmZ3g262T4lFTPTwlz84JZswRW&host=localhost&port=13179&protocol=json-rpc&role=initiator'
 
 connected (press CTRL+C to quit)
 ```
+
+In response to a reconnect/reestablish, the client will always receive an `fsm_up`
+indication with a new `fsm_id` needed for the next reconnect/reestablish.
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_rphrrGiq1damJWDPuzrVJf3tWyd7HiVoZG636YisH98WaaLSH",
+    "data": {
+      "event": "fsm_up",
+      "fsm_id": "ba_h2NTyK/L2OAXhJnl/sodLTWmZ3g262T4lFTPTwlz84JZswRW"
+    }
+  },
+  "version": 1
+}
+```
+
 
 While the client is disconnected, the corresponding FSM will reject any
 protocol request that requires signing. An attempt to reconnect to an FSM that
@@ -1396,11 +1440,15 @@ done by simply disconnecting, or by sending a `'leave'` request. When receving
 a leave request, the channel FSM passes it on to the peer FSM, reports the
 current mutually authenticated state and then terminates. The `'reestablish'` request
 is very similar to a [Channel open](#channel-open) request, but also requires
-the channel id and the latest mutually authenticated state.
+the channel id and the latest mutually authenticated state. For authentication,
+a unique token called an `fsm_id` also needs to be provided
+See [initial connection indication](#initial-connection-indication) on how the
+`fsm_id` is communicated.
 
-The full state, including state trees, is cached internally by the Aeternity
-node, and upon reestablish, it is verified that the encoded state provided
-by the client corresponds to the latest full state retrieved from the cache.
+The full state, including state trees, is cached in encrypted form internally
+by the Aeternity node, and upon reestablish, it is verified that the encoded
+state provided by the client corresponds to the latest full state retrieved from
+the cache.
 
 ### Leave request
 Example:
@@ -1428,23 +1476,42 @@ The FSM responds with the following type of report:
 ```
 
 ### Reestablish
-Open the channel in the same way as in the
+Open the channel in a similar way as in the
 [Initiator WebSocket open](#initiator-websocket-open) example,
-adding the parameters `existing_channel_id` and `offchain_tx` with values
-matching the ones provided in the `leave` report above. Some parameters (related to open transaction) are not required and ignored. See [Channel parameters](#channel-parameters):
+providing the parameters `existing_channel_id` and `fsm_id` with values matching
+the ones provided in previous signing requests and reports (note that the latest
+unique `fsm_id` must be used.)
 
 ```
-$ wscat --connect
-localhost:3014/channel?existing_channel_id=ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR&host=localhost&offchain_tx=tx_%2BQENCwH4h...&port=12341&protocol=json-rpc&role=initiator
+$ wscat --connect localhost:3014/channel?existing_channel_id=ch_qbM3mAio9VyqU3GLhjWmdcg3H5gbrTJhaMYCokik7CbeHghWS&existing_fsm_id=ba_RtzmxPbVqyDrXjPcY3OP%2FU2YdlpWonF%2BcVIEYEH01%2BFQ1AI7&port=13180&protocol=json-rpc&role=responder
 ```
 
 The channel FSM responds with the following event reports if all goes well:
+
+An `fsm_up` event indicating that the FSM is running, and a new `fsm_id`
+has been created:
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": null,
+    "channel_id": "ch_qbM3mAio9VyqU3GLhjWmdcg3H5gbrTJhaMYCokik7CbeHghWS",
+    "data": {
+      "event": "fsm_up",
+      "fsm_id": "ba_gvH8dUxre/htCqdWWxJS6YkBBx4l5Q41noArQf35tCDsB7ZO"
+    }
+  },
+  "version": 1
+}
+```
+
+A report indicating that the `reestablish` handshake succeeded:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_qbM3mAio9VyqU3GLhjWmdcg3H5gbrTJhaMYCokik7CbeHghWS",
     "data": {
       "event": "channel_reestablished"
     }
@@ -1459,7 +1526,7 @@ then the standard report indicating that the channel is open:
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "channel_id": "ch_qbM3mAio9VyqU3GLhjWmdcg3H5gbrTJhaMYCokik7CbeHghWS",
     "data": {
       "event": "open"
     }
@@ -1474,14 +1541,15 @@ followed by an update report with the latest mutually authenticated state:
   "jsonrpc": "2.0",
   "method": "channels.update",
   "params": {
-    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "channel_id": "ch_qbM3mAio9VyqU3GLhjWmdcg3H5gbrTJhaMYCokik7CbeHghWS",
     "data": {
-      "state": "tx_+QENCwH4..."
+      "state": "tx_+QENCwH4hLhAGi4f1QWVwvBlk2kk+CN3ELiNe6Own36tLwarvqpo2brJlkYdX0gj1VB4B/eqFcYfDWSo1AMsJ0oKQy3AWt/QCrhAPuqasfg0X10mndNxgG75y2QxUm//mYT13c1vp5aSJYX4+xTYfBV8SxZD36M9rNBx1/9/CAfUL4YYdg3GX5JmAbiD+IEyAaEBE7TIKkriBfmYFubsoRmC9dCOrNzIF2Uou0YIXPBsLoGGP6olImAAoQEJFbpig3RT+UOpwl8CyzLXDoK0biVPpJ6fhnl+trcT3IYkYTnKgAACCgCGEAZ510gAwKB9oftkV6lyU0PDMM7T0DutPgGd6CZ2st1XJiEM6z01rhXYqWnL"
     }
   },
   "version": 1
 }
 ```
+
 
 ## Channel mutual close
 At any moment after the channel is opened, a closing procedure can be
