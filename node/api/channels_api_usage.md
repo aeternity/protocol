@@ -307,7 +307,9 @@ values being provided by the `responder`.
 
 Each client receives an `fsm_up` event indicating that a connection has been
 established. Each fsm reveals a unique token which is needed for authentication
-if the client needs to reconnect later.
+if the client needs to reconnect later. Note that the tokens are unique to each
+respective client.
+
 
 ```javascript
 {
@@ -317,7 +319,7 @@ if the client needs to reconnect later.
     "channel_id": null,
     "data": {
       "event": "fsm_up",
-      "fsm_id": "ba_7ky3hNtIJ4KaBhvDbCKSYuARysjl4DAmpH+9uNFBy3agKuf9"
+      "fsm_id": "ba_14XZqoUZUc9U6RUbvN2iWd+dd5H9xIWYDUyjk6L3NE2MZV2P"
     }
   },
   "version": 1
@@ -331,8 +333,27 @@ Note that the channel ID has not yet been created.
 Parties' WebSocket clients receive messages for the opening of the TCP
 connection.
 
+#### Responder connection opened message
+The responder receives the following message, indicating that the protocol
+message `channel_open` has been received by the responder FSM.
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": null,
+    "data": {
+      "event": "channel_open"
+    }
+  },
+  "version": 1
+}
+```
+
 #### Initiator connection opened message
-The initiator receives the following message
+The initiator receives the following message indicating that the
+responder FSM replied with a valid `channel_accept` message.
 
 ```javascript
 {
@@ -348,21 +369,6 @@ The initiator receives the following message
 }
 ```
 
-#### Responder connection opened message
-The responder receives the following message
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.info",
-  "params": {
-    "channel_id": null,
-    "data": {
-      "event": "channel_open"
-    }
-  },
-  "version": 1
-}
-```
 
 ### Create transaction authentication
 The `channel_create_tx` is sent subsequently to both parties and they mutually
@@ -370,19 +376,15 @@ authenticate it. Then it is posted to the chain.
 
 #### Initiator authenticates the tx
 The initiator receives a message containing the unauthenticated transaction.
-The `channel_id` and `fsm_id` are included as separate elements, since the
-will need them to reconnect, which is possible once the client has responded
-to the signing request.
 
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.sign.initiator_sign",
   "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "channel_id": null,
     "data": {
-      "fsm_id": "ba_7ky3hNtIJ4KaBhvDbCKSYuARysjl4DAmpH+9uNFBy3agKuf9",
-      "signed_tx": "tx_+IEyAaEB...",
+      "signed_tx": "tx_+IgLAcC4g...",
       "updates": []
     }
   },
@@ -394,6 +396,7 @@ Initiator is to decode the transaction, inspect its contents, authenticate it, e
 it and then post it back via a WebSocket message:
 ```javascript
 {
+  "id": -576460752303423488,
   "jsonrpc": "2.0",
   "method": "channels.initiator_sign",
   "params": {
@@ -403,13 +406,15 @@ it and then post it back via a WebSocket message:
 ```
 
 #### Responder is informed
-The responder receives the following message.
+The responder receives the following message indicating that a valid
+`funding_created` protocol message has been received.
+
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
       "event": "funding_created"
     }
@@ -430,10 +435,10 @@ the signing request.
   "jsonrpc": "2.0",
   "method": "channels.sign.responder_sign",
   "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
-     "fsm_id": "ba_M5Bn1bQXqMA2L1RMDJQopaN+3ys88wpn4Y0FELRjXGQ+RvBT",
-     "signed_tx": "tx_+MsLAfhCu...",
+      "fsm_id": "ba_M4vTq7zj3l7rRWj56Lyl60P4v6HYM7pbq1OEMXRAIkHrCXJQ",
+      "signed_tx": "tx_+MsLAfhCu...",
       "updates": []
     }
   },
@@ -448,24 +453,30 @@ it back via a WebSocket message:
 
 ```javascript
 {
+  "id": -576460752303423487,
   "jsonrpc": "2.0",
   "method": "channels.responder_sign",
   "params": {
-    "signed_tx": "tx_+MsLAfhCP4...",
+    "signed_tx": "tx_+QENCwH4h..."
   }
 }
 ```
 
 #### Initiator is informed
-The initiator receives the following message
+The initiator receives the following message, indicating that the FSM
+has received a co-signed `create_tx` object. Since this is the first
+report to the initiator where the on-chain channel ID is guaranteed to
+be known, the `fsm_id` is also included for convenience.
+
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
-      "event": "funding_signed"
+      "event": "funding_signed",
+      "fsm_id": "ba_14XZqoUZUc9U6RUbvN2iWd+dd5H9xIWYDUyjk6L3NE2MZV2P"
     }
   },
   "version": 1
@@ -482,10 +493,10 @@ initiator to push the co-authenticed transaction to the mempool:
   "jsonrpc": "2.0",
   "method": "channels.on_chain_tx",
   "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
       "info": "funding_created",
-      "tx": "tx_+MsLAfhCP4...",
+      "tx": "tx_+QENCwH4h...",
       "type": "channel_create_tx"
     }
   },
@@ -499,13 +510,12 @@ The initiator FSM reports to its client that it received the co-authenticated
 ```javascript
 {
   "jsonrpc": "2.0",
-  "method": "channels.on_chain_tx",
+  "method": "channels.info",
   "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
-      "info": "funding_signed",
-      "tx": "tx_+MsLAfhCP4...",
-      "type": "channel_create_tx"
+      "event": "funding_signed",
+      "fsm_id": "ba_14XZqoUZUc9U6RUbvN2iWd+dd5H9xIWYDUyjk6L3NE2MZV2P"
     }
   },
   "version": 1
@@ -523,15 +533,16 @@ if the `block_hash` is `none` - then the transaction is still in the mempool.
 #### Transaction detected on-chain
 Once the transaction is picked up by a miner and included in a block, the FSMs will detect it and report
 a `channel_changed` event in an `on_chain_tx` report:
+
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.on_chain_tx",
   "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
-      "info": "channel_changed",
-      "tx": "tx_+QENCwH4hLhAKOlyL6Y5R1OgoyQ8+8QdDya72IT479ncEFi7BnPO3zMyE4N/E54E2heF3g8aCYirv/ajwxB5DIDn2cdEF6h6ALhA2ILrieAe4Y8a+0lfSwmN+ddIv6gPX0xfMyX4RpQ7BRZoINayCRQNOxGci9v2J7to+CSYNJQEYzBXcSTclpoXCbiD+IEyAaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGP6olImAAoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhIYkYTnKgAACCgCGG0jrV+AAwKCjPk7CXWjSHTO8V2Y9WTad6D/5sB8yCR8WumWh0WxWvwMXN1eS",
+      "info": "funding_signed",
+      "tx": "tx_+QENCwH4h...",
       "type": "channel_create_tx"
     }
   },
@@ -550,7 +561,7 @@ An update from one's own node that the block height needed is reached:
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
       "event": "own_funding_locked"
     }
@@ -566,7 +577,7 @@ height needed is reached:
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
       "event": "funding_locked"
     }
@@ -587,7 +598,7 @@ After both parties have mutually authenticated the state update both of them wil
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
       "event": "open"
     }
@@ -607,9 +618,9 @@ present the initial off-chain state:
   "jsonrpc": "2.0",
   "method": "channels.update",
   "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
-      "state": "tx_+QENCwH4hLhAKOlyL6Y5R1OgoyQ8+8QdDya72IT479ncEFi7BnPO3zMyE4N/E54E2heF3g8aCYirv/ajwxB5DIDn2cdEF6h6ALhA2ILrieAe4Y8a+0lfSwmN+ddIv6gPX0xfMyX4RpQ7BRZoINayCRQNOxGci9v2J7to+CSYNJQEYzBXcSTclpoXCbiD+IEyAaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGP6olImAAoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhIYkYTnKgAACCgCGG0jrV+AAwKCjPk7CXWjSHTO8V2Y9WTad6D/5sB8yCR8WumWh0WxWvwMXN1eS"
+      "state": "tx_+QENCwH4h..."
     }
   },
   "version": 1
@@ -625,8 +636,19 @@ The node will try to locate the FSM using these parameters and reconnect.
 The FSM will check the `fsm_id` token for authentication. If the FSM is not
 running, a full reestablish is attempted.
 
+Although it is possible to disconnect and reconnect once the signing request has been
+answered, the initiator FSM is not guaranteed to know the channel ID at the time of
+sending the initial signing request. If the initiator is a Generalized Account, the
+channel ID depends in part on the initiator authentication. The initiator client
+could derive the channel ID from its authenticated `channel_create_tx`, but
+otherwise, it will be informed of the channel ID and (again) the FSM ID in the
+later `funding_signed` message, once the responder client has also authenticated
+the `channel_create_tx`.
+
+The initiator opens a new WebSocket connection, passing the existing channel and FSM IDs.
+
 ```
-$ wscat --connect 'localhost:3014/channel?existing_channel_id=ch_rphrrGiq1damJWDPuzrVJf3tWyd7HiVoZG636YisH98WaaLSH&existing_fsm_id=ba_h2NTyK%2FL2OAXhJnl%2FsodLTWmZ3g262T4lFTPTwlz84JZswRW&host=localhost&port=13179&protocol=json-rpc&role=initiator'
+$ wscat 'localhost:3014/channel?existing_channel_id=ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL&existing_fsm_id=ba_14XZqoUZUc9U6RUbvN2iWd%2Bdd5H9xIWYDUyjk6L3NE2MZV2P&host=localhost&port=13179&protocol=json-rpc&role=initiator'
 
 connected (press CTRL+C to quit)
 ```
@@ -639,7 +661,7 @@ indication with a new `fsm_id` needed for the next reconnect/reestablish.
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_rphrrGiq1damJWDPuzrVJf3tWyd7HiVoZG636YisH98WaaLSH",
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
       "event": "fsm_up",
       "fsm_id": "ba_h2NTyK/L2OAXhJnl/sodLTWmZ3g262T4lFTPTwlz84JZswRW"
@@ -669,7 +691,7 @@ received corresponding `channels.update` messages:
   "params": {
     "channel_id": "ch_2qHR2iopmhCpRq1NYKcqXkAM4ydhKrqCiwyNushZrH94L6TQ4r",
     "data": {
-      "state": "tx_+QENCwH4hLhAqJaduFrTCqaxqF9uEDPVbd6nkl/cLzuNqQo4n7Unc9SZK8uWVyRTvbPL8AP4Zo/c9giz5ip9Au7qyGmoNRRhD7hAuur2dr0f4rmoiYQaJn51XGm26ksdM6UdCTGJcJSoPXNT9qaWKdiT/1uDXhUuv6L92JlkWPoqNdxAgoZgGozdDriD+IEyAaEBczX34JBR7Jaa9oTSdI0jePPWlUuTx7E0OO/D32FaT2CGP6olImAAoQECgVxNp3bgfaAQOCDBXtlM1JpBTJJK4MgaN+bFPvE9VoYkYTnKgAACCgCGEAZ510gAwKB7Hn2psAENZRcUm0kl3cMq7J6YaBSioPNTsxFw3H8aFAHEJFnz"
+      "state": "tx_+QENCwH4h..."
     }
   },
   "version": 1
