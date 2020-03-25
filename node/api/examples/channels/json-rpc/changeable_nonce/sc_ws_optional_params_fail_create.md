@@ -1,7 +1,7 @@
 
 #### initiator opens a WebSocket connection
 ```
-ws://localhost:3014/channel?channel_reserve=2&host=localhost&initiator_amount=70000000000000&initiator_id=ak_2MJU325LQVfAu36vjGvdVpVgiCDbjRsMAjHZc7ahzuLZHTjWYS&keep_running=false&lock_period=10&nonce=1234567&port=13179&protocol=json-rpc&push_amount=1&responder_amount=40000000000000&responder_id=ak_cU4JbcvVzqCtttniEVwvN1z6P7s4vgtTCjfDYfF1kbh7gCs7W&role=initiator
+ws://localhost:3014/channel?channel_reserve=2&host=localhost&initiator_amount=70000000000000&initiator_id=ak_mLjWgLbapr5CiVD2Q248aS2TQj9itXnoPv5tteXvZaJ8tdD2C&keep_running=false&lock_period=10&nonce=1234567&port=13179&protocol=json-rpc&push_amount=1&responder_amount=40000000000000&responder_id=ak_26jAbCjYM16ppbhFG6PCQhv6HkwRAri7QNJfoEtb1R8amLscpt&role=initiator
 ```
 
 #### initiator <--- node
@@ -13,7 +13,7 @@ ws://localhost:3014/channel?channel_reserve=2&host=localhost&initiator_amount=70
     "channel_id": null,
     "data": {
       "event": "fsm_up",
-      "fsm_id": "ba_JzlMz0PzR78x42dD9+V8OQDmTRVa/m9hmRHs+4T9xbH6O6+2"
+      "fsm_id": "ba_VoRfifO9h5rYB1ePPY5iAnPOrZO6wLltPcnJ5e+NVfOGUsUX"
     }
   },
   "version": 1
@@ -25,7 +25,7 @@ ws://localhost:3014/channel?channel_reserve=2&host=localhost&initiator_amount=70
 
 #### responder opens a WebSocket connection
 ```
-ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&initiator_id=ak_2MJU325LQVfAu36vjGvdVpVgiCDbjRsMAjHZc7ahzuLZHTjWYS&keep_running=false&lock_period=10&nonce=1234567&port=13179&protocol=json-rpc&push_amount=1&responder_amount=40000000000000&responder_id=ak_cU4JbcvVzqCtttniEVwvN1z6P7s4vgtTCjfDYfF1kbh7gCs7W&role=responder
+ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&initiator_id=ak_mLjWgLbapr5CiVD2Q248aS2TQj9itXnoPv5tteXvZaJ8tdD2C&keep_running=false&lock_period=10&nonce=1234567&port=13179&protocol=json-rpc&push_amount=1&responder_amount=40000000000000&responder_id=ak_26jAbCjYM16ppbhFG6PCQhv6HkwRAri7QNJfoEtb1R8amLscpt&role=responder
 ```
 
 #### responder <--- node
@@ -37,7 +37,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
     "channel_id": null,
     "data": {
       "event": "fsm_up",
-      "fsm_id": "ba_Ks01D0Tu19oTEly/0DfeuTJTMi76KidkIQmQEovIGXkrBSw/"
+      "fsm_id": "ba_LlzwPDMU32OgDqub2KLPd0ZZb+3koEQ8JoXjiXM/qxXsh0YS"
     }
   },
   "version": 1
@@ -91,7 +91,7 @@ ws://localhost:3014/channel?channel_reserve=2&initiator_amount=70000000000000&in
   "params": {
     "channel_id": null,
     "data": {
-      "signed_tx": "tx_+IsLAcC4hviEMgGhAbHK1UrKbrlQsMI3Yjl98MiDcLOw7duG4FDH+F2sz2/Whj+qJSJgAKEBUIfxRMCl/jwvRuoWbFmhIig8m7x6bH0vWLBj5i0/wvCGJGE5yoAAAgoAhhAUch6gAMCgJDWBAD11XwiJMMVLXmZJYd6krb12dOCG3ND1JHXhDguDEtaHikIIQw==",
+      "signed_tx": "tx_+IsLAcC4hviEMgGhAWSuDghi3tNLOnvuIVm5FIbC9Ikodk2/E4CKiamLla+Bhj+qJSJgAKEBkLMuMMqdp4Acg/adLsNQ2VimQAyKhQvdpRTurgwqcKGGJGE5yoAAAgoAhhAUch6gAMCgZP8IHNNsTxaYp/GakGy6MTXm8MnOngPkebqMLgn1uEaDEtaHV+/9Bg==",
       "updates": []
     }
   },

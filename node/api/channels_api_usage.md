@@ -408,6 +408,8 @@ it and then post it back via a WebSocket message:
 #### Responder is informed
 The responder receives the following message indicating that a valid
 `funding_created` protocol message has been received.
+The on-chain `channel_id` and `fsm_id` are included, and the client
+can use them to reconnect, once it has responded to the signing request.
 
 ```javascript
 {
@@ -416,6 +418,7 @@ The responder receives the following message indicating that a valid
   "params": {
     "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
+      "fsm_id": "ba_M4vTq7zj3l7rRWj56Lyl60P4v6HYM7pbq1OEMXRAIkHrCXJQ",
       "event": "funding_created"
     }
   },
@@ -426,9 +429,7 @@ The responder receives the following message indicating that a valid
 #### Responder authenticates the tx
 After being informed for the initiator's authentication, the responder receives a
 message containing the solo-authenticated transaction to be co-authenticated by her
-as well. As for the initiator singning request, the `channel_id` and `fsm_id`
-are included, and the client can use them to reconnect, once it has responded to
-the signing request.
+as well.
 
 ```javascript
 {
@@ -437,7 +438,6 @@ the signing request.
   "params": {
     "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
-      "fsm_id": "ba_M4vTq7zj3l7rRWj56Lyl60P4v6HYM7pbq1OEMXRAIkHrCXJQ",
       "signed_tx": "tx_+MsLAfhCu...",
       "updates": []
     }
@@ -498,24 +498,6 @@ initiator to push the co-authenticed transaction to the mempool:
       "info": "funding_created",
       "tx": "tx_+QENCwH4h...",
       "type": "channel_create_tx"
-    }
-  },
-  "version": 1
-}
-```
-
-The initiator FSM reports to its client that it received the co-authenticated
-`channel_create_tx` from the responder:
-
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.info",
-  "params": {
-    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
-    "data": {
-      "event": "funding_signed",
-      "fsm_id": "ba_14XZqoUZUc9U6RUbvN2iWd+dd5H9xIWYDUyjk6L3NE2MZV2P"
     }
   },
   "version": 1
@@ -643,7 +625,9 @@ channel ID depends in part on the initiator authentication. The initiator client
 could derive the channel ID from its authenticated `channel_create_tx`, but
 otherwise, it will be informed of the channel ID and (again) the FSM ID in the
 later `funding_signed` message, once the responder client has also authenticated
-the `channel_create_tx`.
+the `channel_create_tx`. The responder receives the channel and FSM IDs in the
+`funding_created` report, and can use them to reconnect after signing the
+`channel_create_tx`.
 
 The initiator opens a new WebSocket connection, passing the existing channel and FSM IDs.
 
