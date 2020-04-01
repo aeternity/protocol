@@ -1782,7 +1782,7 @@ that is not based on the latest off-chain state, our FSM informs us about it
     "data": {
       "info": "can_slash",
       "tx": "tx_+NILAfiEuEBCNNHFxu/R+ypbtOCh7BrA+oFrAYYHzhZTR8BmTOgO2yYKd7lXwU7+xlfvD3Mu9dEeVp1T1aVuH8UPk/7wU9UMuECR/+7ZaF0OqeiRuRVkjsd2aEynOBmBk+tFETlA5H/jNIVB2A1RbKDe8yHGBWpUbWZzLnPXK+pl1Wkml094WxUAuEj4RjkCoQYfhMxkEg4U4IPqO0HIxeove0RQjLQ6xewjm9BZLWhckwKgKhvZeiagtdVqx9aMKxKhw8+hK5cMrAWcpuiI9OVBfAcDKgN0",
-      "type": "channel_offchain_tx"
+      "type": "channel_close_solo_tx"
     }
   },
   "version": 1
@@ -3156,13 +3156,38 @@ Where `channel_id` has the correct value of the channel's ID.
 Every once and a while a participant might feel the urge to post the latest
 channel off-chain state on-chain. That would protect them from malicious
 actions from the other party, namely unilaterally closing the channel with an
-older state. This can be prevented by posting a `channel_snapshot_solo_tx`
-transaction on-chain containing the latest co-authenticated off-chain state -
-this guarantees that an older state can not make it on-chain.
+older state. Another use case would be disputing an on-chain
+`channel_force_progress_tx` that is based on an older state. This can be
+prevented by posting a `channel_snapshot_solo_tx` transaction on-chain
+containing the latest co-authenticated off-chain state - this guarantees that
+an older state can not make it on-chain or with the case of forced progress -
+it will be replaced.
 
 It is worth mentioning that if the latest off-chain state is already present
 on-chain, the snapshot transaction would not provide any new information
 on-chain, so it would fail to be included in the blockchain.
+
+If the channel is not yet closing and a malicious `channel_force_progress_tx`
+transaction is included on-chain - the client gets notified. The malicious
+forced progress transaction would be one being based upon not on the latest
+off-chain state but on an older one. The specifies that a snapshot could
+dispute the malicious on-chain transaction.
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_Et72swxcKCAJ8KzUDm17X1Ukuo6W7516WfYDPdUoTYpArCdfQ",
+    "data": {
+      "info": "can_snapshot",
+      "tx": "tx_+NILAf....",
+      "type": "channel_force_progress_tx"
+    }
+  },
+  "version": 1
+}
+```
 
 #### Snapshotter inittiates a snapshot solo 
 
