@@ -3160,7 +3160,7 @@ older state. Another use case would be disputing an on-chain
 `channel_force_progress_tx` that is based on an older state. This can be
 prevented by posting a `channel_snapshot_solo_tx` transaction on-chain
 containing the latest co-authenticated off-chain state - this guarantees that
-an older state can not make it on-chain or with the case of forced progress -
+an older state can not make it on-chain or, in the case of forced progress,
 it will be replaced.
 
 It is worth mentioning that if the latest off-chain state is already present
@@ -3168,9 +3168,10 @@ on-chain, the snapshot transaction would not provide any new information
 on-chain, so it would fail to be included in the blockchain.
 
 If the channel is not yet closing and a malicious `channel_force_progress_tx`
-transaction is included on-chain - the client gets notified. The malicious
-forced progress transaction would be one being based upon not on the latest
-off-chain state but on an older one. The specifies that a snapshot could
+transaction is included on-chain, the client gets notified. The malicious
+forced progress transaction would be one based upon an off-chain state
+older than the latest one.
+The report declares that a snapshot could dispute the malicious on-chain transaction.
 dispute the malicious on-chain transaction.
 
 ```javascript

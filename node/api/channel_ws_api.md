@@ -1060,7 +1060,7 @@ Roles:
  * `"solo_closing"` - reported by both parties, when the on-chain channel state is detected to transition
    to a proper `solo_closing` state - that is, with the latest known state.
  * `"can_slash"` or `"can_snapshot"`- reported by both parties, when the
-   on-chain channel state is detected to transition to to an improper state -
+   on-chain channel state is seen to transition into an improper state -
    that is, when there exists a later mutually authenticated state than the
    one reported by either party on-chain. If the channel is not yet closing -
    that could be a malicious `channel_force_progress_tx` and the reported
