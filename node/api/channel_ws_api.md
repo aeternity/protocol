@@ -781,6 +781,32 @@ Roles:
 Roles:
  * Snapshotter
 
+### Snapshotter is prompted to snapshot (not mandatory step)
+ * **method:** `channels.on_chain_tx`
+ * **params:**
+
+ | Name  | Type | Description | Required |
+ | ----- | ---- | ----------- | -------- |
+ | info | string | "can_snapshot" | Yes |
+ | tx | string | the last on-chain transaction that could be disputed by a snapshot | Yes |
+
+#### Example
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_rb...",
+    "data": {
+      "info": "can_snapshot",
+      "tx": "tx_+NIL...",
+      "type": "channel_offchain_tx"
+    }
+  },
+  "version": 1
+}
+```
+
 ### Snapshotter initiates solo snapshot
  * **method:** `channels.snapshot_solo`
  * **params:**
@@ -1033,8 +1059,16 @@ Roles:
    to a `closed` state.
  * `"solo_closing"` - reported by both parties, when the on-chain channel state is detected to transition
    to a proper `solo_closing` state - that is, with the latest known state.
- * `"can_slash"` - reported by both parties, when the on-chain channel state is detected to transition to
-   to an improper `solo_closing` state - that is, when there exists a later mutually authenticated state.
+ * `"can_slash"` or `"can_snapshot"`- reported by both parties, when the
+   on-chain channel state is seen to transition into an improper state -
+   that is, when there exists a later mutually authenticated state than the
+   one reported by either party on-chain. If the channel is not yet closing -
+   that could be a malicious `channel_force_progress_tx` and the reported
+   `info` value is `"can_snapshot"`. If the malicious on-chain transaction is
+   `channel_close_solo_tx` or the channel is already closing and a
+   `channel_force_progress_tx` is received - then the `info` is `"can_slash"`.
+   Other transactions with an older `round` than the latest off-chain are not
+   considered harmful.
 
 #### Example
 ```javascript
