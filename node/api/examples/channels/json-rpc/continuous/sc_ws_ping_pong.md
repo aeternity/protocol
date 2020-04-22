@@ -16,7 +16,7 @@
   "jsonrpc": "2.0",
   "method": "channels.system.pong",
   "params": {
-    "channel_id": "ch_ArR8UHQFmJ1GkJGk5BTWfKcZnMdeSyEMx2V9qyXJq2sk8QMBh",
+    "channel_id": "ch_S8axer1izndZW5nt5Qi7e8gZsjDFi13S64RZkWSFzHYmUi3PJ",
     "data": {
       "action": "system",
       "tag": "pong"
@@ -43,7 +43,7 @@
   "jsonrpc": "2.0",
   "method": "channels.system.pong",
   "params": {
-    "channel_id": "ch_ArR8UHQFmJ1GkJGk5BTWfKcZnMdeSyEMx2V9qyXJq2sk8QMBh",
+    "channel_id": "ch_S8axer1izndZW5nt5Qi7e8gZsjDFi13S64RZkWSFzHYmUi3PJ",
     "data": {
       "action": "system",
       "tag": "pong"
