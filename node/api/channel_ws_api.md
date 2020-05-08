@@ -21,6 +21,7 @@ The WebSocket API provides the following actions:
  * [Info messages](#info-messages)
  * [System messages](#system-messages)
  * [Signing error replies](#signing-error-replies)
+ * [Diagnostic and utility functions](#diagnostic-and-utility-functions)
 
 ## Update
 Roles:
@@ -1785,5 +1786,121 @@ the following error:
    "id":null,
    "jsonrpc":"2.0",
    "version":1
+}
+```
+
+## Diagnostic and Utility Functions
+
+### Get Proof-of-Inclusion
+
+* **method** `channels.get.poi`
+* **params**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | accounts | array | Account keys | No |
+ | contracts | array | Contract keys | No |
+
+This method returns a Proof-of-inclusion hash for the specified account and/or contract pubkeys.
+
+#### Example
+
+##### Request
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.get.poi",
+  "params": {
+    "accounts": [
+      "ak_HDrSVDTNugcrhXnLvCjqp2v9suCnkMeqRHqcfu3LB2yHrGRwc",
+      "ak_pyi456zpTB2RpRJEAFt6hYXw43gTdPWtmkRF3gsiGLDRcVrXv"
+    ]
+  }
+}
+```
+
+##### Response
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.get.poi.reply",
+  "params": {
+    "channel_id": "ch_2xt8q5h4Hi6jJb1zdabWft84uxoj98oq15F88m7M9CJymkAey",
+    "data": {
+      "poi": "pi_+QFJPAH5AT/5ATygepH4RQ+R0UU49I1IyJLnFNvCt2/jNFO6CmUc7m8XtFz5ARj4T6BeJcjJyIDlz7sfXIvk9yozlz+FAvg2gyPU4Q+riny2yO2gNNVGz2j3KKoPdrttVqL5+r4gxNQQ+Z0OyjSb/LiDA9OLygoBAIY/qiUiX//4dKB6kfhFD5HRRTj0jUjIkucU28K3b+M0U7oKZRzubxe0XPhRgICgXiXIyciA5c+7H1yL5PcqM5c/hQL4NoMj1OEPq4p8tsiAgICgvKtiRfbWmcPoLZAC+MrIzdCePZz2oQbQchvdT6ErhjOAgICAgICAgICA+E+gvKtiRfbWmcPoLZAC+MrIzdCePZz2oQbQchvdT6ErhjPtoDzwdPIo9ems+H6aeW3ytzsa+WhQkdiOteNZ/24etp6Hi8oKAQCGJGE5yoABwMDAwMCttJuC"
+    }
+  },
+  "version": 1
+}
+```
+
+### Fetch history
+
+* **method** `channels.history.fetch`
+* **params**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | n | integer | Number of items | No |
+ | type | array of string | Type(s) of entries | No |
+ | tag | array of string | Report tag(s) | No |
+
+The FSM keeps a sliding-window history of events, which can be fetched using this method.
+
+If no filter parameters are given, the entire available history is returned (note that the `log_keep` parameter when opening the channel sets the size of the sliding window).
+
+Supported values for `type`:
+* `rpt` - reports to the client
+* `rcv` - internal messages received from the peer
+* `snd` - internal messages sent to the peer
+* `req` - (signing) requests to the client
+
+Supported values for `tag` (for filtering `rpt` entries):
+* `info`
+* `on_chain_tx`
+* `conflict`
+* `update`
+* `leave`
+* `error`
+* `debug`
+
+#### Example
+
+##### Request
+
+```javascript
+{
+  "id": -576460752303423482,
+  "jsonrpc": "2.0",
+  "method": "channels.history.fetch",
+  "params": {
+    "n": 1,
+    "tag": [
+      "update"
+    ],
+    "type": [
+      "rpt"
+    ]
+  }
+}
+```
+
+##### Response
+```javascript
+{
+  "channel_id": "ch_2iAf5bSGD3QEJXSwg5mGE6ghVvn99vjs6AuX8TxhXcQt2U4c4V",
+  "id": -576460752303423482,
+  "jsonrpc": "2.0",
+  "result": [
+    {
+      "info": {
+        "state": "ba_dHhfK1FFTkN3SDRoTGhBRjQ5WEsyM0ZTaDVtWmQ0UWhpV09HVExUYzVRUFYwQkJtbzRQQVVRT2YyZVNnTkFDaU1Samw1eC9OSlh6aEREb3g0MHJ0NzNuWVRyTE40aXNrQ0p2QnJoQTlTeHFNL0VVQUd2TUZnb2pNKzZVVEF1b2lBcHlzYjllWnhFY3hVOFlGTXB2ZzlpWGdjMlYvbnFMTkRZaDRIelVaT2IvUk5tM0pndk90eEc3S3hnbURyaUQrSUV5QWFFQlB4KzBjWWV2cHgrMmR1NGZkNm5mYVQ0dGdDNmkzVDVQMkpzUDdYMVBybkNHUDZvbEltQUFvUUV4SzBWRG81US9VWUprSG95M0pXYkNLamJRaC9XUTNaVUE0UG12Sjd0Zng0WWtZVG5LZ0FBQ0NnQ0dFQVo1MTBnQXdLREZzRi90emRqeHB3ZTgzWlIzS0hzVVBNeDVIaDFYT3VrcVFTZ2pHeEM5M1FId0dsWmyO04cz"
+      },
+      "tag": "update",
+      "time": "2020-05-08T08:47:55.685261Z",
+      "type": "report"
+    }
+  ],
+  "version": 1
 }
 ```
