@@ -1801,7 +1801,7 @@ the following error:
  | accounts | array | Account keys | No |
  | contracts | array | Contract keys | No |
 
-This method returns a Proof-of-inclusion hash for the specified account and/or contract pubkeys.
+This method returns a Proof-of-inclusion for the specified account and/or contract pubkeys.
 
 #### Example
 
