@@ -984,6 +984,9 @@ authorization data.
 ```
 
 #### Generalized accounts meta transaction
+
+##### Meta transaction  version 1, pre Iris
+
 ```
 [ <ga_id>       :: id()
 , <auth_data>   :: binary()
@@ -992,6 +995,19 @@ authorization data.
 , <gas>         :: int()
 , <gas_price>   :: int()
 , <ttl>         :: int()
+, <tx>          :: binary()
+]
+```
+
+##### Meta transaction  version 2, from Iris on
+
+```
+[ <ga_id>       :: id()
+, <auth_data>   :: binary()
+, <abi_version> :: int()
+, <fee>         :: int()
+, <gas>         :: int()
+, <gas_price>   :: int()
 , <tx>          :: binary()
 ]
 ```
