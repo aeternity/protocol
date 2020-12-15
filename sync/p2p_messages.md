@@ -229,6 +229,7 @@ This is to be used for network monitoring.
 
 Message is RLP encoded, fields:
   - `Version` :: byte_array - the version of the node
+  - `Revision` :: byte_array - the revision of the node§§
   - `OS` :: byte_array - the operating system the node is being ran
   - `NetworkId` :: byte_array - the node's expectation of the `network_id`. This has heavy impact on authentication validations
   - `VerifiedPeers` :: integer - the amount of peers the node consideres to be verified
