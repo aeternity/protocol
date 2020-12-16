@@ -33,6 +33,8 @@ the [Aeternity node](https://github.com/aeternity/aeternity/blob/master/apps/aec
   - [MSG_TX_POOL_SYNC_UNFOLD](#msg_tx_pool_sync_unfold)
   - [MSG_TX_POOL_SYNC_GET](#msg_tx_pool_sync_get)
   - [MSG_TX_POOL_SYNC_FINISH](#msg_tx_pool_sync_finish)
+  - [MSG_GET_NODE_INFO](#msg_get_node_info)
+  - [MSG_NODE_INFO](#msg_node_info)
   - [MSG_CLOSE](#msg_close)
 
 Each message type (except for `MSG_FRAGMENT`) is versioned such that the
@@ -214,6 +216,29 @@ Message is RLP encoded, fields:
 
 Message is RLP encoded, fields:
   - `Done :: bool`
+
+## MSG_GET_NODE_INFO
+*(Tag = 125)*
+
+This message has no fields.
+
+This is to be used for network monitoring.
+
+## MSG_NODE_INFO
+*(Tag = 126)*
+
+Message is RLP encoded, fields:
+  - `Version` :: byte_array - the version of the node
+  - `Revision` :: byte_array - the revision of the node
+  - `Vendor` :: byte_array - a string to differentiate between different protocol imlementations
+  - `OS` :: byte_array - the operating system the node is being ran
+  - `NetworkId` :: byte_array - the node's expectation of the `network_id`. This has heavy impact on authentication validations
+  - `VerifiedPeers` :: integer - the amount of peers the node consideres to be verified
+  - `UnverifiedPeers` :: integer - the amount of peers the node consideres to be unverified
+
+This message is the response for the [MSG_GET_NODE_INFO](#msg_get_node_info)
+message. It is important to note that respoding to it is not required by the
+p2p protocol as a peer might prefer keeping this information private.
 
 ## MSG_CLOSE
 *(Tag = 127)*
