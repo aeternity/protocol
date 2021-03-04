@@ -82,9 +82,12 @@ Serialization defined [here](../serializations.md#channel-create-transaction)
 - `responder_amount`: unsigned amount of coins the responder commits to the
   channel
 - `lock_period`: period for disputes after solo operations
-- `delegate_ids`: a list of delegate account ids. The delegates play a role in
-  the solo closing sequence: except for the participants of the channel, they
-  are the only ones that can provide a slash transaction.
+- `delegate_ids`, `initiator_delegate_ids` and `responder_delegate_ids`: lists
+  of delegate account ids. The delegates play a role in the solo closing
+  sequence: except for the participants of the channel, they are the only ones
+  that can provide a snapshot, slash or forced progress transactions. Pre
+  `iris` there is only a single list of delegates and from `iris` on those are
+  fine grained on a participant level
 - `state_hash`: the root hash of the channel state tree; This is not validated,
   just kept in the channel's object as initial value. This come into play if
   participants enter a dispute right after opening the channel on-chain.
@@ -247,10 +250,11 @@ Serialization defined [here](../serializations.md#channel-snapshot-solo-transact
 - `fee`: transaction fee
 - `nonce`: the `from_id` account nonce
 
-The `from_id` account MUST be a participant in the target channel. The `payload`
-MUST be an off-chain state. It MUST provide correct authentication methods for
-both parties. It MUST be part of the same channel (containing same channel id)
-and it MUST have a `round` higher than the one currently recorded on-chain.
+The `from_id` account MUST be a participant or a delegate in the target
+channel. The `payload` MUST be an off-chain state. It MUST provide correct
+authentication methods for both parties. It MUST be part of the same channel
+(containing same channel id) and it MUST have a `round` higher than the one
+currently recorded on-chain.
 
 This transaction MUST NOT trigger the `lock_period` and MUST NOT be used when
 the channel is in the closing state. It can be used to overwrite a state produced
@@ -272,13 +276,14 @@ close the channel, closing is just a matter of issuing one on-chain
 transaction, authenticated by everyone involved.
 
 In the case of a solo closing, operations are subject to the `lock_period`,
-during which the closing state can be disputed via a `channel_slash_tx` or even
-progressed further on-chain via `channel_force_progress_tx` transactions.
+during which the closing state can be disputed via a `channel_slash_tx` or
+even progressed further on-chain via `channel_force_progress_tx` transactions.
 
 
 ### `channel_close_mutual`
 
-Serialization defined [here](../serializations.md#channel-close-mutual-transaction)
+Serialization defined
+[here](../serializations.md#channel-close-mutual-transaction)
 
 - `channel_id`: channel id as recorded on-chain
 - `from_id`: the account that posts the transaction
@@ -460,6 +465,12 @@ locks it for `lock_period` blocks, during which the update can be disputed. This
 lock is necessary to prevent the channel from being closed immediately after
 a new round has been produced on chain.
 
+The forcer can be either a participant or, after `iris`, a delegate. The
+latter can only force from behalf of the participant that had specified her to
+do so, ex: `initiator`'s delegates can only force progress calls made from the
+`initiator`'s account. Delegated forced progress is allowed only when the
+channel is already in a closing state.
+
 It is worth mentioning that what is to be disputed is the off-chain state that
 the force progress had been based on and not the forcing of progress itself. If
 an older state had been provided by the forcing party, the other party can post
@@ -472,13 +483,16 @@ round will replace the on-chain produced one.
 Serialization defined [here](../serializations.md#channel-solo-force-progress-transaction)
 
 - `channel_id`: channel id as recorded on-chain
-- `from_id`: participant of the channel that posts the force progress transaction
+- `from_id`: a participant or a delegate of the channel that posts the force
+  progress transaction
 - `payload`: empty or an off-chain state transaction proving that the state trees
   represent a mutually agreed-upon channel state
 - `round`: channel's next round
 - `update`: channel off-chain update that contains the contract call with gas
   limit and gas prices to be consumed for the on-chain execution of the
-  off-chain contract
+  off-chain contract. If it is a delegate that provides the force progress,
+  the the `caller` of the off-chain contract MUST be a participant that had
+  authorized this delegate
 - `state_hash`: channel's expected new root hash of off-chain state trees
 - `offchain_trees`: the full state channel's state trees
 - `ttl`: blockheight target until which this transaction can be included
@@ -501,7 +515,6 @@ MUST be based on the previous on-chain produced states but each next one
 resets the dispute timer.
 
 The payload can be either empty or an authenticated off-chain state transaction.
-
 
 #### Empty Payload
 

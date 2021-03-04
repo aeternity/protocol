@@ -546,7 +546,7 @@ The recipient must be one of the following:
 
 ### Channels
 
-#### Channel create transaction
+#### Channel create transaction (version 1, until Iris release)
 ```
 [ <initiator>        :: id()
 , <initiator_amount> :: int()
@@ -559,6 +559,23 @@ The recipient must be one of the following:
 , <delegate_ids>     :: [id()]
 , <state_hash>       :: binary()
 , <nonce>            :: int()
+]
+```
+
+#### Channel create transaction (version 2, from Iris release)
+```
+[ <initiator>               :: id()
+, <initiator_amount>        :: int()
+, <responder>               :: id()
+, <responder_amount>        :: int()
+, <channel_reserve>         :: int()
+, <lock_period>             :: int()
+, <ttl>                     :: int()
+, <fee>                     :: int()
+, <initiator_delegate_ids>  :: [id()]
+, <responder_delegate_ids>  :: [id()]
+, <state_hash>              :: binary()
+, <nonce>                   :: int()
 ]
 ```
 
@@ -834,6 +851,26 @@ mempool. The elements of the transaction are:
 , <locked_until>        :: int()
 , <initiator_auth>      :: binary()
 , <responder_auth>      :: binary()
+]
+```
+
+#### Channel (version 3, from Iris release)
+```
+[ <initiator>               :: id()
+, <responder>               :: id()
+, <channel_amount>          :: int()
+, <initiator_amount>        :: int()
+, <responder_amount>        :: int()
+, <channel_reserve>         :: int()
+, <initiator_delegate_ids>  :: [id()]
+, <responder_delegate_ids>  :: [id()]
+, <state_hash>              :: binary()
+, <round>                   :: int()
+, <solo_round>              :: int()
+, <lock_period>             :: int()
+, <locked_until>            :: int()
+, <initiator_auth>          :: binary()
+, <responder_auth>          :: binary()
 ]
 ```
 
