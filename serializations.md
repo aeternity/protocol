@@ -222,6 +222,7 @@ subsequent sections divided by object.
 | Contract create transaction | 42 |
 | Contract call transaction | 43 |
 | Channel create transaction | 50 |
+| Channel set delegates transaction | 501 |
 | Channel deposit transaction | 51 |
 | Channel withdraw transaction | 52 |
 | Channel force progress transaction | 521 |
@@ -696,6 +697,24 @@ after the update had been applied to the channel state provided in the proof
 of inclusion.
 The proof of inclusion has the same root hash as the state hash of the co-signed
 payload.
+
+#### Channel set delegates transaction
+```
+[ <channel_id>             :: id()
+, <from_id>                :: id()
+, <initiator_delegate_ids> :: [id()]
+, <responder_delegate_ids> :: [id()]
+, <payload>                :: binary()
+, <state_hash>             :: binary()
+, <round>                  :: int()
+, <ttl>                    :: int()
+, <fee>                    :: int()
+, <nonce>                  :: int()
+]
+```
+
+The payload is a serialized signed channel off-chain transaction or it can be empty.
+
 
 #### Channel off-chain update
 
