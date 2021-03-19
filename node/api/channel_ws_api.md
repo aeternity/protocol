@@ -7,6 +7,7 @@ The WebSocket API provides the following actions:
  * [Off-chain update](#update)
  * [On-chain deposit](#deposit)
  * [On-chain withdrawal](#withdrawal)
+ * [Assume-minimum-depth](#assume-minimum-depth)
  * [Contracts](#contracts)
  * [Generic message](#generic-message)
  * [Close mutual](#close-mutual)
@@ -514,6 +515,26 @@ Roles:
   "method": "channels.withdraw_ack",
   "params": {
     "signed_tx": "tx_+LwLAf..."
+  }
+}
+```
+
+## Assume Minimum Depth
+ * **method:** `channels.assume_minimum_depth`
+ * **params:**
+
+ | Name | Type | Description | Required |
+ | ---- | ---- | ----------- | -------- |
+ | tx_hash | string | The on-chain hash of related transaction | yes |
+
+#### Example
+```javascript
+{
+  "id": -576460752303421693,
+  "jsonrpc": "2.0",
+  "method": "channels.assume_minimum_depth",
+  "params": {
+    "tx_hash": "th_2ERU4LEe8Bn8x1iuw9vSh7iHys9t8zwt3Nq2oz5GQj9pAu9pur"
   }
 }
 ```

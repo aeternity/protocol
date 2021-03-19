@@ -2804,6 +2804,92 @@ are the ones considered latest from the channel's perspective. For example the
 next correct off-chain update/deposit/withdrawal shall have a withdraw
 transaction's `round` plus one.
 
+### Bypassing minimum-depth wait
+In some cases, it can be desirable to get started using the channel directly after
+having posted a `create_tx`, `deposit_tx` or `withdraw_tx` transaction, rather
+than remaining blocked, waiting for the prescribed number of keyblocks. A way to
+do this is for the client to call the `channels.assume_minimum_depth` method,
+once the `on_chain_tx` event has been received. This will instruct the FSM to proceed
+_as if_ the minimum-depth confirmation has already arrived. When the actual confirmation
+arrives, it will be reported in a separate message.
+
+#### Example
+
+After opening a channel and producing a co-authenticated `channel_create_tx`,
+the client waits for a `channel_changed` info report, signifying that the tx
+has appeared on-chain. Normally, this would be followed by the clients waiting
+for a desired number of keyblocks.
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_2CzbXD38sjii5eM1nMLtASBvtpKgfUGJSp3MofesFH5DWro8GJ",
+    "data": {
+      "info": "channel_changed",
+      "tx": "tx_+QEOCwH4hLhAAT1wO6X1XimqSjJgXD2tALoWktcOgWBXvAOPDo5Ul2rBfWPOPkC99JQAO7b8KwPSr7ZMOEilhptPNEWYVqLdBLhAxw3skqCjhCvxm4jwDYZRZ8M/f2QDOuj16uaTYJn9Qx1yvqflv8NcN2Ar++LbxXd2U5QCQnzxRIB1TsNDSG5aCbiE+IIyAqEBwTH0kjbcqZ+kfS4/13ElgHQNj5dEpvgNJ435icc0A0aGP6olImAAoQETPZyIkZzGtspz/mXN+8wG21WBqvpLmWG2islKR7Wj/4YkYTnKgAACCgCGEAsh7xAAwMCgl7VwZbmxRowzuAvo4zydNYlj7gf1bucgNsvexNxbwzoBOeX7Rg==",
+      "type": "channel_create_tx"
+    }
+  },
+  "version": 1
+}
+```
+If a client decides that it doesn't want to wait for final confirmation, it can call
+the `channels.assume_minimum_depth` method:
+
+```javascript
+{
+  "id": -576460752303421693,
+  "jsonrpc": "2.0",
+  "method": "channels.assume_minimum_depth",
+  "params": {
+    "tx_hash": "th_2ERU4LEe8Bn8x1iuw9vSh7iHys9t8zwt3Nq2oz5GQj9pAu9pur"
+  }
+}
+```
+
+This will cause the FSM to proceed as if it had received a minimum_depth event,
+and send an `own_funding_locked` report.
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_2CzbXD38sjii5eM1nMLtASBvtpKgfUGJSp3MofesFH5DWro8GJ",
+    "data": {
+      "event": "own_funding_locked"
+    }
+  },
+  "version": 1
+}
+```
+
+Note that since each client independently waits for minimum depth, the channel
+activity can proceed only as soon as both clients have either received minimum
+depth confirmation, or selected to defer it.
+
+Once the minimum depth event arrives, the FSM will issue a special info report,
+annotated with a notice stating that minimum depth was already assumed.
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_2CzbXD38sjii5eM1nMLtASBvtpKgfUGJSp3MofesFH5DWro8GJ",
+    "data": {
+      "event": "minimum_depth_achieved",
+      "notice": "already_assumed",
+      "tx_hash": "th_2ERU4LEe8Bn8x1iuw9vSh7iHys9t8zwt3Nq2oz5GQj9pAu9pur",
+      "tx_type": "channel_create_tx"
+    }
+  },
+  "version": 1
+}
+```
+
 ### Getting state
 At any moment in time any participant can ask one's own FSM for various views of
 the latest channel state. This is to help wallet apps but they shall not trust
