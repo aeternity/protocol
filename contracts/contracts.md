@@ -80,12 +80,11 @@ security issues with the EVM.
 
 For more information see [Aeternity VMs](./contract_vms.md)
 
-## [Sophia: The first contract language](./sophia.md)
+## [Sophia: The first contract language](https://github.com/aeternity/aesophia)
 
-Sophia is a functional Ocaml like language which syntax most resembles that of Reason.
+Sophia is a functional OCaml like language which syntax most resembles that of Reason.
 
 ## [Contract state trees](./contract_state_tree.md)
-
 
 ## [Contract transactions](./contract_transactions.md)
 

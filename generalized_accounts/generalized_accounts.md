@@ -268,7 +268,8 @@ considered invalid.
 The transaction MUST include a signature created by the private key belonging to
 the `owner_id`.
 
-The `auth_fun` is a function hash as described in the [Sophia](../contracts/sophia.md)
+The `auth_fun` is a function hash as described in the 
+[Sophia](https://github.com/aeternity/aesophia/blob/master/docs/sophia.md)
 section.
 
 If valid, the transaction will set the `ga_contract` and `ga_auth_fun` of the
@@ -277,6 +278,7 @@ If valid, the transaction will set the `ga_contract` and `ga_auth_fun` of the
 
 ### `meta_tx`
 
+Before Iris, version 1:
  ```
  Fieldname       Size (bytes)
  -------------- -----
@@ -298,6 +300,26 @@ If valid, the transaction will set the `ga_contract` and `ga_auth_fun` of the
  -------------- -----
 ```
 
+After Iris, version 2:
+ ```
+ Fieldname       Size (bytes)
+ -------------- -----
+| ga_id        | 32  |
+ -------------- -----
+| auth_data    | var |
+ -------------- -----
+| abi_version  | 2   |
+ -------------- -----
+| fee          | var |
+ -------------- -----
+| gas          | var |
+ -------------- -----
+| gas_price    | var |
+ -------------- -----
+| tx           | var |
+ -------------- -----
+```
+
 For the actual wire format please consult the [serialisation](../serializations.md) document.
 
 The semantics of this transaction are similar to the [Call Contract Transaction](../contracts/contract_transactions.md#contract-call-transaction).
@@ -307,8 +329,12 @@ A `meta_tx` is always a call of the `auth_fun` on the contract located at
 
 The `auth_fun` call MUST return true for the `tx` to be considered valid.
 
-The `auth_fun` is a function hash as described in the [Sophia](../contracts/sophia.md)
+The `auth_fun` is a function hash as described in the [Sophia](https://github.com/aeternity/aesophia/blob/master/docs/sophia.md)
 section.
+
+The `ttl` is the maximum block height that could include the transaction. This
+had changed from Iris hardfork and the innermost transaction's `ttl` is being
+used instead.
 
 The `tx`, or inner transaction, MUST be a well formed transaction with nonce set
 to `0`. The `tx` MUST NOT be a `ga_attach_tx` transaction.

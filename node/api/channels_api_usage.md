@@ -67,6 +67,7 @@ expected. The flow is the following:
   * [Channel slash](#channel-slash)
   * [Channel settle](#channel-settle)
 5. [Optionally snapshot](#channel-snapshot)
+6. [Optionally force progress](#force-progress)
 
 There are a some WebSocket events that can occur while the connection is open
 but are not necessarily part of the channel's life cycle.
@@ -302,12 +303,57 @@ connected (press CTRL+C to quit)
 Note the `role=initiator` as it is specific. Note also the `host` and `port`
 values being provided by the `responder`.
 
+### Initial connection indication
+
+Each client receives an `fsm_up` event indicating that a connection has been
+established. Each fsm reveals a unique token which is needed for authentication
+if the client needs to reconnect later. Note that the tokens are unique to each
+respective client.
+
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": null,
+    "data": {
+      "event": "fsm_up",
+      "fsm_id": "ba_14XZqoUZUc9U6RUbvN2iWd+dd5H9xIWYDUyjk6L3NE2MZV2P"
+    }
+  },
+  "version": 1
+}
+```
+
+Note that the channel ID has not yet been created.
+
+
 ### Connection opened messages
 Parties' WebSocket clients receive messages for the opening of the TCP
 connection.
 
+#### Responder connection opened message
+The responder receives the following message, indicating that the protocol
+message `channel_open` has been received by the responder FSM.
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": null,
+    "data": {
+      "event": "channel_open"
+    }
+  },
+  "version": 1
+}
+```
+
 #### Initiator connection opened message
-The initiator receives the following message
+The initiator receives the following message indicating that the
+responder FSM replied with a valid `channel_accept` message.
 
 ```javascript
 {
@@ -323,28 +369,14 @@ The initiator receives the following message
 }
 ```
 
-#### Responder connection opened message
-The responder receives the following message
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.info",
-  "params": {
-    "channel_id": null,
-    "data": {
-      "event": "channel_open"
-    }
-  },
-  "version": 1
-}
-```
 
 ### Create transaction authentication
 The `channel_create_tx` is sent subsequently to both parties and they mutually
 authenticate it. Then it is posted to the chain.
 
 #### Initiator authenticates the tx
-The initiator receives a message containing the unauthenticated transaction
+The initiator receives a message containing the unauthenticated transaction.
+
 ```javascript
 {
   "jsonrpc": "2.0",
@@ -352,7 +384,7 @@ The initiator receives a message containing the unauthenticated transaction
   "params": {
     "channel_id": null,
     "data": {
-      "signed_tx": "tx_+IEyAaEB...",
+      "signed_tx": "tx_+IgLAcC4g...",
       "updates": []
     }
   },
@@ -364,6 +396,7 @@ Initiator is to decode the transaction, inspect its contents, authenticate it, e
 it and then post it back via a WebSocket message:
 ```javascript
 {
+  "id": -576460752303423488,
   "jsonrpc": "2.0",
   "method": "channels.initiator_sign",
   "params": {
@@ -373,14 +406,19 @@ it and then post it back via a WebSocket message:
 ```
 
 #### Responder is informed
-The responder receives the following message
+The responder receives the following message indicating that a valid
+`funding_created` protocol message has been received.
+The on-chain `channel_id` and `fsm_id` are included, and the client
+can use them to reconnect, once it has responded to the signing request.
+
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": null,
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
+      "fsm_id": "ba_M4vTq7zj3l7rRWj56Lyl60P4v6HYM7pbq1OEMXRAIkHrCXJQ",
       "event": "funding_created"
     }
   },
@@ -389,13 +427,16 @@ The responder receives the following message
 ```
 
 #### Responder authenticates the tx
-After being informed for the initiator's authentication, the responder receives a message containing the solo-authenticated transaction to be co-authenticated by her as well
+After being informed for the initiator's authentication, the responder receives a
+message containing the solo-authenticated transaction to be co-authenticated by her
+as well.
+
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.sign.responder_sign",
   "params": {
-    "channel_id": null,
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
       "signed_tx": "tx_+MsLAfhCu...",
       "updates": []
@@ -412,24 +453,30 @@ it back via a WebSocket message:
 
 ```javascript
 {
+  "id": -576460752303423487,
   "jsonrpc": "2.0",
   "method": "channels.responder_sign",
   "params": {
-    "signed_tx": "tx_+MsLAfhCP4...",
+    "signed_tx": "tx_+QENCwH4h..."
   }
 }
 ```
 
 #### Initiator is informed
-The initiator receives the following message
+The initiator receives the following message, indicating that the FSM
+has received a co-signed `create_tx` object. Since this is the first
+report to the initiator where the on-chain channel ID is guaranteed to
+be known, the `fsm_id` is also included for convenience.
+
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": null,
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
-      "event": "funding_signed"
+      "event": "funding_signed",
+      "fsm_id": "ba_14XZqoUZUc9U6RUbvN2iWd+dd5H9xIWYDUyjk6L3NE2MZV2P"
     }
   },
   "version": 1
@@ -446,29 +493,10 @@ initiator to push the co-authenticed transaction to the mempool:
   "jsonrpc": "2.0",
   "method": "channels.on_chain_tx",
   "params": {
-    "channel_id": null,
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
       "info": "funding_created",
-      "tx": "tx_+MsLAfhCP4...",
-      "type": "channel_create_tx"
-    }
-  },
-  "version": 1
-}
-```
-
-The initiator FSM reports to its client that it received the co-authenticated
-`channel_create_tx` from the responder:
-
-```javascript
-{
-  "jsonrpc": "2.0",
-  "method": "channels.on_chain_tx",
-  "params": {
-    "channel_id": null,
-    "data": {
-      "info": "funding_signed",
-      "tx": "tx_+MsLAfhCP4...",
+      "tx": "tx_+QENCwH4h...",
       "type": "channel_create_tx"
     }
   },
@@ -487,15 +515,16 @@ if the `block_hash` is `none` - then the transaction is still in the mempool.
 #### Transaction detected on-chain
 Once the transaction is picked up by a miner and included in a block, the FSMs will detect it and report
 a `channel_changed` event in an `on_chain_tx` report:
+
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.on_chain_tx",
   "params": {
-    "channel_id": null,
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
-      "info": "channel_changed",
-      "tx": "tx_+QENCwH4hLhAKOlyL6Y5R1OgoyQ8+8QdDya72IT479ncEFi7BnPO3zMyE4N/E54E2heF3g8aCYirv/ajwxB5DIDn2cdEF6h6ALhA2ILrieAe4Y8a+0lfSwmN+ddIv6gPX0xfMyX4RpQ7BRZoINayCRQNOxGci9v2J7to+CSYNJQEYzBXcSTclpoXCbiD+IEyAaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGP6olImAAoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhIYkYTnKgAACCgCGG0jrV+AAwKCjPk7CXWjSHTO8V2Y9WTad6D/5sB8yCR8WumWh0WxWvwMXN1eS",
+      "info": "funding_signed",
+      "tx": "tx_+QENCwH4h...",
       "type": "channel_create_tx"
     }
   },
@@ -514,7 +543,7 @@ An update from one's own node that the block height needed is reached:
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
       "event": "own_funding_locked"
     }
@@ -530,7 +559,7 @@ height needed is reached:
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
       "event": "funding_locked"
     }
@@ -551,7 +580,7 @@ After both parties have mutually authenticated the state update both of them wil
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
       "event": "open"
     }
@@ -571,9 +600,9 @@ present the initial off-chain state:
   "jsonrpc": "2.0",
   "method": "channels.update",
   "params": {
-    "channel_id": "ch_2Jkzb1BVaA888pdNgxoBjJWQKCMiJRxjLbG972dH6cSC3ULwGK",
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
     "data": {
-      "state": "tx_+QENCwH4hLhAKOlyL6Y5R1OgoyQ8+8QdDya72IT479ncEFi7BnPO3zMyE4N/E54E2heF3g8aCYirv/ajwxB5DIDn2cdEF6h6ALhA2ILrieAe4Y8a+0lfSwmN+ddIv6gPX0xfMyX4RpQ7BRZoINayCRQNOxGci9v2J7to+CSYNJQEYzBXcSTclpoXCbiD+IEyAaEBsbV3vNMnyznlXmwCa9anShs13mwGUMSuUe+rdZ5BW2aGP6olImAAoQFnHFVGRklFdbK0lPZRaCFxBmPYSJPN0tI2A3pUwz7uhIYkYTnKgAACCgCGG0jrV+AAwKCjPk7CXWjSHTO8V2Y9WTad6D/5sB8yCR8WumWh0WxWvwMXN1eS"
+      "state": "tx_+QENCwH4h..."
     }
   },
   "version": 1
@@ -582,28 +611,50 @@ present the initial off-chain state:
 
 ### Client reconnect
 Once the `channel_create_tx` has been signed, the client Websocket connection may close
-without causing the FSM to terminate. The client may reconnect by signing a special
-`channel_client_reconnect_tx` transaction, partly to identify the right FSM instance
-to connect to, and partly to prove identity. The transaction has the following structure:
+without causing the FSM to terminate. The client can reconnect using the
+[`reestablish`](#reestablish) method described below.
 
- | Name | Type | Description |
- | ---- | ---- | ----------- |
- | channel id | string | ID of the channel |
- | round | integer | Must be higher than at the last reconnect |
- | role | string | Role of the instance (initiator or responder) |
- | pub key | string | Public key of the client |
+The node will try to locate the FSM using these parameters and reconnect.
+The FSM will check the `fsm_id` token for authentication. If the FSM is not
+running, a full reestablish is attempted.
 
-Information about serialization can be found [here](../../serializations.md#channel-client-reconnect-transaction).
+Although it is possible to disconnect and reconnect once the signing request has been
+answered, the initiator FSM is not guaranteed to know the channel ID at the time of
+sending the initial signing request. If the initiator is a Generalized Account, the
+channel ID depends in part on the initiator authentication. The initiator client
+could derive the channel ID from its authenticated `channel_create_tx`, but
+otherwise, it will be informed of the channel ID and (again) the FSM ID in the
+later `funding_signed` message, once the responder client has also authenticated
+the `channel_create_tx`. The responder receives the channel and FSM IDs in the
+`funding_created` report, and can use them to reconnect after signing the
+`channel_create_tx`.
 
-After signing the reconnect transaction, the client connects using the parameters `protocol`
-and `reconnect_tx` as illustrated below. Note that the `reconnect_tx` parameter uses a
-serialized transaction.
+The initiator opens a new WebSocket connection, passing the existing channel and FSM IDs.
 
 ```
-$ wscat --connect 'localhost:3014/channel?protocol=json-rpc&reconnect_tx=tx_%2BJ0LAfhCuECD0kyElzq1A4bRqUUlIvwqo3UpNLZr07K6f6ZzCMjOY6nVLowEyewiEfDOGu0yy%2BrS2pSOWZzumSKLpNAOwQsBuFX4U4ICPwGhBiPYP7m2R8Z36J9C1yWyKO6C0GoclMWjkh8mGyYcwiNkAYlpbml0aWF0b3KhARZ7k%2B1MUXursizzqkphuO8bCDRo8DrnsRvekHG5Ry3bV0P6XA%3D%3D'
+$ wscat 'localhost:3014/channel?existing_channel_id=ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL&existing_fsm_id=ba_14XZqoUZUc9U6RUbvN2iWd%2Bdd5H9xIWYDUyjk6L3NE2MZV2P&host=localhost&port=13179&protocol=json-rpc&role=initiator'
 
 connected (press CTRL+C to quit)
 ```
+
+In response to a reconnect/reestablish, the client will always receive an `fsm_up`
+indication with a new `fsm_id` needed for the next reconnect/reestablish.
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_KrnFPd2vqBEFeYupgCxXLWMqtDFwzSCyar9v7U6YHdNC7QzcL",
+    "data": {
+      "event": "fsm_up",
+      "fsm_id": "ba_h2NTyK/L2OAXhJnl/sodLTWmZ3g262T4lFTPTwlz84JZswRW"
+    }
+  },
+  "version": 1
+}
+```
+
 
 While the client is disconnected, the corresponding FSM will reject any
 protocol request that requires signing. An attempt to reconnect to an FSM that
@@ -624,7 +675,7 @@ received corresponding `channels.update` messages:
   "params": {
     "channel_id": "ch_2qHR2iopmhCpRq1NYKcqXkAM4ydhKrqCiwyNushZrH94L6TQ4r",
     "data": {
-      "state": "tx_+QENCwH4hLhAqJaduFrTCqaxqF9uEDPVbd6nkl/cLzuNqQo4n7Unc9SZK8uWVyRTvbPL8AP4Zo/c9giz5ip9Au7qyGmoNRRhD7hAuur2dr0f4rmoiYQaJn51XGm26ksdM6UdCTGJcJSoPXNT9qaWKdiT/1uDXhUuv6L92JlkWPoqNdxAgoZgGozdDriD+IEyAaEBczX34JBR7Jaa9oTSdI0jePPWlUuTx7E0OO/D32FaT2CGP6olImAAoQECgVxNp3bgfaAQOCDBXtlM1JpBTJJK4MgaN+bFPvE9VoYkYTnKgAACCgCGEAZ510gAwKB7Hn2psAENZRcUm0kl3cMq7J6YaBSioPNTsxFw3H8aFAHEJFnz"
+      "state": "tx_+QENCwH4h..."
     }
   },
   "version": 1
@@ -1395,11 +1446,15 @@ done by simply disconnecting, or by sending a `'leave'` request. When receving
 a leave request, the channel FSM passes it on to the peer FSM, reports the
 current mutually authenticated state and then terminates. The `'reestablish'` request
 is very similar to a [Channel open](#channel-open) request, but also requires
-the channel id and the latest mutually authenticated state.
+the channel id and the latest mutually authenticated state. For authentication,
+a unique token called an `fsm_id` also needs to be provided
+See [initial connection indication](#initial-connection-indication) on how the
+`fsm_id` is communicated.
 
-The full state, including state trees, is cached internally by the Aeternity
-node, and upon reestablish, it is verified that the encoded state provided
-by the client corresponds to the latest full state retrieved from the cache.
+The full state, including state trees, is cached in encrypted form internally
+by the Aeternity node, and upon reestablish, it is verified that the encoded
+state provided by the client corresponds to the latest full state retrieved from
+the cache.
 
 ### Leave request
 Example:
@@ -1427,23 +1482,42 @@ The FSM responds with the following type of report:
 ```
 
 ### Reestablish
-Open the channel in the same way as in the
+Open the channel in a similar way as in the
 [Initiator WebSocket open](#initiator-websocket-open) example,
-adding the parameters `existing_channel_id` and `offchain_tx` with values
-matching the ones provided in the `leave` report above. Some parameters (related to open transaction) are not required and ignored. See [Channel parameters](#channel-parameters):
+providing the parameters `existing_channel_id` and `fsm_id` with values matching
+the ones provided in previous signing requests and reports (note that the latest
+unique `fsm_id` must be used.)
 
 ```
-$ wscat --connect
-localhost:3014/channel?existing_channel_id=ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR&host=localhost&offchain_tx=tx_%2BQENCwH4h...&port=12341&protocol=json-rpc&role=initiator
+$ wscat --connect localhost:3014/channel?existing_channel_id=ch_qbM3mAio9VyqU3GLhjWmdcg3H5gbrTJhaMYCokik7CbeHghWS&existing_fsm_id=ba_RtzmxPbVqyDrXjPcY3OP%2FU2YdlpWonF%2BcVIEYEH01%2BFQ1AI7&port=13180&protocol=json-rpc&role=responder
 ```
 
 The channel FSM responds with the following event reports if all goes well:
+
+An `fsm_up` event indicating that the FSM is running, and a new `fsm_id`
+has been created:
 ```javascript
 {
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": null,
+    "channel_id": "ch_qbM3mAio9VyqU3GLhjWmdcg3H5gbrTJhaMYCokik7CbeHghWS",
+    "data": {
+      "event": "fsm_up",
+      "fsm_id": "ba_gvH8dUxre/htCqdWWxJS6YkBBx4l5Q41noArQf35tCDsB7ZO"
+    }
+  },
+  "version": 1
+}
+```
+
+A report indicating that the `reestablish` handshake succeeded:
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.info",
+  "params": {
+    "channel_id": "ch_qbM3mAio9VyqU3GLhjWmdcg3H5gbrTJhaMYCokik7CbeHghWS",
     "data": {
       "event": "channel_reestablished"
     }
@@ -1458,7 +1532,7 @@ then the standard report indicating that the channel is open:
   "jsonrpc": "2.0",
   "method": "channels.info",
   "params": {
-    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "channel_id": "ch_qbM3mAio9VyqU3GLhjWmdcg3H5gbrTJhaMYCokik7CbeHghWS",
     "data": {
       "event": "open"
     }
@@ -1473,14 +1547,15 @@ followed by an update report with the latest mutually authenticated state:
   "jsonrpc": "2.0",
   "method": "channels.update",
   "params": {
-    "channel_id": "ch_s8RwBYpaPCPvUxvDsoLxH9KTgSV6EPGNjSYHfpbb4BL4qudgR",
+    "channel_id": "ch_qbM3mAio9VyqU3GLhjWmdcg3H5gbrTJhaMYCokik7CbeHghWS",
     "data": {
-      "state": "tx_+QENCwH4..."
+      "state": "tx_+QENCwH4hLhAGi4f1QWVwvBlk2kk+CN3ELiNe6Own36tLwarvqpo2brJlkYdX0gj1VB4B/eqFcYfDWSo1AMsJ0oKQy3AWt/QCrhAPuqasfg0X10mndNxgG75y2QxUm//mYT13c1vp5aSJYX4+xTYfBV8SxZD36M9rNBx1/9/CAfUL4YYdg3GX5JmAbiD+IEyAaEBE7TIKkriBfmYFubsoRmC9dCOrNzIF2Uou0YIXPBsLoGGP6olImAAoQEJFbpig3RT+UOpwl8CyzLXDoK0biVPpJ6fhnl+trcT3IYkYTnKgAACCgCGEAZ510gAwKB9oftkV6lyU0PDMM7T0DutPgGd6CZ2st1XJiEM6z01rhXYqWnL"
     }
   },
   "version": 1
 }
 ```
+
 
 ## Channel mutual close
 At any moment after the channel is opened, a closing procedure can be
@@ -1781,7 +1856,7 @@ that is not based on the latest off-chain state, our FSM informs us about it
     "data": {
       "info": "can_slash",
       "tx": "tx_+NILAfiEuEBCNNHFxu/R+ypbtOCh7BrA+oFrAYYHzhZTR8BmTOgO2yYKd7lXwU7+xlfvD3Mu9dEeVp1T1aVuH8UPk/7wU9UMuECR/+7ZaF0OqeiRuRVkjsd2aEynOBmBk+tFETlA5H/jNIVB2A1RbKDe8yHGBWpUbWZzLnPXK+pl1Wkml094WxUAuEj4RjkCoQYfhMxkEg4U4IPqO0HIxeove0RQjLQ6xewjm9BZLWhckwKgKhvZeiagtdVqx9aMKxKhw8+hK5cMrAWcpuiI9OVBfAcDKgN0",
-      "type": "channel_offchain_tx"
+      "type": "channel_close_solo_tx"
     }
   },
   "version": 1
@@ -2073,9 +2148,11 @@ the WebSocket connection:
 
 #### Update error
 
-Updates are not always successful, for example one participant tries to spend
-more tokens that one currently has in the channel's balance. This diverges
-from the update flow [described above](#channel-off-chain-update).
+Newly requested updates are not always successful. For example one participant
+tries to spend more tokens that one currently has in the channel's balance.
+Another would be a participant initiating an update while the other
+participant had already proposed a different one. This diverges from the
+update flow [described above](#channel-off-chain-update).
 
 Example message for when the `from` does not have enough tokens to spend
 ```javascript
@@ -2117,6 +2194,23 @@ sent. Possible error reasons are:
 
 * `Invalid pubkeys` - at least one of the addresses in the `update` event is
   not present in the channel.
+
+* `Contract init failed` - when the update introduces a new contract to the
+  off-chain state trees and the init function fails
+
+* `Not a number` - when an argument that is expected to be a number is not a
+  number but rather some other data type, ex. a string
+
+* `Broken encoding: account pubkey` or `Broken encoding: contract pubkey` when
+  the update contains a broken encoding of an account or contract pubkey
+
+* `Broken encoding: contract bytearray` - when the provided bytearray has a
+  broken encoding
+
+* `Conflict` - when the other participant had already proposed a new update
+  and instead of authenticating it or rejecting it, our client initiates
+  another update. It fails with this error and then the [update
+  conflict](#update-conflict) messages are sent to both participants.
 
 #### Update conflict
 
@@ -2161,6 +2255,7 @@ authentications are required for them:
   * `channel_slash_tx`
   * `channel_settle_tx`
   * `channel_snapshot_tx`
+  * `channel_force_progress_tx`
 * mutually authenticated transactions - all the rest
 
 When a client is prompted to authenticate an update, it is expected to either
@@ -3154,13 +3249,39 @@ Where `channel_id` has the correct value of the channel's ID.
 Every once and a while a participant might feel the urge to post the latest
 channel off-chain state on-chain. That would protect them from malicious
 actions from the other party, namely unilaterally closing the channel with an
-older state. This can be prevented by posting a `channel_snapshot_solo_tx`
-transaction on-chain containing the latest co-authenticated off-chain state -
-this guarantees that an older state can not make it on-chain.
+older state. Another use case would be disputing an on-chain
+`channel_force_progress_tx` that is based on an older state. This can be
+prevented by posting a `channel_snapshot_solo_tx` transaction on-chain
+containing the latest co-authenticated off-chain state - this guarantees that
+an older state can not make it on-chain or, in the case of forced progress,
+it will be replaced.
 
 It is worth mentioning that if the latest off-chain state is already present
 on-chain, the snapshot transaction would not provide any new information
 on-chain, so it would fail to be included in the blockchain.
+
+If the channel is not yet closing and a malicious `channel_force_progress_tx`
+transaction is included on-chain, the client gets notified. The malicious
+forced progress transaction would be one based upon an off-chain state
+older than the latest one.
+The report declares that a snapshot could dispute the malicious on-chain transaction.
+dispute the malicious on-chain transaction.
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_Et72swxcKCAJ8KzUDm17X1Ukuo6W7516WfYDPdUoTYpArCdfQ",
+    "data": {
+      "info": "can_snapshot",
+      "tx": "tx_+NILAf....",
+      "type": "channel_force_progress_tx"
+    }
+  },
+  "version": 1
+}
+```
 
 #### Snapshotter inittiates a snapshot solo 
 
@@ -3236,3 +3357,140 @@ them, one could send a `channel_snapshot_solo_tx` as well. The one with the high
 `round` will replace the other and all force-progressed states that had been
 based on the older state.
 
+## Force progress
+
+The biggest strength of State Channels lies in having fast and cheap off-chain
+contract execution. This imposes a risk, though: if the other party suddenly
+becomes non-cooperative or simply missing, a new off-chain state can not be
+produced. This is where the `channel_force_progress_tx` transaction comes in.
+It allows any of the participants to unilaterally execute an off-chain contract
+on-chain. This produces the next State Channel off-chain state on-chain.
+
+A channel force progress transaction is based on the latest co-authenticated
+state. It provides off-chain state trees on-chain. They contain the contract
+to be executed and all the context needed for the execution itself. This
+breaks the assumption of off-chain privacy. If successful, the
+`channel_force_progress_tx` transaction produces on-chain the next off-chain
+state. That's why it also contains the next `round` and the next `state_hash`.
+The latter is the result of applying the off-chain contract call to the
+off-chain state trees.
+
+A force progress transaction can be used while the channel is being closed or
+while it is still open. The assumption is that if one participant refuses to cooperate,
+if the other produces the next forced progress state on-chain, there is no
+going back. From then on they could continue either cooperating or they could
+close the channel. In both cases, they use the on-chain produced off-chain
+state.
+
+The `channel_force_progress_tx` transaction could be a challenge to get right.
+The FSM handles this for the client and from a client's perspective it looks
+like the off-chain contract call. The only difference is that with
+`channel_force_progress_tx` the `gas_price` is mandatory. It is used
+both in the contract call execution and the transaction's `fee` computation.
+
+#### Forcer inittiates a forced progress
+
+Any participant can initiate a forced progress by:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.force_progress",
+  "params": {
+    "abi_version":1,
+    "amount":10,
+    "call_data":"cb_AAAAA...",
+    "contract_id":"ct_5XjcY...",
+    "gas_price":1000000000
+  }
+}
+```
+Except of the `gas_price`, all other `params` correspond to those in a
+`call_contract` off-chain update. The reasoning is quite trivial: if the other
+participant refuses a valid off-chain contract call, the other participant can
+use the very same arguments, add an actual `gas_price` and produce the
+`channel_force_progress_tx`.
+
+#### Forcer authenticates the force progress transaction
+
+After the `channel_force_progress_tx` has been requested, the FSM prompts the
+client to sign it with:
+
+```javascript
+{ 
+   "jsonrpc":"2.0",
+   "method":"channels.sign.force_progress_tx",
+   "params":{ 
+      "channel_id":"ch_2FdiLKkRUdPw4oTRbB6i3M6pquogzWLABQjU373hizDbnD8gGC",
+      "data":{ 
+         "signed_tx":"tx_+Qi9CwHAuQ....",
+         "updates":[ 
+            { 
+               "abi_version":1,
+               "amount":10,
+               "call_data":"cb_AAAAAAA...",
+               "call_stack":[ 
+
+               ],
+               "caller_id":"ak_Vu1cG...",
+               "contract_id":"ct_55C...",
+               "gas":1000000,
+               "gas_price":1000000000,
+               "op":"OffChainCallContract"
+            }
+         ]
+      }
+   },
+   "version":1
+}
+```
+
+Note that the `updates` that comes with the `channel_force_progress_tx` is the
+same as it would be if it were an off-chain `call_contract`.
+
+The forcer is to decode the transaction, inspect its contents, authenticate
+it, encode it and then post it back via a WebSocket message:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.force_progress_sign",
+  "params": {
+    "signed_tx": "tx_+QFxCwH4QrhA..."
+  }
+}
+```
+
+The FSM is to check the transaction and its authentication and then post it
+on the forcer's behalf on-chain. Once it detects it being included
+on-chain, it reports it:
+
+```javascript
+{
+  "jsonrpc": "2.0",
+  "method": "channels.on_chain_tx",
+  "params": {
+    "channel_id": "ch_2eiGsAvt...",
+    "data": {
+      "info": "channel_changed",
+      "tx": "tx_+QFxCwH4QrhA...",
+      "type": "channel_force_progress_tx"
+    }
+  },
+  "version": 1
+}
+```
+
+The other participant's FSM will also notify its client that it has seen a new
+transaction in a microblock, changing the channel on-chain.
+
+An interesting edge case would be one participant producing a force progress based on
+a state that was valid at some point of time but is not the latest one. This is
+considered to be a cheating attempt. The cheating party can try outgrowing the
+off-chain state with a couple of `channel_force_progress_tx` transactions at
+the end producing on-chain a `round` that is greater than the last one
+produced off-chain. If the other participant provides a transaction that was
+based on a yet newer off-chain state than the one the chain of forced
+progressed transactions was based on, the latter are discared althogether.
+With unilaterally forced progress it is not the latest `round` that matters
+but rather the latest co-authenticated one they were all based upon.

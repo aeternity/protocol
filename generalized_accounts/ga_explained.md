@@ -51,7 +51,8 @@ hashed. Then comes the different part - now the *transaction hash*, and a
 secured in some way. This is where *generic* comes in, anything that can be
 produced and then later checked in the authentication contract (in a safe way!)
 can be used. The resulting artifact should be a piece of contract
-[Calldata](../contracts/sophia.md#initialization). Finally, in order to post
+[Calldata](../contracts/aevm.md#initialization).
+Finally, in order to post
 the GA signed transaction to the transaction mempool, we have to prepare a
 *GAMetaTX*, containing the serialized transaction and the calldata (and gas,
 gas price, etc.)
