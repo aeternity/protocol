@@ -421,6 +421,8 @@ If the value is the empty binary the key is pruned from the tree.
 
 The content of the contract store depends on [the ABI and the VM version](/contracts/contract_vms.md).
 
+From FATE VM version 2 stored code is the same as from the coresponding contract create operation. FATE VM version 1 contracts are stored without init function. Only way to check init function of a FATE v1 deployed contract is to look at the Contract create transaction.
+
 #### Contract call
 ```
 [ <caller_id>        :: id()
