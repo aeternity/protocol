@@ -272,8 +272,8 @@ If this transaction is valid then it sets:
 In order to make channels both secure and trustless even when one party goes
 offline, a participant can deleate the right to produce certain transactions
 to other third parties.
-Delegates are set initially in the `channel_create_tx` and since `iris`
-hardfork can be updated with `channel_set_delegates_tx`. It acts similarly to
+Delegates are set initially in the `channel_create_tx` and, since the `iris`
+hardfork, can be updated with `channel_set_delegates_tx`. It acts similarly to
 `channel_snapshot_solo_tx` with three notable differences:
 
 * While `channel_snapshot_solo_tx` can be based only on off-chain state,
@@ -281,11 +281,11 @@ hardfork can be updated with `channel_set_delegates_tx`. It acts similarly to
   on-chain state. In the latter case the `payload` provided is empty.
 
 * `channel_set_delegates_tx` is mutually agreed upon. If the other participant
-  does not want to approve such transaction, this could be a clear sign that
+  does not want to approve such a transaction, this could be a clear sign that
   the assumption of cooperation is broken.
 
-* `channel_set_delegates_tx` not only updates on-chain channel object
-  but also sets the list of delegate ids per participant. The old lists of
+* `channel_set_delegates_tx` not only updates the on-chain channel object
+  but also sets the list of delegate ids for each participant. The old lists of
   delegates are deleted and the new ones provided by the transaction replace
   them. There is no option for setting the list just for one participant.
 
@@ -294,14 +294,14 @@ Serialization defined [here](../serializations.md#channel-set-delegates-transact
 - `channel_id`: channel id as recorded on-chain
 - `from_id`: the account that posts the transaction
 - `initiator_delegate_ids`: the list of delegates that can provide
-  transactions from behalf of the `initiator`
+  transactions on behalf of the `initiator`
 - `responder_delegate_ids`: the list of delegates that can provide
-  transactions from behalf of the `responder`
+  transactions on behalf of the `responder`
 - `payload`: an off-chain transaction of the same channel authenticated
   by both parties. It could be empty
-- `state_hash`: the hash of the payload if provided and if not - the latest
+- `state_hash`: the hash of the payload, if provided - and if not, the latest
   provided on-chain `state_hash`
-- `round`: the hash of the payload if provided and if not - the latest
+- `round`: the hash of the payload, if provided - and if not, the latest
   provided on-chain `round`
 - `ttl`: blockheight target until which this transaction can be included
 - `fee`: transaction fee
