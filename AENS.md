@@ -473,6 +473,11 @@ The `pointers` field SHOULD NOT contain multiple entries with the same key.
 The `pointers` can point to one of: account address, oracle id,
 channel id or contract id.
 
+From Iris hardfork, the following limitations on pointers apply:
+  - No duplicate keys (a key can only be present once in a list of pointers).
+  - Keys are not longer than 256 bytes
+  - The list of pointers is not longer than 32.
+
 #### Transfer
 
 ```
