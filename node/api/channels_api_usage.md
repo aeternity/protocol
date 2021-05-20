@@ -188,6 +188,7 @@ will describe these in groups which indicate their relation to each other.
   | host | string | host of the `responder`'s node| Yes if `role=initiator` | No | No | No |
   | port | integer | the port of the `responder`s node| Yes if `role=initiator` | No | No | No |
   | role | string | the role of the client - either `initiator` or `responder` | Yes | Yes | No |
+  | minimum_depth_strategy | string | How to calculate minimum depth - either `txfee` (default) or `plain` | No | No | No |
   | minimum_depth | integer | the minimum amount of blocks to be mined | No | No | No |
   | fee | integer | the fee to be used for the channel open transaction | No | No | Yes |
   | gas_price | integer | the gas_price to be used for the fee computation of the channel open transaction | No | No | Yes |
@@ -567,6 +568,46 @@ height needed is reached:
   "version": 1
 }
 ```
+
+#### Calculating minimum-depth
+The minimum depth value is dynamically calculated for each on-chain transaction, depending on the values
+of `minimum_depth_strategy` and `minimum_depth` respectively. For the `plain` strategy, the minimum
+depth value is simply set to the value of the `minimum_depth` parameter. While this is straightforward,
+the confirmation time will be the same regardless of the value of the transaction.
+
+If the strategy is `txfee` (the default), the value of `minimum_depth` is interpreted as a `Factor`
+(default: `10`), where:
+
+* If `Factor = 0`, all on-chain interactions will have `MinimumDepth = 1`
+* If `Factor > 0`, `MinDepth` = (`TxFee` / `MinimumGasPrice`)<sup>(`1` / `MinDepthFactor`)</sup>
+
+As an example, assuming the default `MinimumGasPrice = 1 000 000 000`:
+
+**With Factor == 1**
+|            Fee| Min-depth
+|---------------| ---------
+|     1000000000| 1
+|     1500000000| 2
+|     2000000000| 2
+|     3000000000| 3
+
+
+**With Factor == 2**
+|            Fee| Min-depth
+|---------------| ---------
+|     1000000000| 1
+|     6000000000| 3
+|     9000000000| 3
+|    30000000000| 6
+
+**With Factor == 3**
+|            Fee| Min-depth
+|---------------| ---------
+|     1000000000| 1
+|     6000000000| 2
+|     9000000000| 3
+|    30000000000| 4
+
 
 ### Initial state
 After both parties have confirmed that the funding is authenticated - they can proceed
