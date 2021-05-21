@@ -579,7 +579,7 @@ If the strategy is `txfee` (the default), the value of `minimum_depth` is interp
 (default: `10`), where:
 
 * If `Factor = 0`, all on-chain interactions will have `MinimumDepth = 1`
-* If `Factor > 0`, `MinDepth` = (`TxFee` / `MinimumGasPrice`)<sup>(`1` / `MinDepthFactor`)</sup>
+* If `Factor > 0`, `MinDepth` = ceil( (`TxFee` / `MinimumGasPrice`)<sup>(`1` / `MinDepthFactor`)</sup> )
 
 As an example, assuming the default `MinimumGasPrice = 1 000 000 000`:
 
