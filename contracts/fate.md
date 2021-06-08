@@ -542,10 +542,10 @@ Writing to the accumulator pushes a value to the stack.
 | `CHAR_TO_INT` | Arg0 Arg1 | Arg0 := integer representation of UTF-8 character | {char} | int |
 | `CHAR_FROM_INT` | Arg0 Arg1 | Arg0 := Some(UTF-8 character) from integer if valid, None if not valid. | {int} | variant |
 | `CALL_PGR` | Arg0 Identifier Arg2 Arg3 Arg4 Arg5 Arg6 | Potentially protected remote call. Arg5 is protected flag, otherwise as CALL_GR. | {contract,string,typerep,typerep,integer,integer,bool} | variant |
-| `CREATE` | Arg0 Arg1 Arg2 | Deploys a contract with a bytecode Arg1 and value Arg3. The `init` arguments should be placed on the stack and match the type in Arg2. Writes contract address to stack top. | {contract_bytearray,typerep,integer} | contract |
-| `CLONE` | Arg0 Arg1 Arg2 Arg3 | Clones the contract under Arg1 and deploys it with value of Arg3. The `init` arguments should be placed on the stack and match the type in Arg2. Writes contract (or `None` on fail when protected) to stack top. | {contract,typerep,integer,bool} | any |
+| `CREATE` | Arg0 Arg1 Arg2 | Deploys a contract with a bytecode Arg1 and value Arg3. The `init` arguments should be placed on the stack and match the type in Arg2. Writes contract address to the top of the accumulator stack. If an account on the resulting address did exist before the call, the `payable` flag will be updated. | {contract_bytearray,typerep,integer} | contract |
+| `CLONE` | Arg0 Arg1 Arg2 Arg3 | Clones the contract under Arg1 and deploys it with value of Arg3. The `init` arguments should be placed on the stack and match the type in Arg2. Writes contract (or `None` on fail when protected) to the top of the accumulator stack. Does not copy the existing contract's store – it will be initialized by a fresh call to the `init` function. If an account on the resulting address did exist before the call, the `payable` flag will be updated. | {contract,typerep,integer,bool} | any |
 | `CLONE_G` | Arg0 Arg1 Arg2 Arg3 Arg4 | Like `CLONE` but additionally limits gas of `init` call to Arg3 | {contract,typerep,integer,integer,bool} | any |
-| `BYTECODE_HASH` | Arg0 Arg1 | Arg0 := hash of the deserialized contract's bytecode under address given in Arg1 (or `None` on fail). | {contract} | variant |
+| `BYTECODE_HASH` | Arg0 Arg1 | Arg0 := hash of the deserialized contract's bytecode under address given in Arg1 (or `None` on fail). Fails on AEVM contracts and contracts deployed before Iris. | {contract} | variant |
 | `FEE` | Arg0 | Arg0 := The fee for the current call tx. | {} | integer |
 | `DEACTIVATE` |  | Mark the current contract for deactivation. | {} | none |
 | `ABORT` | Arg0 | Abort execution (dont use all gas) with error message in Arg0. | {string} | none |
