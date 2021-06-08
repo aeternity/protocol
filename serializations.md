@@ -1163,143 +1163,181 @@ Instruction ::=
 
 ```
 Opcode ::=
-  0x00 ; 'RETURN'
-| 0x01 ; 'RETURNR'
-| 0x02 ; 'CALL'
-| 0x03 ; 'CALL_R'
-| 0x04 ; 'CALL_T'
-| 0x05 ; 'CALL_GR'
-| 0x06 ; 'JUMP'
-| 0x07 ; 'JUMPIF'
-| 0x08 ; 'SWITCH_V2'
-| 0x09 ; 'SWITCH_V3'
-| 0x0a ; 'SWITCH_VN'
-| 0x0b ; 'CALL_VALUE'
-| 0x0c ; 'PUSH'
-| 0x0d ; 'DUPA'
-| 0x0e ; 'DUP'
-| 0x0f ; 'POP'
-| 0x10 ; 'INCA'
-| 0x11 ; 'INC'
-| 0x12 ; 'DECA'
-| 0x13 ; 'DEC'
-| 0x14 ; 'ADD'
-| 0x15 ; 'SUB'
-| 0x16 ; 'MUL'
-| 0x17 ; 'DIV'
-| 0x18 ; 'MOD'
-| 0x19 ; 'POW'
-| 0x1a ; 'STORE'
-| 0x1b ; 'SHA3'
-| 0x1c ; 'SHA256'
-| 0x1d ; 'BLAKE2B'
-| 0x1e ; 'LT'
-| 0x1f ; 'GT'
-| 0x20 ; 'EQ'
-| 0x21 ; 'ELT'
-| 0x22 ; 'EGT'
-| 0x23 ; 'NEQ'
-| 0x24 ; 'AND'
-| 0x25 ; 'OR'
-| 0x26 ; 'NOT'
-| 0x27 ; 'TUPLE'
-| 0x28 ; 'ELEMENT'
-| 0x29 ; 'SETELEMENT'
-| 0x2a ; 'MAP_EMPTY'
-| 0x2b ; 'MAP_LOOKUP'
-| 0x2c ; 'MAP_LOOKUPD'
-| 0x2d ; 'MAP_UPDATE'
-| 0x2e ; 'MAP_DELETE'
-| 0x2f ; 'MAP_MEMBER'
-| 0x30 ; 'MAP_FROM_LIST'
-| 0x31 ; 'MAP_SIZE'
-| 0x32 ; 'MAP_TO_LIST'
-| 0x33 ; 'IS_NIL'
-| 0x34 ; 'CONS'
-| 0x35 ; 'HD'
-| 0x36 ; 'TL'
-| 0x37 ; 'LENGTH'
-| 0x38 ; 'NIL'
-| 0x39 ; 'APPEND'
-| 0x3a ; 'STR_JOIN'
-| 0x3b ; 'INT_TO_STR'
-| 0x3c ; 'ADDR_TO_STR'
-| 0x3d ; 'STR_REVERSE'
-| 0x3e ; 'STR_LENGTH'
-| 0x3f ; 'BYTES_TO_INT'
-| 0x40 ; 'BYTES_TO_STR'
-| 0x41 ; 'BYTES_CONCAT'
-| 0x42 ; 'BYTES_SPLIT'
-| 0x43 ; 'INT_TO_ADDR'
-| 0x44 ; 'VARIANT'
-| 0x45 ; 'VARIANT_TEST'
-| 0x46 ; 'VARIANT_ELEMENT'
-| 0x47 ; 'BITS_NONEA'
-| 0x48 ; 'BITS_NONE'
-| 0x49 ; 'BITS_ALLA'
-| 0x4a ; 'BITS_ALL'
-| 0x4b ; 'BITS_ALL_N'
-| 0x4c ; 'BITS_SET'
-| 0x4d ; 'BITS_CLEAR'
-| 0x4e ; 'BITS_TEST'
-| 0x4f ; 'BITS_SUM'
-| 0x50 ; 'BITS_OR'
-| 0x51 ; 'BITS_AND'
-| 0x52 ; 'BITS_DIFF'
-| 0x53 ; 'BALANCE'
-| 0x54 ; 'ORIGIN'
-| 0x55 ; 'CALLER'
-| 0x56 ; 'BLOCKHASH'
-| 0x57 ; 'BENEFICIARY'
-| 0x58 ; 'TIMESTAMP'
-| 0x59 ; 'GENERATION'
-| 0x5a ; 'MICROBLOCK'
-| 0x5b ; 'DIFFICULTY'
-| 0x5c ; 'GASLIMIT'
-| 0x5d ; 'GAS'
-| 0x5e ; 'ADDRESS'
-| 0x5f ; 'GASPRICE'
-| 0x60 ; 'LOG0'
-| 0x61 ; 'LOG1'
-| 0x62 ; 'LOG2'
-| 0x63 ; 'LOG3'
-| 0x64 ; 'LOG4'
-| 0x65 ; 'SPEND'
-| 0x66 ; 'ORACLE_REGISTER'
-| 0x67 ; 'ORACLE_QUERY'
-| 0x68 ; 'ORACLE_RESPOND'
-| 0x69 ; 'ORACLE_EXTEND'
-| 0x6a ; 'ORACLE_GET_ANSWER'
-| 0x6b ; 'ORACLE_GET_QUESTION'
-| 0x6c ; 'ORACLE_QUERY_FEE'
-| 0x6d ; 'AENS_RESOLVE'
-| 0x6e ; 'AENS_PRECLAIM'
-| 0x6f ; 'AENS_CLAIM'
-| 0x70 ; 'AENS_UPDATE'
-| 0x71 ; 'AENS_TRANSFER'
-| 0x72 ; 'AENS_REVOKE'
-| 0x73 ; 'BALANCE_OTHER'
-| 0x74 ; 'VERIFY_SIG'
-| 0x75 ; 'VERIFY_SIG_SECP256K1'
-| 0x76 ; 'CONTRACT_TO_ADDRESS'
-| 0x77 ; 'AUTH_TX_HASH'
-| 0x78 ; 'ORACLE_CHECK'
-| 0x79 ; 'ORACLE_CHECK_QUERY'
-| 0x7a ; 'IS_ORACLE'
-| 0x7b ; 'IS_CONTRACT'
-| 0x7c ; 'IS_PAYABLE'
-| 0x7d ; 'CREATOR'
-| 0x7e ; 'ECVERIFY_SECP256K1'
-| 0x7f ; 'ECRECOVER_SECP256K1'
-| 0xfa ; 'DEACTIVATE'
-| 0xfb ; 'ABORT'
-| 0xfc ; 'EXIT'
-| 0xfd ; 'NOP'
-| 0xfe ; 'FUNCTION' only used outside of BBs
-| 0xff ; 'EXTEND' reserved for extending instruction set to two bytes, not used yet.
-
+  0x0 ; `RETURN`
+| 0x1 ; `RETURNR`
+| 0x2 ; `CALL`
+| 0x3 ; `CALL_R`
+| 0x4 ; `CALL_T`
+| 0x5 ; `CALL_GR`
+| 0x6 ; `JUMP`
+| 0x7 ; `JUMPIF`
+| 0x8 ; `SWITCH_V2`
+| 0x9 ; `SWITCH_V3`
+| 0xa ; `SWITCH_VN`
+| 0xb ; `CALL_VALUE`
+| 0xc ; `PUSH`
+| 0xd ; `DUPA`
+| 0xe ; `DUP`
+| 0xf ; `POP`
+| 0x10 ; `INCA`
+| 0x11 ; `INC`
+| 0x12 ; `DECA`
+| 0x13 ; `DEC`
+| 0x14 ; `ADD`
+| 0x15 ; `SUB`
+| 0x16 ; `MUL`
+| 0x17 ; `DIV`
+| 0x18 ; `MOD`
+| 0x19 ; `POW`
+| 0x1a ; `STORE`
+| 0x1b ; `SHA3`
+| 0x1c ; `SHA256`
+| 0x1d ; `BLAKE2B`
+| 0x1e ; `LT`
+| 0x1f ; `GT`
+| 0x20 ; `EQ`
+| 0x21 ; `ELT`
+| 0x22 ; `EGT`
+| 0x23 ; `NEQ`
+| 0x24 ; `AND`
+| 0x25 ; `OR`
+| 0x26 ; `NOT`
+| 0x27 ; `TUPLE`
+| 0x28 ; `ELEMENT`
+| 0x29 ; `SETELEMENT`
+| 0x2a ; `MAP_EMPTY`
+| 0x2b ; `MAP_LOOKUP`
+| 0x2c ; `MAP_LOOKUPD`
+| 0x2d ; `MAP_UPDATE`
+| 0x2e ; `MAP_DELETE`
+| 0x2f ; `MAP_MEMBER`
+| 0x30 ; `MAP_FROM_LIST`
+| 0x31 ; `MAP_SIZE`
+| 0x32 ; `MAP_TO_LIST`
+| 0x33 ; `IS_NIL`
+| 0x34 ; `CONS`
+| 0x35 ; `HD`
+| 0x36 ; `TL`
+| 0x37 ; `LENGTH`
+| 0x38 ; `NIL`
+| 0x39 ; `APPEND`
+| 0x3a ; `STR_JOIN`
+| 0x3b ; `INT_TO_STR`
+| 0x3c ; `ADDR_TO_STR`
+| 0x3d ; `STR_REVERSE`
+| 0x3e ; `STR_LENGTH`
+| 0x3f ; `BYTES_TO_INT`
+| 0x40 ; `BYTES_TO_STR`
+| 0x41 ; `BYTES_CONCAT`
+| 0x42 ; `BYTES_SPLIT`
+| 0x43 ; `INT_TO_ADDR`
+| 0x44 ; `VARIANT`
+| 0x45 ; `VARIANT_TEST`
+| 0x46 ; `VARIANT_ELEMENT`
+| 0x47 ; `BITS_NONEA`
+| 0x48 ; `BITS_NONE`
+| 0x49 ; `BITS_ALLA`
+| 0x4a ; `BITS_ALL`
+| 0x4b ; `BITS_ALL_N`
+| 0x4c ; `BITS_SET`
+| 0x4d ; `BITS_CLEAR`
+| 0x4e ; `BITS_TEST`
+| 0x4f ; `BITS_SUM`
+| 0x50 ; `BITS_OR`
+| 0x51 ; `BITS_AND`
+| 0x52 ; `BITS_DIFF`
+| 0x53 ; `BALANCE`
+| 0x54 ; `ORIGIN`
+| 0x55 ; `CALLER`
+| 0x56 ; `BLOCKHASH`
+| 0x57 ; `BENEFICIARY`
+| 0x58 ; `TIMESTAMP`
+| 0x59 ; `GENERATION`
+| 0x5a ; `MICROBLOCK`
+| 0x5b ; `DIFFICULTY`
+| 0x5c ; `GASLIMIT`
+| 0x5d ; `GAS`
+| 0x5e ; `ADDRESS`
+| 0x5f ; `GASPRICE`
+| 0x60 ; `LOG0`
+| 0x61 ; `LOG1`
+| 0x62 ; `LOG2`
+| 0x63 ; `LOG3`
+| 0x64 ; `LOG4`
+| 0x65 ; `SPEND`
+| 0x66 ; `ORACLE_REGISTER`
+| 0x67 ; `ORACLE_QUERY`
+| 0x68 ; `ORACLE_RESPOND`
+| 0x69 ; `ORACLE_EXTEND`
+| 0x6a ; `ORACLE_GET_ANSWER`
+| 0x6b ; `ORACLE_GET_QUESTION`
+| 0x6c ; `ORACLE_QUERY_FEE`
+| 0x6d ; `AENS_RESOLVE`
+| 0x6e ; `AENS_PRECLAIM`
+| 0x6f ; `AENS_CLAIM`
+| 0x70 ; `AENS_UPDATE`
+| 0x71 ; `AENS_TRANSFER`
+| 0x72 ; `AENS_REVOKE`
+| 0x73 ; `BALANCE_OTHER`
+| 0x74 ; `VERIFY_SIG`
+| 0x75 ; `VERIFY_SIG_SECP256K1`
+| 0x76 ; `CONTRACT_TO_ADDRESS`
+| 0x77 ; `AUTH_TX_HASH`
+| 0x78 ; `ORACLE_CHECK`
+| 0x79 ; `ORACLE_CHECK_QUERY`
+| 0x7a ; `IS_ORACLE`
+| 0x7b ; `IS_CONTRACT`
+| 0x7c ; `IS_PAYABLE`
+| 0x7d ; `CREATOR`
+| 0x7e ; `ECVERIFY_SECP256K1`
+| 0x7f ; `ECRECOVER_SECP256K1`
+| 0x80 ; `ADDRESS_TO_CONTRACT`
+| 0x81 ; `BLS12_381_G1_NEG`
+| 0x82 ; `BLS12_381_G1_NORM`
+| 0x83 ; `BLS12_381_G1_VALID`
+| 0x84 ; `BLS12_381_G1_IS_ZERO`
+| 0x85 ; `BLS12_381_G1_ADD`
+| 0x86 ; `BLS12_381_G1_MUL`
+| 0x87 ; `BLS12_381_G2_NEG`
+| 0x88 ; `BLS12_381_G2_NORM`
+| 0x89 ; `BLS12_381_G2_VALID`
+| 0x8a ; `BLS12_381_G2_IS_ZERO`
+| 0x8b ; `BLS12_381_G2_ADD`
+| 0x8c ; `BLS12_381_G2_MUL`
+| 0x8d ; `BLS12_381_GT_INV`
+| 0x8e ; `BLS12_381_GT_ADD`
+| 0x8f ; `BLS12_381_GT_MUL`
+| 0x90 ; `BLS12_381_GT_POW`
+| 0x91 ; `BLS12_381_GT_IS_ONE`
+| 0x92 ; `BLS12_381_PAIRING`
+| 0x93 ; `BLS12_381_MILLER_LOOP`
+| 0x94 ; `BLS12_381_FINAL_EXP`
+| 0x95 ; `BLS12_381_INT_TO_FR`
+| 0x96 ; `BLS12_381_INT_TO_FP`
+| 0x97 ; `BLS12_381_FR_TO_INT`
+| 0x98 ; `BLS12_381_FP_TO_INT`
+| 0x99 ; `AENS_LOOKUP`
+| 0x9a ; `ORACLE_EXPIRY`
+| 0x9b ; `AUTH_TX`
+| 0x9c ; `STR_TO_LIST`
+| 0x9d ; `STR_FROM_LIST`
+| 0x9e ; `STR_TO_UPPER`
+| 0x9f ; `STR_TO_LOWER`
+| 0xa0 ; `CHAR_TO_INT`
+| 0xa1 ; `CHAR_FROM_INT`
+| 0xa2 ; `CALL_PGR`
+| 0xa3 ; `CREATE`
+| 0xa4 ; `CLONE`
+| 0xa5 ; `CLONE_G`
+| 0xa6 ; `BYTECODE_HASH`
+| 0xa7 ; `FEE`
+| 0xfa ; `DEACTIVATE`
+| 0xfb ; `ABORT`
+| 0xfc ; `EXIT`
+| 0xfd ; `NOP`
+| 0xfe ; `FUNCTION` only used outside of BBs
+| 0xff ; `EXTEND` reserved for extending instruction set to two bytes, not used yet.
 ```
-
 
 ### AddressingMode
 
@@ -1357,6 +1395,7 @@ Data(D) ::=
 | StoreMap
 | Variant
 | Type
+| ContractBytearray
 ```
 
 #### Boolean
@@ -1544,6 +1583,7 @@ Type(T) ::=
 | BytesType(bytes_types_size(T))
 | AnyType
 | VarType(var_type_id(T))
+| ContractBytearrayType
 
 IntegerType      ::= <<< 00000111 >>>
 BooleanType      ::= <<< 00010111 >>>
@@ -1561,9 +1601,19 @@ VariantType(T)   ::= <<< 10000111 >>>, << size(type_arities(T)) >>, VariantTypes
 BytesType(N)     ::= <<< 10010111 >>>, Integer(N)
 AnyType          ::= <<< 11110111 >>>
 VarType(N)       ::= <<< 11100111 >>>, << N >>
+ContractBytearrayType ::= <<< 10100111 >>>
 
 TupleElementTypes(T) ::= < > | Type, TupleElementTypes
 
 VariantTypes(T)      ::= < > | Type, VariantTypes
 
+```
+
+#### ContractBytearray
+
+The function size(S) gives the number of bytes in the byte array.
+
+```
+ContractBytearray ::=
+ <<< 10001111 >>>, Integer(size(S)), S 
 ```
