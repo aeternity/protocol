@@ -392,7 +392,8 @@ The recipient must be one of the following:
 
 #### Contract
 
-For a contract with address `<contractpubkey>`, the fields of the contract object (to which tag and version need to be prepended) are:
+For a contract with address `<contractpubkey>`, the fields of the contract
+object (to which tag and version need to be prepended) are:
 
 ```
 [ <owner>      :: id()
@@ -409,8 +410,9 @@ The log field is always the empty binary.
 
 The balance of the account is stored in the account state tree.
 
-The contract storage (or state) which is a key value map from (key::binary() to value::binary())
-is stored in its own subtree. The key for a contract storage value is:
+The contract storage (or state) which is a key value map from (key::binary() to
+value::binary()) is stored in its own subtree. The key for a contract storage
+value is:
 ```
 <contractpubkey><16><key> :: binary()
 ```
@@ -419,9 +421,13 @@ The `<key>` is non-empty.
 Each value is just stored as a binary as is - without tag or version.
 If the value is the empty binary the key is pruned from the tree.
 
-The content of the contract store depends on [the ABI and the VM version](/contracts/contract_vms.md).
+The content of the contract store depends on [the ABI and the VM
+version](/contracts/contract_vms.md).
 
-From FATE VM version 2 stored code is the same as from the coresponding contract create operation. FATE VM version 1 contracts are stored without init function. Only way to check init function of a FATE v1 deployed contract is to look at the Contract create transaction.
+From FATE VM version 2, stored code is the same as from the corresponding
+contract create operation. FATE VM version 1 contracts are stored without an
+`init` function. The only way to check the `init` function of a FATE v1
+deployed contract is to look at the Contract create transaction.
 
 #### Contract call
 ```

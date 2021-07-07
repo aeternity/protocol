@@ -25,7 +25,7 @@ The current meaning of the VM field is:
 |          05 | [FATE_01](fate.md) | For Sophia contracts using FATE (Lima release) |
 |          06 | [AEVM_04](aevm.md) | Improved AEVM for Sophia, Lima release         |
 |          07 | [FATE_02](fate.md) | For Sophia contracts using FATE (Iris release) |
-|     07-FFFF |                    | UNUSED                                         |
+|     08-FFFF |                    | UNUSED                                         |
 
 The current meaning of the ABI field is:
 
@@ -96,5 +96,6 @@ See [The AEVM](./aevm.md).
   * Crypto pairing operations (BLS12-381)
   * String functions (`to_list`, `from_list`, etc)
   * `AENS.update`, `AENS.lookup`, `Oracle.expire`
+  * `Chain.create`, `Chain.clone`, `Chain.bytecode_hash`, `Call.fee`
 * Bug fixes
 * Gas model adjustments
