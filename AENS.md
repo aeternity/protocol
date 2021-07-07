@@ -123,7 +123,7 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 ### AENS Entry
 
-This is the entry as it should be stored by a node.
+This is the name entry as it should be stored by a node.
 
 ```
   name         size (bytes)
@@ -158,7 +158,36 @@ This can have multiple entries, e.g. a payment address associated
 with the name and an oracle address associated with the name.
 
 
-### Name
+A subname entry (or, subdomain), belongs to a name entry.
+
+The fields **owner**, **expires_by** and **client_ttl** of the
+name entry applies to all subname entries of the name entry.
+
+The lifecycle of subnames are driven by the lifecycle of the name
+they belong to.
+
+Issuing `revoke` or `transfer` transactions on name causes revoking or
+transfering of all of the name's subnames.
+
+When the name enters `unclaimed` state, all of the name's subnames
+are deleted.
+
+Issuing `claim`, `revoke`, `transfer` and `update` transaction where
+subname is provided instead of name causes failure, and such transaction
+is not propagated to other nodes.
+
+The only subname specific fields are **pointers** which can be
+unique for every subname entry.
+
+```
+  name         size (bytes)
+ ------------ ----
+| pointers   |    |
+ ------------ ----
+```
+
+
+### Name and Subname
 
 Names MUST be normalized according to IDNA2008 before hashing, as
 described in [uts-46](https://unicode.org/reports/tr46) and SHOULD
@@ -181,6 +210,11 @@ interoperability with DNS.
 
 ***Note:*** For this first draft names MUST `.test` as a suffix, i.e. `mywallet.test`.
 
+Subnames are subject to the same restriction applied to names, with one
+additional requirement that they MUST contain more than one `.` character
+in their literal presentation.
+
+***Example:*** `subname.topname.test` or `nested-subname.subname.topname.test`.
 
 ### Namespaces/Labels
 
@@ -507,6 +541,39 @@ After the `revoke` transaction has been included in the chain,
 the name enters the `revoked` state. After a fixed timeout of
 2016 blocks, the name will be available for claiming again.
 
+
+### Subname
+
+```
+ ------------ ----
+| name       | 63 |
+ ------------ ----
+| definition |    |
+ ------------ ----
+```
+
+The `subname` transaction MUST be signed by the owner of the `name` entry.
+
+`subname` transaction is used to define a tree of subnames below `name` entry
+along with the pointers for each subname.
+
+A `definition` field is a mapping of `subname prefix` to `pointers`, where the `pointers`
+for subname SHOULD NOT contain multiple entries with the same key.
+
+A `subname prefix` in the position of key in the map stored in `definition` field,
+when concatenated with '.' character and value of `name` of the domain for which we
+are defining the subnames for, should form a full `subname` value.
+
+For example, Subname prefix `example` for name `topname.aet` forms
+full subname value `example.topname.aet`.
+
+The execution of `subname` transaction is semantically equivalent to:
+- removal of all subnames belonging to provided `existing` name
+- inserting of all subnames into naming tree with their respective pointers
+
+To just remove all subnames of a name, the `definition` should be empty.
+
+NOTE: The size and complexity of the configuration of subnames is implicitly capped by the block gas limit.
 
 ## Storage
 

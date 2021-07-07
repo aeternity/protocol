@@ -217,6 +217,8 @@ subsequent sections divided by object.
 | Name service update transaction | 34 |
 | Name service revoke transaction | 35 |
 | Name service transfer transaction | 36 |
+| Name service subname | 38|
+| Name service subname transaction | 39 |
 | Contract | 40 |
 | Contract call | 41 |
 | Contract create transaction | 42 |
@@ -543,6 +545,19 @@ The recipient must be one of the following:
 * An account identifier.
 * A name identifier, whose related name entry has an identifier as value of pointer with key `account_pubkey`.
   If multiple pointer entries are present for such key, then the first of such entries is used.
+
+
+#### Name service subname transaction
+From Lima release.
+```
+[ <account_id> :: id()
+, <nonce>      :: int()
+, <name>       :: binary()
+, <definition> :: [{binary(), [{binary(), id()}]}]
+, <fee>        :: int()
+, <ttl>        :: int()
+]
+```
 
 ### Channels
 
