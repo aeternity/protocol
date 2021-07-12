@@ -191,6 +191,7 @@ will describe these in groups which indicate their relation to each other.
   | minimum_depth | integer | the minimum amount of blocks to be mined | No | No | No |
   | fee | integer | the fee to be used for the channel open transaction | No | No | Yes |
   | gas_price | integer | the gas_price to be used for the fee computation of the channel open transaction | No | No | Yes |
+  | log\_keep | integer | the size of the sliding-window history log | No | No | No |
 
   `responder`'s port and host pair must be reachable from `initiator` network
   so unless participants are part of a LAN, they should be exposed to the
