@@ -1,0 +1,66 @@
+site_name: aeternity Protocol
+plugins:
+  - search
+  - mkdocs-simple-hooks:
+      hooks:
+        on_pre_build: 'mkdocs-hook:pre_build'
+repo_url: 'https://github.com/aeternity/protocol'
+edit_uri: ''
+
+docs_dir: specification
+
+theme:
+  favicon: favicon.png
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      primary: pink
+      accent: pink
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: pink
+      accent: pink
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - content.tabs.link
+    - search.highlight
+    - search.share
+    - search.suggest
+
+  # Don't include MkDocs' JavaScript
+  include_search_page: false
+  search_index_only: true
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+
+nav:
+  - Introduction: README.md
+  - Communication:
+    - Gossip: GOSSIP.md
+    - Sync: sync/README.md
+  - Consensus: consensus/README.md
+  - Features:
+    - Generalized Accounts: generalized_accounts/README.md
+    - Naming System: AENS.md
+    - Oracles:
+      - General: oracles/README.md
+      - Lifecycle Examples: oracles/oracle_life_cycle.md
+      - State tree: oracles/oracle_state_tree.md
+      - Transactions: oracles/oracle_transactions.md
+    - Smart Contracts: contracts/README.md
+    - State Channels:
+      - General: channels/README.md
+      - On-Chain Actions: channels/ON-CHAIN.md
+      - Off-Chain Actions: channels/OFF-CHAIN.md
+      - Off-Chain State: channels/state.md
+  - Node API: node/api/README.md
+  - Mining:
+      - Stratum: mining/STRATUM.md
+  - Serializations: serializations.md
