@@ -4,12 +4,13 @@ The most general way to interact with Oracles is to use the HTTP API. In this
 document the API is put to use, showing the complete life cycle of an Oracle.
 
 To show the intended usage of oracles we walk through basically the [Oracle
-life cycle](/oracles/oracle_life_cycle.md) For simplicity, we only work with a single
+life cycle](../../oracles/oracle_life_cycle.md) For simplicity, we only work with a single
 node in this example. It should be straightforward
 to split the example into one node running the oracle and other nodes querying
 that oracle.
 
 The following assumes that the node exposes at address `localhost/127.0.0.1` the following ports:
+
 * User API external HTTP endpoint: 3013
 * User API internal HTTP endpoint: 3113
 
@@ -31,6 +32,7 @@ transactions will be rejected with _"Insufficient balance"_).
 ### Register
 
 Once the account has a positive balance we can register an oracle:
+
 * prepare oracle register transaction as per [specification](../../serializations.md).
 In order to ease the initial integration, the aeternity node provides
 [/debug/oracles/register endpoint](https://api-docs.aeternity.io#/internal/PostOracleRegister):
@@ -56,6 +58,7 @@ curl http://localhost:3013/v2/oracles/ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum3
 ### Extend
 
 Now, when the oracle exists, we can extend the TTL:
+
 * prepare oracle extend transaction as per [specification](../../serializations.md).
 In order to ease the initial integration, the aeternity node provides
 [/debug/oracles/extend endpoint](https://api-docs.aeternity.io#/internal/PostOracleExtend):
@@ -76,6 +79,7 @@ curl http://localhost:3013/v2/oracles/ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum3
 ### Query
 
 We can post a query to the existing oracle:
+
 * prepare oracle query transaction as per [specification](../../serializations.md).
 In order to ease the initial integration, the aeternity node provides
 [/debug/oracles/query endpoint](https://api-docs.aeternity.io#/internal/PostOracleQuery):
@@ -104,6 +108,7 @@ curl http://localhost:3013/v2/oracles/ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum3
 
 We should note that in the response for the query request above we got the
 *query_id* which we use to respond to the query:
+
 * prepare oracle respond transaction as per [specification](../../serializations.md).
 In order to ease the initial integration, the aeternity node provides
 [/debug/oracles/respond endpoint](https://api-docs.aeternity.io#/internal/PostOracleRespond):

@@ -16,6 +16,7 @@ contract create transactions ([code/encode-calldata](#encode-call-data),
 [code/call](#call), [create/compute](#contract-create),
 [call/compute](#contract-call)). These support two ways of specifying the
 function and arguments to the call:
+
 - **Unchecked (legacy)**: Function name (except for `create/compute`) and arguments
   as a Sophia constant tuple. No checks are made to ensure that the given
   arguments match what the contracts expects.
@@ -55,6 +56,7 @@ TODO stil relevant?
 [/debug/transactions/dry-run](https://api-docs.aeternity.io#/internal/DryRunTxs)
 
 The arguments to the /debug/transactions/dry-run endpoint are:
+
 * `txs` - a list of *unsigned* transactions to execute.
 * `top` - an optional blockhash at which to do the dry-run (if not specified `top` hash will be used).
 * `accounts` - a list of "extra" accounts to be used in the dry-run.
@@ -69,6 +71,7 @@ An aeternity node provides some APIs to format contract transactions and an API 
 There are two contract transactions available: create and call.
 
 You:
+
 * Format the contract transaction using the corresponding API;
 * (As for any other transaction) sign offline (i.e. outside of the aeternity node) the transaction according to consensus;
 * (As for any other transaction) submit the transaction to the aeternity node using [its API](https://api-docs.aeternity.io/#/external/PostTransaction).

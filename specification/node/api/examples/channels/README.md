@@ -7,6 +7,7 @@ integration tests and represent real interaction with the node.
 ### Different APIs
 
 Currently there is 1 API protocol that is supported:
+
 * JSON-RPC
 
 Legacy protocol was removed.
@@ -104,4 +105,3 @@ and the former are outside it. The continuous ones have one single opening of
 the state channel and the following examples are focused on specific actions.
 The opening with initial balances is described in
 `./*/continuous/init_per_group.md`
-

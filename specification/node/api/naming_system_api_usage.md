@@ -3,9 +3,10 @@
 ## Introduction
 
 The way to interact with Naming System is to use HTTP API.
-To read about possible states and life cycle of a name please see [the doc](/AENS.md).
+To read about possible states and life cycle of a name please see [the doc](../../AENS.md).
 
 The following assumes that the node exposes at address 127.0.0.1 the following ports:
+
 * User API external HTTP endpoint: 3013
 * User API internal HTTP endpoint: 3113
 
@@ -28,7 +29,7 @@ curl http://localhost:3013/v2/names/foobar.test
 In order to claim a name you need to submit a preclaim transaction first, containing commitment hash.
 
 You need to pick a random salt value, to make commitment hash unique.
-Commitment hash is calculated based on [the formula](/AENS.md#pre-claim).
+Commitment hash is calculated based on [the formula](../../AENS.md#pre-claim).
 For the purpose of this example name `foobar.test` with salt 123 is considered.
 In order to obtain commitment hash use the [/debug/names/commitment-id endpoint](https://api-docs.aeternity.io#/internal/GetCommitmentId):
 ```
@@ -37,6 +38,7 @@ curl http://localhost:3113/v2/debug/names/commitment-id\?name\=foobar.test\&salt
 ```
 
 To preclaim a name:
+
 * prepare name preclaim transaction as per [specification](../../serializations.md).
 In order to ease the initial integration, the aeternity node provides
 [/debug/names/preclaim endpoint](https://api-docs.aeternity.io#/internal/PostNamePreclaim):
@@ -54,6 +56,7 @@ To check the height of the blockchain use the [/generations/current endpoint](ht
 ### Claim
 
 When a name is preclaimed, you are in a position to claim it:
+
 * prepare name claim transaction as per [specification](../../serializations.md).
 In order to ease the initial integration, the aeternity node provides
 [/debug/names/claim endpoint](https://api-docs.aeternity.io#/internal/PostNameClaim).
@@ -75,9 +78,11 @@ Note that the name is claimed for the max period (50000 blocks) and relative to 
 In order to make better use of claimed name you need to specify where it should point to.
 To do so, specify pointers, which translates to different blockchain entities.
 In the initial version the following well-known pointer keys are available:
+
 * `account_pubkey`
 
 In order to update pointers:
+
 * prepare name update transaction as per [specification](../../serializations.md).
 In order to ease the initial integration, the aeternity node provides
 [/debug/names/update endpoint](https://api-docs.aeternity.io#/internal/PostNameUpdate):
@@ -101,6 +106,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"sender_id":"...", "recipi
 ### Transfer ownership
 
 In order to transfer a name to another user:
+
 * prepare name transfer transaction as per [specification](../../serializations.md).
 In order to ease the initial integration, the aeternity node provides
 [/debug/names/transfer endpoint](https://api-docs.aeternity.io#/internal/PostNameTransfer):
@@ -114,6 +120,7 @@ curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/
 ### Revoke
 
 In order to revoke a name:
+
 * prepare name revoke transaction as per [specification](../../serializations.md).
 In order to ease the initial integration, the aeternity node provides
 [/debug/names/revoke endpoint](https://api-docs.aeternity.io#/internal/PostNameRevoke):

@@ -3,6 +3,7 @@
 Messages on the WebSocket API have to follow JSON-RPC specification version 2.0. See: [www.jsonrpc.org](https://www.jsonrpc.org/specification)
 
 The WebSocket API provides the following actions:
+
  * [Off-chain update](#update)
  * [On-chain deposit](#deposit)
  * [On-chain withdrawal](#withdrawal)
@@ -24,10 +25,12 @@ The WebSocket API provides the following actions:
 
 ## Update
 Roles:
+
  * Sender
  * Acknowledger
 
 ### Sender trigger an update
+
  * **method:** `channels.update.new`
  * **params:**
 
@@ -85,6 +88,7 @@ Roles:
 ```
 
 ### Sender authenticates off-chain state responsse
+
  * **method:** `channels.update`
  * **params:**
 
@@ -104,6 +108,7 @@ Roles:
 ```
 
 ### Acknowledger receives a non-authenticated off-chain state
+
  * **method:** `channels.sign.update_ack`
  * **params:**
 
@@ -135,7 +140,8 @@ Roles:
 }
 ```
 
-### Acknowledger authenticated off-chain state responsse
+### Acknowledger authenticated off-chain state response
+
  * **method:** `channels.update_ack`
  * **params:**
 
@@ -155,6 +161,7 @@ Roles:
 ```
 
 ### Update conflict
+
  * **method:** `channels.conflict`
  * **params:**
 
@@ -187,6 +194,7 @@ Roles:
 ```
 
 ### Update error
+
  * **error:**
 
   | Name | Type | Description | Required |
@@ -234,10 +242,12 @@ Roles:
 
 ## Deposit
 Roles:
+
  * Depositor
  * Acknowledger
 
 ### Depositor trigger a update
+
  * **method:** `channels.deposit`
  * **params:**
 
@@ -262,6 +272,7 @@ Roles:
 ```
 
 ### Depositor receives an non-authenticated deposit transaction
+
  * **method:** `channels.sign.deposit_tx`
  * **params:**
 
@@ -300,6 +311,7 @@ Roles:
 ```
 
 ### Depositor authenticates deposit response
+
  * **method:** `channels.deposit_tx`
  * **params:**
 
@@ -319,6 +331,7 @@ Roles:
 ```
 
 ### Acknowledger receives a non-authenticated deposit transaction
+
  * **method:** `channels.sign.deposit_ack`
  * **params:**
 
@@ -356,7 +369,8 @@ Roles:
 }
 ```
 
-### Acknowledger authenticates deposit responsse
+### Acknowledger authenticates deposit response
+
  * **method:** `channels.deposit_ack`
  * **params:**
 
@@ -377,10 +391,12 @@ Roles:
 
 ## Withdrawal
 Roles:
+
  * Withdrawer
  * Acknowledger
 
 ### Withdrawer trigger a update
+
  * **method:** `channels.withdraw`
  * **params:**
 
@@ -405,6 +421,7 @@ Roles:
 ```
 
 ### Withdrawer receives a non-authenticated withdraw transaction
+
  * **method:** `channels.sign.withdraw_tx`
  * **payload:**
 
@@ -443,6 +460,7 @@ Roles:
 ```
 
 ### Withdrawer authenticates withdraw response
+
  * **method:** `channels.withdraw_tx`
  * **params:**
 
@@ -462,6 +480,7 @@ Roles:
 ```
 
 ### Acknowledger receives a non-authenticated withdraw transaction
+
  * **method:** `channels.sign.withdraw_ack`
  * **params:**
 
@@ -499,7 +518,8 @@ Roles:
 }
 ```
 
-### Acknowledger authenticates withdraw responsse
+### Acknowledger authenticates withdraw response
+
  * **method:** `channels.withdraw_ack`
  * **params:**
 
@@ -519,6 +539,7 @@ Roles:
 ```
 
 ## Assume Minimum Depth
+
  * **method:** `channels.assume_minimum_depth`
  * **params:**
 
@@ -602,6 +623,7 @@ Roles:
 
 ## Generic message
 Roles:
+
  * Sender
  * Receiver
 
@@ -627,6 +649,7 @@ Roles:
 ```
 
 ### Receiver receives message
+
  * **method:** `channels.message`
  * **params:**
 
@@ -672,10 +695,12 @@ Roles:
 
 ## Close mutual
 Roles:
+
  * Closer
  * Acknowledger
 
 ### Closer initiate mutual close
+
  * **method:** `channels.shutdown`
  * **params:**
 
@@ -728,6 +753,7 @@ Roles:
 ```
 
 ### Closer returns an authenticated mutual close
+
  * **method:** `channels.shutdown_sign`
  * **params:**
 
@@ -747,6 +773,7 @@ Roles:
 ```
 
 ### Acknowledger receives mutual close
+
  * **method:** `channels.sign.shutdown_sign_ack`
  * **params:**
 
@@ -779,6 +806,7 @@ Roles:
 ```
 
 ### Acknowledger returns an authenticated mutual close
+
  * **method:** `channels.shutdown_sign_ack`
  * **params:**
 
@@ -799,9 +827,11 @@ Roles:
 
 ## Snapshot
 Roles:
+
  * Snapshotter
 
 ### Snapshotter is prompted to snapshot (not mandatory step)
+
  * **method:** `channels.on_chain_tx`
  * **params:**
 
@@ -828,6 +858,7 @@ Roles:
 ```
 
 ### Snapshotter initiates solo snapshot
+
  * **method:** `channels.snapshot_solo`
  * **params:**
 
@@ -847,6 +878,7 @@ Roles:
 ```
 
 ### Snapshotter receives solo snapshot
+
  * **method:** `channels.sign.snapshot_solo_tx`
  * **params:**
 
@@ -879,6 +911,7 @@ Roles:
 ```
 
 ### Snapshotter returns an authenticated solo snapshot
+
  * **method:** `channels.snapshot_solo_sign`
  * **params:**
 
@@ -899,9 +932,11 @@ Roles:
 
 ## Force progress
 Roles:
+
  * Forcer
 
 ### Forcer initiates a force progress
+
  * **method:** `channels.force_progress`
  * **params:**
 
@@ -931,6 +966,7 @@ Roles:
 ```
 
 ### Forcer receives a prepared force progress transaction to authenticate
+
  * **method:** `channels.sign.force_progress_tx`
  * **params:**
 
@@ -992,6 +1028,7 @@ Roles:
 ```
 
 ### Forcer returns an authenticated force progress transaction
+
  * **method:** `channels.force_progress_sign`
  * **params:**
 
@@ -1040,6 +1077,7 @@ Roles:
 ```
 
 ## On-chain transactions
+
  * **method:** `channels.on_chain_tx`
  * **params:**
 
@@ -1057,6 +1095,7 @@ Roles:
   | type | transaction type | Yes |
 
  The `info` values could be:
+ 
  * `"funding_signed"` - reported by the `initiator`, indicating that a `channel_create_tx` has been
    singly authenticated by the `initiator` client, and sent to the `responder` for co-signing.
  * `"funding_created"` - reported by the `responder`, indicating that a `channel_create_tx` has been
@@ -1109,9 +1148,11 @@ Roles:
 
 ## Close solo
 Roles:
+
  * Closer
 
 ### Closer initiated solo close
+
  * **method:** `channels.close_solo`
  * **params:**
 
@@ -1131,6 +1172,7 @@ Roles:
 ```
 
 ### Closer receives solo close
+
  * **method:** `channels.sign.close_solo_sign`
  * **params:**
 
@@ -1163,6 +1205,7 @@ Roles:
 ```
 
 ### Closer returns an authenticated solo close
+
  * **method:** `channels.close_solo_sign`
  * **params:**
 
@@ -1182,9 +1225,11 @@ Roles:
 ```
 ## Slash
 Roles:
+
  * Slasher
 
 ### Slasher initiated slash
+
  * **method:** `channels.slash
  * **params:**
 
@@ -1204,6 +1249,7 @@ Roles:
 ```
 
 ### Slasher receives slash
+
  * **method:** `channels.sign.slash_tx`
  * **params:**
 
@@ -1236,6 +1282,7 @@ Roles:
 ```
 
 ### Slasher returns an authenticated slash
+
  * **method:** `channels.slash_sign
  * **params:**
 
@@ -1256,9 +1303,11 @@ Roles:
 
 ## Slash
 Roles:
+
  * Slasher
 
 ### Slasher is prompted to slash
+
  * **method:** `channels.on_chain_tx`
  * **params:**
 
@@ -1286,6 +1335,7 @@ Roles:
 
 
 ### Slasher initiates slash
+
  * **method:** `channels.slash`
 
 #### Example
@@ -1298,6 +1348,7 @@ Roles:
 ```
 
 ### Slasher receives slash
+
  * **method:** `channels.sign.slash`
  * **params:**
 
@@ -1330,6 +1381,7 @@ Roles:
 ```
 
 ### Slasher returns an authenticated slash
+
  * **method:** `channels.slash_sign`
  * **params:**
 
@@ -1350,9 +1402,11 @@ Roles:
 
 ## Settle
 Roles:
+
  * Settler
 
 ### Settler initiates settle
+
  * **method:** `channels.settle`
  * **params:**
 
@@ -1371,6 +1425,7 @@ Roles:
 }
 ```
 ### Settler receives settle
+
  * **method:** `channels.sign.settle_sign`
  * **params:**
 
@@ -1402,6 +1457,7 @@ Roles:
 }
 ```
 ### Settler returns an authenticated settle
+
  * **method:** `channels.settle_sign`
  * **params:**
 
@@ -1422,6 +1478,7 @@ Roles:
 
 ## Leave
 Roles:
+
  * Leaver
  * Acknowledger
 
@@ -1472,6 +1529,7 @@ Roles:
 ## Info messages
 
 ### Info
+
  * **method:** `channels.info`
  * **params:**
 
@@ -1502,9 +1560,11 @@ Roles:
 ```
 
 ### Latest state
+
  * **method:** `channels.get.offchain_state`
 
 #### Response
+
  * **result:**
 
  | Field name | Value |
@@ -1542,6 +1602,7 @@ Roles:
 ```
 
 ### Latest contract state
+
  * **method:** `channels.get.contract`
  * **params:**
 
@@ -1550,6 +1611,7 @@ Roles:
   | pubkey | string | requested contract pubkey | Yes |
 
 #### Response
+
  * **result:**
 
  | Field name | Value |
@@ -1612,6 +1674,7 @@ Roles:
 ## System messages
 
 ### ping
+
  * **method:** `channels.system`
  * **params:**
 
@@ -1620,6 +1683,7 @@ Roles:
   | action | string | the value "ping" | Yes |
 
 #### Response
+
  * **method:** `channels.system`
  * **params.data:**
 
@@ -1657,6 +1721,7 @@ Roles:
 ```
 
 ## Signing Error Replies
+
  * **method:** `channels.initiator_sign | channels.responder_sign | channels.deposit_tx | channels.deposit_ack
             | channels.withdraw_tx | channels.withdraw_ack | channels.responder_sign
             | channels.snapshot_solo_tx | channels.snapshot_solo_sign

@@ -11,7 +11,7 @@ method at channel creation time. You can read more about it
 ## Introduction
 You interact with an aeternity node both through HTTP requests and WebSocket
 connections.
-To learn more about channels and their life cycle see [the doc](/channels/README.md).
+To learn more about channels and their life cycle see [the doc](../../channels/README.md).
 
 In each channel there are two WebSocket client parties. For each channel, a
 new WebSocket connection is opened. Once the channel is opened - participants
@@ -105,6 +105,7 @@ Only steps 1 and 4 require chain interactions, step 2 and 3 are off-chain.
 
 ### On-chain requests
 There are two types of requests:
+
 * Total amount-modifying ones - [deposit](#deposit-transaction) and [withdrawal](#withdraw-transaction)
 * [Channel-closing ones](#solo-closing-sequence) - [solo close](#solo-close-on-chain-transaction), [slash](#slash-on-chain-transaction) and [settle](#settle-on-chain-transaction)
 
@@ -2249,6 +2250,7 @@ is authenticated by a client, that client can no longer abort it.
 
 The FSM produces two types of transactions according to how many
 authentications are required for them:
+
 * solo authenticated transactions:
   * `channel_close_solo_tx`
   * `channel_slash_tx`
