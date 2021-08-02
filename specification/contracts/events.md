@@ -85,6 +85,6 @@ would yield exactly the same result in the example above!
 ### Event indexing
 
 Finally it has to be pointed out that there is no *indexing* going on in the
-æternity node itself. One could imagine this being part of a middleware
+aeternity node itself. One could imagine this being part of a middleware
 service, with a subscribe/notify interface or applications could be scraping
 the chain by other means.

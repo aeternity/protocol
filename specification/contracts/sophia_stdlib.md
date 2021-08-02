@@ -1,1 +1,0 @@
-This file has been moved [here](https://github.com/aeternity/aesophia/blob/lima/docs/sophia_stdlib.md)

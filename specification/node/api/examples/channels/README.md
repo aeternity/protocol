@@ -1,7 +1,7 @@
-# æternity node channel WebSocket API examples
+# Aeternity node channel WebSocket API examples
 
 This directory provides a set of examples of state channel's communication via
-the WebSocket API. The examples are generated from æternity node's
+the WebSocket API. The examples are generated from aeternity node's
 integration tests and represent real interaction with the node.
 
 ### Different APIs

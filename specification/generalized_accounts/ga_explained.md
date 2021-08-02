@@ -19,13 +19,13 @@ For plain old accounts (POA) transaction integrity comes down to two things;
 transactions originating from the account, and (2) a transaction can only be
 included once - i.e. it is not possible to include the same SpendTx twice to
 get double payment. (1) is achieved by [crypotographic
-signing](https://en.wikipedia.org/wiki/Digital_signature), æternity uses
+signing](https://en.wikipedia.org/wiki/Digital_signature), aeternity uses
 [EdDSA](https://en.wikipedia.org/wiki/EdDSA) signatures with
 ([Curve25519](https://en.wikipedia.org/wiki/Curve25519)). (2) is normally
 achieved by adding a (sequential) *nonce* to the transaction, and then the
 consensus algorithm only allows an account to "use" a nonce once.
 
-In the æternity blockchain when a transaction is prepared for inclusion a
+In the aeternity blockchain when a transaction is prepared for inclusion a
 suitable nonce is selected and included in the transaction, then the
 transaction (`TX`) is serialized (`SerTX`) and hashed. The resulting hash is
 then signed yielding a signature (`SigTX`); finally the serialized transaction

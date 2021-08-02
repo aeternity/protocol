@@ -14,11 +14,11 @@
 
 ## Goals
 
-The overreaching functional goal of æternity smart contracts is to be able to execute
+The overreaching functional goal of aeternity smart contracts is to be able to execute
 code on the chain. That is, code execution that is verified by a miner and
 which can alter the state of the chain.
 
-The design and implementation of the æternity smart contracts also have the following
+The design and implementation of the aeternity smart contracts also have the following
 non-functional goals in the following order:
 
 1. Contract execution should be safe.
@@ -35,10 +35,10 @@ safe virtual machine [FATE](./fate.md).
 
 ### Goal 2: Contract execution should be efficient and scale
 
-In order to achieve a scalable solution æternity provides State Channels and
+In order to achieve a scalable solution aeternity provides State Channels and
 a new consensus algorithm.
 
-To get efficient contract execution æternity provides a very high level language
+To get efficient contract execution aeternity provides a very high level language
 for blindingly fast execution of simple contracts. For more advanced contract
 the Sophia language can be used. Sophia is compiled to a virtual machine that
 is tailored for the execution of Sophia contracts. This machine is also high level
@@ -52,12 +52,12 @@ but by providing State channels, efficient ways to execute contracts, and a simp
 rate high level contract language prices should be kept low.
 
 ### Goal 4. There should be a simple way to migrate from Ethereum smart contracts
-By providing a version of the EVM it is easy to migrate EVM contracts to æternity.
+By providing a version of the EVM it is easy to migrate EVM contracts to aeternity.
 
 
 ## Contract life cycle examples
 
-There is no kill instruction in the æternity virtual machine, instead there is a deactivation instruction.
+There is no kill instruction in the aeternity virtual machine, instead there is a deactivation instruction.
 When a contract is disabled it can only be called from other contracts already created on the chain.
 One can not create a new contract on the chain that calls a disabled contract neither directly nor indirectly.
 
@@ -70,15 +70,15 @@ A typically contract life cycle looks like this:
 5. No one can call A directly any more, and no new contract can refer to contracts A and B, but calls through B still go to A.f.
 6. Contract B is deactivated by its owner, and has no referring contracts, it is deallocated as is contract A. (removed form the contract state tree)
 
-## æternity VMs
+## Aeternity VMs
 
-æternity plans to support multiple virtual machines.
+Aeternity plans to support multiple virtual machines.
 In order to make transition from Ethereum easy the first VM (AEVM) will be very similar to the EVM.
 A field in the contract specifies which virtual machine to be used.
 In the future we plan to provide at least one more virtual machine which addresses some of the
 security issues with the EVM.
 
-For more information see [æternity VMs](./contract_vms.md)
+For more information see [aeternity VMs](./contract_vms.md)
 
 ## Sophia: The first contract language
 

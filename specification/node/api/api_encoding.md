@@ -1,6 +1,6 @@
 # Encoding scheme for API identifiers and byte arrays
 
-The æternity node uses
+The aeternity node uses
 [base58Check](https://en.bitcoin.it/wiki/Base58Check_encoding)
 encoding for identifiers such as account and contract public
 keys. Base58c is not well suited for encoding big byte arrays, so for

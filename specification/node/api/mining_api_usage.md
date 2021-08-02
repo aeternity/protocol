@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In order to get a reward and transaction fees, the æternity node needs to mine
+In order to get a reward and transaction fees, the aeternity node needs to mine
 a key block. With increased difficulty, the probability of mining a key block
 is lower. Therefore, the miners can form mining pools where they share the
 processing power over the network so they can mine key blocks more often. They
@@ -10,21 +10,21 @@ split the reward according to the amount of work they contribute to mine a
 block. The mining pool is formed of a mining pool manager that manages the
 pool (and gets a fee for that) and the miners.
 
-The æternity node provides very basic API that allows to retrieve a pending key
+The aeternity node provides very basic API that allows to retrieve a pending key
 block and submit a mined key block.
 
-The way to interact with the æternity node is to use HTTP API.
+The way to interact with the aeternity node is to use HTTP API.
 
 The following assumes that the node exposes at address 127.0.0.1 the following
 ports:
 * User API external HTTP endpoint: 3013
 * User API internal HTTP endpoint: 3113
 
-## æternity node modes
+## Aeternity node modes
 
 ### Pool manager
 
-The æternity node can be configured (using `autostart: false`) not to mine key
+The aeternity node can be configured (using `autostart: false`) not to mine key
 blocks. Even though the node does not mine the key blocks, it still produces
 the key block candidates that do not have `nonce` and `pow` set. These key
 block candidates can be retrieved using the
@@ -51,7 +51,7 @@ according to how much processing power they provide to the pool. It is not
 implemented.
 
 NOTE: The "info" field is added as a mandatory field from the 2.0
-release of the æternity node.
+release of the aeternity node.
 
 ### Miner
 

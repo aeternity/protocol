@@ -24,7 +24,7 @@ aenode://pp_HryRGHJ7Ct3trkktVyVBgfhHL1J4EYSD9cScuMZDV61eSHrCZ@mynode.example.com
 ```
 
 A node is uniquely identified by its public key, and it can only have one IP and
-port at the same time. This means one IP can have several instances of æternity node
+port at the same time. This means one IP can have several instances of aeternity node
 started at the same time listening on different ports if they have different
 public keys. This key corresponds to the private key that is used for the Noise
 protocol listener associated with the IP and port.

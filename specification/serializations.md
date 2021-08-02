@@ -169,7 +169,7 @@ objects, lists and byte arrays.
 
 RLP ensures that the serialization is a non-empty byte array.
 
-Objects in æternity are encoded as lists of fields, where the two
+Objects in aeternity are encoded as lists of fields, where the two
 first fields describe the object type and the object version.
 
 ```

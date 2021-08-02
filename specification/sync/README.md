@@ -47,7 +47,7 @@ means that the initiator of the handshake sends their static key to
 the responder and the initiator knows the static keyof the responder.
 
 Each node has a static `Curve25519` key pair for P2P communication. The peer
-discovery is bootstrapped by having a set of æternity peer addresses in the
+discovery is bootstrapped by having a set of aeternity peer addresses in the
 node configuration and the node tries to connect to these peers after starting
 up the node. Peer addresses looks like:
 `aenode://pp_ttZZwTS2nzxg7pnEeFMWeRCfdvdxeRu6SgVyeALZX3LbdeiWS@31.13.249.0:3015`.
@@ -181,7 +181,7 @@ synchronize the chain, and the current list of unconfirmed transactions.
 Synchronizing the chain is (potentially) a big task, and the node will utilize
 all its connected peers to fetch blocks and transactions.
 
-(***TODO***: Write a detailed description of the æternity node implementation.)
+(***TODO***: Write a detailed description of the aeternity node implementation.)
 
 Synchronizing the unconfirmed transactions is a smaller task and the
 node will pick one other peer and synchronize (only the missing) transactions

@@ -1,5 +1,3 @@
-[back](./README.md)
-
 # P2P messages
 
 P2P messages are transported using the [Noise
@@ -13,7 +11,7 @@ payload is a byte array, and messages are either fixed binary data or encoded
 using [RLP](https://github.com/ethereum/wiki/wiki/RLP).
 
 The following P2P messages are implemented in
-the [æternity node](https://github.com/aeternity/aeternity/blob/master/apps/aecore/src/aec_peer_messages.erl):
+the [aeternity node](https://github.com/aeternity/aeternity/blob/master/apps/aecore/src/aec_peer_messages.erl):
 
   - [MSG_FRAGMENT](#msg_fragment)
   - [MSG_P2P_RESPONSE](#msg_p2p_response)
