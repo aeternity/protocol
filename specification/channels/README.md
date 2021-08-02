@@ -362,7 +362,7 @@ channels trustless.
 
 ## Node configuration
 
-Aeternity nodes are prepared to service state channels via a JSON-RPC API over WebSocket.
+æternity nodes are prepared to service state channels via a JSON-RPC API over WebSocket.
 
 The following configuration values control the support for state channels:
 

@@ -4,8 +4,8 @@ The Fast æternity Transaction Engine
 ## Design
 
 The high level machine (or the Fast æternity Transaction Engine) has
-aeternity transactions as its basic operations and it operates
-directly on the state tree of the aeternity chain. This is a new
+æternity transactions as its basic operations and it operates
+directly on the state tree of the æternity chain. This is a new
 paradigm in blockchain virtual machine specifications which makes it
 possible to create type safe and efficient implementations of the
 machine.

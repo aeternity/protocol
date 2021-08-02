@@ -1,7 +1,7 @@
 [back](./README.md)
 # The Solidity Language
 
-Æternity has limited support for the Solidity language bytecode and ABI. There
+æternity has limited support for the Solidity language bytecode and ABI. There
 are a number of test cases and some scaffolding code. However, it is not mature
 enough to be part of consensus and thus the Solidity ABI is not allowed on
 chain.

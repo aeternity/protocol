@@ -169,7 +169,7 @@ objects, lists and byte arrays.
 
 RLP ensures that the serialization is a non-empty byte array.
 
-Objects in Æternity are encoded as lists of fields, where the two
+Objects in æternity are encoded as lists of fields, where the two
 first fields describe the object type and the object version.
 
 ```
@@ -311,7 +311,7 @@ The recipient must be one of the following:
 * A name identifier, whose related name entry has an identifier as value of pointer with key `account_pubkey`.
   If multiple pointer entries are present for such key, then the first of such entries is used.
 
-#### Oracles
+### Oracles
 ```
 [ <owner>           :: id()
 , <query_format>    :: binary()
@@ -390,7 +390,7 @@ The recipient must be one of the following:
 ]
 ```
 
-#### Contract
+### Contracts
 
 For a contract with address `<contractpubkey>`, the fields of the contract object (to which tag and version need to be prepended) are:
 
@@ -468,7 +468,7 @@ From FATE VM version 2 stored code is the same as from the coresponding contract
 ]
 ```
 
-#### Name service name
+### Name service name
 ```
 [ <owner>      :: id()
 , <expires_by> :: int()

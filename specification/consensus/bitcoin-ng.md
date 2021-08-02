@@ -1,5 +1,5 @@
 [back](./README.md)
-# Bitcoin-NG for Aeternity
+# Bitcoin-NG for æternity
 
 Bitcoin-NG is an evolution of the Bitcoin protocol [1]. It still uses Nakamoto consensus but separates leader election and block production. This separation is done by introducing two kinds of blocks, key and micro. Key blocks are used for leader election. They don't contain any transactions but do require a solution to a Proof of Work puzzle. Once a leader has been found, he can produce multiple micro blocks. Micro blocks include transactions but do not require solutions to Proof of Work puzzles. Instead they need to be cryptographically signed be the current leader to be considered valid.
 
@@ -31,7 +31,7 @@ Leaders, who follow the protocol, emit Micro Blocks until they receive Key Block
 
 ## Latency
 
-On average in Bitcoin blocks are broadcasted every 10 minutes - it is driven by protocol and guarded by target. Aeternity assumed 3 minutes for Key Blocks and 3 seconds time delta between Micro Blocks. 3 minutes resolution of Key Blocks is also guarded by target and Proof-of-Work.
+On average in Bitcoin blocks are broadcasted every 10 minutes - it is driven by protocol and guarded by target. æternity assumed 3 minutes for Key Blocks and 3 seconds time delta between Micro Blocks. 3 minutes resolution of Key Blocks is also guarded by target and Proof-of-Work.
 
 ## Rewards
 
@@ -44,7 +44,7 @@ There is major challenge in providing liveness and integrity of the chain in the
      └────────┘                        └────────┘
       Leader 2 Award: Governance(Coinbase) + 0.6*(FeeN1+FeeN2) + 0.4*FeeN3
 
-In Aeternity granting both fixed award and fees from the generation is delayed by 180 key blocks (generations). As mentioned above, Key Blocks should be broadcasted approximately every 3 minutes, so the approximated delay is:
+In æternity granting both fixed award and fees from the generation is delayed by 180 key blocks (generations). As mentioned above, Key Blocks should be broadcasted approximately every 3 minutes, so the approximated delay is:
 ```
 180 * 3 minutes = 540 minutes = 9 hours
 ```

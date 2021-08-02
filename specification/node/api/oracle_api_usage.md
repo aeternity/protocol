@@ -32,7 +32,7 @@ transactions will be rejected with _"Insufficient balance"_).
 
 Once the account has a positive balance we can register an oracle:
 * prepare oracle register transaction as per [specification](../../serializations.md).
-In order to ease the initial integration, the Aeternity node provides
+In order to ease the initial integration, the æternity node provides
 [/debug/oracles/register endpoint](https://api-docs.aeternity.io#/internal/PostOracleRegister):
 ```
 curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/oracle -d '{"account_id:"ak_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_format":"the query spec", "response_format":"the response spec", "query_fee":4, "oracle_ttl":{"type":"delta", "value":50}, "fee":2, "ttl":1234}'
@@ -57,7 +57,7 @@ curl http://localhost:3013/v2/oracles/ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum3
 
 Now, when the oracle exists, we can extend the TTL:
 * prepare oracle extend transaction as per [specification](../../serializations.md).
-In order to ease the initial integration, the Aeternity node provides
+In order to ease the initial integration, the æternity node provides
 [/debug/oracles/extend endpoint](https://api-docs.aeternity.io#/internal/PostOracleExtend):
 ```
 curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/extend -d '{"oracle_id":"ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "fee":5, "oracle_ttl":{"type":"delta", "value":100}}'
@@ -77,7 +77,7 @@ curl http://localhost:3013/v2/oracles/ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum3
 
 We can post a query to the existing oracle:
 * prepare oracle query transaction as per [specification](../../serializations.md).
-In order to ease the initial integration, the Aeternity node provides
+In order to ease the initial integration, the æternity node provides
 [/debug/oracles/query endpoint](https://api-docs.aeternity.io#/internal/PostOracleQuery):
 ```
 curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/query -d '{"oracle_id":"ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum38yz48Frwov", "query_fee":4, "query_ttl":{"type":"delta", "value":10}, "response_ttl":{"type":"delta", "value":10}, "fee":2, "ttl":15, "query":"How are you?"}'
@@ -105,7 +105,7 @@ curl http://localhost:3013/v2/oracles/ok_EmJyR97vW4jzdcCPCvgjUa8RUmo45E1KnExBum3
 We should note that in the response for the query request above we got the
 *query_id* which we use to respond to the query:
 * prepare oracle respond transaction as per [specification](../../serializations.md).
-In order to ease the initial integration, the Aeternity node provides
+In order to ease the initial integration, the æternity node provides
 [/debug/oracles/respond endpoint](https://api-docs.aeternity.io#/internal/PostOracleRespond):
 ```
 curl -X POST -H "Content-Type: application/json" http://localhost:3113/v2/debug/oracles/respond -d '{"query_id":"oq_2f9NqPf39Hin4FZoYCyL66zcyZEQJ3L2K7ZGQFbTR3PdT3u2m", "response_ttl":{"type":"delta", "value":10}, ""fee":2, "ttl":1234, "response":"I am fine, thanks!"}'

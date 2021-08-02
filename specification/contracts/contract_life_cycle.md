@@ -1,2 +1,0 @@
-## Contract life cycle examples
-

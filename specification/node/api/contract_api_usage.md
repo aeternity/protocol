@@ -1,13 +1,13 @@
 # Contracts - intended usage
 
 ## Introduction
-You interact with a Aeternity node through HTTP.
+You interact with a æternity node through HTTP.
 To learn more about contracts and contract life cycles see [the doc](/contracts/contracts.md).
 
 There are two basic types of API calls, off-chain operations and on-chain transactions.
 
 For an up to date list of all HTTP API endpoints and their arguments see
-[Aeternity node HTTP API](https://api-docs.aeternity.io)
+[æternity node HTTP API](https://api-docs.aeternity.io)
 
 ## Sophia calldata creation
 
@@ -39,7 +39,7 @@ function and arguments to the call:
 
 ## Off chain operations
 
-An Aeternity node provides some utility functions to help you create contract transactions and test contracts.
+An æternity node provides some utility functions to help you create contract transactions and test contracts.
 
 
 ### Contract Compile
@@ -64,14 +64,14 @@ TODO => http compiler & other tools
 
 ## On chain transactions
 
-An Aeternity node provides some APIs to format contract transactions and an API for submitting a signed transaction.
+An æternity node provides some APIs to format contract transactions and an API for submitting a signed transaction.
 
 There are two contract transactions available: create and call.
 
 You:
 * Format the contract transaction using the corresponding API;
-* (As for any other transaction) sign offline (i.e. outside of the Aeternity node) the transaction according to consensus;
-* (As for any other transaction) submit the transaction to the Aeternity node using [its API](https://api-docs.aeternity.io/#/external/PostTransaction).
+* (As for any other transaction) sign offline (i.e. outside of the æternity node) the transaction according to consensus;
+* (As for any other transaction) submit the transaction to the æternity node using [its API](https://api-docs.aeternity.io/#/external/PostTransaction).
 
 In order to affect the state of the chain you have to submit the signed transaction to a mining node.
 

@@ -1,4 +1,4 @@
-site_name: aeternity Protocol
+site_name: æternity Protocol
 plugins:
   - search
   - mkdocs-simple-hooks:
@@ -52,9 +52,14 @@ nav:
     - Oracles:
       - General: oracles/README.md
       - Lifecycle Examples: oracles/oracle_life_cycle.md
-      - State tree: oracles/oracle_state_tree.md
+      - State Tree: oracles/oracle_state_tree.md
       - Transactions: oracles/oracle_transactions.md
-    - Smart Contracts: contracts/README.md
+    - Smart Contracts:
+      - General: contracts/README.md
+      - Events: contracts/events.md
+      - Transaction Types: contracts/contract_transactions.md
+      - State Tree: contracts/contract_state_tree.md
+      - Virtual Machines: contracts/contract_vms.md
     - State Channels:
       - General: channels/README.md
       - On-Chain Actions: channels/ON-CHAIN.md

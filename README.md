@@ -16,6 +16,6 @@ mechanisms.
 ## Whitepapers
 
 - [2017 Whitepaper](https://blockchainlab.com/pdf/%91ternity-blockchain-whitepaper.pdf) - The original whitepaper.
-    - Repository: https://github.com/aeternity/whitepaper
+    - https://github.com/aeternity/whitepaper
 - [2020 Whitepaper](https://github.com/keypair/white-paper/blob/master/aeternity-whitepaper.pdf) - Draft that reflects the current state.
-    - Repository: https://github.com/aeternity/white-paper
+    - https://github.com/aeternity/white-paper
