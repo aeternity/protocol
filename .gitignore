@@ -1,2 +1,3 @@
 __pycache__
-specification/README.md
+00_mkdocs/docs_root/*/*
+00_mkdocs/docs_root/*.md

@@ -1,4 +1,3 @@
-[back](./README.md)
 # Coinbase at height
 
 The following table shows the heights for which the coinbase changes,

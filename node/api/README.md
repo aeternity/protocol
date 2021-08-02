@@ -38,7 +38,7 @@ The aeternity node exposes the following APIs:
     * They are encrypted and authenticated using the Noise protocol using
       dynamic keys (unauthenticated Diffie-Hellman - exact protocol
       name `Noise_NN_25519_ChaChaPoly_BLAKE2b`);
-    * The schema of its payload is [defined](/channels/OFF-CHAIN.md#messages);
+    * The schema of its payload is [defined](../../channels/OFF-CHAIN.md#messages);
     * They are meant to be exposed on the Internet;
 
 ## Channels WebSocket API definition

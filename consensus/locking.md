@@ -1,4 +1,3 @@
-[back](./README.md)
 # Coins locking
 
 We want a predictable inflation so there MUST not be any token burning. In order
