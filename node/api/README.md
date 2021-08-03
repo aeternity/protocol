@@ -18,28 +18,27 @@ The aeternity node exposes the following APIs:
     * Its static Noise key pair is configurable.
 * User API. It consists of the following TCP endpoints:
     * External HTTP endpoint;
-      * It is defined via Swagger schema;
-      * It is meant to be exposed on the Internet;
-      * Its TCP port is configurable.
+        * It is defined via Swagger schema;
+        * It is meant to be exposed on the Internet;
+        * Its TCP port is configurable.
     * Internal HTTP endpoint;
-      * It is defined via Swagger schema;
-      * It is **not** meant to be exposed on the Internet;
-      * Its TCP port is configurable.
+        * It is defined via Swagger schema;
+        * It is **not** meant to be exposed on the Internet;
+        * Its TCP port is configurable.
     * Internal Channels WebSocket endpoint.
-      * It is defined in the rest of this document;
-      * It is not meant to be exposed on the Internet;
-      * Its TCP port is configurable.
-    * Range of external Channels noise endpoints. It consists of as many TCP
-    endpoints as needed.
-      * They are used for connecting as a `responder` role in channel
+        * It is defined in the rest of this document;
+        * It is not meant to be exposed on the Internet;
+        * Its TCP port is configurable.
+    * Range of external Channels noise endpoints. It consists of as many TCP endpoints as needed.
+        * They are used for connecting as a `responder` role in channel
       communication;
-      * It is up to the node operator to define the range to be used; Their
+        * It is up to the node operator to define the range to be used; Their
       configuration is not part of the aeternity node;
-      * They are encrypted and authenticated using the Noise protocol using
+        * They are encrypted and authenticated using the Noise protocol using
       dynamic keys (unauthenticated Diffie-Hellman - exact protocol
       name `Noise_NN_25519_ChaChaPoly_BLAKE2b`);
-      * The schema of its payload is [defined](../../channels/OFF-CHAIN.md#messages);
-      * They are meant to be exposed on the Internet;
+        * The schema of its payload is [defined](../../channels/OFF-CHAIN.md#messages);
+        * They are meant to be exposed on the Internet;
 
 ## User API - intended usage
 

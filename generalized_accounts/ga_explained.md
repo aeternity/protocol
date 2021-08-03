@@ -1,4 +1,3 @@
-[back](./README.md)
 # Generalized accounts - explained
 
 Generalized accounts are motivated and described from a protocol perspective
