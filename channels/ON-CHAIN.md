@@ -39,6 +39,7 @@ have to do is to provide a proof of inclusion having the same `state_hash`.
 	+ [`channel_deposit`](#channel_deposit)
 	+ [`channel_withdraw`](#channel_withdraw)
 	+ [`channel_snapshot_solo`](#channel_snapshot_solo)
+	+ [`channel_set_delegates`](#channel_set_delegates)
 - [Closing a channel](#closing-a-channel)
 	+ [`channel_close_mutual`](#channel_close_mutual)
 	+ [`channel_close_solo`](#channel_close_solo)
@@ -186,7 +187,7 @@ recorded `Channel(channel_id).round`.
 If this transaction is valid then it sets:
 
 - `Channel(channel_id).round := round`
-- `Channel(channel_id).solo_round := round`
+- `Channel(channel_id).solo_round := 0`
 - `Channel(channel_id).state_hash := state_hash`
 - `Channel(channel_id).total_amount := Channel(channel_id).total_amount + amount`
 
@@ -223,7 +224,7 @@ currently recorded `Channel(channel_id).round`.
 If this transaction is valid then it sets:
 
 - `Channel(channel_id).round := round`
-- `Channel(channel_id).solo_round := round`
+- `Channel(channel_id).solo_round := 0`
 - `Channel(channel_id).state_hash := state_hash`
 - `Channel(channel_id).total_amount := Channel(channel_id).total_amount - amount`
 
@@ -263,9 +264,67 @@ by a `channel_force_progress_tx` while the channel is in the open state.
 If this transaction is valid then it sets:
 
 - `Channel(channel_id).round := payload.round`
-- `Channel(channel_id).solo_round := payload.round`
+- `Channel(channel_id).solo_round := 0`
 - `Channel(channel_id).state_hash := payload.state_hash`
 
+### `channel_set_delegates`
+
+In order to make channels both secure and trustless even when one party goes
+offline, a participant can deleate the right to produce certain transactions
+to other third parties.
+Delegates are set initially in the `channel_create_tx` and, since the `iris`
+hardfork, can be updated with `channel_set_delegates_tx`. It acts similarly to
+`channel_snapshot_solo_tx` with three notable differences:
+
+* While `channel_snapshot_solo_tx` can be based only on off-chain state,
+  `channel_set_delegates_tx` can be based both on off-chain state or latest
+  on-chain state. In the latter case the `payload` provided is empty.
+
+* `channel_set_delegates_tx` is mutually agreed upon. If the other participant
+  does not want to approve such a transaction, this could be a clear sign that
+  the assumption of cooperation is broken.
+
+* `channel_set_delegates_tx` not only updates the on-chain channel object
+  but also sets the list of delegate ids for each participant. The old lists of
+  delegates are deleted and the new ones provided by the transaction replace
+  them. There is no option for setting the list just for one participant.
+
+Serialization defined [here](../serializations.md#channel-set-delegates-transaction)
+
+- `channel_id`: channel id as recorded on-chain
+- `from_id`: the account that posts the transaction
+- `initiator_delegate_ids`: the list of delegates that can provide
+  transactions on behalf of the `initiator`
+- `responder_delegate_ids`: the list of delegates that can provide
+  transactions on behalf of the `responder`
+- `payload`: an off-chain transaction of the same channel authenticated
+  by both parties. It could be empty
+- `state_hash`: the hash of the payload, if provided - and if not, the latest
+  provided on-chain `state_hash`
+- `round`: the hash of the payload, if provided - and if not, the latest
+  provided on-chain `round`
+- `ttl`: blockheight target until which this transaction can be included
+- `fee`: transaction fee
+- `nonce`: the `from_id` account nonce
+
+The `from_id` account MUST be a participant in the target
+channel. The `payload` MUST be an off-chain state or empty. It MUST provide correct
+authentication methods for both parties. It MUST be part of the same channel
+(containing same channel id). If provided, it MUST have a `round` higher than
+the one currently recorded on-chain. The `state_hash` and `round` must match
+the ones in `payload` or the on-chain stored data if the `payload` is empty.
+
+This transaction MUST NOT trigger the `lock_period` and MUST NOT be used when
+the channel is in the closing state. It can be used to overwrite a state produced
+by a `channel_force_progress_tx` while the channel is in the open state.
+
+If this transaction is valid then it sets:
+
+- `Channel(channel_id).round := round`
+- `Channel(channel_id).solo_round := 0`
+- `Channel(channel_id).state_hash := state_hash`
+- `Channel(channel_id).initiator_delegate_ids := initiator_delegate_ids`
+- `Channel(channel_id).responder_delegate_ids := responder_delegate_ids`
 
 ## Closing a channel
 
