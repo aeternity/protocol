@@ -155,11 +155,11 @@ unverified peer is upgraded to the verified pool and removed from the unverified
 pool. If the connection fails, the peer retry counter and last retry time are
 updated.
 
-The node will periodically check a random peer from the pool without sending
-a ping message, only establishing the Noise connection. This ensure the pool
-contains enough reachable peers to reduce the chance of a Sybil attack were
-most of the good peers are unreachable augmenting the probability of only
-hostile node getting selected. (Not yet implemented).
+The node will periodically check a random peer from the unverified pool without
+sending a ping message, only establishing a TCP connection. This ensures the
+verified pool contains enough reachable peers to reduce the chance of a Sybil
+attack where most of the good peers are unreachable augmenting the probability
+of only hostile node getting selected.
 
 If a peer changes its IP address but not its key, the new address will **never**
 be updated through gossip. This is to prevent an hostil node from gossiping
