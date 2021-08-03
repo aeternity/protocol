@@ -182,5 +182,5 @@ nav:
           - timeout_open: node/api/examples/channels/json-rpc/sc_ws_timeout_open.md
           - update_with_meta: node/api/examples/channels/json-rpc/sc_ws_update_with_meta.md
   - Mining:
-    - Stratum: mining/STRATUM.md
+    - Stratum: STRATUM.md
   - Serializations: serializations.md

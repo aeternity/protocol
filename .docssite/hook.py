@@ -2,12 +2,13 @@ import os
 import shutil
 
 def pre_build(**kwargs):
-  source_folders = ['channels', 'consensus', 'contracts', 'generalized_accounts', 'mining', 'node', 'oracles', 'sync']
+  source_folders = ['channels', 'consensus', 'contracts', 'generalized_accounts', 'node', 'oracles', 'sync']
   dest = 'docs'
   shutil.copy('../README.md', dest)
   shutil.copy('../AENS.md', dest)
   shutil.copy('../GOSSIP.md', dest)
   shutil.copy('../serializations.md', dest)
+  shutil.copy('../STRATUM.md', dest)
   for source in source_folders:
     from_path = '../' + source
     to_path = dest + "/" + source
