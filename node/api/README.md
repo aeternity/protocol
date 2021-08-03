@@ -11,35 +11,46 @@ This document:
 The aeternity node exposes the following APIs:
 
 * Peer-to-peer network API. It consists of one TCP endpoint:
-  * It is encrypted and authenticated using the Noise protocol;
-  * The schema of its payload is [defined](/sync/);
-  * It is meant to be exposed on the Internet;
-  * Its TCP port is configurable.
-  * Its static Noise key pair is configurable.
-* User API. It consists of the following TCP endpoints:
-  * External HTTP endpoint;
-    * It is defined via Swagger schema;
+    * It is encrypted and authenticated using the Noise protocol;
+    * The schema of its payload is [defined](/sync/);
     * It is meant to be exposed on the Internet;
     * Its TCP port is configurable.
-  * Internal HTTP endpoint;
-    * It is defined via Swagger schema;
-    * It is **not** meant to be exposed on the Internet;
-    * Its TCP port is configurable.
-  * Internal Channels WebSocket endpoint.
-    * It is defined in the rest of this document;
-    * It is not meant to be exposed on the Internet;
-    * Its TCP port is configurable.
-  * Range of external Channels noise endpoints. It consists of as many TCP
+    * Its static Noise key pair is configurable.
+* User API. It consists of the following TCP endpoints:
+    * External HTTP endpoint;
+      * It is defined via Swagger schema;
+      * It is meant to be exposed on the Internet;
+      * Its TCP port is configurable.
+    * Internal HTTP endpoint;
+      * It is defined via Swagger schema;
+      * It is **not** meant to be exposed on the Internet;
+      * Its TCP port is configurable.
+    * Internal Channels WebSocket endpoint.
+      * It is defined in the rest of this document;
+      * It is not meant to be exposed on the Internet;
+      * Its TCP port is configurable.
+    * Range of external Channels noise endpoints. It consists of as many TCP
     endpoints as needed.
-    * They are used for connecting as a `responder` role in channel
+      * They are used for connecting as a `responder` role in channel
       communication;
-    * It is up to the node operator to define the range to be used; Their
+      * It is up to the node operator to define the range to be used; Their
       configuration is not part of the aeternity node;
-    * They are encrypted and authenticated using the Noise protocol using
+      * They are encrypted and authenticated using the Noise protocol using
       dynamic keys (unauthenticated Diffie-Hellman - exact protocol
       name `Noise_NN_25519_ChaChaPoly_BLAKE2b`);
-    * The schema of its payload is [defined](../../channels/OFF-CHAIN.md#messages);
-    * They are meant to be exposed on the Internet;
+      * The schema of its payload is [defined](../../channels/OFF-CHAIN.md#messages);
+      * They are meant to be exposed on the Internet;
+
+## User API - intended usage
+
+* [Encoding scheme for API identifiers](./api_encoding.md)
+* [Account management user API usage](./account_api_usage.md)
+* [Spending tokens using user API](./spend_api_usage.md)
+* [Oracle user API usage](./oracle_api_usage.md)
+* [Naming system API usage](./naming_system_api_usage.md)
+* [Contract API usage](./contract_api_usage.md)
+* [Channels API usage](./channels_api_usage.md)
+* [Mining API usage](./mining_api_usage.md)
 
 ## Channels WebSocket API definition
 
@@ -238,14 +249,3 @@ The `'data'` element may contain more detailed information inside `'data'`:
 }
 ```
 Detailed message transcripts from test suites can be found [here](https://github.com/aeternity/protocol/tree/master/specification/node/api/examples/channels/json-rpc).
-
-## User API - intended usage
-
-* [Encoding scheme for API identifiers](./api_encoding.md)
-* [Account management user API usage](./account_api_usage.md)
-* [Spending tokens using user API](./spend_api_usage.md)
-* [Oracle user API usage](./oracle_api_usage.md)
-* [Naming system API usage](./naming_system_api_usage.md)
-* [Contract API usage](./contract_api_usage.md)
-* [Channels API usage](./channels_api_usage.md)
-* [Mining API usage](./mining_api_usage.md)

@@ -3,14 +3,14 @@ plugins:
   - search
   - mkdocs-simple-hooks:
       hooks:
-        on_pre_build: '00_mkdocs.hook:pre_build'
+        on_pre_build: 'hook:pre_build'
 repo_url: 'https://github.com/aeternity/protocol'
 edit_uri: ''
 
-docs_dir: 00_mkdocs/docs_root
+docs_dir: docs
 
 theme:
-  favicon: 00_mkdocs/favicon.png
+  favicon: docs/favicon.png
   name: material
   language: en
   palette:

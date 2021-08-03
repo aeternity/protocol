@@ -20,4 +20,6 @@ jobs:
       - run: pip3 install -r .github/workflows/requirements.txt
       - run: git config --global user.email "github-action@users.noreply.github.com"
       - run: git config --global user.name "GitHub Action"
-      - run: mkdocs gh-deploy
+      - run: |
+          cd .docssite
+          mkdocs gh-deploy
