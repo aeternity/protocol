@@ -5,7 +5,7 @@ to a server, which coordinates the distribution of work packages among
 miners.
 
 The initial protocol was written for Bitcoin and contains several pieces that
-need adjustment in order to be usable with aeternity.
+need adjustment in order to be usable with æternity.
 
 Pool operators looking to implement this specification should note, that the
 usage of the Bitcoin-NG protocol changes the dynamics of the mining game.

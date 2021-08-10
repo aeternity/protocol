@@ -1,9 +1,9 @@
-# Aeternity Naming System
+# æternity naming system
 
 
 ## Abstract
 
-This document describes the first draft of the Aeternity Naming System,
+This document describes the first draft of the æternity naming system,
 short AENS.
 
 

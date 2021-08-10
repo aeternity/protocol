@@ -1,8 +1,8 @@
-# The Aeternity Ethereum Virtual Machine (AEVM)
+# The æternity Ethereum virtual machine (AEVM)
 
 The AEVM is a version of the EVM: https://github.com/ethereum/yellowpaper
 
-The AEVM can be emulated inside the aeternity node and no marshaling of
+The AEVM can be emulated inside the æternity node and no marshaling of
 arguments, code and data is necessary.  This makes for fast upstart
 and faster execution of most smaller contracts.
 
@@ -17,9 +17,9 @@ transactions can call the contract directly. When all other contracts
 referring to a disabled contract are fully disabled the contract is
 disabled.
 
-## Aeternity primitive operations
+## æternity primitive operations
 
-Interaction with the first class objects of the aeternity chain (e.g.
+Interaction with the first class objects of the æternity chain (e.g.
 oracles, names, and state channels) is done through calls to a
 built-in contract at address 0.
 
@@ -315,4 +315,4 @@ Some chain operations (`Oracle.<operation>` and `AENS.<operation>`) has an optio
 delegation signature. This is typically used when a user/accounts would like to
 allow a contract to act on it's behalf. The exact data to be signed varies for the
 different operations, but in *all* cases you should prepend the signature data with
-the `network_id` (`ae_mainnet` for the aeternity mainnet, etc.).
+the `network_id` (`ae_mainnet` for the æternity mainnet, etc.).

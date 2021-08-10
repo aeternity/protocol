@@ -9,7 +9,7 @@ method at channel creation time. You can read more about it
 [here](../../channels/authentication.md).
 
 ## Introduction
-You interact with an aeternity node both through HTTP requests and WebSocket
+You interact with an æternity node both through HTTP requests and WebSocket
 connections.
 To learn more about channels and their life cycle see [the doc](../../channels/README.md).
 
@@ -1452,7 +1452,7 @@ See [initial connection indication](#initial-connection-indication) on how the
 `fsm_id` is communicated.
 
 The full state, including state trees, is cached in encrypted form internally
-by the aeternity node, and upon reestablish, it is verified that the encoded
+by the æternity node, and upon reestablish, it is verified that the encoded
 state provided by the client corresponds to the latest full state retrieved from
 the cache.
 

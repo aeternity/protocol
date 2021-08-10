@@ -1,11 +1,11 @@
 # FATE
-The Fast Aeternity Transaction Engine
+The fast æternity transaction engine.
 
 ## Design
 
-The high level machine (or the Fast Aeternity Transaction Engine) has
-aeternity transactions as its basic operations and it operates
-directly on the state tree of the aeternity chain. This is a new
+The high level machine (or the fast æternity transaction engine) has
+æternity transactions as its basic operations and it operates
+directly on the state tree of the æternity chain. This is a new
 paradigm in blockchain virtual machine specifications which makes it
 possible to create type safe and efficient implementations of the
 machine.
@@ -17,7 +17,7 @@ be no catch instruction.
 
 In addition to normal machine instructions, such as ADD, the machine
 also has support for constructing most of the transactions available on
-the aeternity chain from native low level chain transaction
+the æternity chain from native low level chain transaction
 instructions.
 
 The instruction memory is divided into functions and basic

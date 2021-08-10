@@ -1,6 +1,6 @@
-# aeternity protocol
+# æternity protocol
 
-This document defines the aeternity protocol. It replaces the outdated whitepaper from 2017.
+This document defines the æternity protocol. It replaces the outdated whitepaper from 2017.
 
 ## Disclaimer
 

@@ -1,4 +1,4 @@
-site_name: aeternity Protocol
+site_name: æternity Protocol
 plugins:
   - search
   - mkdocs-simple-hooks:
