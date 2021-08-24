@@ -1,6 +1,6 @@
 # æternity node channel WebSocket API examples
 
-This directory provides a set of examples of state channel's communication via
+The JSON-RPC section provides examples of state channel's communication via
 the WebSocket API. The examples are generated from æternity node's
 integration tests and represent real interaction with the node.
 
@@ -99,9 +99,8 @@ comment of what had just happened. They look like this:
 
 #### Continuous example
 
-There are two types of examples: that show a full open-close scenario or those
-that are built on top of the previous ones'state. The latter are in `./*/continuous/`
-and the former are outside it. The continuous ones have one single opening of
-the state channel and the following examples are focused on specific actions.
-The opening with initial balances is described in
-`./*/continuous/init_per_group.md`
+There are two types of examples:
+
+  - Those that show a full open-close scenario (most of the examples)
+  - Those that are built on top of the previous ones' state (continuous)
+      These have one single opening of the state channel and the following examples are focused on specific actions

@@ -247,4 +247,4 @@ The `'data'` element may contain more detailed information inside `'data'`:
   "jsonrpc": "2.0"
 }
 ```
-Detailed message transcripts from test suites can be found [here](https://github.com/aeternity/protocol/tree/master/specification/node/api/examples/channels/json-rpc).
+Detailed message transcripts from test suites can be found in the JSON-RCP section of the [Websocket API examples](./examples/channels/README.md).
