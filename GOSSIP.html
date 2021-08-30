@@ -1,0 +1,3046 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="favicon.png">
+      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.9">
+    
+    
+      
+        <title>Gossip - æternity Protocol</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.ca7ac06f.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.f1a3b89f.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="pink" data-md-color-accent="pink">
+  
+    
+    <script>function __prefix(e){return new URL(".",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gossip" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="æternity Protocol" class="md-header__button md-logo" aria-label="æternity Protocol" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            æternity Protocol
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Gossip
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="pink" data-md-color-accent="pink"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="pink" data-md-color-accent="pink"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/aeternity/protocol/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="æternity Protocol" class="md-nav__button md-logo" aria-label="æternity Protocol" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    æternity Protocol
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/aeternity/protocol/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      <label class="md-nav__link" for="__nav_2">
+        Communication
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Communication" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Communication
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Gossip
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="GOSSIP.html" class="md-nav__link md-nav__link--active">
+        Gossip
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#initial-configuration" class="md-nav__link">
+    Initial Configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#peers" class="md-nav__link">
+    Peers
+  </a>
+  
+    <nav class="md-nav" aria-label="Peers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gossiping-of-new-peers" class="md-nav__link">
+    Gossiping of New Peers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#peers-maintenance" class="md-nav__link">
+    Peers Maintenance
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#peer-groups" class="md-nav__link">
+    Peer Groups
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connections" class="md-nav__link">
+    Connections
+  </a>
+  
+    <nav class="md-nav" aria-label="Connections">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#connection-cleanup" class="md-nav__link">
+    Connection Cleanup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unverified-peers" class="md-nav__link">
+    Unverified Peers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verified-peers" class="md-nav__link">
+    Verified Peers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technical-details" class="md-nav__link">
+    Technical Details
+  </a>
+  
+    <nav class="md-nav" aria-label="Technical Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constants" class="md-nav__link">
+    Constants
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bucket-selection" class="md-nav__link">
+    Bucket Selection
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#persistence" class="md-nav__link">
+    Persistence
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sync/index.html" class="md-nav__link">
+        Sync
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Consensus
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Consensus" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Consensus
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="consensus/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="consensus/bitcoin-ng.html" class="md-nav__link">
+        Bitcoin-NG
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="consensus/coinbase.html" class="md-nav__link">
+        Coinbase
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="consensus/locking.html" class="md-nav__link">
+        Locking
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        Features
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Features" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Features
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="generalized_accounts/index.html" class="md-nav__link">
+        Generalized Accounts
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="AENS.html" class="md-nav__link">
+        Naming System
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      <label class="md-nav__link" for="__nav_4_3">
+        Oracles
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Oracles" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Oracles
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="oracles/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="oracles/oracle_life_cycle.html" class="md-nav__link">
+        Lifecycle Examples
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="oracles/oracle_state_tree.html" class="md-nav__link">
+        State Tree
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="oracles/oracle_transactions.html" class="md-nav__link">
+        Transactions
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_4" type="checkbox" id="__nav_4_4" >
+      
+      <label class="md-nav__link" for="__nav_4_4">
+        Smart Contracts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Smart Contracts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_4">
+          <span class="md-nav__icon md-icon"></span>
+          Smart Contracts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contracts/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contracts/events.html" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contracts/contract_transactions.html" class="md-nav__link">
+        Transaction Types
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contracts/contract_state_tree.html" class="md-nav__link">
+        State Tree
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_4_5" type="checkbox" id="__nav_4_4_5" >
+      
+      <label class="md-nav__link" for="__nav_4_4_5">
+        Virtual Machines
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Virtual Machines" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_4_5">
+          <span class="md-nav__icon md-icon"></span>
+          Virtual Machines
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contracts/contract_vms.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contracts/aevm.html" class="md-nav__link">
+        AEVM
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contracts/fate.html" class="md-nav__link">
+        FATE VM
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_5" type="checkbox" id="__nav_4_5" >
+      
+      <label class="md-nav__link" for="__nav_4_5">
+        State Channels
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="State Channels" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_5">
+          <span class="md-nav__icon md-icon"></span>
+          State Channels
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="channels/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="channels/ON-CHAIN.html" class="md-nav__link">
+        On-Chain Actions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="channels/OFF-CHAIN.html" class="md-nav__link">
+        Off-Chain Actions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="channels/state.html" class="md-nav__link">
+        Off-Chain State
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Node API
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Node API" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Node API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/api_encoding.html" class="md-nav__link">
+        Encoding
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      <label class="md-nav__link" for="__nav_5_3">
+        API Usage
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="API Usage" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          API Usage
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/account_api_usage.html" class="md-nav__link">
+        Account API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/channels_api_usage.html" class="md-nav__link">
+        Channels API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/contract_api_usage.html" class="md-nav__link">
+        Contract API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/mining_api_usage.html" class="md-nav__link">
+        Mining API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/naming_system_api_usage.html" class="md-nav__link">
+        Naming System API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/oracle_api_usage.html" class="md-nav__link">
+        Oracle API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/spend_api_usage.html" class="md-nav__link">
+        Spend API
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4" type="checkbox" id="__nav_5_4" >
+      
+      <label class="md-nav__link" for="__nav_5_4">
+        State Channels
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="State Channels" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_4">
+          <span class="md-nav__icon md-icon"></span>
+          State Channels
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/channel_ws_api.html" class="md-nav__link">
+        WebSocket API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2" type="checkbox" id="__nav_5_4_2" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2">
+        Examples
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Examples" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2" type="checkbox" id="__nav_5_4_2_2" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2">
+        JSON-RPC
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="JSON-RPC" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          JSON-RPC
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_1" type="checkbox" id="__nav_5_4_2_2_1" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_1">
+        Abort Updates
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Abort Updates" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Abort Updates
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_deposit.html" class="md-nav__link">
+        abort_deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_offchain_update.html" class="md-nav__link">
+        abort_offchain_update
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_settle.html" class="md-nav__link">
+        abort_settle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_shutdown.html" class="md-nav__link">
+        abort_shutdown
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_slash.html" class="md-nav__link">
+        abort_slash
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_snapshot_solo.html" class="md-nav__link">
+        abort_snapshot_solo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_withdraw.html" class="md-nav__link">
+        abort_withdraw
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_can_not_abort_while_open.html" class="md-nav__link">
+        can_not_abort_while_open
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_2" type="checkbox" id="__nav_5_4_2_2_2" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_2">
+        Assume Min Depth
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Assume Min Depth" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Assume Min Depth
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/assume_min_depth/sc_ws_basic_open_close.html" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_3" type="checkbox" id="__nav_5_4_2_2_3" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_3">
+        Both Sign
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Both Sign" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Both Sign
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/both_sign/init_per_group.html" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_3_2" type="checkbox" id="__nav_5_4_2_2_3_2" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_3_2">
+        conflicts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="conflicts" data-md-level="6">
+        <label class="md-nav__title" for="__nav_5_4_2_2_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          conflicts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_deposit_and_offchain_update.html" class="md-nav__link">
+        conflict_deposit_and_offchain_update
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_two_deposits.html" class="md-nav__link">
+        conflict_two_deposits
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_two_offchain_updates.html" class="md-nav__link">
+        conflict_two_offchain_updates
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_two_withdrawals.html" class="md-nav__link">
+        conflict_two_withdrawals
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_withdrawal_and_deposit.html" class="md-nav__link">
+        conflict_withdrawal_and_deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_withdrawal_and_offchain_update.html" class="md-nav__link">
+        conflict_withdrawal_and_offchain_update
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_4" type="checkbox" id="__nav_5_4_2_2_4" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_4">
+        Changeable Fee
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Changeable Fee" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Changeable Fee
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_close_mutual.html" class="md-nav__link">
+        set_fee_close_mutual
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_close_solo.html" class="md-nav__link">
+        set_fee_close_solo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_create.html" class="md-nav__link">
+        set_fee_create
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_deposit.html" class="md-nav__link">
+        set_fee_deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_settle.html" class="md-nav__link">
+        set_fee_settle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_slash.html" class="md-nav__link">
+        set_fee_slash
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_snapshot.html" class="md-nav__link">
+        set_fee_snapshot
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_withdrawal.html" class="md-nav__link">
+        set_fee_withdrawal
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_5" type="checkbox" id="__nav_5_4_2_2_5" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_5">
+        Continuous
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Continuous" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Continuous
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/continuous/init_per_group.html" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/continuous/sc_ws_deposit.html" class="md-nav__link">
+        deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/continuous/sc_ws_failed_update.html" class="md-nav__link">
+        failed_update
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/continuous/sc_ws_generic_messages.html" class="md-nav__link">
+        generic_messages
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/continuous/sc_ws_ping_pong.html" class="md-nav__link">
+        ping_pong
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/continuous/sc_ws_update_conflict.html" class="md-nav__link">
+        update_conflict
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/continuous/sc_ws_withdraw.html" class="md-nav__link">
+        withdraw
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_6" type="checkbox" id="__nav_5_4_2_2_6" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_6">
+        Contracts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Contracts" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Contracts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/init_per_group.html" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/sc_ws_basic_contracts.html" class="md-nav__link">
+        basic_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/sc_ws_environment_contract.html" class="md-nav__link">
+        environment_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/sc_ws_nameservice_contract.html" class="md-nav__link">
+        nameservice_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/sc_ws_oracle_contract.html" class="md-nav__link">
+        oracle_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/sc_ws_remote_call_contract.html" class="md-nav__link">
+        remote_call_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/sc_ws_remote_call_contract_refering_onchain_data.html" class="md-nav__link">
+        remote_call_contract_refering_onchain_data
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/sc_ws_wrong_call_data.html" class="md-nav__link">
+        wrong_call_data
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_7" type="checkbox" id="__nav_5_4_2_2_7" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_7">
+        Force Progress
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Force Progress" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          Force Progress
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/force_progress/sc_ws_force_progress_based_on_offchain_state.html" class="md-nav__link">
+        force_progress_based_on_offchain_state
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/force_progress/sc_ws_force_progress_based_on_onchain_state.html" class="md-nav__link">
+        force_progress_based_on_onchain_state
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_8" type="checkbox" id="__nav_5_4_2_2_8" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_8">
+        Generalized Accounts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Generalized Accounts" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8">
+          <span class="md-nav__icon md-icon"></span>
+          Generalized Accounts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_8_1" type="checkbox" id="__nav_5_4_2_2_8_1" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_8_1">
+        both
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="both" data-md-level="6">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8_1">
+          <span class="md-nav__icon md-icon"></span>
+          both
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/generalized_accounts/both/sc_ws_basic_open_close.html" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_8_2" type="checkbox" id="__nav_5_4_2_2_8_2" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_8_2">
+        initiator
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="initiator" data-md-level="6">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8_2">
+          <span class="md-nav__icon md-icon"></span>
+          initiator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/generalized_accounts/initiator/sc_ws_basic_open_close.html" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_8_3" type="checkbox" id="__nav_5_4_2_2_8_3" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_8_3">
+        responder
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="responder" data-md-level="6">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8_3">
+          <span class="md-nav__icon md-icon"></span>
+          responder
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/generalized_accounts/responder/sc_ws_basic_open_close.html" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_9" type="checkbox" id="__nav_5_4_2_2_9" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_9">
+        Only One Signs
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Only One Signs" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_9">
+          <span class="md-nav__icon md-icon"></span>
+          Only One Signs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/init_per_group.html" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/sc_ws_conflict_on_new_offchain.html" class="md-nav__link">
+        conflict_on_new_offchain
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/sc_ws_conflict_snapshot_and_offchain_update.html" class="md-nav__link">
+        sc_ws_conflict_snapshot_and_offchain_update
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_9_4" type="checkbox" id="__nav_5_4_2_2_9_4" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_9_4">
+        conflicts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="conflicts" data-md-level="6">
+        <label class="md-nav__title" for="__nav_5_4_2_2_9_4">
+          <span class="md-nav__icon md-icon"></span>
+          conflicts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_deposit_and_offchain_update.html" class="md-nav__link">
+        conflict_deposit_and_offchain_update
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_two_deposits.html" class="md-nav__link">
+        conflict_two_deposits
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_two_offchain_updates.html" class="md-nav__link">
+        conflict_two_offchain_updates
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_two_withdrawals.html" class="md-nav__link">
+        conflict_two_withdrawals
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_withdrawal_and_deposit.html" class="md-nav__link">
+        conflict_withdrawal_and_deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_withdrawal_and_offchain_update.html" class="md-nav__link">
+        conflict_withdrawal_and_offchain_update
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_10" type="checkbox" id="__nav_5_4_2_2_10" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_10">
+        Reconnect
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Reconnect" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_10">
+          <span class="md-nav__icon md-icon"></span>
+          Reconnect
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/reconnect/sc_ws_basic_client_reconnect_i.html" class="md-nav__link">
+        basic_client_reconnect_i
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/reconnect/sc_ws_basic_client_reconnect_i_w_reestablish.html" class="md-nav__link">
+        basic_client_reconnect_i_w_reestablish
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/reconnect/sc_ws_basic_client_reconnect_r.html" class="md-nav__link">
+        basic_client_reconnect_r
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_11" type="checkbox" id="__nav_5_4_2_2_11" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_11">
+        With Meta
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="With Meta" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_11">
+          <span class="md-nav__icon md-icon"></span>
+          With Meta
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/with_meta/init_per_group.html" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/with_meta/sc_ws_deposit.html" class="md-nav__link">
+        deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/with_meta/sc_ws_remote_call_contract.html" class="md-nav__link">
+        remote_call_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/with_meta/sc_ws_withdraw.html" class="md-nav__link">
+        withdraw
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_basic_open_close_server.html" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_basic_open_close.html" class="md-nav__link">
+        basic_open_close_server
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_broken_open_params.html" class="md-nav__link">
+        broken_open_params
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_close_mutual.html" class="md-nav__link">
+        close_mutual
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_close_solo.html" class="md-nav__link">
+        close_solo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_leave_reconnect.html" class="md-nav__link">
+        leave_reconnect
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_leave_reestablish.html" class="md-nav__link">
+        leave_reestablish
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_leave_reestablish_responder_stays.html" class="md-nav__link">
+        leave_reestablish_responder_stays
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_leave_reestablish_wrong_fsm_id.html" class="md-nav__link">
+        leave_reestablish_wrong_fsm_id
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_min_depth_is_modifiable.html" class="md-nav__link">
+        min_depth_is_modifiable
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_min_depth_not_reached_timeout.html" class="md-nav__link">
+        min_depth_not_reached_timeout
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_opening_ping_pong.html" class="md-nav__link">
+        opening_ping_pong
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_reconnect_early.html" class="md-nav__link">
+        reconnect_early
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_slash.html" class="md-nav__link">
+        slash
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_snapshot_solo.html" class="md-nav__link">
+        snapshot_solo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_timeout_open.html" class="md-nav__link">
+        timeout_open
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_update_with_meta.html" class="md-nav__link">
+        update_with_meta
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
+        Mining
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Mining" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Mining
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="STRATUM.html" class="md-nav__link">
+        Stratum
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="serializations.html" class="md-nav__link">
+        Serializations
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#initial-configuration" class="md-nav__link">
+    Initial Configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#peers" class="md-nav__link">
+    Peers
+  </a>
+  
+    <nav class="md-nav" aria-label="Peers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gossiping-of-new-peers" class="md-nav__link">
+    Gossiping of New Peers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#peers-maintenance" class="md-nav__link">
+    Peers Maintenance
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#peer-groups" class="md-nav__link">
+    Peer Groups
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connections" class="md-nav__link">
+    Connections
+  </a>
+  
+    <nav class="md-nav" aria-label="Connections">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#connection-cleanup" class="md-nav__link">
+    Connection Cleanup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unverified-peers" class="md-nav__link">
+    Unverified Peers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verified-peers" class="md-nav__link">
+    Verified Peers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technical-details" class="md-nav__link">
+    Technical Details
+  </a>
+  
+    <nav class="md-nav" aria-label="Technical Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constants" class="md-nav__link">
+    Constants
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bucket-selection" class="md-nav__link">
+    Bucket Selection
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#persistence" class="md-nav__link">
+    Persistence
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/aeternity/protocol/edit/master/docs/GOSSIP.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="gossip">Gossip</h1>
+<p>As explained in the <a href="sync/index.html">Sync</a> document, any blockchain implementation
+needs communication with peers in order to be truly useful. Apart from the lower
+level details described in that document, there is the added dimension of
+how peers are selected for communication, how connections to those peers are
+maintained over time. This is the purpose of gossiping functionality.</p>
+<h2 id="initial-configuration">Initial Configuration</h2>
+<p>The initial set of peers is defined by configuration when starting the node.
+This is a predefined set of peers that are automatically connected to upon
+startup.</p>
+<h2 id="peers">Peers</h2>
+<p>A peer is identified by a URI consisting of the protocol 'aenode://', the public
+key, an '@' character, the hostname or IP number, a ':' character and the Noise
+port number the node is using. If the address contains a hostname, it will be
+resolved to an IP. Example:</p>
+<div class="highlight"><pre><span></span><code>aenode://pp_HryRGHJ7Ct3trkktVyVBgfhHL1J4EYSD9cScuMZDV61eSHrCZ@mynode.example.com:3015
+</code></pre></div>
+<p>A node is uniquely identified by its public key, and it can only have one IP and
+port at the same time. This means one IP can have several instances of æternity node
+started at the same time listening on different ports if they have different
+public keys. This key corresponds to the private key that is used for the Noise
+protocol listener associated with the IP and port.</p>
+<p>Apart from being used in encryption via the Noise protocol, the public key is
+also used to determine which node should keep its initiated connection open in
+case two connections are opened (see
+<a href="#gossiping-of-new-peers">Gossiping of New Peers</a>).</p>
+<h3 id="gossiping-of-new-peers">Gossiping of New Peers</h3>
+<p>Whenever a ping message is exchanged between peers, either a ping request or
+ping response, the peers also attach a subset of neighboring peers they know of.
+The node that generates the message populates the neighbor list with 32 peers
+at most that are randomly selected from its verified peer pool (see
+<a href="#peers-maintenance">Peers Maintenance</a>).</p>
+<p>When a ping request is received from another peer, that peer is first checked
+for acceptance. This includes verifying</p>
+<ol>
+<li>It is not the local node itself</li>
+<li>The peer is not on the blocked list</li>
+<li>It doesn't already have an existing connection</li>
+</ol>
+<p>(3) refers to the case where two peers have learned about each other separately
+and are both trying to initiate a connection. The connections are both initiated
+via Noise, but once they are connected each node checks if they already have a
+connection to that same peer. If they do, they will keep it if their public key
+is larger than their peers, and drop it if not. This ordering of keys is
+arbitrary but achieves the effect of only ever being true at one node or the
+other. Thus, only one connection is kept.</p>
+<p>Once the peer is accepted, all the neighbors not already verified are added to
+the unverified pool. If this is the first ping from an inbound connection from
+an unverified peer, the peer itself is added to the unverified pool too
+(see <a href="#peers-maintenance">Peers Maintenance</a> for more details).</p>
+<h3 id="peers-maintenance">Peers Maintenance</h3>
+<p>The objectives of peer maintenance are:</p>
+<ol>
+<li>Prevent peer poisoning (Sybil/eclipse attack)</li>
+<li>Limit the number of active peer connections</li>
+<li>Cache the known peers between restart to make peer poisoning harder.</li>
+</ol>
+<p>To prevent an attacker from poisoning the list of peers, isolating the
+node from the rest of the network, we make it impossible to predict
+the set of peer's IP/port the attacker should control to fill enough of the list
+for the attack to be statistically successful. In addition, we randomize the
+peer eviction to prevent an attacker from predicting it and replace all good
+peers for their own compromised ones.</p>
+<p>This is achieved by first categorizing peers in two groups:</p>
+<ol>
+<li>
+<p>The unverified pool contains all the peers received through gossip.
+It ensures no Byzantine node can fill it completely by limiting the subset
+of the pool it can affect; it prevents attackers from predicting the set of
+IP/port they must use to successfully eclipse the node.</p>
+</li>
+<li>
+<p>The verified pool contains the peers the node connected to explicitly after
+passing through the filter of the unverified pool. It randomizes the peer
+distribution to the eye of attackers, preventing them from predicting the
+eviction algorithm.</p>
+</li>
+</ol>
+<p>Peers are considered verified when the node has been able to connect to
+them using the Noise protocol.</p>
+<p>Both groups clusterize peers into multiple buckets; they select which one
+an added peer belongs to based on a combination of the address of the node the
+information is coming from, the address of the peer to be added and a secret
+generated by the node for the purpose of randomizing the selection process.
+See <a href="#unverified-pool">Unverified Pool</a> and <a href="#verified-pool">Verified Pool</a> for
+more details on how the peers are added to the pools.</p>
+<p>The peers received from configuration are added directly to the verified pool
+and are marked as "trusted", meaning that they will never get downgraded to the
+unverified pool even if the node cannot connect to them.</p>
+<h3 id="peer-groups">Peer Groups</h3>
+<p>Peers are grouped by the 16 most significant bits of a peer IP (\16 mask).
+This group is used when selecting a bucket and establishing the node outbound
+connections to prevent nodes from being connected only to local nodes; this
+make block forwarding more effective. NOTE: If all the nodes are in the same
+group, they may not reach their maximum number of outbound connection and this
+should probably be disabled.</p>
+<h3 id="connections">Connections</h3>
+<p>There are two pools of connections, inbound connection and outbound connections.</p>
+<p>Both inbound and outbound connections are used for mempool, gossip and sync
+protocol; but only outbound connections are used for relaying new blocks to
+reduce the network load.</p>
+<p>There is a hard limit on the maximum number of outbound connection
+(default to 10).</p>
+<p>There is a soft limit on the maximum of inbound connections (default to 100).
+When it is reached, the node will still accept inbound connections, but they will
+be closed right after responding to the first ping. This is a soft limit to allow
+nodes to join the cluster even if the trusted nodes inbound limit has been
+reached. In addition, this prevents a node, in particular a trusted node, to
+have so much inbound connections that it cannot reach its number of outbound
+connections; a guaranteed number of outbound connection is crucial for proper
+propagation of new blocks. For all nodes to reach their established number of
+outbound connections, the soft maximum limit for inbound connections must be
+smaller than the maximum number of nodes minus the wanted number of outgoing
+connections.</p>
+<p>The node will first burst-connect to the trusted peers and then periodically
+connects to more peers until it reaches the maximum number of outbound
+connections; the delay between connections to new peers should be small enough
+so the nodes has enough outbound connections to work properly, but large enough
+so it has enough peers to choose from. This is done by having a variable delay
+between connections of <code>2^(OUTBOUND_CONNECTION_COUNT - 1)</code> seconds when
+<code>OUTBOUND_CONNECTION_COUNT</code> is greater than <code>0</code> with a maximum of <code>30</code> seconds;
+this allow the node to reach 5 outbound connection under <code>15</code> seconds and
+connect to the last peer when having received around <code>20</code> gossip messages.</p>
+<p>The node iteratively picks a random peer (not yet connected) from either
+the verified pool or the unverified pool (<code>1.0</code> probability by default, so it
+always tries to pick a peer from the verified pool first)
+that is from a different group (<a href="#peer-groups">See Peer Groups</a>) than
+any actual outbound connection. In case there are no more peers available in the
+selected pool the other one will be tried. If the connection succeeds, an
+unverified peer is upgraded to the verified pool and removed from the unverified
+pool. If the connection fails, the peer retry counter and last retry time are
+updated.</p>
+<p>The node will periodically check a random peer from the unverified pool without
+sending a ping message, only establishing a TCP connection. This ensures the
+verified pool contains enough reachable peers to reduce the chance of a Sybil
+attack where most of the good peers are unreachable augmenting the probability
+of only hostile node getting selected.</p>
+<p>If a peer changes its IP address but not its key, the new address will <strong>never</strong>
+be updated through gossip. This is to prevent an hostil node from gossiping
+bad addresses for known good nodes and making them unreachable. The peer will be
+removed after the normal retry policy is exausted; then the new address will be
+added through the usual gossip exchanges.</p>
+<p>The peer retry counter and last retry time (initialized to '0' and 'infinity'),
+are used to filter out peers when picking them from the pools providing
+exponential backoff. After N failed attempts, a verified peer that is not
+marked as trusted is downgraded to the unverified pool and the counter and time
+is reset; unverified peers are simply removed.</p>
+<p>Connected peers will periodically be pinged, and their connection state
+monitored. The ping interval is configurable and defaults to once every 120
+seconds. If a ping fails, this is logged and the peer is scheduled for another
+ping in the normal interval.</p>
+<h4 id="connection-cleanup">Connection Cleanup</h4>
+<p>Connections are monitored and cleaned when inactive to prevent an attacker
+from isolating the node by blocking chain traffic. If there is actually no
+traffic, it will just accelerate the connection rotation.</p>
+<ul>
+<li>All connections without any chain-related activity (not counting gossip) for
+more than 180 seconds will get disconnected. (Not yet implemented)</li>
+<li>All inbound connections that don't send a ping after 30 seconds will be
+disconnected.</li>
+<li>All recent inbound connections (less than 90 seconds old) without any
+chain-related activity (not counting gossip) will be closed. (Not yet implemented)</li>
+<li>When the maximum number of outbound connections has been reached, a random
+peer is checked every minute (only Noise handcheck).</li>
+</ul>
+<h4 id="unverified-peers">Unverified Peers</h4>
+<p>The unverified pool is composed of 1024 buckets of up to 64 peers, resulting in
+a maximum capacity of 65536 peers.</p>
+<p>To prevent a rogue node to fill it with compromised peers, it uses the address
+group of the node gossiping the peers to select a subset of the buckets; then
+the added peer address group is used to select a smaller subset and then the
+rest of the address is finally used to select the bucket it belongs to.
+A secret known only by the node is used to randomize the selection process
+so it cannot be predicted by the attacker.</p>
+<p>If a peer is not already in the verified pool, the steps to add it to the
+unverified pool are:</p>
+<ol>
+<li>If there is already 8 references of the peer in the pool, no more
+references are added; if there is N references, a random probability check of
+'1/2^N' is performed to decide if another reference to the peer should be added.</li>
+<li>A subset of 64 buckets are selected based on the secret and the group of the
+node that gossiped the peer (IP '/16' mask); this limits the part of the pool
+that can be changed by any given rogue node IP.</li>
+<li>From this subset, 4 buckets are selected based on the secret and the IP of
+the peer to be added; this randomizes the peer distribution preventing the
+prediction of the way peers will be evicted.</li>
+<li>From these 4 buckets, a single one is selected randomly; this reduces the
+collisions between peers that share the same IP.</li>
+<li>If the bucket already contains a reference to the peer, it is not added again.</li>
+<li>If the bucket the peer has to be added to is full, one existing peer has to
+be evicted. This is done by first cleaning all the peers that weren't gossiped
+for a certain amount of time, then if the bucket is still full, by selecting a
+random peer with a bias favoring peers that were added the longest time ago.</li>
+<li>The eventually evicted peer is completely removed from the pool.</li>
+</ol>
+<p>Only the IPs of the peers are used to select a subset of the pool because
+IP is an expensive resource while ports are comparatively cheap.</p>
+<p>See <a href="#bucket-selection">Bucket Selection</a> for more details on how the buckets
+are selected from the secret and other discriminators.</p>
+<h4 id="verified-peers">Verified Peers</h4>
+<p>The verified pool is composed of 256 buckets of up to 32 peers, resulting in a
+maximum capacity of 8192 peers.</p>
+<p>To prevent attackers from predicting how good peers are evicted and replace them
+by compromised peers, the eviction is done per-bucket; the buckets are selected
+from the peer address and a secret to randomize the selection process.</p>
+<p>When a peer is verified the first time by connecting to it using the Noise
+protocol, it is removed from the unverified pool and the steps to add it to
+the verified pool are:</p>
+<ol>
+<li>A subset of 8 buckets are selected based on the secret and the address group
+of the peer to be added.</li>
+<li>From this subset, a single bucket is selected based on the secret and the
+rest of the IP of the peer to be added.</li>
+<li>If the bucket is full, one peer has to be evicted. This is done by first
+cleaning the peers that weren't gossiped for a long time, and if the bucket is
+still full, by selecting a random one with a bias toward the ones that are not
+connected and the last connection was the longest time ago. Trusted peers and
+connected peers are never evicted.</li>
+<li>The eventually evicted peer is added to the unverified pool; its retry
+counter and last retry time are reset.</li>
+</ol>
+<p>See <a href="#bucket-selection">Bucket Selection</a> for more details on how the buckets
+are selected from the secret and other discriminators.</p>
+<h4 id="technical-details">Technical Details</h4>
+<h5 id="constants">Constants</h5>
+<p>List of constants with their current default values:</p>
+<ul>
+<li>Maximum number of outbound connections: <code>10</code></li>
+<li>Soft maximum number of inbound connections: <code>100</code></li>
+<li>Number of buckets in the verified pool: <code>2^8</code> (<code>256</code>)</li>
+<li>Number of peer per verified buckets: <code>2^5</code> (<code>32</code>)</li>
+<li>Number of buckets in the unverified pool: <code>2^10</code> (<code>1024</code>)</li>
+<li>Number of peer per unverified buckets: <code>2^6</code> (<code>64</code>)</li>
+<li>Maximum number of duplicated peers in the unverified pool: <code>8</code></li>
+<li>Probability of adding a Nth duplicated reference of an existing peer to the
+unverified pool: <code>1/2^N</code></li>
+<li>Period of verified peer random peer check when the maximum number
+of verified connections has been reached: <code>60 seconds</code></li>
+<li>Period of new peer connection up to the maximum number of verified
+connections: <code>min(30, 2^(OUTBOUND_CONNECTION_COUNT - 1)) seconds</code>.</li>
+<li>Gossip ping frequency: <code>120 seconds</code></li>
+<li>Maximum time to get a ping from an inbound connection: <code>30 seconds</code></li>
+<li>Maximum time without activity (besides gossip) for inbound connections less
+than 90 seconds old: <code>30 seconds</code></li>
+<li>Maximum time without activity (besides gossip) for all connections: <code>180 seconds</code></li>
+<li>Number of unverified buckets selected based on the source address group: <code>64</code></li>
+<li>Number of unverified sub-buckets selected based on the peer address group: <code>4</code></li>
+<li>Number of verified buckets selected based on peer address group: <code>8</code></li>
+</ul>
+<p>With these default values:</p>
+<ul>
+<li>The maximum cumulated number of distinct peers in the pools is from
+16384 to 73728 depending on peer duplication in the unverified pool.</li>
+<li>The maximum number of peers that can be added through gossip by peers sharing
+the same address group is from 512 to 4096 depending on peer duplication in the
+unverified pool.</li>
+<li>The maximum number of neighboring peers sharing the same IP a single node
+can add through gossip is from 23 to 184 depending on peer duplication in the
+unverified pool.</li>
+<li>The minimum time to reach 10 outbound connections is 2 minutes and 31 seconds.</li>
+</ul>
+<h5 id="bucket-selection">Bucket Selection</h5>
+<p>The bucket selection is done by hashing the secret with the discriminator and
+use the result as an integer; this integer modulo is used to restrict the
+subset.</p>
+<p>For the unverified bucket selection:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;&lt;</span><span class="nv">N1</span><span class="p">:</span><span class="mi">160</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="nn">crypto</span><span class="p">:</span><span class="nb">hash</span><span class="p">(</span><span class="n">sha</span><span class="p">,</span> <span class="o">&lt;&lt;</span><span class="nv">Secret</span><span class="o">/</span><span class="n">binary</span><span class="p">,</span> <span class="nv">PeerGroup</span><span class="o">/</span><span class="n">binary</span><span class="o">&gt;&gt;</span><span class="p">).</span>
+<span class="o">&lt;&lt;</span><span class="nv">N2</span><span class="p">:</span><span class="mi">160</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="nn">crypto</span><span class="p">:</span><span class="nb">hash</span><span class="p">(</span><span class="n">sha</span><span class="p">,</span> <span class="o">&lt;&lt;</span><span class="nv">Secret</span><span class="o">/</span><span class="n">binary</span><span class="p">,</span> <span class="nv">PeerAddress</span><span class="o">/</span><span class="n">binary</span><span class="o">&gt;&gt;</span><span class="p">).</span>
+<span class="o">&lt;&lt;</span><span class="nv">N3</span><span class="p">:</span><span class="mi">160</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="nn">crypto</span><span class="p">:</span><span class="nb">hash</span><span class="p">(</span><span class="n">sha</span><span class="p">,</span> <span class="o">&lt;&lt;</span><span class="nv">Secret</span><span class="o">/</span><span class="n">binary</span><span class="p">,</span> <span class="nv">SourceGroup</span><span class="o">/</span><span class="n">binary</span><span class="p">,</span> <span class="p">(</span><span class="nv">N1</span> <span class="ow">rem</span> <span class="mi">16</span><span class="p">):</span><span class="mi">8</span><span class="p">,</span> <span class="p">(</span><span class="nv">N2</span> <span class="ow">rem</span> <span class="mi">4</span><span class="p">):</span><span class="mi">8</span><span class="o">&gt;&gt;</span><span class="p">).</span>
+<span class="nv">BucketIdx</span> <span class="o">=</span> <span class="nv">N3</span> <span class="ow">rem</span> <span class="mi">1024</span><span class="p">.</span>
+</code></pre></div>
+<p>For the verified bucket selection:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;&lt;</span><span class="nv">N1</span><span class="p">:</span><span class="mi">160</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="nn">crypto</span><span class="p">:</span><span class="nb">hash</span><span class="p">(</span><span class="n">sha</span><span class="p">,</span> <span class="o">&lt;&lt;</span><span class="nv">Secret</span><span class="o">/</span><span class="n">binary</span><span class="p">,</span> <span class="nv">PeerAddress</span><span class="o">/</span><span class="n">binary</span><span class="o">&gt;&gt;</span><span class="p">).</span>
+<span class="o">&lt;&lt;</span><span class="nv">N2</span><span class="p">:</span><span class="mi">160</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="nn">crypto</span><span class="p">:</span><span class="nb">hash</span><span class="p">(</span><span class="n">sha</span><span class="p">,</span> <span class="o">&lt;&lt;</span><span class="nv">Secret</span><span class="o">/</span><span class="n">binary</span><span class="p">,</span> <span class="nv">PeerGroup</span><span class="o">/</span><span class="n">binary</span><span class="p">,</span> <span class="p">(</span><span class="nv">N1</span> <span class="ow">rem</span> <span class="mi">8</span><span class="p">):</span><span class="mi">8</span><span class="o">&gt;&gt;</span><span class="p">).</span>
+<span class="nv">BucketIdx</span> <span class="o">=</span> <span class="nv">N2</span> <span class="ow">rem</span> <span class="mi">256</span><span class="p">.</span>
+</code></pre></div>
+<h4 id="persistence">Persistence</h4>
+<p>(Not yet implemented)</p>
+<p>Persistence of the known peers is important in preventing Sybil/eclipse attacks.</p>
+<p>If the node rebuild its list of peers from scratch every time it is restarted,
+an attacker could use any other attack vector to crash the node or wait for
+a scheduled restart and be the first to spam it with compromised addresses.</p>
+<p>To support persistence, both verified and unverified pools are dumped to disk
+periodically and loaded on startup.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="index.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Introduction" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Introduction
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="sync/index.html" class="md-footer__link md-footer__link--next" aria-label="Next: Sync" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Sync
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": ".", "features": ["content.tabs.link", "search.highlight", "search.share", "search.suggest"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "assets/javascripts/workers/search.477d984a.min.js", "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.82b56eb2.min.js"></script>
+      
+    
+  </body>
+</html>

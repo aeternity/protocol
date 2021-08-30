@@ -1,0 +1,3508 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="favicon.png">
+      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.9">
+    
+    
+      
+        <title>Naming System - æternity Protocol</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.ca7ac06f.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.f1a3b89f.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="pink" data-md-color-accent="pink">
+  
+    
+    <script>function __prefix(e){return new URL(".",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ternity-naming-system" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="æternity Protocol" class="md-header__button md-logo" aria-label="æternity Protocol" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            æternity Protocol
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Naming System
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="pink" data-md-color-accent="pink"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="pink" data-md-color-accent="pink"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/aeternity/protocol/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="æternity Protocol" class="md-nav__button md-logo" aria-label="æternity Protocol" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    æternity Protocol
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/aeternity/protocol/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Communication
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Communication" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Communication
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="GOSSIP.html" class="md-nav__link">
+        Gossip
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sync/index.html" class="md-nav__link">
+        Sync
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Consensus
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Consensus" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Consensus
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="consensus/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="consensus/bitcoin-ng.html" class="md-nav__link">
+        Bitcoin-NG
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="consensus/coinbase.html" class="md-nav__link">
+        Coinbase
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="consensus/locking.html" class="md-nav__link">
+        Locking
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      <label class="md-nav__link" for="__nav_4">
+        Features
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Features" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Features
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="generalized_accounts/index.html" class="md-nav__link">
+        Generalized Accounts
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Naming System
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="AENS.html" class="md-nav__link md-nav__link--active">
+        Naming System
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#abstract" class="md-nav__link">
+    Abstract
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    Motivation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    Background
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#governance" class="md-nav__link">
+    Governance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mechanisms" class="md-nav__link">
+    Mechanisms
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specification" class="md-nav__link">
+    Specification
+  </a>
+  
+    <nav class="md-nav" aria-label="Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aens-entry" class="md-nav__link">
+    AENS Entry
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#name" class="md-nav__link">
+    Name
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#namespaceslabels" class="md-nav__link">
+    Namespaces/Labels
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registrars" class="md-nav__link">
+    Registrars
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commitment-scheme" class="md-nav__link">
+    Commitment Scheme
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hashing" class="md-nav__link">
+    Hashing
+  </a>
+  
+    <nav class="md-nav" aria-label="Hashing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#until-lima-hardfork" class="md-nav__link">
+    Until Lima hardfork
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-lima-hardfork" class="md-nav__link">
+    From Lima hardfork
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#protocol" class="md-nav__link">
+    Protocol
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#protocol-fees-and-protection-times" class="md-nav__link">
+    Protocol fees and protection times
+  </a>
+  
+    <nav class="md-nav" aria-label="Protocol fees and protection times">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre-claim" class="md-nav__link">
+    Pre-claim
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#claim" class="md-nav__link">
+    Claim
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update" class="md-nav__link">
+    Update
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transfer" class="md-nav__link">
+    Transfer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#revoke" class="md-nav__link">
+    Revoke
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage" class="md-nav__link">
+    Storage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#launch" class="md-nav__link">
+    Launch
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#possible-future-extensions" class="md-nav__link">
+    (possible) Future extensions
+  </a>
+  
+    <nav class="md-nav" aria-label="(possible) Future extensions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registrars_1" class="md-nav__link">
+    Registrars
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auctions" class="md-nav__link">
+    Auctions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uri-schema" class="md-nav__link">
+    URI Schema
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decentralized-name-exchange" class="md-nav__link">
+    Decentralized name exchange
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#governance_1" class="md-nav__link">
+    Governance
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interoperability" class="md-nav__link">
+    Interoperability
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#light-clients" class="md-nav__link">
+    Light clients
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fee-lottery" class="md-nav__link">
+    Fee lottery
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      <label class="md-nav__link" for="__nav_4_3">
+        Oracles
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Oracles" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Oracles
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="oracles/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="oracles/oracle_life_cycle.html" class="md-nav__link">
+        Lifecycle Examples
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="oracles/oracle_state_tree.html" class="md-nav__link">
+        State Tree
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="oracles/oracle_transactions.html" class="md-nav__link">
+        Transactions
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_4" type="checkbox" id="__nav_4_4" >
+      
+      <label class="md-nav__link" for="__nav_4_4">
+        Smart Contracts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Smart Contracts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_4">
+          <span class="md-nav__icon md-icon"></span>
+          Smart Contracts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contracts/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contracts/events.html" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contracts/contract_transactions.html" class="md-nav__link">
+        Transaction Types
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contracts/contract_state_tree.html" class="md-nav__link">
+        State Tree
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_4_5" type="checkbox" id="__nav_4_4_5" >
+      
+      <label class="md-nav__link" for="__nav_4_4_5">
+        Virtual Machines
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Virtual Machines" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_4_5">
+          <span class="md-nav__icon md-icon"></span>
+          Virtual Machines
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contracts/contract_vms.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contracts/aevm.html" class="md-nav__link">
+        AEVM
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contracts/fate.html" class="md-nav__link">
+        FATE VM
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_5" type="checkbox" id="__nav_4_5" >
+      
+      <label class="md-nav__link" for="__nav_4_5">
+        State Channels
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="State Channels" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_5">
+          <span class="md-nav__icon md-icon"></span>
+          State Channels
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="channels/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="channels/ON-CHAIN.html" class="md-nav__link">
+        On-Chain Actions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="channels/OFF-CHAIN.html" class="md-nav__link">
+        Off-Chain Actions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="channels/state.html" class="md-nav__link">
+        Off-Chain State
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Node API
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Node API" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Node API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/api_encoding.html" class="md-nav__link">
+        Encoding
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      <label class="md-nav__link" for="__nav_5_3">
+        API Usage
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="API Usage" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          API Usage
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/account_api_usage.html" class="md-nav__link">
+        Account API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/channels_api_usage.html" class="md-nav__link">
+        Channels API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/contract_api_usage.html" class="md-nav__link">
+        Contract API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/mining_api_usage.html" class="md-nav__link">
+        Mining API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/naming_system_api_usage.html" class="md-nav__link">
+        Naming System API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/oracle_api_usage.html" class="md-nav__link">
+        Oracle API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/spend_api_usage.html" class="md-nav__link">
+        Spend API
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4" type="checkbox" id="__nav_5_4" >
+      
+      <label class="md-nav__link" for="__nav_5_4">
+        State Channels
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="State Channels" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_4">
+          <span class="md-nav__icon md-icon"></span>
+          State Channels
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/channel_ws_api.html" class="md-nav__link">
+        WebSocket API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2" type="checkbox" id="__nav_5_4_2" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2">
+        Examples
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Examples" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2" type="checkbox" id="__nav_5_4_2_2" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2">
+        JSON-RPC
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="JSON-RPC" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          JSON-RPC
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_1" type="checkbox" id="__nav_5_4_2_2_1" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_1">
+        Abort Updates
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Abort Updates" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Abort Updates
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_deposit.html" class="md-nav__link">
+        abort_deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_offchain_update.html" class="md-nav__link">
+        abort_offchain_update
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_settle.html" class="md-nav__link">
+        abort_settle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_shutdown.html" class="md-nav__link">
+        abort_shutdown
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_slash.html" class="md-nav__link">
+        abort_slash
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_snapshot_solo.html" class="md-nav__link">
+        abort_snapshot_solo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_withdraw.html" class="md-nav__link">
+        abort_withdraw
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/abort_updates/sc_ws_can_not_abort_while_open.html" class="md-nav__link">
+        can_not_abort_while_open
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_2" type="checkbox" id="__nav_5_4_2_2_2" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_2">
+        Assume Min Depth
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Assume Min Depth" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Assume Min Depth
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/assume_min_depth/sc_ws_basic_open_close.html" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_3" type="checkbox" id="__nav_5_4_2_2_3" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_3">
+        Both Sign
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Both Sign" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Both Sign
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/both_sign/init_per_group.html" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_3_2" type="checkbox" id="__nav_5_4_2_2_3_2" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_3_2">
+        conflicts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="conflicts" data-md-level="6">
+        <label class="md-nav__title" for="__nav_5_4_2_2_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          conflicts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_deposit_and_offchain_update.html" class="md-nav__link">
+        conflict_deposit_and_offchain_update
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_two_deposits.html" class="md-nav__link">
+        conflict_two_deposits
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_two_offchain_updates.html" class="md-nav__link">
+        conflict_two_offchain_updates
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_two_withdrawals.html" class="md-nav__link">
+        conflict_two_withdrawals
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_withdrawal_and_deposit.html" class="md-nav__link">
+        conflict_withdrawal_and_deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_withdrawal_and_offchain_update.html" class="md-nav__link">
+        conflict_withdrawal_and_offchain_update
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_4" type="checkbox" id="__nav_5_4_2_2_4" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_4">
+        Changeable Fee
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Changeable Fee" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Changeable Fee
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_close_mutual.html" class="md-nav__link">
+        set_fee_close_mutual
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_close_solo.html" class="md-nav__link">
+        set_fee_close_solo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_create.html" class="md-nav__link">
+        set_fee_create
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_deposit.html" class="md-nav__link">
+        set_fee_deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_settle.html" class="md-nav__link">
+        set_fee_settle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_slash.html" class="md-nav__link">
+        set_fee_slash
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_snapshot.html" class="md-nav__link">
+        set_fee_snapshot
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_withdrawal.html" class="md-nav__link">
+        set_fee_withdrawal
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_5" type="checkbox" id="__nav_5_4_2_2_5" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_5">
+        Continuous
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Continuous" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Continuous
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/continuous/init_per_group.html" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/continuous/sc_ws_deposit.html" class="md-nav__link">
+        deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/continuous/sc_ws_failed_update.html" class="md-nav__link">
+        failed_update
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/continuous/sc_ws_generic_messages.html" class="md-nav__link">
+        generic_messages
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/continuous/sc_ws_ping_pong.html" class="md-nav__link">
+        ping_pong
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/continuous/sc_ws_update_conflict.html" class="md-nav__link">
+        update_conflict
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/continuous/sc_ws_withdraw.html" class="md-nav__link">
+        withdraw
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_6" type="checkbox" id="__nav_5_4_2_2_6" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_6">
+        Contracts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Contracts" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Contracts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/init_per_group.html" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/sc_ws_basic_contracts.html" class="md-nav__link">
+        basic_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/sc_ws_environment_contract.html" class="md-nav__link">
+        environment_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/sc_ws_nameservice_contract.html" class="md-nav__link">
+        nameservice_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/sc_ws_oracle_contract.html" class="md-nav__link">
+        oracle_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/sc_ws_remote_call_contract.html" class="md-nav__link">
+        remote_call_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/sc_ws_remote_call_contract_refering_onchain_data.html" class="md-nav__link">
+        remote_call_contract_refering_onchain_data
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/contracts/sc_ws_wrong_call_data.html" class="md-nav__link">
+        wrong_call_data
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_7" type="checkbox" id="__nav_5_4_2_2_7" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_7">
+        Force Progress
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Force Progress" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          Force Progress
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/force_progress/sc_ws_force_progress_based_on_offchain_state.html" class="md-nav__link">
+        force_progress_based_on_offchain_state
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/force_progress/sc_ws_force_progress_based_on_onchain_state.html" class="md-nav__link">
+        force_progress_based_on_onchain_state
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_8" type="checkbox" id="__nav_5_4_2_2_8" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_8">
+        Generalized Accounts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Generalized Accounts" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8">
+          <span class="md-nav__icon md-icon"></span>
+          Generalized Accounts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_8_1" type="checkbox" id="__nav_5_4_2_2_8_1" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_8_1">
+        both
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="both" data-md-level="6">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8_1">
+          <span class="md-nav__icon md-icon"></span>
+          both
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/generalized_accounts/both/sc_ws_basic_open_close.html" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_8_2" type="checkbox" id="__nav_5_4_2_2_8_2" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_8_2">
+        initiator
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="initiator" data-md-level="6">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8_2">
+          <span class="md-nav__icon md-icon"></span>
+          initiator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/generalized_accounts/initiator/sc_ws_basic_open_close.html" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_8_3" type="checkbox" id="__nav_5_4_2_2_8_3" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_8_3">
+        responder
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="responder" data-md-level="6">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8_3">
+          <span class="md-nav__icon md-icon"></span>
+          responder
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/generalized_accounts/responder/sc_ws_basic_open_close.html" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_9" type="checkbox" id="__nav_5_4_2_2_9" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_9">
+        Only One Signs
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Only One Signs" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_9">
+          <span class="md-nav__icon md-icon"></span>
+          Only One Signs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/init_per_group.html" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/sc_ws_conflict_on_new_offchain.html" class="md-nav__link">
+        conflict_on_new_offchain
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/sc_ws_conflict_snapshot_and_offchain_update.html" class="md-nav__link">
+        sc_ws_conflict_snapshot_and_offchain_update
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_9_4" type="checkbox" id="__nav_5_4_2_2_9_4" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_9_4">
+        conflicts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="conflicts" data-md-level="6">
+        <label class="md-nav__title" for="__nav_5_4_2_2_9_4">
+          <span class="md-nav__icon md-icon"></span>
+          conflicts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_deposit_and_offchain_update.html" class="md-nav__link">
+        conflict_deposit_and_offchain_update
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_two_deposits.html" class="md-nav__link">
+        conflict_two_deposits
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_two_offchain_updates.html" class="md-nav__link">
+        conflict_two_offchain_updates
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_two_withdrawals.html" class="md-nav__link">
+        conflict_two_withdrawals
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_withdrawal_and_deposit.html" class="md-nav__link">
+        conflict_withdrawal_and_deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_withdrawal_and_offchain_update.html" class="md-nav__link">
+        conflict_withdrawal_and_offchain_update
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_10" type="checkbox" id="__nav_5_4_2_2_10" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_10">
+        Reconnect
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Reconnect" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_10">
+          <span class="md-nav__icon md-icon"></span>
+          Reconnect
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/reconnect/sc_ws_basic_client_reconnect_i.html" class="md-nav__link">
+        basic_client_reconnect_i
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/reconnect/sc_ws_basic_client_reconnect_i_w_reestablish.html" class="md-nav__link">
+        basic_client_reconnect_i_w_reestablish
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/reconnect/sc_ws_basic_client_reconnect_r.html" class="md-nav__link">
+        basic_client_reconnect_r
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_11" type="checkbox" id="__nav_5_4_2_2_11" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_11">
+        With Meta
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="With Meta" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_11">
+          <span class="md-nav__icon md-icon"></span>
+          With Meta
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/with_meta/init_per_group.html" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/with_meta/sc_ws_deposit.html" class="md-nav__link">
+        deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/with_meta/sc_ws_remote_call_contract.html" class="md-nav__link">
+        remote_call_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/with_meta/sc_ws_withdraw.html" class="md-nav__link">
+        withdraw
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_basic_open_close_server.html" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_basic_open_close.html" class="md-nav__link">
+        basic_open_close_server
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_broken_open_params.html" class="md-nav__link">
+        broken_open_params
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_close_mutual.html" class="md-nav__link">
+        close_mutual
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_close_solo.html" class="md-nav__link">
+        close_solo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_leave_reconnect.html" class="md-nav__link">
+        leave_reconnect
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_leave_reestablish.html" class="md-nav__link">
+        leave_reestablish
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_leave_reestablish_responder_stays.html" class="md-nav__link">
+        leave_reestablish_responder_stays
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_leave_reestablish_wrong_fsm_id.html" class="md-nav__link">
+        leave_reestablish_wrong_fsm_id
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_min_depth_is_modifiable.html" class="md-nav__link">
+        min_depth_is_modifiable
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_min_depth_not_reached_timeout.html" class="md-nav__link">
+        min_depth_not_reached_timeout
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_opening_ping_pong.html" class="md-nav__link">
+        opening_ping_pong
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_reconnect_early.html" class="md-nav__link">
+        reconnect_early
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_slash.html" class="md-nav__link">
+        slash
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_snapshot_solo.html" class="md-nav__link">
+        snapshot_solo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_timeout_open.html" class="md-nav__link">
+        timeout_open
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="node/api/examples/channels/json-rpc/sc_ws_update_with_meta.html" class="md-nav__link">
+        update_with_meta
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
+        Mining
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Mining" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Mining
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="STRATUM.html" class="md-nav__link">
+        Stratum
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="serializations.html" class="md-nav__link">
+        Serializations
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#abstract" class="md-nav__link">
+    Abstract
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    Motivation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    Background
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#governance" class="md-nav__link">
+    Governance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mechanisms" class="md-nav__link">
+    Mechanisms
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specification" class="md-nav__link">
+    Specification
+  </a>
+  
+    <nav class="md-nav" aria-label="Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aens-entry" class="md-nav__link">
+    AENS Entry
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#name" class="md-nav__link">
+    Name
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#namespaceslabels" class="md-nav__link">
+    Namespaces/Labels
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registrars" class="md-nav__link">
+    Registrars
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commitment-scheme" class="md-nav__link">
+    Commitment Scheme
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hashing" class="md-nav__link">
+    Hashing
+  </a>
+  
+    <nav class="md-nav" aria-label="Hashing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#until-lima-hardfork" class="md-nav__link">
+    Until Lima hardfork
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-lima-hardfork" class="md-nav__link">
+    From Lima hardfork
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#protocol" class="md-nav__link">
+    Protocol
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#protocol-fees-and-protection-times" class="md-nav__link">
+    Protocol fees and protection times
+  </a>
+  
+    <nav class="md-nav" aria-label="Protocol fees and protection times">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre-claim" class="md-nav__link">
+    Pre-claim
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#claim" class="md-nav__link">
+    Claim
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update" class="md-nav__link">
+    Update
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transfer" class="md-nav__link">
+    Transfer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#revoke" class="md-nav__link">
+    Revoke
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage" class="md-nav__link">
+    Storage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#launch" class="md-nav__link">
+    Launch
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#possible-future-extensions" class="md-nav__link">
+    (possible) Future extensions
+  </a>
+  
+    <nav class="md-nav" aria-label="(possible) Future extensions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registrars_1" class="md-nav__link">
+    Registrars
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auctions" class="md-nav__link">
+    Auctions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uri-schema" class="md-nav__link">
+    URI Schema
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decentralized-name-exchange" class="md-nav__link">
+    Decentralized name exchange
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#governance_1" class="md-nav__link">
+    Governance
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interoperability" class="md-nav__link">
+    Interoperability
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#light-clients" class="md-nav__link">
+    Light clients
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fee-lottery" class="md-nav__link">
+    Fee lottery
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/aeternity/protocol/edit/master/docs/AENS.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="ternity-naming-system">æternity naming system</h1>
+<h2 id="abstract">Abstract</h2>
+<p>This document describes the first draft of the æternity naming system,
+short AENS.</p>
+<h2 id="motivation">Motivation</h2>
+<p>Entities native to most blockchain systems are addressed or identified
+by their hashes, which are generally <code>n</code> bit numbers displayed in a hex
+or base64/base58 notation, all of which are somewhat unfriendly to the
+humans trying to use these systems.</p>
+<h2 id="background">Background</h2>
+<p>A solution to a similar problem is the Domain Name System, or DNS, which
+should be familiar to most people, providing human readable names for IP
+addresses. The issue with DNS is its centralization and it was conjectured
+by <a href="https://en.wikipedia.org/wiki/Zooko%27s_triangle">Zooko</a> that a
+decentralized system can't have human-meaningful names while still being
+secure. This conjecture has been proven to be false by a number of systems,
+one example being <a href="https://www.namecoin.org">NameCoin</a>, which was debuted
+in 2011. It allowed users to associate names with a number of key-value
+pairs. The NameCoin network still exists today but sees barely any usage.</p>
+<p>A more recent effort is ENS, the Ethereum Name Service, which enables users
+to claim names via a set of smart contracts. ENS is currently running a two
+year trial deployment, during which users can claim name with a <code>.eth</code>
+postfix, e.g. <code>mywallet.eth</code>. ENS currently allows users to associate a single
+32 byte array of data with a node, typically used for a hash.</p>
+<h2 id="overview">Overview</h2>
+<p>Names are part of a namespace, which works just like DNS, e.g. <code>mywallet.test</code>
+or <code>привет.test</code> are part of the same <code>.test</code> namespace.</p>
+<h2 id="governance">Governance</h2>
+<p>Lima hard fork is introducing final <code>.chain</code> registration namespace.
+It also retires <code>.test</code> namespace.
+We will also not include mechanisms similar to the <code>sunrise</code> and <code>landrush</code>
+periods, which are common for DNS, where registration is restricted to small
+select groups and trademark holders in order to avoid name squatting, before
+the general public can start claiming names.</p>
+<h2 id="mechanisms">Mechanisms</h2>
+<p>It is unclear what a good mechanism for a naming system would look
+like. If we imagine two actors both being interested in the same name,
+what would a »fair« solution be to resolve this?</p>
+<p>Fees are the main mechanism to discourage spam and squatting.
+We lock the governance fee in an account without private key access.
+Starting out with <a href="consensus/locking.html">locking</a> could allow us an easier
+path for future update to the fee structures, as it doesn't involve miners.</p>
+<p>Every entry in the <code>.test</code> namespace pays the same amount of fees.
+After Lima <code>.test</code> namespace is no longer available to claim.
+Entries in <code>.chain</code> namespace are differentiated regarding fees by their length.</p>
+<p>The new mechanism planted in Lima hard fork introduces auctions.
+We make auction parameters depend on name length.</p>
+<p>An auction starts when a valid claim transaction following preclaim transaction
+has auction triggering parameter. Currently auction starts when revealed name
+is 12 characters or shorter.</p>
+<p>For the names subject to auction, a claim transaction is an attempt of a name claim.
+It can be followed by another claim from an account different than one set in
+preclaim for given name.</p>
+<p>For names longer than 12 characters, a claim transaction sets ownership of a name.</p>
+<p>There is finite amount of time when the follow up claim in an auction is allowed.
+This time is expressed in height delta computed from function of length of the name.</p>
+<p>The function will return higher value for shorter names. In practice it means
+that the shorter the name, the longer another claim transaction is valid.
+We are starting with extremely long time that makes claim for short name final.
+It will protect attractive names until this functionality is exposed to larger audience.</p>
+<p>Claim transaction becomes a bid in an auction.</p>
+<p>Furthermore, the initial fee for name is a value of the function of
+the name's length. It is decreasing function: for shorter names have higher initial
+fee.</p>
+<p>Also bidding by claim transaction is constrained by price progression.
+Each next bid has to be higher by <code>X</code> tokens, determined by percent of the price
+defined in governance.</p>
+<p>All, functions, base fee, free length value and price progression may be subject
+to changes with governance mechanism. Non-bidding path of the name claim is purposed
+for development or testing.</p>
+<p>Each entry has a fixed expiration date on claim after which the entry should
+transition into the <code>revoked</code> state. Once it reaches this state, the name
+will be released, i.e. transition into the <code>unclaimed</code> state, after which
+it could be claimed again.</p>
+<p>To prevent the entry from expiring a user can, at any point before reaching
+the expiration date, update the entry, which pushes the expiration date
+into the future by the time delta of the registration time and the update time,
+e.g. if a user posts an update one week after claiming their name, the expiration
+date gets pushed one week further into the future. The main motivation of this
+expiration date is to prevent situations where the private keys, which control
+the name, are lost, making the name unusable as well.</p>
+<h2 id="specification">Specification</h2>
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be
+interpreted as described in <a href="https://tools.ietf.org/html/rfc2119">RFC 2119</a>.</p>
+<h3 id="aens-entry">AENS Entry</h3>
+<p>This is the entry as it should be stored by a node.</p>
+<div class="highlight"><pre><span></span><code>  name         size (bytes)
+ ------------ ----
+| owner      | 32 |
+ ------------ ----
+| expires_by | 32 |
+ ------------ ----
+| client_ttl | 8  |
+ ------------ ----
+| pointers   |    |
+ ------------ ----
+</code></pre></div>
+<p><strong><em>owner</em></strong>: the account, which controls this entry.</p>
+<p><strong><em>expires_by</em></strong>: the blockheight after which the entry goes
+into the <code>revoked</code> state. This value MUST NOT be further than
+50000 blocks into the future.</p>
+<p><strong><em>client_ttl</em></strong>: a suggestion as to how long any clients should
+cache this information. (<strong><em>TODO</em></strong>: should have a reasonable
+upper limit, e.g. 86400 seconds, and probably a different
+name to not be confused with the general TTL for transactions)</p>
+<p>This entry is only relevant for clients and has no conensus
+impact.</p>
+<p><strong><em>pointers</em></strong>: a dictionary with all the values this entry
+points towards.
+This can have multiple entries, e.g. a payment address associated
+with the name and an oracle address associated with the name.</p>
+<h3 id="name">Name</h3>
+<p>Names MUST be normalized according to IDNA2008 before hashing, as
+described in <a href="https://unicode.org/reports/tr46">uts-46</a> and SHOULD
+be stored in their ASCII representation.
+The parameters to be used for normalization and validation are:</p>
+<div class="highlight"><pre><span></span><code>UseSTD3ASCIIRules=true
+NontransitionalProcessing=true
+CheckHyphens=true
+CheckBidi=true # important for registrars, to restrict names
+CheckJoiners=true # important for registrars, to restrict names
+</code></pre></div>
+<p>See also <a href="https://tools.ietf.org/html/rfc3491">rfc3491</a> and
+<a href="https://tools.ietf.org/html/rfc3492">rfc3492</a>.</p>
+<p>Names SHOULD be at most 253 characters long, in order to enable
+interoperability with DNS.</p>
+<p><strong><em>Note:</em></strong> For this first draft names MUST <code>.test</code> as a suffix, i.e. <code>mywallet.test</code>.</p>
+<h3 id="namespaceslabels">Namespaces/Labels</h3>
+<p>A name is split up into labels by the <code>FULL STOP (U+002E .)</code> character.
+These labels will also be referred to as namespaces, e.g. <code>mywallet.test</code>
+can be understood as the <code>mywallet</code> namespace in the <code>chain</code> namespace.</p>
+<p>Any label that is not at the top level, e.g. <code>chain</code>, MUST be longer than
+three characters.</p>
+<p>Labels SHOULD be at most 63 characters long and the full path
+of all names and namespaces SHOULD be at most 253 characters
+long, in order to enable interoperability with DNS.</p>
+<h3 id="registrars">Registrars</h3>
+<p>A registrar controls who is allowed to claim names in their namespace
+and under what circumstances they are allowed to do so.</p>
+<p>The only available registrars up to Lima version will be hard-coded
+ones, which own the <code>.</code> and <code>.test</code> namespaces.</p>
+<p>From Lima we will support <code>.chain</code> and limit <code>.test</code> namespace.
+<code>.test</code> names will expire without an option of updating TTL.
+We will use expiration mechanism to purge <code>.test</code> names.</p>
+<p>The <code>.</code> namespace registrar is restricted and MUST NOT allow anyone to
+claim any names in its namespace.</p>
+<p>The <code>.test</code> namespace registrar allows users to claim any name that is
+valid according to the validation rules if the name is currently not
+claimed and they pay the appropriate fee.</p>
+<h3 id="commitment-scheme">Commitment Scheme</h3>
+<p>Claiming a name requires a commitment scheme, which enables the claimant
+to commit to a name and after the commitment has been accepted into the
+chain, reveal the name to finish the process.</p>
+<p>A commitment should be binding, i.e. the claimant cannot change
+the value they commited to without changing the actual commitment
+and hiding, so that a malicious miner learns nothing about the value
+the claimant has commited until they chose to reveal that value. This
+prevents malicious miners from front running, i.e. upon seeing a
+claim transaction, including their own claim request for the same
+name instead of the original claimant's one.</p>
+<p>After the claim transaction the aens protocol is carried in clear text,
+in order to support auctions.</p>
+<h3 id="hashing">Hashing</h3>
+<p>Names are generally only referred to in hashed form.</p>
+<h4 id="until-lima-hardfork">Until Lima hardfork</h4>
+<p>We are going to adopt the <code>NameHash</code> as defined by the ENS in
+<a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md#namehash-algorithm">EIP-137</a>
+using Blake2b (256 bits digest) instead.</p>
+<div class="highlight"><pre><span></span><code>def namehash(name):
+  if name == &#39;&#39;:
+    return &#39;\0&#39; * 32
+  else:
+    label, _, remainder = name.partition(&#39;.&#39;)
+    return Blake2b(namehash(remainder) + Blake2b(label))
+</code></pre></div>
+<h4 id="from-lima-hardfork">From Lima hardfork</h4>
+<p>From Lima we don't use <code>NameHash</code> anymore. Instead, it is a 32 byte Blake2b hash
+of the IDNA encoded UTF-8 name.</p>
+<h3 id="protocol">Protocol</h3>
+<div class="highlight"><pre><span></span><code>                  expire
+      unclaimed &lt;-------- revoked
+          | ^              ^^
+          | |              || expire
+          | | expire       ||
+pre-claim | |              ||  _
+          | |       revoke || | | transfer
+          v |              || | v
+pre-claimed|auction ---&gt; claimed
+         | ^    &lt;timeout&gt;  | ^
+         | |               | |
+          -                 -
+        claim            update
+</code></pre></div>
+<p>The pointers field in the name entry:
+* On <code>claim</code> transaction, is initialized to the empty dictionary.
+* On <code>update</code> transaction, is replaced with the pointers in the transaction, keeping the order in the transaction.</p>
+<p>Note that <code>expire</code> is not an explicit message that is part
+of the protocol.</p>
+<h3 id="protocol-fees-and-protection-times">Protocol fees and protection times</h3>
+<p>Here is the function of initial bidding price depending on name length for Lima hardfork.</p>
+<div class="highlight"><pre><span></span><code> ------------- -------------
+| name length | initial fee (unit 10^14) |
+ ------------- -------------
+| 31          | 3           |
+ ------------- -------------
+| 30          | 5           |
+ ------------- -------------
+| 29          | 8           |
+ ------------- -------------
+| 28          | 13          |
+ ------------- -------------
+| 27          | 21          |
+ ------------- -------------
+| 26          | 34          |
+ ------------- -------------
+| 25          | 55          |
+ ------------- -------------
+| 24          | 89          |
+ ------------- -------------
+| 23          | 144         |
+ ------------- -------------
+| 22          | 233         |
+ ------------- -------------
+| 21          | 377         |
+ ------------- -------------
+| 20          | 610         |
+ ------------- -------------
+| 19          | 987         |
+ ------------- -------------
+| 18          | 1597        |
+ ------------- -------------
+| 17          | 2584        |
+ ------------- -------------
+| 16          | 4181        |
+ ------------- -------------
+| 15          | 6765        |
+ ------------- -------------
+| 14          | 10946       |
+ ------------- -------------
+| 13          | 17711       |
+ ------------- -------------
+| 12          | 28657       |
+ ------------- -------------
+| 11          | 46368       |
+ ------------- -------------
+| 10          | 75025       |
+ ------------- -------------
+| 9           | 121393      |
+ ------------- -------------
+| 8           | 196418      |
+ ------------- -------------
+| 7           | 317811      |
+ ------------- -------------
+| 6           | 514229      |
+ ------------- -------------
+| 5           | 832040      |
+ ------------- -------------
+| 4           | 1346269     |
+ ------------- -------------
+| 3           | 2178309     |
+ ------------- -------------
+| 2           | 3524578     |
+ ------------- -------------
+| 1           | 5702887     |
+ ------------- -------------
+</code></pre></div>
+<p>Here is the function of timeout required to close the auction.
+It depends on name length. Timeout is expressed in blocks.
+Non zero value means that there must be no follow up claim for
+the number of blocks defined here.</p>
+<div class="highlight"><pre><span></span><code> ------------- -------------
+| name length | time out    |
+ ------------- -------------
+| 13+         | 0           |
+ ------------- -------------
+| 9-12        | 480         |
+ ------------- -------------
+| 5-8         | 14880       |
+ ------------- -------------
+| 1-4         | 29760       |
+ ------------- -------------
+</code></pre></div>
+<h4 id="pre-claim">Pre-claim</h4>
+<p>Send a <code>pre-claim</code> transaction containing a hash commitment.
+This transaction starts the claiming process.</p>
+<div class="highlight"><pre><span></span><code> ------------ ----
+| commitment | 32 |
+ ------------ ----
+</code></pre></div>
+<p>A client interacting with the blockchain should generate a warning
+if a user tries to claim a name that is not available.</p>
+<p>The <code>pre-claim</code> has an implicit expiration attached to it. A
+<code>pre-claim</code> MUST be considered invalid after 300 blocks, i.e.
+about two days at 10 minute block time.</p>
+<p>The hash commitment for the <code>pre-claim</code> is computed as follows:</p>
+<div class="highlight"><pre><span></span><code>commitment := Hash(NameHash(name) + name_salt)
+</code></pre></div>
+<h4 id="claim">Claim</h4>
+<div class="highlight"><pre><span></span><code> ---------------- ----
+| name           | 63 |
+ ---------------- ----
+| name_salt      | 32 |
+ ---------------- ----|
+| name_fee       | 32 |
+ ---------------- ----
+</code></pre></div>
+<p>Flow for a user:</p>
+<ol>
+<li>(optional) wait <code>n</code> blocks, s.t. that the block including the <code>pre-claim</code> cannot be reversed whp</li>
+<li>send <code>claim</code> transaction to reveal name and pay the associated fee</li>
+<li>(Lima) send follow up <code>claim</code> transaction as overbid to initial <code>claim</code></li>
+</ol>
+<p>From Lima transaction version is <code>2</code>.</p>
+<p>The first <code>claim</code> after <code>pre-claim</code> transaction MUST be signed by the same private key as a
+<code>pre-claim</code> transaction containing a commitment to the name and nonce.</p>
+<p>If the time delta of <code>pre-claim</code> and <code>claim</code> is bigger than 300 blocks,
+then the <code>claim</code> MUST be rejected.</p>
+<p>If the time delta of subsequent <code>claim</code> is bigger than governance defined values
+then this <code>claim</code> MUST be rejected.</p>
+<p>If the <code>name_fee</code> doesn't meet governance requirements it MUST be rejected.</p>
+<p>From Lima hardfork, the subsequent <code>claim</code> that takes part in auction MUST have <code>name_salt</code>
+equal to <code>0</code></p>
+<p>From Lima hardfork only the first <code>claim</code> transaction MUST be signed by
+the same private key as a <code>pre-claim</code> transaction containing a commitment to the name and nonce.</p>
+<p>A <code>claim</code> transaction MUST NOT be in included in the same block as its
+<code>pre-claim</code>.</p>
+<p>The <code>claim</code> transaction, apart from standard transaction fee,
+locks additional fee in a restricted account (account with no private key access).
+See also <a href="#mechanisms">mechanisms section</a>.</p>
+<h4 id="update">Update</h4>
+<div class="highlight"><pre><span></span><code> ------------ ----
+| hash       | 32 |
+ ------------ ----
+| expire_by  | 8  |
+ ------------ ----
+| client_ttl | 8  |
+ ------------ ----
+| pointers   |    |
+ ------------ ----
+</code></pre></div>
+<p>The <code>update</code> transaction MUST be signed by the owner
+of the name entry to be updated.</p>
+<p>The <code>expire_by</code> MUST NOT be more than 50000 blocks into
+the future.</p>
+<p><code>update</code> transaction may be used to extend the lease of the name.
+We do not require an additional fee for extending the lease.</p>
+<p>The <code>pointers</code> field SHOULD NOT contain multiple entries with the same key.
+The <code>pointers</code> can point to one of: account address, oracle id,
+channel id or contract id.</p>
+<p>From Iris hardfork, the following limitations on pointers apply:
+  - No duplicate keys (a key can only be present once in a list of pointers).
+  - Keys are not longer than 256 bytes
+  - The list of pointers is not longer than 32.</p>
+<h4 id="transfer">Transfer</h4>
+<div class="highlight"><pre><span></span><code> ------------ ----
+| target     | 32 |
+ ------------ ----
+| hash       | 32 |
+ ------------ ----
+</code></pre></div>
+<p>The <code>transfer</code> transaction MUST be signed by the owner
+of the name entry to be transfered.</p>
+<h3 id="revoke">Revoke</h3>
+<div class="highlight"><pre><span></span><code> ------------ ----
+| hash       | 32 |
+ ------------ ----
+</code></pre></div>
+<p>The revoke transaction MUST be signed by the owner
+of a name entry.</p>
+<p>After the <code>revoke</code> transaction has been included in the chain,
+the name enters the <code>revoked</code> state. After a fixed timeout of
+2016 blocks, the name will be available for claiming again.</p>
+<h2 id="storage">Storage</h2>
+<p>We are going to store the AENS entries in an ESMT and use the
+hash of a name, as defined above, as a pointer to the entry data.
+If there's no entry for a given hash then that pointer will point
+to an empty hash or to the hash of that entry data otherwise.</p>
+<h2 id="launch">Launch</h2>
+<p>Giving users plenty time to prepare for a launch of the naming
+system is of utmost importance given the allocation rules, i.e.
+first come first serve, of this first draft.
+This also includes giving users the proper tools, i.e. a GUI,
+in order to level the playing field as to who is able to actually
+register names.</p>
+<p>Since we don't have an auction protocol at launch, we could hold
+auctions on Ethereum to establish an initial allocation of names,
+just like our ERC-20 token.</p>
+<h2 id="possible-future-extensions">(possible) Future extensions</h2>
+<h3 id="registrars_1">Registrars</h3>
+<p>A later version of the name service should allow every user to become
+a registrar and encode their registration logic in a smart contract.
+A simplification would be that registrars have to submit the claim
+transaction themselves and just set the owner to whoever they want to
+give the name to.</p>
+<p>These sub-labels allow for further customisation and also for users to
+associate with particular namespaces, e.g. a cryptographic cat breeding
+game might associate a name entry with every of its cats such as
+<code>unicorn.kitty.test</code> and then transfering that name to the person, who
+adopts the cat. The authorization policies for these will need some
+flexibility seeing as the owner of a namespace might want to prevent
+or allow users creating sub-sub-labels, e.g. the owner of <code>unicorn.kitty.test</code>
+creating <code>rarest.</code>unicorn.kitty.test`.</p>
+<h3 id="auctions">Auctions</h3>
+<p>Using (Vickrey) auctions instead of a simple, first come
+first serve approach for new claims, might allow a better
+mechanism for price discovery without having to go through
+a secondary market.</p>
+<h3 id="uri-schema">URI Schema</h3>
+<p>We are currently using the same schema as DNS, which might
+be problematic since this comes with a big slew of expectations
+as to what can and can't be done.</p>
+<p>See <a href="https://noncombatant.org/2017/11/07/problems-of-urls/">this post about problems of urls</a>
+or <a href="https://github.com/ipfs/specs/pull/152">this IPFS spec issue</a> for
+some discussions.</p>
+<h3 id="decentralized-name-exchange">Decentralized name exchange</h3>
+<p>Having the exchange for names on chain would enable us to
+transfer names in a trustless manner. Plus having the bids
+recorded on chain could also facilitate better price discovery.</p>
+<h3 id="governance_1">Governance</h3>
+<p>Allowing users to register their own namespaces and become
+registrars themselves, i.e. if I own <code>mywallet.chain</code>, I can
+then allow others to register <code>name.mywallet.chain</code>.</p>
+<p>Consider a voting mechanism to introduce new TLDs.</p>
+<h3 id="interoperability">Interoperability</h3>
+<ul>
+<li>investigate possibility to integrate with ENS</li>
+<li>add interoperability with https://ipld.io</li>
+<li>add support for https://multiformats.io/multihash/</li>
+</ul>
+<h3 id="light-clients">Light clients</h3>
+<p>A light client might only be interested in the history or
+integrity particular name and thus require some lightweight
+mechanism for this, which is currently not possible.</p>
+<h3 id="fee-lottery">Fee lottery</h3>
+<p>It was suggested that the fees for the <code>.chain</code> namespace could
+be distributed to random accounts via a lottery.</p>
+<h2 id="references">References</h2>
+<p>[1] Kalodner, Harry A., et al. "An Empirical Study of Namecoin and Lessons for Decentralized Namespace Design." WEIS. 2015.</p>
+<p>[2] Ali, Muneeb, et al. "Blockstack: A Global Naming and Storage System Secured by Blockchains." USENIX Annual Technical Conference. 2016.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="generalized_accounts/index.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Generalized Accounts" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Generalized Accounts
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="oracles/index.html" class="md-footer__link md-footer__link--next" aria-label="Next: General" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              General
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": ".", "features": ["content.tabs.link", "search.highlight", "search.share", "search.suggest"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "assets/javascripts/workers/search.477d984a.min.js", "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.82b56eb2.min.js"></script>
+      
+    
+  </body>
+</html>

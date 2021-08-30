@@ -1,0 +1,5921 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../favicon.png">
+      <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.9">
+    
+    
+      
+        <title>FATE VM - æternity Protocol</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ca7ac06f.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.f1a3b89f.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="pink" data-md-color-accent="pink">
+  
+    
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#fate" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="æternity Protocol" class="md-header__button md-logo" aria-label="æternity Protocol" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            æternity Protocol
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              FATE VM
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="pink" data-md-color-accent="pink"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="pink" data-md-color-accent="pink"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/aeternity/protocol/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="æternity Protocol" class="md-nav__button md-logo" aria-label="æternity Protocol" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    æternity Protocol
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/aeternity/protocol/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Communication
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Communication" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Communication
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../GOSSIP.html" class="md-nav__link">
+        Gossip
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sync/index.html" class="md-nav__link">
+        Sync
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Consensus
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Consensus" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Consensus
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../consensus/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../consensus/bitcoin-ng.html" class="md-nav__link">
+        Bitcoin-NG
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../consensus/coinbase.html" class="md-nav__link">
+        Coinbase
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../consensus/locking.html" class="md-nav__link">
+        Locking
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      <label class="md-nav__link" for="__nav_4">
+        Features
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Features" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Features
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../generalized_accounts/index.html" class="md-nav__link">
+        Generalized Accounts
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AENS.html" class="md-nav__link">
+        Naming System
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      <label class="md-nav__link" for="__nav_4_3">
+        Oracles
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Oracles" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Oracles
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../oracles/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../oracles/oracle_life_cycle.html" class="md-nav__link">
+        Lifecycle Examples
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../oracles/oracle_state_tree.html" class="md-nav__link">
+        State Tree
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../oracles/oracle_transactions.html" class="md-nav__link">
+        Transactions
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_4" type="checkbox" id="__nav_4_4" checked>
+      
+      <label class="md-nav__link" for="__nav_4_4">
+        Smart Contracts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Smart Contracts" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_4">
+          <span class="md-nav__icon md-icon"></span>
+          Smart Contracts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="events.html" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contract_transactions.html" class="md-nav__link">
+        Transaction Types
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contract_state_tree.html" class="md-nav__link">
+        State Tree
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_4_5" type="checkbox" id="__nav_4_4_5" checked>
+      
+      <label class="md-nav__link" for="__nav_4_4_5">
+        Virtual Machines
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Virtual Machines" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_4_5">
+          <span class="md-nav__icon md-icon"></span>
+          Virtual Machines
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="contract_vms.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="aevm.html" class="md-nav__link">
+        AEVM
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          FATE VM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="fate.html" class="md-nav__link md-nav__link--active">
+        FATE VM
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#design" class="md-nav__link">
+    Design
+  </a>
+  
+    <nav class="md-nav" aria-label="Design">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#objectives" class="md-nav__link">
+    Objectives
+  </a>
+  
+    <nav class="md-nav" aria-label="Objectives">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#type-safety" class="md-nav__link">
+    Type safety
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rich-data-types" class="md-nav__link">
+    Rich data types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#faster-transactions-smaller-code-size" class="md-nav__link">
+    Faster transactions, smaller code size
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#components" class="md-nav__link">
+    Components
+  </a>
+  
+    <nav class="md-nav" aria-label="Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#machine-state" class="md-nav__link">
+    Machine State
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory" class="md-nav__link">
+    Memory
+  </a>
+  
+    <nav class="md-nav" aria-label="Memory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-execution-memory" class="md-nav__link">
+    The execution memory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-chain" class="md-nav__link">
+    The chain
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-contract-store" class="md-nav__link">
+    The contract store
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-state-tree" class="md-nav__link">
+    The state tree
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-local-storage" class="md-nav__link">
+    The local storage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-accumulator-stack" class="md-nav__link">
+    The accumulator stack
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-execution-stack" class="md-nav__link">
+    The execution stack
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-event-stream" class="md-nav__link">
+    The event stream
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types" class="md-nav__link">
+    Types
+  </a>
+  
+    <nav class="md-nav" aria-label="Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#integer" class="md-nav__link">
+    Integer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#boolean" class="md-nav__link">
+    Boolean
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addresses-contract-addresses-oracles-oracle-querries-channels" class="md-nav__link">
+    Addresses, Contract Addresses, Oracles, Oracle Querries, Channels
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strings" class="md-nav__link">
+    Strings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tuples" class="md-nav__link">
+    Tuples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lists" class="md-nav__link">
+    Lists
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maps" class="md-nav__link">
+    Maps
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variant-types" class="md-nav__link">
+    Variant Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typerep" class="md-nav__link">
+    TypeRep
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operations" class="md-nav__link">
+    Operations
+  </a>
+  
+    <nav class="md-nav" aria-label="Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#operands" class="md-nav__link">
+    Operands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operations_1" class="md-nav__link">
+    Operations
+  </a>
+  
+    <nav class="md-nav" aria-label="Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#description-of-operations" class="md-nav__link">
+    Description of operations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcodes-flags-and-gas" class="md-nav__link">
+    Opcodes, Flags and Gas
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gas" class="md-nav__link">
+    Gas
+  </a>
+  
+    <nav class="md-nav" aria-label="Gas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add-sub-mul-div-mod" class="md-nav__link">
+    ADD, SUB, MUL, DIV, MOD
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pow" class="md-nav__link">
+    POW
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tuple" class="md-nav__link">
+    TUPLE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setelement" class="md-nav__link">
+    SETELEMENT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map_empty" class="md-nav__link">
+    MAP_EMPTY
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map_update" class="md-nav__link">
+    MAP_UPDATE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map_from_list" class="md-nav__link">
+    MAP_FROM_LIST
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map_to_list" class="md-nav__link">
+    MAP_TO_LIST
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cons" class="md-nav__link">
+    CONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#append" class="md-nav__link">
+    APPEND
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#str_join" class="md-nav__link">
+    STR_JOIN
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#int_to_str" class="md-nav__link">
+    INT_TO_STR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addr_to_str" class="md-nav__link">
+    ADDR_TO_STR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#str_reverse" class="md-nav__link">
+    STR_REVERSE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#int_to_addr" class="md-nav__link">
+    INT_TO_ADDR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bits_none-bits_nonea-bits_all-bits_alla" class="md-nav__link">
+    BITS_NONE, BITS_NONEA, BITS_ALL, BITS_ALLA
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bits_all_n" class="md-nav__link">
+    BITS_ALL_N
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bits_set-bits_clear" class="md-nav__link">
+    BITS_SET, BITS_CLEAR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bytes_concat" class="md-nav__link">
+    BYTES_CONCAT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bytes_to_str" class="md-nav__link">
+    BYTES_TO_STR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bytes_split" class="md-nav__link">
+    BYTES_SPLIT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auth_tx_hash" class="md-nav__link">
+    AUTH_TX_HASH
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variant" class="md-nav__link">
+    VARIANT
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_5" type="checkbox" id="__nav_4_5" >
+      
+      <label class="md-nav__link" for="__nav_4_5">
+        State Channels
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="State Channels" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_5">
+          <span class="md-nav__icon md-icon"></span>
+          State Channels
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/ON-CHAIN.html" class="md-nav__link">
+        On-Chain Actions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/OFF-CHAIN.html" class="md-nav__link">
+        Off-Chain Actions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels/state.html" class="md-nav__link">
+        Off-Chain State
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Node API
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Node API" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Node API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/api_encoding.html" class="md-nav__link">
+        Encoding
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      <label class="md-nav__link" for="__nav_5_3">
+        API Usage
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="API Usage" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          API Usage
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/account_api_usage.html" class="md-nav__link">
+        Account API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/channels_api_usage.html" class="md-nav__link">
+        Channels API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/contract_api_usage.html" class="md-nav__link">
+        Contract API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/mining_api_usage.html" class="md-nav__link">
+        Mining API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/naming_system_api_usage.html" class="md-nav__link">
+        Naming System API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/oracle_api_usage.html" class="md-nav__link">
+        Oracle API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/spend_api_usage.html" class="md-nav__link">
+        Spend API
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4" type="checkbox" id="__nav_5_4" >
+      
+      <label class="md-nav__link" for="__nav_5_4">
+        State Channels
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="State Channels" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_4">
+          <span class="md-nav__icon md-icon"></span>
+          State Channels
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/channel_ws_api.html" class="md-nav__link">
+        WebSocket API
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2" type="checkbox" id="__nav_5_4_2" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2">
+        Examples
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Examples" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/index.html" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2" type="checkbox" id="__nav_5_4_2_2" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2">
+        JSON-RPC
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="JSON-RPC" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          JSON-RPC
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_1" type="checkbox" id="__nav_5_4_2_2_1" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_1">
+        Abort Updates
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Abort Updates" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Abort Updates
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_deposit.html" class="md-nav__link">
+        abort_deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_offchain_update.html" class="md-nav__link">
+        abort_offchain_update
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_settle.html" class="md-nav__link">
+        abort_settle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_shutdown.html" class="md-nav__link">
+        abort_shutdown
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_slash.html" class="md-nav__link">
+        abort_slash
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_snapshot_solo.html" class="md-nav__link">
+        abort_snapshot_solo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_withdraw.html" class="md-nav__link">
+        abort_withdraw
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/abort_updates/sc_ws_can_not_abort_while_open.html" class="md-nav__link">
+        can_not_abort_while_open
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_2" type="checkbox" id="__nav_5_4_2_2_2" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_2">
+        Assume Min Depth
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Assume Min Depth" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Assume Min Depth
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/assume_min_depth/sc_ws_basic_open_close.html" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_3" type="checkbox" id="__nav_5_4_2_2_3" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_3">
+        Both Sign
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Both Sign" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Both Sign
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/both_sign/init_per_group.html" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_3_2" type="checkbox" id="__nav_5_4_2_2_3_2" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_3_2">
+        conflicts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="conflicts" data-md-level="6">
+        <label class="md-nav__title" for="__nav_5_4_2_2_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          conflicts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_deposit_and_offchain_update.html" class="md-nav__link">
+        conflict_deposit_and_offchain_update
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_two_deposits.html" class="md-nav__link">
+        conflict_two_deposits
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_two_offchain_updates.html" class="md-nav__link">
+        conflict_two_offchain_updates
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_two_withdrawals.html" class="md-nav__link">
+        conflict_two_withdrawals
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_withdrawal_and_deposit.html" class="md-nav__link">
+        conflict_withdrawal_and_deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_withdrawal_and_offchain_update.html" class="md-nav__link">
+        conflict_withdrawal_and_offchain_update
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_4" type="checkbox" id="__nav_5_4_2_2_4" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_4">
+        Changeable Fee
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Changeable Fee" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Changeable Fee
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_close_mutual.html" class="md-nav__link">
+        set_fee_close_mutual
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_close_solo.html" class="md-nav__link">
+        set_fee_close_solo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_create.html" class="md-nav__link">
+        set_fee_create
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_deposit.html" class="md-nav__link">
+        set_fee_deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_settle.html" class="md-nav__link">
+        set_fee_settle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_slash.html" class="md-nav__link">
+        set_fee_slash
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_snapshot.html" class="md-nav__link">
+        set_fee_snapshot
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_withdrawal.html" class="md-nav__link">
+        set_fee_withdrawal
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_5" type="checkbox" id="__nav_5_4_2_2_5" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_5">
+        Continuous
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Continuous" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Continuous
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/continuous/init_per_group.html" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/continuous/sc_ws_deposit.html" class="md-nav__link">
+        deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/continuous/sc_ws_failed_update.html" class="md-nav__link">
+        failed_update
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/continuous/sc_ws_generic_messages.html" class="md-nav__link">
+        generic_messages
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/continuous/sc_ws_ping_pong.html" class="md-nav__link">
+        ping_pong
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/continuous/sc_ws_update_conflict.html" class="md-nav__link">
+        update_conflict
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/continuous/sc_ws_withdraw.html" class="md-nav__link">
+        withdraw
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_6" type="checkbox" id="__nav_5_4_2_2_6" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_6">
+        Contracts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Contracts" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Contracts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/contracts/init_per_group.html" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/contracts/sc_ws_basic_contracts.html" class="md-nav__link">
+        basic_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/contracts/sc_ws_environment_contract.html" class="md-nav__link">
+        environment_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/contracts/sc_ws_nameservice_contract.html" class="md-nav__link">
+        nameservice_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/contracts/sc_ws_oracle_contract.html" class="md-nav__link">
+        oracle_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/contracts/sc_ws_remote_call_contract.html" class="md-nav__link">
+        remote_call_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/contracts/sc_ws_remote_call_contract_refering_onchain_data.html" class="md-nav__link">
+        remote_call_contract_refering_onchain_data
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/contracts/sc_ws_wrong_call_data.html" class="md-nav__link">
+        wrong_call_data
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_7" type="checkbox" id="__nav_5_4_2_2_7" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_7">
+        Force Progress
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Force Progress" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          Force Progress
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/force_progress/sc_ws_force_progress_based_on_offchain_state.html" class="md-nav__link">
+        force_progress_based_on_offchain_state
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/force_progress/sc_ws_force_progress_based_on_onchain_state.html" class="md-nav__link">
+        force_progress_based_on_onchain_state
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_8" type="checkbox" id="__nav_5_4_2_2_8" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_8">
+        Generalized Accounts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Generalized Accounts" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8">
+          <span class="md-nav__icon md-icon"></span>
+          Generalized Accounts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_8_1" type="checkbox" id="__nav_5_4_2_2_8_1" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_8_1">
+        both
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="both" data-md-level="6">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8_1">
+          <span class="md-nav__icon md-icon"></span>
+          both
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/generalized_accounts/both/sc_ws_basic_open_close.html" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_8_2" type="checkbox" id="__nav_5_4_2_2_8_2" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_8_2">
+        initiator
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="initiator" data-md-level="6">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8_2">
+          <span class="md-nav__icon md-icon"></span>
+          initiator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/generalized_accounts/initiator/sc_ws_basic_open_close.html" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_8_3" type="checkbox" id="__nav_5_4_2_2_8_3" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_8_3">
+        responder
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="responder" data-md-level="6">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8_3">
+          <span class="md-nav__icon md-icon"></span>
+          responder
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/generalized_accounts/responder/sc_ws_basic_open_close.html" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_9" type="checkbox" id="__nav_5_4_2_2_9" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_9">
+        Only One Signs
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Only One Signs" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_9">
+          <span class="md-nav__icon md-icon"></span>
+          Only One Signs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/only_one_signs/init_per_group.html" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/only_one_signs/sc_ws_conflict_on_new_offchain.html" class="md-nav__link">
+        conflict_on_new_offchain
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/only_one_signs/sc_ws_conflict_snapshot_and_offchain_update.html" class="md-nav__link">
+        sc_ws_conflict_snapshot_and_offchain_update
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_9_4" type="checkbox" id="__nav_5_4_2_2_9_4" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_9_4">
+        conflicts
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="conflicts" data-md-level="6">
+        <label class="md-nav__title" for="__nav_5_4_2_2_9_4">
+          <span class="md-nav__icon md-icon"></span>
+          conflicts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_deposit_and_offchain_update.html" class="md-nav__link">
+        conflict_deposit_and_offchain_update
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_two_deposits.html" class="md-nav__link">
+        conflict_two_deposits
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_two_offchain_updates.html" class="md-nav__link">
+        conflict_two_offchain_updates
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_two_withdrawals.html" class="md-nav__link">
+        conflict_two_withdrawals
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_withdrawal_and_deposit.html" class="md-nav__link">
+        conflict_withdrawal_and_deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_withdrawal_and_offchain_update.html" class="md-nav__link">
+        conflict_withdrawal_and_offchain_update
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_10" type="checkbox" id="__nav_5_4_2_2_10" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_10">
+        Reconnect
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Reconnect" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_10">
+          <span class="md-nav__icon md-icon"></span>
+          Reconnect
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/reconnect/sc_ws_basic_client_reconnect_i.html" class="md-nav__link">
+        basic_client_reconnect_i
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/reconnect/sc_ws_basic_client_reconnect_i_w_reestablish.html" class="md-nav__link">
+        basic_client_reconnect_i_w_reestablish
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/reconnect/sc_ws_basic_client_reconnect_r.html" class="md-nav__link">
+        basic_client_reconnect_r
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2_2_11" type="checkbox" id="__nav_5_4_2_2_11" >
+      
+      <label class="md-nav__link" for="__nav_5_4_2_2_11">
+        With Meta
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="With Meta" data-md-level="5">
+        <label class="md-nav__title" for="__nav_5_4_2_2_11">
+          <span class="md-nav__icon md-icon"></span>
+          With Meta
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/with_meta/init_per_group.html" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/with_meta/sc_ws_deposit.html" class="md-nav__link">
+        deposit
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/with_meta/sc_ws_remote_call_contract.html" class="md-nav__link">
+        remote_call_contract
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/with_meta/sc_ws_withdraw.html" class="md-nav__link">
+        withdraw
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_basic_open_close_server.html" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_basic_open_close.html" class="md-nav__link">
+        basic_open_close_server
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_broken_open_params.html" class="md-nav__link">
+        broken_open_params
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_close_mutual.html" class="md-nav__link">
+        close_mutual
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_close_solo.html" class="md-nav__link">
+        close_solo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_leave_reconnect.html" class="md-nav__link">
+        leave_reconnect
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_leave_reestablish.html" class="md-nav__link">
+        leave_reestablish
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_leave_reestablish_responder_stays.html" class="md-nav__link">
+        leave_reestablish_responder_stays
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_leave_reestablish_wrong_fsm_id.html" class="md-nav__link">
+        leave_reestablish_wrong_fsm_id
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_min_depth_is_modifiable.html" class="md-nav__link">
+        min_depth_is_modifiable
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_min_depth_not_reached_timeout.html" class="md-nav__link">
+        min_depth_not_reached_timeout
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_opening_ping_pong.html" class="md-nav__link">
+        opening_ping_pong
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_reconnect_early.html" class="md-nav__link">
+        reconnect_early
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_slash.html" class="md-nav__link">
+        slash
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_snapshot_solo.html" class="md-nav__link">
+        snapshot_solo
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_timeout_open.html" class="md-nav__link">
+        timeout_open
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../node/api/examples/channels/json-rpc/sc_ws_update_with_meta.html" class="md-nav__link">
+        update_with_meta
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
+        Mining
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Mining" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Mining
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../STRATUM.html" class="md-nav__link">
+        Stratum
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serializations.html" class="md-nav__link">
+        Serializations
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#design" class="md-nav__link">
+    Design
+  </a>
+  
+    <nav class="md-nav" aria-label="Design">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#objectives" class="md-nav__link">
+    Objectives
+  </a>
+  
+    <nav class="md-nav" aria-label="Objectives">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#type-safety" class="md-nav__link">
+    Type safety
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rich-data-types" class="md-nav__link">
+    Rich data types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#faster-transactions-smaller-code-size" class="md-nav__link">
+    Faster transactions, smaller code size
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#components" class="md-nav__link">
+    Components
+  </a>
+  
+    <nav class="md-nav" aria-label="Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#machine-state" class="md-nav__link">
+    Machine State
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory" class="md-nav__link">
+    Memory
+  </a>
+  
+    <nav class="md-nav" aria-label="Memory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-execution-memory" class="md-nav__link">
+    The execution memory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-chain" class="md-nav__link">
+    The chain
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-contract-store" class="md-nav__link">
+    The contract store
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-state-tree" class="md-nav__link">
+    The state tree
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-local-storage" class="md-nav__link">
+    The local storage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-accumulator-stack" class="md-nav__link">
+    The accumulator stack
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-execution-stack" class="md-nav__link">
+    The execution stack
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-event-stream" class="md-nav__link">
+    The event stream
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#types" class="md-nav__link">
+    Types
+  </a>
+  
+    <nav class="md-nav" aria-label="Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#integer" class="md-nav__link">
+    Integer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#boolean" class="md-nav__link">
+    Boolean
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addresses-contract-addresses-oracles-oracle-querries-channels" class="md-nav__link">
+    Addresses, Contract Addresses, Oracles, Oracle Querries, Channels
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strings" class="md-nav__link">
+    Strings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tuples" class="md-nav__link">
+    Tuples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lists" class="md-nav__link">
+    Lists
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maps" class="md-nav__link">
+    Maps
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variant-types" class="md-nav__link">
+    Variant Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typerep" class="md-nav__link">
+    TypeRep
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operations" class="md-nav__link">
+    Operations
+  </a>
+  
+    <nav class="md-nav" aria-label="Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#operands" class="md-nav__link">
+    Operands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operations_1" class="md-nav__link">
+    Operations
+  </a>
+  
+    <nav class="md-nav" aria-label="Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#description-of-operations" class="md-nav__link">
+    Description of operations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcodes-flags-and-gas" class="md-nav__link">
+    Opcodes, Flags and Gas
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gas" class="md-nav__link">
+    Gas
+  </a>
+  
+    <nav class="md-nav" aria-label="Gas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add-sub-mul-div-mod" class="md-nav__link">
+    ADD, SUB, MUL, DIV, MOD
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pow" class="md-nav__link">
+    POW
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tuple" class="md-nav__link">
+    TUPLE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setelement" class="md-nav__link">
+    SETELEMENT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map_empty" class="md-nav__link">
+    MAP_EMPTY
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map_update" class="md-nav__link">
+    MAP_UPDATE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map_from_list" class="md-nav__link">
+    MAP_FROM_LIST
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#map_to_list" class="md-nav__link">
+    MAP_TO_LIST
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cons" class="md-nav__link">
+    CONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#append" class="md-nav__link">
+    APPEND
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#str_join" class="md-nav__link">
+    STR_JOIN
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#int_to_str" class="md-nav__link">
+    INT_TO_STR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#addr_to_str" class="md-nav__link">
+    ADDR_TO_STR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#str_reverse" class="md-nav__link">
+    STR_REVERSE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#int_to_addr" class="md-nav__link">
+    INT_TO_ADDR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bits_none-bits_nonea-bits_all-bits_alla" class="md-nav__link">
+    BITS_NONE, BITS_NONEA, BITS_ALL, BITS_ALLA
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bits_all_n" class="md-nav__link">
+    BITS_ALL_N
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bits_set-bits_clear" class="md-nav__link">
+    BITS_SET, BITS_CLEAR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bytes_concat" class="md-nav__link">
+    BYTES_CONCAT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bytes_to_str" class="md-nav__link">
+    BYTES_TO_STR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bytes_split" class="md-nav__link">
+    BYTES_SPLIT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auth_tx_hash" class="md-nav__link">
+    AUTH_TX_HASH
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variant" class="md-nav__link">
+    VARIANT
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/aeternity/protocol/edit/master/docs/contracts/fate.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="fate">FATE</h1>
+<p>The fast æternity transaction engine.</p>
+<h2 id="design">Design</h2>
+<p>The high level machine (or the fast æternity transaction engine) has
+æternity transactions as its basic operations and it operates
+directly on the state tree of the æternity chain. This is a new
+paradigm in blockchain virtual machine specifications which makes it
+possible to create type safe and efficient implementations of the
+machine.</p>
+<p>Every operation is typed and all values are typed (either by being
+stored in a typed memory or by a tag). Any type violation results in
+an exception and reverts all state changes. In version 1.0 there will
+be no catch instruction.</p>
+<p>In addition to normal machine instructions, such as ADD, the machine
+also has support for constructing most of the transactions available on
+the æternity chain from native low level chain transaction
+instructions.</p>
+<p>The instruction memory is divided into functions and basic
+blocks. Only basic blocks can be indexed and used as jump
+destinations.</p>
+<p>There are instructions to operate on the chain state tree in a safe and formalized way.</p>
+<p>FATE is "functional" in the sense that "updates" of data structures,
+such as tuples, lists or maps do not change the old values of the
+structure. Instead a new version is created, unless specific
+operations to write to the contract store are used.</p>
+<p>FATE does have the ability to write the value of an operation back to the
+same register or stack position as one of the arguments, in effect updating
+the memory. Thus, any other references to the structure before the operation
+will have the same structure as before the operation.</p>
+<h3 id="objectives">Objectives</h3>
+<h4 id="type-safety">Type safety</h4>
+<p>FATE solves some fundamental problems programmers run into when coding for
+Ethereum: integer overflow, weak type checking and poor data
+flow. FATE checks all arithmetic operations to keep the right meaning
+of it. Also you can't implicitly cast types (eg integers to booleans).</p>
+<p>In EVM contracts are not typed. When calling a function, EVM will try
+to find which function you wanted to use by looking at the data that
+you send into the code. In FATE, you have actual functions and the
+functions have types - function call has to match the function type.</p>
+<p>FATE ultimately makes a safer coding platform for smart contracts.</p>
+<h4 id="rich-data-types">Rich data types</h4>
+<p>FATE has more built in data types: like maps, lists.</p>
+<h4 id="faster-transactions-smaller-code-size">Faster transactions, smaller code size</h4>
+<p>Having a higher level instructions makes the code deployed smaller and
+it reduces the blockchain size. Smaller code and smaller hashes also
+keeps a blockchain network from clogging up and results in cheaper
+transactions.</p>
+<h2 id="components">Components</h2>
+<h3 id="machine-state">Machine State</h3>
+<ul>
+<li>Current contract: Address</li>
+<li>Current owner: Address</li>
+<li>Caller: Address</li>
+<li>Code: Code of current contract</li>
+<li>Memory: Several components as defined below</li>
+<li>CF, current function: Hash of current function</li>
+<li>CBB, current basic block: Index of current basic block.</li>
+<li>EC, Execution continuation: A list of instructions left in the current basic block.</li>
+</ul>
+<h3 id="memory">Memory</h3>
+<p>The machine memory is divided into:</p>
+<ul>
+<li>The chain top (block height, etc)</li>
+<li>Event stream</li>
+<li>The account state tree</li>
+<li>The contract store</li>
+<li>The execution/code memory</li>
+<li>Execution stack (push/pop on call/return)</li>
+<li>Accumulator stack (push/pop on instruction level)</li>
+<li>Local storage/stack/environment/context (push/pop on let...in...end)</li>
+</ul>
+<h4 id="the-execution-memory">The execution memory</h4>
+<p>The code to execute is stored in the execution memory. The execution
+memory is a three level map. The key on the top level is a contract
+address. The second level is a map from function hashes to a map of
+basic blocks. The keys in the map of basic blocks are indices to basic
+blocks (a 0 based, dense enumeration). The values are lists of
+instructions.</p>
+<p>When a contract is called the code of the contract is read from the
+state tree into the execution memory. At this point the machine
+implementation can deserialize the serialized version of FATE code
+into instructions and basic blocks.</p>
+<p>The serialization format for FATE code is described in Appendix 1:
+<a href="#appendix-1-fate-serialization">Fate instruction set and serialization</a>.</p>
+<h4 id="the-chain">The chain</h4>
+<p>The chain "memory" contains information about the current block and
+the current iteration. These values are available through special
+instructions.</p>
+<ul>
+<li>Beneficiary</li>
+<li>Timestamp</li>
+<li>(Block) Height</li>
+<li>Difficulty</li>
+<li>Gaslimit</li>
+<li>Address</li>
+<li>Balance</li>
+<li>Caller</li>
+<li>Value</li>
+</ul>
+<h4 id="the-contract-store">The contract store</h4>
+<p>The permanent storage of a contract. Stored in the chain state
+tree. This is a key value store that is mapped to the contract state
+by the compiler.</p>
+<p>The compiler can choose how to represent the contract state in the
+store. For instance, save the entire state under a single key (this is
+how it works in AEVM at the moment), or it could flatten any state
+records and store each field under a separate key.</p>
+<h4 id="the-state-tree">The state tree</h4>
+<p>Contains all accounts, oracles and contracts on the chain. Most values
+such as account balances can be read directly through specific load
+instructions. Some values can be changed through transaction
+instructions.</p>
+<h4 id="the-local-storage">The local storage</h4>
+<p>The local storage is a key value store.
+The key is a an integer. The value can be of any FATE type.
+The local store is local to a function call.</p>
+<h4 id="the-accumulator-stack">The accumulator stack</h4>
+<p>The accumulator stack is a stack of typed values. The top of the stack
+can be used as an argument to an operation. Values can be pushed to
+the stack and popped from the stack.</p>
+<h4 id="the-execution-stack">The execution stack</h4>
+<p>The execution stack contain return addresses as a tuple in the form of
+{contract address, function hash, and basic block index}.</p>
+<h4 id="the-event-stream">The event stream</h4>
+<p>A contract can emit events similar to the EVM.</p>
+<h2 id="types">Types</h2>
+<p>The machine supports the following types:</p>
+<ul>
+<li>Integer (signed arbitrary precision integers)</li>
+<li>Boolean (true | false)</li>
+<li>Strings (arbitrary size byte arrays)</li>
+<li>Bytes (fixed size byte arrays)</li>
+<li>Bits (An arbitrary size bitmap)</li>
+<li>Address (A pointer into the state tree)</li>
+<li>Contract Address (A pointer to a contract)</li>
+<li>Oracle (A pointer to an oracle)</li>
+<li>Oracle Query (A pointer to an oracle query)</li>
+<li>Channel (A pointer to a channel)</li>
+<li>Tuples (a typed series of values)</li>
+<li>Lists (a list of values of a specific type)</li>
+<li>Maps (a key value store)</li>
+<li>Store Map (a key value store mapped to the contract state)</li>
+<li>Variant Types (a set of tagged and typed values)</li>
+<li>Type (a representation of a FATE type)</li>
+</ul>
+<p>These types can be used as argument and return types of functions and
+also as the type of the elements in the contract store.</p>
+<h3 id="integer">Integer</h3>
+<p>The type Integer, is used for any integer, infinitely large or small
+(below zero).</p>
+<p>Examples:</p>
+<div class="highlight"><pre><span></span><code> 0
+ 1
+-1
+589465789334
+-51315353513513131656462262
+</code></pre></div>
+<h3 id="boolean">Boolean</h3>
+<p>The Boolean type only has two values, true or false.</p>
+<p>Examples (all of them):
+<div class="highlight"><pre><span></span><code> true
+ false
+</code></pre></div></p>
+<p>Operations on booleans include:</p>
+<ul>
+<li><code>and</code>, <code>or</code>, <code>not</code></li>
+<li>conditional jumps</li>
+</ul>
+<h3 id="addresses-contract-addresses-oracles-oracle-querries-channels">Addresses, Contract Addresses, Oracles, Oracle Querries, Channels</h3>
+<p>Values of any address type are 32-byte (256-bit) pointers to
+entities on the chain (Accounts, Oracles, Contracts, etc)</p>
+<p>Examples:
+<div class="highlight"><pre><span></span><code>&lt;&lt;ak_2HNb8bivUoJTcaxD6VKDy2wPHvTuQgQRJ3dkF9RSyVFqBkMneC&gt;&gt;
+</code></pre></div></p>
+<h3 id="strings">Strings</h3>
+<p>Strings are byte arrays.
+These can be assumed (by debugging tools) to be UTF-8 encoded unicode characters,
+but there are no instructions that depend upon them being UTF-8 encoded strings,
+they can be used as arbitrary non-indexable arrays of bytes.</p>
+<p>Examples:
+<div class="highlight"><pre><span></span><code>&quot;Hello world&quot;
+  &quot;eof&quot;
+</code></pre></div></p>
+<h3 id="tuples">Tuples</h3>
+<p>Tuples have an arity indicating the number of elements in the
+tuple. Each element in the tuple has a type. The 0-tuple is also
+sometimes called unit.
+The maximum number of elements in the tuple is 255 (included).</p>
+<p>Examples:
+<div class="highlight"><pre><span></span><code> {}                Type: unit
+ {1, 2}            Type: Tuple(Integer, Integer)
+ {&quot;foo&quot;, 42, true} Type: Tuple(String, Integer, Boolean)
+</code></pre></div></p>
+<h3 id="lists">Lists</h3>
+<p>Lists are monomorphic series of values. Hence lists have a type. There
+is also an empty list (or Nil).</p>
+<p>Examples:
+<div class="highlight"><pre><span></span><code>[]                   Type: Nil
+[1, 2, 3]            Type: List(Integer)
+[true, true, false]  Type: List(Boolean)
+</code></pre></div></p>
+<h3 id="maps">Maps</h3>
+<p>Maps are monomorphic key value stores, that is the key is always the
+same type for all elements in a map and the value has the same type in
+all mappings in a map.  The key can have any type except a map.  The
+value can have any type including a map.</p>
+<p>Examples:
+<div class="highlight"><pre><span></span><code>#{ (1, &quot;foo&quot;), (2, &quot;bar&quot;) }
+</code></pre></div>
+Type: Map(Integer, String)</p>
+<p><div class="highlight"><pre><span></span><code>#{ (&quot;Fruit prices&quot;, #{ (&quot;banana&quot;, 42), (&quot;apple&quot;, 12)}),
+   (&quot;Stock prices&quot;, #{(&quot;Apple&quot;, 142), (&quot;Orange&quot;, 112)}) }
+</code></pre></div>
+Type: Map(String, Map(String, Integer))</p>
+<h3 id="variant-types">Variant Types</h3>
+<p>The variant type is a type consisting of a list of sizes and a tag (index)
+where each tag represents a series of values of specified types. For
+example you could have the Option type which could be None or
+Some(Integer). The sizes of the variant are 0 and 1 (there are two variants),
+The value None would be indicated by tag 0. The value
+Some(42) would be represented by tag 1 followed by the integer 42.</p>
+<p>Examples:
+<div class="highlight"><pre><span></span><code>  (| [0,1] | 0 | () |)      ;; None
+  (| [0,1] | 1 | (42) |)    ;; Some(42)
+
+  (| 4 | 3 | (42, &quot;foo&quot;, true) |) ;; Three(42, &quot;foo&quot;, true)
+</code></pre></div></p>
+<p>Note that the tuple syntax for the elements does not indicate a Fate
+tuple but a series of values.</p>
+<h3 id="typerep">TypeRep</h3>
+<p>A TypeRep is the representation of a type as a value.
+A TypeRep is one of</p>
+<ul>
+<li>integer</li>
+<li>boolean</li>
+<li>any</li>
+<li>{list, T}</li>
+<li>{tuple, Ts}</li>
+<li>address</li>
+<li>contract</li>
+<li>oracle</li>
+<li>oracle_query</li>
+<li>channel</li>
+<li>bits</li>
+<li>{map, K, V}</li>
+<li>string</li>
+<li>{variant, ListOfVariants}</li>
+<li>{tvar, N}</li>
+</ul>
+<p>where T, K and V are TypeReps, Ts is a list of TypeReps ([T1, T2, ... ]),
+and ListOfVariants is a list ([]) of tuples of TypeReps
+([{tuple, [Ts1]}, {tuple, [Ts2]} ... ]). N is a byte (0...255).</p>
+<h2 id="operations">Operations</h2>
+<p>All operations are typed. An operand can be the accumulator, an
+immediate, a name, a reference to a field in the state tree, or a
+reference to the contract state. The operand must be of the right
+type.</p>
+<h3 id="operands">Operands</h3>
+<p>Operand specifiers are</p>
+<ul>
+<li>immediate</li>
+<li>arg</li>
+<li>var</li>
+<li>a (accumulator == stack 0)</li>
+</ul>
+<p>The specifiers are encoded as</p>
+<table>
+<thead>
+<tr>
+<th>what</th>
+<th>bits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>immediate</td>
+<td>11</td>
+</tr>
+<tr>
+<td>var</td>
+<td>10</td>
+</tr>
+<tr>
+<td>arg</td>
+<td>01</td>
+</tr>
+<tr>
+<td>stack</td>
+<td>00</td>
+</tr>
+</tbody>
+</table>
+<p>Operand specifiers for operations with 1 to 4 arguments
+are stored in the byte following the opcode.
+Operand specifiers for operations with 5 to 8 arguments
+are stored in the two bytes following the opcode.
+Note that for many operation the first argument (arg0) is
+the destination for the operation.</p>
+<table>
+<thead>
+<tr>
+<th>value:</th>
+<th>arg3</th>
+<th>arg3</th>
+<th>arg2</th>
+<th>arg2</th>
+<th>arg1</th>
+<th>arg1</th>
+<th>arg0</th>
+<th>arg0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bit:</td>
+<td>7</td>
+<td>6</td>
+<td>5</td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>value:</th>
+<th>arg8</th>
+<th>arg7</th>
+<th>arg6</th>
+<th>arg6</th>
+<th>arg5</th>
+<th>arg5</th>
+<th>arg4</th>
+<th>arg4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bit:</td>
+<td>7</td>
+<td>6</td>
+<td>5</td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>Unused arguments should be set to 0.</p>
+<p>E.g. an a :=  immediate + a would have the bit
+pattern 00 11 00 00.</p>
+<p>Each use of the accumulator pops an argument from the stack.
+Writing to the accumulator pushes a value to the stack.</p>
+<h3 id="operations_1">Operations</h3>
+<h4 id="description-of-operations">Description of operations</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Args</th>
+<th>Description</th>
+<th>Arg Types</th>
+<th>Res Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>'RETURN'</td>
+<td></td>
+<td>Return from function call, top of stack is return value . The type of the retun value has to match the return type of the function.</td>
+<td>{}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'RETURNR'</td>
+<td>Arg0</td>
+<td>Push Arg0 and return from function. The type of the retun value has to match the return type of the function.</td>
+<td>{any}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'CALL'</td>
+<td>Arg0</td>
+<td>Call the function Arg0 with args on stack. The types of the arguments has to match the argument typs of the function.</td>
+<td>{string}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'CALL_R'</td>
+<td>Arg0 Identifier Arg2 Arg3 Arg4</td>
+<td>Remote call to contract Arg0 and function Arg1 of type Arg2 =&gt; Arg3 with value Arg4. The types of the arguments has to match the argument types of the function.</td>
+<td>{contract,string,typerep,typerep,integer}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'CALL_T'</td>
+<td>Arg0</td>
+<td>Tail call to function Arg0. The types of the arguments has to match the argument typs of the function. And the return type of the called function has to match the type of the current function.</td>
+<td>{string}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'CALL_GR'</td>
+<td>Arg0 Identifier Arg2 Arg3 Arg4 Arg5</td>
+<td>Remote call with gas cap in Arg4. Otherwise as CALL_R.</td>
+<td>{contract,string,typerep,typerep,integer,integer}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'JUMP'</td>
+<td>Integer</td>
+<td>Jump to a basic block. The basic block has to exist in the current function.</td>
+<td>{integer}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'JUMPIF'</td>
+<td>Arg0 Integer</td>
+<td>Conditional jump to a basic block. If Arg0 then jump to Arg1.</td>
+<td>{boolean,integer}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'SWITCH_V2'</td>
+<td>Arg0 Integer Integer</td>
+<td>Conditional jump to a basic block on variant tag.</td>
+<td>{variant,integer,ingeger}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'SWITCH_V3'</td>
+<td>Arg0 Integer Integer Integer</td>
+<td>Conditional jump to a basic block on variant tag.</td>
+<td>{variant,integer,integer,ingeger}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'SWITCH_VN'</td>
+<td>Arg0 [Integers]</td>
+<td>Conditional jump to a basic block on variant tag.</td>
+<td>{variant,{list,integer}}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'CALL_VALUE'</td>
+<td>Arg0</td>
+<td>The value sent in the current remote call.</td>
+<td>{}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'PUSH'</td>
+<td>Arg0</td>
+<td>Push argument to stack.</td>
+<td>{any}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'DUPA'</td>
+<td></td>
+<td>Duplicate top of stack.</td>
+<td>{any}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'DUP'</td>
+<td>Arg0</td>
+<td>push Arg0 stack pos on top of stack.</td>
+<td>{any}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'POP'</td>
+<td>Arg0</td>
+<td>Arg0 := top of stack.</td>
+<td>{integer}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'INCA'</td>
+<td></td>
+<td>Increment accumulator.</td>
+<td>{integer}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'INC'</td>
+<td>Arg0</td>
+<td>Increment argument.</td>
+<td>{integer}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'DECA'</td>
+<td></td>
+<td>Decrement accumulator.</td>
+<td>{integer}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'DEC'</td>
+<td>Arg0</td>
+<td>Decrement argument.</td>
+<td>{integer}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'ADD'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1 + Arg2.</td>
+<td>{integer,integer}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'SUB'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1 - Arg2.</td>
+<td>{integer,integer}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'MUL'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1 * Arg2.</td>
+<td>{integer,integer}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'DIV'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1 / Arg2.</td>
+<td>{integer,integer}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'MOD'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1 mod Arg2.</td>
+<td>{integer,integer}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'POW'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1  ^ Arg2.</td>
+<td>{integer,integer}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'STORE'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := Arg1.</td>
+<td>{any}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'SHA3'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := sha3(Arg1).</td>
+<td>{any}</td>
+<td>hash</td>
+</tr>
+<tr>
+<td>'SHA256'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := sha256(Arg1).</td>
+<td>{any}</td>
+<td>hash</td>
+</tr>
+<tr>
+<td>'BLAKE2B'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := blake2b(Arg1).</td>
+<td>{any}</td>
+<td>hash</td>
+</tr>
+<tr>
+<td>'LT'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1  &lt; Arg2.</td>
+<td>{integer,integer}</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>'GT'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1  &gt; Arg2.</td>
+<td>{integer,integer}</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>'EQ'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1  = Arg2.</td>
+<td>{integer,integer}</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>'ELT'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1 =&lt; Arg2.</td>
+<td>{integer,integer}</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>'EGT'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1 &gt;= Arg2.</td>
+<td>{integer,integer}</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>'NEQ'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1 /= Arg2.</td>
+<td>{integer,integer}</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>'AND'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1 and Arg2.</td>
+<td>{boolean,boolean}</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>'OR'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1  or Arg2.</td>
+<td>{boolean,boolean}</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>'NOT'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := not Arg1.</td>
+<td>{boolean}</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>'TUPLE'</td>
+<td>Arg0 Integer</td>
+<td>Arg0 := tuple of size = Arg1. Elements on stack.</td>
+<td>{integer}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td>'ELEMENT'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg1 := element(Arg2, Arg3).</td>
+<td>{integer,tuple}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'SETELEMENT'</td>
+<td>Arg0 Arg1 Arg2 Arg3</td>
+<td>Arg0 := a new tuple similar to Arg2, but with element number Arg1 replaced by Arg3.</td>
+<td>{integer,tuple,any}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td>'MAP_EMPTY'</td>
+<td>Arg0</td>
+<td>Arg0 := #{}.</td>
+<td>{}</td>
+<td>map</td>
+</tr>
+<tr>
+<td>'MAP_LOOKUP'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := lookup key Arg2 in map Arg1.</td>
+<td>{map,any}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'MAP_LOOKUPD'</td>
+<td>Arg0 Arg1 Arg2 Arg3</td>
+<td>Arg0 := lookup key Arg2 in map Arg1 if key exists in map otherwise Arg0 := Arg3.</td>
+<td>{map,any,any}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'MAP_UPDATE'</td>
+<td>Arg0 Arg1 Arg2 Arg3</td>
+<td>Arg0 := update key Arg2 in map Arg1 with value Arg3.</td>
+<td>{map,any,any}</td>
+<td>map</td>
+</tr>
+<tr>
+<td>'MAP_DELETE'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := delete key Arg2 from map Arg1.</td>
+<td>{map,any}</td>
+<td>map</td>
+</tr>
+<tr>
+<td>'MAP_MEMBER'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := true if key Arg2 is in map Arg1.</td>
+<td>{map,any}</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>'MAP_FROM_LIST'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := make a map from (key, value) list in Arg1.</td>
+<td>{{list,{tuple,[any,any]}}}</td>
+<td>map</td>
+</tr>
+<tr>
+<td>'MAP_SIZE'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := The size of the map Arg1.</td>
+<td>{map}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'MAP_TO_LIST'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := The tuple list representation of the map Arg1.</td>
+<td>{map}</td>
+<td>list</td>
+</tr>
+<tr>
+<td>'IS_NIL'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := true if Arg1 == [].</td>
+<td>{list}</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>'CONS'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := [Arg1</td>
+<td>Arg2].</td>
+<td>{any,list}</td>
+</tr>
+<tr>
+<td>'HD'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := head of list Arg1.</td>
+<td>{list}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'TL'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := tail of list Arg1.</td>
+<td>{list}</td>
+<td>list</td>
+</tr>
+<tr>
+<td>'LENGTH'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := length of list Arg1.</td>
+<td>{list}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'NIL'</td>
+<td>Arg0</td>
+<td>Arg0 := [].</td>
+<td>{}</td>
+<td>list</td>
+</tr>
+<tr>
+<td>'APPEND'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1 ++ Arg2.</td>
+<td>{list,list}</td>
+<td>list</td>
+</tr>
+<tr>
+<td>'STR_JOIN'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := string Arg1 followed by string Arg2.</td>
+<td>{string,string}</td>
+<td>string</td>
+</tr>
+<tr>
+<td>'INT_TO_STR'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := turn integer Arg1 into a string.</td>
+<td>{integer}</td>
+<td>string</td>
+</tr>
+<tr>
+<td>'ADDR_TO_STR'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := turn address Arg1 into a string.</td>
+<td>{address}</td>
+<td>string</td>
+</tr>
+<tr>
+<td>'STR_REVERSE'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := the reverse of string Arg1.</td>
+<td>{string}</td>
+<td>string</td>
+</tr>
+<tr>
+<td>'STR_LENGTH'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := The length of the string Arg1.</td>
+<td>{string}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'BYTES_TO_INT'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := bytes_to_int(Arg1)</td>
+<td>{bytes}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'BYTES_TO_STR'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := bytes_to_str(Arg1)</td>
+<td>{bytes}</td>
+<td>string</td>
+</tr>
+<tr>
+<td>'BYTES_CONCAT'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := bytes_concat(Arg1, Arg2)</td>
+<td>{bytes,bytes}</td>
+<td>bytes</td>
+</tr>
+<tr>
+<td>'BYTES_SPLIT'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := bytes_split(Arg2, Arg1), where Arg2 is the length of the first chunk.</td>
+<td>{bytes,integer}</td>
+<td>bytes</td>
+</tr>
+<tr>
+<td>'INT_TO_ADDR'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := turn integer Arg1 into an address.</td>
+<td>{integer}</td>
+<td>address</td>
+</tr>
+<tr>
+<td>'VARIANT'</td>
+<td>Arg0 Arg1 Arg2 Arg3</td>
+<td>Arg0 := create a variant of size Arg1 with the tag Arg2 (Arg2 &lt; Arg1) and take Arg3 elements from the stack.</td>
+<td>{integer,integer,integer}</td>
+<td>variant</td>
+</tr>
+<tr>
+<td>'VARIANT_TEST'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := true if variant Arg1 has the tag Arg2.</td>
+<td>{variant,integer}</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>'VARIANT_ELEMENT'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := element number Arg2 from variant Arg1.</td>
+<td>{variant,integer}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'BITS_NONEA'</td>
+<td></td>
+<td>push an empty bitmap on the stack.</td>
+<td>{}</td>
+<td>bits</td>
+</tr>
+<tr>
+<td>'BITS_NONE'</td>
+<td>Arg0</td>
+<td>Arg0 := empty bitmap.</td>
+<td>{}</td>
+<td>bits</td>
+</tr>
+<tr>
+<td>'BITS_ALLA'</td>
+<td></td>
+<td>push a full bitmap on the stack.</td>
+<td>{}</td>
+<td>bits</td>
+</tr>
+<tr>
+<td>'BITS_ALL'</td>
+<td>Arg0</td>
+<td>Arg0 := full bitmap.</td>
+<td>{}</td>
+<td>bits</td>
+</tr>
+<tr>
+<td>'BITS_ALL_N'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := bitmap with Arg1 bits set.</td>
+<td>{integer}</td>
+<td>bits</td>
+</tr>
+<tr>
+<td>'BITS_SET'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := set bit Arg2 of bitmap Arg1.</td>
+<td>{bits,integer}</td>
+<td>bits</td>
+</tr>
+<tr>
+<td>'BITS_CLEAR'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := clear bit Arg2 of bitmap Arg1.</td>
+<td>{bits,integer}</td>
+<td>bits</td>
+</tr>
+<tr>
+<td>'BITS_TEST'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := true if bit Arg2 of bitmap Arg1 is set.</td>
+<td>{bits,integer}</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>'BITS_SUM'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := sum of set bits in bitmap Arg1. Exception if infinit bitmap.</td>
+<td>{bits}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'BITS_OR'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1 v Arg2.</td>
+<td>{bits,bits}</td>
+<td>bits</td>
+</tr>
+<tr>
+<td>'BITS_AND'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1 ^ Arg2.</td>
+<td>{bits,bits}</td>
+<td>bits</td>
+</tr>
+<tr>
+<td>'BITS_DIFF'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := Arg1 - Arg2.</td>
+<td>{bits,bits}</td>
+<td>bits</td>
+</tr>
+<tr>
+<td>'BALANCE'</td>
+<td>Arg0</td>
+<td>Arg0 := The current contract balance.</td>
+<td>{}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'ORIGIN'</td>
+<td>Arg0</td>
+<td>Arg0 := Address of contract called by the call transaction.</td>
+<td>{}</td>
+<td>address</td>
+</tr>
+<tr>
+<td>'CALLER'</td>
+<td>Arg0</td>
+<td>Arg0 := The address that signed the call transaction.</td>
+<td>{}</td>
+<td>address</td>
+</tr>
+<tr>
+<td>'BLOCKHASH'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := The blockhash at height.</td>
+<td>{integer}</td>
+<td>hash</td>
+</tr>
+<tr>
+<td>'BENEFICIARY'</td>
+<td>Arg0</td>
+<td>Arg0 := The address of the current beneficiary.</td>
+<td>{}</td>
+<td>address</td>
+</tr>
+<tr>
+<td>'TIMESTAMP'</td>
+<td>Arg0</td>
+<td>Arg0 := The current timestamp. Unrelaiable, don't use for anything.</td>
+<td>{}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'GENERATION'</td>
+<td>Arg0</td>
+<td>Arg0 := The block height of the cureent generation.</td>
+<td>{}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'MICROBLOCK'</td>
+<td>Arg0</td>
+<td>Arg0 := The current micro block number.</td>
+<td>{}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'DIFFICULTY'</td>
+<td>Arg0</td>
+<td>Arg0 := The current difficulty.</td>
+<td>{}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'GASLIMIT'</td>
+<td>Arg0</td>
+<td>Arg0 := The current gaslimit.</td>
+<td>{}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'GAS'</td>
+<td>Arg0</td>
+<td>Arg0 := The amount of gas left.</td>
+<td>{}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'ADDRESS'</td>
+<td>Arg0</td>
+<td>Arg0 := The current contract address.</td>
+<td>{}</td>
+<td>address</td>
+</tr>
+<tr>
+<td>'GASPRICE'</td>
+<td>Arg0</td>
+<td>Arg0 := The current gas price.</td>
+<td>{}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'LOG0'</td>
+<td>Arg0</td>
+<td>Create a log message in the call object.</td>
+<td>{string}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'LOG1'</td>
+<td>Arg0 Arg1</td>
+<td>Create a log message with one topic in the call object.</td>
+<td>{integer,string}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'LOG2'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Create a log message with two topics in the call object.</td>
+<td>{integer,integer,string}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'LOG3'</td>
+<td>Arg0 Arg1 Arg2 Arg3</td>
+<td>Create a log message with three topics in the call object.</td>
+<td>{integer,integer,integer,string}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'LOG4'</td>
+<td>Arg0 Arg1 Arg2 Arg3 Arg4</td>
+<td>Create a log message with four topics in the call object.</td>
+<td>{integer,integer,integer,integer,string}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'SPEND'</td>
+<td>Arg0 Arg1</td>
+<td>Transfer Arg1 tokens to account Arg0. (If the contract account has at least that many tokens.</td>
+<td>{address,integer}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'ORACLE_REGISTER'</td>
+<td>Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 Arg6</td>
+<td>Arg0 := New oracle with address Arg2, query fee Arg3, TTL Arg4, query type Arg5 and response type Arg6. Arg0 contains delegation signature.</td>
+<td>{signature,address,integer,variant,typerep,typerep}</td>
+<td>oracle</td>
+</tr>
+<tr>
+<td>'ORACLE_QUERY'</td>
+<td>Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 Arg6 Arg7</td>
+<td>Arg0 := New oracle query for oracle Arg1, question in Arg2, query fee in Arg3, query TTL in Arg4, response TTL in Arg5. Typereps for checking oracle type is in Arg6 and Arg7.</td>
+<td>{oracle,any,integer,variant,variant,typerep,typerep}</td>
+<td>oracle_query</td>
+</tr>
+<tr>
+<td>'ORACLE_RESPOND'</td>
+<td>Arg0 Arg1 Arg2 Arg3 Arg4 Arg5</td>
+<td>Respond as oracle Arg1 to query in Arg2 with response Arg3. Arg0 contains delegation signature. Typereps for checking oracle type is in Arg4 and Arg5.</td>
+<td>{signature,oracle,oracle_query,any,typerep,typerep}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'ORACLE_EXTEND'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Extend oracle in Arg1 with TTL in Arg2. Arg0 contains delegation signature.</td>
+<td>{signature,oracle,variant}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'ORACLE_GET_ANSWER'</td>
+<td>Arg0 Arg1 Arg2 Arg3 Arg4</td>
+<td>Arg0 := option variant with answer (if any) from oracle query in Arg1 given by oracle Arg0. Typereps for checking oracle type is in Arg3 and Arg4.</td>
+<td>{oracle,oracle_query,typerep,typerep}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'ORACLE_GET_QUESTION'</td>
+<td>Arg0 Arg1 Arg2 Arg3 Arg4</td>
+<td>Arg0 := question in oracle query Arg2 given to oracle Arg1. Typereps for checking oracle type is in Arg3 and Arg4.</td>
+<td>{oracle,oracle_query,typerep,typerep}</td>
+<td>any</td>
+</tr>
+<tr>
+<td>'ORACLE_QUERY_FEE'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := query fee for oracle Arg1</td>
+<td>{oracle}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'AENS_RESOLVE'</td>
+<td>Arg0 Arg1 Arg2 Arg3</td>
+<td>Resolve name in Arg0 with tag Arg1. Arg2 describes the type parameter of the resolved name.</td>
+<td>{string,string,typerep}</td>
+<td>variant</td>
+</tr>
+<tr>
+<td>'AENS_PRECLAIM'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Preclaim the hash in Arg2 for address in Arg1. Arg0 contains delegation signature.</td>
+<td>{signature,address,hash}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'AENS_CLAIM'</td>
+<td>Arg0 Arg1 Arg2 Arg3 Arg4</td>
+<td>Attempt to claim the name in Arg2 for address in Arg1 at a price in Arg4. Arg3 contains the salt used to hash the preclaim. Arg0 contains delegation signature.</td>
+<td>{signature,address,string,integer,integer}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'AENS_UPDATE'</td>
+<td></td>
+<td>NYI</td>
+<td>{}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'AENS_TRANSFER'</td>
+<td>Arg0 Arg1 Arg2 Arg3</td>
+<td>Transfer ownership of name Arg3 from account Arg1 to Arg2. Arg0 contains delegation signature.</td>
+<td>{signature,address,address,string}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'AENS_REVOKE'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Revoke the name in Arg2 from owner Arg1. Arg0 contains delegation signature.</td>
+<td>{signature,address,string}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'BALANCE_OTHER'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := The balance of address Arg1.</td>
+<td>{address}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>'VERIFY_SIG'</td>
+<td>Arg0 Arg1 Arg2 Arg3</td>
+<td>Arg0 := verify_sig(Hash, PubKey, Signature)</td>
+<td>{bytes,address,bytes}</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>'VERIFY_SIG_SECP256K1'</td>
+<td>Arg0 Arg1 Arg2 Arg3</td>
+<td>Arg0 := verify_sig_secp256k1(Hash, PubKey, Signature)</td>
+<td>{bytes,bytes,bytes}</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>'CONTRACT_TO_ADDRESS'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := Arg1 - A no-op type conversion</td>
+<td>{contract}</td>
+<td>address</td>
+</tr>
+<tr>
+<td>'AUTH_TX_HASH'</td>
+<td>Arg0</td>
+<td>If in GA authentication context return Some(TxHash) otherwise None.</td>
+<td>{}</td>
+<td>variant</td>
+</tr>
+<tr>
+<td>'ORACLE_CHECK'</td>
+<td>Arg0 Arg1 Arg2 Arg3</td>
+<td>Arg0 := is Arg1 an oracle with the given query (Arg2) and response (Arg3) types</td>
+<td>{oracle,typerep,typerep}</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>'ORACLE_CHECK_QUERY'</td>
+<td>Arg0 Arg1 Arg2 Arg3 Arg4</td>
+<td>Arg0 := is Arg2 a query for the oracle Arg1 with the given types (Arg3, Arg4)</td>
+<td>{oracle,oracle_query,typerep,typerep}</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>'IS_ORACLE'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := is Arg1 an oracle</td>
+<td>{address}</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>'IS_CONTRACT'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := is Arg1 a contract</td>
+<td>{address}</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>'IS_PAYABLE'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := is Arg1 a payable address</td>
+<td>{address}</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>'CREATOR'</td>
+<td>Arg0</td>
+<td>Arg0 := contract creator</td>
+<td>{}</td>
+<td>address</td>
+</tr>
+<tr>
+<td>'ECVERIFY_SECP256K1'</td>
+<td>Arg0 Arg1 Arg2 Arg3</td>
+<td>Arg0 := ecverify_secp256k1(Hash, Addr, Signature)</td>
+<td>{bytes,bytes,bytes}</td>
+<td>bytes</td>
+</tr>
+<tr>
+<td>'ECRECOVER_SECP256K1'</td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := ecrecover_secp256k1(Hash, Signature)</td>
+<td>{bytes,bytes}</td>
+<td>bytes</td>
+</tr>
+<tr>
+<td>'ADDRESS_TO_CONTRACT'</td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := Arg1 - A no-op type conversion</td>
+<td>{address}</td>
+<td>contract</td>
+</tr>
+<tr>
+<td>'DEACTIVATE'</td>
+<td></td>
+<td>Mark the current contract for deactivation.</td>
+<td>{}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'ABORT'</td>
+<td>Arg0</td>
+<td>Abort execution (dont use all gas) with error message in Arg0.</td>
+<td>{string}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'EXIT'</td>
+<td>Arg0</td>
+<td>Abort execution (use upp all gas) with error message in Arg0.</td>
+<td>{string}</td>
+<td>none</td>
+</tr>
+<tr>
+<td>'NOP'</td>
+<td></td>
+<td>The no op. does nothing.</td>
+<td>{}</td>
+<td>none</td>
+</tr>
+</tbody>
+</table>
+<h4 id="opcodes-flags-and-gas">Opcodes, Flags and Gas</h4>
+<table>
+<thead>
+<tr>
+<th>Op</th>
+<th>Name</th>
+<th>Ends BB</th>
+<th>In Auth</th>
+<th>Offchain</th>
+<th>Base Gas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x00</td>
+<td>'RETURN'</td>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x01</td>
+<td>'RETURNR'</td>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x02</td>
+<td>'CALL'</td>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x03</td>
+<td>'CALL_R'</td>
+<td>true</td>
+<td>false</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x04</td>
+<td>'CALL_T'</td>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x05</td>
+<td>'CALL_GR'</td>
+<td>true</td>
+<td>false</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x06</td>
+<td>'JUMP'</td>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x07</td>
+<td>'JUMPIF'</td>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x08</td>
+<td>'SWITCH_V2'</td>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x09</td>
+<td>'SWITCH_V3'</td>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x0a</td>
+<td>'SWITCH_VN'</td>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x0b</td>
+<td>'CALL_VALUE'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x0c</td>
+<td>'PUSH'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x0d</td>
+<td>'DUPA'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x0e</td>
+<td>'DUP'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x0f</td>
+<td>'POP'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x10</td>
+<td>'INCA'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x11</td>
+<td>'INC'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x12</td>
+<td>'DECA'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x13</td>
+<td>'DEC'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x14</td>
+<td>'ADD'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x15</td>
+<td>'SUB'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x16</td>
+<td>'MUL'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x17</td>
+<td>'DIV'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x18</td>
+<td>'MOD'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x19</td>
+<td>'POW'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x1a</td>
+<td>'STORE'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x1b</td>
+<td>'SHA3'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x1c</td>
+<td>'SHA256'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x1d</td>
+<td>'BLAKE2B'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x1e</td>
+<td>'LT'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x1f</td>
+<td>'GT'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x20</td>
+<td>'EQ'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x21</td>
+<td>'ELT'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x22</td>
+<td>'EGT'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x23</td>
+<td>'NEQ'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x24</td>
+<td>'AND'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x25</td>
+<td>'OR'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x26</td>
+<td>'NOT'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x27</td>
+<td>'TUPLE'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x28</td>
+<td>'ELEMENT'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x29</td>
+<td>'SETELEMENT'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x2a</td>
+<td>'MAP_EMPTY'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x2b</td>
+<td>'MAP_LOOKUP'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x2c</td>
+<td>'MAP_LOOKUPD'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x2d</td>
+<td>'MAP_UPDATE'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x2e</td>
+<td>'MAP_DELETE'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x2f</td>
+<td>'MAP_MEMBER'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x30</td>
+<td>'MAP_FROM_LIST'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x31</td>
+<td>'MAP_SIZE'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x32</td>
+<td>'MAP_TO_LIST'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x33</td>
+<td>'IS_NIL'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x34</td>
+<td>'CONS'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x35</td>
+<td>'HD'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x36</td>
+<td>'TL'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x37</td>
+<td>'LENGTH'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x38</td>
+<td>'NIL'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x39</td>
+<td>'APPEND'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x3a</td>
+<td>'STR_JOIN'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x3b</td>
+<td>'INT_TO_STR'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x3c</td>
+<td>'ADDR_TO_STR'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x3d</td>
+<td>'STR_REVERSE'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x3e</td>
+<td>'STR_LENGTH'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x3f</td>
+<td>'BYTES_TO_INT'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x40</td>
+<td>'BYTES_TO_STR'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x41</td>
+<td>'BYTES_CONCAT'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x42</td>
+<td>'BYTES_SPLIT'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x43</td>
+<td>'INT_TO_ADDR'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x44</td>
+<td>'VARIANT'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x45</td>
+<td>'VARIANT_TEST'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x46</td>
+<td>'VARIANT_ELEMENT'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x47</td>
+<td>'BITS_NONEA'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x48</td>
+<td>'BITS_NONE'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x49</td>
+<td>'BITS_ALLA'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x4a</td>
+<td>'BITS_ALL'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x4b</td>
+<td>'BITS_ALL_N'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x4c</td>
+<td>'BITS_SET'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x4d</td>
+<td>'BITS_CLEAR'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x4e</td>
+<td>'BITS_TEST'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x4f</td>
+<td>'BITS_SUM'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x50</td>
+<td>'BITS_OR'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x51</td>
+<td>'BITS_AND'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x52</td>
+<td>'BITS_DIFF'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x53</td>
+<td>'BALANCE'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x54</td>
+<td>'ORIGIN'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x55</td>
+<td>'CALLER'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x56</td>
+<td>'BLOCKHASH'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x57</td>
+<td>'BENEFICIARY'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x58</td>
+<td>'TIMESTAMP'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x59</td>
+<td>'GENERATION'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x5a</td>
+<td>'MICROBLOCK'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x5b</td>
+<td>'DIFFICULTY'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x5c</td>
+<td>'GASLIMIT'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x5d</td>
+<td>'GAS'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x5e</td>
+<td>'ADDRESS'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x5f</td>
+<td>'GASPRICE'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x60</td>
+<td>'LOG0'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>0x61</td>
+<td>'LOG1'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>1100</td>
+</tr>
+<tr>
+<td>0x62</td>
+<td>'LOG2'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>1200</td>
+</tr>
+<tr>
+<td>0x63</td>
+<td>'LOG3'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>1300</td>
+</tr>
+<tr>
+<td>0x64</td>
+<td>'LOG4'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>1400</td>
+</tr>
+<tr>
+<td>0x65</td>
+<td>'SPEND'</td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x66</td>
+<td>'ORACLE_REGISTER'</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x67</td>
+<td>'ORACLE_QUERY'</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x68</td>
+<td>'ORACLE_RESPOND'</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x69</td>
+<td>'ORACLE_EXTEND'</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x6a</td>
+<td>'ORACLE_GET_ANSWER'</td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x6b</td>
+<td>'ORACLE_GET_QUESTION'</td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x6c</td>
+<td>'ORACLE_QUERY_FEE'</td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x6d</td>
+<td>'AENS_RESOLVE'</td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x6e</td>
+<td>'AENS_PRECLAIM'</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x6f</td>
+<td>'AENS_CLAIM'</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x70</td>
+<td>'AENS_UPDATE'</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x71</td>
+<td>'AENS_TRANSFER'</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x72</td>
+<td>'AENS_REVOKE'</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x73</td>
+<td>'BALANCE_OTHER'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>50</td>
+</tr>
+<tr>
+<td>0x74</td>
+<td>'VERIFY_SIG'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>1300</td>
+</tr>
+<tr>
+<td>0x75</td>
+<td>'VERIFY_SIG_SECP256K1'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>1300</td>
+</tr>
+<tr>
+<td>0x76</td>
+<td>'CONTRACT_TO_ADDRESS'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x77</td>
+<td>'AUTH_TX_HASH'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x78</td>
+<td>'ORACLE_CHECK'</td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x79</td>
+<td>'ORACLE_CHECK_QUERY'</td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x7a</td>
+<td>'IS_ORACLE'</td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x7b</td>
+<td>'IS_CONTRACT'</td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x7c</td>
+<td>'IS_PAYABLE'</td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x7d</td>
+<td>'CREATOR'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x7e</td>
+<td>'ECVERIFY_SECP256K1'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>1300</td>
+</tr>
+<tr>
+<td>0x7f</td>
+<td>'ECRECOVER_SECP256K1'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>1300</td>
+</tr>
+<tr>
+<td>0x80</td>
+<td>'ADDRESS_TO_CONTRACT'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0xfa</td>
+<td>'DEACTIVATE'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0xfb</td>
+<td>'ABORT'</td>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0xfc</td>
+<td>'EXIT'</td>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0xfd</td>
+<td>'NOP'</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<h2 id="gas">Gas</h2>
+<p>Each instruction uses the base gas as described in the table above.
+In addition to the instruction base cost (some) instructions also
+cost gas in relation to the memory they use. The base cost for
+memory is one gas per "cell" used. A cell is the memory word of
+an underlying machine which is defined to be a 64-bit word.</p>
+<p>Each use of a a cell is counted and for each 1024 cells used
+the price is increased by 1. If a contract uses 1024 cells it
+will cost 1024 gas, if it uses 1025 cells it will cost 1026 gas.
+Using 2049 cells costs 3072 gas and so on.</p>
+<p>When calculating the cell cost the total number of cells
+used after the instruction is used to determine the price for all
+new cells used by the instruction. So if you have used 1020 cells
+and then one instruction uses 5 new cells, then the gas cost
+for that instruction is 10 and not 6.</p>
+<p>Each use of a stack slot (a push) costs gas in the same way and
+is also counted towards the number of used cells. Each pop of
+a stack slot does not cost gas and does not decrease the gas cost
+either but it reduced the count of number of cells in use.</p>
+<p>The instructions uses cells in the following way.</p>
+<h3 id="add-sub-mul-div-mod">ADD, SUB, MUL, DIV, MOD</h3>
+<p>After the operation is done the size of the absolute value of the
+result is calculated, and one cell is used per 64 bits that has a 1 set.
+Integers -18446744073709551615 to 18446744073709551615 uses 1 cell,
+and integers -340282366920938463463374607431768211456 to -18446744073709551616
+and 18446744073709551616 to 340282366920938463463374607431768211456
+uses 2 cells, and so on.</p>
+<h3 id="pow">POW</h3>
+<p>The result of the pow instruction is computed recursively
+and for each step in the recursion the words used are
+calculated and the operation is aborted if all gas is used up.
+Given the function words which calculates the number of cells in
+an integer as described above (1 per 64 bits used).
+The number of cells are calculated as follows.</p>
+<div class="highlight"><pre><span></span><code>pow(a, b)    := pow(a, b, 1)
+
+pow(a, b, r) := r  when b = 0
+pow(a, b, r) := cells += words(a) * 2, pow(a*a, b/2, r) when b rem 2 = 0
+pow(a, b, r) := cells += words(r) + words(a) * 3, pow(a*a, b/2, r*a)
+</code></pre></div>
+<h3 id="tuple">TUPLE</h3>
+<p>For creating a tuple you have already payed gas for the elements when
+you pushed them on the stack with other operations, then the new tuple
+increase the cell count by the size of the tuple plus 2.</p>
+<p>Note that creating the tuple pops the elements from the stack so the
+cell count only increases by 2 by the make_tuple instruction, but
+the gas cost is the cost for size+2 cells.</p>
+<p>Note also that when calculating cell cost the total number of cells
+used after the instruction is used to determine the price for all
+new cells used by the instruction.</p>
+<h3 id="setelement">SETELEMENT</h3>
+<p>The number of cells used is the tuple size + 2.</p>
+<h3 id="map_empty">MAP_EMPTY</h3>
+<p>The cell cost is 2.</p>
+<h3 id="map_update">MAP_UPDATE</h3>
+<p>The cell cost is 2.</p>
+<h3 id="map_from_list">MAP_FROM_LIST</h3>
+<p>The cell cost is 2 + length of the list.</p>
+<h3 id="map_to_list">MAP_TO_LIST</h3>
+<p>The cell cost is 2 * length of the list.</p>
+<h3 id="cons">CONS</h3>
+<p>The cell cost is 2.</p>
+<h3 id="append">APPEND</h3>
+<p>The cell cost is 2 * length of the first list.</p>
+<h3 id="str_join">STR_JOIN</h3>
+<p>The cell cost is 1 cell per 8 bytes in the joined string + 1 cell.</p>
+<h3 id="int_to_str">INT_TO_STR</h3>
+<p>The cell cost is 1 cell per 8 bytes in the produced string + 1 cell.</p>
+<h3 id="addr_to_str">ADDR_TO_STR</h3>
+<p>The cell cost is 1 cell per 8 bytes in the produced string + 1 cell.</p>
+<h3 id="str_reverse">STR_REVERSE</h3>
+<p>The cell cost is 1 cell per 8 bytes in the produced string + 1 cell.</p>
+<h3 id="int_to_addr">INT_TO_ADDR</h3>
+<p>The cell cost is 1 cell per 8 bytes in the produced address + 1 cell.</p>
+<h3 id="bits_none-bits_nonea-bits_all-bits_alla">BITS_NONE, BITS_NONEA, BITS_ALL, BITS_ALLA</h3>
+<p>The cell cost is 1 cell.</p>
+<h3 id="bits_all_n">BITS_ALL_N</h3>
+<p>The cell cost is 1 for every 64 bits used.</p>
+<h3 id="bits_set-bits_clear">BITS_SET, BITS_CLEAR</h3>
+<p>The cell cost is 1 for every 64 bits used by the resulting bit field.</p>
+<h3 id="bytes_concat">BYTES_CONCAT</h3>
+<p>The cell cost is 1 cell per 8 bytes in the produced byte array.</p>
+<h3 id="bytes_to_str">BYTES_TO_STR</h3>
+<p>The cell cost is 1 cell per 8 bytes in resulting string + 1 cell.</p>
+<h3 id="bytes_split">BYTES_SPLIT</h3>
+<p>The number of cells used is the tuple size which is 2 + 2.</p>
+<h3 id="auth_tx_hash">AUTH_TX_HASH</h3>
+<p>If in auth context the number of cells used is 2 + 2, otherwise
+the number of cells used is 1 + 2.</p>
+<h3 id="variant">VARIANT</h3>
+<p>The cell cost is two times the length of the list of arities plus one for
+each element in the variant plus four.</p>
+<h1 id="appendix-1-fate-serialization">Appendix 1: FATE serialization</h1>
+<p>A more formal description of the serialization can be found in
+the general <a href="../serializations.html">serialization document</a>.
+Here we will try to describe the serialization more with words.</p>
+<p>FATE code is serialized in three chunks:</p>
+<ol>
+<li>Code: The code itself.</li>
+<li>Symbols: An optional symbol table.</li>
+<li>Annotations: Optional additional information.</li>
+</ol>
+<p>Each chunk is an RLP encoding of a byte array that is
+the serialization of the chunk. They all have to be there
+in the serialization but they can be empty.
+An empty code chunk is just the RPL encoding of the empty byte array,
+i.e the byte 128.
+Symbols and Annotations can be empty but they have to be there as
+the RLP encoding of the RLP encoding of the empty map i.e. the bytes 130, 47, 0.</p>
+<p>An empty FATE contract is encoded as the byte sequence 128, 130, 47, 0, 130, 47, 0.</p>
+<h1 id="notation">Notation</h1>
+<p>Some notes on notation and definition of terms used in this document.</p>
+<h2 id="bits">Bits</h2>
+<p>Bits are counted from the least significant bit, starting on 0. When
+bits are written out they are written from the most significant bit to
+the least significant bit.</p>
+<p>Example the number 1 in a byte would be written in binary as:
+<div class="highlight"><pre><span></span><code>00000001
+</code></pre></div>
+And we would say that bit 0 is set to 1. All other bits 1 to 7 are set to 0.</p>
+<h2 id="word-size">Word size</h2>
+<p>The word size of the machine is 8 bits (one byte) but each type and instruction
+uses words of varying sizes, all multiples of bytes though.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="aevm.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: AEVM" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              AEVM
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../channels/index.html" class="md-footer__link md-footer__link--next" aria-label="Next: General" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              General
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.tabs.link", "search.highlight", "search.share", "search.suggest"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.477d984a.min.js", "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.82b56eb2.min.js"></script>
+      
+    
+  </body>
+</html>
