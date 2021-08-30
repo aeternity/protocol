@@ -1,53 +1,65 @@
-# Æternity node API
+# æternity node API
 
 This document:
-* Provides an overview of the API exposed by the Aeternity node;
-* Defines the Channels WebSocket API of the Aeternity node;
-* Describes the intended usage of the user API of the Aeternity node.
+
+* Provides an overview of the API exposed by the æternity node;
+* Defines the Channels WebSocket API of the æternity node;
+* Describes the intended usage of the user API of the æternity node.
 
 ## Overview
 
-The Aeternity node exposes the following APIs:
+The æternity node exposes the following APIs:
+
 * Peer-to-peer network API. It consists of one TCP endpoint:
-  * It is encrypted and authenticated using the Noise protocol;
-  * The schema of its payload is [defined](/sync/);
-  * It is meant to be exposed on the Internet;
-  * Its TCP port is configurable.
-  * Its static Noise key pair is configurable.
-* User API. It consists of the following TCP endpoints:
-  * External HTTP endpoint;
-    * It is defined via Swagger schema;
+    * It is encrypted and authenticated using the Noise protocol;
+    * The schema of its payload is [defined](/sync/);
     * It is meant to be exposed on the Internet;
     * Its TCP port is configurable.
-  * Internal HTTP endpoint;
-    * It is defined via Swagger schema;
-    * It is **not** meant to be exposed on the Internet;
-    * Its TCP port is configurable.
-  * Internal Channels WebSocket endpoint.
-    * It is defined in the rest of this document;
-    * It is not meant to be exposed on the Internet;
-    * Its TCP port is configurable.
-  * Range of external Channels noise endpoints. It consists of as many TCP
-    endpoints as needed.
-    * They are used for connecting as a `responder` role in channel
+    * Its static Noise key pair is configurable.
+* User API. It consists of the following TCP endpoints:
+    * External HTTP endpoint;
+        * It is defined via Swagger schema;
+        * It is meant to be exposed on the Internet;
+        * Its TCP port is configurable.
+    * Internal HTTP endpoint;
+        * It is defined via Swagger schema;
+        * It is **not** meant to be exposed on the Internet;
+        * Its TCP port is configurable.
+    * Internal Channels WebSocket endpoint.
+        * It is defined in the rest of this document;
+        * It is not meant to be exposed on the Internet;
+        * Its TCP port is configurable.
+    * Range of external Channels noise endpoints. It consists of as many TCP endpoints as needed.
+        * They are used for connecting as a `responder` role in channel
       communication;
-    * It is up to the node operator to define the range to be used; Their
-      configuration is not part of the Aeternity node;
-    * They are encrypted and authenticated using the Noise protocol using
+        * It is up to the node operator to define the range to be used; Their
+      configuration is not part of the æternity node;
+        * They are encrypted and authenticated using the Noise protocol using
       dynamic keys (unauthenticated Diffie-Hellman - exact protocol
       name `Noise_NN_25519_ChaChaPoly_BLAKE2b`);
-    * The schema of its payload is [defined](/channels/OFF-CHAIN.md#messages);
-    * They are meant to be exposed on the Internet;
+        * The schema of its payload is [defined](../../channels/OFF-CHAIN.md#messages);
+        * They are meant to be exposed on the Internet;
+
+## User API - intended usage
+
+* [Encoding scheme for API identifiers](./api_encoding.md)
+* [Account management user API usage](./account_api_usage.md)
+* [Spending tokens using user API](./spend_api_usage.md)
+* [Oracle user API usage](./oracle_api_usage.md)
+* [Naming system API usage](./naming_system_api_usage.md)
+* [Contract API usage](./contract_api_usage.md)
+* [Channels API usage](./channels_api_usage.md)
+* [Mining API usage](./mining_api_usage.md)
 
 ## Channels WebSocket API definition
 
-The Aeternity node publishes a [JSON-RPC API](https://www.jsonrpc.org/specification)
+The æternity node publishes a [JSON-RPC API](https://www.jsonrpc.org/specification)
 for managing state channels over WebSocket connections. The 'legacy' protocol was removed.
 
 ### Description
 
 Channels provide means for off-chain transactions with functionality of on-chain dispute resolution.
-Channels require persisted connections to Aeternity nodes. Each participant in
+Channels require persisted connections to æternity nodes. Each participant in
 a channel uses one's own trusted node. For persistence of this connection, WebSockets
 are used.
 Channels have on-chain state that persists who the participants are and the
@@ -59,7 +71,7 @@ through mutual agreement.
 
 ### Connection
 
-The Aeternity node supports an endpoint with a configurable port where the
+The æternity node supports an endpoint with a configurable port where the
 WebSocket's clients connect. It is located on `/channel`.
 
 The node could serve multiple channel WebSocket clients. Their number is configured in
@@ -71,7 +83,7 @@ This is to prevent the node of being overloaded with WebSocket connections.
 ### Messages overview
 
 The JSON-RPC protocol supports both synchronous RPC and asynchronous notifications.
-An RPC is indicated by the inclusion of an `'id'` parameter. The Aeternity API
+An RPC is indicated by the inclusion of an `'id'` parameter. The æternity API
 can be used both synchronously and asynchronously. When an asynchronous method is called, the reply will have `'method': '<RequestMethod>.reply'`.
 
 Implementation support exists for batch processing, however this is not yet tested.
@@ -172,7 +184,7 @@ If an error occurs, a JSON-RPC error object is returned. It has the following fo
  ```
 
 The codes and error messages include those specified in the [JSON-RPC 2.0
- Specification](https://www.jsonrpc.org/specification#error_object) [1], some used (or proposed) [by Ethereum](https://github.com/ethereum/wiki/wiki/JSON-RPC-Error-Codes-Improvement-Proposal) [2], and some Aeternity-specific [3].
+ Specification](https://www.jsonrpc.org/specification#error_object) [1], some used (or proposed) [by Ethereum](https://github.com/ethereum/wiki/wiki/JSON-RPC-Error-Codes-Improvement-Proposal) [2], and some æternity-specific [3].
 
  | Code   | Message            | Origin |
  | ------ | ------------------ | ------ |
@@ -235,15 +247,4 @@ The `'data'` element may contain more detailed information inside `'data'`:
   "jsonrpc": "2.0"
 }
 ```
-Detailed message transcripts from test suites can be found [here](./examples/channels/json-rpc/).
-
-## User API - intended usage
-
-* [Encoding scheme for API identifiers](./api_encoding.md)
-* [Account management user API usage](./account_api_usage.md)
-* [Spending tokens using user API](./spend_api_usage.md)
-* [Oracle user API usage](./oracle_api_usage.md)
-* [Naming system API usage](./naming_system_api_usage.md)
-* [Contract API usage](./contract_api_usage.md)
-* [Channels API usage](./channels_api_usage.md)
-* [Mining API usage](./mining_api_usage.md)
+Detailed message transcripts from test suites can be found in the JSON-RCP section of the [Websocket API examples](./examples/channels/README.md).

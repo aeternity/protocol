@@ -1,5 +1,3 @@
-[back](../SYNC.md)
-
 # P2P messages
 
 P2P messages are transported using the [Noise
@@ -13,7 +11,8 @@ payload is a byte array, and messages are either fixed binary data or encoded
 using [RLP](https://github.com/ethereum/wiki/wiki/RLP).
 
 The following P2P messages are implemented in
-the [Aeternity node](https://github.com/aeternity/aeternity/blob/master/apps/aecore/src/aec_peer_messages.erl)
+the [æternity node](https://github.com/aeternity/aeternity/blob/master/apps/aecore/src/aec_peer_messages.erl):
+
   - [MSG_FRAGMENT](#msg_fragment)
   - [MSG_P2P_RESPONSE](#msg_p2p_response)
   - [MSG_PING](#msg_ping)
@@ -58,6 +57,7 @@ various types should be interpreted (corresponds to their encoding):
 *(Tag = 0)*
 
 Fields:
+
   - `N :: int16` - fragment N of M
   - `M :: int16` - total number of fragments
   - `Data :: byte_array`
@@ -68,6 +68,7 @@ Fields:
 *(Tag = 100)*
 
 Message is RLP encoded, fields:
+
   - `Result :: bool` - `true` means ok, `false` means error.
   - `Type :: int` - the type of the response
   - `Reason :: byte_array` - Human readable (UTF8) reason (only set
@@ -78,6 +79,7 @@ Message is RLP encoded, fields:
 *(Tag = 1)*
 
 Message is RLP encoded, fields:
+
   - `Port :: int` - listen port
   - `Share :: int` - number of peers to share
   - `GenesisHash :: byte_array`
@@ -93,12 +95,14 @@ Peers are serialized/deserialized in `aec_peer_messages`
 *(Tag = 3)*
 
 Message is RLP encoded, fields:
+
   - `Hash :: byte_array`
 
 ## MSG_GET_HEADER_BY_HEIGHT
 *(Tag = 15)*
 
 Message is RLP encoded, fields:
+
   - `Height :: int`
   - `TopHash :: byte_array` - to ensure we get a header at height from the right fork
 
@@ -106,6 +110,7 @@ Message is RLP encoded, fields:
 *(Tag = 4)*
 
 Message is RLP encoded, fields:
+
   - `Header :: byte_array`
 
 The Header is serialized using the
@@ -115,6 +120,7 @@ The Header is serialized using the
 *(Tag = 5)*
 
 Message is RLP encoded, fields:
+
   - `FromHash :: byte_array` - header hash to start at
   - `TargetHash :: byte_array` - target header hash (to ensure we get headers from the right fork)
   - `N :: int` - number of header hashes to get
@@ -123,6 +129,7 @@ Message is RLP encoded, fields:
 *(Tag = 6)*
 
 Message is RLP encoded, fields:
+
   - `HeaderHashes :: [byte_array]`
 
 Each header hash contains a 64-bit big endian height and the corresponding
@@ -132,6 +139,7 @@ hash, see `aec_peer_messages` for details.
 *(Tag = 7)*
 
 Message is RLP encoded, fields:
+
   - `Hash :: byte_array - The block we fetch TXs from`
   - `TxHashes :: [byte_array] - List of TxHashes to fetch TXs for`
 
@@ -139,6 +147,7 @@ Message is RLP encoded, fields:
 *(Tag = 8)*
 
 Message is RLP encoded, fields:
+
   - `Hash :: byte_array`
   - `Forward :: bool`
 
@@ -146,6 +155,7 @@ Message is RLP encoded, fields:
 *(Tag = 9)*
 
 Message is RLP encoded, fields:
+
   - `Txs:: [byte_array]`
 
 A signed transaction is serialized as a tagged and versioned
@@ -155,6 +165,7 @@ A signed transaction is serialized as a tagged and versioned
 *(Tag = 13)
 
 Message is RLP encoded, fields:
+
   - `Hash :: byte_array - The block we fetch TXs from`
   - `Txs :: [byte_array] - List of serialized signed TXs`
 
@@ -165,6 +176,7 @@ A signed transaction is serialized as a tagged and versioned
 *(Tag = 10)
 
 Message is RLP encoded, fields:
+
   - `KeyBlock :: byte_array - Serialized key block`
 
 The key block is [serialized](../serializations.md#key-block).
@@ -173,6 +185,7 @@ The key block is [serialized](../serializations.md#key-block).
 *(Tag = 11)
 
 Message is RLP encoded, fields:
+
   - `MicroBlock :: byte_array - Serialized micro block`
   - `Light :: bool - flag if micro block is light or normal`
 
@@ -185,6 +198,7 @@ list of serialized signed transactions with a list of transaction hashes.
 *(Tag = 12)*
 
 Message is RLP encoded, fields:
+
   - `KeyBlock :: byte_array`
   - `MicroBlocks :: [byte_array]`
   - `Forward :: bool`
@@ -209,12 +223,14 @@ Unfolds are serialized in `aec_tx_pool_sync` - the serialization is described in
 *(Tag = 22)*
 
 Message is RLP encoded, fields:
+
   - `TxHashes :: [byte_array]`
 
 ## MSG_TX_POOL_SYNC_FINISH
 *(Tag = 23)*
 
 Message is RLP encoded, fields:
+
   - `Done :: bool`
 
 ## MSG_GET_NODE_INFO
@@ -228,6 +244,7 @@ This is to be used for network monitoring.
 *(Tag = 126)*
 
 Message is RLP encoded, fields:
+
   - `Version` :: byte_array - the version of the node
   - `Revision` :: byte_array - the revision of the node
   - `Vendor` :: byte_array - a string to differentiate between different protocol imlementations

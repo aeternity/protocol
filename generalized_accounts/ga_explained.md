@@ -1,8 +1,7 @@
-[back](./generalized_accounts.md)
 # Generalized accounts - explained
 
-Generalized accounts are motivated and described from a protocol perspective in
-[Generic accounts](./generalized_accounts.md). However, there are several
+Generalized accounts are motivated and described from a protocol perspective
+[here](./README.md). However, there are several
 pitfalls and important aspects that deserve a further discussion. We aim to
 provide further guidance when it comes to generalized accounts here.
 
@@ -19,13 +18,13 @@ For plain old accounts (POA) transaction integrity comes down to two things;
 transactions originating from the account, and (2) a transaction can only be
 included once - i.e. it is not possible to include the same SpendTx twice to
 get double payment. (1) is achieved by [crypotographic
-signing](https://en.wikipedia.org/wiki/Digital_signature), Aeternity uses
+signing](https://en.wikipedia.org/wiki/Digital_signature), æternity uses
 [EdDSA](https://en.wikipedia.org/wiki/EdDSA) signatures with
 ([Curve25519](https://en.wikipedia.org/wiki/Curve25519)). (2) is normally
 achieved by adding a (sequential) *nonce* to the transaction, and then the
 consensus algorithm only allows an account to "use" a nonce once.
 
-In the Aeternity blockchain when a transaction is prepared for inclusion a
+In the æternity blockchain when a transaction is prepared for inclusion a
 suitable nonce is selected and included in the transaction, then the
 transaction (`TX`) is serialized (`SerTX`) and hashed. The resulting hash is
 then signed yielding a signature (`SigTX`); finally the serialized transaction
@@ -34,7 +33,7 @@ inclusion on chain.
 
 ## GA authentication
 
-As described in [Generic accounts](./generalized_accounts.md), GAs are mainly a
+As described in [Generalized accounts](./README.md), GAs are mainly a
 way to give more flexibility when it comes to transaction integrity, in
 particular when it comes to signing. This is done by moving *both* the nonce
 handling and signature checking to a smart contract that is attached to the

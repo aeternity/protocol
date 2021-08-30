@@ -31,7 +31,7 @@ Currently there are two different authentication methods:
   updated by on-chain transactions. It is not updated by off-chain ones but
   since the authentication method MUST be valid in the future, a static
   version of the authentication method is used. More detailed explaination for
-  Generalized Accounts can be found [here](../generalized_accounts/generalized_accounts.md).
+  Generalized Accounts can be found [here](../generalized_accounts/README.md).
 
 Since a participant can upgrade their account from a `basic` to `generalized`
 at any time, we have three options relating to channel's opening transaction.

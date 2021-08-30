@@ -1,5 +1,4 @@
-[back](./oracles.md)
-## Oracle state tree
+# Oracle state tree
 
 The oracle state tree contain oracle objects and oracle query objects. The
 existence of an oracle and the existence of query/response will have to be
@@ -8,13 +7,13 @@ stored in the same tree; where a query has an id that is the concatenation of
 the oracle id and a query id. Thus the queries in effect form a subtree of the
 oracle and can be iterated over, etc.
 
-### Oracle state tree objects
+## Oracle state tree objects
 
 - The oracle state tree contains
   - Oracle objects
   - Query objects
 
-#### The oracle object
+### The oracle object
 
 - Created by an oracle register transaction.
 - Deleted when its TTL expires.
@@ -29,7 +28,7 @@ oracle and can be iterated over, etc.
 }
 ```
 
-#### The oracle query object
+### The oracle query object
 
 - Created by an oracle query transaction.
 - Closed by an oracle response transaction.
@@ -54,7 +53,7 @@ than the TTL of the Oracle, then the query is *rejected*.
 }
 ```
 
-### Oracle state tree update
+## Oracle state tree update
 
 The oracle state tree is pruned when the TTL of an object is reached in the
 height of the chain. We define the operation order as:
@@ -65,7 +64,7 @@ height of the chain. We define the operation order as:
 Note that the sorted order of the IDs is the same as the in-order
 traversal of the tree.
 
-### Handling of TTL of objects
+## Handling of TTL of objects
 
 We will keep a cache of the objects sorted by TTL and ID. Such cache
 has the benefits:
@@ -75,9 +74,8 @@ has the benefits:
 - The cache can be reconstructed by doing an in-order traversal of the
   oracle state tree.
 
-### Pruning of oracle query objects
+## Pruning of oracle query objects
 
 If the oracle query has not been given a response, the poster of
 the query should be refunded the oracle query fee. If the oracle has
 responded, the oracle was already given the funds at response time.
-

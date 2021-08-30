@@ -1,0 +1,3 @@
+__pycache__
+.docssite/docs/*/*
+.docssite/docs/*.md

@@ -114,7 +114,7 @@ taken from their balance and the `nonce` of their account MUST be incremented.
 #### Generalized accounts
 
 If either of the participants is a [Generalized
-account](../generalized_accounts/generalized_accounts.md) the channel create
+account](../generalized_accounts/README.md) the channel create
 will also create an extra entry in the contract state tree, containing a frozen
 authentication state that will be used for off-chain authentication and
 verification in off-chain updates (potentially eventually enforced on-chain)

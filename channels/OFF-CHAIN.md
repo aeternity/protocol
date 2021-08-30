@@ -22,42 +22,42 @@ transactions we can reason which was performed earlier than the other.
 ## Messages
 
 - [Control messages](#control-messages)
-  + [`error`](#error)
-  + [`ping`/`pong`](#pingpong)
+    + [`error`](#error)
+    + [`ping`/`pong`](#pingpong)
 - [Sub-messages](#sub-messages)
-  + [`Updates list`](#updates-list)
+    + [`Updates list`](#updates-list)
 - [Establishing channel off-chain](#establishing-channel-off-chain)
-  + [`channel_open`](#channel_open)
-  + [`channel_accept`](#channel_accept)
-  + [`funding_created`](#funding_created)
-  + [`funding_signed`](#funding_signed)
-  + [`funding_locked`](#funding_locked)
-  + [`channel_reestablish`](#channel_reestablish)
-  + [`channel_reestablish_ack`](#channel_reestablish_ack)
+    + [`channel_open`](#channel_open)
+    + [`channel_accept`](#channel_accept)
+    + [`funding_created`](#funding_created)
+    + [`funding_signed`](#funding_signed)
+    + [`funding_locked`](#funding_locked)
+    + [`channel_reestablish`](#channel_reestablish)
+    + [`channel_reestablish_ack`](#channel_reestablish_ack)
 - [Updates](#state-update)
-  + [`update`](#update)
-  + [`update_ack`](#update_ack)
-  + [`update_error`](#update_error)
-  + [`deposit_created`](#deposit_created)
-  + [`deposit_signed`](#deposit_signed)
-  + [`deposit_locked`](#deposit_locked)
-  + [`deposit_error`](#deposit_error)
-  + [`withdraw_created`](#withdraw_created)
-  + [`withdraw_signed`](#withdraw_signed)
-  + [`withdraw_locked`](#withdraw_locked)
-  + [`withdraw_error`](#withdraw_error)
+    + [`update`](#update)
+    + [`update_ack`](#update_ack)
+    + [`update_error`](#update_error)
+    + [`deposit_created`](#deposit_created)
+    + [`deposit_signed`](#deposit_signed)
+    + [`deposit_locked`](#deposit_locked)
+    + [`deposit_error`](#deposit_error)
+    + [`withdraw_created`](#withdraw_created)
+    + [`withdraw_signed`](#withdraw_signed)
+    + [`withdraw_locked`](#withdraw_locked)
+    + [`withdraw_error`](#withdraw_error)
 - [Other interaction](#other-interaction)
-  + [`inband_msg`](#inband_msg)
+    + [`inband_msg`](#inband_msg)
 - [Closing](#channel-closing)
-  + [`leave`](#leave)
-  + [`leave_ack`](#leave_ack)
-  + [`shutdown`](#shutdown)
-  + [`shutdown_ack`](#shutdown_ack)
+    + [`leave`](#leave)
+    + [`leave_ack`](#leave_ack)
+    + [`shutdown`](#shutdown)
+    + [`shutdown_ack`](#shutdown_ack)
 - [Contracts](#contracts)
-  + [On-chain enforcement](#on-chain-enforcement)
-  + [Lifecycle](#contracts-lifecycle)
-  + [Referring to on-chain objects](#contracts-referring-to-on-chain-data)
-  + [Gas consumption](#gas-consumption)
+    + [On-chain enforcement](#on-chain-enforcement)
+    + [Lifecycle](#contracts-lifecycle)
+    + [Referring to on-chain objects](#contracts-referring-to-on-chain-data)
+    + [Gas consumption](#gas-consumption)
 
 
 ## Overview
@@ -371,7 +371,7 @@ initiating party.
 As outlined in [this Bitcoin-NG blog
 post](http://hackingdistributed.com/2015/11/09/bitcoin-ng-followup/), _an NG
 microblock offers strictly stronger guarantees than a 0-confirmation in
-Bitcoin_. In Aeternity, when the minimum-depth confirmation is set to zero,
+Bitcoin_. In æternity, when the minimum-depth confirmation is set to zero,
 the system will still wait until the transaction is seen inside a microblock.
 This will mean that the transaction has been gossiped, picked up from the
 mempool and accepted by a miner.
@@ -406,9 +406,9 @@ and the clients must verify that they have the corresponding state trees to
 match the state (otherwise, it will not be possible to use the channel later
 on.)
 
-In the Aeternity node implementation, the state trees are cached inside the
+In the æternity node implementation, the state trees are cached inside the
 node.  Note that if the node restarts, cached data is not likely to survive
-(it is not persisted on each update for performance reasons.) The Aeternity
+(it is not persisted on each update for performance reasons.) The æternity
 node channel FSM automatically recovers the state trees and verifies that the
 provided state is in fact the last mutually authenticated state.
 
@@ -646,7 +646,7 @@ method described in the latest channel on-chain persisted object must be used.
 Message code: 10
 
 Since both sides may initiate an `update` request, it is possible that both
-may do so at roughly the same time. In particular, in the Aeternity node system,
+may do so at roughly the same time. In particular, in the æternity node system,
 if an `update` request arrives while the FSM is waiting for its client to
 authenticate a new state update, it reverts both its own update attempt and the
 other participant's update request by sending an `update_error` message.
@@ -750,7 +750,7 @@ useable.
 Message code: 14
 
 Since both sides may initiate a `deposit_created` request, it is possible
-that both may do so at roughly the same time. In particular, in the Aeternity node
+that both may do so at roughly the same time. In particular, in the æternity node
 system, if a `deposit_created` request arrives while the FSM is waiting for
 its client to authenticate a new state update, it reverts both its own update
 attempt and the other participant's update request by sending a `deposit_error`
@@ -853,7 +853,7 @@ useable.
 Message code: 18
 
 Since both sides may initiate a `withdraw_created` request, it is possible
-that both may do so at roughly the same time. In particular, in the Aeternity node
+that both may do so at roughly the same time. In particular, in the æternity node
 system, if a `withdraw_created` request arrives while the FSM is waiting for
 its client to authentication a new state update, it reverts both its own update
 attempt and the other participant's withdraw request by sending a

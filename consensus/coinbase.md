@@ -1,5 +1,4 @@
-Coinbase at height
-==
+# Coinbase at height
 
 The following table shows the heights for which the coinbase changes,
 and to which value. The coinbase is given in full values, while the

@@ -1,6 +1,6 @@
 # Gossip
 
-As explained in the [Sync](SYNC.md) document, any blockchain implementation
+As explained in the [Sync](sync/README.md) document, any blockchain implementation
 needs communication with peers in order to be truly useful. Apart from the lower
 level details described in that document, there is the added dimension of
 how peers are selected for communication, how connections to those peers are
@@ -24,7 +24,7 @@ aenode://pp_HryRGHJ7Ct3trkktVyVBgfhHL1J4EYSD9cScuMZDV61eSHrCZ@mynode.example.com
 ```
 
 A node is uniquely identified by its public key, and it can only have one IP and
-port at the same time. This means one IP can have several instances of Aeternity node
+port at the same time. This means one IP can have several instances of æternity node
 started at the same time listening on different ports if they have different
 public keys. This key corresponds to the private key that is used for the Noise
 protocol listener associated with the IP and port.

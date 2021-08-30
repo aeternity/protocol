@@ -1,14 +1,13 @@
-[back](./README.md)
 # Contracts - intended usage
 
 ## Introduction
-You interact with a Aeternity node through HTTP.
+You interact with a æternity node through HTTP.
 To learn more about contracts and contract life cycles see [the doc](/contracts/contracts.md).
 
 There are two basic types of API calls, off-chain operations and on-chain transactions.
 
 For an up to date list of all HTTP API endpoints and their arguments see
-[Aeternity node HTTP API](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json)
+[æternity node HTTP API](https://api-docs.aeternity.io)
 
 ## Sophia calldata creation
 
@@ -17,6 +16,7 @@ contract create transactions ([code/encode-calldata](#encode-call-data),
 [code/call](#call), [create/compute](#contract-create),
 [call/compute](#contract-call)). These support two ways of specifying the
 function and arguments to the call:
+
 - **Unchecked (legacy)**: Function name (except for `create/compute`) and arguments
   as a Sophia constant tuple. No checks are made to ensure that the given
   arguments match what the contracts expects.
@@ -40,61 +40,52 @@ function and arguments to the call:
 
 ## Off chain operations
 
-An Aeternity node provides some utility functions to help you create contract transactions and test contracts.
+An æternity node provides some utility functions to help you create contract transactions and test contracts.
 
 
 ### Contract Compile
-[/debug/contracts/code/compile doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/CompileContract)
+TODO => http compiler & other tools
 
 ### Encode Call Data
-[/debug/contracts/code/encode-calldata doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/EncodeCalldata)
+TODO => http compiler & other tools
 
 ### Call
-[/debug/contracts/code/call doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/CallContract)
-
-The arguments to the /debug/contracts/code/call endpoint are:
-* `code` - an address of a contract on chain.
-* `call` - the call contract as described [above](#sophia-calldata-creation)
-* `function` (legacy) - the name of the function in the contract to call.
-* `arg` - (legacy) the argument to the call as Sophia constants.
-* `abi` - Currently only "sophia-address" is supported.
+TODO stil relevant?
 
 ### Dry-run
-[/debug/transactions/dry-run doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/DryRunTxs)
+[/debug/transactions/dry-run](https://api-docs.aeternity.io#/internal/DryRunTxs)
 
 The arguments to the /debug/transactions/dry-run endpoint are:
+
 * `txs` - a list of *unsigned* transactions to execute.
 * `top` - an optional blockhash at which to do the dry-run (if not specified `top` hash will be used).
 * `accounts` - a list of "extra" accounts to be used in the dry-run.
 
 ### Decode Call Data
-[/debug/contracts/code/decode-data doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/DecodeData)
+TODO => http compiler & other tools
 
 ## On chain transactions
 
-An Aeternity node provides some APIs to format contract transactions and an API for submitting a signed transaction.
+An æternity node provides some APIs to format contract transactions and an API for submitting a signed transaction.
 
 There are two contract transactions available: create and call.
 
 You:
+
 * Format the contract transaction using the corresponding API;
-* (As for any other transaction) sign offline (i.e. outside of the Aeternity node) the transaction according to consensus;
-* (As for any other transaction) submit the transaction to the Aeternity node using [its API](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/external/PostTransaction).
+* (As for any other transaction) sign offline (i.e. outside of the æternity node) the transaction according to consensus;
+* (As for any other transaction) submit the transaction to the æternity node using [its API](https://api-docs.aeternity.io/#/external/PostTransaction).
 
 In order to affect the state of the chain you have to submit the signed transaction to a mining node.
 
 ### Contract Create
-[/debug/contracts/create doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/PostContractCreate)
-
-[/debug/contracts/create/compute doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/PostContractCreateCompute)
+[/debug/contracts/create](https://api-docs.aeternity.io#/internal/PostContractCreate)
 
 ### Contract Call
-[/debug/contracts/call doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/PostContractCall)
-
-[/debug/contracts/call/compute doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/internal/PostContractCallCompute)
+[/debug/contracts/call](https://api-docs.aeternity.io#/internal/PostContractCall)
 
 ## Reading chain data
 
 ### Contract Call Result
-[/transactions/{hash}/info doc](https://aeternity.github.io/api-docs/?config=https://raw.githubusercontent.com/aeternity/aeternity/master/apps/aehttp/priv/swagger.json#/external/GetTransactionInfoByHash)
+[/transactions/{hash}/info](https://api-docs.aeternity.io#/external/GetTransactionInfoByHash)
 

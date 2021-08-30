@@ -1,8 +1,6 @@
-[back](../SYNC.md)
-
 # Mempool/TX-pool synchronization
 
-On startup the Aeternity node needs to update (or get from scratch if it is a
+On startup the æternity node needs to update (or get from scratch if it is a
 completely new node) its list of unconfirmed transactions. New transactions it
 will get through gossip, but by construction older transactions that (for some
 reason) have not made it onto the chain is not gossiped.

@@ -1,11 +1,11 @@
 # FATE
-The Fast æternity Transaction Engine
+The fast æternity transaction engine.
 
 ## Design
 
-The high level machine (or the Fast æternity Transaction Engine) has
-aeternity transactions as its basic operations and it operates
-directly on the state tree of the aeternity chain. This is a new
+The high level machine (or the fast æternity transaction engine) has
+æternity transactions as its basic operations and it operates
+directly on the state tree of the æternity chain. This is a new
 paradigm in blockchain virtual machine specifications which makes it
 possible to create type safe and efficient implementations of the
 machine.
@@ -77,6 +77,7 @@ transactions.
 
 ### Memory
 The machine memory is divided into:
+
 * The chain top (block height, etc)
 * Event stream
 * The account state tree
@@ -161,6 +162,7 @@ A contract can emit events similar to the EVM.
 ## Types
 
 The machine supports the following types:
+
 * Integer (signed arbitrary precision integers)
 * Boolean (true | false)
 * Strings (arbitrary size byte arrays)
@@ -207,6 +209,7 @@ Examples (all of them):
 ```
 
 Operations on booleans include:
+
 *   `and`, `or`, `not`
 *   conditional jumps
 
@@ -302,6 +305,7 @@ tuple but a series of values.
 
 A TypeRep is the representation of a type as a value.
 A TypeRep is one of
+
 * integer
 * boolean
 * any
@@ -332,6 +336,7 @@ type.
 ### Operands
 
 Operand specifiers are
+
 *  immediate
 *  arg
 *  var
@@ -783,6 +788,7 @@ the general [serialization document](../serializations.md).
 Here we will try to describe the serialization more with words.
 
 FATE code is serialized in three chunks:
+
 1. Code: The code itself.
 2. Symbols: An optional symbol table.
 3. Annotations: Optional additional information.

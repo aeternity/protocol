@@ -1,17 +1,18 @@
-[back](./oracles.md)
-## Oracle transactions
+# Oracle transactions
 
 Oracle transactions are of four types:
+
 - Register
 - Extend
 - Query
 - Response
 
-### Oracle register transaction
+## Oracle register transaction
 
 An oracle operator can register an existing account as an oracle.
 
 The transaction contains:
+
 - The address that should be registered as an oracle (oracle_owner) + nonce
 - Query format definition
 - Response format definition
@@ -22,13 +23,13 @@ The transaction contains:
 
 See the [serialization specification](/serializations.md#oracle-register-transaction).
 
-#### TODO
+### TODO
 
 - In the future we could imagine an oracle register transaction that
   creates a new account by double signing the request with the source
   account and the new account.
 
-### Oracle extend transaction
+## Oracle extend transaction
 
 An oracle operator can extend the TTL of an existing oracle.
 
@@ -39,9 +40,10 @@ The transaction contains:
 
 See the [serialization specification](/serializations.md#oracle-extend-transaction).
 
-### Oracle query transaction
+## Oracle query transaction
 
 - Contains:
+
   - The sender (address) + nonce
   - The oracle (address)
   - The query in binary format
@@ -69,12 +71,12 @@ is paying the fee for the response.
 
 See the [serialization specification](/serializations.md#oracle-query-transaction).
 
-#### Questions/Later
+### Questions/Later
 
 - We could include an earliest time that the oracle can answer to
 protect against malicious oracles answering early and collect the fee.
 
-### Oracle response
+## Oracle response
 
 The oracle operator responds to a query by posting an oracle response
 transaction, signing it with the oracle account's private key.
@@ -89,7 +91,8 @@ response.
 Note that there is an incentive to keep the response precise (and
 small) since the oracle pays for the response transaction.
 
-The transaction contains
+The transaction contains:
+
 - The oracle (address) + nonce
 - The oracle interaction ID (derived from the query)
 - The response in binary format
@@ -98,7 +101,7 @@ The transaction contains
 
 See the [serialization specification](/serializations.md#oracle-response-transaction).
 
-#### Questions/Later
+### Questions/Later
 
 - Should we have an automatic callback defined in the query?
   - Any callback is paid by the oracle.

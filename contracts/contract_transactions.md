@@ -1,7 +1,7 @@
-[back](./contracts.md)
 ## Contract Transactions
 
 Contract transactions are of four types:
+
 - Create
 - Attach
 - Call
@@ -11,7 +11,7 @@ A contract is also a normal account with a balance,
 and the normal spend transaction can be applied to the account.
 
 Before a contract is created or called, the miner subtracts from the
-creator's/caller's account gas*gas_price (*10^-18) aeons.
+creator's/caller's account gas*gas_price (*10^-18) aettos.
 The execution of the call will use a certain amount of gas up to
 the maximum given: the unused portion of the gas is refunded to the caller's
 account; the used portion of the gas is added to the miner's account.
@@ -24,6 +24,7 @@ This is in order to prevent a malicious user from attempting to craft a contract
 Anyone can create a new contract by submitting a create contract transaction.
 
 The transaction contains:
+
 - The address of the contract owner (the one signing and paying for the transaction)
 - Nonce of the owner/creator account.
 - The byte code of the contract
@@ -48,8 +49,9 @@ The special variable "caller" will be set to the same value as "owner"
 for the initial call.
 
 The contract address is created by hashing, using Blake2b (256 bits digest), the concatenation of:
-* The address of the contract owner;
-* The nonce encoded as unsigned, big endian byte array, with the minimum number of bytes.
+
+- The address of the contract owner;
+- The nonce encoded as unsigned, big endian byte array, with the minimum number of bytes.
 
 ```
  hash(owner, nonce)
@@ -80,13 +82,14 @@ init succeeds).
 ### Attach Contract Transaction
 
 This is introduced in the Fortuna release. Attaching a contract to an account
-will make the contract a [Generalized account](../generalized_accounts/generalized_accounts.md)
+will make the contract a [Generalized account](../generalized_accounts/README.md)
 
 ### Contract call transaction
 
 Anyone can call an existing contract (as long as it isn't disabled).
 
 The transaction contains:
+
 - The address of the caller (the one signing and paying for the transaction)
 - The address of the contract
 - An optional additional fee to the miner apart from gas.

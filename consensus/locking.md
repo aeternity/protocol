@@ -1,5 +1,4 @@
-Coins locking
-==
+# Coins locking
 
 We want a predictable inflation so there MUST not be any token burning. In order
 to achieve this whenever there is a need for coins burning, we are locking

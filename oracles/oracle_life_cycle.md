@@ -1,7 +1,6 @@
-[back](./oracles.md)
-## Oracle life cycle examples
+# Oracle life cycle examples
 
-### The football game results oracle
+## The football game results oracle
 
 Alice is a big fan of football and she wants to share the results of games.
 
@@ -10,7 +9,8 @@ to the chain.
 
 Alice pays a fee for submitting the transaction.
 
-Alice needs to include some information in the transaction
+Alice needs to include some information in the transaction:
+
 - A query fee for covering her costs.
 - A declaration of the query format.
 - A declaration of the response format.
@@ -34,6 +34,7 @@ Bob pays a fee posting a query to the oracle. The fee is transfered to
 the oracle's account.
 
 The query transaction contains:
+
 - The address or Alice's oracle.
 - A query in the format declared by Alice's oracle.
 - A transaction fee for the miner.
@@ -54,6 +55,7 @@ event subscription triggers and she gets notified that there is a new
 query on the chain.
 
 The event contains:
+
 - The address of the sender account,
 - The Id of the oracle interaction.
 
@@ -61,6 +63,7 @@ When the match has been played, and there is a result, Alice posts an
 oracle response transaction on the chain.
 
 The response transaction contains:
+
 - The Id of the oracle interaction object.
 - The result as defined in the oracle definition.
 
@@ -72,10 +75,12 @@ When the response transaction has been accepted to the chain, Bob's
 event subscription notifies him that there is a response.
 
 The event contains:
+
 - The Id of the oracle interaction object.
 - The content of the response.
 - The TTL of the response.
 
 Bob can now use the response by:
+
 - Executing a smart contract which references the oracle interaction object.
 - Use a public API of a node to get the answer.

@@ -14,34 +14,6 @@ tries to act maliciously. This arbiter is the blockchain.
 Before describing the protocols involved, we are going to introduce some high
 level issues, that shaped our state channel design.
 
-
-## Table of Contents
-
-- [Terms](#terms)
-- [Notation](#notation)
-- [Goals](#goals)
-	- [Privacy](#privacy)
-	- [Security](#security)
-	- [Speed](#speed)
-	- [Cost](#cost)
-- [Channel types](#channel-types)
-- [Topology](#topology)
-- [Incentives](#incentives)
-- [Artefacts](#artefacts)
-- [Fees](#fees)
-- [Protocol](#protocol)
-	- [Communication](#communication)
-		- [Overview](#overview)
-	- Messages
-		- [Off-chain](./OFF-CHAIN.md)
-		- [On-chain](./ON-CHAIN.md)
-- [Contract execution in channels](#contract-execution)
-- [Light node requirements](#light-node-requirements)
-- [Examples](#examples)
-- [Future work](#future-work)
-- [References](#references)
-
-
 ## Terms
 
 We try to follow the naming conventions used by the lightning network, wherever
@@ -390,7 +362,7 @@ channels trustless.
 
 ## Node configuration
 
-Aeternity nodes are prepared to service state channels via a JSON-RPC API over WebSocket.
+æternity nodes are prepared to service state channels via a JSON-RPC API over WebSocket.
 
 The following configuration values control the support for state channels:
 

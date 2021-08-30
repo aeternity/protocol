@@ -1,0 +1,186 @@
+site_name: æternity Protocol
+plugins:
+  - search
+  - mkdocs-simple-hooks:
+      hooks:
+        on_pre_build: hook:pre_build
+repo_url: https://github.com/aeternity/protocol
+edit_uri: 
+
+docs_dir: docs
+
+theme:
+  favicon: favicon.png
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      primary: pink
+      accent: pink
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: pink
+      accent: pink
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - content.tabs.link
+    - search.highlight
+    - search.share
+    - search.suggest
+
+  # Don't include MkDocs' JavaScript
+  include_search_page: false
+  search_index_only: true
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+
+nav:
+  - Introduction: README.md
+  - Communication:
+    - Gossip: GOSSIP.md
+    - Sync: sync/README.md
+  - Consensus:
+    - General: consensus/README.md
+    - Bitcoin-NG: consensus/bitcoin-ng.md
+    - Coinbase: consensus/coinbase.md
+    - Locking: consensus/locking.md
+  - Features:
+    - Generalized Accounts: generalized_accounts/README.md
+    - Naming System: AENS.md
+    - Oracles:
+      - General: oracles/README.md
+      - Lifecycle Examples: oracles/oracle_life_cycle.md
+      - State Tree: oracles/oracle_state_tree.md
+      - Transactions: oracles/oracle_transactions.md
+    - Smart Contracts:
+      - General: contracts/README.md
+      - Events: contracts/events.md
+      - Transaction Types: contracts/contract_transactions.md
+      - State Tree: contracts/contract_state_tree.md
+      - Virtual Machines:
+        - General: contracts/contract_vms.md
+        - AEVM: contracts/aevm.md
+        - FATE VM: contracts/fate.md
+    - State Channels:
+      - General: channels/README.md
+      - On-Chain Actions: channels/ON-CHAIN.md
+      - Off-Chain Actions: channels/OFF-CHAIN.md
+      - Off-Chain State: channels/state.md
+  - Node API:
+    - General: node/api/README.md
+    - Encoding: node/api/api_encoding.md
+    - API Usage:
+      - Account API: node/api/account_api_usage.md
+      - Channels API: node/api/channels_api_usage.md
+      - Contract API: node/api/contract_api_usage.md
+      - Mining API: node/api/mining_api_usage.md
+      - Naming System API: node/api/naming_system_api_usage.md
+      - Oracle API: node/api/oracle_api_usage.md
+      - Spend API: node/api/spend_api_usage.md
+    - State Channels:
+      - WebSocket API: node/api/channel_ws_api.md
+      - Examples:
+        - General: node/api/examples/channels/README.md
+        - JSON-RPC:
+          - Abort Updates:
+            - abort_deposit: node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_deposit.md
+            - abort_offchain_update: node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_offchain_update.md
+            - abort_settle: node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_settle.md
+            - abort_shutdown: node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_shutdown.md
+            - abort_slash: node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_slash.md
+            - abort_snapshot_solo: node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_snapshot_solo.md
+            - abort_withdraw: node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_withdraw.md
+            - can_not_abort_while_open: node/api/examples/channels/json-rpc/abort_updates/sc_ws_can_not_abort_while_open.md
+          - Assume Min Depth:
+            - basic_open_close: node/api/examples/channels/json-rpc/assume_min_depth/sc_ws_basic_open_close.md
+          - Both Sign:
+            - init_per_group: node/api/examples/channels/json-rpc/both_sign/init_per_group.md
+            - conflicts:
+              - conflict_deposit_and_offchain_update: node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_deposit_and_offchain_update.md
+              - conflict_two_deposits: node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_two_deposits.md
+              - conflict_two_offchain_updates: node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_two_offchain_updates.md
+              - conflict_two_withdrawals: node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_two_withdrawals.md
+              - conflict_withdrawal_and_deposit: node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_withdrawal_and_deposit.md
+              - conflict_withdrawal_and_offchain_update: node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_withdrawal_and_offchain_update.md
+          - Changeable Fee:
+            - set_fee_close_mutual: node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_close_mutual.md
+            - set_fee_close_solo: node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_close_solo.md
+            - set_fee_create: node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_create.md
+            - set_fee_deposit: node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_deposit.md
+            - set_fee_settle: node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_settle.md
+            - set_fee_slash: node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_slash.md
+            - set_fee_snapshot: node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_snapshot.md
+            - set_fee_withdrawal: node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_withdrawal.md
+          - Continuous:
+            - init_per_group: node/api/examples/channels/json-rpc/continuous/init_per_group.md
+            - deposit: node/api/examples/channels/json-rpc/continuous/sc_ws_deposit.md
+            - failed_update: node/api/examples/channels/json-rpc/continuous/sc_ws_failed_update.md
+            - generic_messages: node/api/examples/channels/json-rpc/continuous/sc_ws_generic_messages.md
+            - ping_pong: node/api/examples/channels/json-rpc/continuous/sc_ws_ping_pong.md
+            - update_conflict: node/api/examples/channels/json-rpc/continuous/sc_ws_update_conflict.md
+            - withdraw: node/api/examples/channels/json-rpc/continuous/sc_ws_withdraw.md
+          - Contracts:
+            - init_per_group: node/api/examples/channels/json-rpc/contracts/init_per_group.md
+            - basic_contract: node/api/examples/channels/json-rpc/contracts/sc_ws_basic_contracts.md
+            - environment_contract: node/api/examples/channels/json-rpc/contracts/sc_ws_environment_contract.md
+            - nameservice_contract: node/api/examples/channels/json-rpc/contracts/sc_ws_nameservice_contract.md
+            - oracle_contract: node/api/examples/channels/json-rpc/contracts/sc_ws_oracle_contract.md
+            - remote_call_contract: node/api/examples/channels/json-rpc/contracts/sc_ws_remote_call_contract.md
+            - remote_call_contract_refering_onchain_data: node/api/examples/channels/json-rpc/contracts/sc_ws_remote_call_contract_refering_onchain_data.md
+            - wrong_call_data: node/api/examples/channels/json-rpc/contracts/sc_ws_wrong_call_data.md
+          - Force Progress:
+            - force_progress_based_on_offchain_state: node/api/examples/channels/json-rpc/force_progress/sc_ws_force_progress_based_on_offchain_state.md
+            - force_progress_based_on_onchain_state: node/api/examples/channels/json-rpc/force_progress/sc_ws_force_progress_based_on_onchain_state.md
+          - Generalized Accounts:
+            - both:
+                - basic_open_close: node/api/examples/channels/json-rpc/generalized_accounts/both/sc_ws_basic_open_close.md
+            - initiator:
+                - basic_open_close: node/api/examples/channels/json-rpc/generalized_accounts/initiator/sc_ws_basic_open_close.md
+            - responder:
+                - basic_open_close: node/api/examples/channels/json-rpc/generalized_accounts/responder/sc_ws_basic_open_close.md
+          - Only One Signs:
+            - init_per_group: node/api/examples/channels/json-rpc/only_one_signs/init_per_group.md
+            - conflict_on_new_offchain: node/api/examples/channels/json-rpc/only_one_signs/sc_ws_conflict_on_new_offchain.md
+            - sc_ws_conflict_snapshot_and_offchain_update: node/api/examples/channels/json-rpc/only_one_signs/sc_ws_conflict_snapshot_and_offchain_update.md
+            - conflicts:
+              - conflict_deposit_and_offchain_update: node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_deposit_and_offchain_update.md
+              - conflict_two_deposits: node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_two_deposits.md
+              - conflict_two_offchain_updates: node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_two_offchain_updates.md
+              - conflict_two_withdrawals: node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_two_withdrawals.md
+              - conflict_withdrawal_and_deposit: node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_withdrawal_and_deposit.md
+              - conflict_withdrawal_and_offchain_update: node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_withdrawal_and_offchain_update.md
+          - Reconnect:
+            - basic_client_reconnect_i: node/api/examples/channels/json-rpc/reconnect/sc_ws_basic_client_reconnect_i.md
+            - basic_client_reconnect_i_w_reestablish: node/api/examples/channels/json-rpc/reconnect/sc_ws_basic_client_reconnect_i_w_reestablish.md
+            - basic_client_reconnect_r: node/api/examples/channels/json-rpc/reconnect/sc_ws_basic_client_reconnect_r.md
+          - With Meta:
+            - init_per_group: node/api/examples/channels/json-rpc/with_meta/init_per_group.md
+            - deposit: node/api/examples/channels/json-rpc/with_meta/sc_ws_deposit.md
+            - remote_call_contract: node/api/examples/channels/json-rpc/with_meta/sc_ws_remote_call_contract.md
+            - withdraw: node/api/examples/channels/json-rpc/with_meta/sc_ws_withdraw.md
+          - basic_open_close: node/api/examples/channels/json-rpc/sc_ws_basic_open_close_server.md
+          - basic_open_close_server: node/api/examples/channels/json-rpc/sc_ws_basic_open_close.md
+          - broken_open_params: node/api/examples/channels/json-rpc/sc_ws_broken_open_params.md
+          - close_mutual: node/api/examples/channels/json-rpc/sc_ws_close_mutual.md
+          - close_solo: node/api/examples/channels/json-rpc/sc_ws_close_solo.md
+          - leave_reconnect: node/api/examples/channels/json-rpc/sc_ws_leave_reconnect.md
+          - leave_reestablish: node/api/examples/channels/json-rpc/sc_ws_leave_reestablish.md
+          - leave_reestablish_responder_stays: node/api/examples/channels/json-rpc/sc_ws_leave_reestablish_responder_stays.md
+          - leave_reestablish_wrong_fsm_id: node/api/examples/channels/json-rpc/sc_ws_leave_reestablish_wrong_fsm_id.md
+          - min_depth_is_modifiable: node/api/examples/channels/json-rpc/sc_ws_min_depth_is_modifiable.md
+          - min_depth_not_reached_timeout: node/api/examples/channels/json-rpc/sc_ws_min_depth_not_reached_timeout.md
+          - opening_ping_pong: node/api/examples/channels/json-rpc/sc_ws_opening_ping_pong.md
+          - reconnect_early: node/api/examples/channels/json-rpc/sc_ws_reconnect_early.md
+          - slash: node/api/examples/channels/json-rpc/sc_ws_slash.md
+          - snapshot_solo: node/api/examples/channels/json-rpc/sc_ws_snapshot_solo.md
+          - timeout_open: node/api/examples/channels/json-rpc/sc_ws_timeout_open.md
+          - update_with_meta: node/api/examples/channels/json-rpc/sc_ws_update_with_meta.md
+  - Mining:
+    - Stratum: STRATUM.md
+  - Serializations: serializations.md

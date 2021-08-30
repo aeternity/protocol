@@ -1,8 +1,7 @@
-[back](./contracts.md)
-# Virtual Machines on the Æternity blockchain
+# Virtual machines on the æternity blockchain
 
 A smart contract is associated with a virtual machine for the execution of that
-contract. The Æternity blockchain supports the virtual machine AEVM - A version
+contract. The æternity blockchain supports the virtual machine AEVM - A version
 of the Ethereum VM. The AEVM can also use different ABIs, and it is versioned to
 ensure that runs on earlier version can still be run to validate the chain in
 the presence of consensus breaking VM changes.
@@ -69,7 +68,7 @@ For a description of each ABI see the corresponding language description:
 [Sophia](https://github.com/aeternity/aesophia),
 [Solidity](solidity.md).
 
-## The Æternity Ethereum Virtual Machine AEVM
+## The æternity Ethereum virtual machine AEVM
 See [The AEVM](./aevm.md).
 
 ## Consensus breaking changes between AEVM versions

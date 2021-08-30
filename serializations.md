@@ -40,6 +40,7 @@ as a byte array. The header starts with a version number (32 bits),
 followed by a reserved flags field (32 bits).
 
 For flag bits:
+
 * In Roma release, only one flag bit is used, to mark the header as a key header.
 * In Minerva release, another bit is used, to mark the presence of an optional info field in the header.
 * Other flags must be set to zero.
@@ -169,7 +170,7 @@ objects, lists and byte arrays.
 
 RLP ensures that the serialization is a non-empty byte array.
 
-Objects in Æternity are encoded as lists of fields, where the two
+Objects in æternity are encoded as lists of fields, where the two
 first fields describe the object type and the object version.
 
 ```
@@ -306,13 +307,14 @@ Type signatures are sorted.
 ```
 
 The recipient must be one of the following:
+
 * An account identifier.
 * An oracle identifier.
 * A contract identifier.
 * A name identifier, whose related name entry has an identifier as value of pointer with key `account_pubkey`.
   If multiple pointer entries are present for such key, then the first of such entries is used.
 
-#### Oracles
+### Oracles
 ```
 [ <owner>           :: id()
 , <query_format>    :: binary()
@@ -391,7 +393,7 @@ The recipient must be one of the following:
 ]
 ```
 
-#### Contract
+### Contracts
 
 For a contract with address `<contractpubkey>`, the fields of the contract
 object (to which tag and version need to be prepended) are:
@@ -475,7 +477,7 @@ deployed contract is to look at the Contract create transaction.
 ]
 ```
 
-#### Name service name
+### Name service name
 ```
 [ <owner>      :: id()
 , <expires_by> :: int()
@@ -549,6 +551,7 @@ deployed contract is to look at the Contract create transaction.
 ```
 
 The recipient must be one of the following:
+
 * An account identifier.
 * A name identifier, whose related name entry has an identifier as value of pointer with key `account_pubkey`.
   If multiple pointer entries are present for such key, then the first of such entries is used.
@@ -804,6 +807,7 @@ tree.
 #### Channel off-chain transaction
 
 The channel off-chain transaction is not included directly in the transaction tree but indirectly as payload of:
+
 * The channel close solo transaction.
 * The channel slash transaction.
 * The channel snapshot solo transaction.
@@ -831,6 +835,7 @@ version 2, from Fortuna release
 The channel client reconnect transaction is used only when a Websocket client
 wants to reconnect to an already running FSM. It cannot be introduced into the
 mempool. The elements of the transaction are:
+
 * The channel id of the channel that the client wants to connect to
 * A round (integer), which must be higher than at the last attempt
 * The role (`initiator` or `responder`) of the FSM instance in question
@@ -917,6 +922,7 @@ If a subtree (e.g. `<accounts>`) is empty, then its serialization is just `[]` (
 NOTE: `[{<mpt_hash>, <mpt_value>}]` is the sorted list of Merkle Patricia Tree nodes in the proof.
 
 NOTE: As the POI contains the Merkle Patricia Tree nodes (e.g. not only their hashes):
+
 * Each state subtree does not necessarily contain elements of the same key length.
 * The object itself does not contain its own id as it can be derived from the location in the tree.
 * The key used for storing each object in each state subtree is not necessarily derived from the object itself.
@@ -1098,6 +1104,7 @@ account `A`.
 ]
 ```
 NOTE:
+
 * The *transactions* are signed transactions.
 * The *proof_of_fraud* list is either empty (i.e., no fraud) or has one element (i.e., contains one proof of fraud).
 
@@ -1188,6 +1195,7 @@ Id ::=
 ### Attributes
 Attributes are encoded as the data encoding of the integer encoding
 the bit pattern where each bit indicates one attribute as follows:
+
 * bit 0: private
 * bit 1: payable
 

@@ -1,4 +1,3 @@
-[back](./contracts.md)
 # Events
 
 The implementation of 
@@ -12,7 +11,7 @@ The events are stored in the [contract call object](../serializations.md#contrac
 and can be accessed by looking up the transaction in which they were emitted. 
 
 Let's consider the following Sophia example:
-```
+```sophia
   datatype event =
       TheFirstEvent(indexed int)
     | AnotherEvent(indexed address, string)
@@ -75,7 +74,7 @@ boolean argument would come out as `0` (= false) or `1` (= true).
 
 It is only possible to have one (1) `string` parameter in the event, but it can
 be placed in any position (and its value will end up in the `data` field), i.e.
-```
+```sophia
 AnotherEvent(string, indexed address)
 ...
 
@@ -86,6 +85,6 @@ would yield exactly the same result in the example above!
 ### Event indexing
 
 Finally it has to be pointed out that there is no *indexing* going on in the
-Aeternity node itself. One could imagine this being part of a middleware
+æternity node itself. One could imagine this being part of a middleware
 service, with a subscribe/notify interface or applications could be scraping
 the chain by other means.
