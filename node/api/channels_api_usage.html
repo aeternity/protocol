@@ -1031,6 +1031,19 @@
     Mininum-depth confirmation
   </a>
   
+    <nav class="md-nav" aria-label="Mininum-depth confirmation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calculating-minimum-depth" class="md-nav__link">
+    Calculating minimum-depth
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -3672,6 +3685,19 @@
     Mininum-depth confirmation
   </a>
   
+    <nav class="md-nav" aria-label="Mininum-depth confirmation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calculating-minimum-depth" class="md-nav__link">
+    Calculating minimum-depth
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -4773,6 +4799,14 @@ will describe these in groups which indicate their relation to each other.</p>
 <td>No</td>
 </tr>
 <tr>
+<td>minimum_depth_strategy</td>
+<td>string</td>
+<td>How to calculate minimum depth - either <code>txfee</code> (default) or <code>plain</code></td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
 <td>minimum_depth</td>
 <td>integer</td>
 <td>the minimum amount of blocks to be mined</td>
@@ -5201,6 +5235,39 @@ height needed is reached:
   <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="mf">1</span>
 <span class="p">}</span>
 </code></pre></div></p>
+<h4 id="calculating-minimum-depth">Calculating minimum-depth</h4>
+<p>The minimum depth value is dynamically calculated for each on-chain transaction, depending on the values
+of <code>minimum_depth_strategy</code> and <code>minimum_depth</code> respectively. For the <code>plain</code> strategy, the minimum
+depth value is simply set to the value of the <code>minimum_depth</code> parameter. While this is straightforward,
+the confirmation time will be the same regardless of the value of the transaction.</p>
+<p>If the strategy is <code>txfee</code> (the default), the value of <code>minimum_depth</code> is interpreted as a <code>Factor</code>
+(default: <code>10</code>), where:</p>
+<ul>
+<li>If <code>Factor = 0</code>, all on-chain interactions will have <code>MinimumDepth = 1</code></li>
+<li>If <code>Factor &gt; 0</code>, <code>MinDepth</code> = ceil( (<code>TxFee</code> / <code>MinimumGasPrice</code>)<sup>(<code>1</code> / <code>MinDepthFactor</code>)</sup> )</li>
+</ul>
+<p>As an example, assuming the default <code>MinimumGasPrice = 1 000 000 000</code>:</p>
+<p><strong>With Factor == 1</strong>
+|            Fee| Min-depth
+|---------------| ---------
+|     1000000000| 1
+|     1500000000| 2
+|     2000000000| 2
+|     3000000000| 3</p>
+<p><strong>With Factor == 2</strong>
+|            Fee| Min-depth
+|---------------| ---------
+|     1000000000| 1
+|     6000000000| 3
+|     9000000000| 3
+|    30000000000| 6</p>
+<p><strong>With Factor == 3</strong>
+|            Fee| Min-depth
+|---------------| ---------
+|     1000000000| 1
+|     6000000000| 2
+|     9000000000| 3
+|    30000000000| 4</p>
 <h3 id="initial-state">Initial state</h3>
 <p>After both parties have confirmed that the funding is authenticated - they can proceed
 with sending the messages for off-chain updates. The inital state is the one
