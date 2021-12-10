@@ -94,6 +94,10 @@ in order to lower danger of replay attacks.
 **Note:** Post Lima hard-fork it is allowed to sign either the full serialized object, or
 the hash of the serialized object; prefixed with the network id in either case.
 
+**Note:** For the inner transaction of a PayingFor the network id should be
+extended to ``<network id>-inner_tx`` in order to make the inner transaction
+not replayable on-chain.
+
 ### Proof of Work
 
 [Cuckoo Cycle](https://github.com/tromp/cuckoo) is the algorithm used for proof of work.
@@ -300,6 +304,9 @@ depends on the size of the inner transaction.
  -------------- -----
 ```
 
+**Note:** When signing the inner transaction the network id should be extended
+to ``<network id>-inner_tx`` in order to make the inner transaction not
+replayable on-chain.
 
 #### Contract transactions
 
