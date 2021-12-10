@@ -181,8 +181,8 @@ will describe these in groups which indicate their relation to each other.
   | responder_id | string | responder's public key | Yes | No | Yes |
   | lock_period | integer | amount of blocks for disputing a solo close | Yes | No | Yes |
   | push_amount | integer | initial deposit in favour of the responder by the initiator | Yes | No | No |
-  | initiator_amount | integer | amount of tokens the initiator has committed to the channel | Yes | No | Yes |
-  | responder_amount | integer | amount of tokens the responder has committed to the channel | Yes | No | Yes |
+  | initiator_amount | integer | amount of coins the initiator has committed to the channel | Yes | No | Yes |
+  | responder_amount | integer | amount of coins the responder has committed to the channel | Yes | No | Yes |
   | channel_reserve | integer | the minimum amount both peers need to maintain | Yes | No | Yes |
   | ttl | integer | maximum height of a block to include the `channel_create_tx` | No | No | Yes |
   | host | string | host of the `responder`'s node| Yes if `role=initiator` | No | No | No |
@@ -200,7 +200,7 @@ will describe these in groups which indicate their relation to each other.
   responders. If the `responder` sets `initiator_id` to `"any"`, the responder will
   accept a connection request from any initiator, and fetch the proper `initiator_id`
   from the `channel_open` message.
-  
+
   Once established, the channel follows a [predefined set of state
   transitions](/channels/README.md#overview). The implementation protects the
   client from edge cases when transitions take too long or never happen using
@@ -909,7 +909,7 @@ Example:
 ```
 
 ### Transfer
-The transfer update is moving tokens from one channel account to another. The update is a change to be applied on top of the latest state. It has the
+The transfer update is moving coins from one channel account to another. The update is a change to be applied on top of the latest state. It has the
 following structure:
 
   | Name | Type | Description |
@@ -975,7 +975,7 @@ The starter sends a message containing the desired change
 ```
 
 The `starter` might take the role of `from` or `to` so the `starter` can
-trigger sending or request for tokens.
+trigger sending or request for coins.
 
 ##### Starter authenticates updated state
 The starter receives a message containing the updated channel state as an
@@ -1140,7 +1140,7 @@ following structure:
   | call_data | string | api encoded compiled AEVM call data for the code |
 
 That would create a contract with the poster being the `owner` of it. Poster
-commits initially a `deposit` amount of tokens to the new contract.
+commits initially a `deposit` amount of coins to the new contract.
 
 #### Start create contract update
 ##### Trigger a create contract update
@@ -1295,7 +1295,7 @@ following structure.
   | call_data | string | ABI encoded compiled AEVM call data for the code |
 
 That would call a contract with the poster being the `caller_id` of it. Poster
-commits an `amount` amount of tokens to the contract.
+commits an `amount` amount of coins to the contract.
 
 The call would also create a `call` object inside the channel state tree. It contains the result of the contract call.
 
@@ -1610,8 +1610,8 @@ chain and has the following structure:
   | ---- | ---- | ----------- |
   | channel id | string | ID of the channel|
   | from | string | initiator's public key |
-  | initiator_amount_final | integer | final amount of tokens to be awarded by the initiator |
-  | responder_amount_final | integer | final amount of tokens to be awarded by the responder |
+  | initiator_amount_final | integer | final amount of coins to be awarded by the initiator |
+  | responder_amount_final | integer | final amount of coins to be awarded by the responder |
   | ttl | integer | maximum block height to include the transaction |
   | fee | integer | fee to be paid to the miner |
   | gas_price | integer | the gas_price to be used for the fee computation |
@@ -1868,7 +1868,7 @@ from being cheated by simply providing a co-authenticated off-chain state with
 a higher round. This is done via the `channel_slash_tx` transaction.
 
 Since a co-authenticated off-chain state has a higher priority than an
-unilaterally on-chain produced one via a `channel_force_progress_tx` transaction, 
+unilaterally on-chain produced one via a `channel_force_progress_tx` transaction,
 a `channel_slash_tx` transaction can invalidate a whole chain of
 `channel_force_progress_tx` transactions if the first one of them had been based
 on a channel state that is older than the one provided by the `channel_slash_tx`
@@ -1913,7 +1913,7 @@ the channel has now entered a closing state:
   "method": "channels.info",
   "params": {
     "channel_id": "ch_Et72swxcKCAJ8KzUDm17X1Ukuo6W7516WfYDPdUoTYpArCdfQ",
-    "data": 
+    "data":
       "event": "closing"
     }
   },
@@ -2190,12 +2190,12 @@ the WebSocket connection:
 #### Update error
 
 Newly requested updates are not always successful. For example one participant
-tries to spend more tokens that one currently has in the channel's balance.
+tries to spend more coins than one currently has in the channel's balance.
 Another would be a participant initiating an update while the other
 participant had already proposed a different one. This diverges from the
 update flow [described above](#channel-off-chain-update).
 
-Example message for when the `from` does not have enough tokens to spend
+Example message for when the `from` does not have enough coins to spend
 ```javascript
 {
   "channel_id": "ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX",
@@ -2227,9 +2227,9 @@ Example message for when the `from` does not have enough tokens to spend
 The structure is having a `reason` and `request` holding the request being
 sent. Possible error reasons are:
 
-* `Insufficient balance` - when `from` does not have enough tokens in the
+* `Insufficient balance` - when `from` does not have enough coins in the
   channel. Keep in mind that there is a minimal amount of `channel_reserve`
-  tokens to be kept by both parties.
+  coins to be kept by both parties.
 
 * `Negative amount` - the `udpate` event contained a negative amount
 
@@ -2338,12 +2338,12 @@ instead.
 The response the client receives in that case is:
 
 ```javascript
-{ 
+{
    "jsonrpc":"2.0",
    "method":"channels.info",
-   "params":{ 
+   "params":{
       "channel_id":"ch_95Ya...",
-      "data":{ 
+      "data":{
          "event":"aborted_update"
       }
    },
@@ -2443,7 +2443,7 @@ details:
 
 #### Total balance update events
 
-After the channel has been opened it has a total balance of tokens committed to
+After the channel has been opened it has a total balance of coins committed to
 it. This balance is persisted as part of the on-chain channel state. Upon
 closing a channel on-chain, the closing balances of the participants are
 checked against this balance. Under no circumstances can the sum of the closing balances
@@ -2451,9 +2451,9 @@ be greater than the total balance on-chain.
 
 Participants are able to modify the total balance: the following two functionalities are available:
 
-* deposit - when a participant wants to commit more tokens from his on-chain
+* deposit - when a participant wants to commit more coins from his on-chain
   balance to the channel total balance
-* withdrawal - when a participant wants to transfer tokens out of the channel
+* withdrawal - when a participant wants to transfer coins out of the channel
   on-chain balance to one's personal account
 
 ### Deposit events
@@ -2463,8 +2463,8 @@ deposit. The process closely resembles the [update](#update). The most notable
 difference is the transaction has been mutually authenticated: it is `channel_deposit_tx` and
 after the procedure is finished, it is posted on-chain.
 
-Since both the initiator and responder can deposit tokens, in the scope of this description we
-will call the participant that commits tokens to the channel a depositor and
+Since both the initiator and responder can deposit coins, in the scope of this description we
+will call the participant that commits coins to the channel a depositor and
 the other party - acknowledger. Note that any public key outside of the channel participants
 is considered invalid for the depositor role.
 
@@ -2658,8 +2658,8 @@ withdrawal. The process closely resembles the [update](#update). The most notabl
 difference is that the transaction has been mutually authenticated: it is `channel_withdraw_tx` and
 after the procedure is finished - it is being posted on-chain.
 
-Since both the initiator and responder can withdraw tokens, in the scope of this description we
-will call the participant that commits tokens to the channel a withdrawer and
+Since both the initiator and responder can withdraw coins, in the scope of this description we
+will call the participant that commits coins to the channel a withdrawer and
 the other party - an acknowledger. Note that any public key outside of the channel participants
 is considered invalid for the withdrawer role.
 
@@ -3283,7 +3283,7 @@ it is time to finally close the channel. One of the participants posts a
 `channel_settle_tx` transaction that enforces closing of the channel. This
 happens according to the latest channel state that was sent on-chain. The
 `channel_settle_tx` just finalizes the channel closing with the last received
-state, redistributes tokens to participants and closes the channel. No further
+state, redistributes coins to participants and closes the channel. No further
 disputes are possible after that.
 
 
@@ -3411,7 +3411,7 @@ dispute the malicious on-chain transaction.
 }
 ```
 
-#### Snapshotter inittiates a snapshot solo 
+#### Snapshotter inittiates a snapshot solo
 
 If the channel is in an `open` state, any participant can initiate a solo
 snapshot transaction by:
@@ -3423,7 +3423,7 @@ snapshot transaction by:
   "params": {}
 }
 ```
-#### Snapshotter authenticates the snapshot solo 
+#### Snapshotter authenticates the snapshot solo
 
 After the `channel_snapshot_solo_tx` has been requested, the FSM prompts the
 client to sign it with:
@@ -3545,19 +3545,19 @@ After the `channel_force_progress_tx` has been requested, the FSM prompts the
 client to sign it with:
 
 ```javascript
-{ 
+{
    "jsonrpc":"2.0",
    "method":"channels.sign.force_progress_tx",
-   "params":{ 
+   "params":{
       "channel_id":"ch_2FdiLKkRUdPw4oTRbB6i3M6pquogzWLABQjU373hizDbnD8gGC",
-      "data":{ 
+      "data":{
          "signed_tx":"tx_+Qi9CwHAuQ....",
-         "updates":[ 
-            { 
+         "updates":[
+            {
                "abi_version":1,
                "amount":10,
                "call_data":"cb_AAAAAAA...",
-               "call_stack":[ 
+               "call_stack":[
 
                ],
                "caller_id":"ak_Vu1cG...",

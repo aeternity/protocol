@@ -23,9 +23,8 @@ Interaction with the first class objects of the æternity chain (e.g.
 oracles, names, and state channels) is done through calls to a
 built-in contract at address 0.
 
-
-The value in the call indicates the tokens that the primop can use from the contract account.
-Unused tokens stay on the contract account.
+The value in the call indicates the coins that the primop can use from the
+contract account. Unused coins stay on the contract account.
 
 The first argument in the call specifies which primop to call.
 The following arguments are encoded as Sophia data.
@@ -100,7 +99,7 @@ The byte code contains meta data for the contract.
 - byte_code - the actual byte code
 
 The layout of the encoding can be found
-[here](https://github.com/aeternity/protocol/blob/master/serializations.md#sophia-byte-code). 
+[here](https://github.com/aeternity/protocol/blob/master/serializations.md#sophia-byte-code).
 The encoding is tagged with the compiler version.
 
 #### Type information
@@ -294,7 +293,7 @@ The `CALL` instruction for calling another contract works differently for
 Sophia contracts than in the EVM. It expects on the stack (top to bottom):
 - `Gas` - the amount of gas to allocate to the call
 - `Address` - the address of the contract to call (or 0 for primops)
-- `Amount` - the amount of tokens to transfer with the call
+- `Amount` - the amount of coins to transfer with the call
 - `Calldata` - the calldata value (pair of function hash and arguments)
 - `TypeHash` - the function hash of primops that have dynamic types
                (e.g., oracles). Otherwise unused.

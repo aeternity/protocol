@@ -93,7 +93,7 @@ the name's length. It is decreasing function: for shorter names have higher init
 fee.
 
 Also bidding by claim transaction is constrained by price progression.
-Each next bid has to be higher by `X` tokens, determined by percent of the price
+Each next bid has to be higher by `X` coins, determined by percent of the price
 defined in governance.
 
 All, functions, base fee, free length value and price progression may be subject

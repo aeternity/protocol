@@ -44,7 +44,7 @@ The æternity node exposes the following APIs:
 
 * [Encoding scheme for API identifiers](./api_encoding.md)
 * [Account management user API usage](./account_api_usage.md)
-* [Spending tokens using user API](./spend_api_usage.md)
+* [Spending coins using user API](./spend_api_usage.md)
 * [Oracle user API usage](./oracle_api_usage.md)
 * [Naming system API usage](./naming_system_api_usage.md)
 * [Contract API usage](./contract_api_usage.md)
@@ -58,16 +58,16 @@ for managing state channels over WebSocket connections. The 'legacy' protocol wa
 
 ### Description
 
-Channels provide means for off-chain transactions with functionality of on-chain dispute resolution.
-Channels require persisted connections to æternity nodes. Each participant in
-a channel uses one's own trusted node. For persistence of this connection, WebSockets
-are used.
-Channels have on-chain state that persists who the participants are and the
-total amout of tokens put into the channel.
-Each channel also has an off-chain state representing the latest distribution of the balance of the
-channel. It can be updated - each new state is co-signed by both parties and only then it becomes the latest valid state of the
-channel. At any point in time channel can be closed either unilaterally or
-through mutual agreement.
+Channels provide means for off-chain transactions with functionality of
+on-chain dispute resolution.  Channels require persisted connections to
+æternity nodes. Each participant in a channel uses one's own trusted node. For
+persistence of this connection, WebSockets are used.  Channels have on-chain
+state that persists who the participants are and the total amout of coins put
+into the channel.  Each channel also has an off-chain state representing the
+latest distribution of the balance of the channel. It can be updated - each new
+state is co-signed by both parties and only then it becomes the latest valid
+state of the channel. At any point in time channel can be closed either
+unilaterally or through mutual agreement.
 
 ### Connection
 
