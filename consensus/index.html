@@ -3227,6 +3227,9 @@ Consider changing the id in case of forking the blockchain network,
 in order to lower danger of replay attacks.</p>
 <p><strong>Note:</strong> Post Lima hard-fork it is allowed to sign either the full serialized object, or
 the hash of the serialized object; prefixed with the network id in either case.</p>
+<p><strong>Note:</strong> For the inner transaction of a PayingFor the network id should be
+extended to <code>&lt;network id&gt;-inner_tx</code> in order to make the inner transaction
+not replayable on-chain.</p>
 <h3 id="proof-of-work">Proof of Work</h3>
 <p><a href="https://github.com/tromp/cuckoo">Cuckoo Cycle</a> is the algorithm used for proof of work.
 It was designed to prevent the dynamics that have developed in Bitcoin and
@@ -3405,6 +3408,9 @@ depends on the size of the inner transaction.
 | tx           | var |
  -------------- -----
 </code></pre></div></p>
+<p><strong>Note:</strong> When signing the inner transaction the network id should be extended
+to <code>&lt;network id&gt;-inner_tx</code> in order to make the inner transaction not
+replayable on-chain.</p>
 <h4 id="contract-transactions">Contract transactions</h4>
 <p>Please refer to the <a href="../contracts/contract_transactions.html">dedicated document</a>.</p>
 <h4 id="oracle-transactions">Oracle transactions</h4>
