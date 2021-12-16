@@ -388,6 +388,8 @@ under-utilized.
 
 `GasPerByte` is 20.
 
+**Note** `byte_size(<TxType>)` is the size of the serialized transaction **without** the signature.
+
 ### Proof of Work
 
 ```
