@@ -670,7 +670,7 @@ In order to deposit more funds into the channel, one party can initiate
 a `deposit_created` request. It consists of a single-authenticated
 `channel_deposit_tx` transaction as well as a list of updates. The transaction
 includes the state hash and round of the next off-chain state, after applying
-the updates on top of latest state. 
+the updates on top of latest state.
 
 Note that it is possible to deposit a zero amount, essentially making the
 operation an on-chain snapshot.
@@ -991,7 +991,7 @@ A channel can be closed under three circumstances:
 1. Both parties agree to the close and authenticate the closing transaction
    together, which then gets broadcasted and included in the blockchain.
 2. One party wants to close the channel: the other party might had been missing
-   for some time or had been trying to cheat. In this case either side can publish 
+   for some time or had been trying to cheat. In this case either side can publish
    the latest state authenticated by both parties and claim their balance after
    the negotiated timeout.
 3. A malicious party tries to publish an outdated state, which it prefers over a
@@ -1150,7 +1150,7 @@ call is considered to be executed. Its results can be extracted from the calls
 tree in the state tree.
 Part of the call is the `amount` a participants commits to the contract. This
 is not to be confused with [gas consumption](#gas-consumption) - `amount` are
-the tokens moved from the caller's off-chain balance to the off-chain balance
+the coins moved from the caller's off-chain balance to the off-chain balance
 of the contract been called.
 
 ### Contracts referring to on-chain data

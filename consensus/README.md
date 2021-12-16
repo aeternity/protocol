@@ -141,9 +141,9 @@ Available from the Fortuna consensus protocol version.
 The peer-to-peer network is not part of the consensus and will be described in
 a separate document.
 
-### Coins and tokens
+### Coins
 
-#### æternity tokens
+#### æternity coins
 
 We use the following denominations:
 

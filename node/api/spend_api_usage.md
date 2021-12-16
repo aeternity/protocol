@@ -1,15 +1,15 @@
-# Spending tokens - intended usage
+# Spending coins - intended usage
 
 The following assumes that the node exposes at address 127.0.0.1 the following ports:
 
 * User API internal HTTP endpoint: 3113
 
-## Send tokens to another account
+## Send coins to another account
 
-In order to send tokens, you need to have tokens i.e. a positive (non-zero) balance.
-You obtain tokens e.g. after having mined successfully a block or received tokens through a transaction.
+In order to send coins, you need to have coins i.e. a positive (non-zero) balance.
+You obtain coins e.g. after having mined successfully a block or received coins through a transaction.
 
-In order to transfer tokens from an account (`sender_id`) to another account (`recipient_id`):
+In order to transfer coins from an account (`sender_id`) to another account (`recipient_id`):
 
 * prepare spend transaction as per [specification](../../serializations.md). In order to ease the initial integration, the æternity node provides [/debug/transactions/spend endpoint](https://api-docs.aeternity.io#/internal/PostSpend)):
 ``` bash
@@ -22,13 +22,13 @@ curl -X POST -H "Content-Type: application/json" -d '{"sender_id":"...", "recipi
 Once the transaction is included in a block, the recipient shall receive the specified amount and the miner that specified fee. The `ttl` has to
 reflect the current height of the chain, it specify at what height the transaction expire and can't be included on the chain.
 
-## Notes on testing spending tokens
+## Notes on testing spending coins
 
-The simplest way for testing sending tokens is setting up a local network of two nodes - disconnected from the testnet.
-The reason is that in order to spend tokens from your account you need to obtain tokens in the first place, and in order to obtain tokens you need to mine a block faster than all other miners in the network.
-Testing spending tokens in a local network enables obtaining tokens without competing with other miners.
+The simplest way for testing sending coins is setting up a local network of two nodes - disconnected from the testnet.
+The reason is that in order to spend coins from your account you need to obtain coins in the first place, and in order to obtain coins you need to mine a block faster than all other miners in the network.
+Testing spending coins in a local network enables obtaining coins without competing with other miners.
 
-At least one of the two nodes needs to mine - in order to have tokens to spend.
+At least one of the two nodes needs to mine - in order to have coins to spend.
 
 At least one of the two nodes needs to be configured with the peer address of the other node in order for them to form a network.
 

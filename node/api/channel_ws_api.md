@@ -36,9 +36,9 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | from | string | Participant's account to take tokens from | Yes |
-  | to | string | Participant's account to add tokens to | Yes |
-  | amount | integer | Amount of tokens to transfer | Yes |
+  | from | string | Participant's account to take coins from | Yes |
+  | to | string | Participant's account to add coins to | Yes |
+  | amount | integer | Amount of coins to transfer | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
   | meta | array of strings | Meta information about the update | No |
 
@@ -253,7 +253,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | amount | integer | Amount of tokens to deposit in the channel | Yes |
+  | amount | integer | Amount of coins to deposit in the channel | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
   | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
   | gas_price | integer | the gas_price to be used for the fee computation | No |
@@ -402,7 +402,7 @@ Roles:
 
   | Name | Type | Description | Required |
   | ---- | ---- | ----------- | -------- |
-  | amount | integer | Amount of tokens to withdraw form the channel | Yes |
+  | amount | integer | Amount of coins to withdraw form the channel | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
   | fee | integer | The on-chain transaction fee to be used. If not provided the FSM picks a value for the client | No |
   | gas_price | integer | the gas_price to be used for the fee computation | No |
@@ -602,7 +602,7 @@ Roles:
   | contract_id | contract id | contract to call | Yes |
   | call\_data | call data | call data | Yes |
   | abi\_version | integer | call abi version | Yes |
-  | amount | integer | amount of tokens to transfer to contract | Yes |
+  | amount | integer | amount of coins to transfer to contract | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
   | meta | array of strings | Meta information about the update | No |
 
@@ -945,7 +945,7 @@ Roles:
  | contract_id | contract id | contract to call | Yes |
  | call\_data | call data | call data | Yes |
  | abi\_version | integer | call abi version | Yes |
- | amount | integer | amount of tokens to transfer to contract | Yes |
+ | amount | integer | amount of coins to transfer to contract | Yes |
  | gas\_price | integer | the gas\_price to be used for the fee computation and the update execution | Yes |
  | gas | integer | gas limit, if not provided `1000000` is the default value | No |
  | nonce | integer | the nonce to be used in the transaction | No |
@@ -955,7 +955,7 @@ Roles:
 {
   "jsonrpc": "2.0",
   "method": "channels.force_progress",
-  "params": { 
+  "params": {
     "abi_version":1,
     "amount":10,
     "call_data":"cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCzVg5SHSPanMS8lSeSX8SFfJMeAfEkyR6oKfQhD6XCTgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5gCcXw==",
@@ -986,7 +986,7 @@ Roles:
 
  | Name | Type | Description | Required |
  | ---- | ---- | ----------- | -------- |
- | amount | integer | the tokens amount given to the off-chain contract | Yes |
+ | amount | integer | the coins amount given to the off-chain contract | Yes |
  | abi\_version | integer | abi version | Yes |
  | call\_data | integer | contract execution call data | Yes |
  | call\_stack | list | contract execution call stack | Yes |
@@ -999,19 +999,19 @@ Roles:
 
 #### Example
 ```javascript
-{ 
+{
    "jsonrpc":"2.0",
    "method":"channels.sign.force_progress_tx",
-   "params":{ 
+   "params":{
       "channel_id":"ch_2FdiLKkRUdPw4oTRbB6i3M6pquogzWLABQjU373hizDbnD8gGC",
-      "data":{ 
+      "data":{
          "signed_tx":"tx_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",
-         "updates":[ 
-            { 
+         "updates":[
+            {
                "abi_version":1,
                "amount":10,
                "call_data":"cb_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCzVg5SHSPanMS8lSeSX8SFfJMeAfEkyR6oKfQhD6XCTgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5gCcXw==",
-               "call_stack":[ 
+               "call_stack":[
 
                ],
                "caller_id":"ak_Vu1cGq2d3Dpo9gP7pVJc8KMubXr8PjuX51b4yyJmFDcXgTZxT",
@@ -1057,7 +1057,7 @@ Roles:
   | contract_id | contract id | contract to call | Yes |
   | call\_data | call data | call data | Yes |
   | abi\_version | integer | call abi version | Yes |
-  | amount | integer | amount of tokens to transfer to contract | Yes |
+  | amount | integer | amount of coins to transfer to contract | Yes |
   | block_hash | string | The on-chain block hash to pin the off-chain environment | No |
   | meta | array of strings | Meta information about the update | No |
 
@@ -1095,7 +1095,7 @@ Roles:
   | type | transaction type | Yes |
 
  The `info` values could be:
- 
+
  * `"funding_signed"` - reported by the `initiator`, indicating that a `channel_create_tx` has been
    singly authenticated by the `initiator` client, and sent to the `responder` for co-signing.
  * `"funding_created"` - reported by the `responder`, indicating that a `channel_create_tx` has been
@@ -1783,12 +1783,12 @@ If the abort of the update is successful, the client that aborted receives a
 message for it:
 
 ```javascript
-{ 
+{
    "jsonrpc":"2.0",
    "method":"channels.info",
-   "params":{ 
+   "params":{
       "channel_id":"ch_95YaTDZAysRu3GkmW2yKkCK1H4fGtcttoj2qwFDfUSduTpCPf",
-      "data":{ 
+      "data":{
          "event":"aborted_update"
       }
    },

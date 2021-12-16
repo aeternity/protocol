@@ -28,7 +28,7 @@ You shall read output like the following...
 ```
 {"balance":80, "id":"ak_N1WLMewMQPUyQBdEhXRSYee84RQNKJrECwbbseMkNsZhv1X", "nonce":0}
 ```
-... or - if you do not have tokens yet e.g. because you have not yet mined a block successfully - the following:
+... or - if you do not have any coins yet e.g. because you have not yet mined a block successfully - the following:
 ```
 {"reason":"Account not found"}
 ```

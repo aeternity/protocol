@@ -21,7 +21,7 @@ See [Contract Serialization](../serializations.md#contract) for the serializatio
 The contract also has a nonce and a balance recorded in an account state tree.
 
 A call to a contract can execute chain transactions and these transactions are allowed to spend
-tokens from the balance of the contract.
+coins from the balance of the contract.
 
 #### The contract definition
 
