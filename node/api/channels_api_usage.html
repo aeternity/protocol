@@ -4745,7 +4745,7 @@ will describe these in groups which indicate their relation to each other.</p>
 <tr>
 <td>initiator_amount</td>
 <td>integer</td>
-<td>amount of tokens the initiator has committed to the channel</td>
+<td>amount of coins the initiator has committed to the channel</td>
 <td>Yes</td>
 <td>No</td>
 <td>Yes</td>
@@ -4753,7 +4753,7 @@ will describe these in groups which indicate their relation to each other.</p>
 <tr>
 <td>responder_amount</td>
 <td>integer</td>
-<td>amount of tokens the responder has committed to the channel</td>
+<td>amount of coins the responder has committed to the channel</td>
 <td>Yes</td>
 <td>No</td>
 <td>Yes</td>
@@ -5552,7 +5552,7 @@ party in the channel.</p>
 <span class="p">}</span>
 </code></pre></div></p>
 <h3 id="transfer">Transfer</h3>
-<p>The transfer update is moving tokens from one channel account to another. The update is a change to be applied on top of the latest state. It has the
+<p>The transfer update is moving coins from one channel account to another. The update is a change to be applied on top of the latest state. It has the
 following structure:</p>
 <table>
 <thead>
@@ -5628,7 +5628,7 @@ can take those roles. Any public key outside of the channel is considered invali
 <span class="p">}</span>
 </code></pre></div></p>
 <p>The <code>starter</code> might take the role of <code>from</code> or <code>to</code> so the <code>starter</code> can
-trigger sending or request for tokens.</p>
+trigger sending or request for coins.</p>
 <h5 id="starter-authenticates-updated-state">Starter authenticates updated state</h5>
 <p>The starter receives a message containing the updated channel state as an
 off-chain transaction
@@ -5800,7 +5800,7 @@ following structure:</p>
 </tbody>
 </table>
 <p>That would create a contract with the poster being the <code>owner</code> of it. Poster
-commits initially a <code>deposit</code> amount of tokens to the new contract.</p>
+commits initially a <code>deposit</code> amount of coins to the new contract.</p>
 <h4 id="start-create-contract-update">Start create contract update</h4>
 <h5 id="trigger-a-create-contract-update">Trigger a create contract update</h5>
 <p>The owner sends a message containing the desired change
@@ -5963,7 +5963,7 @@ following structure.</p>
 </tbody>
 </table>
 <p>That would call a contract with the poster being the <code>caller_id</code> of it. Poster
-commits an <code>amount</code> amount of tokens to the contract.</p>
+commits an <code>amount</code> amount of coins to the contract.</p>
 <p>The call would also create a <code>call</code> object inside the channel state tree. It contains the result of the contract call.</p>
 <h4 id="start-call-a-contract-update">Start call a contract update</h4>
 <h5 id="trigger-a-contract-call-update">Trigger a contract call update</h5>
@@ -6255,12 +6255,12 @@ chain and has the following structure:</p>
 <tr>
 <td>initiator_amount_final</td>
 <td>integer</td>
-<td>final amount of tokens to be awarded by the initiator</td>
+<td>final amount of coins to be awarded by the initiator</td>
 </tr>
 <tr>
 <td>responder_amount_final</td>
 <td>integer</td>
-<td>final amount of tokens to be awarded by the responder</td>
+<td>final amount of coins to be awarded by the responder</td>
 </tr>
 <tr>
 <td>ttl</td>
@@ -6496,7 +6496,7 @@ off-chain protocol. In that case the other participant can defend themselves
 from being cheated by simply providing a co-authenticated off-chain state with
 a higher round. This is done via the <code>channel_slash_tx</code> transaction.</p>
 <p>Since a co-authenticated off-chain state has a higher priority than an
-unilaterally on-chain produced one via a <code>channel_force_progress_tx</code> transaction, 
+unilaterally on-chain produced one via a <code>channel_force_progress_tx</code> transaction,
 a <code>channel_slash_tx</code> transaction can invalidate a whole chain of
 <code>channel_force_progress_tx</code> transactions if the first one of them had been based
 on a channel state that is older than the one provided by the <code>channel_slash_tx</code>
@@ -6534,7 +6534,7 @@ the channel has now entered a closing state:</p>
   <span class="s2">&quot;method&quot;</span><span class="o">:</span> <span class="s2">&quot;channels.info&quot;</span><span class="p">,</span>
   <span class="s2">&quot;params&quot;</span><span class="o">:</span> <span class="p">{</span>
     <span class="s2">&quot;channel_id&quot;</span><span class="o">:</span> <span class="s2">&quot;ch_Et72swxcKCAJ8KzUDm17X1Ukuo6W7516WfYDPdUoTYpArCdfQ&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;data&quot;</span><span class="o">:</span> 
+    <span class="s2">&quot;data&quot;</span><span class="o">:</span>
       <span class="s2">&quot;event&quot;</span><span class="o">:</span> <span class="s2">&quot;closing&quot;</span>
     <span class="p">}</span>
   <span class="p">},</span>
@@ -6761,11 +6761,11 @@ the WebSocket connection:</p>
 </code></pre></div>
 <h4 id="update-error">Update error</h4>
 <p>Newly requested updates are not always successful. For example one participant
-tries to spend more tokens that one currently has in the channel's balance.
+tries to spend more coins than one currently has in the channel's balance.
 Another would be a participant initiating an update while the other
 participant had already proposed a different one. This diverges from the
 update flow <a href="#channel-off-chain-update">described above</a>.</p>
-<p>Example message for when the <code>from</code> does not have enough tokens to spend
+<p>Example message for when the <code>from</code> does not have enough coins to spend
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
   <span class="s2">&quot;channel_id&quot;</span><span class="o">:</span> <span class="s2">&quot;ch_zVDx935M1AogqZrNmn8keST2jH8uvn5kmWwtDqefYXvgcCRAX&quot;</span><span class="p">,</span>
   <span class="s2">&quot;error&quot;</span><span class="o">:</span> <span class="p">{</span>
@@ -6796,9 +6796,9 @@ update flow <a href="#channel-off-chain-update">described above</a>.</p>
 sent. Possible error reasons are:</p>
 <ul>
 <li>
-<p><code>Insufficient balance</code> - when <code>from</code> does not have enough tokens in the
+<p><code>Insufficient balance</code> - when <code>from</code> does not have enough coins in the
   channel. Keep in mind that there is a minimal amount of <code>channel_reserve</code>
-  tokens to be kept by both parties.</p>
+  coins to be kept by both parties.</p>
 </li>
 <li>
 <p><code>Negative amount</code> - the <code>udpate</code> event contained a negative amount</p>
@@ -6901,12 +6901,12 @@ instead.</p>
 <span class="p">}</span>
 </code></pre></div>
 <p>The response the client receives in that case is:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span> 
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
    <span class="s2">&quot;jsonrpc&quot;</span><span class="o">:</span><span class="s2">&quot;2.0&quot;</span><span class="p">,</span>
    <span class="s2">&quot;method&quot;</span><span class="o">:</span><span class="s2">&quot;channels.info&quot;</span><span class="p">,</span>
-   <span class="s2">&quot;params&quot;</span><span class="o">:</span><span class="p">{</span> 
+   <span class="s2">&quot;params&quot;</span><span class="o">:</span><span class="p">{</span>
       <span class="s2">&quot;channel_id&quot;</span><span class="o">:</span><span class="s2">&quot;ch_95Ya...&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;data&quot;</span><span class="o">:</span><span class="p">{</span> 
+      <span class="s2">&quot;data&quot;</span><span class="o">:</span><span class="p">{</span>
          <span class="s2">&quot;event&quot;</span><span class="o">:</span><span class="s2">&quot;aborted_update&quot;</span>
       <span class="p">}</span>
    <span class="p">},</span>
@@ -6990,16 +6990,16 @@ details:</p>
 <span class="p">}</span>
 </code></pre></div>
 <h4 id="total-balance-update-events">Total balance update events</h4>
-<p>After the channel has been opened it has a total balance of tokens committed to
+<p>After the channel has been opened it has a total balance of coins committed to
 it. This balance is persisted as part of the on-chain channel state. Upon
 closing a channel on-chain, the closing balances of the participants are
 checked against this balance. Under no circumstances can the sum of the closing balances
 be greater than the total balance on-chain.</p>
 <p>Participants are able to modify the total balance: the following two functionalities are available:</p>
 <ul>
-<li>deposit - when a participant wants to commit more tokens from his on-chain
+<li>deposit - when a participant wants to commit more coins from his on-chain
   balance to the channel total balance</li>
-<li>withdrawal - when a participant wants to transfer tokens out of the channel
+<li>withdrawal - when a participant wants to transfer coins out of the channel
   on-chain balance to one's personal account</li>
 </ul>
 <h3 id="deposit-events">Deposit events</h3>
@@ -7007,8 +7007,8 @@ be greater than the total balance on-chain.</p>
 deposit. The process closely resembles the <a href="#update">update</a>. The most notable
 difference is the transaction has been mutually authenticated: it is <code>channel_deposit_tx</code> and
 after the procedure is finished, it is posted on-chain.</p>
-<p>Since both the initiator and responder can deposit tokens, in the scope of this description we
-will call the participant that commits tokens to the channel a depositor and
+<p>Since both the initiator and responder can deposit coins, in the scope of this description we
+will call the participant that commits coins to the channel a depositor and
 the other party - acknowledger. Note that any public key outside of the channel participants
 is considered invalid for the depositor role.</p>
 <h4 id="deposit-transaction">Deposit transaction</h4>
@@ -7225,8 +7225,8 @@ transaction's <code>round</code> plus one.</p>
 withdrawal. The process closely resembles the <a href="#update">update</a>. The most notable
 difference is that the transaction has been mutually authenticated: it is <code>channel_withdraw_tx</code> and
 after the procedure is finished - it is being posted on-chain.</p>
-<p>Since both the initiator and responder can withdraw tokens, in the scope of this description we
-will call the participant that commits tokens to the channel a withdrawer and
+<p>Since both the initiator and responder can withdraw coins, in the scope of this description we
+will call the participant that commits coins to the channel a withdrawer and
 the other party - an acknowledger. Note that any public key outside of the channel participants
 is considered invalid for the withdrawer role.</p>
 <h4 id="withdraw-transaction">Withdraw transaction</h4>
@@ -7897,7 +7897,7 @@ it is time to finally close the channel. One of the participants posts a
 <code>channel_settle_tx</code> transaction that enforces closing of the channel. This
 happens according to the latest channel state that was sent on-chain. The
 <code>channel_settle_tx</code> just finalizes the channel closing with the last received
-state, redistributes tokens to participants and closes the channel. No further
+state, redistributes coins to participants and closes the channel. No further
 disputes are possible after that.</p>
 <p>In order to give parties time to slash a closing channel and update its state
 with a newer one, there is a timeframe only after which the <code>channel_settle_tx</code>
@@ -8154,19 +8154,19 @@ use the very same arguments, add an actual <code>gas_price</code> and produce th
 <h4 id="forcer-authenticates-the-force-progress-transaction">Forcer authenticates the force progress transaction</h4>
 <p>After the <code>channel_force_progress_tx</code> has been requested, the FSM prompts the
 client to sign it with:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span> 
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
    <span class="s2">&quot;jsonrpc&quot;</span><span class="o">:</span><span class="s2">&quot;2.0&quot;</span><span class="p">,</span>
    <span class="s2">&quot;method&quot;</span><span class="o">:</span><span class="s2">&quot;channels.sign.force_progress_tx&quot;</span><span class="p">,</span>
-   <span class="s2">&quot;params&quot;</span><span class="o">:</span><span class="p">{</span> 
+   <span class="s2">&quot;params&quot;</span><span class="o">:</span><span class="p">{</span>
       <span class="s2">&quot;channel_id&quot;</span><span class="o">:</span><span class="s2">&quot;ch_2FdiLKkRUdPw4oTRbB6i3M6pquogzWLABQjU373hizDbnD8gGC&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;data&quot;</span><span class="o">:</span><span class="p">{</span> 
+      <span class="s2">&quot;data&quot;</span><span class="o">:</span><span class="p">{</span>
          <span class="s2">&quot;signed_tx&quot;</span><span class="o">:</span><span class="s2">&quot;tx_+Qi9CwHAuQ....&quot;</span><span class="p">,</span>
-         <span class="s2">&quot;updates&quot;</span><span class="o">:</span><span class="p">[</span> 
-            <span class="p">{</span> 
+         <span class="s2">&quot;updates&quot;</span><span class="o">:</span><span class="p">[</span>
+            <span class="p">{</span>
                <span class="s2">&quot;abi_version&quot;</span><span class="o">:</span><span class="mf">1</span><span class="p">,</span>
                <span class="s2">&quot;amount&quot;</span><span class="o">:</span><span class="mf">10</span><span class="p">,</span>
                <span class="s2">&quot;call_data&quot;</span><span class="o">:</span><span class="s2">&quot;cb_AAAAAAA...&quot;</span><span class="p">,</span>
-               <span class="s2">&quot;call_stack&quot;</span><span class="o">:</span><span class="p">[</span> 
+               <span class="s2">&quot;call_stack&quot;</span><span class="o">:</span><span class="p">[</span>
 
                <span class="p">],</span>
                <span class="s2">&quot;caller_id&quot;</span><span class="o">:</span><span class="s2">&quot;ak_Vu1cG...&quot;</span><span class="p">,</span>

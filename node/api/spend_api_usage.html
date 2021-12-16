@@ -65,7 +65,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#spending-tokens-intended-usage" class="md-skip">
+        <a href="#spending-coins-intended-usage" class="md-skip">
           Skip to content
         </a>
       
@@ -887,18 +887,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#send-tokens-to-another-account" class="md-nav__link">
-    Send tokens to another account
+  <a href="#send-coins-to-another-account" class="md-nav__link">
+    Send coins to another account
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes-on-testing-spending-tokens" class="md-nav__link">
-    Notes on testing spending tokens
+  <a href="#notes-on-testing-spending-coins" class="md-nav__link">
+    Notes on testing spending coins
   </a>
   
-    <nav class="md-nav" aria-label="Notes on testing spending tokens">
+    <nav class="md-nav" aria-label="Notes on testing spending coins">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2477,18 +2477,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#send-tokens-to-another-account" class="md-nav__link">
-    Send tokens to another account
+  <a href="#send-coins-to-another-account" class="md-nav__link">
+    Send coins to another account
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes-on-testing-spending-tokens" class="md-nav__link">
-    Notes on testing spending tokens
+  <a href="#notes-on-testing-spending-coins" class="md-nav__link">
+    Notes on testing spending coins
   </a>
   
-    <nav class="md-nav" aria-label="Notes on testing spending tokens">
+    <nav class="md-nav" aria-label="Notes on testing spending coins">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2520,15 +2520,15 @@
                   </a>
                 
                 
-                <h1 id="spending-tokens-intended-usage">Spending tokens - intended usage</h1>
+                <h1 id="spending-coins-intended-usage">Spending coins - intended usage</h1>
 <p>The following assumes that the node exposes at address 127.0.0.1 the following ports:</p>
 <ul>
 <li>User API internal HTTP endpoint: 3113</li>
 </ul>
-<h2 id="send-tokens-to-another-account">Send tokens to another account</h2>
-<p>In order to send tokens, you need to have tokens i.e. a positive (non-zero) balance.
-You obtain tokens e.g. after having mined successfully a block or received tokens through a transaction.</p>
-<p>In order to transfer tokens from an account (<code>sender_id</code>) to another account (<code>recipient_id</code>):</p>
+<h2 id="send-coins-to-another-account">Send coins to another account</h2>
+<p>In order to send coins, you need to have coins i.e. a positive (non-zero) balance.
+You obtain coins e.g. after having mined successfully a block or received coins through a transaction.</p>
+<p>In order to transfer coins from an account (<code>sender_id</code>) to another account (<code>recipient_id</code>):</p>
 <ul>
 <li>prepare spend transaction as per <a href="../../serializations.html">specification</a>. In order to ease the initial integration, the æternity node provides <a href="https://api-docs.aeternity.io#/internal/PostSpend">/debug/transactions/spend endpoint</a>):
 <div class="highlight"><pre><span></span><code>curl -X POST -H <span class="s2">&quot;Content-Type: application/json&quot;</span> -d <span class="s1">&#39;{&quot;sender_id&quot;:&quot;...&quot;, &quot;recipient_id&quot;:&quot;...&quot;, &quot;amount&quot;:2, &quot;fee&quot;:1, &quot;ttl&quot;:1234, &quot;payload&quot;:&quot;any public message&quot;}&#39;</span> http://127.0.0.1:3113/v2/debug/transactions/spend
@@ -2539,11 +2539,11 @@ You obtain tokens e.g. after having mined successfully a block or received token
 </ul>
 <p>Once the transaction is included in a block, the recipient shall receive the specified amount and the miner that specified fee. The <code>ttl</code> has to
 reflect the current height of the chain, it specify at what height the transaction expire and can't be included on the chain.</p>
-<h2 id="notes-on-testing-spending-tokens">Notes on testing spending tokens</h2>
-<p>The simplest way for testing sending tokens is setting up a local network of two nodes - disconnected from the testnet.
-The reason is that in order to spend tokens from your account you need to obtain tokens in the first place, and in order to obtain tokens you need to mine a block faster than all other miners in the network.
-Testing spending tokens in a local network enables obtaining tokens without competing with other miners.</p>
-<p>At least one of the two nodes needs to mine - in order to have tokens to spend.</p>
+<h2 id="notes-on-testing-spending-coins">Notes on testing spending coins</h2>
+<p>The simplest way for testing sending coins is setting up a local network of two nodes - disconnected from the testnet.
+The reason is that in order to spend coins from your account you need to obtain coins in the first place, and in order to obtain coins you need to mine a block faster than all other miners in the network.
+Testing spending coins in a local network enables obtaining coins without competing with other miners.</p>
+<p>At least one of the two nodes needs to mine - in order to have coins to spend.</p>
 <p>At least one of the two nodes needs to be configured with the peer address of the other node in order for them to form a network.</p>
 <h3 id="running-multiple-nodes-on-same-host">Running multiple nodes on same host</h3>
 <p>This is mainly purposed for development.</p>

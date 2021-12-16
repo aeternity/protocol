@@ -3701,937 +3701,1210 @@ Writing to the accumulator pushes a value to the stack.</p>
 <th>Name</th>
 <th>Args</th>
 <th>Description</th>
-<th>Arg Types</th>
-<th>Res Type</th>
+<th>Arg types</th>
+<th>Res type</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>'RETURN'</td>
+<td><code>RETURN</code></td>
 <td></td>
 <td>Return from function call, top of stack is return value . The type of the retun value has to match the return type of the function.</td>
 <td>{}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'RETURNR'</td>
+<td><code>RETURNR</code></td>
 <td>Arg0</td>
 <td>Push Arg0 and return from function. The type of the retun value has to match the return type of the function.</td>
 <td>{any}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'CALL'</td>
+<td><code>CALL</code></td>
 <td>Arg0</td>
 <td>Call the function Arg0 with args on stack. The types of the arguments has to match the argument typs of the function.</td>
 <td>{string}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'CALL_R'</td>
+<td><code>CALL_R</code></td>
 <td>Arg0 Identifier Arg2 Arg3 Arg4</td>
 <td>Remote call to contract Arg0 and function Arg1 of type Arg2 =&gt; Arg3 with value Arg4. The types of the arguments has to match the argument types of the function.</td>
 <td>{contract,string,typerep,typerep,integer}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'CALL_T'</td>
+<td><code>CALL_T</code></td>
 <td>Arg0</td>
 <td>Tail call to function Arg0. The types of the arguments has to match the argument typs of the function. And the return type of the called function has to match the type of the current function.</td>
 <td>{string}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'CALL_GR'</td>
+<td><code>CALL_GR</code></td>
 <td>Arg0 Identifier Arg2 Arg3 Arg4 Arg5</td>
 <td>Remote call with gas cap in Arg4. Otherwise as CALL_R.</td>
 <td>{contract,string,typerep,typerep,integer,integer}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'JUMP'</td>
+<td><code>JUMP</code></td>
 <td>Integer</td>
 <td>Jump to a basic block. The basic block has to exist in the current function.</td>
 <td>{integer}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'JUMPIF'</td>
+<td><code>JUMPIF</code></td>
 <td>Arg0 Integer</td>
 <td>Conditional jump to a basic block. If Arg0 then jump to Arg1.</td>
 <td>{boolean,integer}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'SWITCH_V2'</td>
+<td><code>SWITCH_V2</code></td>
 <td>Arg0 Integer Integer</td>
 <td>Conditional jump to a basic block on variant tag.</td>
 <td>{variant,integer,ingeger}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'SWITCH_V3'</td>
+<td><code>SWITCH_V3</code></td>
 <td>Arg0 Integer Integer Integer</td>
 <td>Conditional jump to a basic block on variant tag.</td>
 <td>{variant,integer,integer,ingeger}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'SWITCH_VN'</td>
+<td><code>SWITCH_VN</code></td>
 <td>Arg0 [Integers]</td>
 <td>Conditional jump to a basic block on variant tag.</td>
 <td>{variant,{list,integer}}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'CALL_VALUE'</td>
+<td><code>CALL_VALUE</code></td>
 <td>Arg0</td>
 <td>The value sent in the current remote call.</td>
 <td>{}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'PUSH'</td>
+<td><code>PUSH</code></td>
 <td>Arg0</td>
 <td>Push argument to stack.</td>
 <td>{any}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'DUPA'</td>
+<td><code>DUPA</code></td>
 <td></td>
 <td>Duplicate top of stack.</td>
 <td>{any}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'DUP'</td>
+<td><code>DUP</code></td>
 <td>Arg0</td>
 <td>push Arg0 stack pos on top of stack.</td>
 <td>{any}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'POP'</td>
+<td><code>POP</code></td>
 <td>Arg0</td>
 <td>Arg0 := top of stack.</td>
 <td>{integer}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'INCA'</td>
+<td><code>INCA</code></td>
 <td></td>
 <td>Increment accumulator.</td>
 <td>{integer}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'INC'</td>
+<td><code>INC</code></td>
 <td>Arg0</td>
 <td>Increment argument.</td>
 <td>{integer}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'DECA'</td>
+<td><code>DECA</code></td>
 <td></td>
 <td>Decrement accumulator.</td>
 <td>{integer}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'DEC'</td>
+<td><code>DEC</code></td>
 <td>Arg0</td>
 <td>Decrement argument.</td>
 <td>{integer}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'ADD'</td>
+<td><code>ADD</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1 + Arg2.</td>
 <td>{integer,integer}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'SUB'</td>
+<td><code>SUB</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1 - Arg2.</td>
 <td>{integer,integer}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'MUL'</td>
+<td><code>MUL</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1 * Arg2.</td>
 <td>{integer,integer}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'DIV'</td>
+<td><code>DIV</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1 / Arg2.</td>
 <td>{integer,integer}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'MOD'</td>
+<td><code>MOD</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1 mod Arg2.</td>
 <td>{integer,integer}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'POW'</td>
+<td><code>POW</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1  ^ Arg2.</td>
 <td>{integer,integer}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'STORE'</td>
+<td><code>STORE</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := Arg1.</td>
 <td>{any}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'SHA3'</td>
+<td><code>SHA3</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := sha3(Arg1).</td>
 <td>{any}</td>
 <td>hash</td>
 </tr>
 <tr>
-<td>'SHA256'</td>
+<td><code>SHA256</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := sha256(Arg1).</td>
 <td>{any}</td>
 <td>hash</td>
 </tr>
 <tr>
-<td>'BLAKE2B'</td>
+<td><code>BLAKE2B</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := blake2b(Arg1).</td>
 <td>{any}</td>
 <td>hash</td>
 </tr>
 <tr>
-<td>'LT'</td>
+<td><code>LT</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1  &lt; Arg2.</td>
 <td>{integer,integer}</td>
 <td>boolean</td>
 </tr>
 <tr>
-<td>'GT'</td>
+<td><code>GT</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1  &gt; Arg2.</td>
 <td>{integer,integer}</td>
 <td>boolean</td>
 </tr>
 <tr>
-<td>'EQ'</td>
+<td><code>EQ</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1  = Arg2.</td>
 <td>{integer,integer}</td>
 <td>boolean</td>
 </tr>
 <tr>
-<td>'ELT'</td>
+<td><code>ELT</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1 =&lt; Arg2.</td>
 <td>{integer,integer}</td>
 <td>boolean</td>
 </tr>
 <tr>
-<td>'EGT'</td>
+<td><code>EGT</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1 &gt;= Arg2.</td>
 <td>{integer,integer}</td>
 <td>boolean</td>
 </tr>
 <tr>
-<td>'NEQ'</td>
+<td><code>NEQ</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1 /= Arg2.</td>
 <td>{integer,integer}</td>
 <td>boolean</td>
 </tr>
 <tr>
-<td>'AND'</td>
+<td><code>AND</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1 and Arg2.</td>
 <td>{boolean,boolean}</td>
 <td>boolean</td>
 </tr>
 <tr>
-<td>'OR'</td>
+<td><code>OR</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1  or Arg2.</td>
 <td>{boolean,boolean}</td>
 <td>boolean</td>
 </tr>
 <tr>
-<td>'NOT'</td>
+<td><code>NOT</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := not Arg1.</td>
 <td>{boolean}</td>
 <td>boolean</td>
 </tr>
 <tr>
-<td>'TUPLE'</td>
+<td><code>TUPLE</code></td>
 <td>Arg0 Integer</td>
 <td>Arg0 := tuple of size = Arg1. Elements on stack.</td>
 <td>{integer}</td>
 <td>tuple</td>
 </tr>
 <tr>
-<td>'ELEMENT'</td>
+<td><code>ELEMENT</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg1 := element(Arg2, Arg3).</td>
 <td>{integer,tuple}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'SETELEMENT'</td>
+<td><code>SETELEMENT</code></td>
 <td>Arg0 Arg1 Arg2 Arg3</td>
 <td>Arg0 := a new tuple similar to Arg2, but with element number Arg1 replaced by Arg3.</td>
 <td>{integer,tuple,any}</td>
 <td>tuple</td>
 </tr>
 <tr>
-<td>'MAP_EMPTY'</td>
+<td><code>MAP_EMPTY</code></td>
 <td>Arg0</td>
 <td>Arg0 := #{}.</td>
 <td>{}</td>
 <td>map</td>
 </tr>
 <tr>
-<td>'MAP_LOOKUP'</td>
+<td><code>MAP_LOOKUP</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := lookup key Arg2 in map Arg1.</td>
 <td>{map,any}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'MAP_LOOKUPD'</td>
+<td><code>MAP_LOOKUPD</code></td>
 <td>Arg0 Arg1 Arg2 Arg3</td>
 <td>Arg0 := lookup key Arg2 in map Arg1 if key exists in map otherwise Arg0 := Arg3.</td>
 <td>{map,any,any}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'MAP_UPDATE'</td>
+<td><code>MAP_UPDATE</code></td>
 <td>Arg0 Arg1 Arg2 Arg3</td>
 <td>Arg0 := update key Arg2 in map Arg1 with value Arg3.</td>
 <td>{map,any,any}</td>
 <td>map</td>
 </tr>
 <tr>
-<td>'MAP_DELETE'</td>
+<td><code>MAP_DELETE</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := delete key Arg2 from map Arg1.</td>
 <td>{map,any}</td>
 <td>map</td>
 </tr>
 <tr>
-<td>'MAP_MEMBER'</td>
+<td><code>MAP_MEMBER</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := true if key Arg2 is in map Arg1.</td>
 <td>{map,any}</td>
 <td>boolean</td>
 </tr>
 <tr>
-<td>'MAP_FROM_LIST'</td>
+<td><code>MAP_FROM_LIST</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := make a map from (key, value) list in Arg1.</td>
 <td>{{list,{tuple,[any,any]}}}</td>
 <td>map</td>
 </tr>
 <tr>
-<td>'MAP_SIZE'</td>
+<td><code>MAP_SIZE</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := The size of the map Arg1.</td>
 <td>{map}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'MAP_TO_LIST'</td>
+<td><code>MAP_TO_LIST</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := The tuple list representation of the map Arg1.</td>
 <td>{map}</td>
 <td>list</td>
 </tr>
 <tr>
-<td>'IS_NIL'</td>
+<td><code>IS_NIL</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := true if Arg1 == [].</td>
 <td>{list}</td>
 <td>boolean</td>
 </tr>
 <tr>
-<td>'CONS'</td>
+<td><code>CONS</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := [Arg1</td>
 <td>Arg2].</td>
 <td>{any,list}</td>
 </tr>
 <tr>
-<td>'HD'</td>
+<td><code>HD</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := head of list Arg1.</td>
 <td>{list}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'TL'</td>
+<td><code>TL</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := tail of list Arg1.</td>
 <td>{list}</td>
 <td>list</td>
 </tr>
 <tr>
-<td>'LENGTH'</td>
+<td><code>LENGTH</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := length of list Arg1.</td>
 <td>{list}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'NIL'</td>
+<td><code>NIL</code></td>
 <td>Arg0</td>
 <td>Arg0 := [].</td>
 <td>{}</td>
 <td>list</td>
 </tr>
 <tr>
-<td>'APPEND'</td>
+<td><code>APPEND</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1 ++ Arg2.</td>
 <td>{list,list}</td>
 <td>list</td>
 </tr>
 <tr>
-<td>'STR_JOIN'</td>
+<td><code>STR_JOIN</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := string Arg1 followed by string Arg2.</td>
 <td>{string,string}</td>
 <td>string</td>
 </tr>
 <tr>
-<td>'INT_TO_STR'</td>
+<td><code>INT_TO_STR</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := turn integer Arg1 into a string.</td>
 <td>{integer}</td>
 <td>string</td>
 </tr>
 <tr>
-<td>'ADDR_TO_STR'</td>
+<td><code>ADDR_TO_STR</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := turn address Arg1 into a string.</td>
 <td>{address}</td>
 <td>string</td>
 </tr>
 <tr>
-<td>'STR_REVERSE'</td>
+<td><code>STR_REVERSE</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := the reverse of string Arg1.</td>
 <td>{string}</td>
 <td>string</td>
 </tr>
 <tr>
-<td>'STR_LENGTH'</td>
+<td><code>STR_LENGTH</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := The length of the string Arg1.</td>
 <td>{string}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'BYTES_TO_INT'</td>
+<td><code>BYTES_TO_INT</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := bytes_to_int(Arg1)</td>
 <td>{bytes}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'BYTES_TO_STR'</td>
+<td><code>BYTES_TO_STR</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := bytes_to_str(Arg1)</td>
 <td>{bytes}</td>
 <td>string</td>
 </tr>
 <tr>
-<td>'BYTES_CONCAT'</td>
+<td><code>BYTES_CONCAT</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := bytes_concat(Arg1, Arg2)</td>
 <td>{bytes,bytes}</td>
 <td>bytes</td>
 </tr>
 <tr>
-<td>'BYTES_SPLIT'</td>
+<td><code>BYTES_SPLIT</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := bytes_split(Arg2, Arg1), where Arg2 is the length of the first chunk.</td>
 <td>{bytes,integer}</td>
 <td>bytes</td>
 </tr>
 <tr>
-<td>'INT_TO_ADDR'</td>
+<td><code>INT_TO_ADDR</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := turn integer Arg1 into an address.</td>
 <td>{integer}</td>
 <td>address</td>
 </tr>
 <tr>
-<td>'VARIANT'</td>
+<td><code>VARIANT</code></td>
 <td>Arg0 Arg1 Arg2 Arg3</td>
 <td>Arg0 := create a variant of size Arg1 with the tag Arg2 (Arg2 &lt; Arg1) and take Arg3 elements from the stack.</td>
 <td>{integer,integer,integer}</td>
 <td>variant</td>
 </tr>
 <tr>
-<td>'VARIANT_TEST'</td>
+<td><code>VARIANT_TEST</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := true if variant Arg1 has the tag Arg2.</td>
 <td>{variant,integer}</td>
 <td>boolean</td>
 </tr>
 <tr>
-<td>'VARIANT_ELEMENT'</td>
+<td><code>VARIANT_ELEMENT</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := element number Arg2 from variant Arg1.</td>
 <td>{variant,integer}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'BITS_NONEA'</td>
+<td><code>BITS_NONEA</code></td>
 <td></td>
 <td>push an empty bitmap on the stack.</td>
 <td>{}</td>
 <td>bits</td>
 </tr>
 <tr>
-<td>'BITS_NONE'</td>
+<td><code>BITS_NONE</code></td>
 <td>Arg0</td>
 <td>Arg0 := empty bitmap.</td>
 <td>{}</td>
 <td>bits</td>
 </tr>
 <tr>
-<td>'BITS_ALLA'</td>
+<td><code>BITS_ALLA</code></td>
 <td></td>
 <td>push a full bitmap on the stack.</td>
 <td>{}</td>
 <td>bits</td>
 </tr>
 <tr>
-<td>'BITS_ALL'</td>
+<td><code>BITS_ALL</code></td>
 <td>Arg0</td>
 <td>Arg0 := full bitmap.</td>
 <td>{}</td>
 <td>bits</td>
 </tr>
 <tr>
-<td>'BITS_ALL_N'</td>
+<td><code>BITS_ALL_N</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := bitmap with Arg1 bits set.</td>
 <td>{integer}</td>
 <td>bits</td>
 </tr>
 <tr>
-<td>'BITS_SET'</td>
+<td><code>BITS_SET</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := set bit Arg2 of bitmap Arg1.</td>
 <td>{bits,integer}</td>
 <td>bits</td>
 </tr>
 <tr>
-<td>'BITS_CLEAR'</td>
+<td><code>BITS_CLEAR</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := clear bit Arg2 of bitmap Arg1.</td>
 <td>{bits,integer}</td>
 <td>bits</td>
 </tr>
 <tr>
-<td>'BITS_TEST'</td>
+<td><code>BITS_TEST</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := true if bit Arg2 of bitmap Arg1 is set.</td>
 <td>{bits,integer}</td>
 <td>boolean</td>
 </tr>
 <tr>
-<td>'BITS_SUM'</td>
+<td><code>BITS_SUM</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := sum of set bits in bitmap Arg1. Exception if infinit bitmap.</td>
 <td>{bits}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'BITS_OR'</td>
+<td><code>BITS_OR</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1 v Arg2.</td>
 <td>{bits,bits}</td>
 <td>bits</td>
 </tr>
 <tr>
-<td>'BITS_AND'</td>
+<td><code>BITS_AND</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1 ^ Arg2.</td>
 <td>{bits,bits}</td>
 <td>bits</td>
 </tr>
 <tr>
-<td>'BITS_DIFF'</td>
+<td><code>BITS_DIFF</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := Arg1 - Arg2.</td>
 <td>{bits,bits}</td>
 <td>bits</td>
 </tr>
 <tr>
-<td>'BALANCE'</td>
+<td><code>BALANCE</code></td>
 <td>Arg0</td>
 <td>Arg0 := The current contract balance.</td>
 <td>{}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'ORIGIN'</td>
+<td><code>ORIGIN</code></td>
 <td>Arg0</td>
 <td>Arg0 := Address of contract called by the call transaction.</td>
 <td>{}</td>
 <td>address</td>
 </tr>
 <tr>
-<td>'CALLER'</td>
+<td><code>CALLER</code></td>
 <td>Arg0</td>
 <td>Arg0 := The address that signed the call transaction.</td>
 <td>{}</td>
 <td>address</td>
 </tr>
 <tr>
-<td>'BLOCKHASH'</td>
+<td><code>BLOCKHASH</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := The blockhash at height.</td>
 <td>{integer}</td>
-<td>hash</td>
+<td>variant</td>
 </tr>
 <tr>
-<td>'BENEFICIARY'</td>
+<td><code>BENEFICIARY</code></td>
 <td>Arg0</td>
 <td>Arg0 := The address of the current beneficiary.</td>
 <td>{}</td>
 <td>address</td>
 </tr>
 <tr>
-<td>'TIMESTAMP'</td>
+<td><code>TIMESTAMP</code></td>
 <td>Arg0</td>
 <td>Arg0 := The current timestamp. Unrelaiable, don't use for anything.</td>
 <td>{}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'GENERATION'</td>
+<td><code>GENERATION</code></td>
 <td>Arg0</td>
 <td>Arg0 := The block height of the cureent generation.</td>
 <td>{}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'MICROBLOCK'</td>
+<td><code>MICROBLOCK</code></td>
 <td>Arg0</td>
 <td>Arg0 := The current micro block number.</td>
 <td>{}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'DIFFICULTY'</td>
+<td><code>DIFFICULTY</code></td>
 <td>Arg0</td>
 <td>Arg0 := The current difficulty.</td>
 <td>{}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'GASLIMIT'</td>
+<td><code>GASLIMIT</code></td>
 <td>Arg0</td>
 <td>Arg0 := The current gaslimit.</td>
 <td>{}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'GAS'</td>
+<td><code>GAS</code></td>
 <td>Arg0</td>
 <td>Arg0 := The amount of gas left.</td>
 <td>{}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'ADDRESS'</td>
+<td><code>ADDRESS</code></td>
 <td>Arg0</td>
 <td>Arg0 := The current contract address.</td>
 <td>{}</td>
 <td>address</td>
 </tr>
 <tr>
-<td>'GASPRICE'</td>
+<td><code>GASPRICE</code></td>
 <td>Arg0</td>
 <td>Arg0 := The current gas price.</td>
 <td>{}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'LOG0'</td>
+<td><code>LOG0</code></td>
 <td>Arg0</td>
 <td>Create a log message in the call object.</td>
 <td>{string}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'LOG1'</td>
+<td><code>LOG1</code></td>
 <td>Arg0 Arg1</td>
 <td>Create a log message with one topic in the call object.</td>
 <td>{integer,string}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'LOG2'</td>
+<td><code>LOG2</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Create a log message with two topics in the call object.</td>
 <td>{integer,integer,string}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'LOG3'</td>
+<td><code>LOG3</code></td>
 <td>Arg0 Arg1 Arg2 Arg3</td>
 <td>Create a log message with three topics in the call object.</td>
 <td>{integer,integer,integer,string}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'LOG4'</td>
+<td><code>LOG4</code></td>
 <td>Arg0 Arg1 Arg2 Arg3 Arg4</td>
 <td>Create a log message with four topics in the call object.</td>
 <td>{integer,integer,integer,integer,string}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'SPEND'</td>
+<td><code>SPEND</code></td>
 <td>Arg0 Arg1</td>
-<td>Transfer Arg1 tokens to account Arg0. (If the contract account has at least that many tokens.</td>
+<td>Transfer Arg1 coins to account Arg0. (If the contract account has at least that many coins.</td>
 <td>{address,integer}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'ORACLE_REGISTER'</td>
+<td><code>ORACLE_REGISTER</code></td>
 <td>Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 Arg6</td>
 <td>Arg0 := New oracle with address Arg2, query fee Arg3, TTL Arg4, query type Arg5 and response type Arg6. Arg0 contains delegation signature.</td>
 <td>{signature,address,integer,variant,typerep,typerep}</td>
 <td>oracle</td>
 </tr>
 <tr>
-<td>'ORACLE_QUERY'</td>
+<td><code>ORACLE_QUERY</code></td>
 <td>Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 Arg6 Arg7</td>
 <td>Arg0 := New oracle query for oracle Arg1, question in Arg2, query fee in Arg3, query TTL in Arg4, response TTL in Arg5. Typereps for checking oracle type is in Arg6 and Arg7.</td>
 <td>{oracle,any,integer,variant,variant,typerep,typerep}</td>
 <td>oracle_query</td>
 </tr>
 <tr>
-<td>'ORACLE_RESPOND'</td>
+<td><code>ORACLE_RESPOND</code></td>
 <td>Arg0 Arg1 Arg2 Arg3 Arg4 Arg5</td>
 <td>Respond as oracle Arg1 to query in Arg2 with response Arg3. Arg0 contains delegation signature. Typereps for checking oracle type is in Arg4 and Arg5.</td>
 <td>{signature,oracle,oracle_query,any,typerep,typerep}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'ORACLE_EXTEND'</td>
+<td><code>ORACLE_EXTEND</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Extend oracle in Arg1 with TTL in Arg2. Arg0 contains delegation signature.</td>
 <td>{signature,oracle,variant}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'ORACLE_GET_ANSWER'</td>
+<td><code>ORACLE_GET_ANSWER</code></td>
 <td>Arg0 Arg1 Arg2 Arg3 Arg4</td>
 <td>Arg0 := option variant with answer (if any) from oracle query in Arg1 given by oracle Arg0. Typereps for checking oracle type is in Arg3 and Arg4.</td>
 <td>{oracle,oracle_query,typerep,typerep}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'ORACLE_GET_QUESTION'</td>
+<td><code>ORACLE_GET_QUESTION</code></td>
 <td>Arg0 Arg1 Arg2 Arg3 Arg4</td>
 <td>Arg0 := question in oracle query Arg2 given to oracle Arg1. Typereps for checking oracle type is in Arg3 and Arg4.</td>
 <td>{oracle,oracle_query,typerep,typerep}</td>
 <td>any</td>
 </tr>
 <tr>
-<td>'ORACLE_QUERY_FEE'</td>
+<td><code>ORACLE_QUERY_FEE</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := query fee for oracle Arg1</td>
 <td>{oracle}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'AENS_RESOLVE'</td>
+<td><code>AENS_RESOLVE</code></td>
 <td>Arg0 Arg1 Arg2 Arg3</td>
 <td>Resolve name in Arg0 with tag Arg1. Arg2 describes the type parameter of the resolved name.</td>
 <td>{string,string,typerep}</td>
 <td>variant</td>
 </tr>
 <tr>
-<td>'AENS_PRECLAIM'</td>
+<td><code>AENS_PRECLAIM</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Preclaim the hash in Arg2 for address in Arg1. Arg0 contains delegation signature.</td>
 <td>{signature,address,hash}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'AENS_CLAIM'</td>
+<td><code>AENS_CLAIM</code></td>
 <td>Arg0 Arg1 Arg2 Arg3 Arg4</td>
 <td>Attempt to claim the name in Arg2 for address in Arg1 at a price in Arg4. Arg3 contains the salt used to hash the preclaim. Arg0 contains delegation signature.</td>
 <td>{signature,address,string,integer,integer}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'AENS_UPDATE'</td>
-<td></td>
-<td>NYI</td>
-<td>{}</td>
+<td><code>AENS_UPDATE</code></td>
+<td>Arg0 Arg1 Arg2 Arg3 Arg4 Arg5</td>
+<td>Updates name in Arg2 for address in Arg1. Arg3 contains optional ttl (of type Chain.ttl), Arg4 contains optional client_ttl (of type int), Arg5 contains optional pointers (of type map(string, pointee))</td>
+<td>{signature,address,string,variant,variant,variant}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'AENS_TRANSFER'</td>
+<td><code>AENS_TRANSFER</code></td>
 <td>Arg0 Arg1 Arg2 Arg3</td>
 <td>Transfer ownership of name Arg3 from account Arg1 to Arg2. Arg0 contains delegation signature.</td>
 <td>{signature,address,address,string}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'AENS_REVOKE'</td>
+<td><code>AENS_REVOKE</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Revoke the name in Arg2 from owner Arg1. Arg0 contains delegation signature.</td>
 <td>{signature,address,string}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'BALANCE_OTHER'</td>
+<td><code>BALANCE_OTHER</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := The balance of address Arg1.</td>
 <td>{address}</td>
 <td>integer</td>
 </tr>
 <tr>
-<td>'VERIFY_SIG'</td>
+<td><code>VERIFY_SIG</code></td>
 <td>Arg0 Arg1 Arg2 Arg3</td>
 <td>Arg0 := verify_sig(Hash, PubKey, Signature)</td>
 <td>{bytes,address,bytes}</td>
 <td>boolean</td>
 </tr>
 <tr>
-<td>'VERIFY_SIG_SECP256K1'</td>
+<td><code>VERIFY_SIG_SECP256K1</code></td>
 <td>Arg0 Arg1 Arg2 Arg3</td>
 <td>Arg0 := verify_sig_secp256k1(Hash, PubKey, Signature)</td>
 <td>{bytes,bytes,bytes}</td>
 <td>boolean</td>
 </tr>
 <tr>
-<td>'CONTRACT_TO_ADDRESS'</td>
+<td><code>CONTRACT_TO_ADDRESS</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := Arg1 - A no-op type conversion</td>
 <td>{contract}</td>
 <td>address</td>
 </tr>
 <tr>
-<td>'AUTH_TX_HASH'</td>
+<td><code>AUTH_TX_HASH</code></td>
 <td>Arg0</td>
 <td>If in GA authentication context return Some(TxHash) otherwise None.</td>
 <td>{}</td>
 <td>variant</td>
 </tr>
 <tr>
-<td>'ORACLE_CHECK'</td>
+<td><code>ORACLE_CHECK</code></td>
 <td>Arg0 Arg1 Arg2 Arg3</td>
 <td>Arg0 := is Arg1 an oracle with the given query (Arg2) and response (Arg3) types</td>
 <td>{oracle,typerep,typerep}</td>
 <td>bool</td>
 </tr>
 <tr>
-<td>'ORACLE_CHECK_QUERY'</td>
+<td><code>ORACLE_CHECK_QUERY</code></td>
 <td>Arg0 Arg1 Arg2 Arg3 Arg4</td>
 <td>Arg0 := is Arg2 a query for the oracle Arg1 with the given types (Arg3, Arg4)</td>
 <td>{oracle,oracle_query,typerep,typerep}</td>
 <td>bool</td>
 </tr>
 <tr>
-<td>'IS_ORACLE'</td>
+<td><code>IS_ORACLE</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := is Arg1 an oracle</td>
 <td>{address}</td>
 <td>bool</td>
 </tr>
 <tr>
-<td>'IS_CONTRACT'</td>
+<td><code>IS_CONTRACT</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := is Arg1 a contract</td>
 <td>{address}</td>
 <td>bool</td>
 </tr>
 <tr>
-<td>'IS_PAYABLE'</td>
+<td><code>IS_PAYABLE</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := is Arg1 a payable address</td>
 <td>{address}</td>
 <td>bool</td>
 </tr>
 <tr>
-<td>'CREATOR'</td>
+<td><code>CREATOR</code></td>
 <td>Arg0</td>
 <td>Arg0 := contract creator</td>
 <td>{}</td>
 <td>address</td>
 </tr>
 <tr>
-<td>'ECVERIFY_SECP256K1'</td>
+<td><code>ECVERIFY_SECP256K1</code></td>
 <td>Arg0 Arg1 Arg2 Arg3</td>
 <td>Arg0 := ecverify_secp256k1(Hash, Addr, Signature)</td>
 <td>{bytes,bytes,bytes}</td>
 <td>bytes</td>
 </tr>
 <tr>
-<td>'ECRECOVER_SECP256K1'</td>
+<td><code>ECRECOVER_SECP256K1</code></td>
 <td>Arg0 Arg1 Arg2</td>
 <td>Arg0 := ecrecover_secp256k1(Hash, Signature)</td>
 <td>{bytes,bytes}</td>
 <td>bytes</td>
 </tr>
 <tr>
-<td>'ADDRESS_TO_CONTRACT'</td>
+<td><code>ADDRESS_TO_CONTRACT</code></td>
 <td>Arg0 Arg1</td>
 <td>Arg0 := Arg1 - A no-op type conversion</td>
 <td>{address}</td>
 <td>contract</td>
 </tr>
 <tr>
-<td>'DEACTIVATE'</td>
+<td><code>BLS12_381_G1_NEG</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := BLS12_381.g1_neg(Arg1) - Negate a G1-value</td>
+<td>{tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_G1_NORM</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := BLS12_381.g1_normalize(Arg1) - Normalize a G1-value</td>
+<td>{tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_G1_VALID</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := BLS12_381.g1_valid(Arg1) - Check if G1-value is a valid group member</td>
+<td>{tuple}</td>
+<td>bool</td>
+</tr>
+<tr>
+<td><code>BLS12_381_G1_IS_ZERO</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := BLS12_381.g1_is_zero(Arg1) - Check if G1-value is zero</td>
+<td>{tuple}</td>
+<td>bool</td>
+</tr>
+<tr>
+<td><code>BLS12_381_G1_ADD</code></td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := BLS12_381.g1_add(Arg1, Arg2) - Add two G1-values</td>
+<td>{tuple,tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_G1_MUL</code></td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := BLS12_381.g1_mul(Arg1, Arg2) - Scalar multiplication for a G1-value (Arg1), and an Fr-value</td>
+<td>{tuple,tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_G2_NEG</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := BLS12_381.g2_neg(Arg1) - Negate a G2-value</td>
+<td>{tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_G2_NORM</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := BLS12_381.g2_normalize(Arg1) - Normalize a G2-value</td>
+<td>{tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_G2_VALID</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := BLS12_381.g2_valid(Arg1) - Check if G2-value is a valid group member</td>
+<td>{tuple}</td>
+<td>bool</td>
+</tr>
+<tr>
+<td><code>BLS12_381_G2_IS_ZERO</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := BLS12_381.g2_is_zero(Arg1) - Check if G2-value is zero</td>
+<td>{tuple}</td>
+<td>bool</td>
+</tr>
+<tr>
+<td><code>BLS12_381_G2_ADD</code></td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := BLS12_381.g2_add(Arg1, Arg2) - Add two G2-values</td>
+<td>{tuple,tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_G2_MUL</code></td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := BLS12_381.g2_mul(Arg1, Arg2) - Scalar multiplication for a G2-value (Arg2), and an Fr-value</td>
+<td>{tuple,tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_GT_INV</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := BLS12_381.gt_inv(Arg1) - Invert a GT-value</td>
+<td>{tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_GT_ADD</code></td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := BLS12_381.gt_add(Arg1, Arg2) - Add two GT-values</td>
+<td>{tuple,tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_GT_MUL</code></td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := BLS12_381.gt_mul(Arg1, Arg2) - Multiply two GT-values</td>
+<td>{tuple,tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_GT_POW</code></td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := BLS12_381.gt_pow(Arg1, Arg2) - Scalar exponentiation for a GT-value (Arg2), and an Fr-value</td>
+<td>{tuple,tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_GT_IS_ONE</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := BLS12_381.gt_is_one(Arg1) - Check if a GT value is "one"</td>
+<td>{tuple}</td>
+<td>bool</td>
+</tr>
+<tr>
+<td><code>BLS12_381_PAIRING</code></td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := BLS12_381.pairing(Arg1, Arg2) - Find the pairing of a G1-value (Arg1) and a G2-value (Arg2)</td>
+<td>{tuple,tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_MILLER_LOOP</code></td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Arg0 := BLS12_381.miller_loop(Arg1, Arg2) - Do the Miller-loop step of pairing for a G1-value (Arg1) and a G2-value (Arg2)</td>
+<td>{tuple,tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_FINAL_EXP</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := BLS12_381.final_exp(Arg1) - Do the final exponentiation in pairing</td>
+<td>{tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_INT_TO_FR</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := to_montgomery(Arg1) - Convert (Big)integer to Montgomery representation (32 bytes)</td>
+<td>{tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_INT_TO_FP</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := to_montgomery(Arg1) - Convert (Big)integer to Montgomery representation (48 bytes)</td>
+<td>{tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_FR_TO_INT</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := from_montgomery(Arg1) - Convert Montgomery representation (32 bytes) to integer</td>
+<td>{tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>BLS12_381_FP_TO_INT</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := from_montgomery(Arg1) - Convert Montgomery representation (48 bytes) to integer</td>
+<td>{tuple}</td>
+<td>tuple</td>
+</tr>
+<tr>
+<td><code>AENS_LOOKUP</code></td>
+<td>Arg0 Arg1</td>
+<td>Lookup the name of Arg0. Returns option(AENS.name)</td>
+<td>{string}</td>
+<td>variant</td>
+</tr>
+<tr>
+<td><code>ORACLE_EXPIRY</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := expiry block for oracle Arg1</td>
+<td>{oracle}</td>
+<td>int</td>
+</tr>
+<tr>
+<td><code>AUTH_TX</code></td>
+<td>Arg0</td>
+<td>If in GA authentication context return Some(Tx) otherwise None.</td>
+<td>{}</td>
+<td>variant</td>
+</tr>
+<tr>
+<td><code>STR_TO_LIST</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := string converted to list of characters</td>
+<td>{string}</td>
+<td>list</td>
+</tr>
+<tr>
+<td><code>STR_FROM_LIST</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := string converted from list of characters</td>
+<td>{list}</td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>STR_TO_UPPER</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := to_upper(string)</td>
+<td>{string}</td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>STR_TO_LOWER</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := to_lower(string)</td>
+<td>{string}</td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>CHAR_TO_INT</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := integer representation of UTF-8 character</td>
+<td>{char}</td>
+<td>int</td>
+</tr>
+<tr>
+<td><code>CHAR_FROM_INT</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := Some(UTF-8 character) from integer if valid, None if not valid.</td>
+<td>{int}</td>
+<td>variant</td>
+</tr>
+<tr>
+<td><code>CALL_PGR</code></td>
+<td>Arg0 Identifier Arg2 Arg3 Arg4 Arg5 Arg6</td>
+<td>Potentially protected remote call. Arg5 is protected flag, otherwise as CALL_GR.</td>
+<td>{contract,string,typerep,typerep,integer,integer,bool}</td>
+<td>variant</td>
+</tr>
+<tr>
+<td><code>CREATE</code></td>
+<td>Arg0 Arg1 Arg2</td>
+<td>Deploys a contract with a bytecode Arg1 and value Arg3. The <code>init</code> arguments should be placed on the stack and match the type in Arg2. Writes contract address to the top of the accumulator stack. If an account on the resulting address did exist before the call, the <code>payable</code> flag will be updated.</td>
+<td>{contract_bytearray,typerep,integer}</td>
+<td>contract</td>
+</tr>
+<tr>
+<td><code>CLONE</code></td>
+<td>Arg0 Arg1 Arg2 Arg3</td>
+<td>Clones the contract under Arg1 and deploys it with value of Arg3. The <code>init</code> arguments should be placed on the stack and match the type in Arg2. Writes contract (or <code>None</code> on fail when protected) to the top of the accumulator stack. Does not copy the existing contract's store – it will be initialized by a fresh call to the <code>init</code> function. If an account on the resulting address did exist before the call, the <code>payable</code> flag will be updated.</td>
+<td>{contract,typerep,integer,bool}</td>
+<td>any</td>
+</tr>
+<tr>
+<td><code>CLONE_G</code></td>
+<td>Arg0 Arg1 Arg2 Arg3 Arg4</td>
+<td>Like <code>CLONE</code> but additionally limits the gas of the <code>init</code> call by Arg3</td>
+<td>{contract,typerep,integer,integer,bool}</td>
+<td>any</td>
+</tr>
+<tr>
+<td><code>BYTECODE_HASH</code></td>
+<td>Arg0 Arg1</td>
+<td>Arg0 := hash of the deserialized contract's bytecode under address given in Arg1 (or <code>None</code> on fail). Fails on AEVM contracts and contracts deployed before Iris.</td>
+<td>{contract}</td>
+<td>variant</td>
+</tr>
+<tr>
+<td><code>FEE</code></td>
+<td>Arg0</td>
+<td>Arg0 := The fee for the current call tx.</td>
+<td>{}</td>
+<td>integer</td>
+</tr>
+<tr>
+<td><code>DEACTIVATE</code></td>
 <td></td>
 <td>Mark the current contract for deactivation.</td>
 <td>{}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'ABORT'</td>
+<td><code>ABORT</code></td>
 <td>Arg0</td>
 <td>Abort execution (dont use all gas) with error message in Arg0.</td>
 <td>{string}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'EXIT'</td>
+<td><code>EXIT</code></td>
 <td>Arg0</td>
 <td>Abort execution (use upp all gas) with error message in Arg0.</td>
 <td>{string}</td>
 <td>none</td>
 </tr>
 <tr>
-<td>'NOP'</td>
+<td><code>NOP</code></td>
 <td></td>
 <td>The no op. does nothing.</td>
 <td>{}</td>
@@ -4643,138 +4916,138 @@ Writing to the accumulator pushes a value to the stack.</p>
 <table>
 <thead>
 <tr>
-<th>Op</th>
+<th>Opcode</th>
 <th>Name</th>
-<th>Ends BB</th>
-<th>In Auth</th>
-<th>Offchain</th>
-<th>Base Gas</th>
+<th>Ends basic block</th>
+<th>Allowed in auth</th>
+<th>Allowed offchain</th>
+<th>Gas cost</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>0x00</td>
-<td>'RETURN'</td>
+<td>0x0</td>
+<td><code>RETURN</code></td>
 <td>true</td>
 <td>true</td>
 <td>true</td>
 <td>10</td>
 </tr>
 <tr>
-<td>0x01</td>
-<td>'RETURNR'</td>
+<td>0x1</td>
+<td><code>RETURNR</code></td>
 <td>true</td>
 <td>true</td>
 <td>true</td>
 <td>10</td>
 </tr>
 <tr>
-<td>0x02</td>
-<td>'CALL'</td>
+<td>0x2</td>
+<td><code>CALL</code></td>
 <td>true</td>
 <td>true</td>
 <td>true</td>
 <td>10</td>
 </tr>
 <tr>
-<td>0x03</td>
-<td>'CALL_R'</td>
+<td>0x3</td>
+<td><code>CALL_R</code></td>
 <td>true</td>
 <td>false</td>
 <td>true</td>
 <td>100</td>
 </tr>
 <tr>
-<td>0x04</td>
-<td>'CALL_T'</td>
+<td>0x4</td>
+<td><code>CALL_T</code></td>
 <td>true</td>
 <td>true</td>
 <td>true</td>
 <td>10</td>
 </tr>
 <tr>
-<td>0x05</td>
-<td>'CALL_GR'</td>
+<td>0x5</td>
+<td><code>CALL_GR</code></td>
 <td>true</td>
 <td>false</td>
 <td>true</td>
 <td>100</td>
 </tr>
 <tr>
-<td>0x06</td>
-<td>'JUMP'</td>
+<td>0x6</td>
+<td><code>JUMP</code></td>
 <td>true</td>
 <td>true</td>
 <td>true</td>
 <td>10</td>
 </tr>
 <tr>
-<td>0x07</td>
-<td>'JUMPIF'</td>
+<td>0x7</td>
+<td><code>JUMPIF</code></td>
 <td>true</td>
 <td>true</td>
 <td>true</td>
 <td>10</td>
 </tr>
 <tr>
-<td>0x08</td>
-<td>'SWITCH_V2'</td>
+<td>0x8</td>
+<td><code>SWITCH_V2</code></td>
 <td>true</td>
 <td>true</td>
 <td>true</td>
 <td>10</td>
 </tr>
 <tr>
-<td>0x09</td>
-<td>'SWITCH_V3'</td>
+<td>0x9</td>
+<td><code>SWITCH_V3</code></td>
 <td>true</td>
 <td>true</td>
 <td>true</td>
 <td>10</td>
 </tr>
 <tr>
-<td>0x0a</td>
-<td>'SWITCH_VN'</td>
+<td>0xa</td>
+<td><code>SWITCH_VN</code></td>
 <td>true</td>
 <td>true</td>
 <td>true</td>
 <td>10</td>
 </tr>
 <tr>
-<td>0x0b</td>
-<td>'CALL_VALUE'</td>
+<td>0xb</td>
+<td><code>CALL_VALUE</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
 <td>10</td>
 </tr>
 <tr>
-<td>0x0c</td>
-<td>'PUSH'</td>
+<td>0xc</td>
+<td><code>PUSH</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
 <td>10</td>
 </tr>
 <tr>
-<td>0x0d</td>
-<td>'DUPA'</td>
+<td>0xd</td>
+<td><code>DUPA</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
 <td>10</td>
 </tr>
 <tr>
-<td>0x0e</td>
-<td>'DUP'</td>
+<td>0xe</td>
+<td><code>DUP</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
 <td>10</td>
 </tr>
 <tr>
-<td>0x0f</td>
-<td>'POP'</td>
+<td>0xf</td>
+<td><code>POP</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4782,7 +5055,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x10</td>
-<td>'INCA'</td>
+<td><code>INCA</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4790,7 +5063,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x11</td>
-<td>'INC'</td>
+<td><code>INC</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4798,7 +5071,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x12</td>
-<td>'DECA'</td>
+<td><code>DECA</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4806,7 +5079,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x13</td>
-<td>'DEC'</td>
+<td><code>DEC</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4814,7 +5087,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x14</td>
-<td>'ADD'</td>
+<td><code>ADD</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4822,7 +5095,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x15</td>
-<td>'SUB'</td>
+<td><code>SUB</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4830,7 +5103,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x16</td>
-<td>'MUL'</td>
+<td><code>MUL</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4838,7 +5111,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x17</td>
-<td>'DIV'</td>
+<td><code>DIV</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4846,7 +5119,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x18</td>
-<td>'MOD'</td>
+<td><code>MOD</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4854,7 +5127,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x19</td>
-<td>'POW'</td>
+<td><code>POW</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4862,7 +5135,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x1a</td>
-<td>'STORE'</td>
+<td><code>STORE</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4870,7 +5143,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x1b</td>
-<td>'SHA3'</td>
+<td><code>SHA3</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4878,7 +5151,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x1c</td>
-<td>'SHA256'</td>
+<td><code>SHA256</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4886,7 +5159,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x1d</td>
-<td>'BLAKE2B'</td>
+<td><code>BLAKE2B</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4894,7 +5167,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x1e</td>
-<td>'LT'</td>
+<td><code>LT</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4902,7 +5175,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x1f</td>
-<td>'GT'</td>
+<td><code>GT</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4910,7 +5183,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x20</td>
-<td>'EQ'</td>
+<td><code>EQ</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4918,7 +5191,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x21</td>
-<td>'ELT'</td>
+<td><code>ELT</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4926,7 +5199,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x22</td>
-<td>'EGT'</td>
+<td><code>EGT</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4934,7 +5207,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x23</td>
-<td>'NEQ'</td>
+<td><code>NEQ</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4942,7 +5215,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x24</td>
-<td>'AND'</td>
+<td><code>AND</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4950,7 +5223,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x25</td>
-<td>'OR'</td>
+<td><code>OR</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4958,7 +5231,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x26</td>
-<td>'NOT'</td>
+<td><code>NOT</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4966,7 +5239,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x27</td>
-<td>'TUPLE'</td>
+<td><code>TUPLE</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4974,7 +5247,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x28</td>
-<td>'ELEMENT'</td>
+<td><code>ELEMENT</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4982,7 +5255,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x29</td>
-<td>'SETELEMENT'</td>
+<td><code>SETELEMENT</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4990,7 +5263,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x2a</td>
-<td>'MAP_EMPTY'</td>
+<td><code>MAP_EMPTY</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -4998,7 +5271,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x2b</td>
-<td>'MAP_LOOKUP'</td>
+<td><code>MAP_LOOKUP</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5006,7 +5279,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x2c</td>
-<td>'MAP_LOOKUPD'</td>
+<td><code>MAP_LOOKUPD</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5014,7 +5287,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x2d</td>
-<td>'MAP_UPDATE'</td>
+<td><code>MAP_UPDATE</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5022,7 +5295,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x2e</td>
-<td>'MAP_DELETE'</td>
+<td><code>MAP_DELETE</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5030,7 +5303,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x2f</td>
-<td>'MAP_MEMBER'</td>
+<td><code>MAP_MEMBER</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5038,7 +5311,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x30</td>
-<td>'MAP_FROM_LIST'</td>
+<td><code>MAP_FROM_LIST</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5046,7 +5319,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x31</td>
-<td>'MAP_SIZE'</td>
+<td><code>MAP_SIZE</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5054,7 +5327,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x32</td>
-<td>'MAP_TO_LIST'</td>
+<td><code>MAP_TO_LIST</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5062,7 +5335,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x33</td>
-<td>'IS_NIL'</td>
+<td><code>IS_NIL</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5070,7 +5343,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x34</td>
-<td>'CONS'</td>
+<td><code>CONS</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5078,7 +5351,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x35</td>
-<td>'HD'</td>
+<td><code>HD</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5086,7 +5359,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x36</td>
-<td>'TL'</td>
+<td><code>TL</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5094,7 +5367,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x37</td>
-<td>'LENGTH'</td>
+<td><code>LENGTH</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5102,7 +5375,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x38</td>
-<td>'NIL'</td>
+<td><code>NIL</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5110,7 +5383,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x39</td>
-<td>'APPEND'</td>
+<td><code>APPEND</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5118,7 +5391,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x3a</td>
-<td>'STR_JOIN'</td>
+<td><code>STR_JOIN</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5126,7 +5399,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x3b</td>
-<td>'INT_TO_STR'</td>
+<td><code>INT_TO_STR</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5134,7 +5407,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x3c</td>
-<td>'ADDR_TO_STR'</td>
+<td><code>ADDR_TO_STR</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5142,7 +5415,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x3d</td>
-<td>'STR_REVERSE'</td>
+<td><code>STR_REVERSE</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5150,7 +5423,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x3e</td>
-<td>'STR_LENGTH'</td>
+<td><code>STR_LENGTH</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5158,7 +5431,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x3f</td>
-<td>'BYTES_TO_INT'</td>
+<td><code>BYTES_TO_INT</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5166,7 +5439,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x40</td>
-<td>'BYTES_TO_STR'</td>
+<td><code>BYTES_TO_STR</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5174,7 +5447,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x41</td>
-<td>'BYTES_CONCAT'</td>
+<td><code>BYTES_CONCAT</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5182,7 +5455,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x42</td>
-<td>'BYTES_SPLIT'</td>
+<td><code>BYTES_SPLIT</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5190,7 +5463,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x43</td>
-<td>'INT_TO_ADDR'</td>
+<td><code>INT_TO_ADDR</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5198,7 +5471,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x44</td>
-<td>'VARIANT'</td>
+<td><code>VARIANT</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5206,7 +5479,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x45</td>
-<td>'VARIANT_TEST'</td>
+<td><code>VARIANT_TEST</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5214,7 +5487,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x46</td>
-<td>'VARIANT_ELEMENT'</td>
+<td><code>VARIANT_ELEMENT</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5222,7 +5495,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x47</td>
-<td>'BITS_NONEA'</td>
+<td><code>BITS_NONEA</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5230,7 +5503,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x48</td>
-<td>'BITS_NONE'</td>
+<td><code>BITS_NONE</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5238,7 +5511,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x49</td>
-<td>'BITS_ALLA'</td>
+<td><code>BITS_ALLA</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5246,7 +5519,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x4a</td>
-<td>'BITS_ALL'</td>
+<td><code>BITS_ALL</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5254,7 +5527,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x4b</td>
-<td>'BITS_ALL_N'</td>
+<td><code>BITS_ALL_N</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5262,7 +5535,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x4c</td>
-<td>'BITS_SET'</td>
+<td><code>BITS_SET</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5270,7 +5543,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x4d</td>
-<td>'BITS_CLEAR'</td>
+<td><code>BITS_CLEAR</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5278,7 +5551,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x4e</td>
-<td>'BITS_TEST'</td>
+<td><code>BITS_TEST</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5286,7 +5559,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x4f</td>
-<td>'BITS_SUM'</td>
+<td><code>BITS_SUM</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5294,7 +5567,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x50</td>
-<td>'BITS_OR'</td>
+<td><code>BITS_OR</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5302,7 +5575,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x51</td>
-<td>'BITS_AND'</td>
+<td><code>BITS_AND</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5310,7 +5583,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x52</td>
-<td>'BITS_DIFF'</td>
+<td><code>BITS_DIFF</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5318,7 +5591,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x53</td>
-<td>'BALANCE'</td>
+<td><code>BALANCE</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5326,7 +5599,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x54</td>
-<td>'ORIGIN'</td>
+<td><code>ORIGIN</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5334,7 +5607,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x55</td>
-<td>'CALLER'</td>
+<td><code>CALLER</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5342,15 +5615,15 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x56</td>
-<td>'BLOCKHASH'</td>
+<td><code>BLOCKHASH</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
-<td>10</td>
+<td>1000 (iris), 10 (lima)</td>
 </tr>
 <tr>
 <td>0x57</td>
-<td>'BENEFICIARY'</td>
+<td><code>BENEFICIARY</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5358,7 +5631,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x58</td>
-<td>'TIMESTAMP'</td>
+<td><code>TIMESTAMP</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5366,7 +5639,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x59</td>
-<td>'GENERATION'</td>
+<td><code>GENERATION</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5374,7 +5647,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x5a</td>
-<td>'MICROBLOCK'</td>
+<td><code>MICROBLOCK</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5382,7 +5655,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x5b</td>
-<td>'DIFFICULTY'</td>
+<td><code>DIFFICULTY</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5390,7 +5663,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x5c</td>
-<td>'GASLIMIT'</td>
+<td><code>GASLIMIT</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5398,7 +5671,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x5d</td>
-<td>'GAS'</td>
+<td><code>GAS</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5406,7 +5679,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x5e</td>
-<td>'ADDRESS'</td>
+<td><code>ADDRESS</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5414,7 +5687,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x5f</td>
-<td>'GASPRICE'</td>
+<td><code>GASPRICE</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5422,7 +5695,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x60</td>
-<td>'LOG0'</td>
+<td><code>LOG0</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5430,7 +5703,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x61</td>
-<td>'LOG1'</td>
+<td><code>LOG1</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5438,7 +5711,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x62</td>
-<td>'LOG2'</td>
+<td><code>LOG2</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5446,7 +5719,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x63</td>
-<td>'LOG3'</td>
+<td><code>LOG3</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5454,7 +5727,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x64</td>
-<td>'LOG4'</td>
+<td><code>LOG4</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5462,127 +5735,127 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x65</td>
-<td>'SPEND'</td>
+<td><code>SPEND</code></td>
 <td>false</td>
 <td>false</td>
 <td>true</td>
-<td>100</td>
+<td>5000 (iris), 100 (lima)</td>
 </tr>
 <tr>
 <td>0x66</td>
-<td>'ORACLE_REGISTER'</td>
+<td><code>ORACLE_REGISTER</code></td>
 <td>false</td>
 <td>false</td>
 <td>false</td>
-<td>100</td>
+<td>10000 (iris), 100 (lima)</td>
 </tr>
 <tr>
 <td>0x67</td>
-<td>'ORACLE_QUERY'</td>
+<td><code>ORACLE_QUERY</code></td>
 <td>false</td>
 <td>false</td>
 <td>false</td>
-<td>100</td>
+<td>10000 (iris), 100 (lima)</td>
 </tr>
 <tr>
 <td>0x68</td>
-<td>'ORACLE_RESPOND'</td>
+<td><code>ORACLE_RESPOND</code></td>
 <td>false</td>
 <td>false</td>
 <td>false</td>
-<td>100</td>
+<td>10000 (iris), 100 (lima)</td>
 </tr>
 <tr>
 <td>0x69</td>
-<td>'ORACLE_EXTEND'</td>
+<td><code>ORACLE_EXTEND</code></td>
 <td>false</td>
 <td>false</td>
 <td>false</td>
-<td>100</td>
+<td>10000 (iris), 100 (lima)</td>
 </tr>
 <tr>
 <td>0x6a</td>
-<td>'ORACLE_GET_ANSWER'</td>
+<td><code>ORACLE_GET_ANSWER</code></td>
 <td>false</td>
 <td>false</td>
 <td>true</td>
-<td>100</td>
+<td>2000 (iris), 100 (lima)</td>
 </tr>
 <tr>
 <td>0x6b</td>
-<td>'ORACLE_GET_QUESTION'</td>
+<td><code>ORACLE_GET_QUESTION</code></td>
 <td>false</td>
 <td>false</td>
 <td>true</td>
-<td>100</td>
+<td>2000 (iris), 100 (lima)</td>
 </tr>
 <tr>
 <td>0x6c</td>
-<td>'ORACLE_QUERY_FEE'</td>
+<td><code>ORACLE_QUERY_FEE</code></td>
 <td>false</td>
 <td>false</td>
 <td>true</td>
-<td>100</td>
+<td>2000 (iris), 100 (lima)</td>
 </tr>
 <tr>
 <td>0x6d</td>
-<td>'AENS_RESOLVE'</td>
+<td><code>AENS_RESOLVE</code></td>
 <td>false</td>
 <td>false</td>
 <td>true</td>
-<td>100</td>
+<td>2000 (iris), 100 (lima)</td>
 </tr>
 <tr>
 <td>0x6e</td>
-<td>'AENS_PRECLAIM'</td>
+<td><code>AENS_PRECLAIM</code></td>
 <td>false</td>
 <td>false</td>
 <td>false</td>
-<td>100</td>
+<td>10000 (iris), 100 (lima)</td>
 </tr>
 <tr>
 <td>0x6f</td>
-<td>'AENS_CLAIM'</td>
+<td><code>AENS_CLAIM</code></td>
 <td>false</td>
 <td>false</td>
 <td>false</td>
-<td>100</td>
+<td>10000 (iris), 100 (lima)</td>
 </tr>
 <tr>
 <td>0x70</td>
-<td>'AENS_UPDATE'</td>
+<td><code>AENS_UPDATE</code></td>
 <td>false</td>
 <td>false</td>
 <td>false</td>
-<td>100</td>
+<td>10000 (iris), 100 (lima)</td>
 </tr>
 <tr>
 <td>0x71</td>
-<td>'AENS_TRANSFER'</td>
+<td><code>AENS_TRANSFER</code></td>
 <td>false</td>
 <td>false</td>
 <td>false</td>
-<td>100</td>
+<td>10000 (iris), 100 (lima)</td>
 </tr>
 <tr>
 <td>0x72</td>
-<td>'AENS_REVOKE'</td>
+<td><code>AENS_REVOKE</code></td>
 <td>false</td>
 <td>false</td>
 <td>false</td>
-<td>100</td>
+<td>10000 (iris), 100 (lima)</td>
 </tr>
 <tr>
 <td>0x73</td>
-<td>'BALANCE_OTHER'</td>
+<td><code>BALANCE_OTHER</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
-<td>50</td>
+<td>2000 (iris), 50 (lima)</td>
 </tr>
 <tr>
 <td>0x74</td>
-<td>'VERIFY_SIG'</td>
+<td><code>VERIFY_SIG</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5590,7 +5863,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x75</td>
-<td>'VERIFY_SIG_SECP256K1'</td>
+<td><code>VERIFY_SIG_SECP256K1</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5598,7 +5871,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x76</td>
-<td>'CONTRACT_TO_ADDRESS'</td>
+<td><code>CONTRACT_TO_ADDRESS</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5606,7 +5879,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x77</td>
-<td>'AUTH_TX_HASH'</td>
+<td><code>AUTH_TX_HASH</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5614,7 +5887,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x78</td>
-<td>'ORACLE_CHECK'</td>
+<td><code>ORACLE_CHECK</code></td>
 <td>false</td>
 <td>false</td>
 <td>true</td>
@@ -5622,7 +5895,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x79</td>
-<td>'ORACLE_CHECK_QUERY'</td>
+<td><code>ORACLE_CHECK_QUERY</code></td>
 <td>false</td>
 <td>false</td>
 <td>true</td>
@@ -5630,7 +5903,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x7a</td>
-<td>'IS_ORACLE'</td>
+<td><code>IS_ORACLE</code></td>
 <td>false</td>
 <td>false</td>
 <td>true</td>
@@ -5638,7 +5911,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x7b</td>
-<td>'IS_CONTRACT'</td>
+<td><code>IS_CONTRACT</code></td>
 <td>false</td>
 <td>false</td>
 <td>true</td>
@@ -5646,7 +5919,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x7c</td>
-<td>'IS_PAYABLE'</td>
+<td><code>IS_PAYABLE</code></td>
 <td>false</td>
 <td>false</td>
 <td>true</td>
@@ -5654,7 +5927,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x7d</td>
-<td>'CREATOR'</td>
+<td><code>CREATOR</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5662,7 +5935,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x7e</td>
-<td>'ECVERIFY_SECP256K1'</td>
+<td><code>ECVERIFY_SECP256K1</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5670,7 +5943,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x7f</td>
-<td>'ECRECOVER_SECP256K1'</td>
+<td><code>ECRECOVER_SECP256K1</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5678,7 +5951,319 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0x80</td>
-<td>'ADDRESS_TO_CONTRACT'</td>
+<td><code>ADDRESS_TO_CONTRACT</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0x81</td>
+<td><code>BLS12_381_G1_NEG</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x82</td>
+<td><code>BLS12_381_G1_NORM</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x83</td>
+<td><code>BLS12_381_G1_VALID</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>2000</td>
+</tr>
+<tr>
+<td>0x84</td>
+<td><code>BLS12_381_G1_IS_ZERO</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>30</td>
+</tr>
+<tr>
+<td>0x85</td>
+<td><code>BLS12_381_G1_ADD</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x86</td>
+<td><code>BLS12_381_G1_MUL</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>0x87</td>
+<td><code>BLS12_381_G2_NEG</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x88</td>
+<td><code>BLS12_381_G2_NORM</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x89</td>
+<td><code>BLS12_381_G2_VALID</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>2000</td>
+</tr>
+<tr>
+<td>0x8a</td>
+<td><code>BLS12_381_G2_IS_ZERO</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>30</td>
+</tr>
+<tr>
+<td>0x8b</td>
+<td><code>BLS12_381_G2_ADD</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x8c</td>
+<td><code>BLS12_381_G2_MUL</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>0x8d</td>
+<td><code>BLS12_381_GT_INV</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x8e</td>
+<td><code>BLS12_381_GT_ADD</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x8f</td>
+<td><code>BLS12_381_GT_MUL</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x90</td>
+<td><code>BLS12_381_GT_POW</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>2000</td>
+</tr>
+<tr>
+<td>0x91</td>
+<td><code>BLS12_381_GT_IS_ONE</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>30</td>
+</tr>
+<tr>
+<td>0x92</td>
+<td><code>BLS12_381_PAIRING</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>12000</td>
+</tr>
+<tr>
+<td>0x93</td>
+<td><code>BLS12_381_MILLER_LOOP</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>5000</td>
+</tr>
+<tr>
+<td>0x94</td>
+<td><code>BLS12_381_FINAL_EXP</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>7000</td>
+</tr>
+<tr>
+<td>0x95</td>
+<td><code>BLS12_381_INT_TO_FR</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>30</td>
+</tr>
+<tr>
+<td>0x96</td>
+<td><code>BLS12_381_INT_TO_FP</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>30</td>
+</tr>
+<tr>
+<td>0x97</td>
+<td><code>BLS12_381_FR_TO_INT</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>30</td>
+</tr>
+<tr>
+<td>0x98</td>
+<td><code>BLS12_381_FP_TO_INT</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>30</td>
+</tr>
+<tr>
+<td>0x99</td>
+<td><code>AENS_LOOKUP</code></td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>2000</td>
+</tr>
+<tr>
+<td>0x9a</td>
+<td><code>ORACLE_EXPIRY</code></td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>2000</td>
+</tr>
+<tr>
+<td>0x9b</td>
+<td><code>AUTH_TX</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x9c</td>
+<td><code>STR_TO_LIST</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x9d</td>
+<td><code>STR_FROM_LIST</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x9e</td>
+<td><code>STR_TO_UPPER</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0x9f</td>
+<td><code>STR_TO_LOWER</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0xa0</td>
+<td><code>CHAR_TO_INT</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0xa1</td>
+<td><code>CHAR_FROM_INT</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>10</td>
+</tr>
+<tr>
+<td>0xa2</td>
+<td><code>CALL_PGR</code></td>
+<td>true</td>
+<td>false</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0xa3</td>
+<td><code>CREATE</code></td>
+<td>true</td>
+<td>false</td>
+<td>true</td>
+<td>10000</td>
+</tr>
+<tr>
+<td>0xa4</td>
+<td><code>CLONE</code></td>
+<td>true</td>
+<td>false</td>
+<td>true</td>
+<td>5000</td>
+</tr>
+<tr>
+<td>0xa5</td>
+<td><code>CLONE_G</code></td>
+<td>true</td>
+<td>false</td>
+<td>true</td>
+<td>5000</td>
+</tr>
+<tr>
+<td>0xa6</td>
+<td><code>BYTECODE_HASH</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>100</td>
+</tr>
+<tr>
+<td>0xa7</td>
+<td><code>FEE</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5686,7 +6271,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0xfa</td>
-<td>'DEACTIVATE'</td>
+<td><code>DEACTIVATE</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>
@@ -5694,7 +6279,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0xfb</td>
-<td>'ABORT'</td>
+<td><code>ABORT</code></td>
 <td>true</td>
 <td>true</td>
 <td>true</td>
@@ -5702,7 +6287,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0xfc</td>
-<td>'EXIT'</td>
+<td><code>EXIT</code></td>
 <td>true</td>
 <td>true</td>
 <td>true</td>
@@ -5710,7 +6295,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 </tr>
 <tr>
 <td>0xfd</td>
-<td>'NOP'</td>
+<td><code>NOP</code></td>
 <td>false</td>
 <td>true</td>
 <td>true</td>

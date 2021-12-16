@@ -2717,8 +2717,8 @@ disabled.</p>
 <p>Interaction with the first class objects of the æternity chain (e.g.
 oracles, names, and state channels) is done through calls to a
 built-in contract at address 0.</p>
-<p>The value in the call indicates the tokens that the primop can use from the contract account.
-Unused tokens stay on the contract account.</p>
+<p>The value in the call indicates the coins that the primop can use from the
+contract account. Unused coins stay on the contract account.</p>
 <p>The first argument in the call specifies which primop to call.
 The following arguments are encoded as Sophia data.</p>
 <p>The total gas of the operation is a sum of the base gas and the op gas.</p>
@@ -2902,7 +2902,7 @@ code.</p>
 - type_info - see Type information below
 - byte_code - the actual byte code</p>
 <p>The layout of the encoding can be found
-<a href="https://github.com/aeternity/protocol/blob/master/serializations.md#sophia-byte-code">here</a>. 
+<a href="https://github.com/aeternity/protocol/blob/master/serializations.md#sophia-byte-code">here</a>.
 The encoding is tagged with the compiler version.</p>
 <h4 id="type-information">Type information</h4>
 <p>The type information of each function is encoded in the meta data. The function
@@ -3088,7 +3088,7 @@ compiler is responsible for adding the type representation.</p>
 Sophia contracts than in the EVM. It expects on the stack (top to bottom):
 - <code>Gas</code> - the amount of gas to allocate to the call
 - <code>Address</code> - the address of the contract to call (or 0 for primops)
-- <code>Amount</code> - the amount of tokens to transfer with the call
+- <code>Amount</code> - the amount of coins to transfer with the call
 - <code>Calldata</code> - the calldata value (pair of function hash and arguments)
 - <code>TypeHash</code> - the function hash of primops that have dynamic types
                (e.g., oracles). Otherwise unused.
