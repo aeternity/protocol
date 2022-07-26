@@ -1100,7 +1100,7 @@ account `A`.
 #### Micro Body
 ```
 [ <transactions>    :: [binary()]
-, <proof_of_fraud>> :: [binary()]
+, <proof_of_fraud>  :: [binary()]
 ]
 ```
 NOTE:
