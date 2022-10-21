@@ -14,17 +14,18 @@ the serialization packs the version into one integer.)
 
 The current meaning of the VM field is:
 
-| Value (hex) | Machine            | Description                                    |
-|-------------|--------------------|------------------------------------------------|
-|          00 | none               | NO_VM ("Used" in oracles)                      |
-|          01 | [AEVM_01](aevm.md) | For Sophia contracts on the AEVM               |
-|          02 | [AEVM_01](aevm.md) | For Solidity contracts on the AEVM             |
-|          03 | [AEVM_02](aevm.md) | Improved AEVM for Sophia, Minerva release      |
-|          04 | [AEVM_03](aevm.md) | Improved AEVM for Sophia, Fortuna release      |
-|          05 | [FATE_01](fate.md) | For Sophia contracts using FATE (Lima release) |
-|          06 | [AEVM_04](aevm.md) | Improved AEVM for Sophia, Lima release         |
-|          07 | [FATE_02](fate.md) | For Sophia contracts using FATE (Iris release) |
-|     08-FFFF |                    | UNUSED                                         |
+| Value (hex) | Machine            | Description                                     |
+|-------------|--------------------|-------------------------------------------------|
+|          00 | none               | NO_VM ("Used" in oracles)                       |
+|          01 | [AEVM_01](aevm.md) | For Sophia contracts on the AEVM                |
+|          02 | [AEVM_01](aevm.md) | For Solidity contracts on the AEVM              |
+|          03 | [AEVM_02](aevm.md) | Improved AEVM for Sophia, Minerva release       |
+|          04 | [AEVM_03](aevm.md) | Improved AEVM for Sophia, Fortuna release       |
+|          05 | [FATE_01](fate.md) | For Sophia contracts using FATE (Lima release)  |
+|          06 | [AEVM_04](aevm.md) | Improved AEVM for Sophia, Lima release          |
+|          07 | [FATE_02](fate.md) | For Sophia contracts using FATE (Iris release)  |
+|          08 | [FATE_03](fate.md) | For Sophia contracts using FATE (Ceres release) |
+|     09-FFFF |                    | UNUSED                                          |
 
 The current meaning of the ABI field is:
 
@@ -38,22 +39,25 @@ The current meaning of the ABI field is:
 
 Which VM versions are accepted are different based on consensus protocol versions.
 
-| Protocol version | Operation            | Accepted VM values                       | Accepted ABI values |
-|------------------|----------------------|------------------------------------------|---------------------|
-| Roma             | contract call/create | `0x1`                                    | `0x1`               |
-|                  | oracle register      | (Not applicable.)                        | `0x0`, `0x1`        |
-| Minerva          | contract call        | `0x1`, `0x3`                             | `0x1`               |
-|                  | contract create      | `0x3`                                    | `0x1`               |
-|                  | oracle register      | (Not applicable.)                        | `0x0`, `0x1`        |
-| Fortuna          | contract call        | `0x1`, `0x3`, `0x4`                      | `0x1`               |
-|                  | contract create      | `0x3`, `0x4`                             | `0x1`               |
-|                  | oracle register      | (Not applicable.)                        | `0x0`, `0x1`        |
-| Lima             | contract call        | `0x1`, `0x3`, `0x4`, `0x5`, `0x6`        | `0x1`, `0x3`        |
-|                  | contract create      | `0x5`, `0x6`                             | `0x1`, `0x3`        |
-|                  | oracle register      | (Not applicable.)                        | `0x0`, `0x1`, `0x3` |
-| Iris             | contract call        | `0x1`, `0x3`, `0x4`, `0x5`, `0x6`, `0x7` | `0x1`, `0x3`        |
-|                  | contract create      | `0x7`                                    | `0x3`               |
-|                  | oracle register      | (Not applicable.)                        | `0x0`, `0x3`        |
+| Protocol version | Operation            | Accepted VM values                              | Accepted ABI values |
+|------------------|----------------------|-------------------------------------------------|---------------------|
+| Roma             | contract call/create | `0x1`                                           | `0x1`               |
+|                  | oracle register      | (Not applicable.)                               | `0x0`, `0x1`        |
+| Minerva          | contract call        | `0x1`, `0x3`                                    | `0x1`               |
+|                  | contract create      | `0x3`                                           | `0x1`               |
+|                  | oracle register      | (Not applicable.)                               | `0x0`, `0x1`        |
+| Fortuna          | contract call        | `0x1`, `0x3`, `0x4`                             | `0x1`               |
+|                  | contract create      | `0x3`, `0x4`                                    | `0x1`               |
+|                  | oracle register      | (Not applicable.)                               | `0x0`, `0x1`        |
+| Lima             | contract call        | `0x1`, `0x3`, `0x4`, `0x5`, `0x6`               | `0x1`, `0x3`        |
+|                  | contract create      | `0x5`, `0x6`                                    | `0x1`, `0x3`        |
+|                  | oracle register      | (Not applicable.)                               | `0x0`, `0x1`, `0x3` |
+| Iris             | contract call        | `0x1`, `0x3`, `0x4`, `0x5`, `0x6`, `0x7`        | `0x1`, `0x3`        |
+|                  | contract create      | `0x7`                                           | `0x3`               |
+|                  | oracle register      | (Not applicable.)                               | `0x0`, `0x3`        |
+| Ceres            | contract call        | `0x1`, `0x3`, `0x4`, `0x5`, `0x6`, `0x7`, `0x8` | `0x1`, `0x3`        |
+|                  | contract create      | `0x8`                                           | `0x3`               |
+|                  | oracle register      | (Not applicable.)                               | `0x0`, `0x3`        |
 
 The number after the machine name designates the version of the machine.
 In the future new versions of the machine can be implemented with new instructions,
@@ -98,3 +102,9 @@ See [The AEVM](./aevm.md).
   * `Chain.create`, `Chain.clone`, `Chain.bytecode_hash`, `Call.fee`
 * Bug fixes
 * Gas model adjustments
+### FATE_02 -> FATE_03
+* Added operations:
+  * bitwise operations on integers (`band`, `bor`, `bxor`, `bnot`, `<<` and `>>`)
+  * Address.to_bytes - converting an address to its binary representation
+  * Int.mulmod - a combined multiplication and modulus operation for efficiency
+  * Crypto.poseidon - a ZK/SNARK friendly hash function
