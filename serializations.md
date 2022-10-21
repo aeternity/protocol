@@ -432,12 +432,27 @@ contract create operation. FATE VM version 1 contracts are stored without an
 `init` function. The only way to check the `init` function of a FATE v1
 deployed contract is to look at the Contract create transaction.
 
-#### Contract call
+#### Contract call (version 2, from Roma release)
 ```
 [ <caller_id>        :: id()
 , <caller_nonce>     :: int()
 , <height>           :: int()
 , <contract_id>      :: id()
+, <gas_price>        :: int()
+, <gas_used>         :: int()
+, <return_value>     :: binary()
+, <return_type>      :: call_return_type()
+, <log>              :: [ { <address> :: id, [ <topics> :: binary() ], <data> :: binary() } ]
+]
+```
+
+#### Contract call (version 3, with ct_call_id, from Ceres release)
+```
+[ <caller_id>        :: id()
+, <caller_nonce>     :: int()
+, <height>           :: int()
+, <contract_id>      :: id()
+, <ct_call_id>       :: binary()
 , <gas_price>        :: int()
 , <gas_used>         :: int()
 , <return_value>     :: binary()
@@ -476,6 +491,8 @@ deployed contract is to look at the Contract create transaction.
 , <call_data>   :: binary()
 ]
 ```
+Note: From Ceres protocol version `contract` can be a name (where the
+`contract_pubkey` key defines the contract to be called. No type change.
 
 ### Name service name
 ```

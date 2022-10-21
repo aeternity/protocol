@@ -91,7 +91,7 @@ Anyone can call an existing contract (as long as it isn't disabled).
 The transaction contains:
 
 - The address of the caller (the one signing and paying for the transaction)
-- The address of the contract
+- The address of the contract (from Ceres release, it can also be a name, that should have the `contract_pubkey` key set).
 - An optional additional fee to the miner apart from gas.
 - Optional amount to transfer to the account before execution (refunded if the execution fails).
 - The amount of gas to use
