@@ -471,7 +471,13 @@ We do not require an additional fee for extending the lease.
 
 The `pointers` field SHOULD NOT contain multiple entries with the same key.
 The `pointers` can point to one of: account address, oracle id,
-channel id or contract id.
+channel id or contract id. In order to distinguish destination of the pointer we
+support following keys in a single key/value pair in option field list:
+
+`Key = account_pubkey | channel | contract_pubkey | oracle_pubkey`
+
+`pointers` = `[{Key, hash}]`
+
 
 From Iris hardfork, the following limitations on pointers apply:
   - No duplicate keys (a key can only be present once in a list of pointers).
