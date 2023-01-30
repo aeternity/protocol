@@ -2,7 +2,7 @@
 
 ## Introduction
 You interact with a æternity node through HTTP.
-To learn more about contracts and contract life cycles see [the doc](/contracts/contracts.md).
+To learn more about contracts and contract life cycles see [the doc](../../contracts/README.md).
 
 There are two basic types of API calls, off-chain operations and on-chain transactions.
 
