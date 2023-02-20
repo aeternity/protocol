@@ -58,8 +58,8 @@ various types should be interpreted (corresponds to their encoding):
 
 Fields:
 
-  - `N :: int16` - fragment N of M
-  - `M :: int16` - total number of fragments
+  - `N :: uint16` - fragment N of M
+  - `M :: uint16` - total number of fragments
   - `Data :: byte_array`
 
 *NOTE:* Data is either (65536 - 6) bytes or `N` is equal to `M`.
