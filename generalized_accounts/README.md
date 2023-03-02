@@ -3,9 +3,9 @@
 
 ## Motivation
 
-Plain old accounts (POA) have very little flexibility when it comes to the logic
-controlling them. While this results in a uniform user experience and makes
-development easier, e.g. a wallet only needs to handle a single method of
+Plain old accounts (POA) have very little flexibility when it comes to the
+logic controlling them. While this results in a uniform user experience and
+makes development easier, e.g. a wallet only needs to handle a single method of
 accessing accounts, it also ignores that people may have varying needs when
 managing their accounts.
 
@@ -268,7 +268,7 @@ considered invalid.
 The transaction MUST include a signature created by the private key belonging to
 the `owner_id`.
 
-The `auth_fun` is a function hash as described in the 
+The `auth_fun` is a function hash as described in the
 [Sophia](https://github.com/aeternity/aesophia/blob/master/docs/sophia.md)
 section.
 
@@ -341,6 +341,11 @@ used instead.
 The `tx`, or inner transaction, MUST be a well formed transaction with nonce set
 to `0`. The `tx` MUST NOT be a `ga_attach_tx` transaction.
 
+The `authorization` function is executed in a special FATE environment where
+`Auth.tx_hash` and `Auth.tx` are available. These can (and should!) be used to
+securely authorize a transaction. Note: `Auth.tx_hash` computation differs
+between protocol versions, see [serialisation](../serializations.md)
+specification for details.
 
 ## Backwards compatibility
 
