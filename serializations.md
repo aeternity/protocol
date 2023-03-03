@@ -1072,7 +1072,7 @@ authorization data.
 
 #### Generalized accounts meta transaction
 
-##### Meta transaction  version 1, pre Iris
+##### Meta transaction version 1, pre Iris
 
 ```
 [ <ga_id>       :: id()
@@ -1086,7 +1086,7 @@ authorization data.
 ]
 ```
 
-##### Meta transaction  version 2, from Iris on
+##### Meta transaction version 2, from Iris on
 
 ```
 [ <ga_id>       :: id()
@@ -1098,6 +1098,33 @@ authorization data.
 , <tx>          :: binary()
 ]
 ```
+
+##### Auth.tx\_hash, pre Ceres
+
+The Blake2b hash of:
+```
+[ <fee>  :: int()
+, <gas_price> :: int()
+, <tx_hash>   :: binary()
+]
+```
+
+Where `tx_hash` is the hash of the inner transaction.
+
+##### Auth.tx\_hash, from Ceres on
+
+The Blake2b hash of:
+
+```
+[ <fee>  :: int()
+, <gas_price> :: int()
+, <tx_hash>   :: binary()
+]
+```
+
+Where `tx_hash` is the hash of the inner transaction. The change ensure that a
+rouge miner can not tamper with the `fee` or the `gas_price`.
+
 
 ### PayingFor
 The `PayingFor` transaction is available from version 5, Iris release. By using
