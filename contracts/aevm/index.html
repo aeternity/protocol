@@ -1,0 +1,3595 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../contract_vms/">
+      
+      
+        <link rel="next" href="../fate/">
+      
+      <link rel="icon" href="../../favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.9">
+    
+    
+      
+        <title>AEVM - æternity Protocol</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.0d440cfe.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="pink" data-md-color-accent="pink">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-ternity-ethereum-virtual-machine-aevm" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="æternity Protocol" class="md-header__button md-logo" aria-label="æternity Protocol" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            æternity Protocol
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              AEVM
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="pink" data-md-color-accent="pink"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="pink" data-md-color-accent="pink"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/aeternity/protocol" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="æternity Protocol" class="md-nav__button md-logo" aria-label="æternity Protocol" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    æternity Protocol
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/aeternity/protocol" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Communication
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Communication
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../GOSSIP/" class="md-nav__link">
+        Gossip
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sync/" class="md-nav__link">
+        Sync
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Consensus
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Consensus
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../consensus/" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../consensus/bitcoin-ng/" class="md-nav__link">
+        Bitcoin-NG
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../consensus/coinbase/" class="md-nav__link">
+        Coinbase
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../consensus/locking/" class="md-nav__link">
+        Locking
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Features
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Features
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generalized_accounts/" class="md-nav__link">
+        Generalized Accounts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AENS/" class="md-nav__link">
+        Naming System
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+          Oracles
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Oracles
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../oracles/" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../oracles/oracle_life_cycle/" class="md-nav__link">
+        Lifecycle Examples
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../oracles/oracle_state_tree/" class="md-nav__link">
+        State Tree
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../oracles/oracle_transactions/" class="md-nav__link">
+        Transactions
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+          Smart Contracts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_4_4">
+          <span class="md-nav__icon md-icon"></span>
+          Smart Contracts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../events/" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contract_transactions/" class="md-nav__link">
+        Transaction Types
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contract_state_tree/" class="md-nav__link">
+        State Tree
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4_5" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4_5" id="__nav_4_4_5_label" tabindex="0">
+          Virtual Machines
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_4_5_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_4_4_5">
+          <span class="md-nav__icon md-icon"></span>
+          Virtual Machines
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contract_vms/" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          AEVM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        AEVM
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ternity-primitive-operations" class="md-nav__link">
+    æternity primitive operations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chain-specific-instructions" class="md-nav__link">
+    Chain specific instructions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-sophia_aevm_01-abi" class="md-nav__link">
+    The Sophia_AEVM_01 ABI
+  </a>
+  
+    <nav class="md-nav" aria-label="The Sophia_AEVM_01 ABI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#byte-code" class="md-nav__link">
+    Byte code
+  </a>
+  
+    <nav class="md-nav" aria-label="Byte code">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#meta-data" class="md-nav__link">
+    Meta data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-information" class="md-nav__link">
+    Type information
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-layout" class="md-nav__link">
+    Memory layout
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encoding-sophia-values-as-binaries" class="md-nav__link">
+    Encoding Sophia values as binaries
+  </a>
+  
+    <nav class="md-nav" aria-label="Encoding Sophia values as binaries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#binary-encoding-of-sophia-maps" class="md-nav__link">
+    Binary encoding of Sophia maps
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initialization" class="md-nav__link">
+    Initialization
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return" class="md-nav__link">
+    Return
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#storing-the-contract-state" class="md-nav__link">
+    Storing the contract state
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remote-contract-calls" class="md-nav__link">
+    Remote contract calls
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delegation-signature" class="md-nav__link">
+    Delegation signature
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fate/" class="md-nav__link">
+        FATE VM
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+          State Channels
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4_5">
+          <span class="md-nav__icon md-icon"></span>
+          State Channels
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/ON-CHAIN/" class="md-nav__link">
+        On-Chain Actions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/OFF-CHAIN/" class="md-nav__link">
+        Off-Chain Actions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../channels/state/" class="md-nav__link">
+        Off-Chain State
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          Node API
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Node API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/api_encoding/" class="md-nav__link">
+        Encoding
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+          API Usage
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          API Usage
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/account_api_usage/" class="md-nav__link">
+        Account API
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/channels_api_usage/" class="md-nav__link">
+        Channels API
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/contract_api_usage/" class="md-nav__link">
+        Contract API
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/mining_api_usage/" class="md-nav__link">
+        Mining API
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/naming_system_api_usage/" class="md-nav__link">
+        Naming System API
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/oracle_api_usage/" class="md-nav__link">
+        Oracle API
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/spend_api_usage/" class="md-nav__link">
+        Spend API
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
+          State Channels
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4">
+          <span class="md-nav__icon md-icon"></span>
+          State Channels
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/channel_ws_api/" class="md-nav__link">
+        WebSocket API
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2" id="__nav_5_4_2_label" tabindex="0">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_4_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/" class="md-nav__link">
+        General
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2" id="__nav_5_4_2_2_label" tabindex="0">
+          JSON-RPC
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_5_4_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          JSON-RPC
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_1" id="__nav_5_4_2_2_1_label" tabindex="0">
+          Abort Updates
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_5_4_2_2_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_1">
+          <span class="md-nav__icon md-icon"></span>
+          Abort Updates
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_deposit/" class="md-nav__link">
+        abort_deposit
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_offchain_update/" class="md-nav__link">
+        abort_offchain_update
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_settle/" class="md-nav__link">
+        abort_settle
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_shutdown/" class="md-nav__link">
+        abort_shutdown
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_slash/" class="md-nav__link">
+        abort_slash
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_snapshot_solo/" class="md-nav__link">
+        abort_snapshot_solo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/abort_updates/sc_ws_abort_withdraw/" class="md-nav__link">
+        abort_withdraw
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/abort_updates/sc_ws_can_not_abort_while_open/" class="md-nav__link">
+        can_not_abort_while_open
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_2" id="__nav_5_4_2_2_2_label" tabindex="0">
+          Assume Min Depth
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_5_4_2_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Assume Min Depth
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/assume_min_depth/sc_ws_basic_open_close/" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_3" id="__nav_5_4_2_2_3_label" tabindex="0">
+          Both Sign
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_5_4_2_2_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Both Sign
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/both_sign/init_per_group/" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_3_2" id="__nav_5_4_2_2_3_2_label" tabindex="0">
+          conflicts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="6" aria-labelledby="__nav_5_4_2_2_3_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          conflicts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_deposit_and_offchain_update/" class="md-nav__link">
+        conflict_deposit_and_offchain_update
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_two_deposits/" class="md-nav__link">
+        conflict_two_deposits
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_two_offchain_updates/" class="md-nav__link">
+        conflict_two_offchain_updates
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_two_withdrawals/" class="md-nav__link">
+        conflict_two_withdrawals
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_withdrawal_and_deposit/" class="md-nav__link">
+        conflict_withdrawal_and_deposit
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/both_sign/conflicts/sc_ws_conflict_withdrawal_and_offchain_update/" class="md-nav__link">
+        conflict_withdrawal_and_offchain_update
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_4" id="__nav_5_4_2_2_4_label" tabindex="0">
+          Changeable Fee
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_5_4_2_2_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Changeable Fee
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_close_mutual/" class="md-nav__link">
+        set_fee_close_mutual
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_close_solo/" class="md-nav__link">
+        set_fee_close_solo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_create/" class="md-nav__link">
+        set_fee_create
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_deposit/" class="md-nav__link">
+        set_fee_deposit
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_settle/" class="md-nav__link">
+        set_fee_settle
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_slash/" class="md-nav__link">
+        set_fee_slash
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_snapshot/" class="md-nav__link">
+        set_fee_snapshot
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/changeable_fee/sc_ws_set_fee_withdrawal/" class="md-nav__link">
+        set_fee_withdrawal
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_5" id="__nav_5_4_2_2_5_label" tabindex="0">
+          Continuous
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_5_4_2_2_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          Continuous
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/continuous/init_per_group/" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/continuous/sc_ws_deposit/" class="md-nav__link">
+        deposit
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/continuous/sc_ws_failed_update/" class="md-nav__link">
+        failed_update
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/continuous/sc_ws_generic_messages/" class="md-nav__link">
+        generic_messages
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/continuous/sc_ws_ping_pong/" class="md-nav__link">
+        ping_pong
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/continuous/sc_ws_update_conflict/" class="md-nav__link">
+        update_conflict
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/continuous/sc_ws_withdraw/" class="md-nav__link">
+        withdraw
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_6" id="__nav_5_4_2_2_6_label" tabindex="0">
+          Contracts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_5_4_2_2_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Contracts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/contracts/init_per_group/" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/contracts/sc_ws_basic_contracts/" class="md-nav__link">
+        basic_contract
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/contracts/sc_ws_environment_contract/" class="md-nav__link">
+        environment_contract
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/contracts/sc_ws_nameservice_contract/" class="md-nav__link">
+        nameservice_contract
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/contracts/sc_ws_oracle_contract/" class="md-nav__link">
+        oracle_contract
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/contracts/sc_ws_remote_call_contract/" class="md-nav__link">
+        remote_call_contract
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/contracts/sc_ws_remote_call_contract_refering_onchain_data/" class="md-nav__link">
+        remote_call_contract_refering_onchain_data
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/contracts/sc_ws_wrong_call_data/" class="md-nav__link">
+        wrong_call_data
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_7" id="__nav_5_4_2_2_7_label" tabindex="0">
+          Force Progress
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_5_4_2_2_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          Force Progress
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/force_progress/sc_ws_force_progress_based_on_offchain_state/" class="md-nav__link">
+        force_progress_based_on_offchain_state
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/force_progress/sc_ws_force_progress_based_on_onchain_state/" class="md-nav__link">
+        force_progress_based_on_onchain_state
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_8" id="__nav_5_4_2_2_8_label" tabindex="0">
+          Generalized Accounts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_5_4_2_2_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8">
+          <span class="md-nav__icon md-icon"></span>
+          Generalized Accounts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_8_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_8_1" id="__nav_5_4_2_2_8_1_label" tabindex="0">
+          both
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="6" aria-labelledby="__nav_5_4_2_2_8_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8_1">
+          <span class="md-nav__icon md-icon"></span>
+          both
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/generalized_accounts/both/sc_ws_basic_open_close/" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_8_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_8_2" id="__nav_5_4_2_2_8_2_label" tabindex="0">
+          initiator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="6" aria-labelledby="__nav_5_4_2_2_8_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8_2">
+          <span class="md-nav__icon md-icon"></span>
+          initiator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/generalized_accounts/initiator/sc_ws_basic_open_close/" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_8_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_8_3" id="__nav_5_4_2_2_8_3_label" tabindex="0">
+          responder
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="6" aria-labelledby="__nav_5_4_2_2_8_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_8_3">
+          <span class="md-nav__icon md-icon"></span>
+          responder
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/generalized_accounts/responder/sc_ws_basic_open_close/" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_9" id="__nav_5_4_2_2_9_label" tabindex="0">
+          Only One Signs
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_5_4_2_2_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_9">
+          <span class="md-nav__icon md-icon"></span>
+          Only One Signs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/only_one_signs/init_per_group/" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/only_one_signs/sc_ws_conflict_on_new_offchain/" class="md-nav__link">
+        conflict_on_new_offchain
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/only_one_signs/sc_ws_conflict_snapshot_and_offchain_update/" class="md-nav__link">
+        sc_ws_conflict_snapshot_and_offchain_update
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_9_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_9_4" id="__nav_5_4_2_2_9_4_label" tabindex="0">
+          conflicts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="6" aria-labelledby="__nav_5_4_2_2_9_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_9_4">
+          <span class="md-nav__icon md-icon"></span>
+          conflicts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_deposit_and_offchain_update/" class="md-nav__link">
+        conflict_deposit_and_offchain_update
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_two_deposits/" class="md-nav__link">
+        conflict_two_deposits
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_two_offchain_updates/" class="md-nav__link">
+        conflict_two_offchain_updates
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_two_withdrawals/" class="md-nav__link">
+        conflict_two_withdrawals
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_withdrawal_and_deposit/" class="md-nav__link">
+        conflict_withdrawal_and_deposit
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/only_one_signs/conflicts/sc_ws_conflict_withdrawal_and_offchain_update/" class="md-nav__link">
+        conflict_withdrawal_and_offchain_update
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_10" id="__nav_5_4_2_2_10_label" tabindex="0">
+          Reconnect
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_5_4_2_2_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_10">
+          <span class="md-nav__icon md-icon"></span>
+          Reconnect
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/reconnect/sc_ws_basic_client_reconnect_i/" class="md-nav__link">
+        basic_client_reconnect_i
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/reconnect/sc_ws_basic_client_reconnect_i_w_reestablish/" class="md-nav__link">
+        basic_client_reconnect_i_w_reestablish
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/reconnect/sc_ws_basic_client_reconnect_r/" class="md-nav__link">
+        basic_client_reconnect_r
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4_2_2_11" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2_2_11" id="__nav_5_4_2_2_11_label" tabindex="0">
+          With Meta
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_5_4_2_2_11_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5_4_2_2_11">
+          <span class="md-nav__icon md-icon"></span>
+          With Meta
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/with_meta/init_per_group/" class="md-nav__link">
+        init_per_group
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/with_meta/sc_ws_deposit/" class="md-nav__link">
+        deposit
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/with_meta/sc_ws_remote_call_contract/" class="md-nav__link">
+        remote_call_contract
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/with_meta/sc_ws_withdraw/" class="md-nav__link">
+        withdraw
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_basic_open_close_server/" class="md-nav__link">
+        basic_open_close
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_basic_open_close/" class="md-nav__link">
+        basic_open_close_server
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_broken_open_params/" class="md-nav__link">
+        broken_open_params
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_close_mutual/" class="md-nav__link">
+        close_mutual
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_close_solo/" class="md-nav__link">
+        close_solo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_leave_reconnect/" class="md-nav__link">
+        leave_reconnect
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_leave_reestablish/" class="md-nav__link">
+        leave_reestablish
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_leave_reestablish_responder_stays/" class="md-nav__link">
+        leave_reestablish_responder_stays
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_leave_reestablish_wrong_fsm_id/" class="md-nav__link">
+        leave_reestablish_wrong_fsm_id
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_min_depth_is_modifiable/" class="md-nav__link">
+        min_depth_is_modifiable
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_min_depth_not_reached_timeout/" class="md-nav__link">
+        min_depth_not_reached_timeout
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_opening_ping_pong/" class="md-nav__link">
+        opening_ping_pong
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_reconnect_early/" class="md-nav__link">
+        reconnect_early
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_slash/" class="md-nav__link">
+        slash
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_snapshot_solo/" class="md-nav__link">
+        snapshot_solo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_timeout_open/" class="md-nav__link">
+        timeout_open
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../node/api/examples/channels/json-rpc/sc_ws_update_with_meta/" class="md-nav__link">
+        update_with_meta
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          Mining
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Mining
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../STRATUM/" class="md-nav__link">
+        Stratum
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../serializations/" class="md-nav__link">
+        Serializations
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ternity-primitive-operations" class="md-nav__link">
+    æternity primitive operations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chain-specific-instructions" class="md-nav__link">
+    Chain specific instructions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-sophia_aevm_01-abi" class="md-nav__link">
+    The Sophia_AEVM_01 ABI
+  </a>
+  
+    <nav class="md-nav" aria-label="The Sophia_AEVM_01 ABI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#byte-code" class="md-nav__link">
+    Byte code
+  </a>
+  
+    <nav class="md-nav" aria-label="Byte code">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#meta-data" class="md-nav__link">
+    Meta data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-information" class="md-nav__link">
+    Type information
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-layout" class="md-nav__link">
+    Memory layout
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encoding-sophia-values-as-binaries" class="md-nav__link">
+    Encoding Sophia values as binaries
+  </a>
+  
+    <nav class="md-nav" aria-label="Encoding Sophia values as binaries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#binary-encoding-of-sophia-maps" class="md-nav__link">
+    Binary encoding of Sophia maps
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#initialization" class="md-nav__link">
+    Initialization
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return" class="md-nav__link">
+    Return
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#storing-the-contract-state" class="md-nav__link">
+    Storing the contract state
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remote-contract-calls" class="md-nav__link">
+    Remote contract calls
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delegation-signature" class="md-nav__link">
+    Delegation signature
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+
+<h1 id="the-ternity-ethereum-virtual-machine-aevm">The æternity Ethereum virtual machine (AEVM)</h1>
+<p>The AEVM is a version of the EVM: https://github.com/ethereum/yellowpaper</p>
+<p>The AEVM can be emulated inside the æternity node and no marshaling of
+arguments, code and data is necessary.  This makes for fast upstart
+and faster execution of most smaller contracts.</p>
+<p>There are a few differences between the EVM and the AEVM.</p>
+<p>The AEVM provides an number of primitive operations that can be
+used to interact with the chain.</p>
+<p>The SELFDESTRUCT instruction is not immediate, instead the contract is
+set in a disabled state where neither new contracts nor call
+transactions can call the contract directly. When all other contracts
+referring to a disabled contract are fully disabled the contract is
+disabled.</p>
+<h2 id="ternity-primitive-operations">æternity primitive operations</h2>
+<p>Interaction with the first class objects of the æternity chain (e.g.
+oracles, names, and state channels) is done through calls to a
+built-in contract at address 0.</p>
+<p>The value in the call indicates the coins that the primop can use from the
+contract account. Unused coins stay on the contract account.</p>
+<p>The first argument in the call specifies which primop to call.
+The following arguments are encoded as Sophia data.</p>
+<p>The total gas of the operation is a sum of the base gas and the op gas.</p>
+<table>
+<thead>
+<tr>
+<th>OpNo</th>
+<th>Name</th>
+<th>Value</th>
+<th>Arguments</th>
+<th>Return value</th>
+<th>Base gas</th>
+<th>Op gas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Spend</td>
+<td><code>Amount : int</code></td>
+<td><code>Recipient : address</code></td>
+<td><code>Nil</code></td>
+<td>12000</td>
+<td>0</td>
+</tr>
+<tr>
+<td>100</td>
+<td>Oracle register</td>
+<td>(Unused.)</td>
+<td><code>Acct : address, Sign : signature, QFee : int, TTL : Chain.ttl, QType : typerep, RType : typerep</code></td>
+<td><code>Oracle : address</code></td>
+<td>12000</td>
+<td>Proportional to oracle TTL argument <code>TTL</code> (interpreted as relative), specifically: <code>ceiling(32000 * RelativeTTL / floor(60 * 24 * 365 / key_block_interval))</code> and the byte size of the transaction representing this operation, specifically: <code>byte_size(OracleRegisterTx) * GasPerByte</code></td>
+</tr>
+<tr>
+<td>101</td>
+<td>Oracle query</td>
+<td><code>QFee : int</code></td>
+<td><code>Oracle : address, Query : 'a, QTTL : Chain.ttl, RTTL : Chain.ttl</code></td>
+<td><code>Query : address</code></td>
+<td>12000</td>
+<td>Proportional to oracle query TTL argument <code>QTTL</code> (interpreted as relative), specifically: <code>ceiling(32000 * RelativeTTL / floor(60 * 24 * 365 / key_block_interval))</code> and the byte size of the transaction representing this operation, specifically: <code>byte_size(OracleQueryTx) * GasPerByte</code></td>
+</tr>
+<tr>
+<td>102</td>
+<td>Oracle respond</td>
+<td>(Unused.)</td>
+<td><code>Oracle : address, Query : address, Sign : signature, R : 'b</code></td>
+<td><code>()</code></td>
+<td>12000</td>
+<td>Proportional to oracle response TTL argument <code>RTTL</code> in oracle query (as found in the oracle query in the state, and interpreted as relative), specifically: <code>ceiling(32000 * RelativeTTL / floor(60 * 24 * 365 / key_block_interval))</code> and the byte size of the transaction representing this operation, specifically: <code>byte_size(OracleRespondTx) * GasPerByte</code></td>
+</tr>
+<tr>
+<td>103</td>
+<td>Oracle extend</td>
+<td>(Unused.)</td>
+<td><code>Oracle : address, Sign : signature, TTL : Chain.ttl</code></td>
+<td><code>()</code></td>
+<td>12000</td>
+<td>Proportional to oracle TTL argument <code>TTL</code> (interpreted as relative), specifically: <code>ceiling(32000 * RelativeTTL / floor(60 * 24 * 365 / key_block_interval))</code></td>
+</tr>
+<tr>
+<td>104</td>
+<td>Oracle get answer</td>
+<td>(Unused.)</td>
+<td><code>Oracle : address, Query : address</code></td>
+<td><code>option('b)</code></td>
+<td>12000</td>
+<td>0</td>
+</tr>
+<tr>
+<td>105</td>
+<td>Oracle get question</td>
+<td>(Unused.)</td>
+<td><code>Oracle : address, Query : address</code></td>
+<td><code>'a</code></td>
+<td>12000</td>
+<td>0</td>
+</tr>
+<tr>
+<td>106</td>
+<td>Oracle query fee</td>
+<td>(Unused.)</td>
+<td><code>Oracle : address</code></td>
+<td><code>int</code></td>
+<td>12000</td>
+<td>0</td>
+</tr>
+<tr>
+<td>200</td>
+<td>Name resolve</td>
+<td>(Unused.)</td>
+<td><code>Name : string, Key : string, Type : typerep</code></td>
+<td><code>option(address)</code></td>
+<td>12000</td>
+<td>0</td>
+</tr>
+<tr>
+<td>201</td>
+<td>Name preclaim</td>
+<td>(Unused.)</td>
+<td><code>Account : address, Commitment : hash, Sign : signature</code></td>
+<td><code>()</code></td>
+<td>12000</td>
+<td>Proportional to the byte size of the transaction representing this operation, specifically: <code>byte_size(NamePreclaimTx) * GasPerByte</code></td>
+</tr>
+<tr>
+<td>202</td>
+<td>Name claim</td>
+<td>(Unused.)</td>
+<td><code>Account : address, Name : string, Salt : int, Sign : signature</code></td>
+<td><code>()</code></td>
+<td>12000</td>
+<td>Proportional to the byte size of the transaction representing this operation, specifically: <code>byte_size(NameClaimTx) * GasPerByte</code></td>
+</tr>
+<tr>
+<td>203</td>
+<td>Name update</td>
+<td>(Unused.)</td>
+<td>TODO</td>
+<td>TODO</td>
+<td>TODO</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>204</td>
+<td>Name transfer</td>
+<td>(Unused.)</td>
+<td><code>From : address, To : address, Hash : hash, Sign : signature</code></td>
+<td><code>()</code></td>
+<td>12000</td>
+<td>0</td>
+</tr>
+<tr>
+<td>205</td>
+<td>Name revoke</td>
+<td>(Unused.)</td>
+<td><code>Addr : address, Hash : hash, Sign : signature</code></td>
+<td><code>()</code></td>
+<td>12000</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p><code>GasPerByte</code> is 20.</p>
+<p>Note that the gas cost indicated in the table above does not include the gas required for the call instruction to the primop.</p>
+<p>Calling state changing prim-ops in oracles and names's trees in off-chain
+environment results in an error with output data <code>not_allowed_off_chain</code>.</p>
+<h2 id="chain-specific-instructions">Chain specific instructions</h2>
+<p>The COINBASE instruction return the beneficiary of the current generation
+stored in the previous key block.
+When executing a contract in a state channel off-chain, COINBASE will return
+the beneficiary of the previous key block as seen by the participant executing
+the contract. In a forced progress call the COINBASE will return the
+current beneficiary.</p>
+<p>The TIMESTAMP instruction returns the timestamp of the current micro block.
+When executing a contract in a state channel off-chain TIMESTAMP will return
+the timestamp of the last block as seen by the participant executing the
+contract. In a forced progress call the TIMESTAMP will return the timestamp
+of the current micro block.</p>
+<p>The DIFFICULTY instruction returns the difficulty of the current
+generation stored in the previous key block.
+When executing a contract in a state channel off-chain DIFFICULTY will return
+the difficulty of the current generation stored in the last key block as seen
+by the participant executing the contract. In a forced progress call the
+DIFFICULTY will return the difficulty of the current generation.</p>
+<p>The BLOCKHASH instruction returns the hash of the key block at the specified height.
+If the height is below genesis height the instruction returns 0.
+If the height is higher than or equal to the current height the instruction returns 0.
+If the height is lower than current height minus 256 the instruction returns 0.
+When executing a contract in a state channel (either off-chain or in
+a force progress) BLOCKHASH will return the hash of the key block at the
+specified heigh as seen by the one executing the contract.</p>
+<h2 id="the-sophia_aevm_01-abi">The Sophia_AEVM_01 ABI</h2>
+<h3 id="byte-code">Byte code</h3>
+<p>The byte code contains meta data about the original sophia source
+code.</p>
+<h4 id="meta-data">Meta data</h4>
+<p>The byte code contains meta data for the contract.
+- source_code_hash - a Blake2b hash of the source code string of the contract
+- type_info - see Type information below
+- byte_code - the actual byte code</p>
+<p>The layout of the encoding can be found
+<a href="https://github.com/aeternity/protocol/blob/master/serializations.md#sophia-byte-code">here</a>.
+The encoding is tagged with the compiler version.</p>
+<h4 id="type-information">Type information</h4>
+<p>The type information of each function is encoded in the meta data. The function
+hash depends both on the function name and the type signature of the function.
+The function hash is also the identifier of a function when calling a contract.
+In this way, the function prototype in the calling function gets some level of
+type verification.</p>
+<p>The type information contains:
+- fun_hash - A Blake2b hash of the function name and the function types
+- fun_name - The function name as a string
+- arg_type - The vm encoded typerep of the argument (as a tuple) of the function
+- out_type - The vm encoded typerep of the return type of the function</p>
+<h3 id="memory-layout">Memory layout</h3>
+<p>Sophia values are 256-bit words. In case of unboxed types (<code>int</code>,
+<code>address</code>, and <code>bool</code>) this is simply the value. For boxed types
+such as tuples and (non-empty) lists, the word is a pointer into the heap
+(memory).</p>
+<p>More precisely</p>
+<ul>
+<li>
+<p>Unboxed types are represented as a single big endian 256-bit (32 bytes) word.
+  Booleans are represented as 0 for <code>false</code> and 1 for <code>true</code>. The empty list is
+  represented as an unboxed -1. In memory maps are represented by an unboxed
+  unique identifier. The contents of the map is stored separately in the VM
+  state.</p>
+</li>
+<li>
+<p>Boxed types are represented as a 256-bit pointer to a contiguous sequence of
+  words, called a <em>heap object</em>, on the heap.</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Value/Type</th>
+<th>Heap object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tuple</td>
+<td>The value of each component in left-to-right order.</td>
+</tr>
+<tr>
+<td>String</td>
+<td>The length (number of bytes), followed by as many words as required to store the character data, padded on the right with 0.</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The following types are represented in terms of other types:</p>
+<table>
+  <tr><th>Type</th><th>Representation</th></tr>
+  <tr><td>Non-empty list</td><td>A pair of the head and the tail.</td></tr>
+  <tr><td>Record</td><td>A tuple of the field values.</td></tr>
+  <tr><td>Data type</td>
+      <td>A tuple where the first component is a constructor
+          tag (starting with 0 for the first constructor), and the following
+          components are the constructor arguments. For instance, for<br/><br/>
+          <tt>datatype zeroOrTwo = Zero | Two(int, int)</tt><br/><br/>
+          <tt>Zero</tt> is encoded as a singleton tuple <tt>(0)</tt> and
+          <tt>Two(a, b)</tt> as the triple <tt>(1, a, b)</tt>.
+      </td></tr>
+  <tr><td>Signature</td><td>A pair of two 256-bit words.</td></tr>
+  <tr><td>Option types</td><td><tt>datatype option('a) = None | Some('a)</tt>.</td></tr>
+  <tr><td><tt>ttl</tt></td><td><tt>datatype ttl = RelativeTTL(int) | FixedTTL(int)</tt></td></tr>
+  <tr><td>Type representations</td>
+      <td>
+      When types need to be encoded as data, they are represented as the following datatype<br/><br/>
+      <div>
+      <pre>
+        datatype typerep = Word  // any unboxed type
+                         | String
+                         | List(typerep)
+                         | Tuple(list(typerep))
+                         | Datatype(list(list(typerep)))
+                         | TypeRep
+                         | Map(typerep, typerep)
+      </pre></div>
+      The argument to the <tt>Datatype</tt> constructor is the list of type
+      representations of the constructor arguments.
+      </td></tr>
+  </table>
+
+<h3 id="encoding-sophia-values-as-binaries">Encoding Sophia values as binaries</h3>
+<p>When communicating Sophia values between a contract and the outside world they
+are encoded as a binary containing a heap whose first word is the encoded value
+(except in the case of maps, see below). For example, the value <code>("main", (1, 2, 3))</code>
+can be encoded as
+<div class="highlight"><pre><span></span><code>Word       0       1       2       3       4       5       6       7
+Addr    0x00    0x20    0x40    0x60    0x80    0xA0    0xC0    0xE0
+Value   0x20    0x60    0xA0       4   &quot;main&quot;      1       2       3
+</code></pre></div>
+where <code>"main"</code> is the 32 byte word obtained by right padding the string
+<code>"main"</code> with zeroes.</p>
+<p>Note that the order of the heap objects on the heap is unspecified. Another
+valid encoding of the same value is
+<div class="highlight"><pre><span></span><code>Word       0       1       2       3       4       5       6       7
+Addr    0x00    0x20    0x40    0x60    0x80    0xA0    0xC0    0xE0
+Value   0x60       4   &quot;main&quot;   0x20    0xA0       1       2       3
+</code></pre></div></p>
+<p>A canonical binary representation is obtained by storing heap objects in
+depth-first left-to-right order (as in the first example). This is the
+representation used in map keys.</p>
+<h4 id="binary-encoding-of-sophia-maps">Binary encoding of Sophia maps</h4>
+<p>In memory, maps are represented by their unique identifier, but in binary
+encodings the identifier is replaced by a boxed representation with a heap
+object of the shape
+<div class="highlight"><pre><span></span><code>    MapSize (N)
+    KeySize1
+  +----------+
+  |   Key1   |
+  +----------+
+    ValSize1
+  +----------+
+  |   Val1   |
+  +----------+
+      ...
+    KeySizeN
+  +----------+
+  |   KeyN   |
+  +----------+
+    ValSizeN
+  +----------+
+  |   ValN   |
+  +----------+
+</code></pre></div>
+The keys and values are encoded as standalone binaries, so the addresses in
+<code>KeyI</code> (say) are relative only to the <code>KeyI</code> binary.</p>
+<h3 id="initialization">Initialization</h3>
+<p>When a Sophia contract is called the calldata should be a pair of a function
+hash and a tuple of arguments, encoded as a binary as described above
+The value should be a pair of a function hash and a tuple of arguments
+For instance, to call the function <code>foo</code> (assuming the function
+hash 12345) with arguments <code>1</code> and <code>"bar"</code>, the calldata should be
+(the binary encoding of)
+<div class="highlight"><pre><span></span><code>  (12345, (1, &quot;bar&quot;))
+</code></pre></div>
+Before the contract starts executing the first word of the encoded calldata
+(i.e. the calldata value) is pushed on the stack and the rest of the calldata
+heap is written to memory. The result is that the Sophia contract starts with
+the value of the calldata on top of the stack.</p>
+<p>If the contract state has been initialized it is stored on the heap and a
+pointer to it is written to address 0. If the contract state has not been
+initialized, for instance, when running the <code>init</code> function, 0 is written to
+address 0. Note that address 0 contains a <em>pointer</em> to the value of the state,
+not the value itself.</p>
+<p>The compiler is responsible for generating the appropriate dispatch code,
+looking at the calldata and calling the correct function.</p>
+<h3 id="return">Return</h3>
+<p>When returning from a contract call (using the <code>RETURN</code> instruction) the
+type information from the meta data is used to encode the return value.
+The VM reads the return value from the heap and returns it to the caller,
+and reads the updated contract state using the state pointer at address 0.
+A contract can write 0 to the state pointer to indicate that the state
+did not change.</p>
+<h3 id="storing-the-contract-state">Storing the contract state</h3>
+<p>The contract state is stored in the <em>store</em> as a binary heap whose first word
+is the value (with maps stored as their identifiers) under key <code>0x00</code>.
+The type of the state is stored as an encoded type representation under key
+<code>0x01</code> (<strong><em>subject to change: contract state type to be stored in contract
+metadata</em></strong>). The list of maps in the contract state is stored under key <code>0x02</code>
+as a sequence of 256-bit map identifiers. For each map there are mappings
+(where <code>[X]</code> denotes a single 256-bit word):
+<div class="highlight"><pre><span></span><code>  [MapId]      =&gt; [RealId] [RefCount] [Size] Types
+  [RealId] Key =&gt; Val
+</code></pre></div>
+<code>Types</code> is the binary encoding of the tuple <code>(KeyType, ValType)</code> of type
+representations for the key and value types of the map. <code>Key</code> and <code>Val</code> are
+stand-alone heap encodings with map identifiers for maps (although for keys
+there are no maps). The <code>RealId</code> field is an indirection to allow in-place
+updates of maps and the <code>RefCount</code> field is used to track the number of
+occurrences of a map in other maps for the purpose of garbage collection.</p>
+<p>The <code>init</code> function of a contract should return a pair of the state type
+representation and the initial state, which are written to the store by the VM.
+Note that the Sophia code for <code>init</code> only returns the initial state value--the
+compiler is responsible for adding the type representation.</p>
+<h3 id="remote-contract-calls">Remote contract calls</h3>
+<p>The <code>CALL</code> instruction for calling another contract works differently for
+Sophia contracts than in the EVM. It expects on the stack (top to bottom):
+- <code>Gas</code> - the amount of gas to allocate to the call
+- <code>Address</code> - the address of the contract to call (or 0 for primops)
+- <code>Amount</code> - the amount of coins to transfer with the call
+- <code>Calldata</code> - the calldata value (pair of function hash and arguments)
+- <code>TypeHash</code> - the function hash of primops that have dynamic types
+               (e.g., oracles). Otherwise unused.
+- <code>_</code> - unused (offset to write return value in the EVM)
+- <code>_</code> - unused (return value size in the EVM)</p>
+<p>The calldata is read from the heap guided by the calldata type and passed to
+the called contract. Before the call is made gas is charged for the size of the
+expanded calldata (e.g. maps have to be made explicit when passed between
+contracts). When the call returns the return value is pushed on top of the
+stack, and potential heap objects for the return value written to the top of
+the heap. The return type from the contracts meta data is used when writing it
+ to the heap. Since maps are handled outside the heap, the caller explicitly
+pays gas for handling maps in the return value.</p>
+<h3 id="delegation-signature">Delegation signature</h3>
+<p>Some chain operations (<code>Oracle.&lt;operation&gt;</code> and <code>AENS.&lt;operation&gt;</code>) has an optional
+delegation signature. This is typically used when a user/accounts would like to
+allow a contract to act on it's behalf. The exact data to be signed varies for the
+different operations, but in <em>all</em> cases you should prepend the signature data with
+the <code>network_id</code> (<code>ae_mainnet</code> for the æternity mainnet, etc.).</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.tabs.link", "search.highlight", "search.share", "search.suggest"], "search": "../../assets/javascripts/workers/search.db81ec45.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a00a7c5e.min.js"></script>
+      
+    
+  </body>
+</html>
