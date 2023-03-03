@@ -470,13 +470,16 @@ the future.
 We do not require an additional fee for extending the lease.
 
 The `pointers` field SHOULD NOT contain multiple entries with the same key.
-The `pointers` can point to one of: account address, oracle id,
-channel id or contract id.
+The `pointers` can point to one of: account address, oracle id, channel id or
+contract id, and from Ceres 1024 bytes of uninterpreted data (a bytearray).
 
 From Iris hardfork, the following limitations on pointers apply:
   - No duplicate keys (a key can only be present once in a list of pointers).
   - Keys are not longer than 256 bytes
   - The list of pointers is not longer than 32.
+
+From Ceres hardfork, a new pointer target type is introduced:
+  - A key can point to up to 1024 bytes of uninterpreted data (a bytearray)
 
 #### Transfer
 
