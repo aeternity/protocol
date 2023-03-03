@@ -2,13 +2,6 @@
 
 This document defines the æternity protocol. It replaces the outdated whitepaper from 2017.
 
-## Disclaimer
-
-Any specification living in here is to be understood as a work in progress until
-the feature freeze for the mainnet launch. After the feature freeze amendments
-or changes to these specifications should only be done via the governance
-mechanisms.
-
 ## Security
 
 - [Threat Model](https://github.com/aeternity/aetmodel/blob/master/ThreatModel.md)
