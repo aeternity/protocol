@@ -225,16 +225,25 @@ Examples:
 
 ### Strings
 
-Strings are byte arrays.
-These can be assumed (by debugging tools) to be UTF-8 encoded unicode characters,
-but there are no instructions that depend upon them being UTF-8 encoded strings,
-they can be used as arbitrary non-indexable arrays of bytes.
+Strings are stored as byte arrays. From VM version `FATE_02` they are strictly
+UTF-8 encoded unicode characters. In particular operations `String.to_list` and
+`String.from_list` ensure that they only contain well formed code points.
 
 Examples:
 ```
 "Hello world"
-  "eof"
+"eof"
 ```
+
+### Bytes
+
+In VM versions `FATE_01` and `FATE_02` only fixed (size known at compile time)
+size byte arrays exist. With the change to Strings, making them UTF-8 encoded
+byte arrays, there is a need for general arbitrary length byte arrays. These
+are introduced in `FATE_03` - and a couple of new operations handling (and
+converting) byte arrays are added. Technical note: the bytes type was `{bytes,
+N} / bytes(n)` - to change as little as possible arbitrary size byte arrays
+have the type `{bytes, -1} / bytes()`.
 
 ### Tuples
 
@@ -317,6 +326,7 @@ A TypeRep is one of
 * oracle_query
 * channel
 * bits
+* {bytes, N}
 * {map, K, V}
 * string
 * {variant, ListOfVariants}
@@ -553,6 +563,20 @@ Writing to the accumulator pushes a value to the stack.
 | `CLONE_G` | Arg0 Arg1 Arg2 Arg3 Arg4 | Like `CLONE` but additionally limits the gas of the `init` call by Arg3 | {contract,typerep,integer,integer,bool} | any |
 | `BYTECODE_HASH` | Arg0 Arg1 | Arg0 := hash of the deserialized contract's bytecode under address given in Arg1 (or `None` on fail). Fails on AEVM contracts and contracts deployed before Iris. | {contract} | variant |
 | `FEE` | Arg0 | Arg0 := The fee for the current call tx. | {} | integer |
+| `ADDRESS_TO_BYTES` | Arg0 Arg1 | Arg0 := the fixed size byte representation of the address Arg1 | {address} | bytes |
+| `POSEIDON` | Arg0 Arg1 Arg2 | Arg0 := the Poseidon hash of Arg1 and Arg2 - all integers in the BLS12-381 scalar field | {integer, integer} | integer |
+| `MULMOD` | Arg0 Arg1 Arg2 Arg3 | Arg0 := (Arg1 * Arg2) mod Arg3 | {integer, integer, integer} | integer |
+| `BAND` | Arg0 Arg1 Arg2 | Arg0 := Arg1 & Arg2 | {integer, integer} | integer |
+| `BOR` | Arg0 Arg1 Arg2 | Arg0 := Arg1 | Arg2 | {integer, integer} | integer |
+| `BXOR` | Arg0 Arg1 Arg2 | Arg0 := Arg1 ^ Arg2 | {integer, integer} | integer |
+| `BNOT` | Arg0 Arg1 | Arg0 := ~Arg1 | {integer} | integer |
+| `BSL` | Arg0 Arg1 Arg2 | Arg0 := Arg1 << Arg2 | {integer, integer} | integer |
+| `BSR` | Arg0 Arg1 Arg2 | Arg0 := Arg1 >> Arg2 | {integer, integer} | integer |
+| `BYTES_SPLIT_ANY` | Arg0 Arg1 Arg2 | Arg0 := bytes\_split\_any(Arg1, Arg2), where a positive Arg2 is the length of the first chunk, and a negative Arg2 is the length of the second chunk. Returns None if byte array is not long enough. | {bytes, integer} | variant |
+| `BYTES_SIZE` | Arg0 Arg1 | Arg0 := bytes\_size(Arg1), returns the number of bytes in the byte array. | {bytes} | integer |
+| `BYTES_TO_FIXED_SIZE` | Arg0 Arg1 Arg2 | Arg0 := bytes\_to\_fixe\_size(Arg1, Arg2), returns Some(Arg1') if byte\_size(Arg1) == Arg2, None otherwise. The type of Arg1' is bytes(Arg2) but the value is unchanged | {bytes, integer} | variant |
+| `INT_TO_BYTES` | Arg0 Arg1 Arg2 | Arg0 := turn integer Arg1 into a byte array (big endian) length Arg2 (truncating if not fit). | {integer, integer} | bytes |
+| `STR_TO_BYTES` | Arg0 Arg1 | Arg0 := turn string Arg1 into the corresponding byte array. | {string} | bytes |
 | `DEACTIVATE` |  | Mark the current contract for deactivation. | {} | none |
 | `ABORT` | Arg0 | Abort execution (dont use all gas) with error message in Arg0. | {string} | none |
 | `EXIT` | Arg0 | Abort execution (use upp all gas) with error message in Arg0. | {string} | none |
@@ -730,6 +754,20 @@ Writing to the accumulator pushes a value to the stack.
 | 0xa5 | `CLONE_G` | true | false | true | 5000 |
 | 0xa6 | `BYTECODE_HASH` | false | true | true | 100 |
 | 0xa7 | `FEE` | false | true | true | 10 |
+| 0xa8 | `ADDRESS_TO_BYTES` | false | true | true | 10 |
+| 0xa9 | `POSEIDON` | false | true | true | 6000 |
+| 0xaa | `MULMOD` | false | true | true | 10 |
+| 0xab | `BAND` | false | true | true | 10 |
+| 0xac | `BOR` | false | true | true | 10 |
+| 0xad | `BXOR` | false | true | true | 10 |
+| 0xae | `BNOT` | false | true | true | 10 |
+| 0xaf | `BSL` | false | true | true | 10 |
+| 0xb0 | `BSR` | false | true | true | 10 |
+| 0xb1 | `BYTES_SPLIT_ANY` | false | true | true | 10 |
+| 0xb2 | `BYTES_SIZE` | false | true | true | 10 |
+| 0xb3 | `BYTES_TO_FIXED_SIZE` | false | true | true | 10 |
+| 0xb4 | `INT_TO_BYTES` | false | true | true | 10 |
+| 0xb5 | `STR_TO_BYTES` | false | true | true | 10 |
 | 0xfa | `DEACTIVATE` | false | true | true | 10 |
 | 0xfb | `ABORT` | true | true | true | 10 |
 | 0xfc | `EXIT` | true | true | true | 10 |
