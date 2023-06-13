@@ -225,16 +225,25 @@ Examples:
 
 ### Strings
 
-Strings are byte arrays.
-These can be assumed (by debugging tools) to be UTF-8 encoded unicode characters,
-but there are no instructions that depend upon them being UTF-8 encoded strings,
-they can be used as arbitrary non-indexable arrays of bytes.
+Strings are stored as byte arrays. From VM version `FATE_02` they are strictly
+UTF-8 encoded unicode characters. In particular operations `String.to_list` and
+`String.from_list` ensure that they only contain well formed code points.
 
 Examples:
 ```
 "Hello world"
-  "eof"
+"eof"
 ```
+
+### Bytes
+
+In VM versions `FATE_01` and `FATE_02` only fixed (size known at compile time)
+size byte arrays exist. With the change to Strings, making them UTF-8 encoded
+byte arrays, there is a need for general arbitrary length byte arrays. These
+are introduced in `FATE_03` - and a couple of new operations handling (and
+converting) byte arrays are added. Technical note: the bytes type was `{bytes,
+N} / bytes(n)` - to change as little as possible arbitrary size byte arrays
+have the type `{bytes, -1} / bytes()`.
 
 ### Tuples
 
@@ -317,6 +326,7 @@ A TypeRep is one of
 * oracle_query
 * channel
 * bits
+* {bytes, N}
 * {map, K, V}
 * string
 * {variant, ListOfVariants}
@@ -383,180 +393,194 @@ Writing to the accumulator pushes a value to the stack.
 
 #### Description of operations
 
-| Name | Args | Description | Arg types | Res type |
-| ---- | ---- | ----------- | --------- | -------- |
-| `RETURN` |  | Return from function call, top of stack is return value . The type of the retun value has to match the return type of the function. | {} | any |
-| `RETURNR` | Arg0 | Push Arg0 and return from function. The type of the retun value has to match the return type of the function. | {any} | any |
-| `CALL` | Arg0 | Call the function Arg0 with args on stack. The types of the arguments has to match the argument typs of the function. | {string} | any |
-| `CALL_R` | Arg0 Identifier Arg2 Arg3 Arg4 | Remote call to contract Arg0 and function Arg1 of type Arg2 => Arg3 with value Arg4. The types of the arguments has to match the argument types of the function. | {contract,string,typerep,typerep,integer} | any |
-| `CALL_T` | Arg0 | Tail call to function Arg0. The types of the arguments has to match the argument typs of the function. And the return type of the called function has to match the type of the current function. | {string} | any |
-| `CALL_GR` | Arg0 Identifier Arg2 Arg3 Arg4 Arg5 | Remote call with gas cap in Arg4. Otherwise as CALL_R. | {contract,string,typerep,typerep,integer,integer} | any |
-| `JUMP` | Integer | Jump to a basic block. The basic block has to exist in the current function. | {integer} | none |
-| `JUMPIF` | Arg0 Integer | Conditional jump to a basic block. If Arg0 then jump to Arg1. | {boolean,integer} | none |
-| `SWITCH_V2` | Arg0 Integer Integer | Conditional jump to a basic block on variant tag. | {variant,integer,ingeger} | none |
-| `SWITCH_V3` | Arg0 Integer Integer Integer | Conditional jump to a basic block on variant tag. | {variant,integer,integer,ingeger} | none |
-| `SWITCH_VN` | Arg0 [Integers] | Conditional jump to a basic block on variant tag. | {variant,{list,integer}} | none |
-| `CALL_VALUE` | Arg0 | The value sent in the current remote call. | {} | integer |
-| `PUSH` | Arg0 | Push argument to stack. | {any} | any |
-| `DUPA` |  | Duplicate top of stack. | {any} | any |
-| `DUP` | Arg0 | push Arg0 stack pos on top of stack. | {any} | any |
-| `POP` | Arg0 | Arg0 := top of stack. | {integer} | integer |
-| `INCA` |  | Increment accumulator. | {integer} | integer |
-| `INC` | Arg0 | Increment argument. | {integer} | integer |
-| `DECA` |  | Decrement accumulator. | {integer} | integer |
-| `DEC` | Arg0 | Decrement argument. | {integer} | integer |
-| `ADD` | Arg0 Arg1 Arg2 | Arg0 := Arg1 + Arg2. | {integer,integer} | integer |
-| `SUB` | Arg0 Arg1 Arg2 | Arg0 := Arg1 - Arg2. | {integer,integer} | integer |
-| `MUL` | Arg0 Arg1 Arg2 | Arg0 := Arg1 * Arg2. | {integer,integer} | integer |
-| `DIV` | Arg0 Arg1 Arg2 | Arg0 := Arg1 / Arg2. | {integer,integer} | integer |
-| `MOD` | Arg0 Arg1 Arg2 | Arg0 := Arg1 mod Arg2. | {integer,integer} | integer |
-| `POW` | Arg0 Arg1 Arg2 | Arg0 := Arg1  ^ Arg2. | {integer,integer} | integer |
-| `STORE` | Arg0 Arg1 | Arg0 := Arg1. | {any} | any |
-| `SHA3` | Arg0 Arg1 | Arg0 := sha3(Arg1). | {any} | hash |
-| `SHA256` | Arg0 Arg1 | Arg0 := sha256(Arg1). | {any} | hash |
-| `BLAKE2B` | Arg0 Arg1 | Arg0 := blake2b(Arg1). | {any} | hash |
-| `LT` | Arg0 Arg1 Arg2 | Arg0 := Arg1  < Arg2. | {integer,integer} | boolean |
-| `GT` | Arg0 Arg1 Arg2 | Arg0 := Arg1  > Arg2. | {integer,integer} | boolean |
-| `EQ` | Arg0 Arg1 Arg2 | Arg0 := Arg1  = Arg2. | {integer,integer} | boolean |
-| `ELT` | Arg0 Arg1 Arg2 | Arg0 := Arg1 =< Arg2. | {integer,integer} | boolean |
-| `EGT` | Arg0 Arg1 Arg2 | Arg0 := Arg1 >= Arg2. | {integer,integer} | boolean |
-| `NEQ` | Arg0 Arg1 Arg2 | Arg0 := Arg1 /= Arg2. | {integer,integer} | boolean |
-| `AND` | Arg0 Arg1 Arg2 | Arg0 := Arg1 and Arg2. | {boolean,boolean} | boolean |
-| `OR` | Arg0 Arg1 Arg2 | Arg0 := Arg1  or Arg2. | {boolean,boolean} | boolean |
-| `NOT` | Arg0 Arg1 | Arg0 := not Arg1. | {boolean} | boolean |
-| `TUPLE` | Arg0 Integer | Arg0 := tuple of size = Arg1. Elements on stack. | {integer} | tuple |
-| `ELEMENT` | Arg0 Arg1 Arg2 | Arg1 := element(Arg2, Arg3). | {integer,tuple} | any |
-| `SETELEMENT` | Arg0 Arg1 Arg2 Arg3 | Arg0 := a new tuple similar to Arg2, but with element number Arg1 replaced by Arg3. | {integer,tuple,any} | tuple |
-| `MAP_EMPTY` | Arg0 | Arg0 := #{}. | {} | map |
-| `MAP_LOOKUP` | Arg0 Arg1 Arg2 | Arg0 := lookup key Arg2 in map Arg1. | {map,any} | any |
-| `MAP_LOOKUPD` | Arg0 Arg1 Arg2 Arg3 | Arg0 := lookup key Arg2 in map Arg1 if key exists in map otherwise Arg0 := Arg3. | {map,any,any} | any |
-| `MAP_UPDATE` | Arg0 Arg1 Arg2 Arg3 | Arg0 := update key Arg2 in map Arg1 with value Arg3. | {map,any,any} | map |
-| `MAP_DELETE` | Arg0 Arg1 Arg2 | Arg0 := delete key Arg2 from map Arg1. | {map,any} | map |
-| `MAP_MEMBER` | Arg0 Arg1 Arg2 | Arg0 := true if key Arg2 is in map Arg1. | {map,any} | boolean |
-| `MAP_FROM_LIST` | Arg0 Arg1 | Arg0 := make a map from (key, value) list in Arg1. | {{list,{tuple,[any,any]}}} | map |
-| `MAP_SIZE` | Arg0 Arg1 | Arg0 := The size of the map Arg1. | {map} | integer |
-| `MAP_TO_LIST` | Arg0 Arg1 | Arg0 := The tuple list representation of the map Arg1. | {map} | list |
-| `IS_NIL` | Arg0 Arg1 | Arg0 := true if Arg1 == []. | {list} | boolean |
-| `CONS` | Arg0 Arg1 Arg2 | Arg0 := [Arg1|Arg2]. | {any,list} | list |
-| `HD` | Arg0 Arg1 | Arg0 := head of list Arg1. | {list} | any |
-| `TL` | Arg0 Arg1 | Arg0 := tail of list Arg1. | {list} | list |
-| `LENGTH` | Arg0 Arg1 | Arg0 := length of list Arg1. | {list} | integer |
-| `NIL` | Arg0 | Arg0 := []. | {} | list |
-| `APPEND` | Arg0 Arg1 Arg2 | Arg0 := Arg1 ++ Arg2. | {list,list} | list |
-| `STR_JOIN` | Arg0 Arg1 Arg2 | Arg0 := string Arg1 followed by string Arg2. | {string,string} | string |
-| `INT_TO_STR` | Arg0 Arg1 | Arg0 := turn integer Arg1 into a string. | {integer} | string |
-| `ADDR_TO_STR` | Arg0 Arg1 | Arg0 := turn address Arg1 into a string. | {address} | string |
-| `STR_REVERSE` | Arg0 Arg1 | Arg0 := the reverse of string Arg1. | {string} | string |
-| `STR_LENGTH` | Arg0 Arg1 | Arg0 := The length of the string Arg1. | {string} | integer |
-| `BYTES_TO_INT` | Arg0 Arg1 | Arg0 := bytes_to_int(Arg1) | {bytes} | integer |
-| `BYTES_TO_STR` | Arg0 Arg1 | Arg0 := bytes_to_str(Arg1) | {bytes} | string |
-| `BYTES_CONCAT` | Arg0 Arg1 Arg2 | Arg0 := bytes_concat(Arg1, Arg2) | {bytes,bytes} | bytes |
-| `BYTES_SPLIT` | Arg0 Arg1 Arg2 | Arg0 := bytes_split(Arg2, Arg1), where Arg2 is the length of the first chunk. | {bytes,integer} | bytes |
-| `INT_TO_ADDR` | Arg0 Arg1 | Arg0 := turn integer Arg1 into an address. | {integer} | address |
-| `VARIANT` | Arg0 Arg1 Arg2 Arg3 | Arg0 := create a variant of size Arg1 with the tag Arg2 (Arg2 < Arg1) and take Arg3 elements from the stack. | {integer,integer,integer} | variant |
-| `VARIANT_TEST` | Arg0 Arg1 Arg2 | Arg0 := true if variant Arg1 has the tag Arg2. | {variant,integer} | boolean |
-| `VARIANT_ELEMENT` | Arg0 Arg1 Arg2 | Arg0 := element number Arg2 from variant Arg1. | {variant,integer} | any |
-| `BITS_NONEA` |  | push an empty bitmap on the stack. | {} | bits |
-| `BITS_NONE` | Arg0 | Arg0 := empty bitmap. | {} | bits |
-| `BITS_ALLA` |  | push a full bitmap on the stack. | {} | bits |
-| `BITS_ALL` | Arg0 | Arg0 := full bitmap. | {} | bits |
-| `BITS_ALL_N` | Arg0 Arg1 | Arg0 := bitmap with Arg1 bits set. | {integer} | bits |
-| `BITS_SET` | Arg0 Arg1 Arg2 | Arg0 := set bit Arg2 of bitmap Arg1. | {bits,integer} | bits |
-| `BITS_CLEAR` | Arg0 Arg1 Arg2 | Arg0 := clear bit Arg2 of bitmap Arg1. | {bits,integer} | bits |
-| `BITS_TEST` | Arg0 Arg1 Arg2 | Arg0 := true if bit Arg2 of bitmap Arg1 is set. | {bits,integer} | boolean |
-| `BITS_SUM` | Arg0 Arg1 | Arg0 := sum of set bits in bitmap Arg1. Exception if infinit bitmap. | {bits} | integer |
-| `BITS_OR` | Arg0 Arg1 Arg2 | Arg0 := Arg1 v Arg2. | {bits,bits} | bits |
-| `BITS_AND` | Arg0 Arg1 Arg2 | Arg0 := Arg1 ^ Arg2. | {bits,bits} | bits |
-| `BITS_DIFF` | Arg0 Arg1 Arg2 | Arg0 := Arg1 - Arg2. | {bits,bits} | bits |
-| `BALANCE` | Arg0 | Arg0 := The current contract balance. | {} | integer |
-| `ORIGIN` | Arg0 | Arg0 := Address of contract called by the call transaction. | {} | address |
-| `CALLER` | Arg0 | Arg0 := The address that signed the call transaction. | {} | address |
-| `BLOCKHASH` | Arg0 Arg1 | Arg0 := The blockhash at height. | {integer} | variant |
-| `BENEFICIARY` | Arg0 | Arg0 := The address of the current beneficiary. | {} | address |
-| `TIMESTAMP` | Arg0 | Arg0 := The current timestamp. Unrelaiable, don't use for anything. | {} | integer |
-| `GENERATION` | Arg0 | Arg0 := The block height of the cureent generation. | {} | integer |
-| `MICROBLOCK` | Arg0 | Arg0 := The current micro block number. | {} | integer |
-| `DIFFICULTY` | Arg0 | Arg0 := The current difficulty. | {} | integer |
-| `GASLIMIT` | Arg0 | Arg0 := The current gaslimit. | {} | integer |
-| `GAS` | Arg0 | Arg0 := The amount of gas left. | {} | integer |
-| `ADDRESS` | Arg0 | Arg0 := The current contract address. | {} | address |
-| `GASPRICE` | Arg0 | Arg0 := The current gas price. | {} | integer |
-| `LOG0` | Arg0 | Create a log message in the call object. | {string} | none |
-| `LOG1` | Arg0 Arg1 | Create a log message with one topic in the call object. | {integer,string} | none |
-| `LOG2` | Arg0 Arg1 Arg2 | Create a log message with two topics in the call object. | {integer,integer,string} | none |
-| `LOG3` | Arg0 Arg1 Arg2 Arg3 | Create a log message with three topics in the call object. | {integer,integer,integer,string} | none |
-| `LOG4` | Arg0 Arg1 Arg2 Arg3 Arg4 | Create a log message with four topics in the call object. | {integer,integer,integer,integer,string} | none |
-| `SPEND` | Arg0 Arg1 | Transfer Arg1 coins to account Arg0. (If the contract account has at least that many coins. | {address,integer} | none |
-| `ORACLE_REGISTER` | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 Arg6 | Arg0 := New oracle with address Arg2, query fee Arg3, TTL Arg4, query type Arg5 and response type Arg6. Arg0 contains delegation signature. | {signature,address,integer,variant,typerep,typerep} | oracle |
-| `ORACLE_QUERY` | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 Arg6 Arg7 | Arg0 := New oracle query for oracle Arg1, question in Arg2, query fee in Arg3, query TTL in Arg4, response TTL in Arg5. Typereps for checking oracle type is in Arg6 and Arg7. | {oracle,any,integer,variant,variant,typerep,typerep} | oracle_query |
-| `ORACLE_RESPOND` | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 | Respond as oracle Arg1 to query in Arg2 with response Arg3. Arg0 contains delegation signature. Typereps for checking oracle type is in Arg4 and Arg5. | {signature,oracle,oracle_query,any,typerep,typerep} | none |
-| `ORACLE_EXTEND` | Arg0 Arg1 Arg2 | Extend oracle in Arg1 with TTL in Arg2. Arg0 contains delegation signature. | {signature,oracle,variant} | none |
-| `ORACLE_GET_ANSWER` | Arg0 Arg1 Arg2 Arg3 Arg4 | Arg0 := option variant with answer (if any) from oracle query in Arg1 given by oracle Arg0. Typereps for checking oracle type is in Arg3 and Arg4. | {oracle,oracle_query,typerep,typerep} | any |
-| `ORACLE_GET_QUESTION` | Arg0 Arg1 Arg2 Arg3 Arg4 | Arg0 := question in oracle query Arg2 given to oracle Arg1. Typereps for checking oracle type is in Arg3 and Arg4. | {oracle,oracle_query,typerep,typerep} | any |
-| `ORACLE_QUERY_FEE` | Arg0 Arg1 | Arg0 := query fee for oracle Arg1 | {oracle} | integer |
-| `AENS_RESOLVE` | Arg0 Arg1 Arg2 Arg3 | Resolve name in Arg0 with tag Arg1. Arg2 describes the type parameter of the resolved name. | {string,string,typerep} | variant |
-| `AENS_PRECLAIM` | Arg0 Arg1 Arg2 | Preclaim the hash in Arg2 for address in Arg1. Arg0 contains delegation signature. | {signature,address,hash} | none |
-| `AENS_CLAIM` | Arg0 Arg1 Arg2 Arg3 Arg4 | Attempt to claim the name in Arg2 for address in Arg1 at a price in Arg4. Arg3 contains the salt used to hash the preclaim. Arg0 contains delegation signature. | {signature,address,string,integer,integer} | none |
-| `AENS_UPDATE` | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 | Updates name in Arg2 for address in Arg1. Arg3 contains optional ttl (of type Chain.ttl), Arg4 contains optional client_ttl (of type int), Arg5 contains optional pointers (of type map(string, pointee)) | {signature,address,string,variant,variant,variant} | none |
-| `AENS_TRANSFER` | Arg0 Arg1 Arg2 Arg3 | Transfer ownership of name Arg3 from account Arg1 to Arg2. Arg0 contains delegation signature. | {signature,address,address,string} | none |
-| `AENS_REVOKE` | Arg0 Arg1 Arg2 | Revoke the name in Arg2 from owner Arg1. Arg0 contains delegation signature. | {signature,address,string} | none |
-| `BALANCE_OTHER` | Arg0 Arg1 | Arg0 := The balance of address Arg1. | {address} | integer |
-| `VERIFY_SIG` | Arg0 Arg1 Arg2 Arg3 | Arg0 := verify_sig(Hash, PubKey, Signature) | {bytes,address,bytes} | boolean |
-| `VERIFY_SIG_SECP256K1` | Arg0 Arg1 Arg2 Arg3 | Arg0 := verify_sig_secp256k1(Hash, PubKey, Signature) | {bytes,bytes,bytes} | boolean |
-| `CONTRACT_TO_ADDRESS` | Arg0 Arg1 | Arg0 := Arg1 - A no-op type conversion | {contract} | address |
-| `AUTH_TX_HASH` | Arg0 | If in GA authentication context return Some(TxHash) otherwise None. | {} | variant |
-| `ORACLE_CHECK` | Arg0 Arg1 Arg2 Arg3 | Arg0 := is Arg1 an oracle with the given query (Arg2) and response (Arg3) types | {oracle,typerep,typerep} | bool |
-| `ORACLE_CHECK_QUERY` | Arg0 Arg1 Arg2 Arg3 Arg4 | Arg0 := is Arg2 a query for the oracle Arg1 with the given types (Arg3, Arg4) | {oracle,oracle_query,typerep,typerep} | bool |
-| `IS_ORACLE` | Arg0 Arg1 | Arg0 := is Arg1 an oracle | {address} | bool |
-| `IS_CONTRACT` | Arg0 Arg1 | Arg0 := is Arg1 a contract | {address} | bool |
-| `IS_PAYABLE` | Arg0 Arg1 | Arg0 := is Arg1 a payable address | {address} | bool |
-| `CREATOR` | Arg0 | Arg0 := contract creator | {} | address |
-| `ECVERIFY_SECP256K1` | Arg0 Arg1 Arg2 Arg3 | Arg0 := ecverify_secp256k1(Hash, Addr, Signature) | {bytes,bytes,bytes} | bytes |
-| `ECRECOVER_SECP256K1` | Arg0 Arg1 Arg2 | Arg0 := ecrecover_secp256k1(Hash, Signature) | {bytes,bytes} | bytes |
-| `ADDRESS_TO_CONTRACT` | Arg0 Arg1 | Arg0 := Arg1 - A no-op type conversion | {address} | contract |
-| `BLS12_381_G1_NEG` | Arg0 Arg1 | Arg0 := BLS12_381.g1_neg(Arg1) - Negate a G1-value | {tuple} | tuple |
-| `BLS12_381_G1_NORM` | Arg0 Arg1 | Arg0 := BLS12_381.g1_normalize(Arg1) - Normalize a G1-value | {tuple} | tuple |
-| `BLS12_381_G1_VALID` | Arg0 Arg1 | Arg0 := BLS12_381.g1_valid(Arg1) - Check if G1-value is a valid group member | {tuple} | bool |
-| `BLS12_381_G1_IS_ZERO` | Arg0 Arg1 | Arg0 := BLS12_381.g1_is_zero(Arg1) - Check if G1-value is zero | {tuple} | bool |
-| `BLS12_381_G1_ADD` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.g1_add(Arg1, Arg2) - Add two G1-values | {tuple,tuple} | tuple |
-| `BLS12_381_G1_MUL` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.g1_mul(Arg1, Arg2) - Scalar multiplication for a G1-value (Arg1), and an Fr-value | {tuple,tuple} | tuple |
-| `BLS12_381_G2_NEG` | Arg0 Arg1 | Arg0 := BLS12_381.g2_neg(Arg1) - Negate a G2-value | {tuple} | tuple |
-| `BLS12_381_G2_NORM` | Arg0 Arg1 | Arg0 := BLS12_381.g2_normalize(Arg1) - Normalize a G2-value | {tuple} | tuple |
-| `BLS12_381_G2_VALID` | Arg0 Arg1 | Arg0 := BLS12_381.g2_valid(Arg1) - Check if G2-value is a valid group member | {tuple} | bool |
-| `BLS12_381_G2_IS_ZERO` | Arg0 Arg1 | Arg0 := BLS12_381.g2_is_zero(Arg1) - Check if G2-value is zero | {tuple} | bool |
-| `BLS12_381_G2_ADD` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.g2_add(Arg1, Arg2) - Add two G2-values | {tuple,tuple} | tuple |
-| `BLS12_381_G2_MUL` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.g2_mul(Arg1, Arg2) - Scalar multiplication for a G2-value (Arg2), and an Fr-value | {tuple,tuple} | tuple |
-| `BLS12_381_GT_INV` | Arg0 Arg1 | Arg0 := BLS12_381.gt_inv(Arg1) - Invert a GT-value | {tuple} | tuple |
-| `BLS12_381_GT_ADD` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.gt_add(Arg1, Arg2) - Add two GT-values | {tuple,tuple} | tuple |
-| `BLS12_381_GT_MUL` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.gt_mul(Arg1, Arg2) - Multiply two GT-values | {tuple,tuple} | tuple |
-| `BLS12_381_GT_POW` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.gt_pow(Arg1, Arg2) - Scalar exponentiation for a GT-value (Arg2), and an Fr-value | {tuple,tuple} | tuple |
-| `BLS12_381_GT_IS_ONE` | Arg0 Arg1 | Arg0 := BLS12_381.gt_is_one(Arg1) - Check if a GT value is "one" | {tuple} | bool |
-| `BLS12_381_PAIRING` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.pairing(Arg1, Arg2) - Find the pairing of a G1-value (Arg1) and a G2-value (Arg2) | {tuple,tuple} | tuple |
-| `BLS12_381_MILLER_LOOP` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.miller_loop(Arg1, Arg2) - Do the Miller-loop step of pairing for a G1-value (Arg1) and a G2-value (Arg2) | {tuple,tuple} | tuple |
-| `BLS12_381_FINAL_EXP` | Arg0 Arg1 | Arg0 := BLS12_381.final_exp(Arg1) - Do the final exponentiation in pairing | {tuple} | tuple |
-| `BLS12_381_INT_TO_FR` | Arg0 Arg1 | Arg0 := to_montgomery(Arg1) - Convert (Big)integer to Montgomery representation (32 bytes) | {tuple} | tuple |
-| `BLS12_381_INT_TO_FP` | Arg0 Arg1 | Arg0 := to_montgomery(Arg1) - Convert (Big)integer to Montgomery representation (48 bytes) | {tuple} | tuple |
-| `BLS12_381_FR_TO_INT` | Arg0 Arg1 | Arg0 := from_montgomery(Arg1) - Convert Montgomery representation (32 bytes) to integer | {tuple} | tuple |
-| `BLS12_381_FP_TO_INT` | Arg0 Arg1 | Arg0 := from_montgomery(Arg1) - Convert Montgomery representation (48 bytes) to integer | {tuple} | tuple |
-| `AENS_LOOKUP` | Arg0 Arg1 | Lookup the name of Arg0. Returns option(AENS.name) | {string} | variant |
-| `ORACLE_EXPIRY` | Arg0 Arg1 | Arg0 := expiry block for oracle Arg1 | {oracle} | int |
-| `AUTH_TX` | Arg0 | If in GA authentication context return Some(Tx) otherwise None. | {} | variant |
-| `STR_TO_LIST` | Arg0 Arg1 | Arg0 := string converted to list of characters | {string} | list |
-| `STR_FROM_LIST` | Arg0 Arg1 | Arg0 := string converted from list of characters | {list} | string |
-| `STR_TO_UPPER` | Arg0 Arg1 | Arg0 := to_upper(string) | {string} | string |
-| `STR_TO_LOWER` | Arg0 Arg1 | Arg0 := to_lower(string) | {string} | string |
-| `CHAR_TO_INT` | Arg0 Arg1 | Arg0 := integer representation of UTF-8 character | {char} | int |
-| `CHAR_FROM_INT` | Arg0 Arg1 | Arg0 := Some(UTF-8 character) from integer if valid, None if not valid. | {int} | variant |
-| `CALL_PGR` | Arg0 Identifier Arg2 Arg3 Arg4 Arg5 Arg6 | Potentially protected remote call. Arg5 is protected flag, otherwise as CALL_GR. | {contract,string,typerep,typerep,integer,integer,bool} | variant |
-| `CREATE` | Arg0 Arg1 Arg2 | Deploys a contract with a bytecode Arg1 and value Arg3. The `init` arguments should be placed on the stack and match the type in Arg2. Writes contract address to the top of the accumulator stack. If an account on the resulting address did exist before the call, the `payable` flag will be updated. | {contract_bytearray,typerep,integer} | contract |
-| `CLONE` | Arg0 Arg1 Arg2 Arg3 | Clones the contract under Arg1 and deploys it with value of Arg3. The `init` arguments should be placed on the stack and match the type in Arg2. Writes contract (or `None` on fail when protected) to the top of the accumulator stack. Does not copy the existing contract's store – it will be initialized by a fresh call to the `init` function. If an account on the resulting address did exist before the call, the `payable` flag will be updated. | {contract,typerep,integer,bool} | any |
-| `CLONE_G` | Arg0 Arg1 Arg2 Arg3 Arg4 | Like `CLONE` but additionally limits the gas of the `init` call by Arg3 | {contract,typerep,integer,integer,bool} | any |
-| `BYTECODE_HASH` | Arg0 Arg1 | Arg0 := hash of the deserialized contract's bytecode under address given in Arg1 (or `None` on fail). Fails on AEVM contracts and contracts deployed before Iris. | {contract} | variant |
-| `FEE` | Arg0 | Arg0 := The fee for the current call tx. | {} | integer |
-| `DEACTIVATE` |  | Mark the current contract for deactivation. | {} | none |
-| `ABORT` | Arg0 | Abort execution (dont use all gas) with error message in Arg0. | {string} | none |
-| `EXIT` | Arg0 | Abort execution (use upp all gas) with error message in Arg0. | {string} | none |
-| `NOP` |  | The no op. does nothing. | {} | none |
+| Name | Args | Description | Arg types | Res type | Added in VM version |
+| ---- | ---- | ----------- | --------- | -------- | ------------------- |
+| `RETURN` |  | Return from function call, top of stack is return value . The type of the retun value has to match the return type of the function. | {} | any | `FATE_01` |
+| `RETURNR` | Arg0 | Push Arg0 and return from function. The type of the retun value has to match the return type of the function. | {any} | any | `FATE_01` |
+| `CALL` | Arg0 | Call the function Arg0 with args on stack. The types of the arguments has to match the argument typs of the function. | {string} | any | `FATE_01` |
+| `CALL_R` | Arg0 Identifier Arg2 Arg3 Arg4 | Remote call to contract Arg0 and function Arg1 of type Arg2 => Arg3 with value Arg4. The types of the arguments has to match the argument types of the function. | {contract,string,typerep,typerep,integer} | any | `FATE_01` |
+| `CALL_T` | Arg0 | Tail call to function Arg0. The types of the arguments has to match the argument typs of the function. And the return type of the called function has to match the type of the current function. | {string} | any | `FATE_01` |
+| `CALL_GR` | Arg0 Identifier Arg2 Arg3 Arg4 Arg5 | Remote call with gas cap in Arg4. Otherwise as CALL_R. | {contract,string,typerep,typerep,integer,integer} | any | `FATE_01` |
+| `JUMP` | Integer | Jump to a basic block. The basic block has to exist in the current function. | {integer} | none | `FATE_01` |
+| `JUMPIF` | Arg0 Integer | Conditional jump to a basic block. If Arg0 then jump to Arg1. | {boolean,integer} | none | `FATE_01` |
+| `SWITCH_V2` | Arg0 Integer Integer | Conditional jump to a basic block on variant tag. | {variant,integer,ingeger} | none | `FATE_01` |
+| `SWITCH_V3` | Arg0 Integer Integer Integer | Conditional jump to a basic block on variant tag. | {variant,integer,integer,ingeger} | none | `FATE_01` |
+| `SWITCH_VN` | Arg0 [Integers] | Conditional jump to a basic block on variant tag. | {variant,{list,integer}} | none | `FATE_01` |
+| `CALL_VALUE` | Arg0 | The value sent in the current remote call. | {} | integer | `FATE_01` |
+| `PUSH` | Arg0 | Push argument to stack. | {any} | any | `FATE_01` |
+| `DUPA` |  | Duplicate top of stack. | {any} | any | `FATE_01` |
+| `DUP` | Arg0 | push Arg0 stack pos on top of stack. | {any} | any | `FATE_01` |
+| `POP` | Arg0 | Arg0 := top of stack. | {integer} | integer | `FATE_01` |
+| `INCA` |  | Increment accumulator. | {integer} | integer | `FATE_01` |
+| `INC` | Arg0 | Increment argument. | {integer} | integer | `FATE_01` |
+| `DECA` |  | Decrement accumulator. | {integer} | integer | `FATE_01` |
+| `DEC` | Arg0 | Decrement argument. | {integer} | integer | `FATE_01` |
+| `ADD` | Arg0 Arg1 Arg2 | Arg0 := Arg1 + Arg2. | {integer,integer} | integer | `FATE_01` |
+| `SUB` | Arg0 Arg1 Arg2 | Arg0 := Arg1 - Arg2. | {integer,integer} | integer | `FATE_01` |
+| `MUL` | Arg0 Arg1 Arg2 | Arg0 := Arg1 * Arg2. | {integer,integer} | integer | `FATE_01` |
+| `DIV` | Arg0 Arg1 Arg2 | Arg0 := Arg1 / Arg2. | {integer,integer} | integer | `FATE_01` |
+| `MOD` | Arg0 Arg1 Arg2 | Arg0 := Arg1 mod Arg2. | {integer,integer} | integer | `FATE_01` |
+| `POW` | Arg0 Arg1 Arg2 | Arg0 := Arg1  ^ Arg2. | {integer,integer} | integer | `FATE_01` |
+| `STORE` | Arg0 Arg1 | Arg0 := Arg1. | {any} | any | `FATE_01` |
+| `SHA3` | Arg0 Arg1 | Arg0 := sha3(Arg1). | {any} | hash | `FATE_01` |
+| `SHA256` | Arg0 Arg1 | Arg0 := sha256(Arg1). | {any} | hash | `FATE_01` |
+| `BLAKE2B` | Arg0 Arg1 | Arg0 := blake2b(Arg1). | {any} | hash | `FATE_01` |
+| `LT` | Arg0 Arg1 Arg2 | Arg0 := Arg1  < Arg2. | {integer,integer} | boolean | `FATE_01` |
+| `GT` | Arg0 Arg1 Arg2 | Arg0 := Arg1  > Arg2. | {integer,integer} | boolean | `FATE_01` |
+| `EQ` | Arg0 Arg1 Arg2 | Arg0 := Arg1  = Arg2. | {integer,integer} | boolean | `FATE_01` |
+| `ELT` | Arg0 Arg1 Arg2 | Arg0 := Arg1 =< Arg2. | {integer,integer} | boolean | `FATE_01` |
+| `EGT` | Arg0 Arg1 Arg2 | Arg0 := Arg1 >= Arg2. | {integer,integer} | boolean | `FATE_01` |
+| `NEQ` | Arg0 Arg1 Arg2 | Arg0 := Arg1 /= Arg2. | {integer,integer} | boolean | `FATE_01` |
+| `AND` | Arg0 Arg1 Arg2 | Arg0 := Arg1 and Arg2. | {boolean,boolean} | boolean | `FATE_01` |
+| `OR` | Arg0 Arg1 Arg2 | Arg0 := Arg1  or Arg2. | {boolean,boolean} | boolean | `FATE_01` |
+| `NOT` | Arg0 Arg1 | Arg0 := not Arg1. | {boolean} | boolean | `FATE_01` |
+| `TUPLE` | Arg0 Integer | Arg0 := tuple of size = Arg1. Elements on stack. | {integer} | tuple | `FATE_01` |
+| `ELEMENT` | Arg0 Arg1 Arg2 | Arg1 := element(Arg2, Arg3). | {integer,tuple} | any | `FATE_01` |
+| `SETELEMENT` | Arg0 Arg1 Arg2 Arg3 | Arg0 := a new tuple similar to Arg2, but with element number Arg1 replaced by Arg3. | {integer,tuple,any} | tuple | `FATE_01` |
+| `MAP_EMPTY` | Arg0 | Arg0 := #{}. | {} | map | `FATE_01` |
+| `MAP_LOOKUP` | Arg0 Arg1 Arg2 | Arg0 := lookup key Arg2 in map Arg1. | {map,any} | any | `FATE_01` |
+| `MAP_LOOKUPD` | Arg0 Arg1 Arg2 Arg3 | Arg0 := lookup key Arg2 in map Arg1 if key exists in map otherwise Arg0 := Arg3. | {map,any,any} | any | `FATE_01` |
+| `MAP_UPDATE` | Arg0 Arg1 Arg2 Arg3 | Arg0 := update key Arg2 in map Arg1 with value Arg3. | {map,any,any} | map | `FATE_01` |
+| `MAP_DELETE` | Arg0 Arg1 Arg2 | Arg0 := delete key Arg2 from map Arg1. | {map,any} | map | `FATE_01` |
+| `MAP_MEMBER` | Arg0 Arg1 Arg2 | Arg0 := true if key Arg2 is in map Arg1. | {map,any} | boolean | `FATE_01` |
+| `MAP_FROM_LIST` | Arg0 Arg1 | Arg0 := make a map from (key, value) list in Arg1. | {{list,{tuple,[any,any]}}} | map | `FATE_01` |
+| `MAP_SIZE` | Arg0 Arg1 | Arg0 := The size of the map Arg1. | {map} | integer | `FATE_01` |
+| `MAP_TO_LIST` | Arg0 Arg1 | Arg0 := The tuple list representation of the map Arg1. | {map} | list | `FATE_01` |
+| `IS_NIL` | Arg0 Arg1 | Arg0 := true if Arg1 == []. | {list} | boolean | `FATE_01` |
+| `CONS` | Arg0 Arg1 Arg2 | Arg0 := [Arg1|Arg2]. | {any,list} | list | `FATE_01` |
+| `HD` | Arg0 Arg1 | Arg0 := head of list Arg1. | {list} | any | `FATE_01` |
+| `TL` | Arg0 Arg1 | Arg0 := tail of list Arg1. | {list} | list | `FATE_01` |
+| `LENGTH` | Arg0 Arg1 | Arg0 := length of list Arg1. | {list} | integer | `FATE_01` |
+| `NIL` | Arg0 | Arg0 := []. | {} | list | `FATE_01` |
+| `APPEND` | Arg0 Arg1 Arg2 | Arg0 := Arg1 ++ Arg2. | {list,list} | list | `FATE_01` |
+| `STR_JOIN` | Arg0 Arg1 Arg2 | Arg0 := string Arg1 followed by string Arg2. | {string,string} | string | `FATE_01` |
+| `INT_TO_STR` | Arg0 Arg1 | Arg0 := turn integer Arg1 into a string. | {integer} | string | `FATE_01` |
+| `ADDR_TO_STR` | Arg0 Arg1 | Arg0 := turn address Arg1 into a string. | {address} | string | `FATE_01` |
+| `STR_REVERSE` | Arg0 Arg1 | Arg0 := the reverse of string Arg1. | {string} | string | `FATE_01` |
+| `STR_LENGTH` | Arg0 Arg1 | Arg0 := The length of the string Arg1. | {string} | integer | `FATE_01` |
+| `BYTES_TO_INT` | Arg0 Arg1 | Arg0 := bytes_to_int(Arg1) | {bytes} | integer | `FATE_01` |
+| `BYTES_TO_STR` | Arg0 Arg1 | Arg0 := bytes_to_str(Arg1) | {bytes} | string | `FATE_01` |
+| `BYTES_CONCAT` | Arg0 Arg1 Arg2 | Arg0 := bytes_concat(Arg1, Arg2) | {bytes,bytes} | bytes | `FATE_01` |
+| `BYTES_SPLIT` | Arg0 Arg1 Arg2 | Arg0 := bytes_split(Arg2, Arg1), where Arg2 is the length of the first chunk. | {bytes,integer} | bytes | `FATE_01` |
+| `INT_TO_ADDR` | Arg0 Arg1 | Arg0 := turn integer Arg1 into an address. | {integer} | address | `FATE_01` |
+| `VARIANT` | Arg0 Arg1 Arg2 Arg3 | Arg0 := create a variant of size Arg1 with the tag Arg2 (Arg2 < Arg1) and take Arg3 elements from the stack. | {integer,integer,integer} | variant | `FATE_01` |
+| `VARIANT_TEST` | Arg0 Arg1 Arg2 | Arg0 := true if variant Arg1 has the tag Arg2. | {variant,integer} | boolean | `FATE_01` |
+| `VARIANT_ELEMENT` | Arg0 Arg1 Arg2 | Arg0 := element number Arg2 from variant Arg1. | {variant,integer} | any | `FATE_01` |
+| `BITS_NONEA` |  | push an empty bitmap on the stack. | {} | bits | `FATE_01` |
+| `BITS_NONE` | Arg0 | Arg0 := empty bitmap. | {} | bits | `FATE_01` |
+| `BITS_ALLA` |  | push a full bitmap on the stack. | {} | bits | `FATE_01` |
+| `BITS_ALL` | Arg0 | Arg0 := full bitmap. | {} | bits | `FATE_01` |
+| `BITS_ALL_N` | Arg0 Arg1 | Arg0 := bitmap with Arg1 bits set. | {integer} | bits | `FATE_01` |
+| `BITS_SET` | Arg0 Arg1 Arg2 | Arg0 := set bit Arg2 of bitmap Arg1. | {bits,integer} | bits | `FATE_01` |
+| `BITS_CLEAR` | Arg0 Arg1 Arg2 | Arg0 := clear bit Arg2 of bitmap Arg1. | {bits,integer} | bits | `FATE_01` |
+| `BITS_TEST` | Arg0 Arg1 Arg2 | Arg0 := true if bit Arg2 of bitmap Arg1 is set. | {bits,integer} | boolean | `FATE_01` |
+| `BITS_SUM` | Arg0 Arg1 | Arg0 := sum of set bits in bitmap Arg1. Exception if infinit bitmap. | {bits} | integer | `FATE_01` |
+| `BITS_OR` | Arg0 Arg1 Arg2 | Arg0 := Arg1 v Arg2. | {bits,bits} | bits | `FATE_01` |
+| `BITS_AND` | Arg0 Arg1 Arg2 | Arg0 := Arg1 ^ Arg2. | {bits,bits} | bits | `FATE_01` |
+| `BITS_DIFF` | Arg0 Arg1 Arg2 | Arg0 := Arg1 - Arg2. | {bits,bits} | bits | `FATE_01` |
+| `BALANCE` | Arg0 | Arg0 := The current contract balance. | {} | integer | `FATE_01` |
+| `ORIGIN` | Arg0 | Arg0 := Address of contract called by the call transaction. | {} | address | `FATE_01` |
+| `CALLER` | Arg0 | Arg0 := The address that signed the call transaction. | {} | address | `FATE_01` |
+| `BLOCKHASH` | Arg0 Arg1 | Arg0 := The blockhash at height. | {integer} | variant | `FATE_01` |
+| `BENEFICIARY` | Arg0 | Arg0 := The address of the current beneficiary. | {} | address | `FATE_01` |
+| `TIMESTAMP` | Arg0 | Arg0 := The current timestamp. Unrelaiable, don't use for anything. | {} | integer | `FATE_01` |
+| `GENERATION` | Arg0 | Arg0 := The block height of the cureent generation. | {} | integer | `FATE_01` |
+| `MICROBLOCK` | Arg0 | Arg0 := The current micro block number. | {} | integer | `FATE_01` |
+| `DIFFICULTY` | Arg0 | Arg0 := The current difficulty. | {} | integer | `FATE_01` |
+| `GASLIMIT` | Arg0 | Arg0 := The current gaslimit. | {} | integer | `FATE_01` |
+| `GAS` | Arg0 | Arg0 := The amount of gas left. | {} | integer | `FATE_01` |
+| `ADDRESS` | Arg0 | Arg0 := The current contract address. | {} | address | `FATE_01` |
+| `GASPRICE` | Arg0 | Arg0 := The current gas price. | {} | integer | `FATE_01` |
+| `LOG0` | Arg0 | Create a log message in the call object. | {string} | none | `FATE_01` |
+| `LOG1` | Arg0 Arg1 | Create a log message with one topic in the call object. | {integer,string} | none | `FATE_01` |
+| `LOG2` | Arg0 Arg1 Arg2 | Create a log message with two topics in the call object. | {integer,integer,string} | none | `FATE_01` |
+| `LOG3` | Arg0 Arg1 Arg2 Arg3 | Create a log message with three topics in the call object. | {integer,integer,integer,string} | none | `FATE_01` |
+| `LOG4` | Arg0 Arg1 Arg2 Arg3 Arg4 | Create a log message with four topics in the call object. | {integer,integer,integer,integer,string} | none | `FATE_01` |
+| `SPEND` | Arg0 Arg1 | Transfer Arg1 coins to account Arg0. (If the contract account has at least that many coins. | {address,integer} | none | `FATE_01` |
+| `ORACLE_REGISTER` | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 Arg6 | Arg0 := New oracle with address Arg2, query fee Arg3, TTL Arg4, query type Arg5 and response type Arg6. Arg0 contains delegation signature. | {signature,address,integer,variant,typerep,typerep} | oracle | `FATE_01` |
+| `ORACLE_QUERY` | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 Arg6 Arg7 | Arg0 := New oracle query for oracle Arg1, question in Arg2, query fee in Arg3, query TTL in Arg4, response TTL in Arg5. Typereps for checking oracle type is in Arg6 and Arg7. | {oracle,any,integer,variant,variant,typerep,typerep} | oracle_query | `FATE_01` |
+| `ORACLE_RESPOND` | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 | Respond as oracle Arg1 to query in Arg2 with response Arg3. Arg0 contains delegation signature. Typereps for checking oracle type is in Arg4 and Arg5. | {signature,oracle,oracle_query,any,typerep,typerep} | none | `FATE_01` |
+| `ORACLE_EXTEND` | Arg0 Arg1 Arg2 | Extend oracle in Arg1 with TTL in Arg2. Arg0 contains delegation signature. | {signature,oracle,variant} | none | `FATE_01` |
+| `ORACLE_GET_ANSWER` | Arg0 Arg1 Arg2 Arg3 Arg4 | Arg0 := option variant with answer (if any) from oracle query in Arg1 given by oracle Arg0. Typereps for checking oracle type is in Arg3 and Arg4. | {oracle,oracle_query,typerep,typerep} | any | `FATE_01` |
+| `ORACLE_GET_QUESTION` | Arg0 Arg1 Arg2 Arg3 Arg4 | Arg0 := question in oracle query Arg2 given to oracle Arg1. Typereps for checking oracle type is in Arg3 and Arg4. | {oracle,oracle_query,typerep,typerep} | any | `FATE_01` |
+| `ORACLE_QUERY_FEE` | Arg0 Arg1 | Arg0 := query fee for oracle Arg1 | {oracle} | integer | `FATE_01` |
+| `AENS_RESOLVE` | Arg0 Arg1 Arg2 Arg3 | Resolve name in Arg0 with tag Arg1. Arg2 describes the type parameter of the resolved name. | {string,string,typerep} | variant | `FATE_01` |
+| `AENS_PRECLAIM` | Arg0 Arg1 Arg2 | Preclaim the hash in Arg2 for address in Arg1. Arg0 contains delegation signature. | {signature,address,hash} | none | `FATE_01` |
+| `AENS_CLAIM` | Arg0 Arg1 Arg2 Arg3 Arg4 | Attempt to claim the name in Arg2 for address in Arg1 at a price in Arg4. Arg3 contains the salt used to hash the preclaim. Arg0 contains delegation signature. | {signature,address,string,integer,integer} | none | `FATE_01` |
+| `AENS_UPDATE` | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 | Updates name in Arg2 for address in Arg1. Arg3 contains optional ttl (of type Chain.ttl), Arg4 contains optional client_ttl (of type int), Arg5 contains optional pointers (of type map(string, pointee)) | {signature,address,string,variant,variant,variant} | none | `FATE_01` |
+| `AENS_TRANSFER` | Arg0 Arg1 Arg2 Arg3 | Transfer ownership of name Arg3 from account Arg1 to Arg2. Arg0 contains delegation signature. | {signature,address,address,string} | none | `FATE_01` |
+| `AENS_REVOKE` | Arg0 Arg1 Arg2 | Revoke the name in Arg2 from owner Arg1. Arg0 contains delegation signature. | {signature,address,string} | none | `FATE_01` |
+| `BALANCE_OTHER` | Arg0 Arg1 | Arg0 := The balance of address Arg1. | {address} | integer | `FATE_01` |
+| `VERIFY_SIG` | Arg0 Arg1 Arg2 Arg3 | Arg0 := verify_sig(Hash, PubKey, Signature) | {bytes,address,bytes} | boolean | `FATE_01` |
+| `VERIFY_SIG_SECP256K1` | Arg0 Arg1 Arg2 Arg3 | Arg0 := verify_sig_secp256k1(Hash, PubKey, Signature) | {bytes,bytes,bytes} | boolean | `FATE_01` |
+| `CONTRACT_TO_ADDRESS` | Arg0 Arg1 | Arg0 := Arg1 - A no-op type conversion | {contract} | address | `FATE_01` |
+| `AUTH_TX_HASH` | Arg0 | If in GA authentication context return Some(TxHash) otherwise None. | {} | variant | `FATE_01` |
+| `ORACLE_CHECK` | Arg0 Arg1 Arg2 Arg3 | Arg0 := is Arg1 an oracle with the given query (Arg2) and response (Arg3) types | {oracle,typerep,typerep} | bool | `FATE_01` |
+| `ORACLE_CHECK_QUERY` | Arg0 Arg1 Arg2 Arg3 Arg4 | Arg0 := is Arg2 a query for the oracle Arg1 with the given types (Arg3, Arg4) | {oracle,oracle_query,typerep,typerep} | bool | `FATE_01` |
+| `IS_ORACLE` | Arg0 Arg1 | Arg0 := is Arg1 an oracle | {address} | bool | `FATE_01` |
+| `IS_CONTRACT` | Arg0 Arg1 | Arg0 := is Arg1 a contract | {address} | bool | `FATE_01` |
+| `IS_PAYABLE` | Arg0 Arg1 | Arg0 := is Arg1 a payable address | {address} | bool | `FATE_01` |
+| `CREATOR` | Arg0 | Arg0 := contract creator | {} | address | `FATE_01` |
+| `ECVERIFY_SECP256K1` | Arg0 Arg1 Arg2 Arg3 | Arg0 := ecverify_secp256k1(Hash, Addr, Signature) | {bytes,bytes,bytes} | bytes | `FATE_01` |
+| `ECRECOVER_SECP256K1` | Arg0 Arg1 Arg2 | Arg0 := ecrecover_secp256k1(Hash, Signature) | {bytes,bytes} | bytes | `FATE_01` |
+| `ADDRESS_TO_CONTRACT` | Arg0 Arg1 | Arg0 := Arg1 - A no-op type conversion | {address} | contract | `FATE_01` |
+| `BLS12_381_G1_NEG` | Arg0 Arg1 | Arg0 := BLS12_381.g1_neg(Arg1) - Negate a G1-value | {tuple} | tuple | `FATE_02` |
+| `BLS12_381_G1_NORM` | Arg0 Arg1 | Arg0 := BLS12_381.g1_normalize(Arg1) - Normalize a G1-value | {tuple} | tuple | `FATE_02` |
+| `BLS12_381_G1_VALID` | Arg0 Arg1 | Arg0 := BLS12_381.g1_valid(Arg1) - Check if G1-value is a valid group member | {tuple} | bool | `FATE_02` |
+| `BLS12_381_G1_IS_ZERO` | Arg0 Arg1 | Arg0 := BLS12_381.g1_is_zero(Arg1) - Check if G1-value is zero | {tuple} | bool | `FATE_02` |
+| `BLS12_381_G1_ADD` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.g1_add(Arg1, Arg2) - Add two G1-values | {tuple,tuple} | tuple | `FATE_02` |
+| `BLS12_381_G1_MUL` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.g1_mul(Arg1, Arg2) - Scalar multiplication for a G1-value (Arg1), and an Fr-value | {tuple,tuple} | tuple | `FATE_02` |
+| `BLS12_381_G2_NEG` | Arg0 Arg1 | Arg0 := BLS12_381.g2_neg(Arg1) - Negate a G2-value | {tuple} | tuple | `FATE_02` |
+| `BLS12_381_G2_NORM` | Arg0 Arg1 | Arg0 := BLS12_381.g2_normalize(Arg1) - Normalize a G2-value | {tuple} | tuple | `FATE_02` |
+| `BLS12_381_G2_VALID` | Arg0 Arg1 | Arg0 := BLS12_381.g2_valid(Arg1) - Check if G2-value is a valid group member | {tuple} | bool | `FATE_02` |
+| `BLS12_381_G2_IS_ZERO` | Arg0 Arg1 | Arg0 := BLS12_381.g2_is_zero(Arg1) - Check if G2-value is zero | {tuple} | bool | `FATE_02` |
+| `BLS12_381_G2_ADD` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.g2_add(Arg1, Arg2) - Add two G2-values | {tuple,tuple} | tuple | `FATE_02` |
+| `BLS12_381_G2_MUL` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.g2_mul(Arg1, Arg2) - Scalar multiplication for a G2-value (Arg2), and an Fr-value | {tuple,tuple} | tuple | `FATE_02` |
+| `BLS12_381_GT_INV` | Arg0 Arg1 | Arg0 := BLS12_381.gt_inv(Arg1) - Invert a GT-value | {tuple} | tuple | `FATE_02` |
+| `BLS12_381_GT_ADD` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.gt_add(Arg1, Arg2) - Add two GT-values | {tuple,tuple} | tuple | `FATE_02` |
+| `BLS12_381_GT_MUL` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.gt_mul(Arg1, Arg2) - Multiply two GT-values | {tuple,tuple} | tuple | `FATE_02` |
+| `BLS12_381_GT_POW` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.gt_pow(Arg1, Arg2) - Scalar exponentiation for a GT-value (Arg2), and an Fr-value | {tuple,tuple} | tuple | `FATE_02` |
+| `BLS12_381_GT_IS_ONE` | Arg0 Arg1 | Arg0 := BLS12_381.gt_is_one(Arg1) - Check if a GT value is "one" | {tuple} | bool | `FATE_02` |
+| `BLS12_381_PAIRING` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.pairing(Arg1, Arg2) - Find the pairing of a G1-value (Arg1) and a G2-value (Arg2) | {tuple,tuple} | tuple | `FATE_02` |
+| `BLS12_381_MILLER_LOOP` | Arg0 Arg1 Arg2 | Arg0 := BLS12_381.miller_loop(Arg1, Arg2) - Do the Miller-loop step of pairing for a G1-value (Arg1) and a G2-value (Arg2) | {tuple,tuple} | tuple | `FATE_02` |
+| `BLS12_381_FINAL_EXP` | Arg0 Arg1 | Arg0 := BLS12_381.final_exp(Arg1) - Do the final exponentiation in pairing | {tuple} | tuple | `FATE_02` |
+| `BLS12_381_INT_TO_FR` | Arg0 Arg1 | Arg0 := to_montgomery(Arg1) - Convert (Big)integer to Montgomery representation (32 bytes) | {tuple} | tuple | `FATE_02` |
+| `BLS12_381_INT_TO_FP` | Arg0 Arg1 | Arg0 := to_montgomery(Arg1) - Convert (Big)integer to Montgomery representation (48 bytes) | {tuple} | tuple | `FATE_02` |
+| `BLS12_381_FR_TO_INT` | Arg0 Arg1 | Arg0 := from_montgomery(Arg1) - Convert Montgomery representation (32 bytes) to integer | {tuple} | tuple | `FATE_02` |
+| `BLS12_381_FP_TO_INT` | Arg0 Arg1 | Arg0 := from_montgomery(Arg1) - Convert Montgomery representation (48 bytes) to integer | {tuple} | tuple | `FATE_02` |
+| `AENS_LOOKUP` | Arg0 Arg1 | Lookup the name of Arg0. Returns option(AENS.name) | {string} | variant | `FATE_02` |
+| `ORACLE_EXPIRY` | Arg0 Arg1 | Arg0 := expiry block for oracle Arg1 | {oracle} | int | `FATE_02` |
+| `AUTH_TX` | Arg0 | If in GA authentication context return Some(Tx) otherwise None. | {} | variant | `FATE_02` |
+| `STR_TO_LIST` | Arg0 Arg1 | Arg0 := string converted to list of characters | {string} | list | `FATE_02` |
+| `STR_FROM_LIST` | Arg0 Arg1 | Arg0 := string converted from list of characters | {list} | string | `FATE_02` |
+| `STR_TO_UPPER` | Arg0 Arg1 | Arg0 := to_upper(string) | {string} | string | `FATE_02` |
+| `STR_TO_LOWER` | Arg0 Arg1 | Arg0 := to_lower(string) | {string} | string | `FATE_02` |
+| `CHAR_TO_INT` | Arg0 Arg1 | Arg0 := integer representation of UTF-8 character | {char} | int | `FATE_02` |
+| `CHAR_FROM_INT` | Arg0 Arg1 | Arg0 := Some(UTF-8 character) from integer if valid, None if not valid. | {int} | variant | `FATE_02` |
+| `CALL_PGR` | Arg0 Identifier Arg2 Arg3 Arg4 Arg5 Arg6 | Potentially protected remote call. Arg5 is protected flag, otherwise as CALL_GR. | {contract,string,typerep,typerep,integer,integer,bool} | variant | `FATE_02` |
+| `CREATE` | Arg0 Arg1 Arg2 | Deploys a contract with a bytecode Arg1 and value Arg3. The `init` arguments should be placed on the stack and match the type in Arg2. Writes contract address to the top of the accumulator stack. If an account on the resulting address did exist before the call, the `payable` flag will be updated. | {contract_bytearray,typerep,integer} | contract | `FATE_02` |
+| `CLONE` | Arg0 Arg1 Arg2 Arg3 | Clones the contract under Arg1 and deploys it with value of Arg3. The `init` arguments should be placed on the stack and match the type in Arg2. Writes contract (or `None` on fail when protected) to the top of the accumulator stack. Does not copy the existing contract's store – it will be initialized by a fresh call to the `init` function. If an account on the resulting address did exist before the call, the `payable` flag will be updated. | {contract,typerep,integer,bool} | any | `FATE_02` |
+| `CLONE_G` | Arg0 Arg1 Arg2 Arg3 Arg4 | Like `CLONE` but additionally limits the gas of the `init` call by Arg3 | {contract,typerep,integer,integer,bool} | any | `FATE_02` |
+| `BYTECODE_HASH` | Arg0 Arg1 | Arg0 := hash of the deserialized contract's bytecode under address given in Arg1 (or `None` on fail). Fails on AEVM contracts and contracts deployed before Iris. | {contract} | variant | `FATE_02` |
+| `FEE` | Arg0 | Arg0 := The fee for the current call tx. | {} | integer | `FATE_02` |
+| `ADDRESS_TO_BYTES` | Arg0 Arg1 | Arg0 := the fixed size byte representation of the address Arg1 | {address} | bytes | `FATE_03` |
+| `POSEIDON` | Arg0 Arg1 Arg2 | Arg0 := the Poseidon hash of Arg1 and Arg2 - all integers in the BLS12-381 scalar field | {integer, integer} | integer | `FATE_03` |
+| `MULMOD` | Arg0 Arg1 Arg2 Arg3 | Arg0 := (Arg1 * Arg2) mod Arg3 | {integer, integer, integer} | integer | `FATE_03` |
+| `BAND` | Arg0 Arg1 Arg2 | Arg0 := Arg1 & Arg2 | {integer, integer} | integer | `FATE_03` |
+| `BOR` | Arg0 Arg1 Arg2 | Arg0 := Arg1 | Arg2 | {integer, integer} | integer | `FATE_03` |
+| `BXOR` | Arg0 Arg1 Arg2 | Arg0 := Arg1 ^ Arg2 | {integer, integer} | integer | `FATE_03` |
+| `BNOT` | Arg0 Arg1 | Arg0 := ~Arg1 | {integer} | integer | `FATE_03` |
+| `BSL` | Arg0 Arg1 Arg2 | Arg0 := Arg1 << Arg2 | {integer, integer} | integer | `FATE_03` |
+| `BSR` | Arg0 Arg1 Arg2 | Arg0 := Arg1 >> Arg2 | {integer, integer} | integer | `FATE_03` |
+| `BYTES_SPLIT_ANY` | Arg0 Arg1 Arg2 | Arg0 := bytes\_split\_any(Arg1, Arg2), where a positive Arg2 is the length of the first chunk, and a negative Arg2 is the length of the second chunk. Returns None if byte array is not long enough. | {bytes, integer} | variant | `FATE_03` |
+| `BYTES_SIZE` | Arg0 Arg1 | Arg0 := bytes\_size(Arg1), returns the number of bytes in the byte array. | {bytes} | integer | `FATE_03` |
+| `BYTES_TO_FIXED_SIZE` | Arg0 Arg1 Arg2 | Arg0 := bytes\_to\_fixe\_size(Arg1, Arg2), returns Some(Arg1') if byte\_size(Arg1) == Arg2, None otherwise. The type of Arg1' is bytes(Arg2) but the value is unchanged | {bytes, integer} | variant | `FATE_03` |
+| `INT_TO_BYTES` | Arg0 Arg1 Arg2 | Arg0 := turn integer Arg1 into a byte array (big endian) length Arg2 (truncating if not fit). | {integer, integer} | bytes | `FATE_03` |
+| `STR_TO_BYTES` | Arg0 Arg1 | Arg0 := turn string Arg1 into the corresponding byte array. | {string} | bytes | `FATE_03` |
+| `DEACTIVATE` |  | Mark the current contract for deactivation. | {} | none | `FATE_01` |
+| `ABORT` | Arg0 | Abort execution (dont use all gas) with error message in Arg0. | {string} | none | `FATE_01` |
+| `EXIT` | Arg0 | Abort execution (use upp all gas) with error message in Arg0. | {string} | none | `FATE_01` |
+| `NOP` |  | The no op. does nothing. | {} | none | `FATE_01` |
 
 #### Opcodes, Flags and Gas
 
@@ -730,6 +754,20 @@ Writing to the accumulator pushes a value to the stack.
 | 0xa5 | `CLONE_G` | true | false | true | 5000 |
 | 0xa6 | `BYTECODE_HASH` | false | true | true | 100 |
 | 0xa7 | `FEE` | false | true | true | 10 |
+| 0xa8 | `ADDRESS_TO_BYTES` | false | true | true | 10 |
+| 0xa9 | `POSEIDON` | false | true | true | 6000 |
+| 0xaa | `MULMOD` | false | true | true | 10 |
+| 0xab | `BAND` | false | true | true | 10 |
+| 0xac | `BOR` | false | true | true | 10 |
+| 0xad | `BXOR` | false | true | true | 10 |
+| 0xae | `BNOT` | false | true | true | 10 |
+| 0xaf | `BSL` | false | true | true | 10 |
+| 0xb0 | `BSR` | false | true | true | 10 |
+| 0xb1 | `BYTES_SPLIT_ANY` | false | true | true | 10 |
+| 0xb2 | `BYTES_SIZE` | false | true | true | 10 |
+| 0xb3 | `BYTES_TO_FIXED_SIZE` | false | true | true | 10 |
+| 0xb4 | `INT_TO_BYTES` | false | true | true | 10 |
+| 0xb5 | `STR_TO_BYTES` | false | true | true | 10 |
 | 0xfa | `DEACTIVATE` | false | true | true | 10 |
 | 0xfb | `ABORT` | true | true | true | 10 |
 | 0xfc | `EXIT` | true | true | true | 10 |

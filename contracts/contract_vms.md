@@ -102,9 +102,11 @@ See [The AEVM](./aevm.md).
   * `Chain.create`, `Chain.clone`, `Chain.bytecode_hash`, `Call.fee`
 * Bug fixes
 * Gas model adjustments
-### FATE_02 -> FATE_03
+### FATE\_02 -> FATE\_03
 * Added operations:
   * bitwise operations on integers (`band`, `bor`, `bxor`, `bnot`, `<<` and `>>`)
-  * Address.to_bytes - converting an address to its binary representation
+  * Address.to\_bytes - converting an address to its binary representation
   * Int.mulmod - a combined multiplication and modulus operation for efficiency
   * Crypto.poseidon - a ZK/SNARK friendly hash function
+  * Arbitrary sized binary arrays: `Bytes.split_any`, `Bytes.to_fixed_size`,
+    `Bytes.size`, `String.to_bytes`, and `Int.to_bytes`
