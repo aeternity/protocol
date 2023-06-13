@@ -3402,14 +3402,28 @@
         
           <li class="md-nav__item">
   <a href="#meta-transaction-version-1-pre-iris" class="md-nav__link">
-    Meta transaction  version 1, pre Iris
+    Meta transaction version 1, pre Iris
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#meta-transaction-version-2-from-iris-on" class="md-nav__link">
-    Meta transaction  version 2, from Iris on
+    Meta transaction version 2, from Iris on
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authtx_hash-pre-ceres" class="md-nav__link">
+    Auth.tx_hash, pre Ceres
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authtx_hash-from-ceres-on" class="md-nav__link">
+    Auth.tx_hash, from Ceres on
   </a>
   
 </li>
@@ -4269,14 +4283,28 @@
         
           <li class="md-nav__item">
   <a href="#meta-transaction-version-1-pre-iris" class="md-nav__link">
-    Meta transaction  version 1, pre Iris
+    Meta transaction version 1, pre Iris
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#meta-transaction-version-2-from-iris-on" class="md-nav__link">
-    Meta transaction  version 2, from Iris on
+    Meta transaction version 2, from Iris on
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authtx_hash-pre-ceres" class="md-nav__link">
+    Auth.tx_hash, pre Ceres
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authtx_hash-from-ceres-on" class="md-nav__link">
+    Auth.tx_hash, from Ceres on
   </a>
   
 </li>
@@ -5814,7 +5842,7 @@ authorization data.</p>
 ]
 </code></pre></div>
 <h4 id="generalized-accounts-meta-transaction">Generalized accounts meta transaction</h4>
-<h5 id="meta-transaction-version-1-pre-iris">Meta transaction  version 1, pre Iris</h5>
+<h5 id="meta-transaction-version-1-pre-iris">Meta transaction version 1, pre Iris</h5>
 <div class="highlight"><pre><span></span><code>[ &lt;ga_id&gt;       :: id()
 , &lt;auth_data&gt;   :: binary()
 , &lt;abi_version&gt; :: int()
@@ -5825,7 +5853,7 @@ authorization data.</p>
 , &lt;tx&gt;          :: binary()
 ]
 </code></pre></div>
-<h5 id="meta-transaction-version-2-from-iris-on">Meta transaction  version 2, from Iris on</h5>
+<h5 id="meta-transaction-version-2-from-iris-on">Meta transaction version 2, from Iris on</h5>
 <div class="highlight"><pre><span></span><code>[ &lt;ga_id&gt;       :: id()
 , &lt;auth_data&gt;   :: binary()
 , &lt;abi_version&gt; :: int()
@@ -5835,6 +5863,23 @@ authorization data.</p>
 , &lt;tx&gt;          :: binary()
 ]
 </code></pre></div>
+<h5 id="authtx_hash-pre-ceres">Auth.tx_hash, pre Ceres</h5>
+<p>The Blake2b hash of:
+<div class="highlight"><pre><span></span><code>[ &lt;fee&gt;  :: int()
+, &lt;gas_price&gt; :: int()
+, &lt;tx_hash&gt;   :: binary()
+]
+</code></pre></div></p>
+<p>Where <code>tx_hash</code> is the hash of the inner transaction.</p>
+<h5 id="authtx_hash-from-ceres-on">Auth.tx_hash, from Ceres on</h5>
+<p>The Blake2b hash of:</p>
+<div class="highlight"><pre><span></span><code>[ &lt;fee&gt;  :: int()
+, &lt;gas_price&gt; :: int()
+, &lt;tx_hash&gt;   :: binary()
+]
+</code></pre></div>
+<p>Where <code>tx_hash</code> is the hash of the inner transaction. The change ensure that a
+rouge miner can not tamper with the <code>fee</code> or the <code>gas_price</code>.</p>
 <h3 id="payingfor">PayingFor</h3>
 <p>The <code>PayingFor</code> transaction is available from version 5, Iris release. By using
 it,  an account <code>P</code> can pay for the transaction (transaction fee + gas) of another

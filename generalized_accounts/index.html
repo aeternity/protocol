@@ -3164,13 +3164,13 @@
 
 <h1 id="generalized-accounts">Generalized accounts</h1>
 <h2 id="motivation">Motivation</h2>
-<p>Plain old accounts (POA) have very little flexibility when it comes to the logic
-controlling them. While this results in a uniform user experience and makes
-development easier, e.g. a wallet only needs to handle a single method of
+<p>Plain old accounts (POA) have very little flexibility when it comes to the
+logic controlling them. While this results in a uniform user experience and
+makes development easier, e.g. a wallet only needs to handle a single method of
 accessing accounts, it also ignores that people may have varying needs when
 managing their accounts.</p>
 <p>This has led to a variety of smart contract wallets being developed, which can
-enforce spending limits, enable more sophisticated authorisation schemes via
+enforce spending limits, enable more sophisticated authorization schemes via
 multi-signatures and other things. The biggest drawback of this approach is the
 need to still own a "normal" account, in order to invoke the smart contract and
 pay for its execution.</p>
@@ -3180,7 +3180,7 @@ being able to pay for their own execution, will be addressed by this proposal.</
 system.</p>
 <h2 id="approaches">Approaches</h2>
 <p>We give a brief overview of some of the different approaches, that would allow
-for authorisation logic to be more flexible.</p>
+for authorization logic to be more flexible.</p>
 <p>They lie on a spectrum from the current fixed signature and nonce scheme to
 having full fledged smart contracts.</p>
 <p>When it comes to modifications required for transactions, there are two ways to
@@ -3193,17 +3193,17 @@ do it:</p>
 </ul>
 <p>In either case, signature logic will need to be touched, s.t. an empty signature
 can be accepted.</p>
-<p>Additionally, the more flexible authorisation logic will make transaction
+<p>Additionally, the more flexible authorization logic will make transaction
 validation costlier and therefore also increase the associated fees.</p>
 <h3 id="side-effect-free">Side-effect free</h3>
 <p>A fairly non-invasive solution would be to attach a pure function to accounts.
-This means that all relevant authorisation code and data, e.g. public keys for
+This means that all relevant authorization code and data, e.g. public keys for
 signature checks, have to be included directly in the function body and can not
 be updated. Nonce handling would still be handled implicitly, i.e. stay
 unchanged.</p>
-<p>Making the authorisation function optional ensures POAs to not be impacted.</p>
+<p>Making the authorization function optional ensures POAs to not be impacted.</p>
 <p>The downsides of this would be the need to for special handling of the
-authorisation code because execution would not happen in the normal VM context
+authorization code because execution would not happen in the normal VM context
 and thus likely end up with a lot of implementation complexity.</p>
 <p>This approach would be a slight improvement over the status quo but still leave
 a lot left to be desired, such as calling other contracts, enforcing dynamic
@@ -3218,11 +3218,11 @@ In addition, the VM does not yet have to the ability to create all the available
 transaction types.</p>
 <h3 id="hybrid">Hybrid</h3>
 <p>For the hybrid solution POAs and smart contracts stay separate, meaning that
-accounts can still be used with the implicit nonce and signature authorisation.
+accounts can still be used with the implicit nonce and signature authorization.
 But accounts are extended with two new fields, allowing its owner to specify the
 address of a smart contract and name of a function, which will be called
 whenever a transaction needs to be authorised.
-As soon as the new authorisation contract is attached to an account, it is no
+As soon as the new authorization contract is attached to an account, it is no
 longer possible to author transactions with the old nonce plus signature method.</p>
 <h2 id="background">Background</h2>
 <p>POAs and smart contract states are currently stored separately.</p>
@@ -3250,9 +3250,9 @@ guarantees integrity of the <code>data</code> and <code>nonce</code> fields, whi
 prevents replay of old transactions.</p>
 <p>In addition to integrity, the signature is used to prove that the issuer knows
 the private key for the public key specified in the <code>from</code> field, i.e. used as
-authorisation.</p>
+authorization.</p>
 <p>The above scheme is the only one natively supported via the POA.</p>
-<p>If the authorisation were to be abstracted as well, then we end up with:</p>
+<p>If the authorization were to be abstracted as well, then we end up with:</p>
 <div class="highlight"><pre><span></span><code> Fieldname       Size (bytes)
  -------------- -----
 | data         | var |
@@ -3298,21 +3298,21 @@ stored in the account tree changes from:</p>
 | ga_auth_fun  | var |
  -------------- -----
 </code></pre></div>
-<p>For the actual wire format please consult the <a href="../serializations/">serialisation</a> document.</p>
+<p>For the actual wire format please consult the <a href="../serializations/">serialization</a> document.</p>
 <p>The <code>ga_contract</code> MUST be the identifier of a deployed contract or empty.
 The <code>ga_auth_fun</code> MUST be the identifier of a function to be called or empty.</p>
 <p>If the <code>ga_contract</code> field is not empty, then the <code>ga_auth_fun</code> field MUST NOT
 be empty.</p>
-<p>If <code>ga_contract</code> is not empty, then authorisation MUST be done by calling the
+<p>If <code>ga_contract</code> is not empty, then authorization MUST be done by calling the
 <code>ga_auth_fun</code> of the contract located at <code>ga_contract</code>. The data provided to the
 <code>ga_auth_fun</code> is supplied via a <a href="#meta_tx"><code>meta_tx</code></a>. The <code>ga_auth_fun</code> MUST
-return <code>true</code> for the authorisation to succeed.</p>
+return <code>true</code> for the authorization to succeed.</p>
 <p>The <code>nonce</code> field is irrelevant if the account is a GA.</p>
 <p>The <code>ga_contract</code> and <code>ga_auth_fun</code> fields MUST NOT go from non-empty to empty,
 i.e. after a POA has been converted to a GA it cannot be undone.</p>
 <p>The <code>ga_contract</code> and <code>ga_auth_fun</code> fields MUST NOT change after they have been
 set once.</p>
-<p>If the <code>ga_contract</code> field is empty, then authorisation MUST be done via the old
+<p>If the <code>ga_contract</code> field is empty, then authorization MUST be done via the old
 verification of the signature attached to transactions. In this case, a
 transaction MUST only be considered valid, if
     1. a signature is attached, that has been produced by the private key that
@@ -3347,7 +3347,7 @@ Afterwards the new <code>meta_tx</code> is used to interact with the GA.</p>
 | call_data    | var |
  -------------- -----
 </code></pre></div>
-<p>For the actual wire format please consult the <a href="../serializations/">serialisation</a> document.</p>
+<p>For the actual wire format please consult the <a href="../serializations/">serialization</a> document.</p>
 <p>The semantics of this transaction are almost identical to the <a href="../contracts/contract_transactions/#create-contract-transaction">Create Contract Transaction</a>.
 As such, only the additional logic not covered by the <code>Create Contract
 Transaction</code> will be listed here.</p>
@@ -3358,7 +3358,7 @@ is valid. If the account at <code>owner_id</code> is already a GA, the transacti
 considered invalid.</p>
 <p>The transaction MUST include a signature created by the private key belonging to
 the <code>owner_id</code>.</p>
-<p>The <code>auth_fun</code> is a function hash as described in the 
+<p>The <code>auth_fun</code> is a function hash as described in the
 <a href="https://github.com/aeternity/aesophia/blob/master/docs/sophia.md">Sophia</a>
 section.</p>
 <p>If valid, the transaction will set the <code>ga_contract</code> and <code>ga_auth_fun</code> of the
@@ -3402,7 +3402,7 @@ section.</p>
 | tx           | var |
  -------------- -----
 </code></pre></div>
-<p>For the actual wire format please consult the <a href="../serializations/">serialisation</a> document.</p>
+<p>For the actual wire format please consult the <a href="../serializations/">serialization</a> document.</p>
 <p>The semantics of this transaction are similar to the <a href="../contracts/contract_transactions/#contract-call-transaction">Call Contract Transaction</a>.</p>
 <p>A <code>meta_tx</code> is always a call of the <code>auth_fun</code> on the contract located at
 <code>ga_id</code> with the supplied <code>auth_data</code>.</p>
@@ -3414,12 +3414,17 @@ had changed from Iris hardfork and the innermost transaction's <code>ttl</code> 
 used instead.</p>
 <p>The <code>tx</code>, or inner transaction, MUST be a well formed transaction with nonce set
 to <code>0</code>. The <code>tx</code> MUST NOT be a <code>ga_attach_tx</code> transaction.</p>
+<p>The <code>authorization</code> function is executed in a special FATE environment where
+<code>Auth.tx_hash</code> and <code>Auth.tx</code> are available. These can (and should!) be used to
+securely authorize a transaction. Note: <code>Auth.tx_hash</code> computation differs
+between protocol versions, see <a href="../serializations/">serialization</a>
+specification for details.</p>
 <h2 id="backwards-compatibility">Backwards compatibility</h2>
 <p>Going from POA to GA is entirely optional and both types of accounts can coexist
 without problems.</p>
 <h2 id="discussion">Discussion</h2>
 <h3 id="threat-modelattack-vectors">Threat model/attack vectors</h3>
-<p>Special care needs to be taken when writing contracts, that handle authorisation
+<p>Special care needs to be taken when writing contracts, that handle authorization
 logic for a GA. If the contract does not enforce integrity checking or replay
 protection, then it will be vulnerable to abuse.</p>
 <h3 id="example-contracts">Example contracts</h3>

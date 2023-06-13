@@ -3774,12 +3774,14 @@ the future.</p>
 <p><code>update</code> transaction may be used to extend the lease of the name.
 We do not require an additional fee for extending the lease.</p>
 <p>The <code>pointers</code> field SHOULD NOT contain multiple entries with the same key.
-The <code>pointers</code> can point to one of: account address, oracle id,
-channel id or contract id.</p>
+The <code>pointers</code> can point to one of: account address, oracle id, channel id or
+contract id, and from Ceres 1024 bytes of uninterpreted data (a bytearray).</p>
 <p>From Iris hardfork, the following limitations on pointers apply:
   - No duplicate keys (a key can only be present once in a list of pointers).
   - Keys are not longer than 256 bytes
   - The list of pointers is not longer than 32.</p>
+<p>From Ceres hardfork, a new pointer target type is introduced:
+  - A key can point to up to 1024 bytes of uninterpreted data (a bytearray)</p>
 <h4 id="transfer">Transfer</h4>
 <div class="highlight"><pre><span></span><code> ------------ ----
 | target     | 32 |
