@@ -92,9 +92,9 @@ Furthermore, the initial fee for name is a value of the function of
 the name's length. It is decreasing function: for shorter names have higher initial
 fee.
 
-Also bidding by claim transaction is constrained by price progression.
-Each next bid has to be higher by `X` coins, determined by percent of the price
-defined in governance.
+Also bidding by claim transaction is constrained by price progression. Each new
+bid has to be higher than the previous bid by a certain margin, determined by
+a percentage of the price (currently 5%) defined in governance.
 
 All, functions, base fee, free length value and price progression may be subject
 to changes with governance mechanism. Non-bidding path of the name claim is purposed
