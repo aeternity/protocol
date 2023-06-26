@@ -42,12 +42,12 @@ or `привет.test` are part of the same `.test` namespace.
 
 ## Governance
 
-Lima hard fork is introducing final `.chain` registration namespace.
-It also retires `.test` namespace.
-We will also not include mechanisms similar to the `sunrise` and `landrush`
-periods, which are common for DNS, where registration is restricted to small
-select groups and trademark holders in order to avoid name squatting, before
-the general public can start claiming names.
+Lima protocol upgrade is introducing final `.chain` registration namespace.  It
+also retires `.test` namespace.  We will also not include mechanisms similar to
+the `sunrise` and `landrush` periods, which are common for DNS, where
+registration is restricted to small select groups and trademark holders in
+order to avoid name squatting, before the general public can start claiming
+names.
 
 
 ## Mechanisms
@@ -92,9 +92,9 @@ Furthermore, the initial fee for name is a value of the function of
 the name's length. It is decreasing function: for shorter names have higher initial
 fee.
 
-Also bidding by claim transaction is constrained by price progression.
-Each next bid has to be higher by `X` coins, determined by percent of the price
-defined in governance.
+Also bidding by claim transaction is constrained by price progression. Each new
+bid has to be higher than the previous bid by a certain margin, determined by
+a percentage of the price (currently 5%) defined in governance.
 
 All, functions, base fee, free length value and price progression may be subject
 to changes with governance mechanism. Non-bidding path of the name claim is purposed
@@ -140,9 +140,9 @@ This is the entry as it should be stored by a node.
 
 ***owner***: the account, which controls this entry.
 
-***expires_by***: the blockheight after which the entry goes
-into the `revoked` state. This value MUST NOT be further than
-50000 blocks into the future.
+***expires_by***: the blockheight after which the entry goes into the `revoked`
+state. This value MUST NOT be further than 180000 blocks (Note: used to be
+50000 before Iris protocol upgrade) into the future.
 
 ***client_ttl***: a suggestion as to how long any clients should
 cache this information. (***TODO***: should have a reasonable
@@ -238,7 +238,7 @@ in order to support auctions.
 
 Names are generally only referred to in hashed form.
 
-#### Until Lima hardfork
+#### Until Lima protocol upgrade
 We are going to adopt the `NameHash` as defined by the ENS in
 [EIP-137](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md#namehash-algorithm)
 using Blake2b (256 bits digest) instead.
@@ -252,7 +252,7 @@ def namehash(name):
     return Blake2b(namehash(remainder) + Blake2b(label))
 ```
 
-#### From Lima hardfork
+#### From Lima protocol upgrade
 
 From Lima we don't use `NameHash` anymore. Instead, it is a 32 byte Blake2b hash
 of the IDNA encoded UTF-8 name.
@@ -286,7 +286,8 @@ of the protocol.
 
 ### Protocol fees and protection times
 
-Here is the function of initial bidding price depending on name length for Lima hardfork.
+Here is the function of initial bidding price depending on name length for Lima
+protocol upgrade.
 
 ```
  ------------- -------------
@@ -463,8 +464,8 @@ See also [mechanisms section](#mechanisms).
 The `update` transaction MUST be signed by the owner
 of the name entry to be updated.
 
-The `expire_by` MUST NOT be more than 50000 blocks into
-the future.
+The `expire_by` MUST NOT be more than 180000 blocks (Note: used to be 50000
+before Iris protocol upgrade) into the future.
 
 `update` transaction may be used to extend the lease of the name.
 We do not require an additional fee for extending the lease.
@@ -473,7 +474,7 @@ The `pointers` field SHOULD NOT contain multiple entries with the same key.
 The `pointers` can point to one of: account address, oracle id, channel id or
 contract id, and from Ceres 1024 bytes of uninterpreted data (a bytearray).
 
-From Iris hardfork, the following limitations on pointers apply:
+From Iris protocol upgrade, the following limitations on pointers apply:
   - No duplicate keys (a key can only be present once in a list of pointers).
   - Keys are not longer than 256 bytes
   - The list of pointers is not longer than 32.
