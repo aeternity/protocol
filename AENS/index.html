@@ -579,15 +579,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#until-lima-hardfork" class="md-nav__link">
-    Until Lima hardfork
+  <a href="#until-lima-protocol-upgrade" class="md-nav__link">
+    Until Lima protocol upgrade
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#from-lima-hardfork" class="md-nav__link">
-    From Lima hardfork
+  <a href="#from-lima-protocol-upgrade" class="md-nav__link">
+    From Lima protocol upgrade
   </a>
   
 </li>
@@ -3239,15 +3239,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#until-lima-hardfork" class="md-nav__link">
-    Until Lima hardfork
+  <a href="#until-lima-protocol-upgrade" class="md-nav__link">
+    Until Lima protocol upgrade
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#from-lima-hardfork" class="md-nav__link">
-    From Lima hardfork
+  <a href="#from-lima-protocol-upgrade" class="md-nav__link">
+    From Lima protocol upgrade
   </a>
   
 </li>
@@ -3454,12 +3454,12 @@ postfix, e.g. <code>mywallet.eth</code>. ENS currently allows users to associate
 <p>Names are part of a namespace, which works just like DNS, e.g. <code>mywallet.test</code>
 or <code>привет.test</code> are part of the same <code>.test</code> namespace.</p>
 <h2 id="governance">Governance</h2>
-<p>Lima hard fork is introducing final <code>.chain</code> registration namespace.
-It also retires <code>.test</code> namespace.
-We will also not include mechanisms similar to the <code>sunrise</code> and <code>landrush</code>
-periods, which are common for DNS, where registration is restricted to small
-select groups and trademark holders in order to avoid name squatting, before
-the general public can start claiming names.</p>
+<p>Lima protocol upgrade is introducing final <code>.chain</code> registration namespace.  It
+also retires <code>.test</code> namespace.  We will also not include mechanisms similar to
+the <code>sunrise</code> and <code>landrush</code> periods, which are common for DNS, where
+registration is restricted to small select groups and trademark holders in
+order to avoid name squatting, before the general public can start claiming
+names.</p>
 <h2 id="mechanisms">Mechanisms</h2>
 <p>It is unclear what a good mechanism for a naming system would look
 like. If we imagine two actors both being interested in the same name,
@@ -3490,9 +3490,9 @@ It will protect attractive names until this functionality is exposed to larger a
 <p>Furthermore, the initial fee for name is a value of the function of
 the name's length. It is decreasing function: for shorter names have higher initial
 fee.</p>
-<p>Also bidding by claim transaction is constrained by price progression.
-Each next bid has to be higher by <code>X</code> coins, determined by percent of the price
-defined in governance.</p>
+<p>Also bidding by claim transaction is constrained by price progression. Each new
+bid has to be higher than the previous bid by a certain margin, determined by
+a percentage of the price (currently 5%) defined in governance.</p>
 <p>All, functions, base fee, free length value and price progression may be subject
 to changes with governance mechanism. Non-bidding path of the name claim is purposed
 for development or testing.</p>
@@ -3525,9 +3525,9 @@ interpreted as described in <a href="https://tools.ietf.org/html/rfc2119">RFC 21
  ------------ ----
 </code></pre></div>
 <p><strong><em>owner</em></strong>: the account, which controls this entry.</p>
-<p><strong><em>expires_by</em></strong>: the blockheight after which the entry goes
-into the <code>revoked</code> state. This value MUST NOT be further than
-50000 blocks into the future.</p>
+<p><strong><em>expires_by</em></strong>: the blockheight after which the entry goes into the <code>revoked</code>
+state. This value MUST NOT be further than 180000 blocks (Note: used to be
+50000 before Iris protocol upgrade) into the future.</p>
 <p><strong><em>client_ttl</em></strong>: a suggestion as to how long any clients should
 cache this information. (<strong><em>TODO</em></strong>: should have a reasonable
 upper limit, e.g. 86400 seconds, and probably a different
@@ -3591,7 +3591,7 @@ name instead of the original claimant's one.</p>
 in order to support auctions.</p>
 <h3 id="hashing">Hashing</h3>
 <p>Names are generally only referred to in hashed form.</p>
-<h4 id="until-lima-hardfork">Until Lima hardfork</h4>
+<h4 id="until-lima-protocol-upgrade">Until Lima protocol upgrade</h4>
 <p>We are going to adopt the <code>NameHash</code> as defined by the ENS in
 <a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-137.md#namehash-algorithm">EIP-137</a>
 using Blake2b (256 bits digest) instead.</p>
@@ -3602,7 +3602,7 @@ using Blake2b (256 bits digest) instead.</p>
     label, _, remainder = name.partition(&#39;.&#39;)
     return Blake2b(namehash(remainder) + Blake2b(label))
 </code></pre></div>
-<h4 id="from-lima-hardfork">From Lima hardfork</h4>
+<h4 id="from-lima-protocol-upgrade">From Lima protocol upgrade</h4>
 <p>From Lima we don't use <code>NameHash</code> anymore. Instead, it is a 32 byte Blake2b hash
 of the IDNA encoded UTF-8 name.</p>
 <h3 id="protocol">Protocol</h3>
@@ -3626,7 +3626,8 @@ pre-claimed|auction ---&gt; claimed
 <p>Note that <code>expire</code> is not an explicit message that is part
 of the protocol.</p>
 <h3 id="protocol-fees-and-protection-times">Protocol fees and protection times</h3>
-<p>Here is the function of initial bidding price depending on name length for Lima hardfork.</p>
+<p>Here is the function of initial bidding price depending on name length for Lima
+protocol upgrade.</p>
 <div class="highlight"><pre><span></span><code> ------------- -------------
 | name length | initial fee (unit 10^14) |
  ------------- -------------
@@ -3769,14 +3770,14 @@ See also <a href="#mechanisms">mechanisms section</a>.</p>
 </code></pre></div>
 <p>The <code>update</code> transaction MUST be signed by the owner
 of the name entry to be updated.</p>
-<p>The <code>expire_by</code> MUST NOT be more than 50000 blocks into
-the future.</p>
+<p>The <code>expire_by</code> MUST NOT be more than 180000 blocks (Note: used to be 50000
+before Iris protocol upgrade) into the future.</p>
 <p><code>update</code> transaction may be used to extend the lease of the name.
 We do not require an additional fee for extending the lease.</p>
 <p>The <code>pointers</code> field SHOULD NOT contain multiple entries with the same key.
 The <code>pointers</code> can point to one of: account address, oracle id, channel id or
 contract id, and from Ceres 1024 bytes of uninterpreted data (a bytearray).</p>
-<p>From Iris hardfork, the following limitations on pointers apply:
+<p>From Iris protocol upgrade, the following limitations on pointers apply:
   - No duplicate keys (a key can only be present once in a list of pointers).
   - Keys are not longer than 256 bytes
   - The list of pointers is not longer than 32.</p>
