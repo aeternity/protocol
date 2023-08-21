@@ -11,7 +11,6 @@ be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 ## Notation
 
 - `x || y`, x concatenated with y
-- `sk <- rand(1^n)`, sample a random n bit number
 
 ## Overview
 
