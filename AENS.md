@@ -565,7 +565,7 @@ game might associate a name entry with every of its cats such as
 adopts the cat. The authorization policies for these will need some
 flexibility seeing as the owner of a namespace might want to prevent
 or allow users creating sub-sub-labels, e.g. the owner of `unicorn.kitty.test`
-creating `rarest.`unicorn.kitty.test`.
+creating `rarest.unicorn.kitty.test`.
 
 
 ### Auctions
