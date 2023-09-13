@@ -113,6 +113,14 @@ date gets pushed one week further into the future. The main motivation of this
 expiration date is to prevent situations where the private keys, which control
 the name, are lost, making the name unusable as well.
 
+The salted (blind) preclaim followed in a later generation by a name revealing
+claim was introduced to avoid front-running. At the same time it introduces
+problems in UX, two transactions are needed, the salt needs to be
+remembered/stored, etc. By the introduction (in Lima) of auctions the
+front-running is no longer an issue - hence, from Ceres onwards, the preclaim
+is _optional_. The user can then initiate an auction (or immediately claim long
+names) directly with a `NameClaimTx` (with salt = 0). Note: it is still
+possible to do a preclaim followed by a claim!
 
 ## Specification
 
@@ -265,8 +273,8 @@ of the IDNA encoded UTF-8 name.
       unclaimed <-------- revoked
           | ^              ^^
           | |              || expire
-          | | expire       ||
-pre-claim | |              ||  _
+pre-claim | | expire       ||
+ (claim)  | |              ||  _
           | |       revoke || | | transfer
           v |              || | v
 pre-claimed|auction ---> claimed
@@ -278,7 +286,8 @@ pre-claimed|auction ---> claimed
 
 The pointers field in the name entry:
 * On `claim` transaction, is initialized to the empty dictionary.
-* On `update` transaction, is replaced with the pointers in the transaction, keeping the order in the transaction.
+* On `update` transaction, is replaced with the pointers in the transaction,
+  keeping the order in the transaction.
 
 Note that `expire` is not an explicit message that is part
 of the protocol.
@@ -401,6 +410,7 @@ The hash commitment for the `pre-claim` is computed as follows:
 commitment := Hash(NameHash(name) + name_salt)
 ```
 
+Note: since Ceres the preclaim is _optional_.
 
 #### Claim
 
@@ -422,8 +432,9 @@ Flow for a user:
 
 From Lima transaction version is `2`.
 
-The first `claim` after `pre-claim` transaction MUST be signed by the same private key as a
-`pre-claim` transaction containing a commitment to the name and nonce.
+The first `claim` after a `pre-claim` transaction MUST be signed by the same
+private key as a `pre-claim` transaction containing a commitment to the name
+and nonce.
 
 If the time delta of `pre-claim` and `claim` is bigger than 300 blocks,
 then the `claim` MUST be rejected.
@@ -433,19 +444,22 @@ then this `claim` MUST be rejected.
 
 If the `name_fee` doesn't meet governance requirements it MUST be rejected.
 
-From Lima hardfork, the subsequent `claim` that takes part in auction MUST have `name_salt`
-equal to `0`
+From Lima hardfork, the subsequent `claim` that takes part in auction MUST have
+`name_salt` equal to `0`
 
 From Lima hardfork only the first `claim` transaction MUST be signed by
-the same private key as a `pre-claim` transaction containing a commitment to the name and nonce.
+the same private key as a `pre-claim` transaction containing a commitment to
+the name and nonce.
 
 A `claim` transaction MUST NOT be in included in the same block as its
 `pre-claim`.
 
-The `claim` transaction, apart from standard transaction fee,
-locks additional fee in a restricted account (account with no private key access).
-See also [mechanisms section](#mechanisms).
+The `claim` transaction, apart from standard transaction fee, locks additional
+fee in a restricted account (account with no private key access). See also
+[mechanisms section](#mechanisms).
 
+From Ceres hardfork the `pre-claim` is optional, and an auction can be started
+(or direct claim can be made) with a `claim` having `name_salt` equal to `0`.
 
 #### Update
 
