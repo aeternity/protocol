@@ -371,6 +371,8 @@ It depends on name length. Timeout is expressed in blocks.
 Non zero value means that there must be no follow up claim for
 the number of blocks defined here.
 
+#### Until Ceres protocol upgrade
+
 ```
  ------------- -------------
 | name length | time out    |
@@ -384,6 +386,26 @@ the number of blocks defined here.
 | 1-4         | 29760       |
  ------------- -------------
 ```
+
+#### From Ceres protocol upgrade
+
+```
+ ------------- -------------
+| name length | time out    |
+ ------------- -------------
+| 13+         | 0           |
+ ------------- -------------
+| 9-12        | 480         |
+ ------------- -------------
+| 5-8         | 960         |
+ ------------- -------------
+| 1-4         | 2400        |
+ ------------- -------------
+```
+
+From Ceres, each time a new (successful!) bid is made for a name the auction is
+extended for up to 120 key-blocks/generations. I.e. after the bid there is
+always at least 120 generations to make a higher bid.
 
 
 #### Pre-claim
