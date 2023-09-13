@@ -187,8 +187,6 @@ See also [rfc3491](https://tools.ietf.org/html/rfc3491) and
 Names SHOULD be at most 253 characters long, in order to enable
 interoperability with DNS.
 
-***Note:*** For this first draft names MUST `.test` as a suffix, i.e. `mywallet.test`.
-
 
 ### Namespaces/Labels
 
