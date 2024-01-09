@@ -5066,7 +5066,7 @@ Writing to the accumulator pushes a value to the stack.</p>
 <tr>
 <td><code>AENS_UPDATE</code></td>
 <td>Arg0 Arg1 Arg2 Arg3 Arg4 Arg5</td>
-<td>Updates name in Arg2 for address in Arg1. Arg3 contains optional ttl (of type Chain.ttl), Arg4 contains optional client_ttl (of type int), Arg5 contains optional pointers (of type map(string, pointee))</td>
+<td>Updates name in Arg2 for address in Arg1. Arg3 contains optional ttl (of type Chain.ttl), Arg4 contains optional client_ttl (of type int), Arg5 contains optional pointers (of type map(string, pointee)). Arg0 contains delegation signature.</td>
 <td>{signature,address,string,variant,variant,variant}</td>
 <td>none</td>
 <td><code>FATE_01</code></td>
@@ -7270,6 +7270,93 @@ i.e the byte 128.
 Symbols and Annotations can be empty but they have to be there as
 the RLP encoding of the RLP encoding of the empty map i.e. the bytes 130, 47, 0.</p>
 <p>An empty FATE contract is encoded as the byte sequence 128, 130, 47, 0, 130, 47, 0.</p>
+<h1 id="appendix-2-delegation-signatures">Appendix 2: Delegation signatures</h1>
+<p>A couple of FATE operations can perform actions on behalf of a "user", these
+operations are: <code>AENS_PRECLAIM</code>, <code>AENS_CLAIM</code>, <code>AENS_UPDATE</code>, <code>AENS_TRANSFER</code>,
+<code>AENS_REVOKE</code>, <code>ORACLE_REGISTER</code>, <code>ORACLE_RESPOND</code>, and <code>ORACLE_EXTEND</code>. The
+first argument of these operations is a <em>delegation signature</em> - the signature
+"proves" that the user is allowed to manipulate the object (name or oracle).
+Naturally, if the contract itself is the owner of the name/oracle the signature
+is not needed. Otherwise, the user signs (using the private key) data
+authorizing the operation. Note: it is not possible to make a delegation
+signature using a generalized account.</p>
+<p>There are five different delegation signatures:
+ - <code>AENS_PRECLAIM</code> - the user signs: <code>owner account + contract</code>
+ - <code>AENS_CLAIM</code>,<code>AENS_UPDATE</code>, <code>AENS_TRANSFER</code>, <code>AENS_REVOKE</code> - the user signs:
+   <code>owner account + name hash + contract</code>
+ - AENS wildcard (valid for any name) - the user signs:
+   <code>owner account + contract</code> [New in <code>FATE_03</code>]
+ - <code>ORACLE_REGISTER</code>, <code>ORACLE_EXTEND</code> - the user signs: <code>owner account + contract</code>
+ - <code>ORACLE_RESPOND</code> - the user signs: <code>query id + contract</code></p>
+<p>To protect about cross network re-use of signatures, the data to be signed is
+also prefixed with the <em>network id</em>.</p>
+<h2 id="from-ceres-serialized-signature-data">From Ceres: Serialized signature data</h2>
+<p>From Ceres/<code>FATE_03</code> the material to be signed is more structured; the reason
+is two-fold, (a) to make it easier for the signer to see the what is signed and
+why, and (b) to safeguard against spoofing a transaction as a delegation
+signature (their structure was similar). Note: the semantic data to be signed
+has not changed from the description above, only the exact bytes to be signed
+and its structure.</p>
+<p>For general information about serialization, RLP encoding, etc, see the general
+<a href="../../serializations/">serialization document</a>.</p>
+<p>We use the tag <code>0x1a01</code> to identify delegation signatures. We use the following
+tags/types to identify the different delegation signatures:</p>
+<table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Delegation type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>aens wildcard</td>
+</tr>
+<tr>
+<td>2</td>
+<td>aens name</td>
+</tr>
+<tr>
+<td>3</td>
+<td>aens preclaim</td>
+</tr>
+<tr>
+<td>4</td>
+<td>oracle</td>
+</tr>
+<tr>
+<td>5</td>
+<td>oracle response</td>
+</tr>
+</tbody>
+</table>
+<p>For serialization we use a schema similar to chain object serialization with
+the tags in the table above and version is 1. I.e. <code>S = rlp([tag, vsn] ++
+fields)</code> with fields as described below. The complete binary to sign is:
+<div class="highlight"><pre><span></span><code> 0x1a01 + &lt;network_id&gt; + S
+</code></pre></div></p>
+<h3 id="aens-wildcard">AENS Wildcard</h3>
+<div class="highlight"><pre><span></span><code>[ &lt;account&gt;  :: id()
+, &lt;contract&gt; :: id() ]
+</code></pre></div>
+<h3 id="aens-name">AENS Name</h3>
+<div class="highlight"><pre><span></span><code>[ &lt;account&gt;  :: id()
+, &lt;name&gt;     :: id()
+, &lt;contract&gt; :: id() ]
+</code></pre></div>
+<h3 id="aens-preclaim">AENS Preclaim</h3>
+<div class="highlight"><pre><span></span><code>[ &lt;account&gt;  :: id()
+, &lt;contract&gt; :: id() ]
+</code></pre></div>
+<h3 id="oracle-handling">Oracle handling</h3>
+<div class="highlight"><pre><span></span><code>[ &lt;account&gt;  :: id()
+, &lt;contract&gt; :: id() ]
+</code></pre></div>
+<h3 id="oracle-response">Oracle response</h3>
+<div class="highlight"><pre><span></span><code>[ &lt;query_id&gt; :: id()     %% using id type &#39;oracle&#39;
+, &lt;contract&gt; :: id() ]
+</code></pre></div>
 <h1 id="notation">Notation</h1>
 <p>Some notes on notation and definition of terms used in this document.</p>
 <h2 id="bits">Bits</h2>
