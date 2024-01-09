@@ -507,7 +507,7 @@ Writing to the accumulator pushes a value to the stack.
 | `AENS_RESOLVE` | Arg0 Arg1 Arg2 Arg3 | Resolve name in Arg0 with tag Arg1. Arg2 describes the type parameter of the resolved name. | {string,string,typerep} | variant | `FATE_01` |
 | `AENS_PRECLAIM` | Arg0 Arg1 Arg2 | Preclaim the hash in Arg2 for address in Arg1. Arg0 contains delegation signature. | {signature,address,hash} | none | `FATE_01` |
 | `AENS_CLAIM` | Arg0 Arg1 Arg2 Arg3 Arg4 | Attempt to claim the name in Arg2 for address in Arg1 at a price in Arg4. Arg3 contains the salt used to hash the preclaim. Arg0 contains delegation signature. | {signature,address,string,integer,integer} | none | `FATE_01` |
-| `AENS_UPDATE` | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 | Updates name in Arg2 for address in Arg1. Arg3 contains optional ttl (of type Chain.ttl), Arg4 contains optional client_ttl (of type int), Arg5 contains optional pointers (of type map(string, pointee)) | {signature,address,string,variant,variant,variant} | none | `FATE_01` |
+| `AENS_UPDATE` | Arg0 Arg1 Arg2 Arg3 Arg4 Arg5 | Updates name in Arg2 for address in Arg1. Arg3 contains optional ttl (of type Chain.ttl), Arg4 contains optional client_ttl (of type int), Arg5 contains optional pointers (of type map(string, pointee)). Arg0 contains delegation signature. | {signature,address,string,variant,variant,variant} | none | `FATE_01` |
 | `AENS_TRANSFER` | Arg0 Arg1 Arg2 Arg3 | Transfer ownership of name Arg3 from account Arg1 to Arg2. Arg0 contains delegation signature. | {signature,address,address,string} | none | `FATE_01` |
 | `AENS_REVOKE` | Arg0 Arg1 Arg2 | Revoke the name in Arg2 from owner Arg1. Arg0 contains delegation signature. | {signature,address,string} | none | `FATE_01` |
 | `BALANCE_OTHER` | Arg0 Arg1 | Arg0 := The balance of address Arg1. | {address} | integer | `FATE_01` |
@@ -919,6 +919,90 @@ the RLP encoding of the RLP encoding of the empty map i.e. the bytes 130, 47, 0.
 
 An empty FATE contract is encoded as the byte sequence 128, 130, 47, 0, 130, 47, 0.
 
+# Appendix 2: Delegation signatures
+
+A couple of FATE operations can perform actions on behalf of a "user", these
+operations are: `AENS_PRECLAIM`, `AENS_CLAIM`, `AENS_UPDATE`, `AENS_TRANSFER`,
+`AENS_REVOKE`, `ORACLE_REGISTER`, `ORACLE_RESPOND`, and `ORACLE_EXTEND`. The
+first argument of these operations is a _delegation signature_ - the signature
+"proves" that the user is allowed to manipulate the object (name or oracle).
+Naturally, if the contract itself is the owner of the name/oracle the signature
+is not needed. Otherwise, the user signs (using the private key) data
+authorizing the operation. Note: it is not possible to make a delegation
+signature using a generalized account.
+
+There are five different delegation signatures:
+ - `AENS_PRECLAIM` - the user signs: `owner account + contract`
+ - `AENS_CLAIM`,`AENS_UPDATE`, `AENS_TRANSFER`, `AENS_REVOKE` - the user signs:
+   `owner account + name hash + contract`
+ - AENS wildcard (valid for any name) - the user signs:
+   `owner account + contract` [New in `FATE_03`]
+ - `ORACLE_REGISTER`, `ORACLE_EXTEND` - the user signs: `owner account + contract`
+ - `ORACLE_RESPOND` - the user signs: `query id + contract`
+
+To protect about cross network re-use of signatures, the data to be signed is
+also prefixed with the _network id_.
+
+## From Ceres: Serialized signature data
+
+From Ceres/`FATE_03` the material to be signed is more structured; the reason
+is two-fold, (a) to make it easier for the signer to see the what is signed and
+why, and (b) to safeguard against spoofing a transaction as a delegation
+signature (their structure was similar). Note: the semantic data to be signed
+has not changed from the description above, only the exact bytes to be signed
+and its structure.
+
+For general information about serialization, RLP encoding, etc, see the general
+[serialization document](../serializations.md).
+
+We use the tag `0x1a01` to identify delegation signatures. We use the following
+tags/types to identify the different delegation signatures:
+
+| Tag | Delegation type |
+| --- | ---             |
+| 1   | aens wildcard   |
+| 2   | aens name       |
+| 3   | aens preclaim   |
+| 4   | oracle          |
+| 5   | oracle response |
+
+For serialization we use a schema similar to chain object serialization with
+the tags in the table above and version is 1. I.e. `S = rlp([tag, vsn] ++
+fields)` with fields as described below. The complete binary to sign is:
+```
+ 0x1a01 + <network_id> + S
+```
+
+### AENS Wildcard
+```
+[ <account>  :: id()
+, <contract> :: id() ]
+```
+
+### AENS Name
+```
+[ <account>  :: id()
+, <name>     :: id()
+, <contract> :: id() ]
+```
+
+### AENS Preclaim
+```
+[ <account>  :: id()
+, <contract> :: id() ]
+```
+
+### Oracle handling
+```
+[ <account>  :: id()
+, <contract> :: id() ]
+```
+
+### Oracle response
+```
+[ <query_id> :: id()     %% using id type 'oracle'
+, <contract> :: id() ]
+```
 
 # Notation
 
