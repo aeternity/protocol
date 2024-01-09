@@ -268,9 +268,16 @@ of the IDNA encoded UTF-8 name.
 
 ```
                   expire
-      unclaimed <-------- revoked
-          | ^              ^^
-          | |              || expire
+       unclaimed ◄────────── revoked
+         │   ▲                   ▲
+         │   │                   │
+         │   │                   │
+pre-claim│   │ expire     expire │
+ (claim) │   │            revoke │
+         │   │                   │   transfer
+         │   │                   │ ┌────┐
+         ▼   │                   │ │    │
+  pre-claimed/auction ─────► claimed ◄──┘
 pre-claim | | expire       ||
  (claim)  | |              ||  _
           | |       revoke || | | transfer
@@ -387,7 +394,7 @@ the number of blocks defined here.
 
 #### From Ceres protocol upgrade
 
-```
+
  ------------- -------------
 | name length | time out    |
  ------------- -------------
@@ -399,7 +406,7 @@ the number of blocks defined here.
  ------------- -------------
 | 1-4         | 2400        |
  ------------- -------------
-```
+
 
 From Ceres, each time a new (successful!) bid is made for a name the auction is
 extended for up to 120 key-blocks/generations. I.e. after the bid there is
