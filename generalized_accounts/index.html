@@ -3363,6 +3363,9 @@ the <code>owner_id</code>.</p>
 section.</p>
 <p>If valid, the transaction will set the <code>ga_contract</code> and <code>ga_auth_fun</code> of the
 <code>owner_id</code> account.</p>
+<p>From Ceres, and onwards, it is only possible to attach authorization code to a
+<em>fresh</em> account. An account is fresh as long as it hasn't signed any
+transactions - this means that GAAttachTx is only allowed with <code>nonce = 1</code>.</p>
 <h3 id="meta_tx"><code>meta_tx</code></h3>
 <p>Before Iris, version 1:</p>
 <div class="highlight"><pre><span></span><code> Fieldname       Size (bytes)
