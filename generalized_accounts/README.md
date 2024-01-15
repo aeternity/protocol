@@ -275,6 +275,9 @@ section.
 If valid, the transaction will set the `ga_contract` and `ga_auth_fun` of the
 `owner_id` account.
 
+From Ceres, and onwards, it is only possible to attach authorization code to a
+_fresh_ account. An account is fresh as long as it hasn't signed any
+transactions - this means that GAAttachTx is only allowed with `nonce = 1`.
 
 ### `meta_tx`
 
