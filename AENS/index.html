@@ -613,6 +613,20 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#until-ceres-protocol-upgrade" class="md-nav__link">
+    Until Ceres protocol upgrade
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-ceres-protocol-upgrade" class="md-nav__link">
+    From Ceres protocol upgrade
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pre-claim" class="md-nav__link">
     Pre-claim
   </a>
@@ -3273,6 +3287,20 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#until-ceres-protocol-upgrade" class="md-nav__link">
+    Until Ceres protocol upgrade
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-ceres-protocol-upgrade" class="md-nav__link">
+    From Ceres protocol upgrade
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pre-claim" class="md-nav__link">
     Pre-claim
   </a>
@@ -3507,6 +3535,14 @@ e.g. if a user posts an update one week after claiming their name, the expiratio
 date gets pushed one week further into the future. The main motivation of this
 expiration date is to prevent situations where the private keys, which control
 the name, are lost, making the name unusable as well.</p>
+<p>The salted (blind) preclaim followed in a later generation by a name revealing
+claim was introduced to avoid front-running. At the same time it introduces
+problems in UX, two transactions are needed, the salt needs to be
+remembered/stored, etc. By the introduction (in Lima) of auctions the
+front-running is no longer an issue - hence, from Ceres onwards, the preclaim
+is <em>optional</em>. The user can then initiate an auction (or immediately claim long
+names) directly with a <code>NameClaimTx</code> (with salt = 0). Note: it is still
+possible to do a preclaim followed by a claim!</p>
 <h2 id="specification">Specification</h2>
 <p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED",  "MAY", and "OPTIONAL" in this document are to be
@@ -3553,7 +3589,6 @@ CheckJoiners=true # important for registrars, to restrict names
 <a href="https://tools.ietf.org/html/rfc3492">rfc3492</a>.</p>
 <p>Names SHOULD be at most 253 characters long, in order to enable
 interoperability with DNS.</p>
-<p><strong><em>Note:</em></strong> For this first draft names MUST <code>.test</code> as a suffix, i.e. <code>mywallet.test</code>.</p>
 <h3 id="namespaceslabels">Namespaces/Labels</h3>
 <p>A name is split up into labels by the <code>FULL STOP (U+002E .)</code> character.
 These labels will also be referred to as namespaces, e.g. <code>mywallet.test</code>
@@ -3607,11 +3642,18 @@ using Blake2b (256 bits digest) instead.</p>
 of the IDNA encoded UTF-8 name.</p>
 <h3 id="protocol">Protocol</h3>
 <div class="highlight"><pre><span></span><code>                  expire
-      unclaimed &lt;-------- revoked
-          | ^              ^^
-          | |              || expire
-          | | expire       ||
-pre-claim | |              ||  _
+       unclaimed ◄────────── revoked
+         │   ▲                   ▲
+         │   │                   │
+         │   │                   │
+pre-claim│   │ expire     expire │
+ (claim) │   │            revoke │
+         │   │                   │   transfer
+         │   │                   │ ┌────┐
+         ▼   │                   │ │    │
+  pre-claimed/auction ─────► claimed ◄──┘
+pre-claim | | expire       ||
+ (claim)  | |              ||  _
           | |       revoke || | | transfer
           v |              || | v
 pre-claimed|auction ---&gt; claimed
@@ -3622,7 +3664,8 @@ pre-claimed|auction ---&gt; claimed
 </code></pre></div>
 <p>The pointers field in the name entry:
 * On <code>claim</code> transaction, is initialized to the empty dictionary.
-* On <code>update</code> transaction, is replaced with the pointers in the transaction, keeping the order in the transaction.</p>
+* On <code>update</code> transaction, is replaced with the pointers in the transaction,
+  keeping the order in the transaction.</p>
 <p>Note that <code>expire</code> is not an explicit message that is part
 of the protocol.</p>
 <h3 id="protocol-fees-and-protection-times">Protocol fees and protection times</h3>
@@ -3698,6 +3741,7 @@ protocol upgrade.</p>
 It depends on name length. Timeout is expressed in blocks.
 Non zero value means that there must be no follow up claim for
 the number of blocks defined here.</p>
+<h4 id="until-ceres-protocol-upgrade">Until Ceres protocol upgrade</h4>
 <div class="highlight"><pre><span></span><code> ------------- -------------
 | name length | time out    |
  ------------- -------------
@@ -3710,6 +3754,21 @@ the number of blocks defined here.</p>
 | 1-4         | 29760       |
  ------------- -------------
 </code></pre></div>
+<h4 id="from-ceres-protocol-upgrade">From Ceres protocol upgrade</h4>
+<hr />
+<p>| name length | time out    |</p>
+<hr />
+<p>| 13+         | 0           |</p>
+<hr />
+<p>| 9-12        | 480         |</p>
+<hr />
+<p>| 5-8         | 960         |</p>
+<hr />
+<p>| 1-4         | 2400        |</p>
+<hr />
+<p>From Ceres, each time a new (successful!) bid is made for a name the auction is
+extended for up to 120 key-blocks/generations. I.e. after the bid there is
+always at least 120 generations to make a higher bid.</p>
 <h4 id="pre-claim">Pre-claim</h4>
 <p>Send a <code>pre-claim</code> transaction containing a hash commitment.
 This transaction starts the claiming process.</p>
@@ -3725,6 +3784,7 @@ about two days at 10 minute block time.</p>
 <p>The hash commitment for the <code>pre-claim</code> is computed as follows:</p>
 <div class="highlight"><pre><span></span><code>commitment := Hash(NameHash(name) + name_salt)
 </code></pre></div>
+<p>Note: since Ceres the preclaim is <em>optional</em>.</p>
 <h4 id="claim">Claim</h4>
 <div class="highlight"><pre><span></span><code> ---------------- ----
 | name           | 63 |
@@ -3741,22 +3801,26 @@ about two days at 10 minute block time.</p>
 <li>(Lima) send follow up <code>claim</code> transaction as overbid to initial <code>claim</code></li>
 </ol>
 <p>From Lima transaction version is <code>2</code>.</p>
-<p>The first <code>claim</code> after <code>pre-claim</code> transaction MUST be signed by the same private key as a
-<code>pre-claim</code> transaction containing a commitment to the name and nonce.</p>
+<p>The first <code>claim</code> after a <code>pre-claim</code> transaction MUST be signed by the same
+private key as a <code>pre-claim</code> transaction containing a commitment to the name
+and nonce.</p>
 <p>If the time delta of <code>pre-claim</code> and <code>claim</code> is bigger than 300 blocks,
 then the <code>claim</code> MUST be rejected.</p>
 <p>If the time delta of subsequent <code>claim</code> is bigger than governance defined values
 then this <code>claim</code> MUST be rejected.</p>
 <p>If the <code>name_fee</code> doesn't meet governance requirements it MUST be rejected.</p>
-<p>From Lima hardfork, the subsequent <code>claim</code> that takes part in auction MUST have <code>name_salt</code>
-equal to <code>0</code></p>
+<p>From Lima hardfork, the subsequent <code>claim</code> that takes part in auction MUST have
+<code>name_salt</code> equal to <code>0</code></p>
 <p>From Lima hardfork only the first <code>claim</code> transaction MUST be signed by
-the same private key as a <code>pre-claim</code> transaction containing a commitment to the name and nonce.</p>
+the same private key as a <code>pre-claim</code> transaction containing a commitment to
+the name and nonce.</p>
 <p>A <code>claim</code> transaction MUST NOT be in included in the same block as its
 <code>pre-claim</code>.</p>
-<p>The <code>claim</code> transaction, apart from standard transaction fee,
-locks additional fee in a restricted account (account with no private key access).
-See also <a href="#mechanisms">mechanisms section</a>.</p>
+<p>The <code>claim</code> transaction, apart from standard transaction fee, locks additional
+fee in a restricted account (account with no private key access). See also
+<a href="#mechanisms">mechanisms section</a>.</p>
+<p>From Ceres hardfork the <code>pre-claim</code> is optional, and an auction can be started
+(or direct claim can be made) with a <code>claim</code> having <code>name_salt</code> equal to <code>0</code>.</p>
 <h4 id="update">Update</h4>
 <div class="highlight"><pre><span></span><code> ------------ ----
 | hash       | 32 |
@@ -3831,7 +3895,7 @@ game might associate a name entry with every of its cats such as
 adopts the cat. The authorization policies for these will need some
 flexibility seeing as the owner of a namespace might want to prevent
 or allow users creating sub-sub-labels, e.g. the owner of <code>unicorn.kitty.test</code>
-creating <code>rarest.</code>unicorn.kitty.test`.</p>
+creating <code>rarest.unicorn.kitty.test</code>.</p>
 <h3 id="auctions">Auctions</h3>
 <p>Using (Vickrey) auctions instead of a simple, first come
 first serve approach for new claims, might allow a better
