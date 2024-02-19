@@ -31,7 +31,7 @@ The transaction contains:
 - The VM and ABI to use
 - A transaction fee
 - A deposit (an even number, 0 is accepted).
-- An amount (aeons to transfer to the account, 0 is accepted).
+- An amount (aettos to transfer to the account, 0 is accepted).
 - Gas for the initial call
 - Gas price for the call.
 - Call data for the initial call (usually including a function name and args, interpreted by the contract).
