@@ -267,8 +267,8 @@ Please refer to the [dedicated document](/generalized_accounts/generalized_accou
 Each (on-chain) transaction has the following fields:
 * Fee. It MUST be at least the gas for the transaction multiplied by the
   minimal gas price, which (after MINERVA hard fork height) is
-  `1000000` (*10^-18) aeons. (Before MINERVA hard fork height it was
-  `1` (*10^-18) aeons.)
+  `1000000` (*10^-18) aettos. (Before MINERVA hard fork height it was
+  `1` (*10^-18) aettos.)
 * Time to live (TTL). The last generation where the transaction is valid.
   0 means it is valid forever (and is the default value in many places).
 
