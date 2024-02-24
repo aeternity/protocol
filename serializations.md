@@ -533,7 +533,7 @@ Note: From Ceres protocol version `contract` can be a name (where the
 ]
 ```
 
-#### Name service update transaction
+#### Name service update transaction (version 1, until Ceres release)
 ```
 [ <account>    :: id()
 , <nonce>      :: int()
@@ -545,6 +545,26 @@ Note: From Ceres protocol version `contract` can be a name (where the
 , <ttl>        :: int()
 ]
 ```
+
+#### Name service update transaction (version 2, from Ceres release)
+```
+[ <account>    :: id()
+, <nonce>      :: int()
+, <hash>       :: id()
+, <name_ttl>   :: int()
+, <pointers>   :: [{binary(), binary()}]
+, <client_ttl> :: int()
+, <fee>        :: int()
+, <ttl>        :: int()
+]
+```
+
+In Erlang notation, the `binary()` for pointer value have the following pattern:
+```
+<<Tag:1/unsigned-integer-unit:8, Data/binary>>
+```
+Where `Tag == 1` means it is a serialized `id()` and `Tag == 2` means it is a
+raw binary array.
 
 #### Name service revoke transaction
 ```
