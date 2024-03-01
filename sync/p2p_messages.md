@@ -80,14 +80,33 @@ Message is RLP encoded, fields:
 
 Message is RLP encoded, fields:
 
-  - `Port :: int` - listen port
-  - `Share :: int` - number of peers to share
+### Version 1
+
+  - `Port :: int` - listen port.
+  - `Share :: int` - number of peers to share.
   - `GenesisHash :: byte_array`
   - `Difficulty :: int` - the total difficulty of the chain.
   - `TopHash :: byte_array`
-  - `sync_allowed :: bool` - if the sender of this ping message is accepting
+  - `SyncAllowed :: bool` - if the sender of this ping message is accepting
     synchronization messages.
-  - `Peers :: [byte_array]` - list of shared peers
+  - `Peers :: [byte_array]` - list of shared peers.
+
+
+### Version 2
+
+  - `Versions :: list`
+    - `Protocol :: binary` - type of message.
+    - `Vsns :: [int]` - versions supported
+  - `Port :: int` - listen port.
+  - `Share :: int` - number of peers to share.
+  - `GenesisHash :: byte_array`
+  - `Height :: int` - current height.
+  - `Difficulty :: int` - the total difficulty of the chain.
+  - `TopHash :: byte_array`
+  - `SyncAllowed :: bool` - if the sender of this ping message is accepting
+    synchronization messages.
+  - `Capabilities :: byte_array` - list of supported capabilites.
+  - `Peers :: [byte_array]` - list of shared peers.
 
 Peers are serialized/deserialized in `aec_peer_messages`
 
