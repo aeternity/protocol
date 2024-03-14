@@ -95,7 +95,7 @@ Message is RLP encoded, fields:
 ### Version 2
 
   - `Versions :: list`
-    - `Protocol :: binary` - type of message.
+    - `Protocol :: binary` - type of message, currently only "ping" is supported.
     - `Vsns :: [int]` - versions supported
   - `Port :: int` - listen port.
   - `Share :: int` - number of peers to share.
