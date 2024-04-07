@@ -1437,7 +1437,7 @@ Opcode ::=
 AddressingMode ::=
   < >
 | LowAddressingMode
-| HighAddressingMode | LowAddressingMode
+| HighAddressingMode, LowAddressingMode
 
 LowAddressingMode ::=
   <<< Mode, Mode, Mode, Mode >>> ; Arg3 Arg2 Arg1 Arg0
@@ -1476,8 +1476,8 @@ Data(D) ::=
 | String
 | Bytes
 | Bits
-| Address
-| ContractAddress
+| Account
+| Contract
 | Oracle
 | OracleQuery
 | Channel
@@ -1487,6 +1487,7 @@ Data(D) ::=
 | StoreMap
 | Variant
 | Type
+| ContractBytearray
 ```
 
 #### Boolean
@@ -1507,7 +1508,7 @@ Integer(I) ::=
 LargeInt(I) ::=
   RLP(Unsigned(I))
 
-;; Encode an unsigned int
+;; Encode an unsigned int as a big endian binary representation.
 ;; where 'shr' is bitwise shift right, and 'band' is bitwise and.
 Unsigned(I) ::=
   << 0 >> ;; When I = 0
@@ -1542,17 +1543,17 @@ Bytes(B) ::=
   <<<10011111>>>, <<<00000001>>>, String(B)
 ```
 
-#### Address
+#### Account
 
 ```
-Address(A) ::=
+Account(A) ::=
   <<<10011111>>>, <<<00000000>>>, RLP(A)
 ```
 
-#### ContractAddress
+#### Contract
 
 ```
-ContractAddress(C) ::=
+Contract(C) ::=
   <<<10011111>>>, <<<00000010>>>, RLP(C)
 ```
 
@@ -1577,8 +1578,8 @@ Channel(C) ::=
   <<<10011111>>>, <<<00000101>>>, RLP(C)
 ```
 
-
 #### Tuple
+
 The function tuple_size gives the number of elements of the tuple.
 The elements are serialized in order from left to right.
 
@@ -1586,7 +1587,7 @@ The elements are serialized in order from left to right.
 Tuple(T) ::=
   <<< 00111111 >>>                                        ; for the empty tuple (Unit)
 | <<< tuple_size(T), 1011 >>>, Elements                   ; when tuple_size(T) < 16
-| <<< 00001011 >>>, Integer(tuple_size(T) - 16), Elements ; Otherwise
+| <<< 00001011 >>>, RLP(tuple_size(T) - 16), Elements ; Otherwise
 
 Elements ::=
   Data
@@ -1662,7 +1663,7 @@ Type(T) ::=
 | BooleanType
 | ListType(list_element_type(T))
 | TupleType(tuple_element_types(T))
-| AddressType
+| AccountType
 | ContractType
 | OracleType
 | OracleQueryType
@@ -1675,25 +1676,33 @@ Type(T) ::=
 | AnyType
 | VarType(var_type_id(T))
 
-IntegerType      ::= <<< 00000111 >>>
-BooleanType      ::= <<< 00010111 >>>
-ListType(ET)     ::= <<< 00100111 >>>, Type(ET)
-TupleType(ETs)   ::= <<< 00110111 >>>, length(ETs), TupleElementTypes(ETs)
-AddressType      ::= <<< 01000111 >>>, <<< 00000000 >>>
-ContractType     ::= <<< 01000111 >>>, <<< 00000010 >>>
-OracleType       ::= <<< 01000111 >>>, <<< 00000011 >>>
-OracleQueryType  ::= <<< 01000111 >>>, <<< 00000100 >>>
-ChannelType      ::= <<< 01000111 >>>, <<< 00000101 >>>
-BitsType         ::= <<< 01010111 >>>
-MapType(T)       ::= <<< 01100111 >>>, Type(key_type(T)), Type(value_type(T))
-StringType       ::= <<< 01110111 >>>
-VariantType(T)   ::= <<< 10000111 >>>, << size(type_arities(T)) >>, VariantTypes(variant_type_elements(T))
-BytesType(N)     ::= <<< 10010111 >>>, Integer(N)
-AnyType          ::= <<< 11110111 >>>
-VarType(N)       ::= <<< 11100111 >>>, << N >>
+IntegerType           ::= <<< 00000111 >>>
+BooleanType           ::= <<< 00010111 >>>
+ListType(ET)          ::= <<< 00100111 >>>, Type(ET)
+TupleType(ETs)        ::= <<< 00110111 >>>, length(ETs), TupleElementTypes(ETs)
+AccountType           ::= <<< 01000111 >>>, <<< 00000000 >>>
+ContractType          ::= <<< 01000111 >>>, <<< 00000010 >>>
+OracleType            ::= <<< 01000111 >>>, <<< 00000011 >>>
+OracleQueryType       ::= <<< 01000111 >>>, <<< 00000100 >>>
+ChannelType           ::= <<< 01000111 >>>, <<< 00000101 >>>
+BitsType              ::= <<< 01010111 >>>
+MapType(T)            ::= <<< 01100111 >>>, Type(key_type(T)), Type(value_type(T))
+StringType            ::= <<< 01110111 >>>
+VariantType(T)        ::= <<< 10000111 >>>, << size(type_arities(T)) >>, VariantTypes(variant_type_elements(T))
+BytesType(N)          ::= <<< 10010111 >>>, Integer(N)
+AnyType               ::= <<< 11110111 >>>
+VarType(N)            ::= <<< 11100111 >>>, << N >>
+ContractBytearrayType ::= <<< 10001111 >>>
 
 TupleElementTypes(T) ::= < > | Type, TupleElementTypes
 
 VariantTypes(T)      ::= < > | Type, VariantTypes
 
+```
+
+#### ContractBytearray
+
+```
+ContractBytearray(C) ::=
+  <<< 10001111 >>>, Integer(size(C)), C
 ```
