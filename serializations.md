@@ -1224,7 +1224,7 @@ Function ::=
   Id,
   Attributes,
   Type Signature,
-  Instructions
+  Basic Blocks
 ```
 
 ### Id
@@ -1273,10 +1273,19 @@ Type Signature ::=
   Type(RetType)
 ```
 
-### Instructions
-The code itself is encoded as a series of instructions that
-can be broken up into basic blocks.
+### Basic Blocks
+
+The code itself is encoded as a series of instructions that are broken up into
+basic blocks.
+
 ```
+Basic Blocks ::=
+    Basic Block
+  | Basic Block, Basic Blocks
+
+Basic Block ::=
+  Instructions
+
 Instructions ::=
   Instruction
 | Instruction, Instructions
