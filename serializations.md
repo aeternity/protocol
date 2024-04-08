@@ -1198,7 +1198,15 @@ Contract ::=
   RLP(Code),
   RLP(Symbols),
   RLP(Annotations)
+
+Symbols ::=
+  Map(Symbols)
+
+Annotations ::=
+  Map(Annotations)
 ```
+
+`Symbols` and `Annotations` are serialized as FATE maps.
 
 ### Code
 Functions are sorted on their name (a name in this setting is the 4 first bytes of the blake2b
@@ -1207,8 +1215,6 @@ hash of the program level readable name). Only one function of each name is allo
 Code ::=
   < >
 | Function , Code
-
-
 ```
 
 ### Function
