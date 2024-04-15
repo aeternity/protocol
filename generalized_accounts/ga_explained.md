@@ -17,7 +17,7 @@ For plain old accounts (POA) transaction integrity comes down to two things;
 (1) the origin of the transaction - only the owner of an account may produce
 transactions originating from the account, and (2) a transaction can only be
 included once - i.e. it is not possible to include the same SpendTx twice to
-get double payment. (1) is achieved by [crypotographic
+get double payment. (1) is achieved by [cryptographic
 signing](https://en.wikipedia.org/wiki/Digital_signature), æternity uses
 [EdDSA](https://en.wikipedia.org/wiki/EdDSA) signatures with
 ([Curve25519](https://en.wikipedia.org/wiki/Curve25519)). (2) is normally
@@ -99,7 +99,7 @@ used to sign this hash.
 ### Caveat - producing the right hash
 
 It is trivial to produce the hash in the contract, `Crypto.blake2b((h, n))` -
-but it is not as straigthforward to do it _outside_ the contract. After all it
+but it is not as straightforward to do it _outside_ the contract. After all it
 is the Sophia ABI encoded tuple of a hash and an integer that is hashed. It
 isn't impossible to figure this out, but there is an easier way... *Protip:*
 Using the `dry-run` functionality we can call the contract off-chain and use
@@ -136,4 +136,4 @@ contract PayForExample =
 ```
 
 Note: in a realistic use-case it is probably advisable to have an admin
-interface so that you can add (and remore) allowed users later on, etc.
+interface so that you can add (and remove) allowed users later on, etc.

@@ -7,7 +7,7 @@ reason) have not made it onto the chain is not gossiped.
 
 Potentially there is a big overlap between the list of transactions held by the
 starting node (transactions are persisted) and the peer it is synchronizing
-with; thus to save network bandwidth it is preferrable to only send the missing
+with; thus to save network bandwidth it is preferable to only send the missing
 transactions. The protocol is straightforward:
   1. the node picks one peer to synchronize with
   2. they each create a MP tree holding their local transactions - In the MP

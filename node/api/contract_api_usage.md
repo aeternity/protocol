@@ -50,7 +50,7 @@ TODO => http compiler & other tools
 TODO => http compiler & other tools
 
 ### Call
-TODO stil relevant?
+TODO still relevant?
 
 ### Dry-run
 [/debug/transactions/dry-run](https://api-docs.aeternity.io#/internal/DryRunTxs)

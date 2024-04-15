@@ -137,7 +137,7 @@ off-chain consensus being dependent on it could lead to a fragile system with
 a lot of mismatching state hashes of off-chain updates. In order to improve
 this there is an optional functionality of setting `block_hash` that defines
 the on-chain environment that the update is to be executed in. We call this
-shared view of the chain _a pinnned environment_. When a participant wants to
+shared view of the chain _a pinned environment_. When a participant wants to
 start a new round of updates, one can optionally specify a pinned environment
 to execute in. This is how the participant communicates to the other party
 what one considers to be a block hash that is safe enough to base an off-chain
@@ -161,7 +161,7 @@ In order to use a channel, it must be opened. Both parties negotiate parameters 
 
 ### Websocket protocol
 
-The channel websocket api currently supports one protocol: [`json-rpc`](https://www.jsonrpc.org/specification). `legacy` protocol was removed. Choosen protocol has to be specified with the `protocol` option.
+The channel websocket api currently supports one protocol: [`json-rpc`](https://www.jsonrpc.org/specification). `legacy` protocol was removed. Chosen protocol has to be specified with the `protocol` option.
 
 In the examples below, the `json-rpc` protocol is used.
 
@@ -487,7 +487,7 @@ be known, the `fsm_id` is also included for convenience.
 #### Authenticated channel_create_tx
 The responder FSM reports to its client that it received the authentication
 reply, and now has a co-authenticated `channel_create_tx`. It relies on the
-initiator to push the co-authenticed transaction to the mempool:
+initiator to push the co-authenticated transaction to the mempool:
 
 ```javascript
 {
@@ -533,7 +533,7 @@ a `channel_changed` event in an `on_chain_tx` report:
 }
 ```
 
-### Mininum-depth confirmation
+### Minimum-depth confirmation
 A block height timer is started and it ends after `minimum_depth + 1` confirmations. Default value for
 it is 4, so 5 blocks need to be mined. As a result, each party will receive
 two kinds of confirmation.

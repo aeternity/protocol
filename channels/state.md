@@ -60,9 +60,9 @@ time:
 * `round` is being used to order different channel states - the greater the
   `round`, the newer the state
 
-* `state_hash` is the root of the State Channel's MPTree of MPTerees
+* `state_hash` is the root of the State Channel's MPTree of MPTrees
 
-A transaction that has all three defines the channnel's state at a certain
+A transaction that has all three defines the channel's state at a certain
 point of time. This is only valid when this transaction is authenticated by
 both participants. The only exception is the `channel_force_progress_tx` that
 has all three elements but is unilaterally authenticated. It is worth noting

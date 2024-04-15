@@ -70,5 +70,5 @@ correlate the call with the transaction in the block that did the
 call.
 
 The call object in the state tree contains the return value of a contract call transaction.
-For the contract create transaction the return value of the inital call is set to
+For the contract create transaction the return value of the initial call is set to
 the empty byte array.

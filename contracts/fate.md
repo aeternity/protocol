@@ -483,8 +483,8 @@ Writing to the accumulator pushes a value to the stack.
 | `CALLER` | Arg0 | Arg0 := The address that signed the call transaction. | {} | address | `FATE_01` |
 | `BLOCKHASH` | Arg0 Arg1 | Arg0 := The blockhash at height. | {integer} | variant | `FATE_01` |
 | `BENEFICIARY` | Arg0 | Arg0 := The address of the current beneficiary. | {} | address | `FATE_01` |
-| `TIMESTAMP` | Arg0 | Arg0 := The current timestamp. Unrelaiable, don't use for anything. | {} | integer | `FATE_01` |
-| `GENERATION` | Arg0 | Arg0 := The block height of the cureent generation. | {} | integer | `FATE_01` |
+| `TIMESTAMP` | Arg0 | Arg0 := The current timestamp. Unreliable, don't use for anything. | {} | integer | `FATE_01` |
+| `GENERATION` | Arg0 | Arg0 := The block height of the current generation. | {} | integer | `FATE_01` |
 | `MICROBLOCK` | Arg0 | Arg0 := The current micro block number. | {} | integer | `FATE_01` |
 | `DIFFICULTY` | Arg0 | Arg0 := The current difficulty. | {} | integer | `FATE_01` |
 | `GASLIMIT` | Arg0 | Arg0 := The current gaslimit. | {} | integer | `FATE_01` |
