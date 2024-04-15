@@ -153,7 +153,7 @@ state. This value MUST NOT be further than 180000 blocks (Note: used to be
 50000 before Iris protocol upgrade) into the future.
 
 ***client_ttl***: a suggestion as to how long any clients should
-cache this information. (***TODO***: should have a reasonable
+cache pointers. Measured in seconds. (***TODO***: should have a reasonable
 upper limit, e.g. 86400 seconds, and probably a different
 name to not be confused with the general TTL for transactions)
 
