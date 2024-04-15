@@ -3082,8 +3082,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#name-service-update-transaction" class="md-nav__link">
-    Name service update transaction
+  <a href="#name-service-update-transaction-version-1-until-ceres-release" class="md-nav__link">
+    Name service update transaction (version 1, until Ceres release)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#name-service-update-transaction-version-2-from-ceres-release" class="md-nav__link">
+    Name service update transaction (version 2, from Ceres release)
   </a>
   
 </li>
@@ -3970,8 +3977,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#name-service-update-transaction" class="md-nav__link">
-    Name service update transaction
+  <a href="#name-service-update-transaction-version-1-until-ceres-release" class="md-nav__link">
+    Name service update transaction (version 1, until Ceres release)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#name-service-update-transaction-version-2-from-ceres-release" class="md-nav__link">
+    Name service update transaction (version 2, from Ceres release)
   </a>
   
 </li>
@@ -5433,7 +5447,7 @@ Note: From Ceres protocol version <code>contract</code> can be a name (where the
 , &lt;ttl&gt;        :: int()
 ]
 </code></pre></div>
-<h4 id="name-service-update-transaction">Name service update transaction</h4>
+<h4 id="name-service-update-transaction-version-1-until-ceres-release">Name service update transaction (version 1, until Ceres release)</h4>
 <div class="highlight"><pre><span></span><code>[ &lt;account&gt;    :: id()
 , &lt;nonce&gt;      :: int()
 , &lt;hash&gt;       :: id()
@@ -5444,6 +5458,22 @@ Note: From Ceres protocol version <code>contract</code> can be a name (where the
 , &lt;ttl&gt;        :: int()
 ]
 </code></pre></div>
+<h4 id="name-service-update-transaction-version-2-from-ceres-release">Name service update transaction (version 2, from Ceres release)</h4>
+<div class="highlight"><pre><span></span><code>[ &lt;account&gt;    :: id()
+, &lt;nonce&gt;      :: int()
+, &lt;hash&gt;       :: id()
+, &lt;name_ttl&gt;   :: int()
+, &lt;pointers&gt;   :: [{binary(), binary()}]
+, &lt;client_ttl&gt; :: int()
+, &lt;fee&gt;        :: int()
+, &lt;ttl&gt;        :: int()
+]
+</code></pre></div>
+<p>In Erlang notation, the <code>binary()</code> for pointer value have the following pattern:
+<div class="highlight"><pre><span></span><code>&lt;&lt;Tag:1/unsigned-integer-unit:8, Data/binary&gt;&gt;
+</code></pre></div>
+Where <code>Tag == 1</code> means it is a serialized <code>id()</code> and <code>Tag == 2</code> means it is a
+raw binary array.</p>
 <h4 id="name-service-revoke-transaction">Name service revoke transaction</h4>
 <div class="highlight"><pre><span></span><code>[ &lt;account&gt; :: id()
 , &lt;nonce&gt;   :: int()
