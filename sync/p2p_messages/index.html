@@ -2869,6 +2869,26 @@
     MSG_PING
   </a>
   
+    <nav class="md-nav" aria-label="MSG_PING">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#version-1" class="md-nav__link">
+    Version 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#version-2" class="md-nav__link">
+    Version 2
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3095,15 +3115,34 @@ various types should be interpreted (corresponds to their encoding):</p>
 <h2 id="msg_ping">MSG_PING</h2>
 <p><em>(Tag = 1)</em></p>
 <p>Message is RLP encoded, fields:</p>
+<h3 id="version-1">Version 1</h3>
 <ul>
-<li><code>Port :: int</code> - listen port</li>
-<li><code>Share :: int</code> - number of peers to share</li>
+<li><code>Port :: int</code> - listen port.</li>
+<li><code>Share :: int</code> - number of peers to share.</li>
 <li><code>GenesisHash :: byte_array</code></li>
 <li><code>Difficulty :: int</code> - the total difficulty of the chain.</li>
 <li><code>TopHash :: byte_array</code></li>
-<li><code>sync_allowed :: bool</code> - if the sender of this ping message is accepting
+<li><code>SyncAllowed :: bool</code> - if the sender of this ping message is accepting
     synchronization messages.</li>
-<li><code>Peers :: [byte_array]</code> - list of shared peers</li>
+<li><code>Peers :: [byte_array]</code> - list of shared peers.</li>
+</ul>
+<h3 id="version-2">Version 2</h3>
+<ul>
+<li><code>Versions :: list</code><ul>
+<li><code>Protocol :: binary</code> - type of message, currently only "ping" is supported.</li>
+<li><code>Vsns :: [int]</code> - versions supported</li>
+</ul>
+</li>
+<li><code>Port :: int</code> - listen port.</li>
+<li><code>Share :: int</code> - number of peers to share.</li>
+<li><code>GenesisHash :: byte_array</code></li>
+<li><code>Height :: int</code> - current height.</li>
+<li><code>Difficulty :: int</code> - the total difficulty of the chain.</li>
+<li><code>TopHash :: byte_array</code></li>
+<li><code>SyncAllowed :: bool</code> - if the sender of this ping message is accepting
+    synchronization messages.</li>
+<li><code>Capabilities :: byte_array</code> - list of supported capabilites.</li>
+<li><code>Peers :: [byte_array]</code> - list of shared peers.</li>
 </ul>
 <p>Peers are serialized/deserialized in <code>aec_peer_messages</code></p>
 <h2 id="msg_get_header_by_hash">MSG_GET_HEADER_BY_HASH</h2>
