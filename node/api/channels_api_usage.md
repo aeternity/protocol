@@ -1525,7 +1525,7 @@ The FSM responds with the following type of report:
 ### Reestablish
 Open the channel in a similar way as in the
 [Initiator WebSocket open](#initiator-websocket-open) example,
-providing the parameters `existing_channel_id` and `fsm_id` with values matching
+providing the parameters `existing_channel_id` and `existing_fsm_id` with values matching
 the ones provided in previous signing requests and reports (note that the latest
 unique `fsm_id` must be used.)
 
