@@ -533,7 +533,11 @@ Note: From Ceres protocol version `contract` can be a name (where the
 ]
 ```
 
-#### Name service update transaction (version 1, until Ceres release)
+#### Name service update transaction - version 1
+
+This is the serialization of an AENS Update transaction that does not contain
+raw data pointers.
+
 ```
 [ <account>    :: id()
 , <nonce>      :: int()
@@ -546,7 +550,11 @@ Note: From Ceres protocol version `contract` can be a name (where the
 ]
 ```
 
-#### Name service update transaction (version 2, from Ceres release)
+#### Name service update transaction - version 2
+
+Introduced in Ceres protocol; this is the serialization of an AENS Update
+transaction that contains one or more raw data pointers.
+
 ```
 [ <account>    :: id()
 , <nonce>      :: int()
