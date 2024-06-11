@@ -2916,7 +2916,7 @@ different implications this has on channels.</p>
 <p>We express consent in a provable and a cryptographically safe manner. From now
 on we will call it authentication. In the context of channels we can have
 both unilateral and mutual authentication, depending if just one or the two
-parties had expressed their consent. Assumption is if both parties agreeed
+parties had expressed their consent. Assumption is if both parties agreed
 upon a transaction, it had been valid at least at some point of time.</p>
 <h3 id="basic-and-generalized-methods">Basic and generalized methods</h3>
 <p>Currently there are two different authentication methods:</p>
@@ -2931,7 +2931,7 @@ upon a transaction, it had been valid at least at some point of time.</p>
   being used instead of private key. This smart contract has a state and it is
   updated by on-chain transactions. It is not updated by off-chain ones but
   since the authentication method MUST be valid in the future, a static
-  version of the authentication method is used. More detailed explaination for
+  version of the authentication method is used. More detailed explanation for
   Generalized Accounts can be found <a href="../../generalized_accounts/">here</a>.</li>
 </ul>
 <p>Since a participant can upgrade their account from a <code>basic</code> to <code>generalized</code>
@@ -2944,7 +2944,7 @@ creation time.</p>
 is as described above. Both on-chain and off-chain transactions are signed
 using the private key.</p>
 <h4 id="participant-upgrades-their-account-after-channel-creation">Participant upgrades their account after channel creation</h4>
-<p>If a participant upgades their account after the <code>channel_create_tx</code> is being
+<p>If a participant upgrades their account after the <code>channel_create_tx</code> is being
 included, one MUST use the new authentication method for all on-chain
 transactions. Off-chain on the other hand are signed as if the account is
 being <code>basic</code>, as it was at channel creation time.</p>

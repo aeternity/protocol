@@ -5342,7 +5342,7 @@ object (to which tag and version need to be prepended) are:</p>
 , &lt;code&gt;       :: binary()
 , &lt;log&gt;        :: binary(),
 , &lt;active&gt;     :: bool(),
-, &lt;referers&gt;   :: [id()],
+, &lt;referrers&gt;  :: [id()],
 , &lt;deposit&gt;    :: int()
 ]
 </code></pre></div>
@@ -5955,7 +5955,7 @@ NOTE:</p>
 <p>FATE contracts uses a recursive BNF like definition.
 There are serialisations (RLP, FATE), sequences of serializations (<code>S1, S2, ...</code>),
 sequences of bytes (<code>&lt;&lt; .... &gt;&gt;</code>) and sequences of bits (<code>&lt;&lt;&lt; ... &gt;&gt;&gt;</code>).</p>
-<p>Fate Code uses both RLP enodings and pure byte arrays (or binary) encodings.
+<p>Fate Code uses both RLP encodings and pure byte arrays (or binary) encodings.
 In the description here we write <code>RLP(X)</code> for the RLP encoding of <code>X</code>, where
 X is a name of an encoding described above or below in the description of
 the FATE encoding. We write <code>&lt;X, Y&gt;</code> for a byte array made of the sequence of
@@ -6334,7 +6334,7 @@ ListElements ::=
 <p>The function map_size gives the number of key value pairs in the map.
 The key value pairs are serialized in key order with the smallest
 key in the order given by the FATE data order. Each pair is
-serialized toghether, first the key and then the value.</p>
+serialized together, first the key and then the value.</p>
 <p>There must not be any duplicate keys in the map.</p>
 <div class="highlight"><pre><span></span><code>Map(M) ::=
   &lt;&lt;&lt; 00101111 &gt;&gt;&gt;, RLP(map_size(M)), MapElements

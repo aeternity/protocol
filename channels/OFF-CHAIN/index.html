@@ -4416,7 +4416,7 @@ persisted account and not the on-chain persisted channel object.</p>
 <p>This is an acknowledgement of a preceding <code>deposit_created</code> message (see
 above). Upon receipt of a mutually authenticated state, the receiver verifies
 that it is indeed the state resulting from the proposed deposit operation. The
-<code>channel_deposit_tx</code> is then pushed to the chain, and the requisit number of
+<code>channel_deposit_tx</code> is then pushed to the chain, and the requested number of
 confirmations (<code>minimum_depth</code>) are awaited. Once confirmation has been
 received, a <code>deposit_locked</code> message is sent, with the hash of the
 <code>channel_deposit_tx</code> transaction.
@@ -4495,7 +4495,7 @@ persisted account and not the on-chain persisted channel object.</p>
 <p>This is an acknowledgement of a preceding <code>withdraw_created</code> message (see
 above). Upon receipt of a mutually authenticated state, the receiver verifies
 that it is indeed the state resulting from the proposed withdrawal operation.
-The <code>channel_withdraw_tx</code> is then pushed to the chain, and the requisit number
+The <code>channel_withdraw_tx</code> is then pushed to the chain, and the requested number
 of confirmations (<code>minimum_depth</code>) are awaited. Once confirmation has been
 received, a <code>withdraw_locked</code> message is sent, with the hash of the
 <code>channel_withdraw_tx</code> transaction.

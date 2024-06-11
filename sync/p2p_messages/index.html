@@ -3271,14 +3271,14 @@ list of serialized signed transactions with a list of transaction hashes.</p>
 <ul>
 <li><code>Version</code> :: byte_array - the version of the node</li>
 <li><code>Revision</code> :: byte_array - the revision of the node</li>
-<li><code>Vendor</code> :: byte_array - a string to differentiate between different protocol imlementations</li>
+<li><code>Vendor</code> :: byte_array - a string to differentiate between different protocol implementations</li>
 <li><code>OS</code> :: byte_array - the operating system the node is being ran</li>
 <li><code>NetworkId</code> :: byte_array - the node's expectation of the <code>network_id</code>. This has heavy impact on authentication validations</li>
 <li><code>VerifiedPeers</code> :: integer - the amount of peers the node consideres to be verified</li>
 <li><code>UnverifiedPeers</code> :: integer - the amount of peers the node consideres to be unverified</li>
 </ul>
 <p>This message is the response for the <a href="#msg_get_node_info">MSG_GET_NODE_INFO</a>
-message. It is important to note that respoding to it is not required by the
+message. It is important to note that responding to it is not required by the
 p2p protocol as a peer might prefer keeping this information private.</p>
 <h2 id="msg_close">MSG_CLOSE</h2>
 <p><em>(Tag = 127)</em></p>

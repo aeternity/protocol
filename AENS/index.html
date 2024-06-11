@@ -3565,10 +3565,10 @@ interpreted as described in <a href="https://tools.ietf.org/html/rfc2119">RFC 21
 state. This value MUST NOT be further than 180000 blocks (Note: used to be
 50000 before Iris protocol upgrade) into the future.</p>
 <p><strong><em>client_ttl</em></strong>: a suggestion as to how long any clients should
-cache this information. (<strong><em>TODO</em></strong>: should have a reasonable
+cache pointers. Measured in seconds. (<strong><em>TODO</em></strong>: should have a reasonable
 upper limit, e.g. 86400 seconds, and probably a different
 name to not be confused with the general TTL for transactions)</p>
-<p>This entry is only relevant for clients and has no conensus
+<p>This entry is only relevant for clients and has no consensus
 impact.</p>
 <p><strong><em>pointers</em></strong>: a dictionary with all the values this entry
 points towards.
@@ -3616,9 +3616,9 @@ claimed and they pay the appropriate fee.</p>
 to commit to a name and after the commitment has been accepted into the
 chain, reveal the name to finish the process.</p>
 <p>A commitment should be binding, i.e. the claimant cannot change
-the value they commited to without changing the actual commitment
+the value they committed to without changing the actual commitment
 and hiding, so that a malicious miner learns nothing about the value
-the claimant has commited until they chose to reveal that value. This
+the claimant has committed until they chose to reveal that value. This
 prevents malicious miners from front running, i.e. upon seeing a
 claim transaction, including their own claim request for the same
 name instead of the original claimant's one.</p>
@@ -3855,7 +3855,7 @@ contract id, and from Ceres 1024 bytes of uninterpreted data (a bytearray).</p>
  ------------ ----
 </code></pre></div>
 <p>The <code>transfer</code> transaction MUST be signed by the owner
-of the name entry to be transfered.</p>
+of the name entry to be transferred.</p>
 <h3 id="revoke">Revoke</h3>
 <div class="highlight"><pre><span></span><code> ------------ ----
 | hash       | 32 |
@@ -3891,7 +3891,7 @@ give the name to.</p>
 <p>These sub-labels allow for further customisation and also for users to
 associate with particular namespaces, e.g. a cryptographic cat breeding
 game might associate a name entry with every of its cats such as
-<code>unicorn.kitty.test</code> and then transfering that name to the person, who
+<code>unicorn.kitty.test</code> and then transferring that name to the person, who
 adopts the cat. The authorization policies for these will need some
 flexibility seeing as the owner of a namespace might want to prevent
 or allow users creating sub-sub-labels, e.g. the owner of <code>unicorn.kitty.test</code>

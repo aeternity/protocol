@@ -2941,7 +2941,7 @@ provide further guidance when it comes to generalized accounts here.</p>
 (1) the origin of the transaction - only the owner of an account may produce
 transactions originating from the account, and (2) a transaction can only be
 included once - i.e. it is not possible to include the same SpendTx twice to
-get double payment. (1) is achieved by <a href="https://en.wikipedia.org/wiki/Digital_signature">crypotographic
+get double payment. (1) is achieved by <a href="https://en.wikipedia.org/wiki/Digital_signature">cryptographic
 signing</a>, æternity uses
 <a href="https://en.wikipedia.org/wiki/EdDSA">EdDSA</a> signatures with
 (<a href="https://en.wikipedia.org/wiki/Curve25519">Curve25519</a>). (2) is normally
@@ -3009,7 +3009,7 @@ authorization finally checks that the private key corresponding to <code>owner</
 used to sign this hash.</p>
 <h3 id="caveat-producing-the-right-hash">Caveat - producing the right hash</h3>
 <p>It is trivial to produce the hash in the contract, <code>Crypto.blake2b((h, n))</code> -
-but it is not as straigthforward to do it <em>outside</em> the contract. After all it
+but it is not as straightforward to do it <em>outside</em> the contract. After all it
 is the Sophia ABI encoded tuple of a hash and an integer that is hashed. It
 isn't impossible to figure this out, but there is an easier way... <em>Protip:</em>
 Using the <code>dry-run</code> functionality we can call the contract off-chain and use
@@ -3042,7 +3042,7 @@ kind or something similar).</p>
       _ =&gt; abort(&quot;Bad transaction&quot;)
 </code></pre></div></p>
 <p>Note: in a realistic use-case it is probably advisable to have an admin
-interface so that you can add (and remore) allowed users later on, etc.</p>
+interface so that you can add (and remove) allowed users later on, etc.</p>
 
 
 

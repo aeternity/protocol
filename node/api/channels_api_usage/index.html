@@ -1152,11 +1152,11 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#mininum-depth-confirmation" class="md-nav__link">
-    Mininum-depth confirmation
+  <a href="#minimum-depth-confirmation" class="md-nav__link">
+    Minimum-depth confirmation
   </a>
   
-    <nav class="md-nav" aria-label="Mininum-depth confirmation">
+    <nav class="md-nav" aria-label="Minimum-depth confirmation">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -4117,11 +4117,11 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#mininum-depth-confirmation" class="md-nav__link">
-    Mininum-depth confirmation
+  <a href="#minimum-depth-confirmation" class="md-nav__link">
+    Minimum-depth confirmation
   </a>
   
-    <nav class="md-nav" aria-label="Mininum-depth confirmation">
+    <nav class="md-nav" aria-label="Minimum-depth confirmation">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -5108,7 +5108,7 @@ off-chain consensus being dependent on it could lead to a fragile system with
 a lot of mismatching state hashes of off-chain updates. In order to improve
 this there is an optional functionality of setting <code>block_hash</code> that defines
 the on-chain environment that the update is to be executed in. We call this
-shared view of the chain <em>a pinnned environment</em>. When a participant wants to
+shared view of the chain <em>a pinned environment</em>. When a participant wants to
 start a new round of updates, one can optionally specify a pinned environment
 to execute in. This is how the participant communicates to the other party
 what one considers to be a block hash that is safe enough to base an off-chain
@@ -5127,7 +5127,7 @@ client by their FSM.</p>
 <h2 id="channel-open">Channel open</h2>
 <p>In order to use a channel, it must be opened. Both parties negotiate parameters for the channel - for example the amounts to participate. Some of those are relevant to the chain and end up in a<code>channel_create_tx</code> that is posted on the chain. Once a certain amount of blocks have been mined on top of the one that included it, the channel is considered to be opened.</p>
 <h3 id="websocket-protocol">Websocket protocol</h3>
-<p>The channel websocket api currently supports one protocol: <a href="https://www.jsonrpc.org/specification"><code>json-rpc</code></a>. <code>legacy</code> protocol was removed. Choosen protocol has to be specified with the <code>protocol</code> option.</p>
+<p>The channel websocket api currently supports one protocol: <a href="https://www.jsonrpc.org/specification"><code>json-rpc</code></a>. <code>legacy</code> protocol was removed. Chosen protocol has to be specified with the <code>protocol</code> option.</p>
 <p>In the examples below, the <code>json-rpc</code> protocol is used.</p>
 <p>Detailed message transcripts from test suites can also be found <a href="./examples/channels/json-rpc/">here</a>.</p>
 <h3 id="channel-parameters">Channel parameters</h3>
@@ -5604,7 +5604,7 @@ be known, the <code>fsm_id</code> is also included for convenience.</p>
 <h4 id="authenticated-channel_create_tx">Authenticated channel_create_tx</h4>
 <p>The responder FSM reports to its client that it received the authentication
 reply, and now has a co-authenticated <code>channel_create_tx</code>. It relies on the
-initiator to push the co-authenticed transaction to the mempool:</p>
+initiator to push the co-authenticated transaction to the mempool:</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="s2">&quot;jsonrpc&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;2.0&quot;</span><span class="p">,</span>
 <span class="w">  </span><span class="s2">&quot;method&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;channels.on_chain_tx&quot;</span><span class="p">,</span>
@@ -5642,7 +5642,7 @@ a <code>channel_changed</code> event in an <code>on_chain_tx</code> report:</p>
 <span class="w">  </span><span class="s2">&quot;version&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span>
 <span class="p">}</span>
 </code></pre></div>
-<h3 id="mininum-depth-confirmation">Mininum-depth confirmation</h3>
+<h3 id="minimum-depth-confirmation">Minimum-depth confirmation</h3>
 <p>A block height timer is started and it ends after <code>minimum_depth + 1</code> confirmations. Default value for
 it is 4, so 5 blocks need to be mined. As a result, each party will receive
 two kinds of confirmation.</p>

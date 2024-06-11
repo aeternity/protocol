@@ -3608,7 +3608,7 @@ account</a> the channel create
 will also create an extra entry in the contract state tree, containing a frozen
 authentication state that will be used for off-chain authentication and
 verification in off-chain updates (potentially eventually enforced on-chain)
-of this particular channel.  A more detailed explaination can be found
+of this particular channel.  A more detailed explanation can be found
 <a href="../authentication/">here</a></p>
 <h4 id="requirements">Requirements</h4>
 <p><code>Account(initiator).balance &gt;= initiator_amount + fee</code></p>
@@ -3679,7 +3679,7 @@ being able to withdraw locked coins might still be of use.</p>
 </ul>
 <p>The <code>to</code> account MUST be a participant in the target channel. The <code>amount</code>
 MUST be less than or equal to the sum of the channel balance with regard to the
-<code>channel_reserve</code> ammounts, i.e. channels cannot create coins out of thin air
+<code>channel_reserve</code> amounts, i.e. channels cannot create coins out of thin air
 but also a minimum of <code>channel_reserve</code> must remain locked in the channel. The
 fee is paid by the <code>to</code> account and that account should hold enough coins to
 pay the fee, i.e., the fee is subtracted before the withdrawn coins arrive.</p>
@@ -3730,7 +3730,7 @@ by a <code>channel_force_progress_tx</code> while the channel is in the open sta
 </ul>
 <h3 id="channel_set_delegates"><code>channel_set_delegates</code></h3>
 <p>In order to make channels both secure and trustless even when one party goes
-offline, a participant can deleate the right to produce certain transactions
+offline, a participant can delegate the right to produce certain transactions
 to other third parties.
 Delegates are set initially in the <code>channel_create_tx</code> and, since the <code>iris</code>
 hardfork, can be updated with <code>channel_set_delegates_tx</code>. It acts similarly to
@@ -3826,7 +3826,7 @@ resolved by this transaction.</p>
 considered closed and allow no further modifications. The on-chain persisted
 channel object is removed from the on-chain state trees.</p>
 <p><code>channel total &gt;=
-  transcation initiator_amount_final + responder_amount_final + fee</code></p>
+  transaction initiator_amount_final + responder_amount_final + fee</code></p>
 <h3 id="channel_close_solo"><code>channel_close_solo</code></h3>
 <p>In order to close a channel unilaterally, a participant has to send a
 <code>channel_close_solo</code> transaction. This is only necessary if one peer stops
