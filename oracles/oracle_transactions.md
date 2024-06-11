@@ -84,7 +84,7 @@ transaction, signing it with the oracle account's private key.
 The response transaction is invalid if the TTL from the query has
 expired.
 
-The oracle pays the fee of the response transaction. The mininimum fee
+The oracle pays the fee of the response transaction. The minimum fee
 is determined by the response TTL from the query and the size of the
 response.
 

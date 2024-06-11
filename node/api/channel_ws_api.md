@@ -87,7 +87,7 @@ Roles:
 }
 ```
 
-### Sender authenticates off-chain state responsse
+### Sender authenticates off-chain state response
 
  * **method:** `channels.update`
  * **params:**

@@ -162,9 +162,9 @@ attack where most of the good peers are unreachable augmenting the probability
 of only hostile node getting selected.
 
 If a peer changes its IP address but not its key, the new address will **never**
-be updated through gossip. This is to prevent an hostil node from gossiping
+be updated through gossip. This is to prevent a hostile node from gossiping
 bad addresses for known good nodes and making them unreachable. The peer will be
-removed after the normal retry policy is exausted; then the new address will be
+removed after the normal retry policy is exhausted; then the new address will be
 added through the usual gossip exchanges.
 
 The peer retry counter and last retry time (initialized to '0' and 'infinity'),

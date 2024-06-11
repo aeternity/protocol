@@ -705,7 +705,7 @@ Message code: 12
 This is an acknowledgement of a preceding `deposit_created` message (see
 above). Upon receipt of a mutually authenticated state, the receiver verifies
 that it is indeed the state resulting from the proposed deposit operation. The
-`channel_deposit_tx` is then pushed to the chain, and the requisit number of
+`channel_deposit_tx` is then pushed to the chain, and the requested number of
 confirmations (`minimum_depth`) are awaited. Once confirmation has been
 received, a `deposit_locked` message is sent, with the hash of the
 `channel_deposit_tx` transaction.
@@ -807,7 +807,7 @@ Message code: 16
 This is an acknowledgement of a preceding `withdraw_created` message (see
 above). Upon receipt of a mutually authenticated state, the receiver verifies
 that it is indeed the state resulting from the proposed withdrawal operation.
-The `channel_withdraw_tx` is then pushed to the chain, and the requisit number
+The `channel_withdraw_tx` is then pushed to the chain, and the requested number
 of confirmations (`minimum_depth`) are awaited. Once confirmation has been
 received, a `withdraw_locked` message is sent, with the hash of the
 `channel_withdraw_tx` transaction.

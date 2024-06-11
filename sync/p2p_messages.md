@@ -266,14 +266,14 @@ Message is RLP encoded, fields:
 
   - `Version` :: byte_array - the version of the node
   - `Revision` :: byte_array - the revision of the node
-  - `Vendor` :: byte_array - a string to differentiate between different protocol imlementations
+  - `Vendor` :: byte_array - a string to differentiate between different protocol implementations
   - `OS` :: byte_array - the operating system the node is being ran
   - `NetworkId` :: byte_array - the node's expectation of the `network_id`. This has heavy impact on authentication validations
   - `VerifiedPeers` :: integer - the amount of peers the node consideres to be verified
   - `UnverifiedPeers` :: integer - the amount of peers the node consideres to be unverified
 
 This message is the response for the [MSG_GET_NODE_INFO](#msg_get_node_info)
-message. It is important to note that respoding to it is not required by the
+message. It is important to note that responding to it is not required by the
 p2p protocol as a peer might prefer keeping this information private.
 
 ## MSG_CLOSE

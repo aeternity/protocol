@@ -118,7 +118,7 @@ account](../generalized_accounts/README.md) the channel create
 will also create an extra entry in the contract state tree, containing a frozen
 authentication state that will be used for off-chain authentication and
 verification in off-chain updates (potentially eventually enforced on-chain)
-of this particular channel.  A more detailed explaination can be found
+of this particular channel.  A more detailed explanation can be found
 [here](./authentication.md)
 
 #### Requirements
@@ -211,7 +211,7 @@ Serialization defined [here](../serializations.md#channel-withdraw-transaction)
 
 The `to` account MUST be a participant in the target channel. The `amount`
 MUST be less than or equal to the sum of the channel balance with regard to the
-`channel_reserve` ammounts, i.e. channels cannot create coins out of thin air
+`channel_reserve` amounts, i.e. channels cannot create coins out of thin air
 but also a minimum of `channel_reserve` must remain locked in the channel. The
 fee is paid by the `to` account and that account should hold enough coins to
 pay the fee, i.e., the fee is subtracted before the withdrawn coins arrive.
@@ -270,7 +270,7 @@ If this transaction is valid then it sets:
 ### `channel_set_delegates`
 
 In order to make channels both secure and trustless even when one party goes
-offline, a participant can deleate the right to produce certain transactions
+offline, a participant can delegate the right to produce certain transactions
 to other third parties.
 Delegates are set initially in the `channel_create_tx` and, since the `iris`
 hardfork, can be updated with `channel_set_delegates_tx`. It acts similarly to
@@ -375,7 +375,7 @@ considered closed and allow no further modifications. The on-chain persisted
 channel object is removed from the on-chain state trees.
 
 `channel total >=
-  transcation initiator_amount_final + responder_amount_final + fee`
+  transaction initiator_amount_final + responder_amount_final + fee`
 
 
 ### `channel_close_solo`

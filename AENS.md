@@ -153,11 +153,11 @@ state. This value MUST NOT be further than 180000 blocks (Note: used to be
 50000 before Iris protocol upgrade) into the future.
 
 ***client_ttl***: a suggestion as to how long any clients should
-cache this information. (***TODO***: should have a reasonable
+cache pointers. Measured in seconds. (***TODO***: should have a reasonable
 upper limit, e.g. 86400 seconds, and probably a different
 name to not be confused with the general TTL for transactions)
 
-This entry is only relevant for clients and has no conensus
+This entry is only relevant for clients and has no consensus
 impact.
 
 ***pointers***: a dictionary with all the values this entry
@@ -229,9 +229,9 @@ to commit to a name and after the commitment has been accepted into the
 chain, reveal the name to finish the process.
 
 A commitment should be binding, i.e. the claimant cannot change
-the value they commited to without changing the actual commitment
+the value they committed to without changing the actual commitment
 and hiding, so that a malicious miner learns nothing about the value
-the claimant has commited until they chose to reveal that value. This
+the claimant has committed until they chose to reveal that value. This
 prevents malicious miners from front running, i.e. upon seeing a
 claim transaction, including their own claim request for the same
 name instead of the original claimant's one.
@@ -534,7 +534,7 @@ From Ceres hardfork, a new pointer target type is introduced:
 ```
 
 The `transfer` transaction MUST be signed by the owner
-of the name entry to be transfered.
+of the name entry to be transferred.
 
 
 ### Revoke
@@ -588,7 +588,7 @@ give the name to.
 These sub-labels allow for further customisation and also for users to
 associate with particular namespaces, e.g. a cryptographic cat breeding
 game might associate a name entry with every of its cats such as
-`unicorn.kitty.test` and then transfering that name to the person, who
+`unicorn.kitty.test` and then transferring that name to the person, who
 adopts the cat. The authorization policies for these will need some
 flexibility seeing as the owner of a namespace might want to prevent
 or allow users creating sub-sub-labels, e.g. the owner of `unicorn.kitty.test`

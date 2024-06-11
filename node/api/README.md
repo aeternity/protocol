@@ -62,7 +62,7 @@ Channels provide means for off-chain transactions with functionality of
 on-chain dispute resolution.  Channels require persisted connections to
 æternity nodes. Each participant in a channel uses one's own trusted node. For
 persistence of this connection, WebSockets are used.  Channels have on-chain
-state that persists who the participants are and the total amout of coins put
+state that persists who the participants are and the total amount of coins put
 into the channel.  Each channel also has an off-chain state representing the
 latest distribution of the balance of the channel. It can be updated - each new
 state is co-signed by both parties and only then it becomes the latest valid

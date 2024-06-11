@@ -30,7 +30,7 @@ the chain.
 Bob pays a fee for submitting the transaction. The fee is collected by
 the miner.
 
-Bob pays a fee posting a query to the oracle. The fee is transfered to
+Bob pays a fee posting a query to the oracle. The fee is transferred to
 the oracle's account.
 
 The query transaction contains:
