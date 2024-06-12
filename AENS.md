@@ -291,8 +291,7 @@ pre-claimed|auction ---> claimed
 
 The pointers field in the name entry:
 * On `claim` transaction, is initialized to the empty dictionary.
-* On `update` transaction, is replaced with the pointers in the transaction,
-  keeping the order in the transaction.
+* On `update` transaction, is replaced with the pointers in the transaction.
 
 Note that `expire` is not an explicit message that is part
 of the protocol.
@@ -522,6 +521,12 @@ From Iris protocol upgrade, the following limitations on pointers apply:
 
 From Ceres hardfork, a new pointer target type is introduced:
   - A key can point to up to 1024 bytes of uninterpreted data (a bytearray)
+
+Note: An update containing the new pointer target type MUST use version 2 of
+the
+[serialization](serializations.md#name-service-update-transaction-version-2);
+and, an update _not_ containing the new target type MUST use version 1 of the
+[serialization](serializations.md#name-service-update-transaction-version-1).
 
 #### Transfer
 
