@@ -3664,8 +3664,7 @@ pre-claimed|auction ---&gt; claimed
 </code></pre></div>
 <p>The pointers field in the name entry:
 * On <code>claim</code> transaction, is initialized to the empty dictionary.
-* On <code>update</code> transaction, is replaced with the pointers in the transaction,
-  keeping the order in the transaction.</p>
+* On <code>update</code> transaction, is replaced with the pointers in the transaction.</p>
 <p>Note that <code>expire</code> is not an explicit message that is part
 of the protocol.</p>
 <h3 id="protocol-fees-and-protection-times">Protocol fees and protection times</h3>
@@ -3847,6 +3846,11 @@ contract id, and from Ceres 1024 bytes of uninterpreted data (a bytearray).</p>
   - The list of pointers is not longer than 32.</p>
 <p>From Ceres hardfork, a new pointer target type is introduced:
   - A key can point to up to 1024 bytes of uninterpreted data (a bytearray)</p>
+<p>Note: An update containing the new pointer target type MUST use version 2 of
+the
+<a href="../serializations/#name-service-update-transaction-version-2">serialization</a>;
+and, an update <em>not</em> containing the new target type MUST use version 1 of the
+<a href="../serializations/#name-service-update-transaction-version-1">serialization</a>.</p>
 <h4 id="transfer">Transfer</h4>
 <div class="highlight"><pre><span></span><code> ------------ ----
 | target     | 32 |

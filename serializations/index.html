@@ -3082,15 +3082,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#name-service-update-transaction-version-1-until-ceres-release" class="md-nav__link">
-    Name service update transaction (version 1, until Ceres release)
+  <a href="#name-service-update-transaction-version-1" class="md-nav__link">
+    Name service update transaction - version 1
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#name-service-update-transaction-version-2-from-ceres-release" class="md-nav__link">
-    Name service update transaction (version 2, from Ceres release)
+  <a href="#name-service-update-transaction-version-2" class="md-nav__link">
+    Name service update transaction - version 2
   </a>
   
 </li>
@@ -3977,15 +3977,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#name-service-update-transaction-version-1-until-ceres-release" class="md-nav__link">
-    Name service update transaction (version 1, until Ceres release)
+  <a href="#name-service-update-transaction-version-1" class="md-nav__link">
+    Name service update transaction - version 1
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#name-service-update-transaction-version-2-from-ceres-release" class="md-nav__link">
-    Name service update transaction (version 2, from Ceres release)
+  <a href="#name-service-update-transaction-version-2" class="md-nav__link">
+    Name service update transaction - version 2
   </a>
   
 </li>
@@ -5447,7 +5447,9 @@ Note: From Ceres protocol version <code>contract</code> can be a name (where the
 , &lt;ttl&gt;        :: int()
 ]
 </code></pre></div>
-<h4 id="name-service-update-transaction-version-1-until-ceres-release">Name service update transaction (version 1, until Ceres release)</h4>
+<h4 id="name-service-update-transaction-version-1">Name service update transaction - version 1</h4>
+<p>This is the serialization of an AENS Update transaction that does not contain
+raw data pointers.</p>
 <div class="highlight"><pre><span></span><code>[ &lt;account&gt;    :: id()
 , &lt;nonce&gt;      :: int()
 , &lt;hash&gt;       :: id()
@@ -5458,7 +5460,9 @@ Note: From Ceres protocol version <code>contract</code> can be a name (where the
 , &lt;ttl&gt;        :: int()
 ]
 </code></pre></div>
-<h4 id="name-service-update-transaction-version-2-from-ceres-release">Name service update transaction (version 2, from Ceres release)</h4>
+<h4 id="name-service-update-transaction-version-2">Name service update transaction - version 2</h4>
+<p>Introduced in Ceres protocol; this is the serialization of an AENS Update
+transaction that contains one or more raw data pointers.</p>
 <div class="highlight"><pre><span></span><code>[ &lt;account&gt;    :: id()
 , &lt;nonce&gt;      :: int()
 , &lt;hash&gt;       :: id()
