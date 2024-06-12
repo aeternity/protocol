@@ -186,7 +186,7 @@ will describe these in groups which indicate their relation to each other.
   | channel_reserve | integer | the minimum amount both peers need to maintain | Yes | No | Yes |
   | ttl | integer | maximum height of a block to include the `channel_create_tx` | No | No | Yes |
   | host | string | host of the `responder`'s node| Yes if `role=initiator` | No | No | No |
-  | port | integer | the port of the `responder`s node| Yes if `role=initiator` | No | No | No |
+  | port | integer | the port of the `responder`s node| Yes | No | No | No |
   | role | string | the role of the client - either `initiator` or `responder` | Yes | Yes | No |
   | minimum_depth_strategy | string | How to calculate minimum depth - either `txfee` (default) or `plain` | No | No | No |
   | minimum_depth | integer | the minimum amount of blocks to be mined | No | No | No |
@@ -1525,7 +1525,7 @@ The FSM responds with the following type of report:
 ### Reestablish
 Open the channel in a similar way as in the
 [Initiator WebSocket open](#initiator-websocket-open) example,
-providing the parameters `existing_channel_id` and `fsm_id` with values matching
+providing the parameters `existing_channel_id` and `existing_fsm_id` with values matching
 the ones provided in previous signing requests and reports (note that the latest
 unique `fsm_id` must be used.)
 
