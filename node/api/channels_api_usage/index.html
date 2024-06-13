@@ -5224,7 +5224,7 @@ will describe these in groups which indicate their relation to each other.</p>
 <td>port</td>
 <td>integer</td>
 <td>the port of the <code>responder</code>s node</td>
-<td>Yes if <code>role=initiator</code></td>
+<td>Yes</td>
 <td>No</td>
 <td>No</td>
 </tr>
@@ -6604,7 +6604,7 @@ the cache.</p>
 <h3 id="reestablish">Reestablish</h3>
 <p>Open the channel in a similar way as in the
 <a href="#initiator-websocket-open">Initiator WebSocket open</a> example,
-providing the parameters <code>existing_channel_id</code> and <code>fsm_id</code> with values matching
+providing the parameters <code>existing_channel_id</code> and <code>existing_fsm_id</code> with values matching
 the ones provided in previous signing requests and reports (note that the latest
 unique <code>fsm_id</code> must be used.)</p>
 <div class="highlight"><pre><span></span><code>$ wscat --connect localhost:3014/channel?existing_channel_id=ch_qbM3mAio9VyqU3GLhjWmdcg3H5gbrTJhaMYCokik7CbeHghWS&amp;existing_fsm_id=ba_RtzmxPbVqyDrXjPcY3OP%2FU2YdlpWonF%2BcVIEYEH01%2BFQ1AI7&amp;port=13180&amp;protocol=json-rpc&amp;role=responder
