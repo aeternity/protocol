@@ -447,7 +447,7 @@ Writing to the accumulator pushes a value to the stack.
 | `MAP_SIZE` | Arg0 Arg1 | Arg0 := The size of the map Arg1. | {map} | integer | `FATE_01` |
 | `MAP_TO_LIST` | Arg0 Arg1 | Arg0 := The tuple list representation of the map Arg1. | {map} | list | `FATE_01` |
 | `IS_NIL` | Arg0 Arg1 | Arg0 := true if Arg1 == []. | {list} | boolean | `FATE_01` |
-| `CONS` | Arg0 Arg1 Arg2 | Arg0 := [Arg1|Arg2]. | {any,list} | list | `FATE_01` |
+| `CONS` | Arg0 Arg1 Arg2 | Arg0 := [Arg1] ++ Arg2. | {any,list} | list | `FATE_01` |
 | `HD` | Arg0 Arg1 | Arg0 := head of list Arg1. | {list} | any | `FATE_01` |
 | `TL` | Arg0 Arg1 | Arg0 := tail of list Arg1. | {list} | list | `FATE_01` |
 | `LENGTH` | Arg0 Arg1 | Arg0 := length of list Arg1. | {list} | integer | `FATE_01` |
