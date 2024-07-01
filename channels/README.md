@@ -42,7 +42,7 @@ we then want to get the balance of that account we use `Account(A).balance`.
 - generic solution that supports all smart contracts
 	- even better if one state channel is generic, s.t. it can be instantiated and
 	  then be used for many different contracts
-- composability of channels, i.e. an application works for the
+- transitivity of channels, i.e. an application works for the
   A <-> B case should also work in the A <-B-> C (A to C via B) case
 - upgradeable without having to close/re-open the channel
 - the previous should enable state channels to be long lived
@@ -68,8 +68,8 @@ improvements are as follows:
 On-chain interactions offer little to no privacy, since we currently make no
 efforts to hide interacting parties or the nature of their interactions.
 
-State channels, at the least, reveal that two parties establish a channel and
-the amount of coins they commit to the channel, which is no improvement.
+Basic State channels reveal that two parties establish a channel and
+the amount of coins they commit to the channel, which is not an improvement.
 In the case that neither party tries to cheat, the exact nature of their
 interactions stays unrevealed, since a mutual closing of a channel does not
 require publishing of any state.
@@ -94,19 +94,19 @@ Thus security is on par.
 
 ### Speed
 
-Opening a state channel incurs the normal on-chain latency but after the channel
-has been established, operations can be executed as fast as both peers can
-process them, which should be a major improvement over on-chain interactions.
+Opening a state channel involves an on-chain transaction, thus incurs a normal
+on-chain latency. Once a channel is established, operations are executed as fast
+as both peers can exchange and process them, which should be a major improvement
+over on-chain interactions.
 
 
 ### Cost
 
-Using state channels requires at least two on-chain transactions, for opening
-and closing them. Once a channel is established, no further on-chain
-transactions are needed unless a peer wants to withdraw or deposit funds. Even
-in the case of an one off transaction, it still might be worth opening a channel
-if one already has other open channels and thus might stand to gain fees by
-relaying messages.
+State channels require at least two on-chain transactions: to open and to close
+them. Once a channel is established, no further on-chain transactions are needed
+unless a peer wants to withdraw or deposit funds. Even for one off transaction,
+it still might be worth opening a channel if one already has other open channels
+and thus might stand to gain fees by relaying messages.
 
 
 ## Channel types
@@ -131,18 +131,18 @@ channels, where a client is using a service offered by the server, which is
 highly available and probably also some well known entity, mirroring the status
 quo of the current web.
 A popular example would be an exchange, where users connect to an exchange via
-state channels. This would process would be trustless, since exchanges can not
+state channels. This process can be trustless, since exchanges can not
 lose funds, that haven't been signed over to them
 
 
 ## Topology
 
-It is still very much unclear, what the topology of a widely used channel
-network would look like but it seems that a hub and spoke model would be the
-most probable. This model seems more likely than a decentralised one because the
-majority of users would not be able to offer reliable services, longer paths
-through the network would lock up significantly more funds and ostensibly also
-incur a higher forwarding fee.
+It is still very much unclear, what topology of a widely used channel network
+would look like. It seems that a hub - spoke model would be the most probable.
+This model is more likely than a decentralised one because the majority of
+users would not be able to offer reliable services, longer paths through the
+network would lock up significantly more funds and ostensibly also incur higher
+forwarding fee.
 
 In the hub and spoke model, we would have a number of big hubs, which would be
 involved in most routes through the network. These hubs would be tightly
@@ -154,20 +154,21 @@ connectedness.
 
 ## Incentives
 
-Operating a channel takes at least two on-chain operations and therefore has a
-base amount of fees is required and this fact could be abused by a malicious
-peer. Since closing a channel incurs a fee, they could open a channel with
-someone and subsequently refuse to cooperate, locking up coins and making the
-other party pay the fees required to close the channel again.
+Operating a channel takes at least two on-chain operations and therefore a
+base amount of fees is required. This fact could be abused by a malicious
+peer. Since closing a channel incurs a fee, (s)he could open a channel with
+someone and subsequently refuse to cooperate, to unlock the coins the
+other party will require the other party to close the channel and pay
+transaction fees.
 
-Once a channel has been opened, all operations happening within need to be
+Once a channel has been opened, all operations happening within have to be
 signed off by all participants. This creates a free option for whoever is
 signing off an update last. This problem is remedied by the ability to enforce
 progress on chain, that is taking the state from the channel and have miners
 execute the contract call, that other party wasn't willing to sign off.
 
 With that in mind, it is advised for users to be cautious with whom they open
-channels if they want to avoid the above issues.
+channels.
 
 On the other hand, attributing every failure in a channel to malice would also
 be detrimental and cause both a loss of trust in the system and users to spend
@@ -176,23 +177,22 @@ more on fees than they should.
 
 ## Artefacts
 
-What should the outcome of a state channel be? The simplest answer would be a
-change in on-chain balances of participants but it could also be desirable to
-use state channels as a poor man's MPC and have a contract with a non-empty
-state as the result on chain, which would, ideally, require a compact proof,
-that the given smart contract actually produced the state provided by the
-participants.
+What should be an outcome of a state? The simplest product would make a change
+in on-chain balances of participants. It could be also desirable to use state
+channels as a poor man's MPC and have an on-chain contract with a non-empty
+state as the result. It will require a compact proof, that the given smart
+contract actually produced the state provided by the participants.
 
 
 ## Fees
 
 If we consider state channels to be long lived objects, then problems can arise
-around the handling of fees, that need to be paid for on chain transactions.
+around the fees handling, that need to be paid for on chain transactions.
 
 Given that all parties need to sign off everything, a malicious party could
 potentially black mail a peer under some circumstances.
 If fees come from the channel balance, then one might end up in situations,
-where the channel balance is lower than the fee required for miners to pick up
+where the channel balance is lower than the fee required by miners to pick up
 the transaction. The upshot here is, that the black mailed peer would lose less
 coins than the cost of an on chain transaction, which should not be a lot.
 If the fee instead comes from the account sending the transaction, then that
@@ -219,9 +219,9 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 Communication between participants of a channel is peer to peer and SHOULD
 happen via a reliable and ordered protocol, e.g. TCP. Peers should expect to be
-running their own node, in order to be able to catch transactions relevant to
-the channels they are involved in, although outsourcing that job to a third
-party, while still being trustless, might be possible in the future.
+running their own node, to receive transactions relevant to the channels they
+are involved in. Although outsourcing that job to a third party, while still
+being trustless, might be possible in the future.
 
 Participating in a state channel requires two nodes to be able to communicate
 with each other. Throughout this document we are going to assume that this
