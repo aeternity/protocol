@@ -1,1 +1,0 @@
-This file has been moved [here](https://github.com/aeternity/aesophia/blob/v6.0.2/docs/sophia.md)
