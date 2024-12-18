@@ -1,2 +1,0 @@
-# changeable\_nonce
-

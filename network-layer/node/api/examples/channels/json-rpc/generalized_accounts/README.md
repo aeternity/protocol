@@ -1,2 +1,0 @@
-# generalized\_accounts
-

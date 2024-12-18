@@ -1,2 +1,0 @@
-# Protocol Overview and Architecture
-
