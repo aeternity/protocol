@@ -393,7 +393,7 @@ the number of blocks defined here.
 
 #### From Ceres protocol upgrade
 
-
+```
  ------------- -------------
 | name length | time out    |
  ------------- -------------
@@ -405,7 +405,7 @@ the number of blocks defined here.
  ------------- -------------
 | 1-4         | 2400        |
  ------------- -------------
-
+```
 
 From Ceres, each time a new (successful!) bid is made for a name the auction is
 extended for up to 120 key-blocks/generations. I.e. after the bid there is
