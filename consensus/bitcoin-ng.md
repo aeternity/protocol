@@ -133,9 +133,9 @@ a reward controlled by governance (i.e. a portion of coinbase), unless reported 
 coins not attributed to the fraudulent miner are [locked](locking.md) instead.
 
 The serialization format of the Proof-of-Fraud object can be found
-[here](../serializations.md#proof-of-fraud), and the inclusion of
+[here](../../serializations.md#proof-of-fraud), and the inclusion of
 the Proof-Of-Fraud object in micro blocks is defined
-[here](../serializations.md#micro-block)
+[here](../../serializations.md#micro-block)
 
 ## Reward Split
 
